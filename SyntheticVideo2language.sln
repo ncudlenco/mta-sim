@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29509.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampSharp.SyntheticGameMode", "SampSharpGameMode\SampSharp.SyntheticGameMode.csproj", "{BE5AF8B4-46AF-4437-B126-36BAFDBCF7DD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampSharp.Streamer", "SampSharp.Streamer\SampSharp.Streamer.csproj", "{3C67ACEF-BB4F-4231-96AD-85F4AA3E5F84}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampSharp.ColAndreas", "SampSharp.ColAndreas\SampSharp.ColAndreas.csproj", "{E156AE01-B1B6-432F-B233-BD49E98E3F97}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampSharp.Streamer.TestMode", "SampSharp.Streamer.TestMode\SampSharp.Streamer.TestMode.csproj", "{4B1FE370-B31F-42A9-A0B1-39010C6E4A48}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyntheticVideo2language.StoryGenerator", "Vision2language.StoryGenerator\SyntheticVideo2language.StoryGenerator.csproj", "{2DE4AB06-CA05-4A67-A78D-1FD30415E344}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BE5AF8B4-46AF-4437-B126-36BAFDBCF7DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE5AF8B4-46AF-4437-B126-36BAFDBCF7DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE5AF8B4-46AF-4437-B126-36BAFDBCF7DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE5AF8B4-46AF-4437-B126-36BAFDBCF7DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C67ACEF-BB4F-4231-96AD-85F4AA3E5F84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C67ACEF-BB4F-4231-96AD-85F4AA3E5F84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C67ACEF-BB4F-4231-96AD-85F4AA3E5F84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C67ACEF-BB4F-4231-96AD-85F4AA3E5F84}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E156AE01-B1B6-432F-B233-BD49E98E3F97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E156AE01-B1B6-432F-B233-BD49E98E3F97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E156AE01-B1B6-432F-B233-BD49E98E3F97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E156AE01-B1B6-432F-B233-BD49E98E3F97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B1FE370-B31F-42A9-A0B1-39010C6E4A48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B1FE370-B31F-42A9-A0B1-39010C6E4A48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B1FE370-B31F-42A9-A0B1-39010C6E4A48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B1FE370-B31F-42A9-A0B1-39010C6E4A48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DE4AB06-CA05-4A67-A78D-1FD30415E344}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DE4AB06-CA05-4A67-A78D-1FD30415E344}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DE4AB06-CA05-4A67-A78D-1FD30415E344}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DE4AB06-CA05-4A67-A78D-1FD30415E344}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {23B2D408-AAA0-4847-931B-1A2741A9CC4C}
+	EndGlobalSection
+EndGlobal

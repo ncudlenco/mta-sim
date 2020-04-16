@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SyntheticVideo2language.StoryGenerator.Api
+namespace SyntheticVideo2language.Story.Api
 {
     public enum eStoryItemType
     {
-        Player,
+        Object,
+        Action,
+        Actor,
         Location,
         TimeOfDay,
         Weather,
-        Action,
         Vehicle,
-        Object
     }
 }

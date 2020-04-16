@@ -12,6 +12,9 @@ using SampSharp.ColAndreas;
 using SampSharp.SyntheticGameMode.Story;
 using Objects = SampSharp.SyntheticGameMode.Story.Objects;
 using SampSharp.SyntheticGameMode.Enums;
+using SampSharp.SyntheticGameMode.Extensions;
+using SampSharp.SyntheticGameMode.Data;
+using System.Windows.Forms;
 
 namespace SampSharp.SyntheticGameMode.Commands
 {
@@ -20,6 +23,148 @@ namespace SampSharp.SyntheticGameMode.Commands
     {
         public static readonly List<int> TOWELLS = new List<int> { 1640, 1641, 1642, 1643 };
 
+        [Command("clear", "debug")]
+        private static async void Clear(Player player, string what)
+        {
+            await Task.Delay(100);
+            switch (what)
+            {
+                case "debug":
+                    Debug.ClearDebugObjects();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        [Command("teleport")]
+        private static async void Teleport(Player player, string where)
+        {
+            switch (where)
+            {
+                case "smbeach":
+                    await Location.LosSantos[(int)CityLocation.SantaMariaBeach].SpawnPlayerHere();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        [Command("bed")]
+        private static async void Bed(Player player, string what)
+        {
+            await Task.Delay(100);
+            switch (what)
+            {
+                case "inL":
+                    player.ApplyAnimation("INT_HOUSE", "BED_In_L", 4.1f, false, false, false, true, 3000, true);
+                    break;
+                case "sleepR":
+                    player.ApplyAnimation("INT_HOUSE", "BED_Loop_R", 4.1f, false, false, false, true, 3000, true);
+                    break;
+                case "sleepL":
+                    player.ApplyAnimation("INT_HOUSE", "BED_Loop_L", 4.1f, false, false, false, true, 3000, true);
+                    player.Angle += 180;
+                    break;
+                case "outL":
+                    player.ApplyAnimation("INT_HOUSE", "BED_Out_L", 4.1f, false, false, false, true, 3000, true);
+                    player.Angle += 180;
+                    break;
+                case "outR":
+                    player.ApplyAnimation("INT_HOUSE", "BED_Out_R", 4.1f, false, false, false, true, 3000, true);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        [Command("animation")]
+        private static async void Animation(Player player, string what, string animLib, string animId, string loopstr, string lockXstr, string lockYstr, string freezestr, string forceSyncstr, string specialAction)
+        {
+            await Task.Delay(100);
+            switch (what)
+            {
+                case "sit":
+                    player.ApplyAnimation("MISC", "SEAT_LR", 4.1f, false, false, false, true, 3000, true);
+                    break;
+                case "getup":
+                    player.ApplyAnimation("ped", "getup", 4.1f, false, false, false, true, 3000, true);
+                    break;
+                case "washHands":
+                    player.ApplyAnimation("INT_HOUSE", "wash_up", 4.1f, false, false, false, true, 3000, true);
+                    break;
+                case "custom":
+                    try
+                    {
+                        bool loop = Convert.ToBoolean(loopstr);
+                        bool lockX = Convert.ToBoolean(lockXstr);
+                        bool lockY = Convert.ToBoolean(lockYstr);
+                        bool freeze = Convert.ToBoolean(freezestr);
+                        bool forceSync = Convert.ToBoolean(forceSyncstr);
+                        player.ApplyAnimation(animLib, animId, 4.1f, loop, lockX, lockY, freeze, 3000, forceSync);
+                        await Task.Delay(100);
+                        int specialActionId;
+                        if (!string.IsNullOrEmpty(specialAction) && Int32.TryParse(specialAction, out specialActionId))
+                        {
+                            player.SpecialAction = GameMode.Definitions.SpecialAction.Sitting;
+                            await Task.Delay(100);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        player.SendClientMessage(ex.ToString());
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        [Command("position")]
+        private static async void Position(Player player, string what)
+        {
+            await Task.Delay(100);
+            switch (what)
+            {
+                case "get":
+                    Clipboard.SetText(player.Position.X + "," + player.Position.Y + "," + player.Position.Z + "," + player.Angle, TextDataFormat.Text);
+                    player.SendClientMessage(player.Position.X + "," + player.Position.Y + "," + player.Position.Z + "," + player.Angle + " copied to clipboard");
+                    break;
+                case "up":
+                    await Task.Delay(100);
+                    player.Position = new Vector3(player.Position.X, player.Position.Y, player.Position.Z + 0.1);
+                    player.SendClientMessage(player.Position.ToString());
+                    break;
+                case "down":
+                    await Task.Delay(100);
+                    player.Position = new Vector3(player.Position.X, player.Position.Y, player.Position.Z - 0.1);
+                    player.SendClientMessage(player.Position.ToString());
+                    break;
+                case "backward":
+                    await Task.Delay(100);
+                    player.Position = new Vector3(player.Position.X + 0.1, player.Position.Y, player.Position.Z);
+                    player.SendClientMessage(player.Position.ToString());
+                    break;
+                case "forward":
+                    await Task.Delay(100);
+                    player.Position = new Vector3(player.Position.X - 0.1, player.Position.Y, player.Position.Z);
+                    player.SendClientMessage(player.Position.ToString());
+                    break;
+                case "right":
+                    await Task.Delay(100);
+                    player.Position = new Vector3(player.Position.X, player.Position.Y + 0.1, player.Position.Z);
+                    player.SendClientMessage(player.Position.ToString());
+                    break;
+                case "left":
+                    await Task.Delay(100);
+                    player.Position = new Vector3(player.Position.X, player.Position.Y - 0.1, player.Position.Z);
+                    player.SendClientMessage(player.Position.ToString());
+                    break;
+                default:
+                    break;
+            }
+        }
+
         [Command("goto", "beach")]
         private static async void RunBeachScenario(Player player, string location)
         {
@@ -27,7 +172,7 @@ namespace SampSharp.SyntheticGameMode.Commands
             switch (location)
             {
                 case "beach":
-                    SpawnPoint.SetPlayerSpawnPoint(player, (int)City.LosSantos, 32);
+                    Location.SetPlayerSpawnPoint(player, (int)City.LosSantos, 32);
                     break;
                 default:
                     break;

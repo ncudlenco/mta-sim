@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SampSharpGameMode.Extensions
 {
-    public static class SampExtensions
+    public static class Vector3Extensions
     {
         public static Vector3 GetGlobalXaxis(this Vector3 me)
         {
@@ -84,6 +84,44 @@ namespace SampSharpGameMode.Extensions
         {
             axis = axis.Normalized();
             return me.ProjectOnPlane(axis).SignedAngleTo(other.ProjectOnPlane(axis), axis);
+        }
+
+        public static Vector3 Rotate(this Vector3 me, Vector3 rotation)
+        {
+            var yaw = rotation.Z;
+            var pitch = rotation.Y;
+            var roll = rotation.X;
+
+            var cosa = Math.Cos(yaw);
+            var sina = Math.Sin(yaw);
+
+            var cosb = Math.Cos(pitch);
+            var sinb = Math.Sin(pitch);
+
+            var cosg = Math.Cos(roll);
+            var sing = Math.Sin(roll);
+
+            var Axx = cosa * cosb;
+            var Axy = cosa * sinb * sing - sina * cosg;
+            var Axz = cosa * sinb * cosg + sina * sing;
+
+            var Ayx = sina * cosb;
+            var Ayy = sina * sinb * sing + cosa * cosg;
+            var Ayz = sina * sinb * cosg - cosa * sing;
+
+            var Azx = -sinb;
+            var Azy = cosb * sing;
+            var Azz = cosb * cosg;
+
+            var px = me.X;
+            var py = me.Y;
+            var pz = me.Z;
+
+            var x = Axx * px + Axy * py + Axz * pz;
+            var y = Ayx * px + Ayy * py + Ayz * pz;
+            var z = Azx * px + Azy * py + Azz * pz;
+
+            return new Vector3(x, y, z);
         }
 
         public static string ToString(this Vector3 me)

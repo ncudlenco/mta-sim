@@ -39,6 +39,18 @@ namespace SampSharp.ColAndreas
             {
                 throw new NativeNotImplementedException();
             }
+
+            [NativeMethod(Function = "CA_CreateObject")]
+            public virtual int CA_CreateObject(int modelid, float x, float y, float z, float rx, float ry, float rz, bool add)
+            {
+                throw new NativeNotImplementedException();
+            }
+
+            [NativeMethod(Function = "CA_DestroyObject")]
+            public virtual int CA_DestroyObject(int idx)
+            {
+                throw new NativeNotImplementedException();
+            }
         }
     }
 }

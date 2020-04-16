@@ -1,41 +1,35 @@
-﻿using SyntheticVideo2language.StoryGenerator.Api;
+﻿using SyntheticVideo2language.Story.Api;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
-using Vision2language.StoryGenerator.Api;
 using System.Linq;
 using SampSharp.GameMode;
 using SampSharp.ColAndreas;
 using System.Threading.Tasks;
+using SampSharp.SyntheticGameMode.Story.Objects;
 
 namespace SampSharp.SyntheticGameMode.Story.Actions
 {
-    public class PutObjectOnGround : IGenericStoryItem
+    public class PutObjectOnGround : StoryActionBase
     {
-        public string Description { get => " is putting on the ground "; set { } }
-        public int TopologicalOrder { get; set; }
+        public override string Description { get => " is putting on the ground "; set { } }
 
-        public eStoryItemType StoryItemType => eStoryItemType.Action;
+        public override IStoryActor Performer { get; set; }
+        public override IStoryItem TargetItem { get; set; }
 
-        public List<IGenericStoryItem> StoryItems { get; set; }
-        public static List<IGenericStoryItem> GetAllValidObjects()
+        public static List<IStoryItem> GetAllValidObjects()
         {
-            List<IGenericStoryItem> validItems = new List<IGenericStoryItem>();
+            List<IStoryItem> validItems = new List<IStoryItem>();
 
             validItems.AddRange(Objects.Towel.TOWELL_IDS.Select(id => new Objects.Towel(id)));
             validItems.AddRange(Objects.BeachLounger.BEACH_LOUNGER_IDS.Select(id => new Objects.BeachLounger(id)));
             return validItems;
         }
 
-        public async Task<bool> ApplyInGameAsync(params object[] parameters)
+        public async override Task<bool> ApplyAsync(params object[] parameters)
         {
-            if (parameters.Length < 1)
-            {
-                return false;
-            }
-
-            var player = parameters[0] as Player;
+            var player = Performer as Player;
             await Task.Delay(100);
             player.ClearAnimations();
             await Task.Delay(100);
@@ -48,26 +42,12 @@ namespace SampSharp.SyntheticGameMode.Story.Actions
             rotation = new Vector3(rotation.X, rotation.Y, player.Angle);
             await Task.Delay(100);
 
-            player.SendClientMessage(player.Description + " " + this.Description);
+            SampStory.Instance.Logger.Log(player.Description + " " + this.Description, player);
             var res = false;
-            if (StoryItems != null)
-            {
-                var allRes = new List<bool>();
-                foreach (var item in StoryItems)
-                {
-                    allRes.Add(await item.ApplyInGameAsync(player, position, rotation));
-                }
-            }
+            var target = TargetItem as SampStoryObjectBase;
+            await target.CreateAsync(player, position, rotation);
             Thread.Sleep(100);
             return res;
-        }
-
-        public PutObjectOnGround(IGenericStoryItem targetObject)
-        {
-            this.StoryItems = new List<IGenericStoryItem>()
-            {
-                targetObject
-            };
         }
     }
 }

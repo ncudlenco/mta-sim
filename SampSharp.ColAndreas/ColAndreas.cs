@@ -110,6 +110,16 @@ namespace SampSharp.ColAndreas
             return new DynamicObject(modelId, position, rotation);
         }
 
+        public int CreateObjectCollision(int modelId, Vector3 position, Vector3 rotation)
+        {
+            return Internal.CA_CreateObject(modelId, position.X, position.Y, position.Z, rotation.X, rotation.Y, rotation.Z, true);
+        }
+
+        public int DestroyObjectWithCollision(int collisionId)
+        {
+            return Internal.CA_DestroyObject(collisionId);
+        }
+
 
 //        /**--------------------------------------------------------------------------**\
 //<summary>

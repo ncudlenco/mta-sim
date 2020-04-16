@@ -5,54 +5,33 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using SampSharp.GameMode;
-using SyntheticVideo2language.StoryGenerator.Api;
-using Vision2language.StoryGenerator.Api;
+using SyntheticVideo2language.Story.Api;
 
 namespace SampSharp.SyntheticGameMode.Story.Actions
 {
-    public class Swim : IGenericStoryItem
+    public class Swim : StoryActionBase
     {
-        public string Description { get => " is swimming "; set { } }
-        public int TopologicalOrder { get; set; }
+        public override string Description { get => " is swimming "; set { } }
 
-        public eStoryItemType StoryItemType => eStoryItemType.Action;
+        public override IStoryActor Performer { get; set; }
+        public override IStoryItem TargetItem { get; set; }
 
-        public List<IGenericStoryItem> StoryItems { get; set; }
-
-        private System.Timers.Timer t;
-        private double elapse;
-        private Player player;
-        public async Task<bool> ApplyInGameAsync(params object[] parameters)
+        public async override Task<bool> ApplyAsync(params object[] parameters)
         {
-            if (parameters.Length < 1)
-            {
-                return false;
-            }
-
-            this.player = parameters[0] as Player;
-            player.SendClientMessage(player.Description + " " + Description);
+            var player = Performer as Player;
+            SampStory.Instance.Logger.Log(player.Description + " " + Description, player);
             await Task.Delay(100);
-            var position = player.Position;
-            t = new System.Timers.Timer(1000);
-            elapse = 0;
-            t.Elapsed += TimerTick;
-            t.Start();
-            player.ApplyAnimation("SWIM", "Swim_Breast", 4.1f, true, true, true, true, 10000, true);
-            await Task.Delay(10000);
+            var interval = 1300;
+            player.SmoothVelocity = 0.05f;
+            for (int i = 0; i < 10; i++)
+            {
+                player.ApplyAnimation("SWIM", "Swim_Breast", 6.1f, true, true, true, true, interval);
+                await Task.Delay(interval);
+            }
+            player.ClearAnimations();
+            player.SmoothVelocity = 0;
             return true;
         }
 
-        private void TimerTick(object sender, ElapsedEventArgs e)
-        {
-            if (elapse >= 10000)
-            {
-                t.Stop();
-                player.ClearAnimations();
-                return;
-            }
-            player.Position = player.GetXYAroundPlayer(1f);
-            player.SendClientMessage("Tick + " + player.Position.ToString());
-            elapse += t.Interval;
-        }
     }
 }

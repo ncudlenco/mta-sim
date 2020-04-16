@@ -5,24 +5,17 @@ using System.Threading.Tasks;
 using SampSharp.GameMode;
 using SampSharp.Streamer;
 using SampSharp.Streamer.World;
-using SyntheticVideo2language.StoryGenerator.Api;
-using Vision2language.StoryGenerator.Api;
+using SyntheticVideo2language.Story.Api;
 
 namespace SampSharp.SyntheticGameMode.Story.Objects
 {
-    public class BeachLounger : StoryObjectBase, IGenericStoryItem
+    public class BeachLounger : SampStoryObjectBase
     {
-        public string Description { get => "beach lounger with a striped towel"; set => throw new NotImplementedException(); }
-        public int TopologicalOrder { get; set; }
-
+        public override string Description { get => "beach lounger with a striped towel"; set => throw new NotImplementedException(); }
         public override double SittingHeight { get => 0.1082642; }
         public override Vector3 Rotation { get => ObjectInstance == null ? new Vector3() : new Vector3(ObjectInstance.Rotation.X, ObjectInstance.Rotation.Y, ObjectInstance.Rotation.Z > 0 ? ObjectInstance.Rotation.Z - 180 : ObjectInstance.Rotation.Z + 180); }
 
-        public eStoryItemType StoryItemType => eStoryItemType.Object;
-
-        public List<IGenericStoryItem> StoryItems { get; set; }
-
-        public async Task<bool> ApplyInGameAsync(params object[] parameters)
+        public async override Task<bool> CreateAsync (params object[] parameters)
         {
             if (parameters.Length < 3)
             {
@@ -34,9 +27,9 @@ namespace SampSharp.SyntheticGameMode.Story.Objects
 
             await Task.Delay(100);
 
-            player.SendClientMessage(" a " + this.Description);
+            SampStory.Instance.Logger.Log(" a " + this.Description, player);
             double oppositeZrotation = rotation.Z > 0 ? rotation.Z - 180 : rotation.Z + 180;
-            this.ObjectInstance = new DynamicObject(this.Id, position, new Vector3(rotation.X, rotation.Y, oppositeZrotation));
+            this.ObjectInstance = new DynamicObject(this.ModelId, position, new Vector3(rotation.X, rotation.Y, oppositeZrotation));
             var streamer = BaseMode.Instance.Services.GetService<IStreamer>();
             streamer.ProcessActiveItems();
             player.OnUpdate(new SampSharp.GameMode.Events.PlayerUpdateEventArgs() { PreventPropagation = false });
@@ -47,9 +40,9 @@ namespace SampSharp.SyntheticGameMode.Story.Objects
 
         public static readonly List<int> BEACH_LOUNGER_IDS = new List<int> { 1646 };
 
-        public BeachLounger(int id)
+        public BeachLounger(int modelId)
         {
-            this.Id = id;
+            this.ModelId = modelId;
         }
     }
 }

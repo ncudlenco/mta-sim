@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using SyntheticVideo2language.StoryGenerator.Api;
-using Vision2language.StoryGenerator.Api;
+using SyntheticVideo2language.Story.Api;
 
 namespace SampSharp.SyntheticGameMode.Story
 {
-    public class Weather : IGenericStoryItem
+    public class Weather : StoryWeatherBase
     {
         public int Id { get; set; }
 
@@ -41,14 +40,9 @@ namespace SampSharp.SyntheticGameMode.Story
             new Weather (19, "dust storm")
         };
 
-        public string Description { get; set; }
-        public int TopologicalOrder { get => 0; set { } }
+        public override string Description { get; set; }
 
-        public eStoryItemType StoryItemType => eStoryItemType.TimeOfDay;
-
-        public List<IGenericStoryItem> StoryItems { get; set; }
-
-        public async Task<bool> ApplyInGameAsync(params object[] parameters)
+        public override async Task<bool> ApplyAsync(params object[] parameters)
         {
             if (parameters.Length != 1)
             {
@@ -58,7 +52,7 @@ namespace SampSharp.SyntheticGameMode.Story
             var player = parameters[0] as Player;
             player.SetWeather(this.Id);
 
-            player.SendClientMessage(" on a " + this.Description + " weather.");
+            SampStory.Instance.Logger.Log(" on a " + this.Description + " weather.", player);
 
             await Task.Delay(100);
             return true;

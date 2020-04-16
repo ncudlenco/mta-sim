@@ -1,31 +1,24 @@
-﻿using SyntheticVideo2language.StoryGenerator.Api;
+﻿using SyntheticVideo2language.Story.Api;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Vision2language.StoryGenerator.Api;
 
 namespace SampSharp.SyntheticGameMode.Story.Actions
 {
-    public class Smoke : IGenericStoryItem
+    //TODO: implement this as a complex action (which can be made while performing other simple actions and over different locations
+    public class Smoke : StoryActionBase
     {
-        public string Description { get => " is smoking "; set { } }
-        public int TopologicalOrder { get; set; }
+        public override string Description { get => " is smoking "; set { } }
 
-        public eStoryItemType StoryItemType => eStoryItemType.Action;
+        public override IStoryActor Performer { get; set; }
+        public override IStoryItem TargetItem { get; set; }
 
-        public List<IGenericStoryItem> StoryItems { get; set; }
-
-        public async Task<bool> ApplyInGameAsync(params object[] parameters)
+        public async override Task<bool> ApplyAsync(params object[] parameters)
         {
-            if (parameters.Length < 1)
-            {
-                return false;
-            }
-
-            var player = parameters[0] as Player;
-            player.SendClientMessage(player.Description + " " + Description);
+            var player = Performer as Player;
+            SampStory.Instance.Logger.Log(player.Description + " " + Description, player);
             player.SetCameraNextToPlayer(3, 0, 2);
             player.SpecialAction = GameMode.Definitions.SpecialAction.SmokeCiggy;
             await Task.Delay(100);

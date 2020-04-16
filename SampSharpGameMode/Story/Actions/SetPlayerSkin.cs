@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using SyntheticVideo2language.StoryGenerator.Api;
-using Vision2language.StoryGenerator.Api;
+using SyntheticVideo2language.Story.Api;
 
 namespace SampSharp.SyntheticGameMode.Story.Actions
 {
-    public class SetPlayerSkin : IGenericStoryItem
+    public class SetPlayerSkin : StoryActionBase
     {
         public int Id { get; set; }
-        public string Description { get; set; }
-        public int TopologicalOrder { get; set; }
+        public override string Description { get; set; }
+        //The Performer, TargetItem and NextValidStoryItems are not relevant here because this action is applied only once in SampStory.Play
+        public override IStoryActor Performer { get; set; }
+        public override IStoryItem TargetItem { get; set; }
 
         public static readonly List<SetPlayerSkin> PlayerSkins = new List<SetPlayerSkin>
         {
@@ -329,18 +330,9 @@ namespace SampSharp.SyntheticGameMode.Story.Actions
             //new SetPlayerSkin(311, "Desert Sheriff(Without hat)"),
         };
 
-        public eStoryItemType StoryItemType => eStoryItemType.Action;
-
-        public List<IGenericStoryItem> StoryItems { get; set; }
-
-        public async Task<bool> ApplyInGameAsync(params object[] parameters)
+        public async override Task<bool> ApplyAsync(params object[] parameters)
         {
-            if (parameters.Length < 1)
-            {
-                return false;
-            }
-
-            var player = parameters[0] as Player;
+            var player = Performer as Player ?? TargetItem as Player;
             await Task.Delay(100);
             player.Skin = this.Id;
             player.PlayerSkin = this;

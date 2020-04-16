@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using SyntheticVideo2language.StoryGenerator.Api;
-using Vision2language.StoryGenerator.Api;
+using SyntheticVideo2language.Story.Api;
 
 namespace SampSharp.SyntheticGameMode.Story
 {
-    public class TimeOfDay : IGenericStoryItem
+    public class TimeOfDay : StoryTimeOfDayBase
     {
         public int Hour { get; set; }
         public int Minutes { get; set; }
@@ -18,7 +17,7 @@ namespace SampSharp.SyntheticGameMode.Story
             this.Minutes = minutes;
         }
 
-        public string Description
+        public override string Description
         {
             get
             {
@@ -50,13 +49,8 @@ namespace SampSharp.SyntheticGameMode.Story
             }
             set { }
         }
-        public int TopologicalOrder { get => 0; set { } }
 
-        public eStoryItemType StoryItemType => eStoryItemType.TimeOfDay;
-
-        public List<IGenericStoryItem> StoryItems { get; set; }
-
-        public async Task<bool> ApplyInGameAsync(params object[] parameters)
+        public async override Task<bool> ApplyAsync(params object[] parameters)
         {
             if (parameters.Length != 1)
             {
@@ -67,8 +61,7 @@ namespace SampSharp.SyntheticGameMode.Story
             await Task.Delay(100);
 
             player.SetTime(this.Hour, this.Minutes);
-
-            player.SendClientMessage(" " + this.Description);
+            SampStory.Instance.Logger.Log(" " + this.Description, player);
             await Task.Delay(100);
 
             return true;

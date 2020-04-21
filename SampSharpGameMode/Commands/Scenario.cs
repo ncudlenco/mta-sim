@@ -15,10 +15,11 @@ using SampSharp.SyntheticGameMode.Enums;
 using SampSharp.SyntheticGameMode.Extensions;
 using SampSharp.SyntheticGameMode.Data;
 using System.Windows.Forms;
+using SampSharp.GameMode.Helpers;
+using SampSharpGameMode.Extensions;
 
 namespace SampSharp.SyntheticGameMode.Commands
 {
-    [CommandGroup("scenario")]
     public class Scenario
     {
         public static readonly List<int> TOWELLS = new List<int> { 1640, 1641, 1642, 1643 };
@@ -178,22 +179,45 @@ namespace SampSharp.SyntheticGameMode.Commands
                     break;
             }
         }
-
-        [Command("animation", "sleep")]
-        private static void ApplyAnimations(Player player, string param)
+        private static Vector3 previousPosition = Vector3.Zero;
+        [Command("angletest")]
+        private static async void Debugg(Player player, string what)
         {
-            switch (param)
+            await Task.Delay(100);
+
+            switch (what)
             {
-                case "sleep":
-                    player.ApplyAnimation("BEACH", "Lay_Bac_Loop", 4.1f, true, false, false, false, int.MaxValue);
+                case "remember":
+                    previousPosition = player.Position;
+                    player.SendClientMessage("Remembered: " + previousPosition.ToString());
                     break;
-                case "end":
-                    player.ClearAnimations();
+                case "angle":
+                    await player.SetPlayerLookAt(previousPosition);
                     break;
                 default:
                     break;
             }
+            //var h = player.GetHeadingVector();
+            //Debug.DrawVector(player, h, player.Position);
         }
+
+        //[Command("animation", "sleep")]
+        //private static void ApplyAnimations(Player player, string param)
+        //{
+        //    await Task.Delay(100);
+
+        //    switch (param)
+        //    {
+        //        case "sleep":
+        //            player.ApplyAnimation("BEACH", "Lay_Bac_Loop", 4.1f, true, false, false, false, int.MaxValue);
+        //            break;
+        //        case "end":
+        //            player.ClearAnimations();
+        //            break;
+        //        default:
+        //            break;
+        //    }
+        //}
 
         [Command("getCoordinates")]
         private static async void GetCoordinates(Player player)

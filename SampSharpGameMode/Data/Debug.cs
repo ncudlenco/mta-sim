@@ -1,4 +1,5 @@
 ﻿using SampSharp.GameMode;
+using SampSharp.GameMode.Helpers;
 using SampSharp.Streamer;
 using SampSharp.Streamer.World;
 using SampSharp.SyntheticGameMode.Story;
@@ -27,6 +28,21 @@ namespace SampSharp.SyntheticGameMode.Data
             player.OnUpdate(new SampSharp.GameMode.Events.PlayerUpdateEventArgs() { PreventPropagation = false });
             streamer.Update(player, player.Position);
             DEBUG_OBJECTS.Add(ball);
+        }
+
+        public static void DrawVector(Player player, Vector3 vector, Vector3 origin)
+        {
+            var ball = new DynamicObject((int)ePointType.Type1, origin, new Vector3());
+            var vv = vector - origin;
+            var angle = (float)Math.Atan2(vv.Y, vv.X);
+            var cue = new DynamicObject(19631, origin, new Vector3(0, 180, MathHelper.ToDegrees(angle)));
+
+            var streamer = BaseMode.Instance.Services.GetService<IStreamer>();
+            streamer.ProcessActiveItems();
+            player.OnUpdate(new SampSharp.GameMode.Events.PlayerUpdateEventArgs() { PreventPropagation = false });
+            streamer.Update(player, player.Position);
+            DEBUG_OBJECTS.Add(ball);
+            DEBUG_OBJECTS.Add(cue);
         }
 
         public static void ClearDebugObjects()

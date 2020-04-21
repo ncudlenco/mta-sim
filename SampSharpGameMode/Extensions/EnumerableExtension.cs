@@ -9,7 +9,7 @@ namespace SampSharp.SyntheticGameMode.Extensions
     {
         public static T PickRandom<T>(this IEnumerable<T> source, Func<T, bool> predicate = null)
         {
-            return source.PickRandom(1, predicate).Single();
+            return source.PickRandom(1, predicate).FirstOrDefault();
         }
 
         public static IEnumerable<T> PickRandom<T>(this IEnumerable<T> source, int count, Func<T,bool> predicate = null)

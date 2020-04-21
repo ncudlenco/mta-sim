@@ -269,7 +269,12 @@ namespace SampSharp.SyntheticGameMode.Story
             }
             //Check if in history there is a prerequisite action which was not cancelled out by its closing action
             var nextValidActions = this.PossibleActions.Where(x => !x.Equals(previousAction) && x.Prerequisites.All(p => SampStory.Instance.History.LastIndexOf(p) > SampStory.Instance.History.LastIndexOf(p.ClosingAction)));
-            return nextValidActions.PickRandom();
+            var nextRandom = nextValidActions.PickRandom();
+            if (nextRandom == null)
+            {
+                return new DebugEmpty();
+            }
+            return nextRandom;
         }
 
     }

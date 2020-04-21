@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using SampSharp.GameMode;
 using SampSharp.GameMode.Helpers;
+using SampSharp.SyntheticGameMode.Data;
 using SampSharpGameMode.Extensions;
 using SyntheticVideo2language.Story.Api;
 
@@ -33,13 +34,21 @@ namespace SampSharp.SyntheticGameMode.Story.Actions
 
             if (destination != Vector3.Zero)
             {
-                var destinationV = destination - player.Position;
-                //player.Angle = -MathHelper.ToDegrees((float)Vector3.UnitX.SignedAngleTo(destinationV, Vector3.UnitZ));
                 player.SetPlayerLookAt(destination);
             }
 
-            player.ApplyAnimation("ped", "WALK_civi", 4.1f, true, true, true, true, 3000, true);
-            Thread.Sleep(3000);
+            player.Destination = destination;
+            var interval = 1000;
+            var max_ticks = 20;
+            int i = 0;
+            while (player.Destination != Vector3.Zero && i++ < max_ticks)
+            {
+                player.ApplyAnimation("ped", "WALK_civi", 4.1f, true, true, true, true, interval, true);
+                await Task.Delay(interval);
+            }
+
+            player.Destination = Vector3.Zero;
+            player.ClearAnimations();
             player.ClearAnimations();
             await Task.Delay(100);
 

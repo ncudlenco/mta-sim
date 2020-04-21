@@ -21,7 +21,7 @@ namespace SampSharp.SyntheticGameMode.Story
     {
         private static readonly bool LOG_DATA = true;
         private static readonly string LOG_DIRECTORY_PATH = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-        public override int MAX_ACTIONS => 30;
+        public override int MAX_ACTIONS => int.MaxValue;
         public bool IsRunning { get; set; }
         private Guid StoryId = Guid.NewGuid();
         public override List<StoryEpisodeBase> Episodes => new List<StoryEpisodeBase> {
@@ -94,7 +94,7 @@ namespace SampSharp.SyntheticGameMode.Story
                 string monitorDeviceName = System.Windows.Forms.Screen.PrimaryScreen.DeviceName;
                 RecorderOptions options = new RecorderOptions
                 {
-                    DisplayOptions = new DisplayOptions(monitorDeviceName, left, top, right, bottom)
+                    //DisplayOptions = new DisplayOptions(monitorDeviceName, left, top, right, bottom)
                 };
                 videoFilePath = Path.Combine(LOG_DIRECTORY_PATH, StoryId + ".mp4");
                 loggingFilePath = Path.Combine(LOG_DIRECTORY_PATH, StoryId + ".txt");

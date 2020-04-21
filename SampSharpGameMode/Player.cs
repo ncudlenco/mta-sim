@@ -12,6 +12,8 @@ using SampSharp.Streamer.World;
 using System.Threading.Tasks;
 using ScreenRecorderLib;
 using System.IO;
+using SampSharpGameMode.Extensions;
+using System.Threading;
 
 namespace SampSharp.SyntheticGameMode.Story
 {
@@ -25,6 +27,7 @@ namespace SampSharp.SyntheticGameMode.Story
         }
         public eStoryItemType StoryItemType => eStoryItemType.Actor;
         public Actions.SetPlayerSkin PlayerSkin { get; set; }
+        public Vector3 Destination { get; set; }
         public Vector3 CreateVelocity(float speed, float rotation = 0)
         {
             float angle = this.Angle;
@@ -58,25 +61,24 @@ namespace SampSharp.SyntheticGameMode.Story
             return result;
         }
 
-        public void SetPlayerLookAt(Vector3 destination)
+        public async Task SetPlayerLookAt(Vector3 destination)
         {
-            var Pa = Math.Abs(Math.Atan((destination.Y - this.Position.Y) / (destination.X - this.Position.X)));
-            if (destination.X <= this.Position.X && destination.Y >= this.Position.Y)
-                Pa = 180 - Pa;
-            else if (destination.X < this.Position.X && destination.Y < this.Position.Y)
-                Pa += 180;
-            else if (destination.X >= this.Position.X && destination.Y <= this.Position.Y)
-                Pa = 360.0 - Pa;
-            Pa -= 90.0;
-            if (Pa >= 360.0)
-                Pa -= 360.0;
-            this.Angle = (float)Pa;
+            var destinationV = destination - this.Position;
+            var forward = this.GetHeadingVector().Normalized();
+            var normal = destinationV.CrossProduct(Vector3.Forward);
+
+            var angle = MathHelper.ToDegrees((float)forward.SignedAngleTo(destinationV, normal));
+
+            //this.SendClientMessage("Player angle: " + this.Angle.ToString());
+            //this.SendClientMessage("Angle to destination: " + angle.ToString());
+            //this.SendClientMessage("Final angle: " + (this.Angle + angle).ToString());
+
+            this.Angle += angle;
         }
 
-        public Vector3 GetForwardVector()
+        public Vector3 GetHeadingVector()
         {
-            var dest = GetXYAroundPlayer(1);
-            return (dest - this.Position).Normalized();
+            return (GetXYAroundPlayer(10) - this.Position).Normalized();
         }
 
         public async void SetCameraNextToPlayer(float distance, float angle = 0, float zOffset = 0)
@@ -108,6 +110,17 @@ namespace SampSharp.SyntheticGameMode.Story
             if (this.SmoothVelocity > 0)
             {
                 this.Velocity = CreateVelocity(this.SmoothVelocity);
+            }
+            if (this.Destination != Vector3.Zero)
+            {
+                this.SetPlayerLookAt(this.Destination);
+                if(MathF.Abs(this.Position.DistanceTo(this.Destination)) <= .3 + float.Epsilon)
+                {
+                    this.ClearAnimations(true);
+                    this.ClearAnimations(true);
+                    this.Destination = Vector3.Zero;
+                    this.Velocity = Vector3.Zero;
+                }
             }
             base.OnUpdate(e);
         }

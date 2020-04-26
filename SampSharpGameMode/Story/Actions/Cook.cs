@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace SampSharp.SyntheticGameMode.Story.Actions
 {
-    public class WashHands : StoryActionBase
+    public class Cook : StoryActionBase
     {
-        public override string Description { get => " is washing hands "; set { } }
+        public override string Description { get => " is cooking food "; set { } }
         public override IStoryActor Performer { get; set; }
         public override IStoryItem TargetItem { get; set; }
 
@@ -19,11 +19,11 @@ namespace SampSharp.SyntheticGameMode.Story.Actions
             SampStory.Instance.History.Add(this);
 
             var player = Performer as Player;
-            SampStory.Instance.Logger.Log(player.Description + this.Description + " in the " + TargetItem.Description);
+            SampStory.Instance.Logger.Log(player.Description + this.Description + " at the " + TargetItem.Description);
             player.ApplyAnimation("INT_HOUSE", "wash_up", 4.1f, true, false, false, true, 3000, true);
             Thread.Sleep(3500);
             player.ClearAnimations();
-            await Task.Delay(500);
+            await Task.Delay(1000);
 
             return await (NextLocation as Location).GetNextRandomValidAction().ApplyAsync();
         }

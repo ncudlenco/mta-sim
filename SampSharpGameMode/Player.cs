@@ -14,6 +14,8 @@ using ScreenRecorderLib;
 using System.IO;
 using SampSharpGameMode.Extensions;
 using System.Threading;
+using System.Drawing.Printing;
+using System.Security.Cryptography.X509Certificates;
 
 namespace SampSharp.SyntheticGameMode.Story
 {
@@ -63,6 +65,12 @@ namespace SampSharp.SyntheticGameMode.Story
 
         public async Task SetPlayerLookAt(Vector3 destination)
         {
+            this.Angle = MathF.Atan2(destination.X, destination.Y) - MathF.Atan2(Position.X, Position.Y);
+
+
+            Console.WriteLine(this.Angle);
+            Console.WriteLine();
+            /*
             var destinationV = destination - this.Position;
             var forward = this.GetHeadingVector().Normalized();
             var normal = destinationV.CrossProduct(Vector3.Forward);
@@ -73,7 +81,8 @@ namespace SampSharp.SyntheticGameMode.Story
             //this.SendClientMessage("Angle to destination: " + angle.ToString());
             //this.SendClientMessage("Final angle: " + (this.Angle + angle).ToString());
 
-            this.Angle += angle;
+            this.Angle = angle;
+            */
         }
 
         public Vector3 GetHeadingVector()
@@ -111,6 +120,7 @@ namespace SampSharp.SyntheticGameMode.Story
             {
                 this.Velocity = CreateVelocity(this.SmoothVelocity);
             }
+            /*
             if (this.Destination != Vector3.Zero)
             {
                 this.SetPlayerLookAt(this.Destination);
@@ -121,7 +131,7 @@ namespace SampSharp.SyntheticGameMode.Story
                     this.Destination = Vector3.Zero;
                     this.Velocity = Vector3.Zero;
                 }
-            }
+            }*/
             base.OnUpdate(e);
         }
         #endregion

@@ -41,10 +41,10 @@ namespace SampSharp.SyntheticGameMode.Story.Episodes
 
             #region Episode objects
 
-            var kitchenChair1 = new Chair { ModelId = (int)Chair.eChairModel.eSolidWoodenChair, Position = new Vector3(2494.4232, -1708.3188, 1014.4422), Rotation = new Vector3(0, 0, 0) };
+            var kitchenChair1 = new Chair { ModelId = (int)Chair.eChairModel.eSolidWoodenChair, Position = new Vector3(2494.2, -1708.3188, 1014.2422), Rotation = new Vector3(0, 0, 0) };
             await kitchenChair1.CreateAsync(player);
 
-            var kitchenChair2 = new Chair { ModelId = (int)Chair.eChairModel.eSolidWoodenChair, Position = new Vector3(2494.4930, -1706.7609, 1014.4422), Rotation = new Vector3(0, 0, 0) };
+            var kitchenChair2 = new Chair { ModelId = (int)Chair.eChairModel.eSolidWoodenChair, Position = new Vector3(2494.2, -1706.7609, 1014.2422), Rotation = new Vector3(0, 0, 0) };
             await kitchenChair2.CreateAsync(player);
 
             #endregion
@@ -58,10 +58,11 @@ namespace SampSharp.SyntheticGameMode.Story.Episodes
             var kitchenSinkLocation = new Location(2500.1151, -1709.2577, 1014.7422, 267.4209, this.InteriorId, "sink");
             var kitchenGasCookerLocation = new Location(2499.2088, -1706.6673, 1014.7422, 6.4351, this.InteriorId, "gas cooker");
             var kitchenFridgeLocation = new Location(2498.2986, -1711.3533, 1014.7422, 169.6598, this.InteriorId, "fridge");
-            var kitchenTableLocation = new Location(2494.3132, -1707.6363, 1014.7422, 90.000, this.InteriorId, "table");
+            var kitchenChar1Location = new Location(2495.1032, -1708.3363, 1014.7422, 90.000, this.InteriorId, "chair");
+            var kitchenChar2Location = new Location(2495.1032, -1706.7609, 1014.7422, 90.000, this.InteriorId, "chair");
 
             // declare valid starting locations
-            ValidStartingLocations.Add(livingRoomDoorEntranceLocation);
+            ValidStartingLocations.Add(kitchenGasCookerLocation);
 
             #region Create locations graph
             // living room entrance actions
@@ -90,9 +91,17 @@ namespace SampSharp.SyntheticGameMode.Story.Episodes
             // kitchen gas cooker
             var cookAction = new Cook { Performer = player, NextLocation = kitchenGasCookerLocation, TargetItem = kitchenGasCookerLocation };
             kitchenGasCookerLocation.PossibleActions.Add(cookAction);
-            var goToTableAction = new Walk { Performer = player, Prerequisites = new List<StoryActionBase> { cookAction }, NextLocation = kitchenTableLocation, TargetItem = kitchenTableLocation, Angle = 99.8327f };
-            cookAction.ClosingAction = goToTableAction;
-            kitchenGasCookerLocation.PossibleActions.Add(goToTableAction);
+            var goToChair1Action = new Walk { Performer = player, Prerequisites = new List<StoryActionBase> { cookAction }, NextLocation = kitchenChar1Location, TargetItem = kitchenChar1Location, Angle = 108.0327f };
+            cookAction.ClosingAction = goToChair1Action;
+            kitchenGasCookerLocation.PossibleActions.Add(goToChair1Action);
+            var goToChair2Action = new Walk { Performer = player, Prerequisites = new List<StoryActionBase> { cookAction }, NextLocation = kitchenChar2Location, TargetItem = kitchenChar2Location, Angle = 92.8327f };
+            cookAction.ClosingAction = goToChair2Action;
+            kitchenGasCookerLocation.PossibleActions.Add(goToChair2Action);
+
+            var sitDownAtTable1 = new SitDown(SitDown.eHow.atDesk) { Performer = player, NextLocation = kitchenChar1Location, TargetItem = kitchenChair1 };
+            kitchenChar1Location.PossibleActions.Add(sitDownAtTable1);
+            var sitDownAtTable2 = new SitDown(SitDown.eHow.atDesk) { Performer = player, NextLocation = kitchenChar2Location, TargetItem = kitchenChair2 };
+            kitchenChar2Location.PossibleActions.Add(sitDownAtTable2);
 
             #endregion
 

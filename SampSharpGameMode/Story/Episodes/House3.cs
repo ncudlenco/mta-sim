@@ -63,6 +63,8 @@ namespace SampSharp.SyntheticGameMode.Story.Episodes
                 Tuple.Create(new Location(2495.1032, -1706.7609, 1014.7422, 90.000, this.InteriorId, "chair"), 92.8327f)
             };
 
+            int chairLocation = new Random().Next(2);
+            var kitchenChairLocationTuple = kitchenChairLocations[chairLocation];
 
             // declare valid starting locations
             ValidStartingLocations.Add(livingRoomDoorEntranceLocation);
@@ -85,7 +87,8 @@ namespace SampSharp.SyntheticGameMode.Story.Episodes
 
             // kitchen fridge
             var foodTypes = Enum.GetValues(typeof(Food.eFoodType));
-            var pickupFoodAction = new PickUpObject { Performer = player, NextLocation = kitchenFridgeLocation, TargetItem = new Food { ModelId = (int)foodTypes.GetValue(new Random().Next(foodTypes.Length)) } };
+            var food = new Food { ModelId = (int)foodTypes.GetValue(new Random().Next(foodTypes.Length)) };
+            var pickupFoodAction = new PickUpObject { Performer = player, NextLocation = kitchenFridgeLocation, TargetItem = food };
             kitchenFridgeLocation.PossibleActions.Add(pickupFoodAction);
             var goToGasCookerAction = new Walk { Performer = player, Prerequisites = new List<StoryActionBase> { pickupFoodAction }, NextLocation = kitchenGasCookerLocation, TargetItem = kitchenGasCookerLocation, Angle = 350.4216f };
             pickupFoodAction.ClosingAction = goToGasCookerAction;
@@ -94,8 +97,6 @@ namespace SampSharp.SyntheticGameMode.Story.Episodes
             // kitchen gas cooker
             var cookAction = new Cook { Performer = player, NextLocation = kitchenGasCookerLocation, TargetItem = kitchenGasCookerLocation };
             kitchenGasCookerLocation.PossibleActions.Add(cookAction);
-
-            var kitchenChairLocationTuple = kitchenChairLocations.PickRandom();
             var goToChair1Action = new Walk { Performer = player, Prerequisites = new List<StoryActionBase> { cookAction }, NextLocation = kitchenChairLocationTuple.Item1, TargetItem = kitchenChairLocationTuple.Item1, Angle = kitchenChairLocationTuple.Item2 };
             cookAction.ClosingAction = goToChair1Action;
             kitchenGasCookerLocation.PossibleActions.Add(goToChair1Action);
@@ -103,6 +104,14 @@ namespace SampSharp.SyntheticGameMode.Story.Episodes
             // eat at chair 
             var sitDownAtTable1Action = new SitDown(SitDown.eHow.atDesk) { Performer = player, NextLocation = kitchenChairLocationTuple.Item1, TargetItem = kitchenChair1 };
             kitchenChairLocationTuple.Item1.PossibleActions.Add(sitDownAtTable1Action);
+            var standUpFromTableAction = new StandUp(StandUp.eHow.fromDesk) { Performer = player, Prerequisites = new List<StoryActionBase> { sitDownAtTable1Action }, NextLocation = kitchenChairLocationTuple.Item1, TargetItem = kitchenChair1 };
+            sitDownAtTable1Action.ClosingAction = standUpFromTableAction;
+            kitchenChairLocationTuple.Item1.PossibleActions.Add(standUpFromTableAction);
+            
+            var endScenario = new EndSimulation { Prerequisites = new List<StoryActionBase> { standUpFromTableAction } };
+            standUpFromTableAction.ClosingAction = endScenario;
+            kitchenChairLocationTuple.Item1.PossibleActions.Add(endScenario);
+
 
             #endregion
 

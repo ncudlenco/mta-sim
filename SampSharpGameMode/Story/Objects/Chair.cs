@@ -13,6 +13,7 @@ namespace SampSharp.SyntheticGameMode.Story.Objects
         public enum eChairModel
         {
             eBedroomChair = 2331,
+            eSolidWoodenChair = 1811
         }
 
         public override string Description { get => " chair "; set { } }

@@ -56,8 +56,9 @@ namespace SampSharp.SyntheticGameMode.Story.Episodes
             var livingRoomDoorEntranceLocation = new Location(2496.0610, -1694.2596, 1014.7422, 181.8800, this.InteriorId, "livin room near door");
             var kitchenDoorEntranceLocation = new Location(2496.0244, -1708.2274, 1014.7422, 177.1800, this.InteriorId, "kitchen entrance");
             var kitchenSinkLocation = new Location(2500.1151, -1709.2577, 1014.7422, 267.4209, this.InteriorId, "sink");
-            var kitchenGasCookerLocation = new Location(2499.2888, -1706.7673, 1014.7422, 6.4351, this.InteriorId, "gas cooker");
-            var kitchenFridgeLocation = new Location(2498.3386, -1711.3533, 1014.7422, 169.6598, this.InteriorId, "fridge");
+            var kitchenGasCookerLocation = new Location(2499.2088, -1706.6673, 1014.7422, 6.4351, this.InteriorId, "gas cooker");
+            var kitchenFridgeLocation = new Location(2498.2986, -1711.3533, 1014.7422, 169.6598, this.InteriorId, "fridge");
+            var kitchenTableLocation = new Location(2494.3132, -1707.6363, 1014.7422, 90.000, this.InteriorId, "table");
 
             // declare valid starting locations
             ValidStartingLocations.Add(livingRoomDoorEntranceLocation);
@@ -87,9 +88,11 @@ namespace SampSharp.SyntheticGameMode.Story.Episodes
             kitchenFridgeLocation.PossibleActions.Add(goToGasCookerAction);
 
             // kitchen gas cooker
-            kitchenGasCookerLocation.PossibleActions.Add(new Cook { Performer = player, NextLocation = kitchenGasCookerLocation, TargetItem = kitchenGasCookerLocation });
-            kitchenGasCookerLocation.PossibleActions.Add(new Walk { Performer = player, NextLocation = kitchenSinkLocation, TargetItem = kitchenSinkLocation, Angle = 211.6236f });
-            kitchenGasCookerLocation.PossibleActions.Add(new Walk { Performer = player, NextLocation = kitchenFridgeLocation, TargetItem = kitchenFridgeLocation, Angle = 165.8766f });
+            var cookAction = new Cook { Performer = player, NextLocation = kitchenGasCookerLocation, TargetItem = kitchenGasCookerLocation };
+            kitchenGasCookerLocation.PossibleActions.Add(cookAction);
+            var goToTableAction = new Walk { Performer = player, Prerequisites = new List<StoryActionBase> { cookAction }, NextLocation = kitchenTableLocation, TargetItem = kitchenTableLocation, Angle = 99.8327f };
+            cookAction.ClosingAction = goToTableAction;
+            kitchenGasCookerLocation.PossibleActions.Add(goToTableAction);
 
             #endregion
 

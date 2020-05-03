@@ -39,15 +39,22 @@ namespace SampSharp.SyntheticGameMode.Story.Episodes
             //Remove the chair from the buro in bedroom 1
             GlobalObject.Remove(player, 2331, new Vector3(2367.3672, -1123.1563, 1050.1172), 0.25f);
             //
-            var bedroomChair = new Chair { ModelId = (int)Chair.eChairModel.eBedroomChair, Position = new Vector3(2367.20923, -1122.79114, 1050.11719), Rotation = new Vector3(356.85840, 0.00000, 359.39059) };
+            var bedroomChair = new Chair { ModelId = (int)Chair.eChairModel.eBedroomChair, Position = new Vector3(2367.20923, -1122.79114, 1049.91719), Rotation = new Vector3(356.85840, 0.00000, 359.39059) };
             await bedroomChair.CreateAsync(player);
             //Create a closed laptop on the table
             var laptop = new Laptop { ModelId = (int)Laptop.eLaptopModel.eClosed, Position = new Vector3(2368.59741, -1122.68201, 1050.83435), Rotation = new Vector3(0.00000, 0.00000, 269.11588) };
             await laptop.CreateAsync(player);
+
             this.Objects = new List<SampStoryObjectBase>();
             this.Objects.Add(laptop);
             this.Objects.Add(bedroomChair);
             this.ValidStartingLocations = new List<StoryLocationBase>();
+            var photos = new Photos 
+            {
+                ModelId = 2828, 
+                Position = new Vector3(2374.25781, -1129.25781, 1050.78906), 
+                Rotation = new Vector3(356.85840, 0.00000, 360) 
+            };
             var bedroom1Bed = new Bed
             {
                 ModelId = 2302,
@@ -92,13 +99,13 @@ namespace SampSharp.SyntheticGameMode.Story.Episodes
 #region Bedroom1
             var bedroom1FacingBedLeft = new Location(2363.0017, -1123.7264, 1050.8750, 357.2968, this.InteriorId, " bedroom near the bed ");
             var bedroom1BackToBedLeft = new Location(2363.0017, -1123.7264, 1050.8750, 177.2968, this.InteriorId, " bedroom near the bed ");
-            //this.ValidStartingLocations.Add(bedroom1BackToBedLeft);
+            this.ValidStartingLocations.Add(bedroom1FacingBedLeft);
 
             var bedroom1InBedLeft = new Location(2362.477, -1123.7567, 1050.875, 357.29678, this.InteriorId, " bedroom on the bed ");
             var getInBedAction = new GetInBed { NextLocation = bedroom1InBedLeft, Performer = SampStory.Instance.Actor, TargetItem = bedroom1Bed };
             bedroom1FacingBedLeft.PossibleActions.Add(getInBedAction);
 
-            this.ValidStartingLocations.Add(bedroom1FacingBedLeft);
+            //this.ValidStartingLocations.Add(bedroom1FacingBedLeft);
             var sleepAction = new Sleep { NextLocation = bedroom1InBedLeft, Prerequisites = new List<StoryActionBase> { getInBedAction }, Performer = SampStory.Instance.Actor, TargetItem = bedroom1Bed };
             bedroom1InBedLeft.PossibleActions.Add(sleepAction);
             var getOffBedAction = new GetOffBed { NextLocation = bedroom1BackToBedLeft, Prerequisites = new List<StoryActionBase> { getInBedAction, sleepAction }, Performer = SampStory.Instance.Actor, TargetItem = bedroom1Bed };
@@ -139,10 +146,13 @@ namespace SampSharp.SyntheticGameMode.Story.Episodes
             var livingRoomBackToRightSofa2 = new Location(2370.9368, -1124.0031, 1050.8750, 95.8058, " right sofa in the living room ");
             var livingRoomOnTheRightSofa = new Location(2370.9368, -1124.0031, 1050.8750, 95.8058, " right sofa in the living room ");
 
-            hallwayToLivingroomDoor.PossibleActions.Add(new Walk { Performer = player, NextLocation = livingRoomBackToRightSofa, TargetItem = livingRoomBackToRightSofa });
-            var sitOnRightSofaAction = new SitDown(SitDown.eHow.sofa) { Performer = player, NextLocation = livingRoomOnTheRightSofa, TargetItem = new Sofa() };
+            var intermToRightSofa = new Location(2371.629, -1125.857, 1050.875, 307.046, " right sofa in the living room ");
+            hallwayToLivingroomDoor.PossibleActions.Add(new Walk { Performer = player, NextLocation = intermToRightSofa, TargetItem = intermToRightSofa });
+            intermToRightSofa.PossibleActions.Add(new Walk { Performer = player, NextLocation = livingRoomBackToRightSofa, TargetItem = livingRoomBackToRightSofa });
+            
+            var sitOnRightSofaAction = new SitDown(SitDown.eHow.sofa) { Performer = player, NextLocation = livingRoomOnTheRightSofa, TargetItem = sofaRight };
             livingRoomBackToRightSofa.PossibleActions.Add(sitOnRightSofaAction);
-            var standUpFromRightSofaAction = new StandUp(StandUp.eHow.fromSofa) { Performer = player, Prerequisites = new List<StoryActionBase> { sitOnRightSofaAction }, NextLocation = livingRoomBackToRightSofa2, TargetItem = new Sofa() };
+            var standUpFromRightSofaAction = new StandUp(StandUp.eHow.fromSofa) { Performer = player, Prerequisites = new List<StoryActionBase> { sitOnRightSofaAction }, NextLocation = livingRoomBackToRightSofa2, TargetItem = sofaRight };
             sitOnRightSofaAction.ClosingAction = standUpFromRightSofaAction;
             livingRoomOnTheRightSofa.PossibleActions.Add(standUpFromRightSofaAction);
 
@@ -150,19 +160,19 @@ namespace SampSharp.SyntheticGameMode.Story.Episodes
             var livingRoomBackToCentralSofa2 = new Location(2372.0334, -1122.0536, 1050.8750, 356.7915, " central sofa in the living room ");
             var livingRoomOnCentralSofa = new Location(2372.0334, -1122.0536, 1050.8750, 356.7915, " central sofa in the living room ");
             livingRoomBackToRightSofa2.PossibleActions.Add(new Walk { Performer = player, NextLocation = livingRoomBackToCentralSofa, TargetItem = livingRoomBackToCentralSofa });
-            var sitOnCentralSofaAction = new SitDown(SitDown.eHow.sofa) { Performer = player, NextLocation = livingRoomOnCentralSofa, TargetItem = new Sofa() };
+            var sitOnCentralSofaAction = new SitDown(SitDown.eHow.sofa) { Performer = player, NextLocation = livingRoomOnCentralSofa, TargetItem = sofaCenter };
             livingRoomBackToCentralSofa.PossibleActions.Add(sitOnCentralSofaAction);
-            var standUpFromCentralSofaAction = new StandUp(StandUp.eHow.fromSofa) { Performer = player, Prerequisites = new List<StoryActionBase> { sitOnCentralSofaAction }, NextLocation = livingRoomBackToCentralSofa2, TargetItem = new Sofa() };
+            var standUpFromCentralSofaAction = new StandUp(StandUp.eHow.fromSofa) { Performer = player, Prerequisites = new List<StoryActionBase> { sitOnCentralSofaAction }, NextLocation = livingRoomBackToCentralSofa2, TargetItem = sofaCenter };
             sitOnCentralSofaAction.ClosingAction = standUpFromCentralSofaAction;
             livingRoomOnCentralSofa.PossibleActions.Add(standUpFromCentralSofaAction);
 
             var livingRoomBackToLeftSofa = new Location(2374.1345, -1124.0991, 1050.8750, 262.7906, " central sofa in the living room ");
-            var livingRoomBackToLeftSofa2 = new Location(2374.1345, -1124.0991, 1050.8750, 262.7906, " central sofa in the living room ");
+            var livingRoomBackToLeftSofa2 = new Location(2374.1345, -1124.0991, 1050.8750, 262.7906, this.InteriorId, " central sofa in the living room ");
             var livingRoomOnLeftSofa = new Location(2374.1345, -1124.0991, 1050.8750, 262.7906, " central sofa in the living room ");
             livingRoomBackToCentralSofa2.PossibleActions.Add(new Walk { Performer = player, NextLocation = livingRoomBackToLeftSofa, TargetItem = livingRoomBackToLeftSofa });
-            var sitOnLeftSofaAction = new SitDown(SitDown.eHow.sofa) { Performer = player, NextLocation = livingRoomOnLeftSofa, TargetItem = new Sofa() };
+            var sitOnLeftSofaAction = new SitDown(SitDown.eHow.sofa) { Performer = player, NextLocation = livingRoomOnLeftSofa, TargetItem = sofaLeft };
             livingRoomBackToLeftSofa.PossibleActions.Add(sitOnLeftSofaAction);
-            var standUpFromLeftSofaAction = new StandUp(StandUp.eHow.fromSofa) { Performer = player, Prerequisites = new List<StoryActionBase> { sitOnLeftSofaAction }, NextLocation = livingRoomBackToLeftSofa2, TargetItem = new Sofa() };
+            var standUpFromLeftSofaAction = new StandUp(StandUp.eHow.fromSofa) { Performer = player, Prerequisites = new List<StoryActionBase> { sitOnLeftSofaAction }, NextLocation = livingRoomBackToLeftSofa2, TargetItem = sofaLeft };
             sitOnLeftSofaAction.ClosingAction = standUpFromLeftSofaAction;
             livingRoomOnLeftSofa.PossibleActions.Add(standUpFromLeftSofaAction);
 
@@ -173,7 +183,11 @@ namespace SampSharp.SyntheticGameMode.Story.Episodes
 
             var livingRoomToKitchenDoor = new Location(2370.776, -1129.9869, 1050.875, 179.36787, this.InteriorId, " living room at the door to kitchen ");
             //this.ValidStartingLocations.Add(livingRoomToKitchenDoor);
-            livingRoomNearPhotos.PossibleActions.Add(new Walk { Performer = player, NextLocation = livingRoomToKitchenDoor, TargetItem = livingRoomToKitchenDoor });
+            var intermPhotosToKitchenDoor = new Location(2370.8577, -1128.1986, 1050.875, 88.987305, " living room at the door to kitchen ");
+            var lookAtPhotosAction = new LookAtObject { Performer = player, NextLocation = livingRoomNearPhotos, TargetItem = photos };
+            livingRoomNearPhotos.PossibleActions.Add(lookAtPhotosAction);
+            livingRoomNearPhotos.PossibleActions.Add(new Walk { Performer = player, Prerequisites = new List<StoryActionBase> { lookAtPhotosAction }, NextLocation = intermPhotosToKitchenDoor, TargetItem = intermPhotosToKitchenDoor });
+            intermPhotosToKitchenDoor.PossibleActions.Add(new Walk { Performer = player, NextLocation = livingRoomToKitchenDoor, TargetItem = livingRoomToKitchenDoor });
             //hallwayToLivingroomDoor.PossibleActions.Add(new Walk { Performer = player, NextLocation = livingRoomToKitchenDoor, TargetItem = livingRoomToKitchenDoor });
             //livingRoomToKitchenDoor.PossibleActions.Add(new Walk { Performer = player, NextLocation = livingRoomNearPhotos, TargetItem = livingRoomNearPhotos });
             //livingRoomToKitchenDoor.PossibleActions.Add(new Walk { Performer = player, NextLocation = hallwayToLivingroomDoor, TargetItem = hallwayToLivingroomDoor });
@@ -185,16 +199,20 @@ namespace SampSharp.SyntheticGameMode.Story.Episodes
             kitchenNearTheSink.PossibleActions.Add(washHandsAction);
             //kitchenNearTheSink.PossibleActions.Add(new Walk { Performer = player, NextLocation = livingRoomToKitchenDoor, TargetItem = livingRoomToKitchenDoor });
 
+
             var kitchenToHallway = new Location(2366.8711, -1132.0065, 1050.8750, 92.9391, this.InteriorId, " kitchen to hallway door ");
-            kitchenNearTheSink.PossibleActions.Add(new Walk { Performer = player, Prerequisites = new List<StoryActionBase> { washHandsAction }, NextLocation = kitchenToHallway, TargetItem = kitchenToHallway });
+            var intermKitchenToHallway = new Location(2370.9648, -1130.5519, 1050.875, 70.50048, this.InteriorId, " kitchen to hallway door ");
+            kitchenNearTheSink.PossibleActions.Add(new Walk { Performer = player, Prerequisites = new List<StoryActionBase> { washHandsAction }, NextLocation = intermKitchenToHallway, TargetItem = intermKitchenToHallway });
+            intermKitchenToHallway.PossibleActions.Add(new Walk { Performer = player, Prerequisites = new List<StoryActionBase> { washHandsAction }, NextLocation = kitchenToHallway, TargetItem = kitchenToHallway });
 
             var hallwayToBedroom2 = new Location(2363.4084, -1131.7386, 1050.8750, 88.6741, this.InteriorId, " hallway to bedroom door ");
             kitchenToHallway.PossibleActions.Add(new Walk { Performer = player, NextLocation = hallwayToBedroom2, TargetItem = hallwayToBedroom2 });
 
             var bedroom2BackToBedLeft = new Location(2359.0698, -1134.0743, 1050.8750, 177.9942, this.InteriorId, " bedroom near the bed ");
-            var bedroom2FacingBedLeft = new Location(2363.0017, -1123.7264, 1050.8750, 357.9942, this.InteriorId, " bedroom near the bed ");
+            var bedroom2FacingBedLeft = new Location(2359.0698, -1134.0743, 1050.8750, 357.9942, this.InteriorId, " bedroom near the bed ");
+
             hallwayToBedroom2.PossibleActions.Add(new Walk { Performer = player, NextLocation = bedroom2FacingBedLeft, TargetItem = bedroom2FacingBedLeft });
-            var bedroom2InBedLeft = new Location(2363.0017, -1123.7264, 1050.8750, 357.9942, this.InteriorId, " bedroom near the bed ");
+            var bedroom2InBedLeft = new Location(2359.0698, -1134.0743, 1050.8750, 357.9942, this.InteriorId, " bedroom near the bed ");
             var getInBed2Action = new GetInBed { NextLocation = bedroom2InBedLeft, Performer = SampStory.Instance.Actor, TargetItem = bedroom2Bed };
             bedroom2FacingBedLeft.PossibleActions.Add(getInBed2Action);
 

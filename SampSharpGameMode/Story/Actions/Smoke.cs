@@ -19,7 +19,7 @@ namespace SampSharp.SyntheticGameMode.Story.Actions
         {
             var player = Performer as Player;
             SampStory.Instance.Logger.Log(player.Description + " " + Description, player);
-            player.SetCameraNextToPlayer(3, 0, 2);
+            player.SetCameraNextToPlayer(3, player.Position, 0, 2);
             player.SpecialAction = GameMode.Definitions.SpecialAction.SmokeCiggy;
             await Task.Delay(100);
             //player.SendClientMessage("M_smk_in"); //Lights up the cigar

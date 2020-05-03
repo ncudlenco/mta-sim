@@ -22,9 +22,19 @@ namespace SampSharpGameMode.Extensions
             return new Vector3(0, 0, 1);
         }
 
+        public static Vector3 Mult(this Vector3 me, float scalar)
+        {
+            return new Vector3(me.X * scalar, me.Y * scalar, me.Z * scalar);
+        }
+
+        public static Vector3 MovePointAlong(this Vector3 me, Vector3 point, float distance)
+        {
+            return point + me.Mult(distance);
+        }
+
         public static Vector3 CrossProduct(this Vector3 me, Vector3 other)
         {
-            return new Vector3(me.Y * other.Z - me.Z * other.Y, me.Z * other.X - me.X * other.Z, me.X * other.Y - me.Y - other.Z);
+            return new Vector3(me.Y * other.Z - me.Z * other.Y, me.Z * other.X - me.X * other.Z, me.X * other.Y - me.Y - other.X);
         }
 
         public static double AngleTo(this Vector3 me, Vector3 other)
@@ -45,7 +55,7 @@ namespace SampSharpGameMode.Extensions
         public static double SignedAngleTo(this Vector3 me, Vector3 other, Vector3 normal)
         {
             var angle = me.AngleTo(other);
-            var cross = me.CrossProduct(other);
+            var cross = Vector3.Cross(me, other);
             if (normal.DotProduct(cross) < 0)
             {
                 angle = -angle;

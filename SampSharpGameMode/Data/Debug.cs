@@ -14,10 +14,7 @@ namespace SampSharp.SyntheticGameMode.Data
         public enum ePointType
         {
             Type1 = 1946,
-            Type2 = 3000,
-            Type3 = 1598,
-            Type4 = 2995,
-            Type5 = 3100
+            Type2 = 1598,
         }
         public static List<DynamicObject> DEBUG_OBJECTS = new List<DynamicObject>();
         public static void DrawPoint(Player player, Vector3 point, ePointType pointType = ePointType.Type1)

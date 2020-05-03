@@ -63,17 +63,11 @@ namespace SampSharp.SyntheticGameMode.Story
 
         public async Task SetPlayerLookAt(Vector3 destination)
         {
+            await Task.Delay(100);
             var destinationV = destination - this.Position;
-            var forward = this.GetHeadingVector().Normalized();
-            var normal = destinationV.CrossProduct(Vector3.Forward);
+            var angle = MathHelper.ToDegrees((float)Vector3.Forward.AngleAboutAxisTo(destinationV, Vector3.Up));
 
-            var angle = MathHelper.ToDegrees((float)forward.SignedAngleTo(destinationV, normal));
-
-            //this.SendClientMessage("Player angle: " + this.Angle.ToString());
-            //this.SendClientMessage("Angle to destination: " + angle.ToString());
-            //this.SendClientMessage("Final angle: " + (this.Angle + angle).ToString());
-
-            this.Angle += angle;
+            this.Angle = angle + 360;
         }
 
         public Vector3 GetHeadingVector()
@@ -81,12 +75,17 @@ namespace SampSharp.SyntheticGameMode.Story
             return (GetXYAroundPlayer(10) - this.Position).Normalized();
         }
 
-        public async void SetCameraNextToPlayer(float distance, float angle = 0, float zOffset = 0)
+        public async void SetCameraNextToPlayer(float distance, Vector3 target, float angle = 0, float zOffset = 0)
         {
             //This updates the player position
             await Task.Delay(100);
             this.CameraPosition = GetXYAroundPlayer(distance, angle, zOffset);
-            this.SetCameraLookAt(this.Position);
+            if (target.Equals(Vector3.Zero))
+            {
+                target = this.Position;
+            }
+            this.InterpolateCameraLookAt(this.CameraPosition, target, 1000, GameMode.Definitions.CameraCut.Move);
+            this.SetCameraLookAt(target, GameMode.Definitions.CameraCut.Move);
         }
         #region Overrides of BasePlayer
         public override void OnConnected(EventArgs e)

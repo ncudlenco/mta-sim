@@ -30,14 +30,16 @@ namespace SampSharp.SyntheticGameMode.Story.Actions
             {
                 case eHow.fromDesk:
                     player.ApplyAnimation("INT_OFFICE", "OFF_Sit_2Idle_180", 4.1f, false, false, false, true, 5000, true);
+                    Thread.Sleep(5000);
                     break;
                 case eHow.fromSofa:
-                    player.ApplyAnimation("INT_HOUSE", "LOU_Out", 4.1f, false, false, false, true, 5000, true);
+                    player.ApplyAnimation("INT_HOUSE", "LOU_Out", 4.1f, false, false, false, true, 3000, true);
+                    player.Angle += 180;
+                    Thread.Sleep(3000);
                     break;
                 default:
                     break;
             }
-            Thread.Sleep(5000);
             player.ClearAnimations(true);
             player.ClearAnimations();
 

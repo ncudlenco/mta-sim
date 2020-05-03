@@ -265,7 +265,7 @@ namespace SampSharp.SyntheticGameMode.Story
             StoryActionBase previousAction = null;
             if (SampStory.Instance.History.Count >= 2)
             {
-                previousAction = SampStory.Instance.History.GetBeforeLast();
+                previousAction = SampStory.Instance.History.Last();
             }
             //Check if in history there is a prerequisite action which was not cancelled out by its closing action
             var nextValidActions = this.PossibleActions.Where(x => !x.Equals(previousAction) && x.Prerequisites.All(p => SampStory.Instance.History.LastIndexOf(p) > SampStory.Instance.History.LastIndexOf(p.ClosingAction)));

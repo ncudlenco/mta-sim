@@ -73,15 +73,15 @@ namespace SampSharp.SyntheticGameMode.Story.Episodes
             // living room entrance actions
             //livingRoomDoorEntranceLocation.PossibleActions.Add(new PickUpObject { Performer = player, TargetItem = kitchenSinkLocation});
 
-            livingRoomDoorEntranceLocation.PossibleActions.Add(new Walk { Performer = player, NextLocation = kitchenDoorEntranceLocation, TargetItem = kitchenDoorEntranceLocation, Angle = 179.0600f });
+            livingRoomDoorEntranceLocation.PossibleActions.Add(new Walk { Performer = player, NextLocation = kitchenDoorEntranceLocation, TargetItem = kitchenDoorEntranceLocation });
 
             // kitchen entrance actions
-            kitchenDoorEntranceLocation.PossibleActions.Add(new Walk { Performer = player, NextLocation = kitchenSinkLocation, TargetItem = kitchenSinkLocation, Angle = 255.1674f });
+            kitchenDoorEntranceLocation.PossibleActions.Add(new Walk { Performer = player, NextLocation = kitchenSinkLocation, TargetItem = kitchenSinkLocation });
 
             // kitchen sink entrance 
             var washHandsAtSinkAction = new WashHands { Performer = player, NextLocation = kitchenSinkLocation, TargetItem = kitchenSinkLocation };
             kitchenSinkLocation.PossibleActions.Add(washHandsAtSinkAction);
-            var goToFridgeAction = new Walk { Performer = player, Prerequisites = new List<StoryActionBase> { washHandsAtSinkAction }, NextLocation = kitchenFridgeLocation, TargetItem = kitchenFridgeLocation, Angle = 145.4264f };
+            var goToFridgeAction = new Walk { Performer = player, Prerequisites = new List<StoryActionBase> { washHandsAtSinkAction }, NextLocation = kitchenFridgeLocation, TargetItem = kitchenFridgeLocation };
             washHandsAtSinkAction.ClosingAction = goToFridgeAction;
             kitchenSinkLocation.PossibleActions.Add(goToFridgeAction);
 
@@ -90,14 +90,14 @@ namespace SampSharp.SyntheticGameMode.Story.Episodes
             var food = new Food { ModelId = (int)foodTypes.GetValue(new Random().Next(foodTypes.Length)) };
             var pickupFoodAction = new PickUpObject { Performer = player, NextLocation = kitchenFridgeLocation, TargetItem = food };
             kitchenFridgeLocation.PossibleActions.Add(pickupFoodAction);
-            var goToGasCookerAction = new Walk { Performer = player, Prerequisites = new List<StoryActionBase> { pickupFoodAction }, NextLocation = kitchenGasCookerLocation, TargetItem = kitchenGasCookerLocation, Angle = 350.4216f };
+            var goToGasCookerAction = new Walk { Performer = player, Prerequisites = new List<StoryActionBase> { pickupFoodAction }, NextLocation = kitchenGasCookerLocation, TargetItem = kitchenGasCookerLocation };
             pickupFoodAction.ClosingAction = goToGasCookerAction;
             kitchenFridgeLocation.PossibleActions.Add(goToGasCookerAction);
 
             // kitchen gas cooker
             var cookAction = new Cook { Performer = player, NextLocation = kitchenGasCookerLocation, TargetItem = kitchenGasCookerLocation };
             kitchenGasCookerLocation.PossibleActions.Add(cookAction);
-            var goToChair1Action = new Walk { Performer = player, Prerequisites = new List<StoryActionBase> { cookAction }, NextLocation = kitchenChairLocationTuple.Item1, TargetItem = kitchenChairLocationTuple.Item1, Angle = kitchenChairLocationTuple.Item2 };
+            var goToChair1Action = new Walk { Performer = player, Prerequisites = new List<StoryActionBase> { cookAction }, NextLocation = kitchenChairLocationTuple.Item1, TargetItem = kitchenChairLocationTuple.Item1 };
             cookAction.ClosingAction = goToChair1Action;
             kitchenGasCookerLocation.PossibleActions.Add(goToChair1Action);
 

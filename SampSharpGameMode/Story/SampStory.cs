@@ -25,7 +25,7 @@ namespace SampSharp.SyntheticGameMode.Story
         public bool IsRunning { get; set; }
         private Guid StoryId = Guid.NewGuid();
         public override List<StoryEpisodeBase> Episodes => new List<StoryEpisodeBase> {
-            new Episodes.House8()
+            new Episodes.House3()
         };
         public StoryEpisodeBase CurrentEpisode { get; internal set; }
 

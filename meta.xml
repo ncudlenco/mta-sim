@@ -1,0 +1,77 @@
+<meta>
+  <oop>true</oop>
+  <!-- Debug tool -->
+  <script src="MTATD.bundle.lua" type="shared"/>
+  <!-- Custom files -->
+  <file src="files/data/LaptopSAMP1.dff" type="client" />
+  <file src="files/data/LaptopSAMP1.txd" type="client" />
+  <file src="files/data/LaptopSAMP2.dff" type="client" />
+  <!-- Client -->
+  <script src="client/Handlers.lua" type="shared"/>
+  <script src="client/EngineLoader.lua" type="client" />
+  <script src="client/MappingCommands.lua" type="client" />
+  <!-- Generic utils -->
+  <script src="utils/others.lua" type="shared"/>
+  <script src="utils/arrayUtils.lua" type="shared"/>
+  <script src="utils/VectorUtils.lua" type="shared"/>
+  <script src="utils/class.lua" type="shared"/>
+  <script src="utils/enum.lua" type="shared"/>
+  <script src="utils/Extent3.lua" type="shared"/>
+  <script src="utils/guid.lua" type="shared"/>
+  <!-- Api -->
+  <script src="api/eStoryItemType.lua" type="shared"/>
+  <script src="api/IStoryItem.lua" type="shared"/>
+  <script src="api/StoryActionBase.lua" type="shared"/>
+  <script src="api/StoryLocationBase.lua" type="shared"/>
+  <script src="api/StoryBase.lua" type="shared"/>
+  <script src="api/StoryEpisodeBase.lua" type="shared"/>
+  <script src="api/StoryObjectBase.lua" type="shared"/>
+  <script src="api/StoryTextLoggerBase.lua" type="shared"/>
+  <script src="api/StoryTimeOfDayBase.lua" type="shared"/>
+  <script src="api/StoryWeatherBase.lua" type="shared"/>
+  <!-- Globals -->
+  <script src="ServerGlobals.lua" type="server" />
+  <!-- Other story related objects -->
+  <script src="story/Logger.lua" type="server" />
+  <script src="story/TimeOfDay.lua" type="server" />
+  <script src="story/Weather.lua" type="server" />
+  <!-- Locations -->
+  <script src="story/Locations/Location.lua" type="server" />
+  <!-- Actions -->
+  <script src="story/Actions/ActionsGlobals.lua" type="server" />
+  <script src="story/Actions/Cook.lua" type="server" />
+  <script src="story/Actions/Eat.lua" type="server" />
+  <script src="story/Actions/EmptyAction.lua" type="server" />
+  <script src="story/Actions/EndStory.lua" type="server" />
+  <script src="story/Actions/GetInBed.lua" type="server" />
+  <script src="story/Actions/GetOffBed.lua" type="server" />
+  <script src="story/Actions/Sleep.lua" type="server" />
+  <script src="story/Actions/SetPlayerSkin.lua" type="server" />
+  <script src="story/Actions/Move.lua" type="server" />
+  <script src="story/Actions/SitDown.lua" type="server" />
+  <script src="story/Actions/StandUp.lua" type="server" />
+  <script src="story/Actions/WashHands.lua" type="server" />
+  <script src="story/Actions/LookAtObject.lua" type="server" />
+  <script src="story/Actions/OpenLaptop.lua" type="server" />
+  <script src="story/Actions/CloseLaptop.lua" type="server" />
+  <script src="story/Actions/LayOnElbow.lua" type="server" />
+  <script src="story/Actions/PunchSeated.lua" type="server" />
+  <script src="story/Actions/TypeOnKeyboard.lua" type="server" />
+  <script src="story/Actions/LookAtTheWatch.lua" type="server" />
+  <!-- Objects -->
+  <script src="story/Objects/SampStoryObjectBase.lua" type="server" />
+  <script src="story/Objects/Bed.lua" type="server" />
+  <script src="story/Objects/Chair.lua" type="server" />
+  <script src="story/Objects/Laptop.lua" type="server" />
+  <script src="story/Objects/Sofa.lua" type="server" />
+  <script src="story/Objects/Photos.lua" type="server" />
+  <script src="story/Objects/Desk.lua" type="server" />
+  <!-- Episodes -->
+  <script src="story/Episodes/House8.lua" type="server" />
+  <!-- Story main items -->
+  <script src="story/Player.lua" type="server" />
+  <script src="story/Story.lua" type="server" />
+  <!-- Commands -->
+  <script src="ServerCommands.lua" type="server" />
+  <min_mta_version server="1.5.5-9.14370" client="1.5.5-9.14370" />
+</meta>

@@ -1,0 +1,7 @@
+STORIES = {}
+SCREENSHOTS = {}
+MAX_ACTIONS = 10000
+LOG_DATA = false
+LOG_FREQUENCY = 1000 / 30 --in milliseconds
+DEBUG = true
+FREE_ROAM = false

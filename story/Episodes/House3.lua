@@ -47,9 +47,10 @@ function House3:Initialize(...)
     bedroomChair2:Create()
     table.insert(self.Objects, bedroomChair2)
 
-    local livingRoomEntranceLocation = Location(2496.0610, -1694.2596, 1014.7422, 181.8800, self.InteriorId, "livin room.")
-    local kitchenSinkLocation = Location(2500.005859375, -1709.006225585938, 1014.7422, 270.000, self.InteriorId, "the sink in the kitchen.")
-    local kitchenFridgeLocation = Location(2498.2986, -1711.3533, 1014.7422, 169.6598, self.InteriorId, "fridge.")
+    local livingRoomEntranceLocation = Location(2496.0610, -1694.2596, 1014.7422, 181.8800, self.InteriorId, "livin room")
+    local kitchenSinkLocation = Location(2500.005859375, -1709.006225585938, 1014.7422, 270.000, self.InteriorId, "the sink in the kitchen")
+    local kitchenFridgeLocation = Location(2498.2986, -1711.3533, 1014.7422, 169.6598, self.InteriorId, "fridge")
+    local kitchenGasCookerLocation = Location(2499.2088, -1706.6673, 1014.7422, 6.4351, self.InteriorId, "gas cooker")
 
     table.insert(self.ValidStartingLocations, livingRoomEntranceLocation)
 
@@ -57,15 +58,27 @@ function House3:Initialize(...)
     table.insert(livingRoomEntranceLocation.PossibleActions, Move { performer = player, nextLocation = kitchenSinkLocation, targetItem = kitchenSinkLocation, graphId = self.graphId })
 
     -- Wash Hands at the sink
-    washHandsAction = WashHands { performer = player, nextLocation = kitchenSinkLocation, targetItem = kitchenSinkLocation, graphId = self.graphId }
+    local washHandsAction = WashHands { performer = player, nextLocation = kitchenSinkLocation, targetItem = kitchenSinkLocation, graphId = self.graphId }
     table.insert(kitchenSinkLocation.PossibleActions, washHandsAction)
-
-    moveToFridgeAction = Move { performer = player, nextLocation = kitchenFridgeLocation, targetItem = kitchenFridgeLocation, graphId = self.graphId, prerequisites = { washHandsAction }}
-    table.insert(kitchenSinkLocation.PossibleActions, moveToFridgeAction)
+    local moveToFridgeAction = Move { performer = player, prerequisites = { washHandsAction }, nextLocation = kitchenFridgeLocation, targetItem = kitchenFridgeLocation, graphId = self.graphId}
     washHandsAction.ClosingAction = moveToFridgeAction
+    table.insert(kitchenSinkLocation.PossibleActions, moveToFridgeAction)
 
     -- get food from the fridge
+    local food = Food {
+        modelid = Food.eModel.Shawarma,
+        noCollisions = true,
+        position =     Vector3(0, 0, 0),
+        rotation =     Vector3(0, 0, 0),
+        interior = self.InteriorId
+    }
+    food:Create()
 
+    local pickUpFoodAction = PickUp {performer = player, nextLocation = kitchenFridgeLocation, targetItem = food, graphId = self.graphId}
+    table.insert(kitchenFridgeLocation.PossibleActions, pickUpFoodAction)
+    local moveToGasCookerAction = Move { performer = player, nextLocation = kitchenGasCookerLocation, targetItem = kitchenGasCookerLocation, graphId = self.graphId, prerequisites = { pickUpFoodAction }}
+    pickUpFoodAction.ClosingAction = moveToGasCookerAction
+    table.insert(kitchenFridgeLocation.PossibleActions, moveToGasCookerAction)
 
     if DEBUG then
         outputConsole("House3:Initialized")

@@ -18,6 +18,11 @@
   <script src="utils/enum.lua" type="shared"/>
   <script src="utils/Extent3.lua" type="shared"/>
   <script src="utils/guid.lua" type="shared"/>
+  <script src="utils/bone_attach.lua" />
+	<script src="utils/bone_attach_c.lua" type="client" />
+	<script src="utils/attach_func.lua" />
+	<script src="utils/attach_func.lua" type="client" />
+	<script src="utils/bone_pos_rot.lua" type="client" />
   <!-- Api -->
   <script src="api/eStoryItemType.lua" type="shared"/>
   <script src="api/IStoryItem.lua" type="shared"/>
@@ -58,6 +63,7 @@
   <script src="story/Actions/PunchSeated.lua" type="server" />
   <script src="story/Actions/TypeOnKeyboard.lua" type="server" />
   <script src="story/Actions/LookAtTheWatch.lua" type="server" />
+  <script src="story/Actions/PickUp.lua" type="server" />
   <!-- Objects -->
   <script src="story/Objects/SampStoryObjectBase.lua" type="server" />
   <script src="story/Objects/Bed.lua" type="server" />
@@ -66,7 +72,9 @@
   <script src="story/Objects/Sofa.lua" type="server" />
   <script src="story/Objects/Photos.lua" type="server" />
   <script src="story/Objects/Desk.lua" type="server" />
+  <script src="story/Objects/Food.lua" type="server" />
   <!-- Episodes -->
+  <script src="story/Episodes/House3.lua" type="server" />
   <script src="story/Episodes/House8.lua" type="server" />
   <!-- Story main items -->
   <script src="story/Player.lua" type="server" />

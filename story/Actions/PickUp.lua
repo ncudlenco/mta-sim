@@ -10,8 +10,7 @@ function PickUp:Apply()
     -- self.TargetItem.instance:setCollisionsEnabled(false)
 
     self.Performer:setAnimation("INT_SHOP", "shop_loop", 500, true, true, false, true)
-
-    attachElements(self.TargetItem.instance, self.Performer, self.TargetItem.PosOffset)
+    attachElementToBone(self.TargetItem.instance, self.Performer, 12)
 
     if DEBUG then
         outputConsole("PickUp:Apply")

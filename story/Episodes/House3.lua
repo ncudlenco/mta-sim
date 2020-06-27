@@ -65,10 +65,8 @@ function House3:Initialize(...)
     washHandsAction.ClosingAction = moveToFridgeAction
 
     -- get food from the fridge
-    print(Food.eModel[0])
-
     local food = Food {
-        modelid = Food.eModel.Burger,
+        modelid = Food.eModel[PickRandom(Food.eModel)],
         noCollisions = true,
         position =     Vector3(0, 0, 0),
         rotation =     Vector3(0, 0, 0),

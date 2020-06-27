@@ -28,5 +28,15 @@ function All(arr, func)
 end
 
 function PickRandom(arr)
-    return arr[math.random(#arr)]
+    if #arr == 0 then
+        -- then this is a dictionary
+        local keys = {}
+        for key, _ in pairs(arr) do
+            table.insert(keys, key)
+        end
+
+        return keys[math.random(#keys)]
+    else
+        return arr[math.random(#arr)]
+    end
 end

@@ -8,7 +8,7 @@ function Wait:Apply()
     table.insert(story.History, self)
     
     story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description, self.Performer)
-    sleep(o.Time)
+    self.Performer:setAnimation("CASINO", "Slot_wait", self.Time, true, true, false, true)
 
     if DEBUG then
         outputConsole("Wait:Apply")

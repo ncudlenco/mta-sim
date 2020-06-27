@@ -65,6 +65,7 @@
   <script src="story/Actions/LookAtTheWatch.lua" type="server" />
   <script src="story/Actions/PickUp.lua" type="server" />
   <script src="story/Actions/PutIn.lua" type="server" />
+  <script src="story/Actions/Wait.lua" type="server" />
   <!-- Objects -->
   <script src="story/Objects/SampStoryObjectBase.lua" type="server" />
   <script src="story/Objects/Bed.lua" type="server" />

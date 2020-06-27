@@ -51,7 +51,7 @@ function House3:Initialize(...)
     local kitchenSinkLocation = Location(2500.005859375, -1709.006225585938, 1014.7422, 270.000, self.InteriorId, "the sink in the kitchen")
     local kitchenFridgeLocation = Location(2498.2986, -1711.3533, 1014.7422, 169.6598, self.InteriorId, "fridge")
     local kitchenMicroWaveLocation = Location(2500.01416, -1711.3533, 1014.7422, 270.000, self.InteriorId, "microwave")
-    local kitchenChairLocation = Location(2499.1789, -1706.76452, 1014.7422, 90, self.InteriorId, "chair")
+    local kitchenChairLocation = Location(2494.9033, -1708.3198, 1014.7422, 90, self.InteriorId, "chair")
 
     table.insert(self.ValidStartingLocations, kitchenFridgeLocation)
 
@@ -73,7 +73,6 @@ function House3:Initialize(...)
         rotation =     Vector3(0, 0, 0),
         interior = self.InteriorId
     }
-    food:Create()
     
     local pickUpFoodAction = PickUp {performer = player, nextLocation = kitchenFridgeLocation, targetItem = food, where = "the fridge", graphId = self.graphId}
     table.insert(kitchenFridgeLocation.PossibleActions, pickUpFoodAction)
@@ -81,6 +80,16 @@ function House3:Initialize(...)
     pickUpFoodAction.NextAction = moveToMicroWaveAction
     pickUpFoodAction.ClosingAction = moveToMicroWaveAction
 
+    -- cook food at the microwave
+    local putInFoodAction = PutIn {performer = player, nextLocation = kitchenMicroWaveLocation, targetItem = food, where = "the microwave", graphId = self.graphId}
+    table.insert(kitchenMicroWaveLocation.PossibleActions, putInFoodAction)
+    local waitAction = Wait { performer = player, nextLocation = kitchenMicroWaveLocation, time = 2000, graphId = self.graphId}
+    putInFoodAction.NextAction = waitAction
+    local pickUpFoodAction = PickUp {performer = player, nextLocation = kitchenMicroWaveLocation, targetItem = food, where = "the microwave", graphId = self.graphId}
+    waitAction.NextAction = pickUpFoodAction
+    local moveToChairAction = Move { performer = player, nextLocation = kitchenChairLocation, targetItem = kitchenChairLocation, graphId = self.graphId}
+    pickUpFoodAction.NextAction = moveToChairAction
+    putInFoodAction.ClosingAction = moveToChairAction
 
     if DEBUG then
         outputConsole("House3:Initialized")

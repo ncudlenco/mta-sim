@@ -52,7 +52,7 @@ function House3:Initialize(...)
     local kitchenFridgeLocation = Location(2498.2986, -1711.3533, 1014.7422, 169.6598, self.InteriorId, "fridge")
     local kitchenGasCookerLocation = Location(2499.2088, -1706.6673, 1014.7422, 6.4351, self.InteriorId, "gas cooker")
 
-    table.insert(self.ValidStartingLocations, livingRoomEntranceLocation)
+    table.insert(self.ValidStartingLocations, kitchenFridgeLocation)
 
     -- Go to the sink in the kitchen
     table.insert(livingRoomEntranceLocation.PossibleActions, Move { performer = player, nextLocation = kitchenSinkLocation, targetItem = kitchenSinkLocation, graphId = self.graphId })
@@ -61,12 +61,14 @@ function House3:Initialize(...)
     local washHandsAction = WashHands { performer = player, nextLocation = kitchenSinkLocation, targetItem = kitchenSinkLocation, graphId = self.graphId }
     table.insert(kitchenSinkLocation.PossibleActions, washHandsAction)
     local moveToFridgeAction = Move { performer = player, prerequisites = { washHandsAction }, nextLocation = kitchenFridgeLocation, targetItem = kitchenFridgeLocation, graphId = self.graphId}
+    washHandsAction.NextAction = moveToFridgeAction
     washHandsAction.ClosingAction = moveToFridgeAction
-    table.insert(kitchenSinkLocation.PossibleActions, moveToFridgeAction)
 
     -- get food from the fridge
+    print(Food.eModel[0])
+
     local food = Food {
-        modelid = Food.eModel.Shawarma,
+        modelid = Food.eModel.Burger,
         noCollisions = true,
         position =     Vector3(0, 0, 0),
         rotation =     Vector3(0, 0, 0),
@@ -76,9 +78,11 @@ function House3:Initialize(...)
 
     local pickUpFoodAction = PickUp {performer = player, nextLocation = kitchenFridgeLocation, targetItem = food, graphId = self.graphId}
     table.insert(kitchenFridgeLocation.PossibleActions, pickUpFoodAction)
-    local moveToGasCookerAction = Move { performer = player, nextLocation = kitchenGasCookerLocation, targetItem = kitchenGasCookerLocation, graphId = self.graphId, prerequisites = { pickUpFoodAction }}
+    local moveToGasCookerAction = Move { performer = player, nextLocation = kitchenGasCookerLocation, targetItem = kitchenGasCookerLocation, graphId = self.graphId}
+    pickUpFoodAction.NextAction = moveToGasCookerAction
     pickUpFoodAction.ClosingAction = moveToGasCookerAction
-    table.insert(kitchenFridgeLocation.PossibleActions, moveToGasCookerAction)
+
+
 
     if DEBUG then
         outputConsole("House3:Initialized")

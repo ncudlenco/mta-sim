@@ -50,7 +50,8 @@ function House3:Initialize(...)
     local livingRoomEntranceLocation = Location(2496.0610, -1694.2596, 1014.7422, 181.8800, self.InteriorId, "livin room")
     local kitchenSinkLocation = Location(2500.005859375, -1709.006225585938, 1014.7422, 270.000, self.InteriorId, "the sink in the kitchen")
     local kitchenFridgeLocation = Location(2498.2986, -1711.3533, 1014.7422, 169.6598, self.InteriorId, "fridge")
-    local kitchenGasCookerLocation = Location(2499.2088, -1706.6673, 1014.7422, 6.4351, self.InteriorId, "gas cooker")
+    local kitchenMicroWaveLocation = Location(2500.01416, -1711.3533, 1014.7422, 270.000, self.InteriorId, "microwave")
+    local kitchenChairLocation = Location(2499.1789, -1706.76452, 1014.7422, 90, self.InteriorId, "chair")
 
     table.insert(self.ValidStartingLocations, kitchenFridgeLocation)
 
@@ -73,13 +74,12 @@ function House3:Initialize(...)
         interior = self.InteriorId
     }
     food:Create()
-
-    local pickUpFoodAction = PickUp {performer = player, nextLocation = kitchenFridgeLocation, targetItem = food, graphId = self.graphId}
+    
+    local pickUpFoodAction = PickUp {performer = player, nextLocation = kitchenFridgeLocation, targetItem = food, where = "the fridge", graphId = self.graphId}
     table.insert(kitchenFridgeLocation.PossibleActions, pickUpFoodAction)
-    local moveToGasCookerAction = Move { performer = player, nextLocation = kitchenGasCookerLocation, targetItem = kitchenGasCookerLocation, graphId = self.graphId}
-    pickUpFoodAction.NextAction = moveToGasCookerAction
-    pickUpFoodAction.ClosingAction = moveToGasCookerAction
-
+    local moveToMicroWaveAction = Move { performer = player, nextLocation = kitchenMicroWaveLocation, targetItem = kitchenMicroWaveLocation, graphId = self.graphId}
+    pickUpFoodAction.NextAction = moveToMicroWaveAction
+    pickUpFoodAction.ClosingAction = moveToMicroWaveAction
 
 
     if DEBUG then

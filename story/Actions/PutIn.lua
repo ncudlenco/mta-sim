@@ -1,12 +1,13 @@
-PutDown = class(StoryActionBase, function(o, params)
-    StoryActionBase.init(o, " picks up ", params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
+PutIn = class(StoryActionBase, function(o, params)
+    StoryActionBase.init(o, " put ", params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
+    o.Where = params.where
 end)
 
-function PutDown:Apply()
+function PutIn:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History, self)
     
-    story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. self.TargetItem.Description, self.Performer)
+    story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. self.TargetItem.Description .. " in " .. self.Where, self.Performer)
     -- self.TargetItem.instance:setCollisionsEnabled(false)
 
     self.Performer:setAnimation("INT_SHOP", "shop_loop", 500, true, true, false, true)

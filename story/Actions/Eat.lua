@@ -5,10 +5,14 @@ end)
 function Eat:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History, self)
+    
+    story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. " a "  .. self.TargetItem.Description, self.Performer)
 
-    story.Logger.Log(self.Performer:getData('skinDescription') + self.Description + " at the " + self.TargetItem.Description)
-    self.Performer:setAnimation("FOOD", "FF_Sit_Eat2", 3000, true, false, false, true);
-    sleep(3500)
-    self.Performer:setAnimation()
-    self.NextLocation:GetNextValidAction(self.Performer):Apply()
+    self.Performer:setAnimation("FOOD", "FF_Sit_Eat3", 3000, true, true, false, true)
+
+    if DEBUG then
+        outputConsole("Eat:Apply")
+    end
+
+    OnGlobalActionFinished(3000, self.Performer:getData('id'), self.Performer:getData('storyId'))
 end

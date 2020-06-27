@@ -67,7 +67,7 @@ function Move:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History, self)
     
-    story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. " towards the " .. self.TargetItem.Description, self.Performer)
+    story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description, self.Performer)
     if DEBUG then
         outputConsole("Move:Apply")
     end

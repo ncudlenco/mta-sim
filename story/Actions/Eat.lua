@@ -9,6 +9,8 @@ function Eat:Apply()
     story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. " a "  .. self.TargetItem.Description, self.Performer)
 
     self.Performer:setAnimation("FOOD", "FF_Sit_Eat3", 3000, true, true, false, true)
+    detachElementFromBone(self.TargetItem.instance)
+    self.TargetItem:Destroy()
 
     if DEBUG then
         outputConsole("Eat:Apply")

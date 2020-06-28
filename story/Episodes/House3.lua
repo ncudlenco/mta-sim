@@ -27,34 +27,44 @@ function House3:Initialize(...)
     -- declare objects
 
     -- create two new chairs in the kitchen
-    local bedroomChair1 = Chair{
+    local kitchenChair1 = Chair{
         modelid =      Chair.eModel.SolidWoodenChair,
         position =     Vector3(2494.5, -1708.3188, 1014.2422),
         rotation =     Vector3(0, 0, 0),
         noCollisions = true,
         interior =     self.InteriorId
     }
-    bedroomChair1:Create()
-    table.insert(self.Objects, bedroomChair1)
+    kitchenChair1:Create()
+    table.insert(self.Objects, kitchenChair1)
 
-    local bedroomChair2 = Chair{
+    local kitchenChair2 = Chair{
         modelid =      Chair.eModel.SolidWoodenChair,
         position =     Vector3(2494.5, -1706.7609, 1014.2422),
         rotation =     Vector3(0, 0, 0),
         noCollisions = true,
         interior =     self.InteriorId
     }
-    bedroomChair2:Create()
-    table.insert(self.Objects, bedroomChair2)
+    kitchenChair2:Create()
+    table.insert(self.Objects, kitchenChair2)
+
+    local livingroomRemote = Remote {
+        modelid =      Remote.eModel.Remote1,
+        position =     Vector3(2493.2154, -1698.0471,  1014.3103),
+        rotation =     Vector3(0, 0, 0),
+        noCollisions = true,
+        interior =     self.InteriorId
+    }
+    livingroomRemote:Create()
+    table.insert(self.Objects, livingroomRemote)
 
     local livingRoomEntranceLocation = Location(2496.0610, -1694.2596, 1014.7422, 181.8800, self.InteriorId, "livin room")
     local kitchenSinkLocation = Location(2500.005859375, -1709.006225585938, 1014.7422, 270.000, self.InteriorId, "the sink in the kitchen")
     local kitchenFridgeLocation = Location(2498.2986, -1711.3533, 1014.7422, 169.6598, self.InteriorId, "fridge")
     local kitchenMicroWaveLocation = Location(2500.01416, -1711.3533, 1014.7422, 270.000, self.InteriorId, "microwave")
     local kitchenChairLocation = Location(2495.2033, -1708.3198, 1014.7422, 90, self.InteriorId, "chair")
-    local livingroomSofaLocation = Location(2492.9772, -1698.654663085938, 1014.7422, 0, self.InteriorId, "chair")
+    local livingroomSofaLocation = Location(2492.9772, -1698.654663085938, 1014.7422, 0, self.InteriorId, "sofa")
 
-    table.insert(self.ValidStartingLocations, livingRoomEntranceLocation)
+    table.insert(self.ValidStartingLocations, livingroomSofaLocation)
 
     -- Go to the sink in the kitchen
     table.insert(livingRoomEntranceLocation.PossibleActions, Move { performer = player, nextLocation = kitchenSinkLocation, targetItem = kitchenSinkLocation, graphId = self.graphId })
@@ -75,7 +85,7 @@ function House3:Initialize(...)
         interior = self.InteriorId
     }
     
-    local pickUpFoodAction = PickUp {performer = player, nextLocation = kitchenFridgeLocation, targetItem = food, where = "the fridge", graphId = self.graphId}
+    local pickUpFoodAction = PickUp {performer = player, nextLocation = kitchenFridgeLocation, targetItem = food, where = "the fridge", targetObjectExists = false, graphId = self.graphId}
     table.insert(kitchenFridgeLocation.PossibleActions, pickUpFoodAction)
     local moveToMicroWaveAction = Move { performer = player, nextLocation = kitchenMicroWaveLocation, targetItem = kitchenMicroWaveLocation, graphId = self.graphId}
     pickUpFoodAction.NextAction = moveToMicroWaveAction
@@ -86,22 +96,28 @@ function House3:Initialize(...)
     table.insert(kitchenMicroWaveLocation.PossibleActions, putInFoodAction)
     local waitAction = Wait { performer = player, nextLocation = kitchenMicroWaveLocation, time = 3000, graphId = self.graphId}
     putInFoodAction.NextAction = waitAction
-    local pickUpFoodAction = PickUp {performer = player, nextLocation = kitchenMicroWaveLocation, targetItem = food, where = "the microwave", graphId = self.graphId}
+    local pickUpFoodAction = PickUp {performer = player, nextLocation = kitchenMicroWaveLocation, targetItem = food, where = "the microwave", targetObjectExists = false, graphId = self.graphId}
     waitAction.NextAction = pickUpFoodAction
     local moveToKitchenChairAction = Move { performer = player, nextLocation = kitchenChairLocation, targetItem = kitchenChairLocation, graphId = self.graphId}
     pickUpFoodAction.NextAction = moveToKitchenChairAction
     putInFoodAction.ClosingAction = moveToKitchenChairAction
 
     -- eat at the table
-    local sitDownKitchenChairAction = SitDown {performer = player, nextLocation = kitchenChairLocation, targetItem = bedroomChair1, graphId = self.graphId}
+    local sitDownKitchenChairAction = SitDown {performer = player, nextLocation = kitchenChairLocation, targetItem = kitchenChair1, graphId = self.graphId}
     table.insert(kitchenChairLocation.PossibleActions, sitDownKitchenChairAction)
     local eatKitchenChairAction = Eat {performer = player, nextLocation = kitchenChairLocation, targetItem = food, graphId = self.graphId}
     sitDownKitchenChairAction.NextAction = eatKitchenChairAction
-    local standUpKitchenChiarAction = StandUp {performer = player, nextLocation = kitchenChairLocation, targetItem = bedroomChair1, graphId = self.graphId}
+    local standUpKitchenChiarAction = StandUp {performer = player, nextLocation = kitchenChairLocation, targetItem = kitchenChair1, graphId = self.graphId}
     eatKitchenChairAction.NextAction = standUpKitchenChiarAction
     local moveToLivingroomSofa = Move { performer = player, nextLocation = livingroomSofaLocation, targetItem = livingroomSofaLocation, graphId = self.graphId}
     standUpKitchenChiarAction.NextAction = moveToLivingroomSofa
     sitDownKitchenChairAction.ClosingAction = moveToLivingroomSofa
+
+    -- sit on the sofa
+    local pickUpLivingroomRemoteAction = PickUp {performer = player, nextLocation = livingroomSofaLocation, targetItem = livingroomRemote, where = "the table", targetObjectExists = true, how = PickUp.eHow.Down, graphId = self.graphId}
+    table.insert(livingroomSofaLocation.PossibleActions, pickUpLivingroomRemoteAction)
+
+    -- local siDownlivingRoomAction = SitDown {How = SitDown.eHow.OnSofa, performer = player, nextLocation = livingroomSofaLocation, targetItem = livingroomSofaLocation, graphId = self.graphId}
 
     if DEBUG then
         outputConsole("House3:Initialized")

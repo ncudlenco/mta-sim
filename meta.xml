@@ -75,6 +75,7 @@
   <script src="story/Objects/Photos.lua" type="server" />
   <script src="story/Objects/Desk.lua" type="server" />
   <script src="story/Objects/Food.lua" type="server" />
+  <script src="story/Objects/Remote.lua" type="server" />
   <!-- Episodes -->
   <script src="story/Episodes/House3.lua" type="server" />
   <script src="story/Episodes/House8.lua" type="server" />

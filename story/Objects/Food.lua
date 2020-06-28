@@ -1,6 +1,5 @@
 Food = class(SampStoryObjectBase, function(o, params)
     params.description = "food"
-    params.posOffset = Vector3(0, 0, 0)
     SampStoryObjectBase.init(o, params)
     o:updateDescription()
     o:updatePositionOffset()

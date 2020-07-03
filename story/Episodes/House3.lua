@@ -86,6 +86,7 @@ function House3:Initialize(...)
     local kitchenMicroWaveLocation = Location(2500.01416, -1711.3533, 1014.7422, 270.000, self.InteriorId, "microwave")
     local kitchenChairLocation = Location(2495.2033, -1708.3198, 1014.7422, 90, self.InteriorId, "chair")
     local livingroomSofaLocation = Location(2492.5772, -1699.004663085938, 1014.7422, 0, self.InteriorId, "sofa")
+    local bedroomBedLocation = Location(2495.2177734375, -1703.923217773438, 1017.34375, 0, self.InteriorId, "sofa")
 
     table.insert(self.ValidStartingLocations, livingroomSofaLocation)
 
@@ -147,8 +148,9 @@ function House3:Initialize(...)
                                              targetObjectRotation = Vector3(0, 0, 0), graphId = self.graphId}
     standUpLivingroomAction.NextAction = putDownLivingroomAction
 
-    putDownLivingroomAction.NextAction = moveToKitchenChairAction
-    pickUpLivingroomRemoteAction.ClosingAction = moveToKitchenChairAction
+    local moveToBedRoomAction = Move { performer = player, nextLocation = bedroomBedLocation, targetItem = bedroomBedLocation, graphId = self.graphId}
+    putDownLivingroomAction.NextAction = moveToBedRoomAction
+    pickUpLivingroomRemoteAction.ClosingAction = moveToBedRoomAction
 
     -- local siDownlivingRoomAction = SitDown {How = SitDown.eHow.OnSofa, performer = player, nextLocation = livingroomSofaLocation, targetItem = livingroomSofaLocation, graphId = self.graphId}
 

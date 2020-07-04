@@ -64,7 +64,7 @@ function House3:Initialize(...)
         noCollisions = true,
         interior = self.InteriorId
     }
-    print(Sofa.eModel.SofaFurniture01)
+
     removeWorldModel(Sofa.eModel.SofaFurniture01, 10.25, livingroomSofa.position)    
     livingroomSofa:Create()
     table.insert(self.Objects, livingroomSofa)
@@ -76,9 +76,20 @@ function House3:Initialize(...)
         noCollisions = true,
         interior = self.InteriorId
     }
-    print(Sofa.eModel.SofaFurniture01)
+
     removeWorldModel(14477, 10.25, livingroomSofa1.position)    
     livingroomSofa1:Create()
+
+    local bedroomBed = Bed{
+        modelid =      Bed.eModel.Unknown3,
+        position =     Vector3(2495.2177734375, -1703.623217773438, 1017.3672),
+        rotation =     Vector3(0, 360, 0),
+        noCollisions = true,
+        interior =     self.InteriorId
+    }
+    removeWorldModel(Bed.eModel.Unknown3, 1.25, bedroomBed.position)
+    bedroomBed:Create()
+    table.insert(self.Objects, bedroomBed)
 
     local livingRoomEntranceLocation = Location(2496.0610, -1694.2596, 1014.7422, 181.8800, self.InteriorId, "livin room")
     local kitchenSinkLocation = Location(2500.005859375, -1709.006225585938, 1014.7422, 270.000, self.InteriorId, "the sink in the kitchen")
@@ -86,9 +97,9 @@ function House3:Initialize(...)
     local kitchenMicroWaveLocation = Location(2500.01416, -1711.3533, 1014.7422, 270.000, self.InteriorId, "microwave")
     local kitchenChairLocation = Location(2495.2033, -1708.3198, 1014.7422, 90, self.InteriorId, "chair")
     local livingroomSofaLocation = Location(2492.5772, -1699.004663085938, 1014.7422, 0, self.InteriorId, "sofa")
-    local bedroomBedLocation = Location(2495.2177734375, -1703.923217773438, 1017.34375, 0, self.InteriorId, "sofa")
+    local bedroomBedLocation = Location(2495.2177734375, -1703.923217773438, 1018.34375, 0, self.InteriorId, "sofa")
 
-    table.insert(self.ValidStartingLocations, livingroomSofaLocation)
+    table.insert(self.ValidStartingLocations, bedroomBedLocation)
 
     -- Go to the sink in the kitchen
     table.insert(livingRoomEntranceLocation.PossibleActions, Move { performer = player, nextLocation = kitchenSinkLocation, targetItem = kitchenSinkLocation, graphId = self.graphId })
@@ -152,7 +163,13 @@ function House3:Initialize(...)
     putDownLivingroomAction.NextAction = moveToBedRoomAction
     pickUpLivingroomRemoteAction.ClosingAction = moveToBedRoomAction
 
-    -- local siDownlivingRoomAction = SitDown {How = SitDown.eHow.OnSofa, performer = player, nextLocation = livingroomSofaLocation, targetItem = livingroomSofaLocation, graphId = self.graphId}
+    local getInBedAction = GetInBed{performer = player, targetItem = bedroomBed, nextLocation = bedroomBedLocation, how = GetInBed.eHow.Right, graphId = self.graphId}
+    table.insert(bedroomBedLocation.PossibleActions, getInBedAction)
+    local sleepAction = Sleep { nextLocation = bedroomBed, performer = player, targetItem = bedroomBed, how = Sleep.eHow.Right, graphId = self.graphId}
+    getInBedAction.NextAction = sleepAction
+    local getOffBedAction = GetOffBed{performer = player, targetItem = bedroomBed, nextLocation = bedroomBedLocation, how = GetOffBed.eHow.Right, graphId = self.graphId}
+    sleepAction.NextAction = getOffBedAction
+    getInBedAction.ClosingAction = getOffBedAction
 
     if DEBUG then
         outputConsole("House3:Initialized")

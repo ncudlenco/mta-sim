@@ -231,7 +231,7 @@ function House8:Initialize(...)
 
     
     local hallwayToEntrance = Location(2365.3000, -1132.9200, 1050.8750, 180, self.InteriorId, " hallway to entrance door ")
-    table.insert(bedroom2BackToBedLeft.PossibleActions, Move { performer = player, nextLocation = hallwayToEntrance, targetItem = hallwayToEntrance, graphId = self.graphId })
+    table.insert(bedroom2BackToBedLeft.PossibleActions, Move { performer = player, nextLocation = hallwayToEntrance, targetItem = hallwayToEntrance, graphId = self.graphId, how = Sleep.eHow.Right })
 
     if DEBUG then
         outputConsole("House8:Initialized")

@@ -100,7 +100,7 @@ function House3:Initialize(...)
     local bedroomBedLocation = Location(2495.2177734375, -1703.923217773438, 1018.34375, 0, self.InteriorId, "")
     local livingRoomEndLocation = Location(2496.0610, -1694.2596, 1014.7422, 0, self.InteriorId, "end")
 
-    table.insert(self.ValidStartingLocations, kitchenFridgeLocation)
+    table.insert(self.ValidStartingLocations, livingRoomEntranceLocation)
 
     -- Go to the sink in the kitchen
     table.insert(livingRoomEntranceLocation.PossibleActions, Move { performer = player, nextLocation = kitchenSinkLocation, targetItem = kitchenSinkLocation, graphId = self.graphId })

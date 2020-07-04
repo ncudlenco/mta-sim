@@ -82,12 +82,12 @@ function House3:Initialize(...)
 
     local bedroomBed = Bed{
         modelid =      Bed.eModel.Unknown3,
-        position =     Vector3(2495.2177734375, -1703.623217773438, 1017.3672),
-        rotation =     Vector3(0, 360, 0),
+        position =     Vector3(2493.2177734375, -1702.223217773438, 1017.3672),
+        rotation =     Vector3(0, 0, 270),
         noCollisions = true,
         interior =     self.InteriorId
     }
-    removeWorldModel(Bed.eModel.Unknown3, 1.25, bedroomBed.position)
+    removeWorldModel(Bed.eModel.Unknown3, 5.25, bedroomBed.position)
     bedroomBed:Create()
     table.insert(self.Objects, bedroomBed)
 
@@ -96,10 +96,11 @@ function House3:Initialize(...)
     local kitchenFridgeLocation = Location(2498.2986, -1711.3533, 1014.7422, 169.6598, self.InteriorId, "fridge")
     local kitchenMicroWaveLocation = Location(2500.01416, -1711.3533, 1014.7422, 270.000, self.InteriorId, "microwave")
     local kitchenChairLocation = Location(2495.2033, -1708.3198, 1014.7422, 90, self.InteriorId, "chair")
-    local livingroomSofaLocation = Location(2492.5772, -1699.004663085938, 1014.7422, 0, self.InteriorId, "sofa")
-    local bedroomBedLocation = Location(2495.2177734375, -1703.923217773438, 1018.34375, 0, self.InteriorId, "sofa")
+    local livingroomSofaLocation = Location(2492.5772, -1699.004663085938, 1014.7422, 0, self.InteriorId, "")
+    local bedroomBedLocation = Location(2495.2177734375, -1703.923217773438, 1018.34375, 0, self.InteriorId, "")
+    local livingRoomEndLocation = Location(2496.0610, -1694.2596, 1014.7422, 0, self.InteriorId, "end")
 
-    table.insert(self.ValidStartingLocations, bedroomBedLocation)
+    table.insert(self.ValidStartingLocations, kitchenFridgeLocation)
 
     -- Go to the sink in the kitchen
     table.insert(livingRoomEntranceLocation.PossibleActions, Move { performer = player, nextLocation = kitchenSinkLocation, targetItem = kitchenSinkLocation, graphId = self.graphId })
@@ -169,7 +170,9 @@ function House3:Initialize(...)
     getInBedAction.NextAction = sleepAction
     local getOffBedAction = GetOffBed{performer = player, targetItem = bedroomBed, nextLocation = bedroomBedLocation, how = GetOffBed.eHow.Right, graphId = self.graphId}
     sleepAction.NextAction = getOffBedAction
-    getInBedAction.ClosingAction = getOffBedAction
+    local moveToEndAction = Move { performer = player, nextLocation = livingRoomEndLocation, targetItem = livingRoomEndLocation, graphId = self.graphId}
+    getOffBedAction.NextAction = moveToEndAction
+    getInBedAction.ClosingAction = moveToEndAction
 
     if DEBUG then
         outputConsole("House3:Initialized")

@@ -1,4 +1,4 @@
-function OnGlobalActionFinished(delay, playerId, storyId, callback)
+function OnGlobalActionFinished(delay, playerId, storyId, callback, destroyedItem)
     Timer(function(playerId, storyId)
         local story = STORIES[playerId][storyId]
         local lastAction = story.History[#story.History]

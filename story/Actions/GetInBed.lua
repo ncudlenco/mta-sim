@@ -22,15 +22,15 @@ function GetInBed:Apply()
     --self.TargetItem.instance:setCollisionsEnabled(false)
     
     if self.how == GetInBed.eHow.Left then
-        self.Performer:setAnimation("INT_HOUSE", "BED_In_L", -1, false, true, false, true)
+        self.Performer:setAnimation("INT_HOUSE", "BED_In_L", 3500, false, true, false, true)
     elseif self.how == GetInBed.eHow.Right then
-        self.Performer:setAnimation("INT_HOUSE", "BED_In_R", -1, false, true, false, true)
+        self.Performer:setAnimation("INT_HOUSE", "BED_In_R", 3500, false, true, false, true)
     end
 
     if DEBUG then
         outputConsole("GetInBed:Apply")
     end
-    OnGlobalActionFinished(8000, self.Performer:getData('id'), self.Performer:getData('storyId'))
+    OnGlobalActionFinished(3500, self.Performer:getData('id'), self.Performer:getData('storyId'))
 end
 
 GetInBed.eHow = {

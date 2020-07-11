@@ -10,6 +10,28 @@ function (prevA, curA)
     if DEBUG then
         outputConsole("New player joined the server. Id ".. source:getData('id') .. " story id " .. source:getData('storyId'))
     end
+--TODO: add parameters for actionbase:
+-- TopologicalOrder; stats consumed; stats rewarded; 
+--implement server side episode json with points of interest and in each point of interest define possible action
+    --Set the player's needs
+    --basic needs -> physiological needs
+    --health, hunger, thirst, rest
+    --psychological needs -> belongingness and love needs
+    --socializing --talking with friends, going to a restaurant with them
+    --love --going to a date, kissing, giving gifts, hugging, walking while holding hands
+    --fun --watching TV, going 
+    --psychological needs -> esteem needs
+    --money --prestige, accomplishment
+    --prestige --having low body fat, high body muscle and stamina, lung capacity, having an expensive car, expensive clothes, expensive house
+    --self-fulfillment -> achieving one's full potential, including creative activities
+    if DEBUG then
+        outputConsole("Initializing player needs...")
+    end
+    for i, a in pairs(NEEDS) do
+        if a then 
+            a:setRandomForPlayer(source)
+        end
+    end
 
     Timer(function(playerId, storyId)
         local story = STORIES[playerId][storyId]
@@ -17,6 +39,8 @@ function (prevA, curA)
     end, 1000, 1, source:getData('id'), source:getData('storyId'))
 end
 )
+
+--TODO: think of all the objects inside the universe
 
 addEventHandler("onPlayerSpawn", getRootElement(),
 function (prevA, curA)
@@ -30,7 +54,7 @@ function (prevA, curA)
         end
         if story and not FREE_ROAM then
             Timer(function()
-                PickRandom(story.CurrentEpisode.StartingLocation.PossibleActions):Apply();
+                story.CurrentEpisode.StartingLocation:GetNextValidAction(story.Actor):Apply()
             end, 5000, 1)
         end
     end

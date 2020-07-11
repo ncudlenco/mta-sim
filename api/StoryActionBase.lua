@@ -1,4 +1,4 @@
-StoryActionBase = class(IStoryItem, function(o, description, performer, targetItem, nextLocation, prerequisites, closingAction, nextAction)
+StoryActionBase = class(IStoryItem, function(o, description, performer, targetItem, nextLocation, prerequisites, closingAction, nextAction, topologicalOrder, penalties, rewards)
     IStoryItem.init(o, description, eStoryItemType.Action)
     o.Performer = performer
     o.TargetItem = targetItem
@@ -7,6 +7,9 @@ StoryActionBase = class(IStoryItem, function(o, description, performer, targetIt
     o.ClosingAction = closingAction
     o.NextAction = nextAction
     o.ActionId = Guid().Id
+    o.TopologicalOrder = topologicalOrder or -1
+    o.Penalties = penalties or {}
+    o.Rewards = rewards or {}
 end)
 
 function StoryActionBase:__tostring()

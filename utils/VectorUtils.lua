@@ -38,3 +38,7 @@ VectorUtils.Rotate = function (self, rotation)
 end
 
 Vector3.Rotate = VectorUtils.Rotate
+
+function Vector3:unpack( )
+    return { x=self.x, y=self.y, z=self.z }
+end

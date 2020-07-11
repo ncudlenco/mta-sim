@@ -4,7 +4,11 @@ Story = class(StoryBase, function(o, actor, maxActions, logData)
     o.Logger = Logger('data/'..actor:getData('id')..'/'..o.Id..'/labels.txt', true, o)
     o.Episodes = {
         --add an episode here
-        House3()
+        -- House3()
+        House8()
+    }
+    o.EpisodePaths = {
+        "testepisode"
     }
     o.Disposed = false
     if not o.Actor then
@@ -20,6 +24,11 @@ Story = class(StoryBase, function(o, actor, maxActions, logData)
 end)
 
 function Story:Play()
+    -- for i,episode_name in ipairs(self.EpisodePaths) do
+    --     local episode = DynamicEpisode(episode_name)
+    --     episode:LoadFromFile()
+    --     table.insert(self.Episodes, episode)
+    -- end
 
     self.StartTime = os.time()
     if self.LogData then
@@ -59,7 +68,9 @@ function Story:Play()
     skin.Performer = self.Actor
     skin:Apply()
     self.CurrentEpisode = PickRandom(self.Episodes)
-    self.CurrentEpisode:Initialize(self.Actor)
+    if not FREE_ROAM then
+        self.CurrentEpisode:Initialize(self.Actor)
+    end
     self.CurrentEpisode:Play(self.Actor)
 
     if DEBUG then

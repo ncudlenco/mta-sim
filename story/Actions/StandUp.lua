@@ -42,5 +42,8 @@ function StandUp:Apply()
         outputConsole("StandUp:Apply")
     end
 
+    Timer(function()
+        self.Performer.rotation = self.NextLocation.rotation
+    end, duration, 1)
     OnGlobalActionFinished(duration, self.Performer:getData('id'), self.Performer:getData('storyId'))
 end

@@ -1,12 +1,15 @@
-Location = class(StoryLocationBase, function(o, x, y, z, angle, interior, description)
+Location = class(StoryLocationBase, function(o, x, y, z, angle, interior, description, compact)
     StoryLocationBase.init(o, description, {})
     o.X = x
     o.Y = y
     o.Z = z
     o.Angle = angle
     o.Interior = interior
-    o.position = Vector3(x,y,z)
-    o.rotation = Vector3(0,0,angle)
+    o.History = {}
+    if not compact then
+        o.position = Vector3(x,y,z)
+        o.rotation = Vector3(0,0,angle)
+    end
 end)
 
 function Location:SpawnPlayerHere(player)
@@ -44,7 +47,27 @@ function Location:GetNextValidAction(player)
 
     local nextValidActions = Where(self.PossibleActions, function(x)
         return x ~= previousAction and All(x.Prerequisites, function(p)
-            return LastIndexOf(story.History, p) > LastIndexOf(story.History, p.ClosingAction)
+            local li = LastIndexOf(self.History, p)
+            local lic = LastIndexOf(self.History, p.ClosingAction)
+            if DEBUG then
+                outputConsole("Evaluating validity of action "..x.Description)
+                outputConsole("Has prerequisite "..p.Description)
+                if p.ClosingAction then
+                    outputConsole("With closing action "..p.ClosingAction.Description)
+                else
+                    outputConsole("Doesn't have a closing action")
+                end
+                outputConsole("Prerequisite last index: "..li)
+                if p.ClosingAction then
+                    outputConsole("Closing action last index "..lic)
+                end
+                if p.ClosingAction and lic > li or li ~= -1 then
+                    outputConsole("Marked as valid")
+                else
+                    outputConsole("Not valid")
+                end
+            end
+            return p.ClosingAction and lic > li or li ~= -1
         end)
     end)
     if next(nextValidActions) == nil then
@@ -59,6 +82,16 @@ function Location:GetNextValidAction(player)
             outputConsole("Location:GetNextValidAction - next action was null. Ending the current story")
         end
         return EndStory(player)
+    else
+        if DEBUG then
+            outputConsole("Next action chosen: "..next.Description)
+        end
+        if next.NextLocation == self then
+            table.insert(self.History, next)
+        else
+            self.History = {}
+            table.insert(next.NextLocation.History, next)
+        end
     end
     return next
 end

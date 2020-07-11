@@ -1,0 +1,49 @@
+[
+    {
+        "Objects": [],
+        "name": "testepisode",
+        "graphPath": "files\/paths\/house8.json",
+        "ValidStartingLocations": [],
+        "InteriorId": 8,
+        "POI": [
+            {
+                "PossibleActions": [],
+                "X": 2365.1376953125,
+                "Description": "house entrance",
+                "StoryItemType": {
+                    "id": 4,
+                    "idr": 4,
+                    "name": "Location"
+                },
+                "Interior": 8,
+                "Angle": 179.34521484375,
+                "Z": 1049.875,
+                "Y": -1134.026733398438
+            }
+        ],
+        "ObjectsToDelete": [
+            {
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "noCollisions": false,
+                "Description": "",
+                "position": {
+                    "y": -1121.99658203125,
+                    "x": 2361.085693359375,
+                    "z": 1052.7119140625
+                },
+                "interior": 8,
+                "StoryItemType": {
+                    "id": 1,
+                    "idr": 1,
+                    "name": "Object"
+                },
+                "modelid": 2255,
+                "size": 2.5
+            }
+        ]
+    }
+]

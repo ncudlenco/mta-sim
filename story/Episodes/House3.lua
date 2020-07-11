@@ -57,7 +57,7 @@ function House3:Initialize(...)
     livingroomRemote:Create()
     table.insert(self.Objects, livingroomRemote)
 
-    local livingRoomEntranceLocation = Location(2496.0610, -1694.2596, 1014.7422, 181.8800, self.InteriorId, "livin room")
+    local livingRoomEntranceLocation = Location(2496.0610, -1694.2596, 1014.7422, 181.8800, self.InteriorId, "living room")
     local kitchenSinkLocation = Location(2500.005859375, -1709.006225585938, 1014.7422, 270.000, self.InteriorId, "the sink in the kitchen")
     local kitchenFridgeLocation = Location(2498.2986, -1711.3533, 1014.7422, 169.6598, self.InteriorId, "fridge")
     local kitchenMicroWaveLocation = Location(2500.01416, -1711.3533, 1014.7422, 270.000, self.InteriorId, "microwave")

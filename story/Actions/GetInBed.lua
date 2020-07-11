@@ -1,5 +1,6 @@
 GetInBed = class(StoryActionBase, function(o, params)
     StoryActionBase.init(o, " is getting in ", params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
+    o.how = params.how or GetInBed.eHow.Left
 end)
 
 function GetInBed:Apply()
@@ -18,10 +19,21 @@ function GetInBed:Apply()
     -- local centerTopLeft = centerTopMiddle + across.Normalized().Mult((bbox.Max.X - bbox.Min.X) / 2);
     story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. " the " .. self.TargetItem.Description, self.Performer)
     -- player.Position = new Vector3(centerTopLeft.X, centerTopLeft.Y, player.Position.Z);
-    self.TargetItem.instance:setCollisionsEnabled(false)
-    self.Performer:setAnimation("INT_HOUSE", "BED_In_L", -1, false, true, false, true)
+    --self.TargetItem.instance:setCollisionsEnabled(false)
+    
+    if self.how == GetInBed.eHow.Left then
+        self.Performer:setAnimation("INT_HOUSE", "BED_In_L", 3500, false, true, false, true)
+    elseif self.how == GetInBed.eHow.Right then
+        self.Performer:setAnimation("INT_HOUSE", "BED_In_R", 3500, false, true, false, true)
+    end
+
     if DEBUG then
         outputConsole("GetInBed:Apply")
     end
-    OnGlobalActionFinished(8000, self.Performer:getData('id'), self.Performer:getData('storyId'))
+    OnGlobalActionFinished(3500, self.Performer:getData('id'), self.Performer:getData('storyId'))
 end
+
+GetInBed.eHow = {
+    Left = 1,
+    Right = 2
+}

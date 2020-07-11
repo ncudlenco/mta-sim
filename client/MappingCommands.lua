@@ -1,7 +1,7 @@
 
 local json = {}
 local markers = {}
-function text_render ( ) 
+local function text_render ( ) 
     for i, node in pairs ( json ) do 
         if #markers == #json and i > 100 then
             break

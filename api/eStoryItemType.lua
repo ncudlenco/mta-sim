@@ -5,5 +5,6 @@ eStoryItemType = enum ({
     "Location",
     "TimeOfDay",
     "Weather",
-    "Vehicle"
+    "Vehicle",
+    "Episode"
 })

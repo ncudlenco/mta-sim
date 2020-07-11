@@ -1,6 +1,6 @@
 function Where(arr, func)
     local res = {}
-    for _, a in ipairs(arr) do
+    for _, a in pairs(arr) do --I don't care about the order, this will work on arrays and tables
         if func(a) then 
             table.insert(res, a)
         end

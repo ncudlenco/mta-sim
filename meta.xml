@@ -38,11 +38,24 @@
   <script src="ServerGlobals.lua" type="server" />
   <!-- Other story related objects -->
   <script src="story/Logger.lua" type="server" />
-  <script src="story/TimeOfDay.lua" type="server" />
-  <script src="story/Weather.lua" type="server" />
+  <script src="story/TimeOfDay.lua" type="shared" />
+  <script src="story/Weather.lua" type="shared" />
+  <!-- Needs -->
+  <script src="story/Needs/BaseNeed.lua" type="server" />
+  <script src="story/Needs/Fun.lua" type="server" />
+  <script src="story/Needs/Health.lua" type="server" />
+  <script src="story/Needs/Hunger.lua" type="server" />
+  <script src="story/Needs/Love.lua" type="server" />
+  <script src="story/Needs/Money.lua" type="server" />
+  <script src="story/Needs/Prestige.lua" type="server" />
+  <script src="story/Needs/Rest.lua" type="server" />
+  <script src="story/Needs/Socializing.lua" type="server" />
+  <script src="story/Needs/Thirst.lua" type="server" />
+  <script src="story/Needs/NeedsGlobals.lua" type="server" />
   <!-- Locations -->
-  <script src="story/Locations/Location.lua" type="server" />
+  <script src="story/Locations/Location.lua" type="shared" />
   <!-- Actions -->
+  <script src="story/Actions/DynamicAction.lua" type="shared" />
   <script src="story/Actions/ActionsGlobals.lua" type="server" />
   <script src="story/Actions/Cook.lua" type="server" />
   <script src="story/Actions/Eat.lua" type="server" />
@@ -67,7 +80,7 @@
   <script src="story/Actions/PutIn.lua" type="server" />
   <script src="story/Actions/Wait.lua" type="server" />
   <!-- Objects -->
-  <script src="story/Objects/SampStoryObjectBase.lua" type="server" />
+  <script src="story/Objects/SampStoryObjectBase.lua" type="shared" />
   <script src="story/Objects/Bed.lua" type="server" />
   <script src="story/Objects/Chair.lua" type="server" />
   <script src="story/Objects/Laptop.lua" type="server" />
@@ -79,10 +92,12 @@
   <!-- Episodes -->
   <script src="story/Episodes/House3.lua" type="server" />
   <script src="story/Episodes/House8.lua" type="server" />
+  <script src="story/Episodes/DynamicEpisode.lua" type="shared" />
   <!-- Story main items -->
   <script src="story/Player.lua" type="server" />
   <script src="story/Story.lua" type="server" />
   <!-- Commands -->
   <script src="ServerCommands.lua" type="server" />
+  <script src="client/EpisodeCommands.lua" type="client" />
   <min_mta_version server="1.5.5-9.14370" client="1.5.5-9.14370" />
 </meta>

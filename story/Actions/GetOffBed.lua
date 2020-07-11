@@ -13,6 +13,8 @@ function GetOffBed:Apply()
     if DEBUG then
         outputConsole("GetOffBed:Apply")
     end
-
+    Timer(function()
+        self.Performer.rotation = self.NextLocation.rotation
+    end, 5000, 1)
     OnGlobalActionFinished(5000, self.Performer:getData('id'), self.Performer:getData('storyId'))
 end

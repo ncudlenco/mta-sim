@@ -6,6 +6,7 @@ SampStoryObjectBase = class(StoryObjectBase, function(o, params)
     o.noCollisions = params.noCollisions or false
     o.interior = params.interior or 0
     o.instance = nil
+    o.size = params.size or 2.5
 end)
 
 function SampStoryObjectBase:Create(...)

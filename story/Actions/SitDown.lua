@@ -9,6 +9,7 @@ SitDown = class(StoryActionBase, function(o, params)
     end
     StoryActionBase.init(o, " sits down ", params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
     o.how = params.how or SitDown.eHow.atDesk
+    o.rotation= params.rotation or nil
 end)
 
 SitDown.eHow = {
@@ -22,6 +23,11 @@ function SitDown:Apply()
     
     story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. " on the " .. self.TargetItem.Description, self.Performer)
     self.TargetItem.instance:setCollisionsEnabled(false)
+
+    if not (self.rotation == nil) then
+        self.Performer.rotation = self.rotation
+    end
+
     local animationLib = "INT_OFFICE"
     local animationId = "OFF_Sit_In"
     local duration = 5000

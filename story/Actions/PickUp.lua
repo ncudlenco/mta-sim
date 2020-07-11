@@ -9,9 +9,11 @@ function PickUp:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History, self)
     
-    if not self.TargetObjectExists then
-        self.TargetItem:Create()
+    if self.TargetObjectExists then
+        self.TargetItem:Destroy()
     end
+
+    self.TargetItem:Create()
     
     story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. self.TargetItem.Description .. " from " .. self.Where, self.Performer)
     

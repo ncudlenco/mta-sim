@@ -5,5 +5,6 @@ end
 )
 
 Sofa.eModel = {
-    Couch02 = 1703
+    Couch02 = 1703,
+    SofaFurniture01 = 14491,
 }

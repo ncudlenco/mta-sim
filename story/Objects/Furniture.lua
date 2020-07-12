@@ -1,0 +1,20 @@
+Furniture = class(SampStoryObjectBase, function(o, params)
+    params.description = "sofa"
+    SampStoryObjectBase.init(o, params)
+    o:updateDescription()
+end
+)
+
+function Furniture:updateDescription()
+    if self.modelid == Furniture.eModel.House3LivingRoom1 then
+        self.Description = "sofa"
+    elseif self.modelid == Furniture.eModel.House3Kitchen1 then
+        self.Description = "sink"
+    end
+    return self.Description
+end
+
+Furniture.eModel = {
+    House3LivingRoom1 = 14491,
+    House3Kitchen1 = 14472
+}

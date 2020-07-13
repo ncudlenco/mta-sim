@@ -1,6 +1,14 @@
 Food = class(SampStoryObjectBase, function(o, params)
     params.description = "food"
+
+    if params.modelid == Food.eModel.Shawarma then
+        params.position.z = params.position.z - 0.02
+    elseif params.modelid == Food.eModel.Burger then
+        params.rotation = Vector3(270, 0, 200)
+    end
+
     SampStoryObjectBase.init(o, params)
+
     o:updateDescription()
     o:updatePositionOffset()
     o:updateRotOffset()
@@ -27,9 +35,9 @@ end
 
 function Food:updateRotOffset()
     if self.modelid == Food.eModel.Shawarma then
-        self.RotOffset = Vector3(90, 0, 0)
+        self.RotOffset = Vector3(270, 0, 0)
     elseif self.modelid == Food.eModel.Burger then
-        self.RotOffset = Vector3(90, 0, 0)
+        self.RotOffset = Vector3(270, 0, 0)
     end
     return self.Description
 end

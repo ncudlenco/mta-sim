@@ -91,6 +91,7 @@
   <script src="story/Objects/Food.lua" type="server" />
   <script src="story/Objects/Remote.lua" type="server" />
   <script src="story/Objects/Furniture.lua" type="server" />
+  <script src="story/Objects/Plate.lua" type="server" />
   <!-- Episodes -->
   <script src="story/Episodes/House3.lua" type="server" />
   <script src="story/Episodes/House8.lua" type="server" />

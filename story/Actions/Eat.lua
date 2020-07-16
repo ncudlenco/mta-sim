@@ -8,13 +8,13 @@ function Eat:Apply()
     
     story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. " a "  .. self.TargetItem.Description, self.Performer)
 
-    self.Performer:setAnimation("FOOD", "FF_Sit_Eat3", 3500, true, true, false, true)
+    setPedAnimation(self.Performer, "FOOD", "EAT_Burger", 5000, true, true, false, true)
 
     if DEBUG then
         outputConsole("Eat:Apply")
     end
 
-    OnGlobalActionFinished(3500, self.Performer:getData('id'), self.Performer:getData('storyId'), function()
+    OnGlobalActionFinished(5000, self.Performer:getData('id'), self.Performer:getData('storyId'), function()
         detachElementFromBone(self.TargetItem.instance)
         self.TargetItem:Destroy()
     end)

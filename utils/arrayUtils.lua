@@ -40,3 +40,12 @@ function PickRandom(arr)
         return arr[math.random(#arr)]
     end
 end
+
+function Shuffle(arr)
+	for i = #arr, 2, -1 do
+		local j = math.random(i)
+		arr[i], arr[j] = arr[j], arr[i]
+    end
+    
+    return arr
+end

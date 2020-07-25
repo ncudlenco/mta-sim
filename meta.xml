@@ -80,6 +80,9 @@
   <script src="story/Actions/PutIn.lua" type="server" />
   <script src="story/Actions/Wait.lua" type="server" />
   <script src="story/Actions/PutDown.lua" type="server" />
+  <script src="story/Actions/TurnOn.lua" type="server" />
+  <script src="story/Actions/TurnOff.lua" type="server" />
+  <script src="story/Actions/Dance.lua" type="server" />
   <!-- Objects -->
   <script src="story/Objects/SampStoryObjectBase.lua" type="shared" />
   <script src="story/Objects/Bed.lua" type="server" />
@@ -92,6 +95,7 @@
   <script src="story/Objects/Remote.lua" type="server" />
   <script src="story/Objects/Furniture.lua" type="server" />
   <script src="story/Objects/Plate.lua" type="server" />
+  <script src="story/Objects/TurnTable.lua" type="server" />
   <!-- Episodes -->
   <script src="story/Episodes/House3.lua" type="server" />
   <script src="story/Episodes/House8.lua" type="server" />

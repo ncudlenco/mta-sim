@@ -48,7 +48,7 @@ function House3:Initialize(...)
     livingroomRemote:Create()
     table.insert(self.Objects, livingroomRemote)
 
-    livingroomSofa = Furniture {
+    local livingroomSofa = Furniture {
         modelid = Furniture.eModel.House3LivingRoom1,
         position =     Vector3(2501.0703, -1697.6172, 1016.1250),
         rotation =     Vector3(0, 0.0000, 0),
@@ -60,7 +60,7 @@ function House3:Initialize(...)
     livingroomSofa:Create()
     table.insert(self.Objects, livingroomSofa)
 
-    kitchenSink = Furniture {
+    local kitchenSink = Furniture {
         modelid = Furniture.eModel.House3Kitchen1,
         position =     Vector3(2497.8750, -1709.0703, 1015.2344),
         rotation =     Vector3(0, 0.0000, 180),
@@ -72,7 +72,7 @@ function House3:Initialize(...)
     kitchenSink:Create()
     table.insert(self.Objects, kitchenSink)
 
-    livingroomSofa1 = Sofa {
+    local livingroomSofa1 = Sofa {
         modelid = 14477,
         position =     Vector3(2501.0703, -1697.6172, 1016.1250),
         rotation =     Vector3(0, 0.0000, 0),
@@ -105,7 +105,6 @@ function House3:Initialize(...)
     food:Create()
     table.insert(self.Objects, food)
 
-    print(Plate.eModel.Unknown1)
     local plate = Plate {
         modelid = Plate.eModel.Unknown1,
         noCollisions = true,

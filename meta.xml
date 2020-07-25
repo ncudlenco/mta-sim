@@ -83,6 +83,7 @@
   <script src="story/Actions/TurnOn.lua" type="server" />
   <script src="story/Actions/TurnOff.lua" type="server" />
   <script src="story/Actions/Dance.lua" type="server" />
+  <script src="story/Actions/OpenDoor.lua" type="server" />
   <!-- Objects -->
   <script src="story/Objects/SampStoryObjectBase.lua" type="shared" />
   <script src="story/Objects/Bed.lua" type="server" />

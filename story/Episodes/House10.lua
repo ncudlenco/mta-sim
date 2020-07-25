@@ -24,9 +24,28 @@ function House10:Initialize(...)
         return false
     end
 
-    local livingRoomEntranceLocation = Location(2496.212, -1694.371459, 1014.7422, 181.8800, self.InteriorId, "livin room")
+    local livingRoomEntranceLocation = Location(2268.8281, -1210.2188, 1047.5547, 90, self.InteriorId, "living room")
+    local livingRoomSofa1Location = Location(2260.131591796875, -1212.2734375, 1049.0234375, 225, self.InteriorId, "sofa")
+    local livingRoomSofa2Location = Location(2258.73193359375, -1208.598510742188, 1049.0234375, 180, self.InteriorId, "sofa")
+    local livingRoomMusicPlayerLocation = Location(2261.76025390625, -1208.617553710938, 1049.0234375, 270, self.InteriorId, "music player")
+    local kitchenSinkLocation = Location(2248.12060546875, -1209.934448242188, 1049.0234375, 90, self.InteriorId, "sink")
+    local kitchenChairLocation = Location(2250.29248046875, -1210.2216796875, 1049.0234375, 180, self.InteriorId, "chair")
+    local bedroomEntranceLocation = Location(2261.1142578125, -1218.331787109375, 1049.0234375, 180, self.InteriorId, "bedroom entrance")
+    local bedroomExitLocation = Location(2261.194580078125, -1219.606567382813, 1049.0234375, 180, self.InteriorId, "bedroom exit")
+    local bedroomBedLocation = Location(2259.509521484375, -1223.532592773438, 1049.0234375, 180, self.InteriorId, "bedroom bed")
+    local livingRoomEndLocation = Location(2268.8281, -1210.2188, 1047.5547, 270, self.InteriorId, "end")
 
     table.insert(self.ValidStartingLocations, livingRoomEntranceLocation)
+
+    local pointsOfInterests = {livingRoomSofa1Location, livingRoomSofa2Location, livingRoomMusicPlayerLocation, kitchenSinkLocation, bedroomEntranceLocation, livingRoomEndLocation}
+    pointsOfInterests = Shuffle(pointsOfInterests)
+
+    if pointsOfInterests[1] == livingRoomEndLocation then
+        local i = math.random(5) + 1
+        pointsOfInterests[1], pointsOfInterests[i] = pointsOfInterests[i], pointsOfInterests[1]
+    end
+
+    table.insert(livingRoomEntranceLocation.PossibleActions, Move { performer = player, nextLocation = pointsOfInterests[1], targetItem = pointsOfInterests[1], graphId = self.graphId })
 
     if DEBUG then
         outputConsole("House10:Initialized")

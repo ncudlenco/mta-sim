@@ -1,5 +1,5 @@
 TurnOn = class(StoryActionBase, function(o, params)
-    StoryActionBase.init(o, " turns on ", params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
+    StoryActionBase.init(o, " turns on the ", params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
 end)
 
 function TurnOn:Apply()

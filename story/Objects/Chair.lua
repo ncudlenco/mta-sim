@@ -7,5 +7,6 @@ end
 Chair.eModel = 
 {
     BedroomChair = 2331,
-    SolidWoodenChair = 1811
+    SolidWoodenChair = 1811,
+    RedChair = 2121
 }

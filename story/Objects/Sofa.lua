@@ -5,5 +5,6 @@ end
 )
 
 Sofa.eModel = {
+    Couch01 = 1760,
     Couch02 = 1703,
 }

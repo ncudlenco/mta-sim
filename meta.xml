@@ -95,6 +95,7 @@
   <!-- Episodes -->
   <script src="story/Episodes/House3.lua" type="server" />
   <script src="story/Episodes/House8.lua" type="server" />
+  <script src="story/Episodes/House10.lua" type="server" />
   <script src="story/Episodes/DynamicEpisode.lua" type="shared" />
   <!-- Story main items -->
   <script src="story/Player.lua" type="server" />

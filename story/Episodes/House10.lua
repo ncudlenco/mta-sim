@@ -60,20 +60,44 @@ function House10:Initialize(...)
     livingroomTurnTable:Create()
     table.insert(self.Objects, livingroomTurnTable)
 
+    kitchenSink = Furniture {
+        modelid = Furniture.eModel.House10Kitchen1,
+        position =     Vector3(2247.5469, -1210.9688, 1048.0156),
+        rotation =     Vector3(0, 0.0000, 90),
+        noCollisions = true,
+        interior = self.InteriorId
+    }
+
+    removeWorldModel(Furniture.eModel.House10Kitchen1, 0.25, kitchenSink.position)    
+    kitchenSink:Create()
+    table.insert(self.Objects, kitchenSink)
+
+    kitchenChair = Chair {
+        modelid = Chair.eModel.RedChair,
+        position =     Vector3(2250.3047, -1210.8984, 1048.5234),
+        rotation =     Vector3(0, 0.0000, 0),
+        noCollisions = true,
+        interior = self.InteriorId
+    }
+
+    removeWorldModel(Chair.eModel.RedChair, 0.25, kitchenChair.position)    
+    kitchenChair:Create()
+    table.insert(self.Objects, kitchenChair)
+
     local livingRoomEntranceLocation = Location(2268.8281, -1210.2188, 1047.5547, 90, self.InteriorId, "living room")
     local livingRoomSofa1Location = Location(2260.131591796875, -1212.724375, 1049.0234375, 45, self.InteriorId, "sofa")
     local livingRoomSofa2Location = Location(2258.73193359375, -1208.188510742188, 1049.0234375, 180, self.InteriorId, "sofa")
     local livingRoomTurnTableLocation = Location(2261.96025390625, -1208.617553710938, 1049.0234375, 270, self.InteriorId, "music player")
     local livingRoomTurnTableLocation2 = Location(2260.27001953125, -1208.896508789063, 1049.0234375, 270, self.InteriorId, "turntable 2")
     local livingRoomTurnTableLocation3 = Location(2261.96025390625, -1208.617553710938, 1049.0234375, 270, self.InteriorId, "music player")
-    local kitchenSinkLocation = Location(2248.12060546875, -1209.934448242188, 1049.0234375, 90, self.InteriorId, "sink")
+    local kitchenSinkLocation = Location(2247.92060546875, -1209.934448242188, 1049.0234375, 90, self.InteriorId, "sink")
     local kitchenChairLocation = Location(2250.29248046875, -1210.2216796875, 1049.0234375, 180, self.InteriorId, "chair")
     local bedroomEntranceLocation = Location(2261.1142578125, -1218.331787109375, 1049.0234375, 180, self.InteriorId, "bedroom entrance")
     local bedroomExitLocation = Location(2261.194580078125, -1219.606567382813, 1049.0234375, 180, self.InteriorId, "bedroom exit")
     local bedroomBedLocation = Location(2259.509521484375, -1223.532592773438, 1049.0234375, 180, self.InteriorId, "bedroom bed")
     local livingRoomEndLocation = Location(2268.8281, -1210.2188, 1047.5547, 270, self.InteriorId, "end")
 
-    table.insert(self.ValidStartingLocations, livingRoomEntranceLocation)
+    table.insert(self.ValidStartingLocations, kitchenSinkLocation)
 
     local pointsOfInterests = {livingRoomSofa1Location, livingRoomSofa2Location, livingRoomTurnTableLocation, kitchenSinkLocation, bedroomEntranceLocation, livingRoomEndLocation}
     pointsOfInterests = Shuffle(pointsOfInterests)
@@ -117,6 +141,19 @@ function House10:Initialize(...)
     moveToPOS4Action = Move { performer = player, nextLocation = pointsOfInterests[4], targetItem = pointsOfInterests[4], graphId = self.graphId }
     turnOffTurnTableAction.NextAction = moveToPOS4Action
     turnOffTurnTableAction.ClosingAction = moveToPOS4Action
+
+    -- kitchen actions
+    washHandsKitchenAction = WashHands {performer = player, nextLocation = kitchenSinkLocation, targetItem = kitchenSink, graphId = self.graphId}
+    table.insert(kitchenSinkLocation.PossibleActions, washHandsKitchenAction)
+    moveToKitchenChairAction = Move { performer = player, nextLocation = kitchenChairLocation, targetItem = kitchenChairLocation, graphId = self.graphId }
+    washHandsKitchenAction.NextAction = moveToKitchenChairAction
+    sitDownKitchenChairAction = SitDown {how = SitDown.eHow.atDesk, performer = player, nextLocation = kitchenChairLocation, targetItem = kitchenChair, rotation = Vector3(0,0,180), graphId = self.graphId}
+    table.insert(kitchenChairLocation.PossibleActions, sitDownKitchenChairAction)
+    standUpKitchenChairAction = StandUp {how = StandUp.eHow.fromDesk, performer = player, nextLocation = kitchenChairLocation, targetItem = kitchenChair, graphId = self.graphId}
+    sitDownKitchenChairAction.NextAction = standUpKitchenChairAction
+    moveToPOS5Action = Move { performer = player, nextLocation = pointsOfInterests[5], targetItem = pointsOfInterests[5], graphId = self.graphId }
+    standUpKitchenChairAction.NextAction = moveToPOS5Action
+    sitDownKitchenChairAction.ClosingAction = moveToPOS5Action
 
     if DEBUG then
         outputConsole("House10:Initialized")

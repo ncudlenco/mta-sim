@@ -1,5 +1,5 @@
 TurnOff = class(StoryActionBase, function(o, params)
-    StoryActionBase.init(o, " turns off ", params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
+    StoryActionBase.init(o, " turns off the ", params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
     o.Where = params.where
 end)
 

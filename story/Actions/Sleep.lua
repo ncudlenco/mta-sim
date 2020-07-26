@@ -11,17 +11,19 @@ function Sleep:Apply()
     -- self.TargetItem.instance:setCollisionsEnabled(false)
     self.Performer.rotation = self.Performer.rotation + Vector3(0,0,180)
 
+    math.randomseed(os.time())
+    time = math.random(3000, 8000)
     if self.how == Sleep.eHow.Left then
-        self.Performer:setAnimation("INT_HOUSE", "BED_Loop_L", 3000, true, true, false, true)
+        self.Performer:setAnimation("INT_HOUSE", "BED_Loop_L", time, true, true, false, true)
     elseif self.how == Sleep.eHow.Right then
-        self.Performer:setAnimation("INT_HOUSE", "BED_Loop_R", 3000, true, true, false, true)
+        self.Performer:setAnimation("INT_HOUSE", "BED_Loop_R", time, true, true, false, true)
     end
     
     if DEBUG then
         outputConsole("Sleep:Apply")
     end
 
-    OnGlobalActionFinished(3000, self.Performer:getData('id'), self.Performer:getData('storyId'))
+    OnGlobalActionFinished(time, self.Performer:getData('id'), self.Performer:getData('storyId'))
 end
 
 Sleep.eHow = {

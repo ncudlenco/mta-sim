@@ -7,6 +7,19 @@ addEventHandler ( "onClientResourceStart", resourceRoot,
         res = dff:replace(7187)
         
         dff = engineLoadDFF("files/data/LaptopSAMP2.dff")
-        res = dff:replace(7188)
+		res = dff:replace(7188)
+		
+		-- replace food with military objects - https://dev.prineside.com/en/gtasa_samp_model_id/tag/131-military-equipment/
+		local txd = EngineTXD("files/data/SAMPFruits.txd")
+		local res = txd:import(1252)
+
+		local dff = engineLoadDFF("files/data/Apple1.dff")
+		local res = dff:replace(1252)
+
+		local txd = EngineTXD("files/data/SAMPFruits.txd")
+		local res = txd:import(2036)
+		
+		local dff = EngineDFF("files/data/Apple2.dff")
+        local res = dff:replace(2036)
 	end
 );

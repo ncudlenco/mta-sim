@@ -95,6 +95,16 @@ function House10:Initialize(...)
     bedroomBed:Create()
     table.insert(self.Objects, bedroomBed)
 
+    local bathroomSink = Sink {
+        modelid =      Sink.eModel.bathroomSink01,
+        position =     Vector3(2254.1953, -1215.4531, 1048.0156),
+        rotation =     Vector3(0, 0, 0),
+        noCollisions = true,
+        interior =     self.InteriorId
+    }
+    removeWorldModel(Sink.eModel.bathroomSink01, 5.25, bathroomSink.position)
+    bathroomSink:Create()
+    table.insert(self.Objects, bathroomSink)
 
     local livingRoomEntranceLocation = Location(2268.8281, -1210.2188, 1047.5547, 90, self.InteriorId, "living room")
     local livingRoomSofa1Location = Location(2260.131591796875, -1212.724375, 1049.0234375, 45, self.InteriorId, "sofa")
@@ -102,22 +112,30 @@ function House10:Initialize(...)
     local livingRoomTurnTableLocation = Location(2261.96025390625, -1208.617553710938, 1049.0234375, 270, self.InteriorId, "music player")
     local livingRoomTurnTableLocation2 = Location(2260.27001953125, -1208.896508789063, 1049.0234375, 270, self.InteriorId, "turntable 2")
     local livingRoomTurnTableLocation3 = Location(2261.96025390625, -1208.617553710938, 1049.0234375, 270, self.InteriorId, "music player")
+
     local kitchenSinkLocation = Location(2247.92060546875, -1209.934448242188, 1049.0234375, 90, self.InteriorId, "sink")
     local kitchenChairLocation = Location(2250.29248046875, -1210.2216796875, 1049.0234375, 180, self.InteriorId, "chair")
+
     local bedroomEntranceLocation = Location(2261.1142578125, -1218.331787109375, 1049.0234375, 180, self.InteriorId, "bedroom entrance")
     local bedroomEntranceLocation2 = Location(2261.1142578125, -1217.331787109375, 1049.0234375, 0, self.InteriorId, "bedroom entrance")
     local bedroomExitLocation = Location(2261.194580078125, -1220.606567382813, 1049.0234375, 180, self.InteriorId, "bedroom exit")
     local bedroomExitLocation2 = Location(2261.194580078125, -1219.606567382813, 1049.0234375, 0, self.InteriorId, "bedroom exit")
     local bedroomBedLocation = Location(2259.509521484375, -1223.532592773438, 1049.0234375, 90, self.InteriorId, "bedroom bed")
+
+    local bathroomEntranceLocation = Location(2257.67041015625, -1216.752075195313, 1049.0234375, 90, self.InteriorId, "bathroom entrance")
+    local bathroomEntranceLocation2 = Location(2258.67041015625, -1216.752075195313, 1049.0234375, 90, self.InteriorId, "bathroom entrance")
+    local bathroomExitLocation = Location(2256.31640625, -1216.80224609375, 1049.0234375, 270, self.InteriorId, "bathroom exit")
+    local bathroomSinkLocation = Location(2254.75048828125, -1215.560229492188, 1049.0234375, 0, self.InteriorId, "bathroom sink")
+
     local livingRoomEndLocation = Location(2268.8281, -1210.2188, 1047.5547, 270, self.InteriorId, "end")
 
     table.insert(self.ValidStartingLocations, livingRoomEntranceLocation)
 
-    local pointsOfInterests = {livingRoomSofa1Location, livingRoomSofa2Location, livingRoomTurnTableLocation, kitchenSinkLocation, bedroomEntranceLocation, livingRoomEndLocation}
+    local pointsOfInterests = {livingRoomSofa1Location, livingRoomSofa2Location, livingRoomTurnTableLocation, kitchenSinkLocation, bedroomEntranceLocation, bathroomEntranceLocation, livingRoomEndLocation}
     pointsOfInterests = Shuffle(pointsOfInterests)
 
     if pointsOfInterests[1] == livingRoomEndLocation then
-        local i = math.random(5) + 1
+        local i = math.random(6) + 1
         pointsOfInterests[1], pointsOfInterests[i] = pointsOfInterests[i], pointsOfInterests[1]
     end
 
@@ -192,6 +210,23 @@ function House10:Initialize(...)
     
     local moveToPOS6Action = Move { performer = player, nextLocation = pointsOfInterests[6], targetItem = pointsOfInterests[6], graphId = self.graphId}
     table.insert(bedroomEntranceLocation2.PossibleActions, moveToPOS6Action)
+
+    -- bathroom actions
+    local openbathRoomAction = OpenDoor {performer = player, nextLocation = bathroomSinkLocation, targetItem = bathroomSinkLocation, graphId = self.graphId}
+    table.insert(bathroomEntranceLocation.PossibleActions, openbathRoomAction)
+
+    local washhandsBathroomSinkAction = WashHands {performer = player, nextLocation = bathroomSinkLocation, targetItem = bathroomSinkLocation, graphId = self.graphId}
+    table.insert(bathroomSinkLocation.PossibleActions, washhandsBathroomSinkAction)
+    local moveToBathroomExitAction = Move { performer = player, nextLocation = bathroomExitLocation, targetItem = bathroomExitLocation, graphId = self.graphId}
+    washhandsBathroomSinkAction.NextAction = moveToBathroomExitAction
+
+    local openbathRoomAction2 = OpenDoor {performer = player, nextLocation = bathroomEntranceLocation2, targetItem = bathroomEntranceLocation2, graphId = self.graphId}
+    table.insert(bathroomExitLocation.PossibleActions, openbathRoomAction2)
+
+    local moveToPOS7Action = Move { performer = player, nextLocation = pointsOfInterests[7], targetItem = pointsOfInterests[7], graphId = self.graphId}
+    table.insert(bathroomEntranceLocation2.PossibleActions, moveToPOS7Action)
+
+
 
     if DEBUG then
         outputConsole("House10:Initialized")

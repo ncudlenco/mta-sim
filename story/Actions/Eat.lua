@@ -6,7 +6,7 @@ function Eat:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History, self)
     
-    story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. " a "  .. self.TargetItem.Description, self.Performer)
+    story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. self.TargetItem.Description, self.Performer)
 
     math.randomseed(os.time())
     time = math.random(4000, 10000)

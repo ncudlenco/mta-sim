@@ -5,6 +5,9 @@ Food = class(SampStoryObjectBase, function(o, params)
         params.position.z = params.position.z - 0.02
     elseif params.modelid == Food.eModel.Burger then
         params.rotation = Vector3(270, 0, 200)
+    elseif params.modelid == Food.eModel.Pizza then
+        params.rotation = Vector3(180, 90, 0)
+        params.position.z = params.position.z - 0.06
     end
 
     SampStoryObjectBase.init(o, params)
@@ -20,6 +23,10 @@ function Food:updateDescription()
         self.Description = "a shawarma"
     elseif self.modelid == Food.eModel.Burger then
         self.Description = "a burger"
+    elseif self.modelid == Food.eModel.Pizza then
+        self.Description = "a slice of pizza"
+    elseif self.modelid == Food.eModel.Cake then
+        self.Description = "a slice of cake"
     end
     return self.Description
 end
@@ -29,7 +36,12 @@ function Food:updatePositionOffset()
         self.PosOffset = Vector3(-0.02, 0.05, 0.08)
     elseif self.modelid == Food.eModel.Burger then
         self.PosOffset = Vector3(-0.01, 0.09, 0.05)
+    elseif self.modelid == Food.eModel.Pizza then
+        self.PosOffset = Vector3(-0.05, 0.08, 0.12)
+    elseif self.modelid == Food.eModel.Cake then
+        self.PosOffset = Vector3(0, 0, 0)
     end
+
     return self.Description
 end
 
@@ -38,12 +50,18 @@ function Food:updateRotOffset()
         self.RotOffset = Vector3(270, 0, 0)
     elseif self.modelid == Food.eModel.Burger then
         self.RotOffset = Vector3(270, 0, 0)
+    elseif self.modelid == Food.eModel.Pizza then
+        self.RotOffset = Vector3(200, 0, 270)
+    elseif self.modelid == Food.eModel.Cake then
+        self.RotOffset = Vector3(0, 0, 0)
     end
+
     return self.Description
 end
 
 Food.eModel = 
 {
     Shawarma = 2769,
-    Burger = 2703
+    Burger = 2703,
+    Pizza = 2702,
 }

@@ -6,6 +6,9 @@
   <file src="files/data/LaptopSAMP1.dff" type="client" />
   <file src="files/data/LaptopSAMP1.txd" type="client" />
   <file src="files/data/LaptopSAMP2.dff" type="client" />
+  <file src="files/data/SAMPFruits.txd" type="client" />
+  <file src="files/data/Apple1.dff" type="client" />
+  <file src="files/data/Apple2.dff" type="client" />
   <!-- Client -->
   <script src="client/Handlers.lua" type="shared"/>
   <script src="client/EngineLoader.lua" type="client" />

@@ -20,6 +20,12 @@ addEventHandler ( "onClientResourceStart", resourceRoot,
 		local res = txd:import(2036)
 		
 		local dff = EngineDFF("files/data/Apple2.dff")
-        local res = dff:replace(2036)
+		local res = dff:replace(2036)
+		
+		local txd = EngineTXD("files/data/MarcosStuff1.txd")
+		local res = txd:import(2040)
+		
+		local dff = EngineDFF("files/data/MCakeSlice1.dff")
+        local res = dff:replace(2040)
 	end
 );

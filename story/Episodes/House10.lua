@@ -1,0 +1,264 @@
+House10 = class(StoryEpisodeBase, function(o)
+    StoryEpisodeBase.init(o, nil, nil, nil)
+    o.InteriorId = 10
+    if not loadPathGraph then
+        outputDebugString("Pathfinding module not loaded. Exiting...", 2)
+        return
+    end
+
+    -- Load path graph
+    o.graphId = loadPathGraph("files/paths/house10.json")
+    if not findShortestPathBetween then
+        outputDebugString("Pathfinding module not loaded. Exiting...", 2)
+        return false
+    end
+end)
+
+function House10:Initialize(...)
+    local player = nil
+    for i,v in ipairs(arg) do
+        player = v
+        break
+    end
+    if player == nil then
+        return false
+    end
+
+    livingroomSofa1 = Sofa {
+        modelid = Sofa.eModel.Couch01,
+        position =     Vector3(2261.4609, -1212.0625, 1048.0078),
+        rotation =     Vector3(0, 0.0000, 225),
+        noCollisions = true,
+        interior = self.InteriorId
+    }
+
+    removeWorldModel(Sofa.eModel.Couch01, 0.25, livingroomSofa1.position)    
+    livingroomSofa1:Create()
+    table.insert(self.Objects, livingroomSofa1)
+
+    livingroomSofa2 = Sofa {
+        modelid = Sofa.eModel.Couch01,
+        position =     Vector3(2257.6172, -1207.7266, 1048.0078),
+        rotation =     Vector3(0, 0.0000, 0),
+        noCollisions = true,
+        interior = self.InteriorId
+    }
+
+    removeWorldModel(Sofa.eModel.Couch01, 0.25, livingroomSofa2.position)    
+    livingroomSofa2:Create()
+    table.insert(self.Objects, livingroomSofa2)
+
+    livingroomTurnTable = TurnTable {
+        modelid = TurnTable.eModel.Unknown01,
+        position =     Vector3(2262.8047, -1208.4922, 1048.0156),
+        rotation =     Vector3(0, 0.0000, 270),
+        noCollisions = true,
+        interior = self.InteriorId
+    }
+
+    removeWorldModel(TurnTable.eModel.Unknown01, 0.25, livingroomTurnTable.position)    
+    livingroomTurnTable:Create()
+    table.insert(self.Objects, livingroomTurnTable)
+
+    kitchenSink = Furniture {
+        modelid = Furniture.eModel.House10Kitchen1,
+        position =     Vector3(2247.5469, -1210.9688, 1048.0156),
+        rotation =     Vector3(0, 0.0000, 90),
+        noCollisions = true,
+        interior = self.InteriorId
+    }
+
+    removeWorldModel(Furniture.eModel.House10Kitchen1, 0.25, kitchenSink.position)    
+    kitchenSink:Create()
+    table.insert(self.Objects, kitchenSink)
+
+    kitchenChair = Chair {
+        modelid = Chair.eModel.RedChair,
+        position =     Vector3(2250.3047, -1210.8984, 1048.5234),
+        rotation =     Vector3(0, 0.0000, 0),
+        noCollisions = true,
+        interior = self.InteriorId
+    }
+
+    removeWorldModel(Chair.eModel.RedChair, 0.25, kitchenChair.position)    
+    kitchenChair:Create()
+    table.insert(self.Objects, kitchenChair)
+
+    local bedroomBed = Bed{
+        modelid =      Bed.eModel.Unknown9,
+        position =     Vector3(2258.5938, -1221.5469, 1048.0625),
+        rotation =     Vector3(0, 0, 180),
+        noCollisions = true,
+        interior =     self.InteriorId
+    }
+    removeWorldModel(Bed.eModel.Unknown9, 5.25, bedroomBed.position)
+    bedroomBed:Create()
+    table.insert(self.Objects, bedroomBed)
+
+    local bathroomSink = Sink {
+        modelid =      Sink.eModel.bathroomSink01,
+        position =     Vector3(2254.1953, -1215.4531, 1048.0156),
+        rotation =     Vector3(0, 0, 0),
+        noCollisions = true,
+        interior =     self.InteriorId
+    }
+    removeWorldModel(Sink.eModel.bathroomSink01, 5.25, bathroomSink.position)
+    bathroomSink:Create()
+    table.insert(self.Objects, bathroomSink)
+
+    local livingRoomEntranceLocation = Location(2268.8281, -1210.2188, 1047.5547, 90, self.InteriorId, "living room")
+    local livingRoomSofa1Location = Location(2260.131591796875, -1212.724375, 1049.0234375, 45, self.InteriorId, "sofa")
+    local livingRoomSofa2Location = Location(2258.73193359375, -1208.188510742188, 1049.0234375, 180, self.InteriorId, "sofa")
+    local livingRoomTurnTableLocation = Location(2261.96025390625, -1208.617553710938, 1049.0234375, 270, self.InteriorId, "music player")
+    local livingRoomTurnTableLocation2 = Location(2260.27001953125, -1208.896508789063, 1049.0234375, 270, self.InteriorId, "turntable 2")
+    local livingRoomTurnTableLocation3 = Location(2261.96025390625, -1208.617553710938, 1049.0234375, 270, self.InteriorId, "music player")
+
+    local kitchenSinkLocation = Location(2247.92060546875, -1209.934448242188, 1049.0234375, 90, self.InteriorId, "sink")
+    local kitchenChairLocation = Location(2250.29248046875, -1210.2216796875, 1049.0234375, 180, self.InteriorId, "chair")
+
+    local bedroomEntranceLocation = Location(2261.1142578125, -1218.331787109375, 1049.0234375, 180, self.InteriorId, "bedroom entrance")
+    local bedroomEntranceLocation2 = Location(2261.1142578125, -1217.331787109375, 1049.0234375, 0, self.InteriorId, "bedroom entrance")
+    local bedroomExitLocation = Location(2261.194580078125, -1220.606567382813, 1049.0234375, 180, self.InteriorId, "bedroom exit")
+    local bedroomExitLocation2 = Location(2261.194580078125, -1219.606567382813, 1049.0234375, 0, self.InteriorId, "bedroom exit")
+    local bedroomBedLocation = Location(2259.509521484375, -1223.532592773438, 1049.0234375, 90, self.InteriorId, "bedroom bed")
+
+    local bathroomEntranceLocation = Location(2257.67041015625, -1216.752075195313, 1049.0234375, 90, self.InteriorId, "bathroom entrance")
+    local bathroomEntranceLocation2 = Location(2258.67041015625, -1216.752075195313, 1049.0234375, 90, self.InteriorId, "bathroom entrance")
+    local bathroomExitLocation = Location(2256.31640625, -1216.80224609375, 1049.0234375, 270, self.InteriorId, "bathroom exit")
+    local bathroomSinkLocation = Location(2254.75048828125, -1215.560229492188, 1049.0234375, 0, self.InteriorId, "bathroom sink")
+
+    local livingRoomEndLocation = Location(2268.8281, -1210.2188, 1047.5547, 270, self.InteriorId, "end")
+
+    table.insert(self.ValidStartingLocations, livingRoomEntranceLocation)
+
+    local pointsOfInterests = {livingRoomSofa1Location, livingRoomSofa2Location, livingRoomTurnTableLocation, kitchenSinkLocation, bedroomEntranceLocation, bathroomEntranceLocation, livingRoomEndLocation}
+    pointsOfInterests = Shuffle(pointsOfInterests)
+
+    if pointsOfInterests[1] == livingRoomEndLocation then
+        local i = math.random(6) + 1
+        pointsOfInterests[1], pointsOfInterests[i] = pointsOfInterests[i], pointsOfInterests[1]
+    end
+
+    table.insert(livingRoomEntranceLocation.PossibleActions, Move { performer = player, nextLocation = pointsOfInterests[1], targetItem = pointsOfInterests[1], graphId = self.graphId })
+    
+    -- sit on sofa1
+    local sitOnSofa1Action = SitDown {how = SitDown.eHow.onSofa, performer = player, nextLocation = livingRoomSofa1Location, targetItem = livingroomSofa1, rotation = Vector3(0,0,225), graphId = self.graphId}
+    table.insert(livingRoomSofa1Location.PossibleActions, sitOnSofa1Action)
+    local standUpSofa1Action = StandUp {how = StandUp.eHow.fromSofa, performer = player, nextLocation = livingRoomSofa1Location, targetItem = livingroomSofa1, graphId = self.graphId}
+    sitOnSofa1Action.NextAction = standUpSofa1Action
+    local  moveToPOS3Action = Move { performer = player, nextLocation = pointsOfInterests[2], targetItem = pointsOfInterests[2], graphId = self.graphId }
+    standUpSofa1Action.NextAction = moveToPOS3Action
+    sitOnSofa1Action.ClosingAction = moveToPOS3Action
+
+    -- sit on sofa2
+    local sitOnSofa2Action = SitDown {how = SitDown.eHow.onSofa, performer = player, nextLocation = livingRoomSofa2Location, targetItem = livingroomSofa2, rotation = Vector3(0,0,0), graphId = self.graphId}
+    table.insert(livingRoomSofa2Location.PossibleActions, sitOnSofa2Action)
+    local standUpSofa2Action = StandUp {how = StandUp.eHow.fromSofa, performer = player, nextLocation = livingRoomSofa2Location, targetItem = livingroomSofa2, graphId = self.graphId}
+    sitOnSofa2Action.NextAction = standUpSofa2Action
+    moveToPOS3Action = Move { performer = player, nextLocation = pointsOfInterests[3], targetItem = pointsOfInterests[3], graphId = self.graphId }
+    standUpSofa2Action.NextAction = moveToPOS3Action
+    sitOnSofa2Action.ClosingAction = moveToPOS3Action
+
+    -- dance next to the turntable
+    local turnOnTurnTableAction = TurnOn { performer = player, nextLocation = livingRoomTurnTableLocation, targetItem = livingroomTurnTable, graphId = self.graphId }
+    table.insert(livingRoomTurnTableLocation.PossibleActions, turnOnTurnTableAction)
+    local moveToTurnTable2Action = Move { performer = player, nextLocation = livingRoomTurnTableLocation2, targetItem = livingRoomTurnTableLocation2, graphId = self.graphId }
+    turnOnTurnTableAction.NextAction = moveToTurnTable2Action
+    local danceTurnTableAction = Dance { performer = player, nextLocation = livingRoomTurnTableLocation2, targetItem = livingRoomTurnTableLocation2, graphId = self.graphId }
+    table.insert(livingRoomTurnTableLocation2.PossibleActions, danceTurnTableAction)
+    local moveToTurnTable3Action = Move { performer = player, nextLocation = livingRoomTurnTableLocation3, targetItem = livingRoomTurnTableLocation3, graphId = self.graphId }
+    danceTurnTableAction.NextAction = moveToTurnTable3Action
+    local turnOffTurnTableAction = TurnOff { performer = player, nextLocation = livingRoomTurnTableLocation3, targetItem = livingroomTurnTable, graphId = self.graphId }
+    table.insert(livingRoomTurnTableLocation3.PossibleActions, turnOffTurnTableAction)
+    local moveToPOS4Action = Move { performer = player, nextLocation = pointsOfInterests[4], targetItem = pointsOfInterests[4], graphId = self.graphId }
+    turnOffTurnTableAction.NextAction = moveToPOS4Action
+    turnOffTurnTableAction.ClosingAction = moveToPOS4Action
+
+    -- kitchen actions
+    local washHandsKitchenAction = WashHands {performer = player, nextLocation = kitchenSinkLocation, targetItem = kitchenSink, graphId = self.graphId}
+    table.insert(kitchenSinkLocation.PossibleActions, washHandsKitchenAction)
+    local  moveToKitchenChairAction = Move { performer = player, nextLocation = kitchenChairLocation, targetItem = kitchenChairLocation, graphId = self.graphId }
+    washHandsKitchenAction.NextAction = moveToKitchenChairAction
+
+    local sitDownKitchenChairAction = SitDown {how = SitDown.eHow.atDesk, performer = player, nextLocation = kitchenChairLocation, targetItem = kitchenChair, rotation = Vector3(0,0,180), graphId = self.graphId}
+    table.insert(kitchenChairLocation.PossibleActions, sitDownKitchenChairAction)
+    local standUpKitchenChairAction = StandUp {how = StandUp.eHow.fromDesk, performer = player, nextLocation = kitchenChairLocation, targetItem = kitchenChair, graphId = self.graphId}
+    sitDownKitchenChairAction.NextAction = standUpKitchenChairAction
+    local moveToPOS5Action = Move { performer = player, nextLocation = pointsOfInterests[5], targetItem = pointsOfInterests[5], graphId = self.graphId }
+    standUpKitchenChairAction.NextAction = moveToPOS5Action
+    sitDownKitchenChairAction.ClosingAction = moveToPOS5Action
+
+    -- bedroom actions
+    local openBedroomDoorAction = OpenDoor {performer = player, nextLocation = bedroomExitLocation, targetItem = bedroomExitLocation, graphId = self.graphId}
+    table.insert(bedroomEntranceLocation.PossibleActions, openBedroomDoorAction)
+
+    local moveToBedroomBedAction = Move { performer = player, nextLocation = bedroomBedLocation, targetItem = bedroomBedLocation, graphId = self.graphId }
+    table.insert(bedroomExitLocation.PossibleActions, moveToBedroomBedAction)
+
+    local getInBedAction = GetInBed{performer = player, targetItem = bedroomBed, nextLocation = bedroomBedLocation, how = GetInBed.eHow.Left, graphId = self.graphId}
+    table.insert(bedroomBedLocation.PossibleActions, getInBedAction)
+    local sleepAction = Sleep { nextLocation = bedroomBedLocation, performer = player, targetItem = bedroomBed, how = Sleep.eHow.Left, graphId = self.graphId}
+    getInBedAction.NextAction = sleepAction
+    local getOffBedAction = GetOffBed{performer = player, targetItem = bedroomBed, nextLocation = bedroomBedLocation, how = GetOffBed.eHow.Left, graphId = self.graphId}
+    sleepAction.NextAction = getOffBedAction
+    local moveToBedroomExitAction = Move { performer = player, nextLocation = bedroomExitLocation2, targetItem = bedroomExitLocation2, graphId = self.graphId}
+    getOffBedAction.NextAction = moveToBedroomExitAction
+    getInBedAction.ClosingAction = moveToBedroomExitAction
+
+    local openBedroomDoorAction2 = OpenDoor {performer = player, nextLocation = bedroomEntranceLocation2, targetItem = bedroomEntranceLocation2, graphId = self.graphId}
+    table.insert(bedroomExitLocation2.PossibleActions, openBedroomDoorAction2)
+    
+    local moveToPOS6Action = Move { performer = player, nextLocation = pointsOfInterests[6], targetItem = pointsOfInterests[6], graphId = self.graphId}
+    table.insert(bedroomEntranceLocation2.PossibleActions, moveToPOS6Action)
+
+    -- bathroom actions
+    local openbathRoomAction = OpenDoor {performer = player, nextLocation = bathroomSinkLocation, targetItem = bathroomSinkLocation, graphId = self.graphId}
+    table.insert(bathroomEntranceLocation.PossibleActions, openbathRoomAction)
+
+    local washhandsBathroomSinkAction = WashHands {performer = player, nextLocation = bathroomSinkLocation, targetItem = bathroomSinkLocation, graphId = self.graphId}
+    table.insert(bathroomSinkLocation.PossibleActions, washhandsBathroomSinkAction)
+    local moveToBathroomExitAction = Move { performer = player, nextLocation = bathroomExitLocation, targetItem = bathroomExitLocation, graphId = self.graphId}
+    washhandsBathroomSinkAction.NextAction = moveToBathroomExitAction
+
+    local openbathRoomAction2 = OpenDoor {performer = player, nextLocation = bathroomEntranceLocation2, targetItem = bathroomEntranceLocation2, graphId = self.graphId}
+    table.insert(bathroomExitLocation.PossibleActions, openbathRoomAction2)
+
+    local moveToPOS7Action = Move { performer = player, nextLocation = pointsOfInterests[7], targetItem = pointsOfInterests[7], graphId = self.graphId}
+    table.insert(bathroomEntranceLocation2.PossibleActions, moveToPOS7Action)
+
+
+
+    if DEBUG then
+        outputConsole("House10:Initialized")
+    end
+    return true
+end
+
+function House10:Play(...)
+    local player = nil
+    for i,v in ipairs(arg) do
+        player = v
+        break
+    end
+    if player == nil then
+        return false
+    end
+
+    if self.StartingLocation == nil then
+        self.StartingLocation = PickRandom(self.ValidStartingLocations)
+    end
+    self.StartingLocation:SpawnPlayerHere(player)
+    if DEBUG then
+        outputConsole("House10:Play - picked random location "..self.StartingLocation.Description.." Spawn scheduled")
+    end
+end
+    
+function House10:Destroy()
+    for item in self.Objects do
+        item:Destroy()
+    end
+    unloadPathGraph()
+    if DEBUG then
+        outputConsole("House10:Destroyed")
+    end
+end

@@ -42,6 +42,8 @@ function PickRandom(arr)
 end
 
 function Shuffle(arr)
+    math.randomseed(os.time())
+
 	for i = #arr, 2, -1 do
 		local j = math.random(i)
 		arr[i], arr[j] = arr[j], arr[i]

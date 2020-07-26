@@ -3,12 +3,13 @@
   <!-- Debug tool -->
   <script src="MTATD.bundle.lua" type="shared"/>
   <!-- Custom files -->
-  <file src="files/data/LaptopSAMP1.dff" type="client" />
   <file src="files/data/LaptopSAMP1.txd" type="client" />
+  <file src="files/data/LaptopSAMP1.dff" type="client" />
   <file src="files/data/LaptopSAMP2.dff" type="client" />
   <file src="files/data/SAMPFruits.txd" type="client" />
   <file src="files/data/Apple1.dff" type="client" />
   <file src="files/data/Apple2.dff" type="client" />
+  <file src="files/data/Banana1.dff" type="client" />
   <file src="files/data/MarcosStuff1.txd" type="client" />
   <file src="files/data/MCakeSlice1.dff" type="client" />
   <!-- Client -->

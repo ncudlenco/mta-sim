@@ -10,8 +10,10 @@ Food = class(SampStoryObjectBase, function(o, params)
         params.position.z = params.position.z - 0.06
     elseif (params.modelid == Food.eModel.RedApple or params.modelid == Food.eModel.GreenApple) then
         params.position.z = params.position.z - 0.02
-    elseif (params.modelid) == Food.eModel.Cake then
+    elseif params.modelid == Food.eModel.Cake then
         params.position.z = params.position.z - 0.05
+    elseif params.modelid == Food.eModel.Banana then
+        params.position.z = params.position.z - 0.03
     end
 
     SampStoryObjectBase.init(o, params)
@@ -35,6 +37,8 @@ function Food:updateDescription()
         self.Description = "a green apple"
     elseif self.modelid == Food.eModel.Cake then
         self.Description = "a slice of cake"
+    elseif self.modelid == Food.eModel.Banana then
+        self.Description = "a banana"
     end
     return self.Description
 end
@@ -50,6 +54,8 @@ function Food:updatePositionOffset()
         self.PosOffset = Vector3(0, 0.04, 0.06)
     elseif self.modelid == Food.eModel.Cake then
         self.PosOffset = Vector3(-0.04, 0.07, 0.05)
+    elseif self.modelid == Food.eModel.Banana then
+        self.PosOffset = Vector3(-0.01, 0.04, 0.06)
     end
 
     return self.Description
@@ -66,6 +72,8 @@ function Food:updateRotOffset()
         self.RotOffset = Vector3(0, 270, 0)
     elseif self.modelid == Food.eModel.Cake then
         self.RotOffset = Vector3(0, 90, 0)
+    elseif self.modelid == Food.eModel.Banana then
+        self.RotOffset = Vector3(0, 180, 0)
     end
 
     return self.Description
@@ -78,5 +86,6 @@ Food.eModel =
     Pizza = 2702,
     RedApple = 1252,
     GreenApple = 2036,
-    Cake = 2040
+    Cake = 2040,
+    Banana = 3082
 }

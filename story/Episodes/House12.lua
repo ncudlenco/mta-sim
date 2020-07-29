@@ -96,12 +96,24 @@ function House12:Initialize(...)
     bedroom2Bed:Create()
     table.insert(self.Objects, bedroom2Bed)
 
+    drink = Drinks {
+        modelid = Drinks.eModel[PickRandom(Drinks.eModel)],
+        position =     Vector3(2331.306640625, -1140.846923828125, 1050.775),
+        rotation =     Vector3(0, 0.0000, 180),
+        noCollisions = true,
+        interior = self.InteriorId
+    }
+
+    drink:Create()
+    table.insert(self.Objects, drink)
+
     local livingRoomEntranceLocation = Location(2324.4219, -1147.9844, 1050.875, 0, self.InteriorId, "living room")
     local livingRoomSofa1Location = Location(2322.8051171875, -1142.068359375, 1050.875, 270, self.InteriorId, "sofa1")
     local livingRoomSofa2Location = Location(2325.9713671875, -1142.026489257813, 1050.875, 90, self.InteriorId, "sofa2")
     local livingRoomChairLocation = Location(2314.353515625, -1146.708862304688, 1050.875, 0, self.InteriorId, "chair")
 
     local kitchenSinkLocation = Location(2336.946220703125, -1139.029296875, 1050.875, 270, self.InteriorId, "sink")
+    local kitchenTableLocation = Location(2331.906640625, -1140.846923828125, 1050.875, 90, self.InteriorId, "table")
 
     local bedroom1EntranceLocation = Location(2334.14599609375, -1138.757934570313, 1054.3046875, 270, self.InteriorId, "bedroom")
     local bedroom1EntranceLocation2 = Location(2332.56298828125, -1138.757934570313, 1054.3046875, 90, self.InteriorId, "bedroom")
@@ -157,9 +169,21 @@ function House12:Initialize(...)
     --kitchen
     local washhandsKitchenSinkAction = WashHands {performer = player, nextLocation = kitchenSinkLocation, targetItem = kitchenSinkLocation, graphId = self.graphId}
     table.insert(kitchenSinkLocation.PossibleActions, washhandsKitchenSinkAction)
-    local moveToPOS5Action = Move { performer = player, nextLocation = pointsOfInterests[5], targetItem = pointsOfInterests[5], graphId = self.graphId }
-    washhandsKitchenSinkAction.NextAction = moveToPOS5Action
-    washhandsKitchenSinkAction.ClosingAction = moveToPOS5Action
+    local moveToKitchenTableAction = Move { performer = player, nextLocation = kitchenTableLocation, targetItem = kitchenTableLocation, graphId = self.graphId }
+    washhandsKitchenSinkAction.NextAction = moveToKitchenTableAction
+    washhandsKitchenSinkAction.ClosingAction = moveToKitchenTableAction
+
+    local pickUpDrinkAction = PickUp {performer = player, nextLocation = kitchenTableLocation, targetItem = drink, where = "the table", targetObjectExists = true, how = PickUp.eHow.Normal, hand = PickUp.eHand.Left, graphId = self.graphId}
+    table.insert(kitchenTableLocation.PossibleActions, pickUpDrinkAction)
+    local drinkAction = Drink {performer = player, nextLocation = kitchenTableLocation, targetItem = drink, graphId = self.graphId}
+    pickUpDrinkAction.NextAction = drinkAction
+    local putDownDrinkAction = PutDown {performer = player, nextLocation = kitchenTableLocation, targetItem = drink, where = "the table", targetObjectPosition = Vector3(2331.306640625, -1140.846923828125, 1050.775),
+                                        targetObjectRotation = Vector3(0, 0, 0), graphId = self.graphId}
+    drinkAction.NextAction = putDownDrinkAction
+
+    local moveToPOS5Action = Move { performer = player, nextLocation = pointsOfInterests[5], targetItem = pointsOfInterests[5], graphId = self.graphId}
+    putDownDrinkAction.NextAction = moveToPOS5Action
+    pickUpDrinkAction.ClosingAction = moveToPOS5Action
 
     -- bedroom 1 actions
     local opendoorBedRoom1Location = OpenDoor { performer = player, nextLocation = bedroom1BedLocation, targetItem = bedroom1BedLocation, graphId = self.graphId }

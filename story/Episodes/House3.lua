@@ -159,7 +159,7 @@ function House3:Initialize(...)
     local standUpLivingroomAction = StandUp {how = StandUp.eHow.fromSofa, performer = player, nextLocation = livingroomSofaLocation, targetItem = livingroomSofa, graphId = self.graphId}
     sitDownLivingroomAction.NextAction = standUpLivingroomAction
     local putDownLivingroomAction = PutDown {performer = player, nextLocation = livingroomSofaLocation, targetItem = livingroomRemote, where = "the table", targetObjectPosition = Vector3(2492.8154, -1698.0571, 1014.3103),
-                                             targetObjectRotation = Vector3(0, 0, 0), graphId = self.graphId}
+                                             targetObjectRotation = Vector3(0, 0, 0), how = PutDown.eHow.Down, graphId = self.graphId}
     standUpLivingroomAction.NextAction = putDownLivingroomAction
 
     local moveToPOS3Action = Move { performer = player, nextLocation = pointsOfInterests[3], targetItem = pointsOfInterests[3], graphId = self.graphId}

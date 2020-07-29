@@ -3,6 +3,7 @@ PickUp = class(StoryActionBase, function(o, params)
     o.Where = params.where
     o.TargetObjectExists = params.targetObjectExists
     o.how = params.how or PickUp.eHow.Normal
+    o.hand = params.hand or PickUp.eHand.Right
 end)
 
 function PickUp:Apply()
@@ -23,18 +24,23 @@ function PickUp:Apply()
         self.Performer:setAnimation("MISC", "Case_pickup", 500, true, true, false, true)
     end
 
-    attachElementToBone(self.TargetItem.instance, self.Performer, 12, 
-                        self.TargetItem.PosOffset.x, self.TargetItem.PosOffset.y, self.TargetItem.PosOffset.z,
-                        self.TargetItem.RotOffset.x, self.TargetItem.RotOffset.y, self.TargetItem.RotOffset.z)
-
     if DEBUG then
         outputConsole("PickUp:Apply")
     end
 
-    OnGlobalActionFinished(500, self.Performer:getData('id'), self.Performer:getData('storyId'))
+    OnGlobalActionFinished(500, self.Performer:getData('id'), self.Performer:getData('storyId'), function()
+        attachElementToBone(self.TargetItem.instance, self.Performer, self.hand, 
+                        self.TargetItem.PosOffset.x, self.TargetItem.PosOffset.y, self.TargetItem.PosOffset.z,
+                        self.TargetItem.RotOffset.x, self.TargetItem.RotOffset.y, self.TargetItem.RotOffset.z)
+    end)
 end
 
 PickUp.eHow = {
     Normal = 1,
     Down = 2
+}
+
+PickUp.eHand = {
+    Left = 11,
+    Right = 12
 }

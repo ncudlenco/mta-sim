@@ -9,7 +9,7 @@ OpenDoor = class(StoryActionBase, function(o, params)
     elseif type(params.graphId) ~= "number" then
         error("OpenDoor: graphId not given in the constructor")
     end
-    local description = " opens the door"
+    local description = " opens the door and enters the room"
 
     StoryActionBase.init(o, description, params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
     o.path = {}
@@ -18,7 +18,7 @@ OpenDoor = class(StoryActionBase, function(o, params)
 end)
 
 OpenDoor.eHow = {
-    Walk = "Walk_Wuzi"
+    Walk = "WALK_civi"
 }
 
 function OpenDoor.destinationReached(player, matchingDimension)

@@ -12,6 +12,9 @@
   <file src="files/data/Banana1.dff" type="client" />
   <file src="files/data/MarcosStuff1.txd" type="client" />
   <file src="files/data/MCakeSlice1.dff" type="client" />
+  <file src="files/data/cj_ss_1.txd" type="client" />
+  <file src="files/data/JuiceBox1.dff" type="client" />
+  <file src="files/data/JuiceBox2.dff" type="client" />
   <!-- Client -->
   <script src="client/Handlers.lua" type="shared"/>
   <script src="client/EngineLoader.lua" type="client" />
@@ -90,6 +93,7 @@
   <script src="story/Actions/TurnOff.lua" type="server" />
   <script src="story/Actions/Dance.lua" type="server" />
   <script src="story/Actions/OpenDoor.lua" type="server" />
+  <script src="story/Actions/Drink.lua" type="server" />
   <!-- Objects -->
   <script src="story/Objects/SampStoryObjectBase.lua" type="shared" />
   <script src="story/Objects/Bed.lua" type="server" />
@@ -104,10 +108,12 @@
   <script src="story/Objects/Plate.lua" type="server" />
   <script src="story/Objects/TurnTable.lua" type="server" />
   <script src="story/Objects/Sink.lua" type="server" />
+  <script src="story/Objects/Drinks.lua" type="server" />
   <!-- Episodes -->
   <script src="story/Episodes/House3.lua" type="server" />
   <script src="story/Episodes/House8.lua" type="server" />
   <script src="story/Episodes/House10.lua" type="server" />
+  <script src="story/Episodes/House12.lua" type="server" />
   <script src="story/Episodes/DynamicEpisode.lua" type="shared" />
   <!-- Story main items -->
   <script src="story/Player.lua" type="server" />

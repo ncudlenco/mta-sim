@@ -97,7 +97,7 @@ function House12:Initialize(...)
     table.insert(self.Objects, bedroom2Bed)
 
     drink = Drinks {
-        modelid = Drinks.eModel.MilkBottle,
+        modelid = Drinks.eModel[PickRandom(Drinks.eModel)],
         position =     Vector3(2331.306640625, -1140.846923828125, 1050.775),
         rotation =     Vector3(0, 0.0000, 180),
         noCollisions = true,

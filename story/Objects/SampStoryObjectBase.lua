@@ -7,11 +7,13 @@ SampStoryObjectBase = class(StoryObjectBase, function(o, params)
     o.interior = params.interior or 0
     o.instance = nil
     o.size = params.size or 2.5
+    o.scale = params.scale or 1
 end)
 
 function SampStoryObjectBase:Create(...)
     self.instance = Object(self.modelid, self.position, self.rotation, self.noCollisions)
     self.instance:setInterior(self.interior)
+    setObjectScale(self.instance, self.scale)
 end
 
 function SampStoryObjectBase:Destroy(...)

@@ -8,6 +8,10 @@ Drinks = class(SampStoryObjectBase, function(o, params)
         params.position.z = params.position.z + 0.04
     elseif params.modelid == Drinks.eModel.SodaCup then
         params.position.z = params.position.z + 0.08
+    elseif params.modelid == Drinks.eModel.BottleAlcohol1 then
+        params.position.z = params.position.z + 0.1
+    elseif params.modelid == Drinks.eModel.BottleAlcohol2 or params.modelid == Drinks.eModel.BottleAlcohol3 then
+        params.position.z = params.position.z + 0.15
     end
 
     SampStoryObjectBase.init(o, params)
@@ -31,6 +35,9 @@ function Drinks:updateDescription()
         self.Description = "a cup of soda"
     elseif self.modelid == Drinks.eModel.MilkBottle then
         self.Description = "milk from bottle"
+    elseif self.modelid == Drinks.eModel.BottleAlcohol1 or self.modelid == Drinks.eModel.BottleAlcohol2 or 
+           self.modelid == Drinks.eModel.BottleAlcohol3 or self.modelid == Drinks.eModel.BottleAlcohol4 then
+        self.Description = "alcohol from bottle"
     end
 
     return self.Description
@@ -46,6 +53,11 @@ function Drinks:updatePositionOffset()
         self.PosOffset = Vector3(-0.06, 0.07, 0.09)
     elseif self.modelid == Drinks.eModel.MilkBottle then
         self.PosOffset = Vector3(-0.20, 0.09, 0.11)
+    elseif self.modelid == Drinks.eModel.BottleAlcohol1 or self.modelid == Drinks.eModel.BottleAlcohol2 or 
+           self.modelid == Drinks.eModel.BottleAlcohol3 then
+        self.PosOffset = Vector3(-0.04, 0.03, 0.08)
+    elseif self.modelid == Drinks.eModel.BottleAlcohol4 then
+        self.PosOffset = Vector3(-0.23, 0.03, 0.08)
     end
 
     return self.Description
@@ -56,6 +68,9 @@ function Drinks:updateRotOffset()
         self.modelid == Drinks.eModel.MilkCarton or self.modelid == Drinks.eModel.MilkBottle)  then
         self.RotOffset = Vector3(0, 90, 0)
     elseif (self.modelid == Drinks.eModel.CoffeCup or self.modelid == Drinks.eModel.SodaCup) then
+        self.RotOffset = Vector3(0, 90, 0)
+    elseif self.modelid == Drinks.eModel.BottleAlcohol1 or self.modelid == Drinks.eModel.BottleAlcohol2 or 
+           self.modelid == Drinks.eModel.BottleAlcohol3 or self.modelid == Drinks.eModel.BottleAlcohol4 then
         self.RotOffset = Vector3(0, 90, 0)
     end
 
@@ -69,5 +84,9 @@ Drinks.eModel =
     MilkCarton = 3789,
     CoffeCup = 3013,
     SodaCup = 2647,
-    MilkBottle = 3016
+    MilkBottle = 3016,
+    BottleAlcohol1 = 1486,
+    BottleAlcohol2 = 1512,
+    BottleAlcohol3 = 1517,
+    BottleAlcohol4 = 1520
 }

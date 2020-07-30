@@ -39,5 +39,15 @@ addEventHandler ( "onClientResourceStart", resourceRoot,
 		local res = txd:import(3788)
 		local dff = EngineDFF("files/data/JuiceBox1.dff")
 		local res = dff:replace(3788)
+
+		local txd = EngineTXD("files/data/cj_ss_2.txd")
+		local res = txd:import(3789)
+		local dff = EngineDFF("files/data/MilkCarton1.dff")
+		local res = dff:replace(3789)
+
+		local txd = EngineTXD("files/data/d_s.txd")
+		local res = txd:import(3013)
+		local dff = EngineDFF("files/data/CoffeeCup1.dff")
+		local res = dff:replace(3013)
 	end
 );

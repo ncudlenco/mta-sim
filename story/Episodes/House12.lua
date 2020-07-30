@@ -97,7 +97,7 @@ function House12:Initialize(...)
     table.insert(self.Objects, bedroom2Bed)
 
     drink = Drinks {
-        modelid = Drinks.eModel[PickRandom(Drinks.eModel)],
+        modelid = Drinks.eModel.CoffeCup,
         position =     Vector3(2331.306640625, -1140.846923828125, 1050.775),
         rotation =     Vector3(0, 0.0000, 180),
         noCollisions = true,
@@ -127,7 +127,7 @@ function House12:Initialize(...)
 
     local livingRoomEndLocation = Location(2324.4219, -1147.9844, 1050.875, 180, self.InteriorId, "end")
 
-    table.insert(self.ValidStartingLocations, livingRoomEntranceLocation)
+    table.insert(self.ValidStartingLocations, kitchenTableLocation)
 
     local pointsOfInterests = {livingRoomSofa1Location, livingRoomSofa2Location, livingRoomChairLocation, kitchenSinkLocation, bedroom1EntranceLocation, bedroom2EntranceLocation, livingRoomEndLocation}
     pointsOfInterests = Shuffle(pointsOfInterests)

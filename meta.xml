@@ -17,6 +17,7 @@
   <file src="files/data/JuiceBox2.dff" type="client" />
   <file src="files/data/cj_ss_2.txd" type="client" />
   <file src="files/data/MilkCarton1.dff" type="client" />
+  <file src="files/data/MilkBottle1.dff" type="client" />
   <file src="files/data/d_s.txd" type="client" />
   <file src="files/data/CoffeeCup1.dff" type="client" />
   <!-- Client -->

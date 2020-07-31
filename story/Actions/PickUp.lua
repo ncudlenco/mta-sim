@@ -19,10 +19,17 @@ function PickUp:Apply()
     story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. self.TargetItem.Description .. " from " .. self.Where, self.Performer)
     
     if self.how == PickUp.eHow.Normal then
-        self.Performer:setAnimation("INT_SHOP", "shop_loop", 500, true, true, false, true)
+        time = 200
+        self.TargetItem:updatePositionOffsetStandUp()
+        self.TargetItem:updateRotOffsetStandUp()
+        self.Performer:setAnimation("BAR", "Barserve_bottle", time, true, true, false, true)
     elseif self.how == PickUp.eHow.Down then
+        time = 500
         self.Performer:setAnimation("MISC", "Case_pickup", 500, true, true, false, true)
     elseif self.how == PickUp.eHow.Sit then
+        time = 500
+        self.TargetItem:updatePositionOffsetSitDown()
+        self.TargetItem:updateRotOffsetSitDown()
         self.Performer:setAnimation("INT_OFFICE", "OFF_Sit_Drink", 500, true, true, false, true)
     end
 
@@ -30,7 +37,7 @@ function PickUp:Apply()
         outputConsole("PickUp:Apply")
     end
 
-    OnGlobalActionFinished(500, self.Performer:getData('id'), self.Performer:getData('storyId'), function()
+    OnGlobalActionFinished(time, self.Performer:getData('id'), self.Performer:getData('storyId'), function()
         attachElementToBone(self.TargetItem.instance, self.Performer, self.hand, 
                         self.TargetItem.PosOffset.x, self.TargetItem.PosOffset.y, self.TargetItem.PosOffset.z,
                         self.TargetItem.RotOffset.x, self.TargetItem.RotOffset.y, self.TargetItem.RotOffset.z)

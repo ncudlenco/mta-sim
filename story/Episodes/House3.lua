@@ -128,7 +128,7 @@ function House3:Initialize(...)
 
     local livingRoomEntranceLocation = Location(2496.212, -1694.371459, 1014.7422, 181.8800, self.InteriorId, "livin room")
     local kitchenSinkLocation = Location(2500.235859375, -1709.40225585938, 1014.7422, 270.000, self.InteriorId, "the sink in the kitchen")
-    local kitchenTableLocation = Location(2494.4033, -1708.3198, 1014.7422, 90, self.InteriorId, "chair")
+    local kitchenTableLocation = Location(2494.2033, -1708.3198, 1014.7422, 90, self.InteriorId, "chair")
     local livingroomSofaLocation = Location(2492.5772, -1699.004663085938, 1014.7422, 0, self.InteriorId, "")
     local livingroomTableLocation = Location(2494.0677734375, -1702.523217773438, 1014.7422, 90, self.InteriorId, "table")
     local bedroomBedLocation = Location(2495.2177734375, -1703.923217773438, 1018.34375, 0, self.InteriorId, "")
@@ -154,7 +154,7 @@ function House3:Initialize(...)
     washHandsAction.NextAction = moveToTableAction
     washHandsAction.ClosingAction = moveToTableAction
 
-    local pickUpFoodAction = PickUp {performer = player, nextLocation = kitchenTableLocation, targetItem = food, where = "the table", targetObjectExists = true, how = PickUp.eHow.Normal, graphId = self.graphId}
+    local pickUpFoodAction = PickUp {performer = player, nextLocation = kitchenTableLocation, targetItem = food, where = "the table", targetObjectExists = true, how = PickUp.eHow.Normal, hand = PickUp.eHand.Left, graphId = self.graphId}
     table.insert(kitchenTableLocation.PossibleActions, pickUpFoodAction)
     local eatFoodAction = Eat {performer = player, nextLocation = kitchenTableLocation, targetItem = food, graphId = self.graphId}
     pickUpFoodAction.NextAction = eatFoodAction

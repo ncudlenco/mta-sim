@@ -19,8 +19,6 @@ Food = class(SampStoryObjectBase, function(o, params)
     SampStoryObjectBase.init(o, params)
 
     o:updateDescription()
-    o:updatePositionOffset()
-    o:updateRotOffset()
 end
 )
 
@@ -43,7 +41,7 @@ function Food:updateDescription()
     return self.Description
 end
 
-function Food:updatePositionOffset()
+function Food:updatePositionOffsetSitDown()
     if self.modelid == Food.eModel.Shawarma then
         self.PosOffset = Vector3(-0.04, 0.05, 0.08)
     elseif self.modelid == Food.eModel.Burger then
@@ -61,7 +59,7 @@ function Food:updatePositionOffset()
     return self.Description
 end
 
-function Food:updateRotOffset()
+function Food:updateRotOffsetSitDown()
     if self.modelid == Food.eModel.Shawarma then
         self.RotOffset = Vector3(270, 0, 0)
     elseif self.modelid == Food.eModel.Burger then
@@ -74,6 +72,42 @@ function Food:updateRotOffset()
         self.RotOffset = Vector3(0, 90, 0)
     elseif self.modelid == Food.eModel.Banana then
         self.RotOffset = Vector3(0, 180, 0)
+    end
+
+    return self.Description
+end
+
+function Food:updatePositionOffsetStandUp()
+    if self.modelid == Food.eModel.Shawarma then
+        self.PosOffset = Vector3(-0.08, 0.02, 0.08)
+    elseif self.modelid == Food.eModel.Burger then
+        self.PosOffset = Vector3(-0.01, 0.08, 0.08)
+    elseif self.modelid == Food.eModel.Pizza then
+        self.PosOffset = Vector3(0, 0.1, 0.05)
+    elseif (self.modelid == Food.eModel.RedApple or self.modelid == Food.eModel.GreenApple) then
+        self.PosOffset = Vector3(0, 0.04, 0.06)
+    elseif self.modelid == Food.eModel.Cake then
+        self.PosOffset = Vector3(0, 0.07, 0.02)
+    elseif self.modelid == Food.eModel.Banana then
+        self.PosOffset = Vector3(0, 0.03, 0.01)
+    end
+
+    return self.Description
+end
+
+function Food:updateRotOffsetStandUp()
+    if self.modelid == Food.eModel.Shawarma then
+        self.RotOffset = Vector3(0, 0, 210)
+    elseif self.modelid == Food.eModel.Burger then
+        self.RotOffset = Vector3(270, 0, 0)
+    elseif self.modelid == Food.eModel.Pizza then
+        self.RotOffset = Vector3(180, 90, 180)
+    elseif (self.modelid == Food.eModel.RedApple or self.modelid == Food.eModel.GreenApple) then
+        self.RotOffset = Vector3(0, 0, 0)
+    elseif self.modelid == Food.eModel.Cake then
+        self.RotOffset = Vector3(0, 0, 0)
+    elseif self.modelid == Food.eModel.Banana then
+        self.RotOffset = Vector3(0, 270, 0)
     end
 
     return self.Description

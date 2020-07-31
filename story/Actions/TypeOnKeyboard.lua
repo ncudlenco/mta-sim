@@ -7,10 +7,13 @@ function TypeOnKeyboard:Apply()
     table.insert(story.History, self)
     
     story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. " on the " .. self.TargetItem.Description, self.Performer)
-    self.Performer:setAnimation("INT_OFFICE", "OFF_Sit_Type_Loop", -1, true, true, false, true)
+
+    math.randomseed(os.time())
+    time = math.random(4000, 12000)
+    self.Performer:setAnimation("INT_OFFICE", "OFF_Sit_Type_Loop", time, true, true, false, true)
     if DEBUG then
         outputConsole("TypeOnKeyboard:Apply")
     end
 
-    OnGlobalActionFinished(5000, self.Performer:getData('id'), self.Performer:getData('storyId'))
+    OnGlobalActionFinished(time, self.Performer:getData('id'), self.Performer:getData('storyId'))
 end

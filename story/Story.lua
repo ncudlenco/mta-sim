@@ -4,8 +4,8 @@ Story = class(StoryBase, function(o, actor, maxActions, logData)
     o.Logger = Logger('data/'..actor:getData('id')..'/'..o.Id..'/labels.txt', true, o)
     o.Episodes = {
         --add an episode here
-        House3()
-        -- House12()
+        -- House3()
+        House12()
         -- House8()
         -- House10()
     }

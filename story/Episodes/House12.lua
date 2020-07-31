@@ -50,15 +50,38 @@ function House12:Initialize(...)
 
     livingroomChair = Chair {
         modelid = Chair.eModel.WhiteChair,
-        position =     Vector3(2314.2969, -1146.1125, 1050.3203),
+        position =     Vector3(2314.2969, -1146.0125, 1050.3203),
         rotation =     Vector3(0, 0.0000, 270),
         noCollisions = true,
         interior = self.InteriorId
     }
 
-    removeWorldModel(Chair.eModel.WhiteChair, 0.25, livingroomChair.position)    
+    removeWorldModel(Chair.eModel.WhiteChair, 0.5, livingroomChair.position)    
     livingroomChair:Create()
     table.insert(self.Objects, livingroomChair)
+
+    livingroomTable = Table {
+        modelid = Table.eModel.GlassTable,
+        position =     Vector3(2314.2734, -1144.8984, 1050.0859),
+        rotation =     Vector3(0, 0.0000, 270),
+        noCollisions = true,
+        interior = self.InteriorId
+    }
+
+    removeWorldModel(Table.eModel.GlassTable, 0.25, livingroomTable.position)    
+    livingroomTable:Create()
+    table.insert(self.Objects, livingroomTable)
+
+    laptop = Laptop {
+        modelid = Laptop.eModel.Closed,
+        position =     Vector3(2314.3234, -1145.5484, 1050.5059),
+        rotation =     Vector3(0, 0.0000, 0),
+        noCollisions = true,
+        interior = self.InteriorId
+    }
+
+    laptop:Create()
+    table.insert(self.Objects, laptop)
 
     kitchenSink = Furniture {
         modelid = Furniture.eModel.House10Kitchen1,
@@ -160,8 +183,19 @@ function House12:Initialize(...)
     -- sit on chair
     local sitDownLivingRoomChairAction = SitDown {how = SitDown.eHow.atDesk, performer = player, nextLocation = livingRoomChairLocation, targetItem = livingroomChair, rotation = Vector3(0,0,0), graphId = self.graphId}
     table.insert(livingRoomChairLocation.PossibleActions, sitDownLivingRoomChairAction)
+    local openLaptopAction = OpenLaptop{performer = player, nextLocation = livingRoomChairLocation, targetItem = laptop }
+    sitDownLivingRoomChairAction.NextAction = openLaptopAction
+    local writeOnLaptop = TypeOnKeyboard{performer = player, nextLocation = livingRoomChairLocation, targetItem = laptop }
+    openLaptopAction.NextAction = writeOnLaptop
+    local layOnElbow = LayOnElbow{performer = player, nextLocation = livingRoomChairLocation, targetItem = laptop }
+    writeOnLaptop.NextAction = layOnElbow
+    local writeOnLaptop2 = TypeOnKeyboard{performer = player, nextLocation = livingRoomChairLocation, targetItem = laptop }
+    layOnElbow.NextAction = writeOnLaptop2
+    local closeLaptopAction = CloseLaptop{performer = player, nextLocation = livingRoomChairLocation, targetItem = laptop }
+    writeOnLaptop2.NextAction = closeLaptopAction
     local standUpLivingRoomChairAction = StandUp {how = StandUp.eHow.fromDesk, performer = player, nextLocation = livingRoomChairLocation, targetItem = livingroomChair, graphId = self.graphId}
-    sitDownLivingRoomChairAction.NextAction = standUpLivingRoomChairAction
+    closeLaptopAction.NextAction = standUpLivingRoomChairAction
+
     local moveToPOS4Action = Move { performer = player, nextLocation = pointsOfInterests[4], targetItem = pointsOfInterests[4], graphId = self.graphId }
     standUpLivingRoomChairAction.NextAction = moveToPOS4Action
     sitDownLivingRoomChairAction.ClosingAction = moveToPOS4Action

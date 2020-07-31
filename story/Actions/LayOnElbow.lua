@@ -7,11 +7,14 @@ function LayOnElbow:Apply()
     table.insert(story.History, self)
     
     story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description, self.Performer)
-    self.Performer:setAnimation("INT_OFFICE", "OFF_Sit_Bored_Loop", 5000, true, true, false, true)
+
+    math.randomseed(os.time())
+    time = math.random(3000, 8000)
+    self.Performer:setAnimation("INT_OFFICE", "OFF_Sit_Bored_Loop", time, true, true, false, true)
 
     if DEBUG then
         outputConsole("LayOnElbow:Apply")
     end
 
-    OnGlobalActionFinished(5000, self.Performer:getData('id'), self.Performer:getData('storyId'))
+    OnGlobalActionFinished(time, self.Performer:getData('id'), self.Performer:getData('storyId'))
 end

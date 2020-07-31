@@ -122,6 +122,7 @@
   <script src="story/Objects/TurnTable.lua" type="server" />
   <script src="story/Objects/Sink.lua" type="server" />
   <script src="story/Objects/Drinks.lua" type="server" />
+  <script src="story/Objects/Table.lua" type="server" />
   <!-- Episodes -->
   <script src="story/Episodes/House3.lua" type="server" />
   <script src="story/Episodes/House8.lua" type="server" />

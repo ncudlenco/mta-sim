@@ -115,20 +115,32 @@ function House3:Initialize(...)
     plate:Create()
     table.insert(self.Objects, plate)
 
+    drink = Drinks {
+        modelid = Drinks.eModel[PickRandom(Drinks.eModel)],
+        position =     Vector3(2493.5433, -1702.5198, 1014.5922),
+        rotation =     Vector3(0, 0.0000, 0),
+        noCollisions = true,
+        interior = self.InteriorId
+    }
+
+    drink:Create()
+    table.insert(self.Objects, drink)
+
     local livingRoomEntranceLocation = Location(2496.212, -1694.371459, 1014.7422, 181.8800, self.InteriorId, "livin room")
     local kitchenSinkLocation = Location(2500.235859375, -1709.40225585938, 1014.7422, 270.000, self.InteriorId, "the sink in the kitchen")
     local kitchenTableLocation = Location(2494.4033, -1708.3198, 1014.7422, 90, self.InteriorId, "chair")
     local livingroomSofaLocation = Location(2492.5772, -1699.004663085938, 1014.7422, 0, self.InteriorId, "")
+    local livingroomTableLocation = Location(2494.0677734375, -1702.523217773438, 1014.7422, 90, self.InteriorId, "table")
     local bedroomBedLocation = Location(2495.2177734375, -1703.923217773438, 1018.34375, 0, self.InteriorId, "")
     local livingRoomEndLocation = Location(2496.0610, -1694.2596, 1014.7422, 0, self.InteriorId, "end")
 
     table.insert(self.ValidStartingLocations, livingRoomEntranceLocation)
 
-    local pointsOfInterests = {kitchenSinkLocation, livingroomSofaLocation, bedroomBedLocation, livingRoomEndLocation}
+    local pointsOfInterests = {kitchenSinkLocation, livingroomSofaLocation, bedroomBedLocation, livingroomTableLocation, livingRoomEndLocation}
     pointsOfInterests = Shuffle(pointsOfInterests)
 
     if pointsOfInterests[1] == livingRoomEndLocation then
-        local i = math.random(3) + 1
+        local i = math.random(4) + 1
         pointsOfInterests[1], pointsOfInterests[i] = pointsOfInterests[i], pointsOfInterests[1]
     end
 
@@ -166,15 +178,29 @@ function House3:Initialize(...)
     putDownLivingroomAction.NextAction = moveToPOS3Action
     pickUpLivingroomRemoteAction.ClosingAction = moveToPOS3Action
 
+    -- drink at table
+    local pickUpDrinkAction = PickUp {performer = player, nextLocation = livingroomTableLocation, targetItem = drink, where = "the table", targetObjectExists = true, how = PickUp.eHow.Normal, hand = PickUp.eHand.Left, graphId = self.graphId}
+    table.insert(livingroomTableLocation.PossibleActions, pickUpDrinkAction)
+    local drinkAction = Drink {performer = player, nextLocation = livingroomTableLocation, targetItem = drink, graphId = self.graphId}
+    pickUpDrinkAction.NextAction = drinkAction
+    local putDownDrinkAction = PutDown {performer = player, nextLocation = livingroomTableLocation, targetItem = drink, where = "the table", targetObjectPosition = Vector3(2493.5433, -1702.5198, 1014.5922),
+                                        targetObjectRotation = Vector3(0, 0, 0), graphId = self.graphId}
+    drinkAction.NextAction = putDownDrinkAction
+
+    local moveToPOS4Action = Move { performer = player, nextLocation = pointsOfInterests[4], targetItem = pointsOfInterests[4], graphId = self.graphId}
+    putDownDrinkAction.NextAction = moveToPOS4Action
+    pickUpDrinkAction.ClosingAction = moveToPOS4Action
+
+    -- get in bed
     local getInBedAction = GetInBed{performer = player, targetItem = bedroomBed, nextLocation = bedroomBedLocation, how = GetInBed.eHow.Right, graphId = self.graphId}
     table.insert(bedroomBedLocation.PossibleActions, getInBedAction)
     local sleepAction = Sleep { nextLocation = bedroomBed, performer = player, targetItem = bedroomBed, how = Sleep.eHow.Right, graphId = self.graphId}
     getInBedAction.NextAction = sleepAction
     local getOffBedAction = GetOffBed{performer = player, targetItem = bedroomBed, nextLocation = bedroomBedLocation, how = GetOffBed.eHow.Right, graphId = self.graphId}
     sleepAction.NextAction = getOffBedAction
-    local moveToPOI4Action = Move { performer = player, nextLocation = pointsOfInterests[4], targetItem = pointsOfInterests[4], graphId = self.graphId}
-    getOffBedAction.NextAction = moveToPOI4Action
-    getInBedAction.ClosingAction = moveToPOI4Action
+    local moveToPOI5Action = Move { performer = player, nextLocation = pointsOfInterests[5], targetItem = pointsOfInterests[5], graphId = self.graphId}
+    getOffBedAction.NextAction = moveToPOI5Action
+    getInBedAction.ClosingAction = moveToPOI5Action
 
     if DEBUG then
         outputConsole("House3:Initialized")

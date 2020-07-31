@@ -225,7 +225,7 @@ function House10:Initialize(...)
     sitDownKitchenChairAction.ClosingAction = moveToPOS5Action
 
     -- bedroom actions
-    local openBedroomDoorAction = OpenDoor {performer = player, nextLocation = bedroomExitLocation, targetItem = bedroomExitLocation, graphId = self.graphId}
+    local openBedroomDoorAction = OpenDoor {performer = player, nextLocation = bedroomExitLocation, targetItem = bedroomExitLocation, how = OpenDoor.eHow.Enter, graphId = self.graphId}
     table.insert(bedroomEntranceLocation.PossibleActions, openBedroomDoorAction)
 
     local moveToBedroomBedAction = Move { performer = player, nextLocation = bedroomBedLocation, targetItem = bedroomBedLocation, graphId = self.graphId }
@@ -241,14 +241,14 @@ function House10:Initialize(...)
     getOffBedAction.NextAction = moveToBedroomExitAction
     getInBedAction.ClosingAction = moveToBedroomExitAction
 
-    local openBedroomDoorAction2 = OpenDoor {performer = player, nextLocation = bedroomEntranceLocation2, targetItem = bedroomEntranceLocation2, graphId = self.graphId}
+    local openBedroomDoorAction2 = OpenDoor {performer = player, nextLocation = bedroomEntranceLocation2, targetItem = bedroomEntranceLocation2, how = OpenDoor.eHow.Exit, graphId = self.graphId}
     table.insert(bedroomExitLocation2.PossibleActions, openBedroomDoorAction2)
     
     local moveToPOS6Action = Move { performer = player, nextLocation = pointsOfInterests[6], targetItem = pointsOfInterests[6], graphId = self.graphId}
     table.insert(bedroomEntranceLocation2.PossibleActions, moveToPOS6Action)
 
     -- bathroom actions
-    local openbathRoomAction = OpenDoor {performer = player, nextLocation = bathroomSinkLocation, targetItem = bathroomSinkLocation, graphId = self.graphId}
+    local openbathRoomAction = OpenDoor {performer = player, nextLocation = bathroomSinkLocation, targetItem = bathroomSinkLocation, how = OpenDoor.eHow.Enter, graphId = self.graphId}
     table.insert(bathroomEntranceLocation.PossibleActions, openbathRoomAction)
 
     local washhandsBathroomSinkAction = WashHands {performer = player, nextLocation = bathroomSinkLocation, targetItem = bathroomSinkLocation, graphId = self.graphId}
@@ -256,7 +256,7 @@ function House10:Initialize(...)
     local moveToBathroomExitAction = Move { performer = player, nextLocation = bathroomExitLocation, targetItem = bathroomExitLocation, graphId = self.graphId}
     washhandsBathroomSinkAction.NextAction = moveToBathroomExitAction
 
-    local openbathRoomAction2 = OpenDoor {performer = player, nextLocation = bathroomEntranceLocation2, targetItem = bathroomEntranceLocation2, graphId = self.graphId}
+    local openbathRoomAction2 = OpenDoor {performer = player, nextLocation = bathroomEntranceLocation2, targetItem = bathroomEntranceLocation2, how = OpenDoor.eHow.Exit, graphId = self.graphId}
     table.insert(bathroomExitLocation.PossibleActions, openbathRoomAction2)
 
     local moveToPOS7Action = Move { performer = player, nextLocation = pointsOfInterests[7], targetItem = pointsOfInterests[7], graphId = self.graphId}

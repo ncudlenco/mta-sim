@@ -9,7 +9,7 @@ addEventHandler ( "onClientResourceStart", resourceRoot,
         dff = engineLoadDFF("files/data/LaptopSAMP2.dff")
 		res = dff:replace(7188)
 		
-		-- replace food with military objects - https://dev.prineside.com/en/gtasa_samp_model_id/tag/131-military-equipment/
+		-- replace food/drinks with military objects - https://dev.prineside.com/en/gtasa_samp_model_id/tag/131-military-equipment/
 		local txd = EngineTXD("files/data/SAMPFruits.txd")
 		local res = txd:import(1252)
 		local dff = engineLoadDFF("files/data/Apple1.dff")
@@ -54,5 +54,41 @@ addEventHandler ( "onClientResourceStart", resourceRoot,
 		local res = txd:import(3016)
 		local dff = EngineDFF("files/data/MilkBottle1.dff")
 		local res = dff:replace(3016)
+
+		-- replace drinks with icons models (house, heart, start etc.)
+		local txd = EngineTXD("files/data/lee_strip2_1.txd")
+		local res = txd:import(1239)
+		local dff = EngineDFF("files/data/AlcoholBottle1.dff")
+		local res = dff:replace(1239)
+
+		local txd = EngineTXD("files/data/lee_strip2_1.txd")
+		local res = txd:import(1240)
+		local dff = EngineDFF("files/data/AlcoholBottle2.dff")
+		local res = dff:replace(1240)
+
+		local txd = EngineTXD("files/data/lee_strip2_1.txd")
+		local res = txd:import(1241)
+		local dff = EngineDFF("files/data/AlcoholBottle3.dff")
+		local res = dff:replace(1241)
+
+		local txd = EngineTXD("files/data/lee_strip2_1.txd")
+		local res = txd:import(1247)
+		local dff = EngineDFF("files/data/AlcoholBottle4.dff")
+		local res = dff:replace(1247)
+
+		local txd = EngineTXD("files/data/lee_strip2_1.txd")
+		local res = txd:import(1254)
+		local dff = EngineDFF("files/data/AlcoholBottle5.dff")
+		local res = dff:replace(1254)
+
+		local txd = EngineTXD("files/data/lee_strip2_1.txd")
+		local res = txd:import(1253)
+		local dff = EngineDFF("files/data/WineGlass1.dff")
+		local res = dff:replace(1253)
+
+		local txd = EngineTXD("files/data/lee_strip2_1.txd")
+		local res = txd:import(1248)
+		local dff = EngineDFF("files/data/CocktailGlass1.dff")
+		local res = dff:replace(1248)
 	end
 );

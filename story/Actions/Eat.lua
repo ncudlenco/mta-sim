@@ -13,7 +13,7 @@ function Eat:Apply()
     time = math.random(5000, 10000)
     
     if self.how == Eat.eHow.StandUp then
-        setPedAnimation(self.Performer, "FOOD", "EAT_Burger", time, true, true, false, true)
+        setPedAnimation(self.Performer, "VENDING", "vend_eat1_P", time, true, true, false, true)
     elseif self.how == Eat.eHow.SitDown then
         setPedAnimation(self.Performer, "INT_OFFICE", "OFF_Sit_Drink", time, true, true, false, true)
     end

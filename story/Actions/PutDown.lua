@@ -14,8 +14,10 @@ function PutDown:Apply()
     -- self.TargetItem.instance:setCollisionsEnabled(false)
 
     if self.how == PutDown.eHow.Normal then
-        self.Performer:setAnimation("INT_SHOP", "shop_loop", 500, true, true, false, true)
+        time = 200
+        self.Performer:setAnimation("BAR", "Barserve_bottle", time, true, true, false, true)
     elseif self.how == PutDown.eHow.Down then
+        time = 500
         self.Performer:setAnimation("MISC", "Case_pickup", 500, true, true, false, true)
     end
 
@@ -23,11 +25,11 @@ function PutDown:Apply()
         outputConsole("PutDown:Apply")
     end
 
-    OnGlobalActionFinished(500, self.Performer:getData('id'), self.Performer:getData('storyId'), function()
+    OnGlobalActionFinished(time, self.Performer:getData('id'), self.Performer:getData('storyId'), function()
         detachElementFromBone(self.TargetItem.instance)
         self.TargetItem:Destroy()
-        setElementPosition(self.TargetItem.instance, self.TargetObjectPosition)
-        setElementRotation(self.TargetItem.instance, self.TargetObjectRotation)
+        -- setElementPosition(self.TargetItem.instance, self.TargetObjectPosition)
+        -- setElementRotation(self.TargetItem.instance, self.TargetObjectRotation)
         self.TargetItem:Create()
     end)
 end

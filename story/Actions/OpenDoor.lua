@@ -10,7 +10,6 @@ OpenDoor = class(StoryActionBase, function(o, params)
         error("OpenDoor: graphId not given in the constructor")
     end
 
-    print(params.how)
     if params.how == OpenDoor.eHow.Exit then 
         description = " opens the door and exits the room"
     else

@@ -22,6 +22,8 @@ function PickUp:Apply()
         self.Performer:setAnimation("INT_SHOP", "shop_loop", 500, true, true, false, true)
     elseif self.how == PickUp.eHow.Down then
         self.Performer:setAnimation("MISC", "Case_pickup", 500, true, true, false, true)
+    elseif self.how == PickUp.eHow.Sit then
+        self.Performer:setAnimation("INT_OFFICE", "OFF_Sit_Drink", 500, true, true, false, true)
     end
 
     if DEBUG then
@@ -37,7 +39,8 @@ end
 
 PickUp.eHow = {
     Normal = 1,
-    Down = 2
+    Down = 2,
+    Sit = 3
 }
 
 PickUp.eHand = {

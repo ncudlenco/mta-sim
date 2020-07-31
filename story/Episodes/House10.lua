@@ -74,7 +74,7 @@ function House10:Initialize(...)
 
     kitchenChair = Chair {
         modelid = Chair.eModel.RedChair,
-        position =     Vector3(2250.3047, -1210.8984, 1048.5234),
+        position =     Vector3(2250.3047, -1211.0984, 1048.5234),
         rotation =     Vector3(0, 0.0000, 0),
         noCollisions = true,
         interior = self.InteriorId
@@ -84,9 +84,41 @@ function House10:Initialize(...)
     kitchenChair:Create()
     table.insert(self.Objects, kitchenChair)
 
+    kitchenTable = Table {
+        modelid = Table.eModel.WoodRoundTable,
+        position =     Vector3(2250.2813, -1212.2500, 1048.4141),
+        rotation =     Vector3(0, 0.0000, 0),
+        noCollisions = true,
+        interior = self.InteriorId
+    }
+
+    removeWorldModel(Table.eModel.WoodRoundTable, 0.25, kitchenTable.position)    
+    kitchenTable:Create()
+    table.insert(self.Objects, kitchenTable)
+
+    local food = Food {
+        modelid = Food.eModel[PickRandom(Food.eModel)],
+        noCollisions = true,
+        position =     Vector3(2249.8813, -1211.5500, 1048.9141),
+        rotation =     Vector3(0, 0, 0),
+        interior = self.InteriorId
+    }
+    food:Create()
+    table.insert(self.Objects, food)
+
+    local plate = Plate {
+        modelid = Plate.eModel.Unknown2,
+        noCollisions = true,
+        position =     Vector3(2249.8813, -1211.6700, 1048.8441),
+        rotation =     Vector3(0, 0, 0),
+        interior = self.InteriorId
+    }
+    plate:Create()
+    table.insert(self.Objects, plate)
+
     local bedroomBed = Bed{
         modelid =      Bed.eModel.Unknown9,
-        position =     Vector3(2258.5938, -1221.5469, 1048.0625),
+        position =     Vector3(2258.5938, -1221.5469, 1048.0156),
         rotation =     Vector3(0, 0, 180),
         noCollisions = true,
         interior =     self.InteriorId
@@ -114,7 +146,7 @@ function House10:Initialize(...)
     local livingRoomTurnTableLocation3 = Location(2261.96025390625, -1208.617553710938, 1049.0234375, 270, self.InteriorId, "music player")
 
     local kitchenSinkLocation = Location(2247.92060546875, -1209.934448242188, 1049.0234375, 90, self.InteriorId, "sink")
-    local kitchenChairLocation = Location(2250.29248046875, -1210.2216796875, 1049.0234375, 180, self.InteriorId, "chair")
+    local kitchenChairLocation = Location(2250.29248046875, -1210.4216796875, 1049.0234375, 180, self.InteriorId, "chair")
 
     local bedroomEntranceLocation = Location(2261.1142578125, -1218.331787109375, 1049.0234375, 180, self.InteriorId, "bedroom entrance")
     local bedroomEntranceLocation2 = Location(2261.1142578125, -1217.331787109375, 1049.0234375, 0, self.InteriorId, "bedroom entrance")
@@ -182,8 +214,12 @@ function House10:Initialize(...)
 
     local sitDownKitchenChairAction = SitDown {how = SitDown.eHow.atDesk, performer = player, nextLocation = kitchenChairLocation, targetItem = kitchenChair, rotation = Vector3(0,0,180), graphId = self.graphId}
     table.insert(kitchenChairLocation.PossibleActions, sitDownKitchenChairAction)
+    local pickUpFoodAction = PickUp {performer = player, nextLocation = kitchenChairLocation, targetItem = food, where = "the table", targetObjectExists = true, how = PickUp.eHow.Sit, graphId = self.graphId}
+    sitDownKitchenChairAction.NextAction = pickUpFoodAction
+    local eatFoodAction = Eat {performer = player, nextLocation = kitchenChairLocation, targetItem = food, graphId = self.graphId, how = Eat.eHow.SitDown}
+    pickUpFoodAction.NextAction = eatFoodAction
     local standUpKitchenChairAction = StandUp {how = StandUp.eHow.fromDesk, performer = player, nextLocation = kitchenChairLocation, targetItem = kitchenChair, graphId = self.graphId}
-    sitDownKitchenChairAction.NextAction = standUpKitchenChairAction
+    eatFoodAction.NextAction = standUpKitchenChairAction
     local moveToPOS5Action = Move { performer = player, nextLocation = pointsOfInterests[5], targetItem = pointsOfInterests[5], graphId = self.graphId }
     standUpKitchenChairAction.NextAction = moveToPOS5Action
     sitDownKitchenChairAction.ClosingAction = moveToPOS5Action

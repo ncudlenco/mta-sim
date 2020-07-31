@@ -6,5 +6,6 @@ end
 
 Plate.eModel = 
 {
-    Unknown1 = 2812
+    Unknown1 = 2812,
+    Unknown2 = 2830
 }

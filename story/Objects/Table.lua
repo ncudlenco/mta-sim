@@ -6,5 +6,6 @@ end
 
 Table.eModel = 
 {
-    GlassTable = 2086
+    GlassTable = 2086,
+    WoodRoundTable = 2109
 }

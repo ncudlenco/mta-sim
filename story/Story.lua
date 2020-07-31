@@ -5,9 +5,9 @@ Story = class(StoryBase, function(o, actor, maxActions, logData)
     o.Episodes = {
         --add an episode here
         -- House3()
-        House12()
         -- House8()
-        -- House10()
+        House10()
+        -- House12()
     }
     o.EpisodePaths = {
        -- "testepisode"

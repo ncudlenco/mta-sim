@@ -45,7 +45,7 @@ end
 
 function Food:updatePositionOffset()
     if self.modelid == Food.eModel.Shawarma then
-        self.PosOffset = Vector3(-0.02, 0.05, 0.08)
+        self.PosOffset = Vector3(-0.04, 0.05, 0.08)
     elseif self.modelid == Food.eModel.Burger then
         self.PosOffset = Vector3(-0.01, 0.09, 0.05)
     elseif self.modelid == Food.eModel.Pizza then

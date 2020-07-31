@@ -61,36 +61,50 @@ end
 
 function Drinks:updateDescription()
     if self.modelid == Drinks.eModel.AppleJuice then
-        self.Description = "green apple juice from carton"
+        self.Description2 = "green apple juice from a carton"
+        self.Description = "a carton of apple juice"
     elseif self.modelid == Drinks.eModel.OrangeJuice then
-        self.Description = "orange juice from carton"
+        self.Description2 = "orange juice from a carton"
+        self.Description = "a carton of orange juice"
     elseif self.modelid == Drinks.eModel.MilkCarton then
-        self.Description = "milk from carton"
+        self.Description2 = "milk from a carton"
+        self.Description = "a carton of milk"
     elseif self.modelid == Drinks.eModel.CoffeCup then
+        self.Description2 = "a cup of coffe"
         self.Description = "a cup of coffe"
     elseif self.modelid == Drinks.eModel.SodaCup1 or self.modelid == Drinks.eModel.SodaCup2 then
+        self.Description2 = "a cup of soda"
         self.Description = "a cup of soda"
     elseif self.modelid == Drinks.eModel.MilkBottle then
-        self.Description = "milk from a bottle"
+        self.Description2 = "milk from a bottle"
+        self.Description2 = "a bottle of milk"
     elseif self.modelid == Drinks.eModel.BottleAlcohol1 or self.modelid == Drinks.eModel.BottleAlcohol2 or 
            self.modelid == Drinks.eModel.BottleAlcohol3 or self.modelid == Drinks.eModel.BottleAlcohol4 or
            self.modelid == Drinks.eModel.BottleAlcohol5 then
-        self.Description = "alcohol from a bottle"
+        self.Description2 = "alcohol from a bottle"
+        self.Description2 = "a bottle of alcohol"
     elseif self.modelid == Drinks.eModel.BottleCider1 or self.modelid == Drinks.eModel.BottleCider2 then
-        self.Description = "cider from a bottle"
+        self.Description2 = "cider from a bottle"
+        self.Description2 = "a bottle of cider"
     elseif self.modelid == Drinks.eModel.BottleWine1 or self.modelid == Drinks.eModel.BottleWine2 or 
            self.modelid == Drinks.eModel.BottleWine3 or self.modelid == Drinks.eModel.BottleWine4 then
-        self.Description = "wine from a bottle"
+        self.Description2 = "wine from a bottle"
+        self.Description2 = "a bottle of wine"
     elseif self.modelid == Drinks.eModel.GlassBeer then
-        self.Description = "beer from a glass"
+        self.Description2 = "beer from a glass"
+        self.Description2 = "a glass of beer"
     elseif self.modelid == Drinks.eModel.GlassAlcohol then
-        self.Description = "alcohol from a glass"
+        self.Description2 = "alcohol from a glass"
+        self.Description2 = "a glass of alcohol"
     elseif self.modelid == Drinks.eModel.GlassWine1 or self.modelid == Drinks.eModel.GlassWine2 or self.modelid == Drinks.eModel.GlassWine3 then
-        self.Description = "wine from a glass"
+        self.Description2 = "wine from a glass"
+        self.Description2 = "a glass of wine"
     elseif self.modelid == Drinks.eModel.BottleVodka1 or self.modelid == Drinks.eModel.BottleVodka2 then
-        self.Description = "vodka from a bottle"
+        self.Description2 = "vodka from a bottle"
+        self.Description2 = "a bottle of vodka"
     elseif self.modelid == Drinks.eModel.BottleBeer1 or self.modelid == Drinks.eModel.BottleBeer2 then
-        self.Description = "beer from a bottle"
+        self.Description2 = "beer from a bottle"
+        self.Description2 = "a bottle of beer"
     end
 
     return self.Description

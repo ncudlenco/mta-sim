@@ -6,5 +6,6 @@ end
 
 Desk.eModel = 
 {
-    BedroomDesk = 2333
+    BedroomDesk = 2333,
+    GlassTable = 2086
 }

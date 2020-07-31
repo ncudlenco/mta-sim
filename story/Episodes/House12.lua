@@ -220,7 +220,7 @@ function House12:Initialize(...)
     pickUpDrinkAction.ClosingAction = moveToPOS5Action
 
     -- bedroom 1 actions
-    local opendoorBedRoom1Location = OpenDoor { performer = player, nextLocation = bedroom1BedLocation, targetItem = bedroom1BedLocation, graphId = self.graphId }
+    local opendoorBedRoom1Location = OpenDoor { performer = player, nextLocation = bedroom1BedLocation, targetItem = bedroom1BedLocation, how = OpenDoor.eHow.Enter, graphId = self.graphId }
     table.insert(bedroom1EntranceLocation.PossibleActions, opendoorBedRoom1Location)
 
     local getInBed1Action = GetInBed{performer = player, targetItem = bedroom1Bed, nextLocation = bedroom1BedLocation, how = GetInBed.eHow.Left, graphId = self.graphId}
@@ -233,14 +233,14 @@ function House12:Initialize(...)
     getOffBed1Action.NextAction = moveToBedroom1ExitAction
     getInBed1Action.ClosingAction = moveToBedroom1ExitAction
 
-    local openBedroom1DoorAction2 = OpenDoor {performer = player, nextLocation = bedroom1EntranceLocation2, targetItem = bedroom1EntranceLocation2, graphId = self.graphId}
+    local openBedroom1DoorAction2 = OpenDoor {performer = player, nextLocation = bedroom1EntranceLocation2, targetItem = bedroom1EntranceLocation2, how = OpenDoor.eHow.Exit, graphId = self.graphId}
     table.insert(bedroom1ExitLocation.PossibleActions, openBedroom1DoorAction2)
     
     local moveToPOS6Action = Move { performer = player, nextLocation = pointsOfInterests[6], targetItem = pointsOfInterests[6], graphId = self.graphId}
     table.insert(bedroom1EntranceLocation2.PossibleActions, moveToPOS6Action)
 
     -- bedroom 2 actions
-    local opendoorBedRoom2Location = OpenDoor { performer = player, nextLocation = bedroom2BedLocation, targetItem = bedroom2BedLocation, graphId = self.graphId }
+    local opendoorBedRoom2Location = OpenDoor { performer = player, nextLocation = bedroom2BedLocation, targetItem = bedroom2BedLocation, how = OpenDoor.eHow.Enter, graphId = self.graphId }
     table.insert(bedroom2EntranceLocation.PossibleActions, opendoorBedRoom2Location)
 
     local getInBed2Action = GetInBed{performer = player, targetItem = bedroom2Bed, nextLocation = bedroom2BedLocation, how = GetInBed.eHow.Left, graphId = self.graphId}
@@ -253,7 +253,7 @@ function House12:Initialize(...)
     getOffBed2Action.NextAction = moveToBedroom2ExitAction
     getInBed2Action.ClosingAction = moveToBedroom2ExitAction
 
-    local openBedroom2DoorAction2 = OpenDoor {performer = player, nextLocation = bedroom2EntranceLocation2, targetItem = bedroom2EntranceLocation2, graphId = self.graphId}
+    local openBedroom2DoorAction2 = OpenDoor {performer = player, nextLocation = bedroom2EntranceLocation2, targetItem = bedroom2EntranceLocation2, how = OpenDoor.eHow.Exit, graphId = self.graphId}
     table.insert(bedroom2ExitLocation.PossibleActions, openBedroom2DoorAction2)
     
     local moveToPOS6Action = Move { performer = player, nextLocation = pointsOfInterests[7], targetItem = pointsOfInterests[7], graphId = self.graphId}

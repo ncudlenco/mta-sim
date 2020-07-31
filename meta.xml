@@ -20,6 +20,14 @@
   <file src="files/data/MilkBottle1.dff" type="client" />
   <file src="files/data/d_s.txd" type="client" />
   <file src="files/data/CoffeeCup1.dff" type="client" />
+  <file src="files/data/lee_strip2_1.txd" type="client" />
+  <file src="files/data/AlcoholBottle1.dff" type="client" />
+  <file src="files/data/AlcoholBottle2.dff" type="client" />
+  <file src="files/data/AlcoholBottle3.dff" type="client" />
+  <file src="files/data/AlcoholBottle4.dff" type="client" />
+  <file src="files/data/AlcoholBottle5.dff" type="client" />
+  <file src="files/data/WineGlass1.dff" type="client" />
+  <file src="files/data/CocktailGlass1.dff" type="client" />
   <!-- Client -->
   <script src="client/Handlers.lua" type="shared"/>
   <script src="client/EngineLoader.lua" type="client" />

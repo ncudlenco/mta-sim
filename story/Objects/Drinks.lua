@@ -54,8 +54,6 @@ Drinks = class(SampStoryObjectBase, function(o, params)
     SampStoryObjectBase.init(o, params)
 
     o:updateDescription()
-    o:updatePositionOffset()
-    o:updateRotOffset()
 end
 )
 
@@ -110,7 +108,7 @@ function Drinks:updateDescription()
     return self.Description
 end
 
-function Drinks:updatePositionOffset()
+function Drinks:updatePositionOffsetStandUp()
     if (self.modelid == Drinks.eModel.AppleJuice or self.modelid == Drinks.eModel.OrangeJuice or 
         self.modelid == Drinks.eModel.MilkCarton) then
         self.PosOffset = Vector3(-0.15, 0.09, 0.11)
@@ -160,7 +158,7 @@ function Drinks:updatePositionOffset()
     return self.Description
 end
 
-function Drinks:updateRotOffset()
+function Drinks:updateRotOffsetStandUp()
     --if (self.modelid == Drinks.eModel.AppleJuice or self.modelid == Drinks.eModel.OrangeJuice or 
      --   self.modelid == Drinks.eModel.MilkCarton or self.modelid == Drinks.eModel.MilkBottle)  then
       --  self.RotOffset = Vector3(0, 90, 0)

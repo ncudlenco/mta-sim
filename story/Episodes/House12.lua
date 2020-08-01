@@ -259,6 +259,8 @@ function House12:Initialize(...)
     local moveToPOS6Action = Move { performer = player, nextLocation = pointsOfInterests[7], targetItem = pointsOfInterests[7], graphId = self.graphId}
     table.insert(bedroom2EntranceLocation2.PossibleActions, moveToPOS6Action)
 
+    table.insert(livingRoomEndLocation.PossibleActions, EndStory())
+
     if DEBUG then
         outputConsole("House12:Initialized")
     end

@@ -202,6 +202,8 @@ function House3:Initialize(...)
     getOffBedAction.NextAction = moveToPOI5Action
     getInBedAction.ClosingAction = moveToPOI5Action
 
+    table.insert(livingRoomEndLocation.PossibleActions, EndStory())
+
     if DEBUG then
         outputConsole("House3:Initialized")
     end

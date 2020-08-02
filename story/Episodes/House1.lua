@@ -71,6 +71,25 @@ function House1:Initialize(...)
     removeWorldModel(Book.eModel.Book1, 0.25, kitchenBook.position)    
     kitchenBook:Create()
     table.insert(self.Objects, kitchenBook)
+    
+    drink = Drinks {
+        modelid = Drinks.eModel[PickRandom(Drinks.eModel)],
+        position =     Vector3(-2162.421044921875, 639.2874145507813, 1057.5271),
+        rotation =     Vector3(0, 0.0000, 0),
+        noCollisions = true,
+        interior = self.InteriorId
+    }
+
+    drink:Create()
+    table.insert(self.Objects, drink)
+
+    cigarette = Cigarette {
+        modelid = Cigarette.eModel.Cigarette1,
+        position =     Vector3(0, 0, 0),
+        rotation =     Vector3(0, 0.0000, 0),
+        noCollisions = true,
+        interior = self.InteriorId
+    }
 
     local livingRoomEntranceLocation = Location(-2170.126708984375, 638.444580078125, 1057.5971, 0, self.InteriorId, "livin room")
     local livingRoomSofaLocation = Location(-2165.447412109375, 643.7353515625, 1057.5971, 0, self.InteriorId, "sofa")
@@ -79,12 +98,15 @@ function House1:Initialize(...)
     local livingRoomMusicPlayerLocation3 = Location(-2166.1552734375, 641.7701416015625, 1057.5971, 180, self.InteriorId, "music player")
     
     local kitchenChairLocation = Location(-2160.218017578125, 642.3208129882813, 1057.5971, 0, self.InteriorId, "chair")
+    local kitchenTableLocation = Location(-2161.821044921875, 639.2874145507813, 1057.5971, 90, self.InteriorId, "chair")
+    
+    local livingRoomSmokeLocation1 = Location(-2164.91796875, 646.1671142578125, 1057.5971, 0, self.InteriorId, "smoke")
 
     local livingRoomEndLocation = Location(-2170.126708984375, 638.444580078125, 1057.5971, 180, self.InteriorId, "livin room")
 
-    table.insert(self.ValidStartingLocations, kitchenChairLocation)
+    table.insert(self.ValidStartingLocations, livingRoomEntranceLocation)
 
-    local pointsOfInterests = {livingRoomSofaLocation, livingRoomMusicPlayerLocation, kitchenChairLocation, livingRoomEndLocation}
+    local pointsOfInterests = {livingRoomSofaLocation, livingRoomMusicPlayerLocation, kitchenChairLocation, kitchenTableLocation, livingRoomSmokeLocation1, livingRoomEndLocation}
     pointsOfInterests = Shuffle(pointsOfInterests)
 
     if pointsOfInterests[1] == livingRoomEndLocation then
@@ -128,6 +150,33 @@ function House1:Initialize(...)
     local moveToPOS4Action = Move { performer = player, nextLocation = pointsOfInterests[4], targetItem = pointsOfInterests[4], graphId = self.graphId }
     standUpKitchenChairAction.NextAction = moveToPOS4Action
     sitDownKitchenChairAction.ClosingAction = moveToPOS4Action
+
+    -- drink at table
+    local pickUpDrinkAction = PickUp {performer = player, nextLocation = kitchenTableLocation, targetItem = drink, where = "the table", targetObjectExists = true, how = PickUp.eHow.Normal, hand = PickUp.eHand.Left, graphId = self.graphId}
+    table.insert(kitchenTableLocation.PossibleActions, pickUpDrinkAction)
+    local drinkAction = Drink {performer = player, nextLocation = kitchenTableLocation, targetItem = drink, graphId = self.graphId}
+    pickUpDrinkAction.NextAction = drinkAction
+    local putDownDrinkAction = PutDown {performer = player, nextLocation = kitchenTableLocation, targetItem = drink, where = "the table", targetObjectPosition = Vector3(-2162.421044921875, 639.2874145507813, 1057.5271),
+                                        targetObjectRotation = Vector3(0, 0, 0), graphId = self.graphId}
+    drinkAction.NextAction = putDownDrinkAction
+
+    local moveToPOS5Action = Move { performer = player, nextLocation = pointsOfInterests[5], targetItem = pointsOfInterests[5], graphId = self.graphId}
+    putDownDrinkAction.NextAction = moveToPOS5Action
+    pickUpDrinkAction.ClosingAction = moveToPOS5Action
+
+    -- smoke at painting
+    local livingroomSmokeInAction = SmokeIn { performer = player, nextLocation = livingRoomSmokeLocation1, targetItem = cigarette, graphId = self.graphId }
+    table.insert(livingRoomSmokeLocation1.PossibleActions, livingroomSmokeInAction)
+    local livingroomSmokeAction = Smoke { performer = player, nextLocation = livingRoomSmokeLocation1, targetItem = cigarette, graphId = self.graphId }
+    livingroomSmokeInAction.NextAction = livingroomSmokeAction
+    local livingroomSmokeOutAction = SmokeOut { performer = player, nextLocation = livingRoomSmokeLocation1, targetItem = cigarette, graphId = self.graphId }
+    livingroomSmokeAction.NextAction = livingroomSmokeOutAction
+
+    local moveToPOS6Action = Move { performer = player, nextLocation = pointsOfInterests[6], targetItem = pointsOfInterests[6], graphId = self.graphId}
+    livingroomSmokeOutAction.NextAction = moveToPOS6Action
+    livingroomSmokeInAction.ClosingAction = moveToPOS6Action
+
+    table.insert(livingRoomEndLocation.PossibleActions, EndStory())
 
     if DEBUG then
         outputConsole("House1:Initialized")

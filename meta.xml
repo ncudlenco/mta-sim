@@ -107,6 +107,7 @@
   <script src="story/Actions/Dance.lua" type="server" />
   <script src="story/Actions/OpenDoor.lua" type="server" />
   <script src="story/Actions/Drink.lua" type="server" />
+  <script src="story/Actions/Read.lua" type="server" />
   <!-- Objects -->
   <script src="story/Objects/SampStoryObjectBase.lua" type="shared" />
   <script src="story/Objects/Bed.lua" type="server" />
@@ -124,6 +125,7 @@
   <script src="story/Objects/Drinks.lua" type="server" />
   <script src="story/Objects/Table.lua" type="server" />
   <script src="story/Objects/MusicPlayer.lua" type="server" />
+  <script src="story/Objects/Book.lua" type="server" />
   <!-- Episodes -->
   <script src="story/Episodes/House1.lua" type="server" />
   <script src="story/Episodes/House3.lua" type="server" />

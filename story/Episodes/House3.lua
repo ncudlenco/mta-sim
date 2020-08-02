@@ -162,7 +162,6 @@ function House3:Initialize(...)
     eatFoodAction.NextAction = moveToPOS2Action
     pickUpFoodAction.ClosingAction = moveToPOS2Action
 
-
     -- sit on the sofa
     local pickUpLivingroomRemoteAction = PickUp {performer = player, nextLocation = livingroomSofaLocation, targetItem = livingroomRemote, where = "the table", targetObjectExists = true, how = PickUp.eHow.Down, graphId = self.graphId}
     table.insert(livingroomSofaLocation.PossibleActions, pickUpLivingroomRemoteAction)

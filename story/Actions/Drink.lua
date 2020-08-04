@@ -18,3 +18,7 @@ function Drink:Apply()
 
     OnGlobalActionFinished(time, self.Performer:getData('id'), self.Performer:getData('storyId'))
 end
+
+function Drink:GetDynamicString()
+    return 'return Drink{}'
+end

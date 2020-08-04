@@ -327,3 +327,7 @@ function SetPlayerSkin:Apply(...)
     player:setModel(self.Id)
     player:setData('skinDescription', self.Description)
 end
+
+function SetPlayerSkin:GetDynamicString()
+    return 'return SetPlayerSkin('..self.Id..', "'..self.Description..'")'
+end

@@ -1,5 +1,7 @@
 Furniture = class(SampStoryObjectBase, function(o, params)
     params.description = "sofa"
+    params.type = 'Furniture'
+    
     SampStoryObjectBase.init(o, params)
     o:updateDescription()
 end

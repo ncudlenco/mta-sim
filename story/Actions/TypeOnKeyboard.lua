@@ -17,3 +17,7 @@ function TypeOnKeyboard:Apply()
 
     OnGlobalActionFinished(time, self.Performer:getData('id'), self.Performer:getData('storyId'))
 end
+
+function TypeOnKeyboard:GetDynamicString()
+    return 'return TypeOnKeyboard{}'
+end

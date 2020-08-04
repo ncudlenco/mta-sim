@@ -20,3 +20,7 @@ function Dance:Apply()
 
     OnGlobalActionFinished(time, self.Performer:getData('id'), self.Performer:getData('storyId'))
 end
+
+function Dance:GetDynamicString()
+    return 'return Dance{}'
+end

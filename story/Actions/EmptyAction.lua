@@ -7,3 +7,7 @@ function EmptyAction:Apply()
         outputConsole("EmptyAction:Apply")
     end
 end
+
+function EmptyAction:GetDynamicString()
+    return 'return EmptyAction{}'
+end

@@ -37,7 +37,11 @@ function Logger:Log(text, ...)
             break
         end
         if player then
-            player:outputChat(logText, 255, 0, 0, false)
+            if player.outputChat then
+                player:outputChat(logText, 255, 0, 0, false)
+            else
+                outputChatBox(logText, 255, 0, 0, false)
+            end
         end
     end
 end

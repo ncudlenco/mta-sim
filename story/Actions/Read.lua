@@ -17,3 +17,7 @@ function Read:Apply()
 
     OnGlobalActionFinished(time, self.Performer:getData('id'), self.Performer:getData('storyId'))
 end
+
+function Read:GetDynamicString()
+    return 'return Read{}'
+end

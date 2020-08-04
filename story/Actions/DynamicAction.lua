@@ -8,9 +8,13 @@ DynamicAction = class(StoryActionBase, function(o, params)
         params.closingAction or nil,
         params.nextAction or nil
     )
-    for k,v in pairs(params) do
-        self[k] = v
-    end
+    o.block = params.block
+    o.anim = params.anim
+    o.time = params.time
+    o.loop = params.loop
+    o.updatePosition = params.updatePosition
+    o.interruptable = params.interruptable
+    o.freezeLastFrame = params.freezeLastFrame
 end)
 
 function DynamicAction:Apply()
@@ -19,13 +23,22 @@ function DynamicAction:Apply()
     
     story.Logger:Log(self.Performer:getData('skinDescription') .. " " ..self.Description, self.Performer)
 
-    --Decide what to do based on what data is provided
-
-    self.TargetItem:ChangeModel(Laptop.eModel.Closed)
+    setPedAnimation(self.Performer, self.block, self.anim, self.time or 3000, self.loop or true, self.updatePosition or true, self.interruptable or false, self.freezeLastFrame or true)
 
     if DEBUG then
         outputConsole((self.name or "DynamicAction")..":Apply")
     end
 
     OnGlobalActionFinished(1000, self.Performer:getData('id'), self.Performer:getData('storyId'))
+end
+
+function DynamicAction:GetDynamicString()
+    return 'return DynamicAction{ block = '..self.block..','..
+        'anim = '..self.anim..', '..
+        'time = '..(self.time or 'nil')..', '..
+        'loop = '..(self.loop or 'nil')..', '..
+        'updatePosition = '..(self.updatePosition or 'nil')..', '..
+        'interruptable = '..(self.interruptable or 'nil')..', '..
+        'freezeLastFrame = '..(self.freezeLastFrame or 'nil')..
+    '}'
 end

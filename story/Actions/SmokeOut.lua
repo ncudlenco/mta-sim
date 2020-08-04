@@ -18,3 +18,7 @@ function SmokeOut:Apply()
         self.TargetItem:Destroy()
     end)
 end
+
+function SmokeOut:GetDynamicString()
+    return 'return SmokeOut{}'
+end

@@ -1,5 +1,7 @@
 Remote = class(SampStoryObjectBase, function(o, params)
     params.description = "remote"
+    params.type = 'Remote'
+
     SampStoryObjectBase.init(o, params)
     o:updatePositionOffset()
     o:updateRotOffset()

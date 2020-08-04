@@ -38,3 +38,7 @@ PutDown.eHow = {
     Normal = 1,
     Down = 2
 }
+
+function PutDown:GetDynamicString()
+    return 'return PutDown{where = "'..self.Where..'", how = '..self.how..'}'
+end

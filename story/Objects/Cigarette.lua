@@ -1,5 +1,7 @@
 Cigarette = class(SampStoryObjectBase, function(o, params)
     params.description = "a cigarette"
+    params.type = 'Cigarette'
+
     SampStoryObjectBase.init(o, params)
 
     o:updatePositionOffsetStandUp()

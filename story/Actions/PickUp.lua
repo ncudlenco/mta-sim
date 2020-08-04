@@ -44,6 +44,14 @@ function PickUp:Apply()
     end)
 end
 
+function PickUp:GetDynamicString()
+    local TargetObjectExistsStr = 'false'
+    if self.TargetObjectExists then
+        TargetObjectExistsStr = 'true'
+    end
+    return 'return PickUp{where = "'..self.Where..'", targetObjectExists = '.. TargetObjectExistsStr ..', hand = '..self.hand..', how = '..self.how..'}'
+end
+
 PickUp.eHow = {
     Normal = 1,
     Down = 2,

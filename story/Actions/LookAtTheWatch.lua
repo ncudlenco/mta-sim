@@ -15,3 +15,7 @@ function LookAtTheWatch:Apply()
 
     OnGlobalActionFinished(2000, self.Performer:getData('id'), self.Performer:getData('storyId'))
 end
+
+function LookAtTheWatch:GetDynamicString()
+    return 'return LookAtTheWatch{}'
+end

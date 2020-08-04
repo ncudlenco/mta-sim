@@ -19,3 +19,7 @@ function LookAtObject:Apply()
         self.Performer.cameraTarget = nil
     end)
 end
+
+function LookAtObject:GetDynamicString()
+    return 'return LookAtObject{}'
+end

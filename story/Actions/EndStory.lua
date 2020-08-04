@@ -9,3 +9,7 @@ function EndStory:Apply()
     local story = GetStory(self.Performer)
     story:End()
 end
+
+function EndStory:GetDynamicString()
+    return 'return EndStory{}'
+end

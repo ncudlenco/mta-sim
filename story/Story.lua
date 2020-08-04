@@ -4,20 +4,24 @@ Story = class(StoryBase, function(o, actor, maxActions, logData)
     o.Logger = Logger('data/'..actor:getData('id')..'/'..o.Id..'/labels.txt', true, o)
     o.Episodes = {
         --add an episode here
-        House1()
+        -- House1()
         -- House3()
         -- House8()
         -- House10()
         -- House12()
     }
     o.EpisodePaths = {
-       -- "testepisode"
+       "test3"
     }
     o.Disposed = false
     if not o.Actor then
         outputConsole("Error: Actor is null "..o.Id)
     end
     o.Actor:setData('storyId', o.Id)
+
+    if not STORIES then
+        STORIES = {}
+    end
 
     if not STORIES[o.Actor:getData('id')] then
         STORIES[o.Actor:getData('id')] = {}
@@ -27,11 +31,11 @@ Story = class(StoryBase, function(o, actor, maxActions, logData)
 end)
 
 function Story:Play()
-    -- for i,episode_name in ipairs(self.EpisodePaths) do
-    --     local episode = DynamicEpisode(episode_name)
-    --     episode:LoadFromFile()
-    --     table.insert(self.Episodes, episode)
-    -- end
+    for i,episode_name in ipairs(self.EpisodePaths) do
+        local episode = DynamicEpisode(episode_name)
+        episode:LoadFromFile()
+        table.insert(self.Episodes, episode)
+    end
 
     self.StartTime = os.time()
     if self.LogData then

@@ -26,6 +26,10 @@ function GetOffBed:Apply()
     OnGlobalActionFinished(5000, self.Performer:getData('id'), self.Performer:getData('storyId'))
 end
 
+function GetOffBed:GetDynamicString()
+    return 'return GetOffBed{how = '..self.how..'}'
+end
+
 GetOffBed.eHow = {
     Left = 1,
     Right = 2

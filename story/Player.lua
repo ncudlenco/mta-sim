@@ -61,6 +61,26 @@ function (prevA, curA)
 end
 )
 
+addEventHandler ( "onPlayerQuit", root, 
+function ( quitType )
+    if DEBUG then
+        outputConsole(getPlayerName(source).. " has left the server (" .. quitType .. ")")
+    end
+    if STORIES and STORIES[source:getData('id')]  then
+        local story = STORIES[source:getData("id")][source:getData('storyId')]
+        if DEBUG then
+            outputConsole("Found story for the player that quit. Trying to clear the objects")
+        end
+        if story then
+            Timer(function()
+                if not story.CurrentEpisode.Disposed then
+                    story.CurrentEpisode:Destroy()
+                end
+            end, 5000, 1)
+        end
+    end
+end )
+
 addEventHandler( "onPlayerScreenShot", root,
 function ( theResource, status, pixels, timestamp, tag )
     local playerId = tag:sub(0, 36)

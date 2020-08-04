@@ -1,12 +1,12 @@
 StandUp = class(StoryActionBase, function(o, params)
     -- check mandatory options
-    if type(params.performer) ~= "userdata" then
-        error("StandUp: performer not given in the constructor")
-    elseif type(params.targetItem) ~= "table" then
-        error("StandUp: targetItem not given in the constructor")
-    elseif type(params.nextLocation) ~= "table" then
-        error("StandUp: nextLocation not given in the constructor")
-    end
+    -- if type(params.performer) ~= "userdata" then
+    --     error("StandUp: performer not given in the constructor")
+    -- elseif type(params.targetItem) ~= "table" then
+    --     error("StandUp: targetItem not given in the constructor")
+    -- elseif type(params.nextLocation) ~= "table" then
+    --     error("StandUp: nextLocation not given in the constructor")
+    -- end
     StoryActionBase.init(o, " stands up ", params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
     o.how = params.how or StandUp.eHow.atDesk
 end)
@@ -46,4 +46,8 @@ function StandUp:Apply()
         self.Performer.rotation = self.NextLocation.rotation
     end, duration, 1)
     OnGlobalActionFinished(duration, self.Performer:getData('id'), self.Performer:getData('storyId'))
+end
+
+function StandUp:GetDynamicString()
+    return 'return StandUp{how = '..self.how..'}'
 end

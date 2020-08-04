@@ -9,6 +9,9 @@ Location = class(StoryLocationBase, function(o, x, y, z, angle, interior, descri
     if not compact then
         o.position = Vector3(x,y,z)
         o.rotation = Vector3(0,0,angle)
+    else
+        o.position = {x=x, y=y, z=z}
+        o.rotation = {x=0, y=0, z=angle}
     end
 end)
 

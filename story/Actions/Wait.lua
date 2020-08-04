@@ -16,3 +16,7 @@ function Wait:Apply()
 
     OnGlobalActionFinished(self.Time, self.Performer:getData('id'), self.Performer:getData('storyId'))
 end
+
+function Wait:GetDynamicString()
+    return 'return Wait{}'
+end

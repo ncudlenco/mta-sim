@@ -18,3 +18,7 @@ function LayOnElbow:Apply()
 
     OnGlobalActionFinished(time, self.Performer:getData('id'), self.Performer:getData('storyId'))
 end
+
+function LayOnElbow:GetDynamicString()
+    return 'return LayOnElbow{}'
+end

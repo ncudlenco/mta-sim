@@ -1,4 +1,12 @@
 addEvent ( "onElementDoneEditing", true )
+addEvent ( "onActionRetrieved", true )
+
+-- addEventHandler ( "onClientPlayerSpawn", getLocalPlayer(), function()
+--     CLIENT_STORY = Story(localPlayer, 10000, true)
+-- end)
+-- function GetStory(player)
+--     return CLIENT_STORY
+-- end
 
 local episode = DynamicEpisode()
 local markers = {}
@@ -10,8 +18,15 @@ local function text_render ( )
             dxDrawText ("deleted", sx, sy, sw, sh, tocolor ( 255, 0, 0, 255 ), 2.0, "default-bold" ) 
         end 
     end
-    for i, poi in ipairs ( episode.POI ) do 
-        if #markers == #episode.POI and i > 100 then
+    for i, obj in ipairs(episode.Objects) do
+        local sx, sy, _ = getScreenFromWorldPosition(obj.position.x, obj.position.y, obj.position.z)
+        if sx then 
+            local sw, sh = guiGetScreenSize ( )
+            dxDrawText (i..': '..(obj.description or '')..' '..(obj.modelid or 'random eModel'), sx, sy, sw, sh, tocolor ( 0, 255, 0, 255 ), 1.0, "default-bold" ) 
+        end 
+    end
+    for i, poi in ipairs ( episode.POI ) do
+        if #markers == #(episode.POI) and i > 100 then
             break
         end
         local x = poi.X
@@ -23,11 +38,44 @@ local function text_render ( )
         if (localPlayer.position - Vector3(x,y,z)).length < 10 then
             if sx then 
                 local sw, sh = guiGetScreenSize ( )
-                dxDrawText ( poi.idr..":"..poi.Description.."\n"..toJSON(poi.PossibleActions), sx, sy, sw, sh, tocolor ( 255, 200, 0, 255 ), 1.0, "default-bold" ) 
+                local actionsText = ""
+                if #poi.PossibleActions > 0 then
+                    local a = poi.PossibleActions[1]
+                    actionsText = a.id..": "..a.Description
+                    while (a) do
+                        if a.NextAction and #a.NextAction > 0 then
+                            a = a.NextAction[1]
+                        else
+                            a = a.NextAction
+                        end
+                        if not a then
+                            break
+                        end
+                        if isArray(a) then
+                            actionsText = actionsText.." -random- ["
+                            for k, ra in ipairs(a) do
+                                actionsText = actionsText..ra.id..": "..ra.Description
+                            end
+                            actionsText = actionsText..']'
+                        else
+                            actionsText = actionsText.." -mandatory- "..a.id..": "..a.Description
+                        end
+                    end
+                end
+                local allActionsText = ""
+                for k, a in ipairs(poi.allActions) do
+                    local closingActionText = ""
+                    if a.ClosingAction then
+                        closingActionText = "-closed by- "..a.ClosingAction.id..": "..a.ClosingAction.Description
+                    end
+                    allActionsText = allActionsText.."\n["..a.id..": "..a.Description..closingActionText.."]"
+                end
+                dxDrawText ( i..":"..poi.Description.."\n"..actionsText..allActionsText, sx, sy, sw, sh, tocolor ( 255, 200, 0, 255 ), 1.0, "default-bold" ) 
             end 
         end
 
-        if #markers < #episode.POI then
+        if #markers < #(episode.POI) then
+            -- outputChatBox(#markers..' vs '..#(episode.POI))
             local r = 255
             local g = 0
             if #poi.PossibleActions > 0 then
@@ -63,46 +111,165 @@ local function unloadEpisode(episode)
 end
 
 local editedObject = nil
+local altPressed = false
+local shiftPressed = false
 local function playerPressedKey(button, press)
     if (press) then
+        local translationIncrement = 0.1
+        local rotationIncrement = 5
+        local sizeIncrement = 0.5
+        if altPressed then
+            translationIncrement = 0.01
+            rotationIncrement = 1
+            sizeIncrement = 0.1
+        end
+        if shiftPressed then
+            translationIncrement = 0.5
+            rotationIncrement = 90
+            sizeIncrement = 1
+        end
         if button == "w" then
-            editedObject.position = editedObject.position + Vector3(.1,0,0)
+            editedObject.position = editedObject.position + Vector3(translationIncrement,0,0)
         elseif button == "s" then
-            editedObject.position = editedObject.position + Vector3(-.1,0,0)
+            editedObject.position = editedObject.position + Vector3(-1*translationIncrement,0,0)
         elseif button == "a" then
-            editedObject.position = editedObject.position + Vector3(0,-.1,0)
+            editedObject.position = editedObject.position + Vector3(0,-1*translationIncrement,0)
         elseif button == "d" then
-            editedObject.position = editedObject.position + Vector3(0,.1,0)
+            editedObject.position = editedObject.position + Vector3(0,translationIncrement,0)
         elseif button == "z" then 
-            editedObject.position = editedObject.position + Vector3(0,0,.1)
+            editedObject.position = editedObject.position + Vector3(0,0,translationIncrement)
         elseif button == "x" then
-            editedObject.position = editedObject.position + Vector3(0,0,-.1)
+            editedObject.position = editedObject.position + Vector3(0,0,-1 *translationIncrement)
         elseif button == "q" then
-            editedObject.rotation = editedObject.rotation + Vector3(0,0,5)
+            editedObject.rotation = editedObject.rotation + Vector3(0,0,rotationIncrement)
         elseif button == "e" then
-            editedObject.rotation = editedObject.rotation + Vector3(0,0,-5)
+            editedObject.rotation = editedObject.rotation + Vector3(0,0,-1 * rotationIncrement)
         elseif button == "h" then
-            editedObject.rotation = editedObject.rotation + Vector3(0,5,0)
+            editedObject.rotation = editedObject.rotation + Vector3(0,rotationIncrement,0)
         elseif button == "j" then
-            editedObject.rotation = editedObject.rotation + Vector3(0,-5,0)
+            editedObject.rotation = editedObject.rotation + Vector3(0,-1 * rotationIncrement,0)
         elseif button == "f" then
-            editedObject.rotation = editedObject.rotation + Vector3(5,0,0)
+            editedObject.rotation = editedObject.rotation + Vector3(rotationIncrement,0,0)
         elseif button == "g" then
-            editedObject.rotation = editedObject.rotation + Vector3(-5,0,0)
+            editedObject.rotation = editedObject.rotation + Vector3(-1 * rotationIncrement,0,0)
         elseif button == "mouse_wheel_up" then
             if editedObject.size then
-                editedObject.size = editedObject.size + 0.5
+                editedObject.size = editedObject.size + sizeIncrement
             end
         elseif button == "mouse_wheel_down" then
             if editedObject.size then
-                editedObject.size = editedObject.size - 0.5
+                editedObject.size = editedObject.size - sizeIncrement
             end
         elseif button == "enter" then
             showCursor(false)
             removeEventHandler("onClientKey", root, playerPressedKey)
             triggerEvent ( "onElementDoneEditing", getRootElement(), editedObject )
             editedObject = nil
+        elseif button == "lalt" or button == "ralt" then
+            altPressed = true
+        elseif button == "lshift" or button == "rshift" then
+            shiftPressed = true
         end
+    else
+        if button == "lalt" or button == "ralt" then
+            altPressed = false
+        elseif button == "lshift" or button == "rshift" then
+            shiftPressed = false
+        end
+    end
+end
+
+local lastAction = nil
+local function getAction(actionName, params)
+    local action = loadstring("return function(params) return "..actionName.."(params) end")()(params)
+    action.Performer = localPlayer
+    --to this point I must have an action either defined or DynamicAction, with description, block, anim and (optional) time (which can be random)
+    --use this to ask for further ids: nextLocation id, targetItem type (object or location) and id
+    --figure a way to chain actions, ex: a1 -mandatory- a2 -random- [a3, a4, a5] -mandatory- --a6 this should probably be a new command
+    local poi = nil
+    local minDist = 1000
+    for i,v in ipairs (episode.POI) do
+        local dist = math.abs((localPlayer.position - Vector3(v.X, v.Y, v.Z)).length)
+        if dist < minDist then
+            minDist = dist
+            poi = v
+        end
+    end
+
+    local function getTargetItem()
+        outputChatBox("Enter the target item type (object or location):",255,255,0)
+        function consoleCheck2(text2)
+            if starts_with(text2, "episode ") then
+                return
+            end
+            removeEventHandler("onClientConsole",getLocalPlayer(),consoleCheck2)
+            local targetItemType = text2
+            if targetItemType ~= "object" and targetItemType ~= "location" then
+                outputChatBox("Expected object or location but got "..text2,255,255,0)
+                return
+            end
+            outputChatBox("Enter the target item id:",255,255,0)
+            function consoleCheck3(text3)
+                if starts_with(text3, "episode ") then
+                    return
+                end
+                removeEventHandler("onClientConsole",getLocalPlayer(),consoleCheck3)
+                local targetItemId = tonumber(text3)
+                if not targetItemId then
+                    outputChatBox("Could not parse the numeric value "..text3,255,255,0)
+                    return
+                end
+                --do work here to identify that
+                local targetItem = nil
+                if targetItemType == "object" then
+                    if targetItemId > #episode.Objects then
+                        outputChatBox("Target item id is greater than the number of objects: "..targetItemId..' > '..#episode.Objects,255,255,0)
+                        return
+                    end
+                    targetItem = episode.Objects[targetItemId]
+                else
+                    if locationId > #episode.POI then
+                        outputChatBox("Target item id is greater than the number of POI: "..locationId..' > '..#episode.POI,255,255,0)
+                        return
+                    end
+                    targetItem = episode.POI[locationId]
+                end
+                if targetItem then
+                    outputChatBox("target item identified")
+                    action.TargetItem = targetItem
+                    lastAction = action
+                    triggerEvent ( "onActionRetrieved", getRootElement(), action )
+                end
+            end
+            addEventHandler("onClientConsole",getLocalPlayer(),consoleCheck3)
+        end
+        addEventHandler("onClientConsole",getLocalPlayer(),consoleCheck2)
+    end
+
+    if poi == nil then
+        outputChatBox("Enter the nextLocation id and press enter :",255,255,0)
+        function consoleCheck(text)
+            if starts_with(text, "episode ") then
+                return
+            end
+            removeEventHandler("onClientConsole",getLocalPlayer(),consoleCheck)
+            local locationId = tonumber(text)
+            if not locationId then
+                outputChatBox("Could not parse the numeric value "..text,255,255,0)
+                return
+            end
+            if locationId > #episode.POI then
+                outputChatBox("Location id is greater than the number of POI: "..locationId..' > '..#episode.POI,255,255,0)
+                return
+            end
+            poi = episode.POI[locationId]
+            action.NextLocation = poi
+            getTargetItem()
+        end
+        addEventHandler("onClientConsole",getLocalPlayer(),consoleCheck)
+    else
+        action.NextLocation = poi
+        getTargetItem()
     end
 end
 
@@ -119,7 +286,9 @@ addCommandHandler("episode",
             outputChatBox("New episode initialized", 255, 0, 0, false)
             addEventHandler("onClientRender", getRootElement(), text_render)
         elseif command == "run" then
+            episode:Destroy()
             episode:Initialize(localPlayer)
+            episode:Play(localPlayer)
         elseif command == "load" then
             unloadEpisode(episode)
             if param1 then
@@ -138,8 +307,11 @@ addCommandHandler("episode",
             if param1 then
                 episode.name = param1
                 --TODO: check if all the required parameters are given
-                if not episode.graph_path then
+                if not episode.graphPath then
                     outputChatBox("Warning: the graph_path is not set. Run episode setgraph graph_name to set it.", 255, 0, 0, false)
+                end
+                if #episode.POI == 0 then
+                    outputChatBox("Warning: no POI set. Run episode add poi to add some, at least one is necessary.", 255, 0, 0, false)
                 end
                 if param2 ~= "o" and fileExists("files/episodes/"..param1..".json") then
                     outputChatBox("files/episodes/"..param1..".json already exists. To overwrite it type episode save episode_name o", 255, 0, 0, false)
@@ -149,7 +321,61 @@ addCommandHandler("episode",
                 for _,obj in ipairs(episode.Objects) do
                     table.insert(instances, obj.instance)
                     obj.instance = nil
+                    obj.position = obj.position:unpack()
+                    obj.rotation = obj.rotation:unpack()
                 end
+                local backupPOI = {}
+                local serializedPOI = {}
+                for _,poi in ipairs(episode.POI) do
+                    table.insert(backupPOI, poi)
+                    --serialize all actions in this poi
+                    local serializedAllActions = {}
+                    for _, a in ipairs(poi.allActions) do
+                        local serializedNextAction = nil
+                        if a.NextAction then
+                            if isArray(a.NextAction) then
+                                for _, na in ipairs(a.NextAction) do
+                                    table.insert(serializedNextAction, {id = na.id})
+                                end
+                            else
+                                serializedNextAction = { id = a.NextAction.id }
+                            end
+                        end
+                        local targetItemType = 'Object'
+                        local targetItemId = LastIndexOf(episode.Objects, a.TargetItem)
+                        if targetItemId < 0 then
+                            local targetItemType = 'Location'
+                            targetItemId = LastIndexOf(episode.POI, a.TargetItem)
+                        end
+                        local closingAction = nil
+                        if a.ClosingAction then
+                            closingAction = {id = a.ClosingAction.id}
+                        end
+                        table.insert(serializedAllActions, {
+                            dynamicString = a:GetDynamicString(),
+                            id = a.id,
+                            nextAction = serializedNextAction,
+                            targetItem = {id = targetItemId, type = targetItemType},
+                            nextLocation = {id = LastIndexOf(episode.POI, a.NextLocation)},
+                            closingAction = closingAction
+                        })
+                    end
+                    local serializedPossibleActions = {}
+                    for _, a in ipairs(poi.PossibleActions) do
+                        table.insert(serializedPossibleActions, {id = a.id})
+                    end
+                    table.insert(serializedPOI, {
+                        X = poi.X,
+                        Y = poi.Y,
+                        Z = poi.Z,
+                        Angle = poi.Angle,
+                        Interior = poi.Interior,
+                        Description = poi.Description,
+                        allActions = serializedAllActions,
+                        PossibleActions = serializedPossibleActions
+                    })
+                end
+                episode.POI = serializedPOI
                 local fileHandle = fileCreate("files/episodes/"..param1..".json")
                 if fileHandle then
                     local jsonStr = toJSON(episode)
@@ -160,6 +386,7 @@ addCommandHandler("episode",
                 for i,obj in ipairs(episode.Objects) do
                     obj.instance = instances[i]
                 end
+                episode.POI = backupPOI
             else
                 outputChatBox("Parameter episode_name not provided. Ex: episode save episode_name", 255, 0, 0, false)
             end
@@ -170,12 +397,14 @@ addCommandHandler("episode",
                     outputChatBox("Graph path set to "..episode.graphPath.." but this file could not be found in the current client folder.", 255, 0, 0, false)
                     outputChatBox("Run graph new to generate a graph for this episode", 255, 0, 0, false)
                 else
-
                     outputChatBox("Graph path set to "..episode.graphPath, 255, 0, 0, false)
                 end
             else
                 outputChatBox("Parameter graph_name not provided. Ex: episode setgraph house3", 255, 0, 0, false)
             end
+        elseif command == "cancel" then
+            removeEventHandler("onClientKey", root, playerPressedKey)
+            showCursor(false)
         elseif command == "delete" then
             if param1 == "object" then
                 if not param2 then
@@ -188,24 +417,22 @@ addCommandHandler("episode",
                         return
                     end 
                     outputChatBox("Clicked at "..worldX..", "..worldY..", "..worldZ, 255, 0, 0, false)
+                    removeEventHandler("onClientClick", getRootElement(), onClick)
                     if not param2 then
-                        if not element then
-                            outputChatBox("No object could be retrieved. Try again or maybe give the world model modelid if you intended to delete a world model.", 255, 0, 0, false)
-                        else
-                            for i,v in ipairs (episode.Objects) do
-                                if
-                                    v.modelid == element.modelid
-                                    and v.interior == element.interior
-                                    and math.abs(Vector3(v.position.x, v.position.y, v.position.z) - element.position) < 0.1
-                                then
-                                    v:Destroy()
-                                    table.remove(episode.Objects, i)
-                                    outputChatBox("Object found in current episode and deleted", 255, 0, 0, false)
-                                    return
-                                end
+                        for i,v in ipairs (episode.Objects) do
+                            if
+                                v.interior == localPlayer.interior
+                                and math.abs((Vector3(v.position.x, v.position.y, v.position.z) - Vector3(worldX, worldY, worldZ)).length) < 0.1
+                            then
+                                v:Destroy()
+                                table.remove(episode.Objects, i)
+                                outputChatBox("Object found in current episode and deleted", 255, 0, 0, false)
+                                removeEventHandler("onClientClick", getRootElement(), onClick)
+                                return
                             end
-                            outputChatBox("Object not found in current episode", 255, 0, 0, false)
                         end
+                        outputChatBox("Object not found in current episode or try again with a worldmodelid if you intend to delete a world model", 255, 0, 0, false)
+                        removeEventHandler("onClientClick", getRootElement(), onClick)
                         return
                     end
 
@@ -253,6 +480,24 @@ addCommandHandler("episode",
                     removeEventHandler("onClientClick", getRootElement(), onClick)
                 end
                 addEventHandler ( "onClientClick", getRootElement(), onClick)
+            elseif param1 == "poi" then
+                local poi = nil
+                local minDist = 1000
+                local id = -1
+                for i,v in ipairs (episode.POI) do
+                    local dist = math.abs((localPlayer.position - Vector3(v.X, v.Y, v.Z)).length)
+                    if dist < minDist then
+                        minDist = dist
+                        poi = v
+                        id = i
+                    end
+                end
+                if poi == nil then
+                    outputChatBox('Could not find any POI nearby. Place the player in the desired POI')
+                   return 
+                end
+
+                table.remove(episode.POI, id)
             end
         elseif command == "restore" then
             if param1 == "object" then
@@ -310,6 +555,42 @@ addCommandHandler("episode",
                 end
                 addEventHandler ( "onClientClick", getRootElement(), onClick)
             end
+        elseif command == "modify" then
+            if param1 == "object" then
+                outputChatBox("Click on the object to be modified.", 255, 0, 0, false)
+                showCursor(true, true)
+                function onClick(button, state, absoluteX, absoluteY, worldX, worldY, worldZ, element)
+                    if state ~= "up" then
+                        return
+                    end 
+                    outputChatBox("Clicked at "..worldX..", "..worldY..", "..worldZ, 255, 0, 0, false)
+                    for i,v in ipairs (episode.Objects) do
+                        if
+                            v.interior == localPlayer.interior
+                            and math.abs((Vector3(v.position.x, v.position.y, v.position.z) - Vector3(worldX, worldY, worldZ)).length) < 0.1
+                        then
+                            editedObject = v.instance
+                            outputChatBox("Object found in current episode. Modify it and press enter.", 255, 0, 0, false)
+                            outputChatBox("Use w/a/s/d/z/x/q/e/f/g/h/j to place and rotate the object", 255, 0, 0, false)
+                            outputChatBox("Press enter to finish", 255, 0, 0, false)
+                            local function updateObjectData(obj)
+                                showCursor(false)
+                                removeEventHandler("onElementDoneEditing", getRootElement(), addObjectToCreate)
+                                v:UpdateData(true)
+                                outputChatBox("Done. Object modified.", 255, 0, 0, false)
+                                return true
+                            end
+                            addEventHandler("onClientKey", root, playerPressedKey)
+                            addEventHandler ( "onElementDoneEditing", getRootElement(), updateObjectData)
+                            removeEventHandler("onClientClick", getRootElement(), onClick)
+                            return
+                        end
+                    end
+                    outputChatBox("Object not found in current episode", 255, 0, 0, false)
+                    removeEventHandler("onClientClick", getRootElement(), onClick)
+                end
+                addEventHandler ( "onClientClick", getRootElement(), onClick)
+            end
         elseif command == "add" then
             if param1 == "poi" then
                 if not param2 then
@@ -336,11 +617,11 @@ addCommandHandler("episode",
                 )
             elseif param1 == "object" then
                 if not param2 then
-                    outputChatBox("Object modelid expected: Ex: episode add object 2281 painting", 255, 0, 0, false)
+                    outputChatBox("Object modelid or object class expected: Ex: episode add object 2281 painting or episode add Laptop [optional modelId; if no modelId is given then it will be randomly chosen from eModel]", 255, 0, 0, false)
                     return
                 end
                 local description = table.concat( arg, " " )
-                if not description then
+                if (not description or description == "") and tonumber(param2) ~= nil then
                     outputChatBox("Object description expected: Ex: episode add object 2281 painting", 255, 0, 0, false)
                     return
                 end
@@ -349,17 +630,36 @@ addCommandHandler("episode",
                 showCursor(true, true)
                 function onClick(button, state, absoluteX, absoluteY, worldX, worldY, worldZ, element)
                     outputChatBox("Clicked at "..worldX..", "..worldY..", "..worldZ, 255, 0, 0, false)
-                    local modelId = tonumber(param2)
+                    outputChatBox('description: ...'..description..'...')
+                    local modelId = tonumber(param2) or tonumber(description)
+                    outputChatBox('modelid: ...'..modelId..'...')
+                    local type = nil
+                    if tonumber(param2) == nil then
+                        type = param2
+                        description = ''
+                    end
+                    local randomModelid = false
+                    if modelId == nil and type ~= nil then
+                        randomModelid = true
+                        modelId = loadstring('return '..type..'.eModel[PickRandom('..type..'.eModel)]')()
+                        outputChatBox('Will choose a random modelid. For now it is : ...'..modelId..'...')
+                    end
 
                     local function addObjectToCreate(obj)
                         showCursor(false)
                         removeEventHandler("onElementDoneEditing", getRootElement(), addObjectToCreate)
+                        local objModelId = modelId
+                        if randomModelid then
+                            objModelId = nil
+                        end
                         local object = SampStoryObjectBase {
                             description = description,
-                            modelid = obj.modelid,
+                            modelid = objModelId,
                             position = obj.position:unpack(),
                             rotation = obj.rotation:unpack(),
-                            interior = obj.interior
+                            interior = obj.interior,
+                            type = type,
+                            noCollisions = true
                         }
                         table.insert(
                             episode.Objects,
@@ -379,48 +679,138 @@ addCommandHandler("episode",
                     removeEventHandler("onClientClick", getRootElement(), onClick)
                 end
                 addEventHandler ( "onClientClick", getRootElement(), onClick)
+            elseif param1 == "action" then
+                local function addAction(action)
+                    action = lastAction
+                    action.id = #action.NextLocation.allActions + 1
+                    table.insert(action.NextLocation.allActions, action)
+                    removeEventHandler ( "onActionRetrieved", getRootElement(), addAction)
+                    outputChatBox('action '..action.id..' added')
+                end
+                if param2 == "last" then
+                    if lastAction == nil then
+                        outputChatBox('last action is not defined yet')
+                        return
+                    end
+                    addAction(lastAction)
+                else
+                    local actionName = param2
+                    local params = {}
+                    local paramName = nil
+                    for i,v in ipairs(arg) do
+                        if i % 2 == 0 then
+                            params[paramName] = loadstring('return '..v)()
+                        else
+                            paramName = v
+                        end
+                        break
+                    end
+                    addEventHandler ( "onActionRetrieved", getRootElement(), addAction)
+                    getAction(actionName, params)
+                end
+            end
+        elseif command == "linkactions" then
+            local poi = nil
+            local minDist = 1000
+            for i,v in ipairs (episode.POI) do
+                local dist = math.abs((localPlayer.position - Vector3(v.X, v.Y, v.Z)).length)
+                if dist < minDist then
+                    minDist = dist
+                    poi = v
+                end
+            end
+            if poi == nil then
+                outputChatBox('Could not find any POI nearby. Place the player in the desired POI')
+               return 
+            end
+            local toActionId = tonumber(param2)
+            local fromActionId = tonumber(param1)
+            if not fromActionId and param1 ~= "possibleActions" then
+                outputChatBox("expected numeric action id or the keyword possibleActions but got "..(param1 or 'nil')..". Ex: episode linkactions 1 2 [{optional}closing] or episode linkactions possibleActions 1")
+                return
+            end
+            if not toActionId then
+                outputChatBox("expected numeric action id but got "..(param2 or 'nil')..". Ex: episode linkactions 1 2 [{optional}closing] or episode linkactions possibleActions 1")
+                return
+            end
+
+            if toActionId > #poi.allActions then
+                outputChatBox("param2 is greater than the number of actions defined in this POI "..toActionId.." vs "..#poi.allActions)
+                return
+            end
+            local others = table.concat( arg, " " )
+            local action2 = poi.allActions[toActionId]
+            if param1 == "possibleActions" then
+                table.insert(poi.PossibleActions, action2)
+            else
+                if fromActionId > #poi.allActions then
+                    outputChatBox("param1 is greater than the number of actions defined in this POI "..fromActionId.." vs "..#poi.allActions)
+                    return
+                end
+                local action1 = poi.allActions[fromActionId]
+                if others == "closing" then
+                    action1.ClosingAction = action2
+                else
+                    if not action1.NextAction then
+                        action1.NextAction = action2
+                    elseif isArray(action1.NextAction) then
+                        table.insert(action1.NextAction, action2)
+                    else
+                        action1.NextAction = {action1.NextAction, action2}
+                    end
+                end
             end
         elseif command == "help" then
-            outputChatBox("episode new: discards the currently loaded episode and initializes a new episode", 255, 0, 0, false)
-            outputChatBox("episode load episode_name: discards the currently loaded episode and loads a new episode", 255, 0, 0, false)
-            outputChatBox("episode save episode_name [o]: saves the current episode; optional: o overwrites an existing episode", 255, 0, 0, false)
-            outputChatBox("episode setgraph graph_path: sets the current's episode graph path", 255, 0, 0, false)
-            outputChatBox("episode delete object: mark map objects to be deleted", 255, 0, 0, false)
-        end
-	end
-)
+            outputChatBox("episode new: discards the currently loaded episode and initializes a new episode", 0, 0, 255, false)
+            outputChatBox("episode run: plays the current episode", 0, 0, 255, false)
+            outputChatBox("episode load episode_name: discards the currently loaded episode and loads a new episode", 0, 0, 255, false)
+            outputChatBox("episode save episode_name [o]: saves the current episode; optional: o overwrites an existing episode", 0, 0, 255, false)
+            outputChatBox("episode setgraph graph_path: sets the current's episode graph path", 0, 0, 255, false)
+            outputChatBox("episode delete object: mark map objects to be deleted", 0, 0, 255, false)
+            outputChatBox("episode restore object: restores a deleted world object", 0, 0, 255, false)
+            outputChatBox("episode modify object: changes the object's position and rotation", 0, 0, 255, false)
+            outputChatBox("episode add poi: add a point of interest (location)", 0, 0, 255, false)
+            outputChatBox("episode add object: add object to be created", 0, 0, 255, false)
+            outputChatBox("episode add action: add an action in the point of interest where the player is currently located", 0, 0, 255, false)
+            outputChatBox("episode linkactions: in the POI where the player is located, add an action to the POI possibleActions, define NextAxtion (can contain multiple actions) for an action", 0, 0, 255, false)
+        elseif command == "test" then
+            if param1 == "action" then
+                outputChatBox("episode add action name param1_name param1_value param2_name param2_value...", 255, 0, 0, false)
+                local actionName = param2
+                local params = {}
+                local paramName = nil
+                for i,v in ipairs(arg) do
+                    outputChatBox(i.." "..v..' '..(i % 2))
+                    if i % 2 == 0 then
+                        params[paramName] = loadstring('return '..v)()
+                    else
+                        paramName = v
+                    end
+                end
+                local function actionRetrieved(action)
+                    removeEventHandler ( "onActionRetrieved", getRootElement(), actionRetrieved)
+                    outputChatBox("action retrieved")
+                    lastAction:Apply()
+                end
+                addEventHandler ( "onActionRetrieved", getRootElement(), actionRetrieved)
+                getAction(actionName, params)
+            elseif param1 == "poi" then
+                local poi = nil
+                local minDist = 1000
+                for i,v in ipairs (episode.POI) do
+                    local dist = math.abs((localPlayer.position - Vector3(v.X, v.Y, v.Z)).length)
+                    if dist < minDist then
+                        minDist = dist
+                        poi = v
+                    end
+                end
 
-addCommandHandler("eadd",
-	function (commandName, what, param1, param2)
-        if what == "node" then
-            local mapId = #json
-            local groundZ = getGroundPosition (localPlayer.position.x, localPlayer.position.y, localPlayer.position.z)
-            if not groundZ or groundZ == 0 then
-                groundZ = localPlayer.position.z - 1
-            end
-            table.insert(json, {id = mapId, x = localPlayer.position.x, y = localPlayer.position.y, z = groundZ, edges = {}})
-            outputChatBox("Node "..mapId.." added", 255, 0, 0, false)
-        elseif what == "edge" then
-            if param1 and param2 then
-                local id1 = tonumber(param1)
-                local id2 = tonumber(param2)
-                local idx1 = id1+1
-                local idx2 = id2+1
-    
-                local node1 = json[idx1]
-                local node2 = json[idx2]
-
-                markers[idx1]:setColor(0,255,0,128)
-                markers[idx2]:setColor(0,255,0,128)
-    
-                local v2 = Vector3(node2["x"], node2["y"], node2["z"])
-                local v1 = Vector3(node1["x"], node1["y"], node1["z"])
-                local edgeV = v2 - v1
-                table.insert(json[idx1]["edges"], {id2, math.abs(math.floor(edgeV.length))})
-                table.insert(json[idx2]["edges"], {id1, math.abs(math.floor(edgeV.length))})
+                localPlayer.position = poi.position
+                localPlayer.rotation = poi.rotation
+                poi:GetNextValidAction(localPlayer):Apply()
             else
-                outputConsole("Parameter id1 or id2 not provided. Ex: add edge 0 1")
+                outputChatBox("Possible commands: \ntest action \ntest poi"..text,255,255,0)
             end
-		end
+        end
 	end
 )

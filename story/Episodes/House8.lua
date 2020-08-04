@@ -164,16 +164,20 @@ function House8:Initialize(...)
     table.insert(atDesk.PossibleActions, sitAtDeskAction)
     local openLaptopAction = OpenLaptop{performer = player, nextLocation = atDesk, targetItem = laptop }
     sitAtDeskAction.NextAction = openLaptopAction
+
     local writeOnLaptop = TypeOnKeyboard{performer = player, nextLocation = atDesk, targetItem = laptop }
-    openLaptopAction.NextAction = writeOnLaptop
     local punchSeated = PunchSeated{performer = player, nextLocation = atDesk, targetItem = laptop }
-    writeOnLaptop.NextAction = punchSeated
     local layOnElbow = LayOnElbow{performer = player, nextLocation = atDesk, targetItem = laptop }
-    punchSeated.NextAction = layOnElbow
     local lookAtWatch = LookAtTheWatch{performer = player, nextLocation = atDesk, targetItem = laptop }
-    layOnElbow.NextAction = lookAtWatch
     local closeLaptopAction = CloseLaptop{performer = player, nextLocation = atDesk, targetItem = laptop }
-    lookAtWatch.NextAction = closeLaptopAction
+
+    local randomActions = {writeOnLaptop, punchSeated, layOnElbow, lookAtWatch, closeLaptopAction}
+    openLaptopAction.NextAction = randomActions
+    writeOnLaptop.NextAction = randomActions
+    punchSeated.NextAction = randomActions
+    layOnElbow.NextAction = randomActions
+    lookAtWatch.NextAction = randomActions
+
     local standUpFromDeskAction = StandUp{ how = StandUp.eHow.fromDesk, performer = player, nextLocation = atDesk, targetItem = bedroomChair }
     closeLaptopAction.NextAction = standUpFromDeskAction
     sitAtDeskAction.ClosingAction = standUpFromDeskAction
@@ -215,7 +219,11 @@ function House8:Initialize(...)
         table.insert(self.ValidStartingLocations, p1)
         for j, p2 in ipairs(POI) do
             if i ~= j then
-                table.insert(p1.PossibleActions, Move{performer = player, targetItem = p2, nextLocation = p2, prerequisites = {p1.PossibleActions[1]}, graphId = self.graphId})
+                local prerequisites = {}
+                if #p1.PossibleActions > 0 then
+                    prerequisites = {p1.PossibleActions[1]}
+                end
+                table.insert(p1.PossibleActions, Move{performer = player, targetItem = p2, nextLocation = p2, prerequisites = prerequisites, graphId = self.graphId})
             end
         end
     end
@@ -246,11 +254,14 @@ function House8:Play(...)
 end
 
 function House8:Destroy()
-    for item in self.Objects do
+    for _, item in ipairs(self.Objects) do
         item:Destroy()
     end
-    unloadPathGraph()
+    if unloadPathGraph and self.graphId then
+        unloadPathGraph(self.graphId)
+    end
     if DEBUG then
         outputConsole("House8:Destroyed")
     end
+    StoryEpisodeBase.Destroy(self)
 end

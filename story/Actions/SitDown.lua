@@ -1,12 +1,12 @@
 SitDown = class(StoryActionBase, function(o, params)
     -- check mandatory options
-    if type(params.performer) ~= "userdata" then
-        error("SitDown: performer not given in the constructor")
-    elseif type(params.targetItem) ~= "table" then
-        error("SitDown: targetItem not given in the constructor")
-    elseif type(params.nextLocation) ~= "table" then
-        error("SitDown: nextLocation not given in the constructor")
-    end
+    -- if type(params.performer) ~= "userdata" then
+    --     error("SitDown: performer not given in the constructor")
+    -- elseif type(params.targetItem) ~= "table" then
+    --     error("SitDown: targetItem not given in the constructor")
+    -- elseif type(params.nextLocation) ~= "table" then
+    --     error("SitDown: nextLocation not given in the constructor")
+    -- end
     StoryActionBase.init(o, " sits down ", params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
     o.how = params.how or SitDown.eHow.atDesk
     o.rotation= params.rotation or nil
@@ -48,4 +48,12 @@ function SitDown:Apply()
     end
 
     OnGlobalActionFinished(duration, self.Performer:getData('id'), self.Performer:getData('storyId'))
+end
+
+function SitDown:GetDynamicString()
+    local rotationStr = nil
+    if self.rotation then
+        rotationStr = 'Vector3('..self.rotation.x..', '..self.rotation.y..', '..self.rotation.z..')'
+    end
+    return 'return SitDown{how = '..self.how..', rotation = '..(rotationStr or 'nil')..'}'
 end

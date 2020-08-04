@@ -1,5 +1,7 @@
 Laptop = class(SampStoryObjectBase, function(o, params)
     params.description = "laptop"
+    params.type = 'Laptop'
+
     SampStoryObjectBase.init(o, params)
     o:updateDescription()
 end

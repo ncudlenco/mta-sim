@@ -19,3 +19,7 @@ function SmokeIn:Apply()
 
     OnGlobalActionFinished(3000, self.Performer:getData('id'), self.Performer:getData('storyId'))
 end
+
+function SmokeIn:GetDynamicString()
+    return 'return SmokeIn{}'
+end

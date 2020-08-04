@@ -1,5 +1,7 @@
 Chair = class(SampStoryObjectBase, function(o, params)
     params.description = "chair"
+    params.type = 'Chair'
+
     SampStoryObjectBase.init(o, params)
 end
 )

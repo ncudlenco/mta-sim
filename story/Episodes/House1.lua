@@ -204,11 +204,14 @@ function House1:Play(...)
 end
     
 function House1:Destroy()
-    for item in self.Objects do
+    for _, item in ipairs(self.Objects) do
         item:Destroy()
     end
-    unloadPathGraph()
+    if unloadPathGraph and self.graphId then
+        unloadPathGraph(self.graphId)
+    end
     if DEBUG then
         outputConsole("House1:Destroyed")
     end
+    StoryEpisodeBase.Destroy(self)
 end

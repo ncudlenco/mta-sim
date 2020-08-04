@@ -20,3 +20,7 @@ function PutIn:Apply()
 
     OnGlobalActionFinished(500, self.Performer:getData('id'), self.Performer:getData('storyId'))
 end
+
+function PutIn:GetDynamicString()
+    return 'return PutIn{where = "'..self.Where..'", how = '..self.how..'}'
+end

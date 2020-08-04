@@ -15,3 +15,7 @@ function Cook:Apply()
 
     OnGlobalActionFinished(3000, self.Performer:getData('id'), self.Performer:getData('storyId'))
 end
+
+function Cook:GetDynamicString()
+    return 'return Cook{}'
+end

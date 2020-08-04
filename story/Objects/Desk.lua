@@ -1,5 +1,6 @@
 Desk = class(SampStoryObjectBase, function(o, params)
     params.description = "desk"
+    params.type = 'Desk'
     SampStoryObjectBase.init(o, params)
 end
 )

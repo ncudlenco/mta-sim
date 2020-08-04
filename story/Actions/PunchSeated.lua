@@ -15,3 +15,7 @@ function PunchSeated:Apply()
 
     OnGlobalActionFinished(5000, self.Performer:getData('id'), self.Performer:getData('storyId'))
 end
+
+function PunchSeated:GetDynamicString()
+    return 'return PunchSeated{}'
+end

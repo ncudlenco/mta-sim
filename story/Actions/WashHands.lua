@@ -19,3 +19,7 @@ function WashHands:Apply()
 
     OnGlobalActionFinished(time, self.Performer:getData('id'), self.Performer:getData('storyId'))
 end
+
+function WashHands:GetDynamicString()
+    return 'return WashHands{}'
+end

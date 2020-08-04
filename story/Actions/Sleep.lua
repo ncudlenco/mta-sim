@@ -12,7 +12,7 @@ function Sleep:Apply()
     self.Performer.rotation = self.Performer.rotation + Vector3(0,0,180)
 
     math.randomseed(os.time())
-    time = math.random(3000, 8000)
+    local time = math.random(3, 8) * 1000
     if self.how == Sleep.eHow.Left then
         self.Performer:setAnimation("INT_HOUSE", "BED_Loop_L", time, true, true, false, true)
     elseif self.how == Sleep.eHow.Right then
@@ -24,6 +24,10 @@ function Sleep:Apply()
     end
 
     OnGlobalActionFinished(time, self.Performer:getData('id'), self.Performer:getData('storyId'))
+end
+
+function Sleep:GetDynamicString()
+    return 'return Sleep{how = '..self.how..'}'
 end
 
 Sleep.eHow = {

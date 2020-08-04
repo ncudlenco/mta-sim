@@ -51,3 +51,20 @@ function Shuffle(arr)
     
     return arr
 end
+
+function isArray(t)
+    local i = 0
+    for _ in pairs(t) do
+      i = i + 1
+      if t[i] == nil then return false end
+    end
+    return true
+end
+
+function starts_with(str, start)
+    return str:sub(1, #start) == start
+end
+
+function ends_with(str, ending)
+    return ending == "" or str:sub(-#ending) == ending
+end

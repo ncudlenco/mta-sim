@@ -97,3 +97,7 @@ function Move:Apply()
         end
     )
 end
+
+function Move:GetDynamicString()
+    return 'return Move{graphId = '..self.graphId..', how = '..self.how..'}'
+end

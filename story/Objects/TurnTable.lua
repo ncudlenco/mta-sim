@@ -1,5 +1,7 @@
 TurnTable = class(SampStoryObjectBase, function(o, params)
     params.description = "the turn table"
+    params.type = 'TurnTable'
+
     SampStoryObjectBase.init(o, params)
 end
 )

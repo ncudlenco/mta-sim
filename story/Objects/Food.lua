@@ -1,5 +1,6 @@
 Food = class(SampStoryObjectBase, function(o, params)
     params.description = "food"
+    params.type = 'Food'
 
     if params.modelid == Food.eModel.Shawarma then
         params.position.z = params.position.z - 0.02

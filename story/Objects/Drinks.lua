@@ -1,5 +1,6 @@
 Drinks = class(SampStoryObjectBase, function(o, params)
     params.description = "drink"
+    params.type = 'Drinks'
 
     if ( params.modelid == Drinks.eModel.AppleJuice or params.modelid == Drinks.eModel.OrangeJuice or 
          params.modelid == Drinks.eModel.MilkCarton or params.modelid == Drinks.eModel.MilkBottle) then

@@ -4,10 +4,15 @@ StoryEpisodeBase = class(function(o, storyTimeOfDay, storyWeather, startingLocat
     o.StartingLocation = startingLocation
     o.ValidStartingLocations = {}
     o.Objects = {}
+    o.Disposed = false
 end)
 
 function StoryEpisodeBase:Initialize(...)
 end
 
 function StoryEpisodeBase:Play(...)
+end
+
+function StoryEpisodeBase:Destroy()
+    self.Disposed = true
 end

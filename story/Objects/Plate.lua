@@ -1,5 +1,7 @@
 Plate = class(SampStoryObjectBase, function(o, params)
     params.description = "plate"
+    params.type = 'Plate'
+
     SampStoryObjectBase.init(o, params)
 end
 )

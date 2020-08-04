@@ -28,6 +28,10 @@ function Eat:Apply()
     end)
 end
 
+function Eat:GetDynamicString()
+    return 'return Eat{how = '..self.how..'}'
+end
+
 Eat.eHow = {
     SitDown = 1,
     StandUp = 2

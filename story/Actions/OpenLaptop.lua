@@ -15,3 +15,7 @@ function OpenLaptop:Apply()
 
     OnGlobalActionFinished(1000, self.Performer:getData('id'), self.Performer:getData('storyId'))
 end
+
+function OpenLaptop:GetDynamicString()
+    return 'return OpenLaptop{}'
+end

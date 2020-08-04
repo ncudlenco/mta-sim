@@ -1,5 +1,7 @@
 Table = class(SampStoryObjectBase, function(o, params)
     params.description = "table"
+    params.type = 'Table'
+
     SampStoryObjectBase.init(o, params)
 end
 )

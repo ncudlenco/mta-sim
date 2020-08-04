@@ -59,7 +59,7 @@
   <!-- Globals -->
   <script src="ServerGlobals.lua" type="server" />
   <!-- Other story related objects -->
-  <script src="story/Logger.lua" type="server" />
+  <script src="story/Logger.lua" type="shared" />
   <script src="story/TimeOfDay.lua" type="shared" />
   <script src="story/Weather.lua" type="shared" />
   <!-- Needs -->
@@ -78,58 +78,58 @@
   <script src="story/Locations/Location.lua" type="shared" />
   <!-- Actions -->
   <script src="story/Actions/DynamicAction.lua" type="shared" />
-  <script src="story/Actions/ActionsGlobals.lua" type="server" />
-  <script src="story/Actions/Cook.lua" type="server" />
-  <script src="story/Actions/Eat.lua" type="server" />
-  <script src="story/Actions/EmptyAction.lua" type="server" />
-  <script src="story/Actions/EndStory.lua" type="server" />
-  <script src="story/Actions/GetInBed.lua" type="server" />
-  <script src="story/Actions/GetOffBed.lua" type="server" />
-  <script src="story/Actions/Sleep.lua" type="server" />
-  <script src="story/Actions/SetPlayerSkin.lua" type="server" />
-  <script src="story/Actions/Move.lua" type="server" />
-  <script src="story/Actions/SitDown.lua" type="server" />
-  <script src="story/Actions/StandUp.lua" type="server" />
-  <script src="story/Actions/WashHands.lua" type="server" />
-  <script src="story/Actions/LookAtObject.lua" type="server" />
-  <script src="story/Actions/OpenLaptop.lua" type="server" />
-  <script src="story/Actions/CloseLaptop.lua" type="server" />
-  <script src="story/Actions/LayOnElbow.lua" type="server" />
-  <script src="story/Actions/PunchSeated.lua" type="server" />
-  <script src="story/Actions/TypeOnKeyboard.lua" type="server" />
-  <script src="story/Actions/LookAtTheWatch.lua" type="server" />
-  <script src="story/Actions/PickUp.lua" type="server" />
-  <script src="story/Actions/PutIn.lua" type="server" />
-  <script src="story/Actions/Wait.lua" type="server" />
-  <script src="story/Actions/PutDown.lua" type="server" />
-  <script src="story/Actions/TurnOn.lua" type="server" />
-  <script src="story/Actions/TurnOff.lua" type="server" />
-  <script src="story/Actions/Dance.lua" type="server" />
-  <script src="story/Actions/OpenDoor.lua" type="server" />
-  <script src="story/Actions/Drink.lua" type="server" />
-  <script src="story/Actions/Read.lua" type="server" />
-  <script src="story/Actions/Smoke.lua" type="server" />
-  <script src="story/Actions/SmokeIn.lua" type="server" />
-  <script src="story/Actions/SmokeOut.lua" type="server" />
+  <script src="story/Actions/ActionsGlobals.lua" type="shared" />
+  <script src="story/Actions/Cook.lua" type="shared" />
+  <script src="story/Actions/Eat.lua" type="shared" />
+  <script src="story/Actions/EmptyAction.lua" type="shared" />
+  <script src="story/Actions/EndStory.lua" type="shared" />
+  <script src="story/Actions/GetInBed.lua" type="shared" />
+  <script src="story/Actions/GetOffBed.lua" type="shared" />
+  <script src="story/Actions/Sleep.lua" type="shared" />
+  <script src="story/Actions/SetPlayerSkin.lua" type="shared" />
+  <script src="story/Actions/Move.lua" type="shared" />
+  <script src="story/Actions/SitDown.lua" type="shared" />
+  <script src="story/Actions/StandUp.lua" type="shared" />
+  <script src="story/Actions/WashHands.lua" type="shared" />
+  <script src="story/Actions/LookAtObject.lua" type="shared" />
+  <script src="story/Actions/OpenLaptop.lua" type="shared" />
+  <script src="story/Actions/CloseLaptop.lua" type="shared" />
+  <script src="story/Actions/LayOnElbow.lua" type="shared" />
+  <script src="story/Actions/PunchSeated.lua" type="shared" />
+  <script src="story/Actions/TypeOnKeyboard.lua" type="shared" />
+  <script src="story/Actions/LookAtTheWatch.lua" type="shared" />
+  <script src="story/Actions/PickUp.lua" type="shared" />
+  <script src="story/Actions/PutIn.lua" type="shared" />
+  <script src="story/Actions/Wait.lua" type="shared" />
+  <script src="story/Actions/PutDown.lua" type="shared" />
+  <script src="story/Actions/TurnOn.lua" type="shared" />
+  <script src="story/Actions/TurnOff.lua" type="shared" />
+  <script src="story/Actions/Dance.lua" type="shared" />
+  <script src="story/Actions/OpenDoor.lua" type="shared" />
+  <script src="story/Actions/Drink.lua" type="shared" />
+  <script src="story/Actions/Read.lua" type="shared" />
+  <script src="story/Actions/Smoke.lua" type="shared" />
+  <script src="story/Actions/SmokeIn.lua" type="shared" />
+  <script src="story/Actions/SmokeOut.lua" type="shared" />
   <!-- Objects -->
   <script src="story/Objects/SampStoryObjectBase.lua" type="shared" />
-  <script src="story/Objects/Bed.lua" type="server" />
-  <script src="story/Objects/Chair.lua" type="server" />
-  <script src="story/Objects/Laptop.lua" type="server" />
-  <script src="story/Objects/Sofa.lua" type="server" />
-  <script src="story/Objects/Photos.lua" type="server" />
-  <script src="story/Objects/Desk.lua" type="server" />
-  <script src="story/Objects/Food.lua" type="server" />
-  <script src="story/Objects/Remote.lua" type="server" />
-  <script src="story/Objects/Furniture.lua" type="server" />
-  <script src="story/Objects/Plate.lua" type="server" />
-  <script src="story/Objects/TurnTable.lua" type="server" />
-  <script src="story/Objects/Sink.lua" type="server" />
-  <script src="story/Objects/Drinks.lua" type="server" />
-  <script src="story/Objects/Table.lua" type="server" />
-  <script src="story/Objects/MusicPlayer.lua" type="server" />
-  <script src="story/Objects/Book.lua" type="server" />
-  <script src="story/Objects/Cigarette.lua" type="server" />
+  <script src="story/Objects/Bed.lua" type="shared" />
+  <script src="story/Objects/Chair.lua" type="shared" />
+  <script src="story/Objects/Laptop.lua" type="shared" />
+  <script src="story/Objects/Sofa.lua" type="shared" />
+  <script src="story/Objects/Photos.lua" type="shared" />
+  <script src="story/Objects/Desk.lua" type="shared" />
+  <script src="story/Objects/Food.lua" type="shared" />
+  <script src="story/Objects/Remote.lua" type="shared" />
+  <script src="story/Objects/Furniture.lua" type="shared" />
+  <script src="story/Objects/Plate.lua" type="shared" />
+  <script src="story/Objects/TurnTable.lua" type="shared" />
+  <script src="story/Objects/Sink.lua" type="shared" />
+  <script src="story/Objects/Drinks.lua" type="shared" />
+  <script src="story/Objects/Table.lua" type="shared" />
+  <script src="story/Objects/MusicPlayer.lua" type="shared" />
+  <script src="story/Objects/Book.lua" type="shared" />
+  <script src="story/Objects/Cigarette.lua" type="shared" />
   <!-- Episodes -->
   <script src="story/Episodes/House1.lua" type="server" />
   <script src="story/Episodes/House3.lua" type="server" />
@@ -139,7 +139,7 @@
   <script src="story/Episodes/DynamicEpisode.lua" type="shared" />
   <!-- Story main items -->
   <script src="story/Player.lua" type="server" />
-  <script src="story/Story.lua" type="server" />
+  <script src="story/Story.lua" type="shared" />
   <!-- Commands -->
   <script src="ServerCommands.lua" type="server" />
   <script src="client/EpisodeCommands.lua" type="client" />

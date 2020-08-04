@@ -1,0 +1,174 @@
+[
+    {
+        "Objects": [
+            {
+                "dynamicString": "return Bed{description=\"bed\", noCollisions=true, modelid=2298, interior=8, position=Vector3(2361.2995605469,-1134.1754150391,1049.875), rotation=Vector3(0,0,90)}",
+                "type": "Bed",
+                "Description": "bed",
+                "noCollisions": true,
+                "interior": 8,
+                "ObjectId": "e4695bbb-b234-4ae5-a1e3-8a7b111054b2",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 90
+                },
+                "scale": 1,
+                "position": {
+                    "y": -1134.175415039063,
+                    "x": 2361.299560546875,
+                    "z": 1049.875
+                },
+                "StoryItemType": {
+                    "id": 1,
+                    "idr": 1,
+                    "name": "Object"
+                },
+                "modelid": 2298,
+                "size": 2.5
+            }
+        ],
+        "graphPath": "files\/paths\/house8.json",
+        "name": "test3",
+        "InteriorId": 8,
+        "ValidStartingLocations": [],
+        "Disposed": false,
+        "POI": [
+            {
+                "Y": -1134.786987304688,
+                "X": 2365.549560546875,
+                "Description": "house entrance",
+                "Z": 1050.875,
+                "Interior": 8,
+                "Angle": 356.960205078125,
+                "PossibleActions": [],
+                "allActions": []
+            },
+            {
+                "Y": -1134.184692382813,
+                "X": 2359.250732421875,
+                "Description": "bedroom near the bed",
+                "Z": 1050.875,
+                "Interior": 8,
+                "Angle": 3.853607177734375,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "allActions": [
+                    {
+                        "dynamicString": "return GetInBed{how = 1}",
+                        "targetItem": {
+                            "id": 1,
+                            "type": "Object"
+                        },
+                        "id": 1,
+                        "nextAction": {
+                            "id": 2
+                        },
+                        "closingAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 2
+                        }
+                    },
+                    {
+                        "dynamicString": "return Sleep{how = 1}",
+                        "targetItem": {
+                            "id": 1,
+                            "type": "Object"
+                        },
+                        "id": 2,
+                        "nextAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 2
+                        }
+                    },
+                    {
+                        "dynamicString": "return GetOffBed{how = 1}",
+                        "targetItem": {
+                            "id": 1,
+                            "type": "Object"
+                        },
+                        "id": 3,
+                        "nextLocation": {
+                            "id": 2
+                        }
+                    }
+                ]
+            }
+        ],
+        "ObjectsToDelete": [
+            {
+                "dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2255, interior=8, position=Vector3(2361.0856933594,-1122.2124023438,1052.3121337891), rotation=Vector3(0,0,0)}",
+                "type": "SampStoryObjectBase",
+                "Description": "",
+                "noCollisions": false,
+                "interior": 8,
+                "ObjectId": "61ab3b9a-8180-4f7f-a8ab-560c204c3570",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "scale": 1,
+                "position": {
+                    "y": -1122.21240234375,
+                    "x": 2361.085693359375,
+                    "z": 1052.312133789063
+                },
+                "StoryItemType": "^T^5",
+                "modelid": 2255,
+                "size": 2.5
+            },
+            {
+                "dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2331, interior=8, position=Vector3(2367.0971679688,-1123.1702880859,1050.5440673828), rotation=Vector3(0,0,0)}",
+                "type": "SampStoryObjectBase",
+                "Description": "",
+                "noCollisions": false,
+                "interior": 8,
+                "ObjectId": "789c65df-9f09-4d64-9096-007de6b9ce99",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "scale": 1,
+                "position": {
+                    "y": -1123.170288085938,
+                    "x": 2367.09716796875,
+                    "z": 1050.544067382813
+                },
+                "StoryItemType": "^T^5",
+                "modelid": 2331,
+                "size": 2.5
+            },
+            {
+                "dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2298, interior=8, position=Vector3(2359.2045898438,-1132.7109375,1050.40234375), rotation=Vector3(0,0,0)}",
+                "type": "SampStoryObjectBase",
+                "Description": "",
+                "noCollisions": false,
+                "interior": 8,
+                "ObjectId": "1c7999da-5045-43c5-b1ba-e28ecf3ecfde",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "scale": 1,
+                "position": {
+                    "y": -1132.7109375,
+                    "x": 2359.20458984375,
+                    "z": 1050.40234375
+                },
+                "StoryItemType": "^T^5",
+                "modelid": 2298,
+                "size": 5.5
+            }
+        ]
+    }
+]

@@ -17,3 +17,7 @@ function TurnOn:Apply()
 
     OnGlobalActionFinished(500, self.Performer:getData('id'), self.Performer:getData('storyId'))
 end
+
+function TurnOn:GetDynamicString()
+    return 'return TurnOn{}'
+end

@@ -1,14 +1,14 @@
 OpenDoor = class(StoryActionBase, function(o, params)
     -- check mandatory options
-    if not params.performer then
-        error("OpenDoor: performer not given in the constructor")
-    elseif not params.targetItem then
-        error("OpenDoor: targetItem not given in the constructor")
-    elseif not params.nextLocation then
-        error("OpenDoor: nextLocation not given in the constructor")
-    elseif type(params.graphId) ~= "number" then
-        error("OpenDoor: graphId not given in the constructor")
-    end
+    -- if not params.performer then
+    --     error("OpenDoor: performer not given in the constructor")
+    -- elseif not params.targetItem then
+    --     error("OpenDoor: targetItem not given in the constructor")
+    -- elseif not params.nextLocation then
+    --     error("OpenDoor: nextLocation not given in the constructor")
+    -- elseif type(params.graphId) ~= "number" then
+    --     error("OpenDoor: graphId not given in the constructor")
+    -- end
 
     if params.how == OpenDoor.eHow.Exit then 
         description = " opens the door and exits the room"
@@ -99,4 +99,8 @@ function OpenDoor:Apply()
             end
         end
     )
+end
+
+function OpenDoor:GetDynamicString()
+    return 'return OpenDoor{graphId = '..self.graphId..', how = '..self.how..'}'
 end

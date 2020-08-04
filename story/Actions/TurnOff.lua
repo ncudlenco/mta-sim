@@ -1,6 +1,5 @@
 TurnOff = class(StoryActionBase, function(o, params)
     StoryActionBase.init(o, " turns off the ", params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
-    o.Where = params.where
 end)
 
 function TurnOff:Apply()
@@ -17,4 +16,8 @@ function TurnOff:Apply()
     end
 
     OnGlobalActionFinished(500, self.Performer:getData('id'), self.Performer:getData('storyId'))
+end
+
+function TurnOff:GetDynamicString()
+    return 'return TurnOff{}'
 end

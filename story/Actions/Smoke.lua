@@ -17,3 +17,7 @@ function Smoke:Apply()
 
     OnGlobalActionFinished(time, self.Performer:getData('id'), self.Performer:getData('storyId'))
 end
+
+function Smoke:GetDynamicString()
+    return 'return Smoke{}'
+end

@@ -33,6 +33,10 @@ function GetInBed:Apply()
     OnGlobalActionFinished(3500, self.Performer:getData('id'), self.Performer:getData('storyId'))
 end
 
+function GetInBed:GetDynamicString()
+    return 'return GetInBed{how = '..self.how..'}'
+end
+
 GetInBed.eHow = {
     Left = 1,
     Right = 2

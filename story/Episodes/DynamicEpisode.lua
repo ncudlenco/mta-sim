@@ -6,6 +6,7 @@ DynamicEpisode = class(StoryEpisodeBase, function(o, name)
     o.ObjectsToDelete = {}
     o.POI = {}
     o.name = name or ""
+    o.cameras = {}
 end)
 
 
@@ -105,6 +106,8 @@ function DynamicEpisode:LoadFromFile()
         if (episode.StoryWeather) then --TODO: set random if required
             self.StoryWeather = Weather(episode.StoryWeather.id, episode.StoryWeather.description)
         end
+
+        self.cameras = episode.cameras
 
         local objects = {}
         for k,v in ipairs(episode.Objects) do

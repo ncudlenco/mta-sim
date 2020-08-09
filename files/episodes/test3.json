@@ -1,5 +1,101 @@
 [
     {
+        "InteriorId": 8,
+        "ValidStartingLocations": [],
+        "cameras": [
+            {
+                "y": -1135.926000982523,
+                "x": 2363.321484394372,
+                "lz": 1049.882568359375,
+                "z": 1054.08251953125,
+                "lx": 2357.68603515625,
+                "ly": -1130.16455078125,
+                "roll": 0,
+                "fov": 70
+            },
+            {
+                "y": -1135.859814457595,
+                "x": 2357.647216811776,
+                "lz": 1049.875,
+                "z": 1054.274951182306,
+                "lx": 2362.93115234375,
+                "ly": -1130.1513671875,
+                "roll": 0,
+                "fov": 70
+            }
+        ],
+        "ObjectsToDelete": [
+            {
+                "dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2255, interior=8, position=Vector3(2361.0856933594,-1122.2124023438,1052.3121337891), rotation=Vector3(0,0,0)}",
+                "type": "SampStoryObjectBase",
+                "Description": "",
+                "noCollisions": false,
+                "interior": 8,
+                "ObjectId": "4b261ab3-b9a8-4180-b7fb-8ab560c204c3",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "scale": 1,
+                "position": {
+                    "y": -1122.21240234375,
+                    "x": 2361.085693359375,
+                    "z": 1052.312133789063
+                },
+                "StoryItemType": {
+                    "id": 1,
+                    "idr": 1,
+                    "name": "Object"
+                },
+                "modelid": 2255,
+                "size": 2.5
+            },
+            {
+                "dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2331, interior=8, position=Vector3(2367.0971679688,-1123.1702880859,1050.5440673828), rotation=Vector3(0,0,0)}",
+                "type": "SampStoryObjectBase",
+                "Description": "",
+                "noCollisions": false,
+                "interior": 8,
+                "ObjectId": "570789c6-5df9-4f09-b644-096007de6b9c",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "scale": 1,
+                "position": {
+                    "y": -1123.170288085938,
+                    "x": 2367.09716796875,
+                    "z": 1050.544067382813
+                },
+                "StoryItemType": "^T^10",
+                "modelid": 2331,
+                "size": 2.5
+            },
+            {
+                "dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2298, interior=8, position=Vector3(2359.2045898438,-1132.7109375,1050.40234375), rotation=Vector3(0,0,0)}",
+                "type": "SampStoryObjectBase",
+                "Description": "",
+                "noCollisions": false,
+                "interior": 8,
+                "ObjectId": "e991c799-9da5-4045-8c5d-1bae28ecf3ec",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "scale": 1,
+                "position": {
+                    "y": -1132.7109375,
+                    "x": 2359.20458984375,
+                    "z": 1050.40234375
+                },
+                "StoryItemType": "^T^10",
+                "modelid": 2298,
+                "size": 5.5
+            }
+        ],
         "Objects": [
             {
                 "dynamicString": "return Bed{description=\"bed\", noCollisions=true, modelid=2298, interior=8, position=Vector3(2361.2995605469,-1134.1754150391,1049.875), rotation=Vector3(0,0,90)}",
@@ -7,7 +103,7 @@
                 "Description": "bed",
                 "noCollisions": true,
                 "interior": 8,
-                "ObjectId": "e4695bbb-b234-4ae5-a1e3-8a7b111054b2",
+                "ObjectId": "e66e4695-bbbb-4234-ae58-1e38a7b11105",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -19,19 +115,13 @@
                     "x": 2361.299560546875,
                     "z": 1049.875
                 },
-                "StoryItemType": {
-                    "id": 1,
-                    "idr": 1,
-                    "name": "Object"
-                },
+                "StoryItemType": "^T^10",
                 "modelid": 2298,
                 "size": 2.5
             }
         ],
-        "graphPath": "files\/paths\/house8.json",
         "name": "test3",
-        "InteriorId": 8,
-        "ValidStartingLocations": [],
+        "graphPath": "files\/paths\/house8.json",
         "Disposed": false,
         "POI": [
             {
@@ -100,74 +190,6 @@
                         }
                     }
                 ]
-            }
-        ],
-        "ObjectsToDelete": [
-            {
-                "dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2255, interior=8, position=Vector3(2361.0856933594,-1122.2124023438,1052.3121337891), rotation=Vector3(0,0,0)}",
-                "type": "SampStoryObjectBase",
-                "Description": "",
-                "noCollisions": false,
-                "interior": 8,
-                "ObjectId": "61ab3b9a-8180-4f7f-a8ab-560c204c3570",
-                "rotation": {
-                    "y": 0,
-                    "x": 0,
-                    "z": 0
-                },
-                "scale": 1,
-                "position": {
-                    "y": -1122.21240234375,
-                    "x": 2361.085693359375,
-                    "z": 1052.312133789063
-                },
-                "StoryItemType": "^T^5",
-                "modelid": 2255,
-                "size": 2.5
-            },
-            {
-                "dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2331, interior=8, position=Vector3(2367.0971679688,-1123.1702880859,1050.5440673828), rotation=Vector3(0,0,0)}",
-                "type": "SampStoryObjectBase",
-                "Description": "",
-                "noCollisions": false,
-                "interior": 8,
-                "ObjectId": "789c65df-9f09-4d64-9096-007de6b9ce99",
-                "rotation": {
-                    "y": 0,
-                    "x": 0,
-                    "z": 0
-                },
-                "scale": 1,
-                "position": {
-                    "y": -1123.170288085938,
-                    "x": 2367.09716796875,
-                    "z": 1050.544067382813
-                },
-                "StoryItemType": "^T^5",
-                "modelid": 2331,
-                "size": 2.5
-            },
-            {
-                "dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2298, interior=8, position=Vector3(2359.2045898438,-1132.7109375,1050.40234375), rotation=Vector3(0,0,0)}",
-                "type": "SampStoryObjectBase",
-                "Description": "",
-                "noCollisions": false,
-                "interior": 8,
-                "ObjectId": "1c7999da-5045-43c5-b1ba-e28ecf3ecfde",
-                "rotation": {
-                    "y": 0,
-                    "x": 0,
-                    "z": 0
-                },
-                "scale": 1,
-                "position": {
-                    "y": -1132.7109375,
-                    "x": 2359.20458984375,
-                    "z": 1050.40234375
-                },
-                "StoryItemType": "^T^5",
-                "modelid": 2298,
-                "size": 5.5
             }
         ]
     }

@@ -11,6 +11,15 @@ addEvent ( "onActionRetrieved", true )
 local episode = DynamicEpisode()
 local markers = {}
 local function text_render ( )
+    if episode.cameras then
+        for i, c in ipairs(episode.cameras) do
+            local sx, sy, _ = getScreenFromWorldPosition(c.x, c.y, c.z)
+            if sx then 
+                local sw, sh = guiGetScreenSize ( )
+                dxDrawText ("cam"..i, sx, sy, sw, sh, tocolor ( 255, 255, 0, 255 ), 2.0, "default-bold" ) 
+            end     
+        end
+    end
     for i, obj in ipairs(episode.ObjectsToDelete) do
         local sx, sy, _ = getScreenFromWorldPosition(obj.position.x, obj.position.y, obj.position.z)
         if sx then 
@@ -111,8 +120,11 @@ local function unloadEpisode(episode)
 end
 
 local editedObject = nil
+local cameraTargetObject = nil
 local altPressed = false
 local shiftPressed = false
+local setCamera = false
+local moveTarget = false
 local function playerPressedKey(button, press)
     if (press) then
         local translationIncrement = 0.1
@@ -128,47 +140,118 @@ local function playerPressedKey(button, press)
             rotationIncrement = 90
             sizeIncrement = 1
         end
+        local offset = Vector3(0,0,0)
+        local translate = false
+        local rotate = false
+        local changeSize = false
         if button == "w" then
-            editedObject.position = editedObject.position + Vector3(translationIncrement,0,0)
+            translate = true
+            offset = Vector3(translationIncrement,0,0)
         elseif button == "s" then
-            editedObject.position = editedObject.position + Vector3(-1*translationIncrement,0,0)
+            translate = true
+            offset =  Vector3(-1*translationIncrement,0,0)
         elseif button == "a" then
-            editedObject.position = editedObject.position + Vector3(0,-1*translationIncrement,0)
+            translate = true
+            offset =  Vector3(0,-1*translationIncrement,0)
         elseif button == "d" then
-            editedObject.position = editedObject.position + Vector3(0,translationIncrement,0)
+            translate = true
+            offset =  Vector3(0,translationIncrement,0)
         elseif button == "z" then 
-            editedObject.position = editedObject.position + Vector3(0,0,translationIncrement)
+            translate = true
+            offset =  Vector3(0,0,translationIncrement)
         elseif button == "x" then
-            editedObject.position = editedObject.position + Vector3(0,0,-1 *translationIncrement)
+            translate = true
+            offset =  Vector3(0,0,-1 *translationIncrement)
         elseif button == "q" then
-            editedObject.rotation = editedObject.rotation + Vector3(0,0,rotationIncrement)
+            rotate = true
+            offset =  Vector3(0,0,rotationIncrement)
         elseif button == "e" then
-            editedObject.rotation = editedObject.rotation + Vector3(0,0,-1 * rotationIncrement)
+            rotate = true
+            offset =  Vector3(0,0,-1 * rotationIncrement)
         elseif button == "h" then
-            editedObject.rotation = editedObject.rotation + Vector3(0,rotationIncrement,0)
+            rotate = true
+            offset =  Vector3(0,rotationIncrement,0)
         elseif button == "j" then
-            editedObject.rotation = editedObject.rotation + Vector3(0,-1 * rotationIncrement,0)
+            rotate = true
+            offset =  Vector3(0,-1 * rotationIncrement,0)
         elseif button == "f" then
-            editedObject.rotation = editedObject.rotation + Vector3(rotationIncrement,0,0)
+            rotate = true
+            offset =  Vector3(rotationIncrement,0,0)
         elseif button == "g" then
-            editedObject.rotation = editedObject.rotation + Vector3(-1 * rotationIncrement,0,0)
+            rotate = true
+            offset =  Vector3(-1 * rotationIncrement,0,0)
         elseif button == "mouse_wheel_up" then
-            if editedObject.size then
-                editedObject.size = editedObject.size + sizeIncrement
-            end
+            changeSize = true
         elseif button == "mouse_wheel_down" then
-            if editedObject.size then
-                editedObject.size = editedObject.size - sizeIncrement
-            end
+            changeSize = true
+            sizeIncrement = -1 * sizeIncrement
         elseif button == "enter" then
             showCursor(false)
             removeEventHandler("onClientKey", root, playerPressedKey)
             triggerEvent ( "onElementDoneEditing", getRootElement(), editedObject )
             editedObject = nil
+            setCamera = false
+            if cameraTargetObject then
+                cameraTargetObject:destroy()
+                cameraTargetObject = nil
+            end
         elseif button == "lalt" or button == "ralt" then
             altPressed = true
         elseif button == "lshift" or button == "rshift" then
             shiftPressed = true
+        elseif button == "u" then
+            if moveTarget then
+                moveTarget = false
+                outputChatBox("Use w/a/s/d/z/x/q/e to place and roll the camera, use scroll up/down to change the field of view", 255, 0, 0, false)
+                outputChatBox("Press u to modify the coordinates of the camera target", 255, 0, 0, false)
+                outputChatBox("Press enter to save the current camera and target setting", 255, 0, 0, false)
+
+            else
+                outputChatBox("Use w/a/s/d to set the coordinates of the camera target. Press u again to return to modifying the camera position", 255, 0, 0, false)
+                outputChatBox("Press enter to save the current camera and target setting", 255, 0, 0, false)
+                moveTarget = true
+            end
+        end
+
+        if setCamera then
+            if moveTarget then
+                cameraTargetObject.position = cameraTargetObject.position + offset
+                editedObject.lx = cameraTargetObject.position.x
+                editedObject.ly = cameraTargetObject.position.y
+                editedObject.lz = cameraTargetObject.position.z
+            else
+                if translate then
+                    editedObject.x = editedObject.x + offset.x
+                    editedObject.y = editedObject.y + offset.y
+                    editedObject.z = editedObject.z + offset.z
+                elseif rotate then
+                    editedObject.roll = editedObject.roll + offset.z
+                elseif changeSize then
+                    editedObject.fov = editedObject.fov + sizeIncrement
+                end    
+            end
+
+            Camera.setMatrix(
+                editedObject.x,
+                editedObject.y,
+                editedObject.z,
+                editedObject.lx,
+                editedObject.ly,
+                editedObject.lz,
+                editedObject.roll,
+                editedObject.fov
+            )
+            localPlayer.cameraInterior = localPlayer.interior
+        else
+            if translate then
+                editedObject.position = editedObject.position + offset
+            elseif rotate then
+                editedObject.rotation = editedObject.rotation + offset
+            elseif changeSize then
+                if editedObject.size then
+                    editedObject.size = editedObject.size + sizeIncrement
+                end
+            end
         end
     else
         if button == "lalt" or button == "ralt" then
@@ -320,9 +403,13 @@ addCommandHandler("episode",
                 local instances = {}
                 for _,obj in ipairs(episode.Objects) do
                     table.insert(instances, obj.instance)
+                    if obj.position and obj.position.unpack then
+                        obj.position = obj.position:unpack()
+                    end
+                    if obj.rotation and obj.rotation.unpack then
+                        obj.rotation = obj.rotation:unpack()
+                    end
                     obj.instance = nil
-                    obj.position = obj.position:unpack()
-                    obj.rotation = obj.rotation:unpack()
                 end
                 local backupPOI = {}
                 local serializedPOI = {}
@@ -591,6 +678,10 @@ addCommandHandler("episode",
                 end
                 addEventHandler ( "onClientClick", getRootElement(), onClick)
             end
+        elseif command == "reset" then
+            if param1 == "camera" then
+                setCameraTarget(localPlayer)
+            end
         elseif command == "add" then
             if param1 == "poi" then
                 if not param2 then
@@ -708,6 +799,55 @@ addCommandHandler("episode",
                     addEventHandler ( "onActionRetrieved", getRootElement(), addAction)
                     getAction(actionName, params)
                 end
+            elseif param1 == "camera" then
+                outputChatBox('Set the camera as you desire and press enter')
+                setCamera = true
+                moveTarget = false
+                showCursor(true, true)
+                outputChatBox("Use w/a/s/d/z/x/q/e to place and roll the camera, use scroll up/down to change the field of view", 255, 0, 0, false)
+                outputChatBox("Press u to modify the coordinates of the camera target", 255, 0, 0, false)
+                outputChatBox("Press enter to save the current camera and target setting", 255, 0, 0, false)
+
+                local groundZ = getGroundPosition (localPlayer.position.x, localPlayer.position.y, localPlayer.position.z)
+                if not groundZ or groundZ == 0 then
+                    groundZ = localPlayer.position.z - 1
+                end
+    
+                cameraTargetObject = Marker(localPlayer.position.x, localPlayer.position.y, groundZ, "cylinder", 1, 255, 255, 0, 128)
+                cameraTargetObject.interior = localPlayer.interior
+                local startingCameraPos = localPlayer.position + localPlayer.matrix.up * 1.2 - localPlayer.matrix.forward * 1.2
+                editedObject = {
+                    x = startingCameraPos.x,
+                    y = startingCameraPos.y,
+                    z = startingCameraPos.z,
+                    lx = cameraTargetObject.position.x,
+                    ly = cameraTargetObject.position.y,
+                    lz = cameraTargetObject.position.z,
+                    roll = 0,
+                    fov = 70
+                }
+                Camera.setMatrix(
+                    editedObject.x,
+                    editedObject.y,
+                    editedObject.z,
+                    editedObject.lx,
+                    editedObject.ly,
+                    editedObject.lz,
+                    editedObject.roll,
+                    editedObject.fov
+                )
+                localPlayer.cameraInterior = localPlayer.interior
+                local function addCamera(element)
+                    if not episode.cameras then
+                        episode.cameras = {}
+                    end
+                    table.insert(episode.cameras, element)
+                    showCursor(false)
+                    setCameraTarget(localPlayer)
+                    removeEventHandler("onElementDoneEditing", getRootElement(), addCamera)
+                end
+                addEventHandler("onClientKey", root, playerPressedKey)
+                addEventHandler ( "onElementDoneEditing", getRootElement(), addCamera)
             end
         elseif command == "linkactions" then
             local poi = nil
@@ -808,6 +948,37 @@ addCommandHandler("episode",
                 localPlayer.position = poi.position
                 localPlayer.rotation = poi.rotation
                 poi:GetNextValidAction(localPlayer):Apply()
+            elseif param1 == "camera" then
+                if not episode.cameras then
+                    outputChatBox("The episode has no cameras defined",255,255,0)
+                    return
+                end
+                local cam = nil
+                local minDist = 1000
+                for i,v in ipairs (episode.cameras) do
+                    local dist = math.abs((localPlayer.position - Vector3(v.x, v.y, v.z)).length)
+                    if dist < minDist then
+                        minDist = dist
+                        cam = v
+                    end
+                end
+
+                if cam == nil then
+                    outputChatBox("No camera found nearby",255,255,0)
+                    return
+                end
+
+                Camera.setMatrix(
+                    cam.x,
+                    cam.y,
+                    cam.z,
+                    cam.lx,
+                    cam.ly,
+                    cam.lz,
+                    cam.roll,
+                    cam.fov
+                )
+                localPlayer.cameraInterior = localPlayer.interior    
             else
                 outputChatBox("Possible commands: \ntest action \ntest poi"..text,255,255,0)
             end

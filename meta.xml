@@ -111,6 +111,7 @@
   <script src="story/Actions/Smoke.lua" type="shared" />
   <script src="story/Actions/SmokeIn.lua" type="shared" />
   <script src="story/Actions/SmokeOut.lua" type="shared" />
+  <script src="story/Actions/TaiChi.lua" type="shared" />
   <!-- Objects -->
   <script src="story/Objects/SampStoryObjectBase.lua" type="shared" />
   <script src="story/Objects/Bed.lua" type="shared" />

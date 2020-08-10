@@ -12,6 +12,8 @@ Move = class(StoryActionBase, function(o, params)
     local description = " is walking "
     if params.how == Move.eHow.Walk then
         description = " is walking "
+    elseif params.how == Move.eHow.Run then
+        description = " is running "
     end
 
     StoryActionBase.init(o, description, params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
@@ -21,7 +23,8 @@ Move = class(StoryActionBase, function(o, params)
 end)
 
 Move.eHow = {
-    Walk = "WALK_civi"
+    Walk = "WALK_civi",
+    Run = "run_civi",
 }
 
 function Move.destinationReached(player, matchingDimension)

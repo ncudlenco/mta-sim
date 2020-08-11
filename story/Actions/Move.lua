@@ -13,7 +13,7 @@ Move = class(StoryActionBase, function(o, params)
     o.lib = Move.eLib.Ped
 
 
-    if string.match(params.performer:getData('skinDescription'), "skate") then
+    if params.performer.model == 92 or params.performer.model == 99 then
         params.how = Move.eHow.Skate
         o.lib = Move.eLib.Skate
     end

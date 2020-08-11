@@ -10,10 +10,20 @@ Move = class(StoryActionBase, function(o, params)
         error("Move: graphId not given in the constructor")
     end
     local description = " is walking "
+    o.lib = Move.eLib.Ped
+
+
+    if string.match(params.performer:getData('skinDescription'), "skate") then
+        params.how = Move.eHow.Skate
+        o.lib = Move.eLib.Skate
+    end
+
     if params.how == Move.eHow.Walk then
         description = " is walking "
     elseif params.how == Move.eHow.Run then
         description = " is running "
+    elseif params.how == Move.eHow.Skate then
+        description = " is skating "
     end
 
     StoryActionBase.init(o, description, params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
@@ -22,9 +32,15 @@ Move = class(StoryActionBase, function(o, params)
     o.how = params.how or Move.eHow.Walk
 end)
 
+Move.eLib = {
+    Ped = "ped",
+    Skate = "SKATE"
+}
+
 Move.eHow = {
     Walk = "WALK_civi",
     Run = "run_civi",
+    Skate = "skate_run"  
 }
 
 function Move.destinationReached(player, matchingDimension)
@@ -94,7 +110,7 @@ function Move:Apply()
 
                 self.Performer:setRotation(0,0,findRotation(self.Performer.position.x, self.Performer.position.y, nextPos[1], nextPos[2]))
                 Timer(function()
-                    self.Performer:setAnimation("ped", self.how, -1, true, true, true, true)
+                    self.Performer:setAnimation(self.lib, self.how, -1, true, true, true, true)
                 end, 100, 1)
             end
         end

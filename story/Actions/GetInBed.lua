@@ -1,5 +1,5 @@
 GetInBed = class(StoryActionBase, function(o, params)
-    StoryActionBase.init(o, " is getting in ", params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
+    StoryActionBase.init(o, " gets in the ", params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
     o.how = params.how or GetInBed.eHow.Left
 end)
 
@@ -17,7 +17,7 @@ function GetInBed:Apply()
     -- local centerTopMiddle = Vector3(bbox.Center.X, bbox.Center.Y, bbox.Max.Z);
     -- local across = Vector3.UnitX.Rotate(new Vector3(0, 0, theBed.Rotation.Z));
     -- local centerTopLeft = centerTopMiddle + across.Normalized().Mult((bbox.Max.X - bbox.Min.X) / 2);
-    story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. " the " .. self.TargetItem.Description, self.Performer)
+    story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. self.TargetItem.Description, self.Performer)
     -- player.Position = new Vector3(centerTopLeft.X, centerTopLeft.Y, player.Position.Z);
     --self.TargetItem.instance:setCollisionsEnabled(false)
     

@@ -29,3 +29,11 @@ function getPedMaxHealth(ped)
     -- Return the max health. Make sure it can't be below 1
     return math.max(1, maxhealth)
 end
+
+function getWordPrefix(word)
+    if word[1] == "a" or word[1] == "e" or word[1] == "i" or word[1] == "o" or word[1] == "u" then
+        return "an"
+    else 
+        return "a"
+    end
+end

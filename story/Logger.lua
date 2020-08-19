@@ -5,6 +5,7 @@ Logger = class(StoryTextLoggerBase, function(o, path, showOnScreen, story)
     o.PhraseLinks = {". Then", ". After", ". Afterwards"}
     o.FirstPhrase = true
     o.PreviousAnd = true
+    o.TempDependency = false
 end)
 
 function Logger:GetElapsedTime()
@@ -35,16 +36,32 @@ function Logger:Log(text, ...)
             self.FirstPhrase = false
 
         else
-            math.randomseed(os.time())
-            dice = math.random()
+            text = string.sub(text, string.len(player:getData('skinDescription')) + 1)
             
-            if dice > 0.7 and self.PreviousAnd == false then
-                logText = " and" .. string.sub(text, string.len(player:getData('skinDescription')) + 1) .. ". "
-                self.PreviousAnd = true
-            else
-                phraseLink = PickRandom(self.PhraseLinks)
-                logText = phraseLink .. " " .. player:getData('gender') .. string.sub(text, string.len(player:getData('skinDescription')) + 1)
+            if self.TempDependency then
+                logText = text
                 self.PreviousAnd = false
+            elseif string.sub(text, 1, 4) == " and" then
+                logText = text
+                self.PreviousAnd = true
+            else 
+                math.randomseed(os.time())
+                dice = math.random()
+
+                if dice > 0.4 and self.PreviousAnd == false then -- chance of getting a link between phrases with "and"
+                    logText = " and" .. text
+                    self.PreviousAnd = true
+                else
+                    phraseLink = PickRandom(self.PhraseLinks) -- chance of getting a link with "dot"
+                    logText = phraseLink .. " " .. player:getData('genderNominative') .. text
+                    self.PreviousAnd = false
+                end
+            end
+
+            if string.match(text, ". When") then
+                self.TempDependency = true
+            else
+                self.TempDependency = false
             end
         end
     end

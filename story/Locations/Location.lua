@@ -1,4 +1,4 @@
-Location = class(StoryLocationBase, function(o, x, y, z, angle, interior, description, compact)
+Location = class(StoryLocationBase, function(o, x, y, z, angle, interior, description, compact, log)
     StoryLocationBase.init(o, description, {})
     o.X = x
     o.Y = y

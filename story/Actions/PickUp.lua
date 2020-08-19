@@ -16,7 +16,7 @@ function PickUp:Apply()
 
     self.TargetItem:Create()
     
-    story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. self.TargetItem.Description .. " from " .. self.Where, self.Performer)
+    story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. getWordPrefix(self.TargetItem.Description) .. " " .. self.TargetItem.Description .. " from " .. self.Where, self.Performer)
     
     if self.how == PickUp.eHow.Normal then
         time = 200

@@ -9,7 +9,7 @@ Move = class(StoryActionBase, function(o, params)
     elseif type(params.graphId) ~= "number" then
         error("Move: graphId not given in the constructor")
     end
-    local description = " is walking "
+    local description = " goes in the "
     o.lib = Move.eLib.Ped
 
 
@@ -19,11 +19,11 @@ Move = class(StoryActionBase, function(o, params)
     end
 
     if params.how == Move.eHow.Walk then
-        description = " is walking "
+        description = " goes in the "
     elseif params.how == Move.eHow.Run then
-        description = " is running "
+        description = " runs "
     elseif params.how == Move.eHow.Skate then
-        description = " is skating "
+        description = " skates "
     end
 
     StoryActionBase.init(o, description, params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
@@ -85,8 +85,12 @@ end
 function Move:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History, self)
-    
-    story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description, self.Performer)
+
+    if self.TargetItem.Description ~= self.Performer:getData('location') then
+        story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. " " .. self.TargetItem.Description, self.Performer)
+        self.Performer:setData('location', self.TargetItem.Description)
+    end
+
     if DEBUG then
         outputConsole("Move:Apply")
     end
@@ -107,8 +111,9 @@ function Move:Apply()
                 marker:setData('id', self.Performer:getData('id'))
                 marker:setData('storyId', self.Performer:getData('storyId'))
                 addEventHandler("onMarkerHit", marker, self.destinationReached)
-
+            
                 self.Performer:setRotation(0,0,findRotation(self.Performer.position.x, self.Performer.position.y, nextPos[1], nextPos[2]))
+
                 Timer(function()
                     self.Performer:setAnimation(self.lib, self.how, -1, true, true, true, true)
                 end, 100, 1)

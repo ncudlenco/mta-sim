@@ -1,5 +1,5 @@
 Sleep = class(StoryActionBase, function(o, params)
-    StoryActionBase.init(o, " is sleeping ", params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
+    StoryActionBase.init(o, " sleeps on the ", params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
     o.how = params.how or Sleep.eHow.Left
 end)
 
@@ -7,7 +7,8 @@ function Sleep:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History, self)
     
-    story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. " on the " .. self.TargetItem.Description, self.Performer)
+    story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. self.TargetItem.Description ..
+                     ". When " .. self.Performer:getData('genderNominative') .. " wakes up " .. self.Performer:getData('genderNominative') .. " ", self.Performer)
     -- self.TargetItem.instance:setCollisionsEnabled(false)
     self.Performer.rotation = self.Performer.rotation + Vector3(0,0,180)
 

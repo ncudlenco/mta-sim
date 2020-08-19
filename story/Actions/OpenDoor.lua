@@ -13,7 +13,7 @@ OpenDoor = class(StoryActionBase, function(o, params)
     if params.how == OpenDoor.eHow.Exit then 
         description = " opens the door and exits the room"
     else
-        description = " opens the door and enters the room"
+        description = " and opens the door to enter the room"
     end
 
     StoryActionBase.init(o, description, params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)

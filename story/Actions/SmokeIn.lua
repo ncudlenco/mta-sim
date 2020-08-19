@@ -5,8 +5,10 @@ end)
 function SmokeIn:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History, self)
+
+
     
-    story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. self.TargetItem.Description .. " from his (her) pocket", self.Performer)
+    story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. getWordPrefix(self.TargetItem.Description) .. " " .. self.TargetItem.Description .. " from " .. self.Performer:getData('genderGenitive') .. " pocket", self.Performer)
     self.Performer:setAnimation("SMOKING", "M_smk_in", 3000, true, true, false, true)
     self.TargetItem:Create()
     attachElementToBone(self.TargetItem.instance, self.Performer, 12, 

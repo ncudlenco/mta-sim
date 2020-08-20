@@ -2,7 +2,7 @@ Logger = class(StoryTextLoggerBase, function(o, path, showOnScreen, story)
     StoryTextLoggerBase.init(o, path)
     o.ShowOnScreen = showOnScreen
     o.Story = story
-    o.PhraseLinks = {". Then", ". After", ". Afterwards"}
+    o.PhraseLinks = {". Then", ". Then", ". Afterwards"}
     o.FirstPhrase = true
     o.PreviousAnd = true
     o.TempDependency = false

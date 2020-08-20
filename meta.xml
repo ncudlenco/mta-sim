@@ -76,6 +76,7 @@
   <script src="story/Needs/NeedsGlobals.lua" type="server" />
   <!-- Locations -->
   <script src="story/Locations/Location.lua" type="shared" />
+  <script src="story/Locations/Region.lua" type="shared" />
   <!-- Actions -->
   <script src="story/Actions/DynamicAction.lua" type="shared" />
   <script src="story/Actions/ActionsGlobals.lua" type="shared" />

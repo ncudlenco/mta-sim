@@ -9,7 +9,7 @@ Move = class(StoryActionBase, function(o, params)
     elseif type(params.graphId) ~= "number" then
         error("Move: graphId not given in the constructor")
     end
-    local description = " goes in the "
+    local description = " goes to the "
     o.lib = Move.eLib.Ped
 
 
@@ -19,7 +19,7 @@ Move = class(StoryActionBase, function(o, params)
     end
 
     if params.how == Move.eHow.Walk then
-        description = " goes in the "
+        description = " goes to the "
     elseif params.how == Move.eHow.Run then
         description = " runs "
     elseif params.how == Move.eHow.Skate then
@@ -86,9 +86,46 @@ function Move:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History, self)
 
-    if self.TargetItem.Description ~= self.Performer:getData('location') then
-        story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. " " .. self.TargetItem.Description, self.Performer)
-        self.Performer:setData('location', self.TargetItem.Description)
+    if self.TargetItem.Region.Description ~= self.Performer:getData('location') then
+        prevLocations = self.Performer:getData('prevLocations')
+        isPrevLocation = false
+
+        for _,v in pairs(prevLocations) do
+            if v == self.TargetItem.Region.Description then
+                isPrevLocation = true
+              break
+            end
+        end
+
+        if isPrevLocation then
+            story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. " back in the " .. self.TargetItem.Region.Description, self.Performer)
+        else
+            if self.TargetItem.Region.Objects then
+                numObjects = math.random(2, #self.TargetItem.Region.Objects)
+                shuffledObjects = Shuffle(self.TargetItem.Region.Objects)
+
+                objectsDescription = ""
+                for i=1, numObjects do
+                    if i == 1 then
+                        objectsDescription = objectsDescription .. " " .. getWordPrefix(shuffledObjects[i]) .. " " .. shuffledObjects[i]
+                    elseif i == numObjects then
+                        objectsDescription = objectsDescription .. " and " .. getWordPrefix(shuffledObjects[i]) .. " " .. shuffledObjects[i]
+                    else
+                        objectsDescription = objectsDescription .. ", " .. getWordPrefix(shuffledObjects[i]) .. " " .. shuffledObjects[i]
+                    end
+                end
+
+                story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. " " .. self.TargetItem.Region.Description .. 
+                                " where there is" .. objectsDescription, self.Performer)
+            else
+                story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. " " .. self.TargetItem.Region.Description, self.Performer)
+            end
+
+            table.insert(prevLocations, self.TargetItem.Region.Description)
+            self.Performer:setData('prevLocations', prevLocations)
+        end
+
+        self.Performer:setData('location', self.TargetItem.Region.Description)
     end
 
     if DEBUG then

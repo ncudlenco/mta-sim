@@ -18,25 +18,25 @@ SetPlayerSkin.PlayerSkins = {
     -- SetPlayerSkin(10, "An old woman in a red shirt with black plaid and a khaki skirt"),
     -- SetPlayerSkin(11, "A young black woman in a black suit without jacket"),
     -- SetPlayerSkin(12, "A young white woman in a black dress"),
-    -- SetPlayerSkin(13, "A young black woman in a purple t-shirt, blue jeans and with a beige hat"),
-    -- SetPlayerSkin(14, "An old bald black man in a colorful shirt and brown pants"),
+    SetPlayerSkin(13, "A young black woman in a purple t-shirt, blue jeans and with a beige hat"),
+    SetPlayerSkin(14, "An old bald black man in a colorful shirt and brown pants"),
     SetPlayerSkin(15, "An old bald black man in a white shirt with black plaid and blue jeans"),
-    SetPlayerSkin(16, "A middle-aged black man in a black shirt and orange vest, black jeans and with a black cap and headphones"),
-    SetPlayerSkin(17, "A middle-aged black man in a black suit"),
-    SetPlayerSkin(18, "A young black man in red ang green shorts"),
-    SetPlayerSkin(19, "A young black man in red pants and with a red head"),
-    SetPlayerSkin(20, "A young white man in a yellow and black shirt and black pants"),
-    SetPlayerSkin(21, "A young black man in a navy blue shirt with white stripes and khaki three quarter pants"),
-    SetPlayerSkin(22, "A young black man in a black and orange hoody, black and orange pants and with a black hat"),
-    SetPlayerSkin(23, "A young white man in a gray t-shirt, beige three quarter pants and with a black cap"),
-    SetPlayerSkin(24, "A middle-aged black man in a navy blue jacket, blue jeans and navy blue cap"),
-    SetPlayerSkin(25, "A middle-aged black man in a navy blue and white jacket and black jeans"),
-    SetPlayerSkin(26, "A young white man in a navy blue t-shirt, beige shorts and with a gray backpack"),
-    SetPlayerSkin(27, "A middle-aged white man in a white t-shirt, blue jeans, with a yellow hat and white gloves"),
-    SetPlayerSkin(28, "A young black man in a brown sleeveless t-shirt, gray pants and with a brown hat"),
-    SetPlayerSkin(29, "A middle-aged white man in a white hoody, blue jeans and with a black cap"),
-    SetPlayerSkin(30, "A middle-aged white man in a gray sleeveless t-shirt, gray pants and with black glasses"),
-    -- SetPlayerSkin(31, "A middle-aged white woman in a white t-shirt, blue jeans and with a white hat"),
+    -- SetPlayerSkin(16, "A middle-aged black man in a black shirt and orange vest, black jeans and with a black cap and headphones"),
+    -- SetPlayerSkin(17, "A middle-aged black man in a black suit"),
+    -- SetPlayerSkin(18, "A young black man in red ang green shorts"),
+    -- SetPlayerSkin(19, "A young black man in red pants and with a red head"),
+    -- SetPlayerSkin(20, "A young white man in a yellow and black shirt and black pants"),
+    -- SetPlayerSkin(21, "A young black man in a navy blue shirt with white stripes and khaki three quarter pants"),
+    -- SetPlayerSkin(22, "A young black man in a black and orange hoody, black and orange pants and with a black hat"),
+    -- SetPlayerSkin(23, "A young white man in a gray t-shirt, beige three quarter pants and with a black cap"),
+    -- SetPlayerSkin(24, "A middle-aged black man in a navy blue jacket, blue jeans and navy blue cap"),
+    -- SetPlayerSkin(25, "A middle-aged black man in a navy blue and white jacket and black jeans"),
+    -- SetPlayerSkin(26, "A young white man in a navy blue t-shirt, beige shorts and with a gray backpack"),
+    -- SetPlayerSkin(27, "A middle-aged white man in a white t-shirt, blue jeans, with a yellow hat and white gloves"),
+    -- SetPlayerSkin(28, "A young black man in a brown sleeveless t-shirt, gray pants and with a brown hat"),
+    -- SetPlayerSkin(29, "A middle-aged white man in a white hoody, blue jeans and with a black cap"),
+    -- SetPlayerSkin(30, "A middle-aged white man in a gray sleeveless t-shirt, gray pants and with black glasses"),
+    SetPlayerSkin(31, "A middle-aged white woman in a white t-shirt, blue jeans and with a white hat"),
     -- SetPlayerSkin(32, "An old white man in navy blue shirt, gray jeans and with a navy blue cap"),
     -- SetPlayerSkin(33, "A middle-aged white man in a black coat, black pants and with a black hat"),
     -- SetPlayerSkin(34, "A middle-aged white man in a blue shirt with gray plaid, blue jeans, with a gray hat and black glasses"),
@@ -156,7 +156,7 @@ SetPlayerSkin.PlayerSkins = {
     -- SetPlayerSkin(148, "A middle-aged black woman in a light blue suit"), --can't lay on ground (beach)
     -- SetPlayerSkin(149, "Big Smoke Armored"),                                ---> Not Working                              
     -- SetPlayerSkin(150, "A young white woman with one tails blonde hail, wearing a blue suit with gray stripes"),
-    SetPlayerSkin(151, "A young white woman with brown hair, kakhi t-shirt, blue jeans skirt and glasses"),
+    -- SetPlayerSkin(151, "A young white woman with brown hair, kakhi t-shirt, blue jeans skirt and glasses"),
     ---- SetPlayerSkin(152, "Prostitute"),
     -- SetPlayerSkin(153, "Construction Worker"),
     -- SetPlayerSkin(154, "Beach Visitor"),
@@ -326,6 +326,17 @@ function SetPlayerSkin:Apply(...)
     end
     player:setModel(self.Id)
     player:setData('skinDescription', self.Description)
+    
+    if string.match(self.Description, "woman") then
+        playerGenderNominative = "she"
+        playerGenderGenitive = "her"
+    else
+        playerGenderNominative = "he"
+        playerGenderGenitive = "his"
+    end
+
+    player:setData('genderNominative', playerGenderNominative)
+    player:setData('genderGenitive', playerGenderGenitive)
 end
 
 function SetPlayerSkin:GetDynamicString()

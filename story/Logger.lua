@@ -2,6 +2,10 @@ Logger = class(StoryTextLoggerBase, function(o, path, showOnScreen, story)
     StoryTextLoggerBase.init(o, path)
     o.ShowOnScreen = showOnScreen
     o.Story = story
+    o.PhraseLinks = {". Then", ". Then", ". Afterwards"}
+    o.FirstPhrase = true
+    o.PreviousAnd = true
+    o.TempDependency = false
 end)
 
 function Logger:GetElapsedTime()
@@ -38,12 +42,55 @@ function Logger:DescribeObjects(objects)
 end
 
 function Logger:Log(text, ...)
-    local logText = self:GetElapsedTime().." "..text
+    local player = nil
+    for i,v in ipairs(arg) do
+        player = v
+        break
+    end
+
+    if TIME_STAMP then
+        local logText = self:GetElapsedTime().." "..text.."\n" -- with stamp
+    else
+        if self.FirstPhrase then -- if its the frist phrase add the skin description
+            logText = text
+            self.FirstPhrase = false
+
+        else
+            text = string.sub(text, string.len(player:getData('skinDescription')) + 1)
+            
+            if self.TempDependency then
+                logText = text
+                self.PreviousAnd = false
+            elseif string.sub(text, 1, 4) == " and" then
+                logText = text
+                self.PreviousAnd = true
+            else 
+                math.randomseed(os.time())
+                dice = math.random()
+
+                if dice > 0.4 and self.PreviousAnd == false then -- chance of getting a link between phrases with "and"
+                    logText = " and" .. text
+                    self.PreviousAnd = true
+                else
+                    phraseLink = PickRandom(self.PhraseLinks) -- chance of getting a link with "dot"
+                    logText = phraseLink .. " " .. player:getData('genderNominative') .. text
+                    self.PreviousAnd = false
+                end
+            end
+
+            if string.match(text, ". When") then
+                self.TempDependency = true
+            else
+                self.TempDependency = false
+            end
+        end
+    end
+
     if LOG_DATA then
         local file = File(self.Path)
         if file then                               -- check if it was successfully opened
             file:setPos(file:getSize())            -- move position to the end of the file
-            file:write(logText .."\n")                      -- append data
+            file:write(logText)                    -- append data
             file:flush()                           -- Flush the appended data into the file.
             file:close()                           -- close the file once we're done with it
         else
@@ -51,11 +98,6 @@ function Logger:Log(text, ...)
         end
     end
     if self.ShowOnScreen then
-        local player = nil
-        for i,v in ipairs(arg) do
-            player = v
-            break
-        end
         if player then
             if player.outputChat then
                 player:outputChat(logText, 255, 0, 0, false)

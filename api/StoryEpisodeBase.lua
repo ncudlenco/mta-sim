@@ -4,6 +4,7 @@ StoryEpisodeBase = class(function(o, name, storyTimeOfDay, storyWeather, startin
     o.StartingLocation = startingLocation
     o.ValidStartingLocations = {}
     o.Objects = {}
+    o.Regions = {}
     o.Disposed = false
     o.Regions = {}
     o.InteriorId = nil

@@ -1,9 +1,10 @@
 STORIES = {}
 SCREENSHOTS = {}
 MAX_ACTIONS = 10000
-STATIC_CAMERA = true
-LOG_DATA = false
+STATIC_CAMERA = false
+LOG_DATA = true
 LOG_FREQUENCY = 1000 / 30 --in milliseconds
 DEBUG = true
 FREE_ROAM = false
 DEFINING_EPISODES = false
+TIME_STAMP = false

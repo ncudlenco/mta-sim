@@ -7,7 +7,7 @@ SitDown = class(StoryActionBase, function(o, params)
     -- elseif type(params.nextLocation) ~= "table" then
     --     error("SitDown: nextLocation not given in the constructor")
     -- end
-    StoryActionBase.init(o, " sits down ", params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
+    StoryActionBase.init(o, " sits down", params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
     o.how = params.how or SitDown.eHow.atDesk
     o.rotation= params.rotation or nil
 end)

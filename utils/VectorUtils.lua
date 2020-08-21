@@ -42,3 +42,7 @@ Vector3.Rotate = VectorUtils.Rotate
 function Vector3:unpack( )
     return { x=self.x, y=self.y, z=self.z }
 end
+
+function Vector3:__tostring()
+    return "("..self.x..", "..self.y..", "..self.z..")"
+end

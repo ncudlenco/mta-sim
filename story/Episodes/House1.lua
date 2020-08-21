@@ -1,5 +1,6 @@
 House1 = class(StoryEpisodeBase, function(o)
-    StoryEpisodeBase.init(o, nil, nil, nil)
+    StoryEpisodeBase.init(o, 'house1', nil, nil, nil)
+    o:LoadFromFile()
     o.InteriorId = 1
     if not loadPathGraph then
         outputDebugString("Pathfinding module not loaded. Exiting...", 2)
@@ -15,6 +16,8 @@ House1 = class(StoryEpisodeBase, function(o)
 end)
 
 function House1:Initialize(...)
+    StoryEpisodeBase.Initialize(self, arg)
+
     local player = nil
     for i,v in ipairs(arg) do
         player = v

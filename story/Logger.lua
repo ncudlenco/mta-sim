@@ -17,6 +17,26 @@ function Logger:GetElapsedTime()
     end
 end
 
+function Logger:DescribeObjects(objects)
+    local numObjects = 1
+    if #objects > 1 then
+        math.random(2, #objects)
+    end
+    local shuffledObjects = Shuffle(objects)
+
+    local objectsDescription = ""
+    for i=1, numObjects do
+        if i == 1 then
+            objectsDescription = objectsDescription .. " " .. getWordPrefix(shuffledObjects[i].Description) .. " " .. shuffledObjects[i].Description
+        elseif i == numObjects then
+            objectsDescription = objectsDescription .. " and " .. getWordPrefix(shuffledObjects[i].Description) .. " " .. shuffledObjects[i].Description
+        else
+            objectsDescription = objectsDescription .. ", " .. getWordPrefix(shuffledObjects[i].Description) .. " " .. shuffledObjects[i].Description
+        end
+    end
+    return objectsDescription
+end
+
 function Logger:Log(text, ...)
     local logText = self:GetElapsedTime().." "..text
     if LOG_DATA then

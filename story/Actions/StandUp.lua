@@ -49,5 +49,5 @@ function StandUp:Apply()
 end
 
 function StandUp:GetDynamicString()
-    return 'return StandUp{how = '..self.how..'}'
+    return 'return StandUp{how = '..(self.how or 'nil')..'}'
 end

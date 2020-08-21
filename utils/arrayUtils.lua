@@ -68,3 +68,14 @@ end
 function ends_with(str, ending)
     return ending == "" or str:sub(-#ending) == ending
 end
+
+function split_string (inputstr, sep)
+    if sep == nil then
+            sep = "%s"
+    end
+    local t={}
+    for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
+            table.insert(t, str)
+    end
+    return t
+end

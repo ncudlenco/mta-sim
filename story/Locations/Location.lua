@@ -1,4 +1,4 @@
-Location = class(StoryLocationBase, function(o, x, y, z, angle, interior, description, compact)
+Location = class(StoryLocationBase, function(o, x, y, z, angle, interior, description, region, compact, log)
     StoryLocationBase.init(o, description, {})
     o.X = x
     o.Y = y
@@ -6,6 +6,7 @@ Location = class(StoryLocationBase, function(o, x, y, z, angle, interior, descri
     o.Angle = angle
     o.Interior = interior
     o.History = {}
+    o.Region = region
     if not compact then
         o.position = Vector3(x,y,z)
         o.rotation = Vector3(0,0,angle)

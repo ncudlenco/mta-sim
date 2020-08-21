@@ -25,19 +25,19 @@ end
 
 function Food:updateDescription()
     if self.modelid == Food.eModel.Shawarma then
-        self.Description = "a shawarma"
+        self.Description = "shawarma"
     elseif self.modelid == Food.eModel.Burger then
-        self.Description = "a burger"
+        self.Description = "burger"
     elseif self.modelid == Food.eModel.Pizza then
-        self.Description = "a slice of pizza"
+        self.Description = "slice of pizza"
     elseif self.modelid == Food.eModel.RedApple then
-        self.Description = "a red apple"
+        self.Description = "red apple"
     elseif self.modelid == Food.eModel.GreenApple then
-        self.Description = "a green apple"
+        self.Description = "green apple"
     elseif self.modelid == Food.eModel.Cake then
-        self.Description = "a slice of cake"
+        self.Description = "slice of cake"
     elseif self.modelid == Food.eModel.Banana then
-        self.Description = "a banana"
+        self.Description = "banana"
     end
     return self.Description
 end

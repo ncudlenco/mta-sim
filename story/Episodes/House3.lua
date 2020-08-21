@@ -130,18 +130,25 @@ function House3:Initialize(...)
     drink:Create()
     table.insert(self.Objects, drink)
 
-    local livingRoomEntranceLocation = Location(2496.212, -1694.371459, 1014.7422, 181.8800, self.InteriorId, "livin room")
-    local kitchenSinkLocation = Location(2500.235859375, -1709.40225585938, 1014.7422, 270.000, self.InteriorId, "the sink in the kitchen")
-    local kitchenTableLocation = Location(2494.2033, -1708.3198, 1014.7422, 90, self.InteriorId, "chair")
-    local livingroomSofaLocation = Location(2492.5772, -1699.004663085938, 1014.7422, 0, self.InteriorId, "")
-    local livingroomTableLocation = Location(2494.0677734375, -1702.523217773438, 1014.7422, 90, self.InteriorId, "table")
-    local bedroomBedLocation = Location(2495.2177734375, -1703.923217773438, 1018.34375, 0, self.InteriorId, "")
-    local livingRoomEndLocation = Location(2496.0610, -1694.2596, 1014.7422, 0, self.InteriorId, "end")
+    livingRoomRegion = Region({description = "living room", objects = {"table with chairs", "sofa", "TV", "flower in a pot", "comfortable with magazine"}})
+    kitchenRegion = Region({description = "kitchen", objects = {"table with chairs", "fridge", "gas cooker", "microwave", "window"}})
+    bedroomRegion = Region({description = "bedroom", objects = {"bed", "wardrobe", "window"}})
+    exitRegion = Region({description = "exit of the house"})
+
+    local livingRoomEntranceLocation = Location(2496.212, -1694.371459, 1014.7422, 181.8800, self.InteriorId, "entrance", livingRoomRegion)
+    local kitchenSinkLocation = Location(2500.235859375, -1709.40225585938, 1014.7422, 270.000, self.InteriorId, "kitchen", kitchenRegion)
+    local kitchenTableLocation = Location(2494.2033, -1708.3198, 1014.7422, 90, self.InteriorId, "kitchen", kitchenRegion)
+    local livingroomSofaLocation = Location(2492.5772, -1699.004663085938, 1014.7422, 0, self.InteriorId, "living room", livingRoomRegion)
+    local livingroomTableLocation = Location(2494.0677734375, -1702.523217773438, 1014.7422, 90, self.InteriorId, "living room", livingRoomRegion)
+    local bedroomBedLocation = Location(2495.2177734375, -1703.923217773438, 1018.34375, 0, self.InteriorId, "bedroom", bedroomRegion)
+    local livingRoomEndLocation = Location(2496.0610, -1694.2596, 1014.7422, 0, self.InteriorId, "living room exit", exitRegion)
 
     table.insert(self.ValidStartingLocations, livingRoomEntranceLocation)
+    player:setData('location', livingRoomEntranceLocation.Description)
+    player:setData('prevLocations', {})
 
-    local pointsOfInterests = {kitchenSinkLocation, livingroomSofaLocation, bedroomBedLocation, livingroomTableLocation, livingRoomEndLocation}
-    pointsOfInterests = Shuffle(pointsOfInterests)
+    local pointsOfInterests = {livingroomSofaLocation, livingroomTableLocation, kitchenSinkLocation, bedroomBedLocation, livingRoomEndLocation}
+    -- pointsOfInterests = Shuffle(pointsOfInterests)
 
     if pointsOfInterests[1] == livingRoomEndLocation then
         local i = math.random(4) + 1
@@ -152,7 +159,7 @@ function House3:Initialize(...)
     table.insert(livingRoomEntranceLocation.PossibleActions, Move { performer = player, nextLocation = pointsOfInterests[1], targetItem = pointsOfInterests[1], graphId = self.graphId })
 
     -- Wash Hands at the sink
-    local washHandsAction = WashHands { performer = player, nextLocation = kitchenSinkLocation, targetItem = kitchenSinkLocation, graphId = self.graphId }
+    local washHandsAction = WashHands { performer = player, nextLocation = kitchenSinkLocation, targetItem = kitchenSink, graphId = self.graphId }
     table.insert(kitchenSinkLocation.PossibleActions, washHandsAction)
     local moveToTableAction = Move {performer = player, nextLocation = kitchenTableLocation, targetItem = kitchenTableLocation, graphId = self.graphId}
     washHandsAction.NextAction = moveToTableAction

@@ -1,5 +1,5 @@
 MusicPlayer = class(SampStoryObjectBase, function(o, params)
-    params.description = "the music player"
+    params.description = "music player"
     params.type = 'MusicPlayer'
 
     SampStoryObjectBase.init(o, params)

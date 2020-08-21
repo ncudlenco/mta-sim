@@ -24,18 +24,19 @@ end
 function Logger:DescribeObjects(objects)
     local numObjects = 1
     if #objects > 1 then
-        math.random(2, #objects)
+        numObjects = math.random(2, #objects)
     end
     local shuffledObjects = Shuffle(objects)
 
     local objectsDescription = ""
     for i=1, numObjects do
+        local objectDescription = shuffledObjects[i].Description or shuffledObjects[i]
         if i == 1 then
-            objectsDescription = objectsDescription .. " " .. getWordPrefix(shuffledObjects[i].Description) .. " " .. shuffledObjects[i].Description
+            objectsDescription = objectsDescription .. " " .. getWordPrefix(objectDescription) .. " " .. objectDescription
         elseif i == numObjects then
-            objectsDescription = objectsDescription .. " and " .. getWordPrefix(shuffledObjects[i].Description) .. " " .. shuffledObjects[i].Description
+            objectsDescription = objectsDescription .. " and " .. getWordPrefix(objectDescription) .. " " .. objectDescription
         else
-            objectsDescription = objectsDescription .. ", " .. getWordPrefix(shuffledObjects[i].Description) .. " " .. shuffledObjects[i].Description
+            objectsDescription = objectsDescription .. ", " .. getWordPrefix(objectDescription) .. " " .. objectDescription
         end
     end
     return objectsDescription
@@ -43,18 +44,21 @@ end
 
 function Logger:Log(text, ...)
     local player = nil
+    local withoutLink = false
     for i,v in ipairs(arg) do
-        player = v
-        break
+        if i == 1 then
+            player = v
+        elseif i == 2 then
+            withoutLink = v
+        end
     end
 
     if TIME_STAMP then
         local logText = self:GetElapsedTime().." "..text.."\n" -- with stamp
     else
-        if self.FirstPhrase then -- if its the frist phrase add the skin description
+        if self.FirstPhrase or withoutLink then -- if its the frist phrase add the skin description
             logText = text
             self.FirstPhrase = false
-
         else
             text = string.sub(text, string.len(player:getData('skinDescription')) + 1)
             

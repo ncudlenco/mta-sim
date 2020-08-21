@@ -37,7 +37,7 @@ function StoryEpisodeBase:Initialize(...)
         if DEBUG then
             outputConsole('Story:Play - Region hit')
         end
-        local closestRegion = Region.GetClosest(player, self.Regions)
+        local closestRegion = Region.GetClosest(player, self.Regions, true)
         if closestRegion then
             closestRegion:OnPlayerHit(player)
         end

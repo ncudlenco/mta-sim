@@ -76,9 +76,11 @@
   <script src="story/Needs/NeedsGlobals.lua" type="server" />
   <!-- Locations -->
   <script src="story/Locations/Location.lua" type="shared" />
+  <script src="story/Locations/Region.lua" type="shared" />
   <!-- Actions -->
   <script src="story/Actions/DynamicAction.lua" type="shared" />
   <script src="story/Actions/ActionsGlobals.lua" type="shared" />
+  <script src="story/Actions/AnswerPhone.lua" type="shared" />
   <script src="story/Actions/Cook.lua" type="shared" />
   <script src="story/Actions/Eat.lua" type="shared" />
   <script src="story/Actions/EmptyAction.lua" type="shared" />
@@ -114,6 +116,7 @@
   <script src="story/Actions/TaiChi.lua" type="shared" />
   <!-- Objects -->
   <script src="story/Objects/SampStoryObjectBase.lua" type="shared" />
+  <script src="story/Objects/MobilePhone.lua" type="shared" />
   <script src="story/Objects/Bed.lua" type="shared" />
   <script src="story/Objects/Chair.lua" type="shared" />
   <script src="story/Objects/Laptop.lua" type="shared" />

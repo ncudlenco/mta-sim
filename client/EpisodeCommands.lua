@@ -1,12 +1,14 @@
 addEvent ( "onElementDoneEditing", true )
 addEvent ( "onActionRetrieved", true )
 
--- addEventHandler ( "onClientPlayerSpawn", getLocalPlayer(), function()
---     CLIENT_STORY = Story(localPlayer, 10000, true)
--- end)
--- function GetStory(player)
---     return CLIENT_STORY
--- end
+if DEFINING_EPISODES then
+    addEventHandler ( "onClientPlayerSpawn", getLocalPlayer(), function()
+        CLIENT_STORY = Story(localPlayer, 10000, true)
+    end)
+    function GetStory(player)
+        return CLIENT_STORY
+    end
+end
 
 local episode = DynamicEpisode()
 local markers = {}
@@ -31,7 +33,7 @@ local function text_render ( )
         local sx, sy, _ = getScreenFromWorldPosition(obj.position.x, obj.position.y, obj.position.z)
         if sx then 
             local sw, sh = guiGetScreenSize ( )
-            dxDrawText (i..': '..(obj.description or '')..' '..(obj.modelid or 'random eModel'), sx, sy, sw, sh, tocolor ( 0, 255, 0, 255 ), 1.0, "default-bold" ) 
+            dxDrawText (i..': '..(obj.Description or '')..' '..(obj.modelid or 'random eModel'), sx, sy, sw, sh, tocolor ( 0, 255, 0, 255 ), 1.0, "default-bold" ) 
         end 
     end
     for i, poi in ipairs ( episode.POI ) do
@@ -121,6 +123,7 @@ end
 
 local editedObject = nil
 local cameraTargetObject = nil
+local isEditedObjectAttached = false
 local altPressed = false
 local shiftPressed = false
 local setCamera = false
@@ -195,6 +198,7 @@ local function playerPressedKey(button, press)
                 cameraTargetObject:destroy()
                 cameraTargetObject = nil
             end
+            return
         elseif button == "lalt" or button == "ralt" then
             altPressed = true
         elseif button == "lshift" or button == "rshift" then
@@ -242,11 +246,22 @@ local function playerPressedKey(button, press)
                 editedObject.fov
             )
             localPlayer.cameraInterior = localPlayer.interior
+        elseif isEditedObjectAttached then
+            if translate then
+                editedObject.PosOffset = Vector3(editedObject.PosOffset.x, editedObject.PosOffset.y, editedObject.PosOffset.z) + offset
+            elseif rotate then
+                editedObject.RotOffset = Vector3(editedObject.RotOffset.x, editedObject.RotOffset.y, editedObject.RotOffset.z) + offset
+            elseif changeSize then
+                editedObject.scale = editedObject.scale + sizeIncrement
+            end
+            setElementBonePositionOffset(editedObject.instance, editedObject.PosOffset.x, editedObject.PosOffset.y, editedObject.PosOffset.z)
+            setElementBoneRotationOffset(editedObject.instance, editedObject.RotOffset.x, editedObject.RotOffset.y, editedObject.RotOffset.z)
+            setObjectScale(editedObject.instance, editedObject.scale)
         else
             if translate then
-                editedObject.position = editedObject.position + offset
+                editedObject.position = Vector3(editedObject.position.x, editedObject.position.y, editedObject.position.z) + offset
             elseif rotate then
-                editedObject.rotation = editedObject.rotation + offset
+                editedObject.rotation = Vector3(editedObject.rotation.x, editedObject.rotation.y, editedObject.rotation.z) + offset
             elseif changeSize then
                 if editedObject.size then
                     editedObject.size = editedObject.size + sizeIncrement
@@ -264,8 +279,8 @@ end
 
 local lastAction = nil
 local function getAction(actionName, params)
+    params.performer = localPlayer
     local action = loadstring("return function(params) return "..actionName.."(params) end")()(params)
-    action.Performer = localPlayer
     --to this point I must have an action either defined or DynamicAction, with description, block, anim and (optional) time (which can be random)
     --use this to ask for further ids: nextLocation id, targetItem type (object or location) and id
     --figure a way to chain actions, ex: a1 -mandatory- a2 -random- [a3, a4, a5] -mandatory- --a6 this should probably be a new command
@@ -280,15 +295,20 @@ local function getAction(actionName, params)
     end
 
     local function getTargetItem()
-        outputChatBox("Enter the target item type (object or location):",255,255,0)
+        outputChatBox("Enter the target item type (object, location or none):",255,255,0)
         function consoleCheck2(text2)
             if starts_with(text2, "episode ") then
                 return
             end
             removeEventHandler("onClientConsole",getLocalPlayer(),consoleCheck2)
             local targetItemType = text2
-            if targetItemType ~= "object" and targetItemType ~= "location" then
-                outputChatBox("Expected object or location but got "..text2,255,255,0)
+            if targetItemType ~= "object" and targetItemType ~= "location" and targetItemType ~= "none" then
+                outputChatBox("Expected object, location or none but got "..text2,255,255,0)
+                return
+            end
+            if targetItemType == "none" then
+                lastAction = action
+                triggerEvent ( "onActionRetrieved", getRootElement(), action )
                 return
             end
             outputChatBox("Enter the target item id:",255,255,0)
@@ -356,6 +376,7 @@ local function getAction(actionName, params)
     end
 end
 
+local currentRegion = nil
 addCommandHandler("episode",
     function (commandName, command, param1, param2, ...)
         if command == "new" then
@@ -409,7 +430,14 @@ addCommandHandler("episode",
                     if obj.rotation and obj.rotation.unpack then
                         obj.rotation = obj.rotation:unpack()
                     end
+                    if obj.PosOffset and obj.PosOffset.unpack then
+                        obj.PosOffset = obj.PosOffset:unpack()
+                    end
+                    if obj.RotOffset and obj.RotOffset.unpack then
+                        obj.RotOffset = obj.RotOffset:unpack()
+                    end
                     obj.instance = nil
+                    obj.StoryItemType = nil
                 end
                 local backupPOI = {}
                 local serializedPOI = {}
@@ -683,7 +711,7 @@ addCommandHandler("episode",
                 setCameraTarget(localPlayer)
             end
         elseif command == "add" then
-            if param1 == "poi" then
+            if param1 == "poi" or param1 == "POI" then
                 if not param2 then
                     outputChatBox("POI description expected: Ex: episode add poi house entrance", 255, 0, 0, false)
                     return
@@ -848,6 +876,79 @@ addCommandHandler("episode",
                 end
                 addEventHandler("onClientKey", root, playerPressedKey)
                 addEventHandler ( "onElementDoneEditing", getRootElement(), addCamera)
+            elseif param1 == "region" then
+                if not param2 or param2 == '' then
+                    outputChatBox("region short name expected: episode add region name [; optional description]")
+                    outputChatBox("if the region name has multiple words then use ; to divide the region name from the description")
+                    return
+                end
+                local name = param2;
+                if #arg == 0 then
+                    outputChatBox("info: region description was not provided")
+                end
+                local description = table.concat( arg, " " )
+
+                local t = split_string(description, ';')
+                if #t > 1 then
+                    name = name .. " " .. t[1]
+                    description = t[2]
+                end
+                description = description:gsub("%s*;%s*", "")
+
+                currentRegion = {
+                    name = name,
+                    Description = description,
+                    vertexes = {},
+                    isExplored = false,
+                    center = Vector3(0,0,0)
+                }
+                outputChatBox("Started recording vertexes for the region "..name)
+                outputChatBox("To add the vertexes, stop in each desired location clockwise or counterclockwise and execute the command: ")
+                outputChatBox("episode add vertex")
+            elseif param1 == "vertex" then
+                if currentRegion == nil then
+                    outputChatBox("First run the command to start recording a region: episode add region name [optional description]")
+                    outputChatBox("Ex: episode add region bedroom [optional description]")
+                    return
+                end
+                
+                local function doneAddingVertexes()
+                    currentRegion.center = currentRegion.center / #currentRegion.vertexes
+                    currentRegion.center = currentRegion.center:unpack()
+                    table.insert(episode.Regions, currentRegion)
+                    currentRegion = nil
+                    outputChatBox("done adding vertexes")
+                end
+
+                if param2 == "done" then
+                    doneAddingVertexes()
+                    return
+                end
+
+                local vertex = localPlayer.position
+                local groundZ = getGroundPosition (vertex.x, vertex.y, vertex.z)
+                if not groundZ or groundZ == 0 then
+                    groundZ = vertex.z - 1
+                end
+                vertex.z = groundZ;
+
+                currentRegion.center = currentRegion.center + vertex
+                table.insert(currentRegion.vertexes, vertex:unpack())
+                outputChatBox("vertex nr " .. #currentRegion.vertexes .. " added")
+                if #currentRegion.vertexes < 3 then
+                    outputChatBox("at least "..(3 - #currentRegion.vertexes).." more needed to create a valid region")
+                end
+
+                if param2 == "last" then
+                    doneAddingVertexes()
+                else
+                    if #currentRegion.vertexes >= 2 then
+                        outputChatBox("execute 'episode add vertex last' next, if the next vertex is the last one")
+                    end
+                    if #currentRegion.vertexes >= 3 then
+                        outputChatBox("execute 'episode add vertex done' if you are done now and you don't wish to add any more vertexes")
+                    end
+                end
             end
         elseif command == "linkactions" then
             local poi = nil
@@ -915,7 +1016,7 @@ addCommandHandler("episode",
             outputChatBox("episode linkactions: in the POI where the player is located, add an action to the POI possibleActions, define NextAxtion (can contain multiple actions) for an action", 0, 0, 255, false)
         elseif command == "test" then
             if param1 == "action" then
-                outputChatBox("episode add action name param1_name param1_value param2_name param2_value...", 255, 0, 0, false)
+                outputChatBox("episode test action name param1_name param1_value param2_name param2_value...", 255, 0, 0, false)
                 local actionName = param2
                 local params = {}
                 local paramName = nil
@@ -982,6 +1083,48 @@ addCommandHandler("episode",
             else
                 outputChatBox("Possible commands: \ntest action \ntest poi"..text,255,255,0)
             end
+        elseif command == "attach" then
+            local i = tonumber(param1)
+            if not i then
+                outputChatBox("Invalid arguments. Ex: episode attach id [optional: boneNr]")
+            end
+            editedObject = episode.Objects[i];
+            isEditedObjectAttached = true
+            local bone = tonumber(param2) or 12;
+
+            local x = 0;
+            local y = 0;
+            local z = 0;
+            local rx = 0;
+            local ry = 0;
+            local rz = 0;
+            if editedObject.PosOffset then
+                x = editedObject.PosOffset.x
+                y = editedObject.PosOffset.y
+                z = editedObject.PosOffset.z
+            end
+            if editedObject.RotOffset then
+                rx = editedObject.PosOffset.rx
+                ry = editedObject.PosOffset.ry
+                rz = editedObject.PosOffset.rz
+            end
+
+            attachElementToBone(editedObject.instance, localPlayer, bone, x, y, z, rx, ry, rz)
+            outputChatBox("Place the object where you want it to be attached and press enter. Reset the camera before doing this!", 255, 0, 0, false)
+            outputChatBox("Use w/a/s/d/z/x/q/e/f/g/h/j to place and rotate it. Use alt for smaller changes and shift for big steps", 255, 0, 0, false)
+            outputChatBox("Press enter to finish", 255, 0, 0, false)
+
+            showCursor(true, true)
+            addEventHandler("onClientKey", root, playerPressedKey)
+            local function onAttachOffsetsSet(object)
+                removeEventHandler("onElementDoneEditing", getRootElement(), onAttachOffsetsSet)
+                detachElementFromBone(episode.Objects[i].instance)
+                episode.Objects[i].instance.position = Vector3(episode.Objects[i].position.x, episode.Objects[i].position.y, episode.Objects[i].position.z)
+                episode.Objects[i].instance.rotation = Vector3(episode.Objects[i].rotation.x, episode.Objects[i].rotation.y, episode.Objects[i].rotation.z)
+                episode.Objects[i]:UpdateData(false)
+                showCursor(false)
+            end
+            addEventHandler ( "onElementDoneEditing", getRootElement(), onAttachOffsetsSet)
         end
 	end
 )

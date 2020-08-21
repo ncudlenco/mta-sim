@@ -10,30 +10,41 @@ SampStoryObjectBase = class(StoryObjectBase, function(o, params)
     o.instance = nil
     o.size = params.size or 2.5
     o.scale = params.scale or 1
+    o.PosOffset = params.posOffset or Vector3(0,0,0)
+    o.RotOffset = params.rotOffset or Vector3(0,0,0)
     local noCollisionStr = 'false'
     if o.noCollisions then
         noCollisionStr = 'true'
     end
-    o.dynamicString = 'return '..o.type..'{description="'..params.description..'", noCollisions='..noCollisionStr..', modelid='..(params.modelid or o.type..'.eModel[PickRandom('..o.type..'.eModel)]')..', interior='..params.interior..', position=Vector3('..params.position.x..','..params.position.y..','..params.position.z..'), rotation=Vector3('..params.rotation.x..','..params.rotation.y..','..params.rotation.z..')}'
+    o.dynamicString = 'return '..o.type..'{description="'..params.description..'", noCollisions='..noCollisionStr..', modelid='..(params.modelid or o.type..'.eModel[PickRandom('..o.type..'.eModel)]')..', interior='..params.interior..', position=Vector3('..params.position.x..','..params.position.y..','..params.position.z..'), rotation=Vector3('..params.rotation.x..','..params.rotation.y..','..params.rotation.z..'), posOffset=Vector3('..o.PosOffset.x..','..o.PosOffset.y..','..o.PosOffset.z..'), rotOffset=Vector3('..o.RotOffset.x..','..o.RotOffset.y..','..o.RotOffset.z..')}'
     if o.modelid == nil or o.modelid < 0 then
+        o.isRandomModelId = true
         o.modelid = loadstring('return '..o.type..'.eModel[PickRandom('..o.type..'.eModel)]')()
     end
+    o.isRandomModelId = false
     local modelid = o.modelid
     local type = o.type
     local i = 5
 end)
 
-function StoryActionBase:__tostring()
-    return "{\n"..
+function SampStoryObjectBase:__tostring()
+    local noCollisionsStr = 'false'
+    if self.noCollisions then
+        noCollisions = 'true'
+    end
+    local instance = 'none'
+    if self.instance then
+        instance = 'instantiated'
+    end
+    return "\n{\n"..
         "\tDescription = ".. self.Description ..
-        "\tStoryItemType = ".. self.StoryItemType ..
         "\t type = ".. self.type ..
         "\t modelid = ".. self.modelid ..
-        "\t position = ".. self.position ..
-        "\t rotation = ".. self.rotation ..
-        "\t noCollisions = ".. self.noCollisions ..
+        "\t position = ".. Vector3.__tostring(self.position) ..
+        "\t rotation = ".. Vector3.__tostring(self.rotation) ..
+        "\t noCollisions = ".. noCollisionsStr ..
+        "\t instance = ".. instance ..
         "\t interior = ".. self.interior ..
-        "\t instance = ".. self.instance ..
         "\t size = ".. self.size ..
         "\t scale = ".. self.scale ..
         "\t dynamicString = ".. self.dynamicString ..
@@ -56,7 +67,15 @@ function SampStoryObjectBase:UpdateData(unpack)
         self.rotation = self.instance.rotation
     end
     self.interior = self.instance.interior
-    o.dynamicString = 'return '..o.type..'{description="'..self.description..'", modelid='..(self.modelid or 'nil')..', interior='..self.interior..', position=Vector3('..self.position.x..','..self.position.y..','..self.position.z..'), rotation=Vector3('..self.rotation.x..','..self.rotation.y..','..self.rotation.z..')}'
+    local noCollisionStr = 'false'
+    if self.noCollisions then
+        noCollisionStr = 'true'
+    end
+    local modelid = self.modelid
+    if isRandomModelId then
+        modelid = self.type..'.eModel[PickRandom('..self.type..'.eModel)]'
+    end
+    self.dynamicString = 'return '..self.type..'{description="'..self.Description..'", noCollisions='..noCollisionStr..', modelid='..(modelid or 'nil')..', interior='..self.interior..', position=Vector3('..self.position.x..','..self.position.y..','..self.position.z..'), rotation=Vector3('..self.rotation.x..','..self.rotation.y..','..self.rotation.z..'), posOffset=Vector3('..self.PosOffset.x..','..self.PosOffset.y..','..self.PosOffset.z..'), rotOffset=Vector3('..self.RotOffset.x..','..self.RotOffset.y..','..self.RotOffset.z..')}'
 end
 
 SampStoryObjectBase.eModel = {None = -1}

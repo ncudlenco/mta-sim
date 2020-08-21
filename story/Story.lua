@@ -6,12 +6,12 @@ Story = class(StoryBase, function(o, actor, maxActions, logData)
         --add an episode here
         -- House1()
         -- House3()
-        -- House8()
+        House8()
         -- House10()
         -- House12()
     }
-    o.EpisodePaths = {
-       "test3"
+    o.DynamicEpisodes = {
+    --    "test3"
     }
     o.Disposed = false
     if not o.Actor then
@@ -31,7 +31,7 @@ Story = class(StoryBase, function(o, actor, maxActions, logData)
 end)
 
 function Story:Play()
-    for i,episode_name in ipairs(self.EpisodePaths) do
+    for i,episode_name in ipairs(self.DynamicEpisodes) do
         local episode = DynamicEpisode(episode_name)
         episode:LoadFromFile()
         table.insert(self.Episodes, episode)

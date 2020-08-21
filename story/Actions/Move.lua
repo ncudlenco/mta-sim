@@ -86,46 +86,11 @@ function Move:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History, self)
 
-    if self.TargetItem.Region.Description ~= self.Performer:getData('location') then
-        prevLocations = self.Performer:getData('prevLocations')
-        isPrevLocation = false
-
-        for _,v in pairs(prevLocations) do
-            if v == self.TargetItem.Region.Description then
-                isPrevLocation = true
-              break
-            end
-        end
-
-        if isPrevLocation then
-            story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. " back in the " .. self.TargetItem.Region.Description, self.Performer)
-        else
-            if self.TargetItem.Region.Objects then
-                numObjects = math.random(2, #self.TargetItem.Region.Objects)
-                shuffledObjects = Shuffle(self.TargetItem.Region.Objects)
-
-                objectsDescription = ""
-                for i=1, numObjects do
-                    if i == 1 then
-                        objectsDescription = objectsDescription .. " " .. getWordPrefix(shuffledObjects[i]) .. " " .. shuffledObjects[i]
-                    elseif i == numObjects then
-                        objectsDescription = objectsDescription .. " and " .. getWordPrefix(shuffledObjects[i]) .. " " .. shuffledObjects[i]
-                    else
-                        objectsDescription = objectsDescription .. ", " .. getWordPrefix(shuffledObjects[i]) .. " " .. shuffledObjects[i]
-                    end
-                end
-
-                story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. " " .. self.TargetItem.Region.Description .. 
-                                " where there is" .. objectsDescription, self.Performer)
-            else
-                story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. " " .. self.TargetItem.Region.Description, self.Performer)
-            end
-
-            table.insert(prevLocations, self.TargetItem.Region.Description)
-            self.Performer:setData('prevLocations', prevLocations)
-        end
-
-        self.Performer:setData('location', self.TargetItem.Region.Description)
+    --TODO: Implement the isPointInsidePolygon function; on region initialization assign all the POI and objects to a region by their location.
+    --TODO: For now we're comparing the POI descriptions with region names and assume they are the same, we also assume the names of all the regions are unique
+    --TODO: This is ugly
+    if self.TargetItem.Description ~= self.Performer:getData('currentRegion') then
+        story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. " " .. self.TargetItem.Description, self.Performer)
     end
 
     if DEBUG then

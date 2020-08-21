@@ -878,7 +878,7 @@ addCommandHandler("episode",
                 addEventHandler ( "onElementDoneEditing", getRootElement(), addCamera)
             elseif param1 == "region" then
                 if not param2 or param2 == '' then
-                    outputChatBox("region short name expected: episode add region name [; optional description]")
+                    outputChatBox("region short name expected: episode add region name [; optional description] or region name [; addobjects ; object1; object2 ; object3]")
                     outputChatBox("if the region name has multiple words then use ; to divide the region name from the description")
                     return
                 end
@@ -889,15 +889,24 @@ addCommandHandler("episode",
                 local description = table.concat( arg, " " )
 
                 local t = split_string(description, ';')
+                local objects = {}
                 if #t > 1 then
                     name = name .. " " .. t[1]
                     description = t[2]
+                    if description == 'addobjects' then
+                        for i,obj in ipairs(argv) do
+                            if i > 2 then
+                                table.insert(objects, obj)
+                            end
+                        end
+                    end
                 end
                 description = description:gsub("%s*;%s*", "")
 
                 currentRegion = {
                     name = name,
                     Description = description,
+                    objects = objects,
                     vertexes = {},
                     isExplored = false,
                     center = Vector3(0,0,0)

@@ -1,7 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\story",
+    "\\story\\Actions"
   ],
-  "SelectedNode": "\\ServerGlobals.lua",
+  "SelectedNode": "\\story\\Actions\\Move.lua",
   "PreviewInSolutionExplorer": false
 }

@@ -46,3 +46,39 @@ end
 function Vector3:__tostring()
     return "("..self.x..", "..self.y..", "..self.z..")"
 end
+
+function VectorUtils.angle(vec1, vec2)
+    -- Calculate the angle by applying law of cosines
+    return math.acos(vec1:dot(vec2)/(vec1.length*vec2.length))
+end
+
+Vector3.angle = VectorUtils.angle
+
+function VectorUtils.signedAngle(me, other, normal)
+    local angle = me:angle(other)
+    local cross = me:cross(other)
+    if normal:dot(cross) < 0 then
+        angle = -angle;
+    end
+    return angle;
+end
+Vector3.signedAngle = VectorUtils.signedAngle
+
+function VectorUtils.projectOnAxis(me, axis)
+    local axisMagnitude = axis.length
+    local multValue = me:dot(axis) / (axisMagnitude * axisMagnitude)
+    return Vector3(axis.x * multValue, axis.y * multValue, axis.z * multValue)
+end
+Vector3.projectOnAxis = VectorUtils.projectOnAxis
+
+function VectorUtils.projectOnPlane(me, normal)
+    return me - me:projectOnAxis(normal)
+end
+Vector3.projectOnPlane = VectorUtils.projectOnPlane
+
+--Returns the angle between two vectors around a given axis
+function VectorUtils.angleAboutAxis(me, other, axis)
+    axis = axis:getNormalized()
+    return me:projectOnPlane(axis):signedAngle(other:projectOnPlane(axis), axis)
+end
+Vector3.angleAboutAxis = VectorUtils.angleAboutAxis

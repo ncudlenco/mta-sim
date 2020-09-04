@@ -69,6 +69,43 @@ addCommandHandler("position",
 	end
 )
 
+local targetPoint = nil
+addCommandHandler("setTarget",
+	function (thePlayer)
+		targetPoint = thePlayer.position
+		outputConsole("Target point set: "..thePlayer.position.x .. ", "..thePlayer.position.y..", "..thePlayer.position.z)
+	end
+)
+
+addCommandHandler("angle",
+	function (thePlayer)
+		outputConsole("Source point: "..thePlayer.position.x .. ", "..thePlayer.position.y..", "..thePlayer.position.z)
+		local angle = thePlayer.matrix.forward:angleAboutAxis(targetPoint - thePlayer.position, thePlayer.matrix.up)
+		angle = math.deg(angle)
+		outputConsole("The angle is : "..(angle or 'nil'))
+	end
+)
+
+addCommandHandler("isPointInside",
+	function (thePlayer)
+		local story = GetStory(thePlayer)
+		if story then
+			for _,r in ipairs(story.CurrentEpisode.Regions) do
+				if r.Id == thePlayer:getData('currentRegionId') then
+					local isPoint = r:IsPointInsideConvex(thePlayer.position)
+					local answer = ''
+					if not isPoint then
+						answer = 'not '
+					end
+					outputConsole("Found region "..r.name..": point is "..answer..'inside')
+					return
+				end
+			end
+			outputConsole("Point is not inside")
+		end
+	end
+)
+
 addCommandHandler("teleport",
 	function (thePlayer)
 		local gantonHouse = Location(2495.0720, -1687.5278, 13.5150, 360, 0, " front of the house ");

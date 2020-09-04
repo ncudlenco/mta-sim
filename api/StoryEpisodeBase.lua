@@ -26,7 +26,7 @@ function StoryEpisodeBase:Initialize(...)
         end
         local regionCollisionInstance = createColPolygon(unpack(coords))
         if DEBUG and not regionCollisionInstance then
-            outputConsole("Story:Play - [ERROR] Could not create a collision instance "..i)
+            outputConsole("StoryEpisodeBase:Initialize - [ERROR] Could not create a collision instance "..i)
         end
         if regionCollisionInstance then
             region.instance = regionCollisionInstance
@@ -35,7 +35,7 @@ function StoryEpisodeBase:Initialize(...)
     end
     addEventHandler( "onColShapeHit", self.regionsGroup, function(player)
         if DEBUG then
-            outputConsole('Story:Play - Region hit')
+            outputConsole('StoryEpisodeBase:Initialize - Region hit')
         end
         local closestRegion = Region.GetClosest(player, self.Regions, true)
         if closestRegion then

@@ -10,6 +10,71 @@ Region = class(function(o, params)
     o.Objects = params.Objects or params.objects or {}
 end)
 
+function Region:MapObjectsLocations(pointOfView, forward, up)
+    local locationMap = {
+        right={},
+        left={},
+        front={},
+        unknown={}
+    }
+    for _,o in ipairs(self.Objects) do
+        if o.position then
+            local angle = forward:angleAboutAxis(o.position - pointOfView, up)
+            angle = math.deg(angle)
+--between -15 and 15 the object is in front of the player
+            if math.abs(angle) <= 15 then
+                table.insert(locationMap.front, o)
+--between 15 and 180 the object is on the left side
+            elseif angle > 0 and angle <= 135 then
+                table.insert(locationMap.left, o)
+--between -180 and -15 the object is on the right side
+            elseif angle < 0 and angle >= -135 then
+                table.insert(locationMap.right, o)
+            end
+        else
+            table.insert(locationMap.unknown, o)
+        end
+    end
+    return locationMap
+end
+
+--     Globals which should be set before calling this function:
+--     
+--     int    polyCorners  =  how many corners the polygon has (no repeats)
+--     float  polyX[]      =  horizontal coordinates of corners
+--     float  polyY[]      =  vertical coordinates of corners
+--     float  x, y         =  point to be tested
+--     
+--     (Globals are used in this example for purposes of speed.  Change as
+--     desired.)
+--     
+--     The function will return YES if the point x,y is inside the polygon, or
+--     NO if it is not.  If the point is exactly on the edge of the polygon,
+--     then the function may return YES or NO.
+--     
+--     Note that division by zero is avoided because the division is protected
+--     by the "if" clause which surrounds it.
+    
+function Region:IsPointInside(testPoint)
+
+    local i = 1
+    local j = #self.vertexes
+    local oddNodes = false
+
+    while i <= #self.vertexes do
+        if self.vertexes[i].y < testPoint.y and self.vertexes[j].y >= testPoint.y
+            or  self.vertexes[j].y < testPoint.y and self.vertexes[i].y >= testPoint.y then
+            if self.vertexes[i].x + (testPoint.y - self.vertexes[i].y) / (self.vertexes[j].y - self.vertexes[i].y) * (self.vertexes[j].x - self.vertexes[i].x) < testPoint.x then
+                oddNodes = not oddNodes
+            end
+        end
+        j=i
+        i = i+1
+    end
+
+    return oddNodes
+end
+
 function Region:IsPointInsideConvex(testPoint)
     --Check if a triangle or higher n-gon
     if DEBUG and #self.vertexes < 3 then
@@ -21,7 +86,7 @@ function Region:IsPointInsideConvex(testPoint)
 
     for i,vv in ipairs(self.vertexes) do
         local v = Vector3(vv.x,vv.y,vv.z)
-        --If point is in the polygon
+        --If point is a polygon vertex
         if math.abs((v - testPoint).length) < 0.0001 then
             return true
         end
@@ -66,7 +131,7 @@ end
 function Region.GetClosest(element, regions, isInstance)
     local minDistance = 9999999;
     for k,r in ipairs(regions) do
-        if (isInstance and element and isElementWithinColShape(element, r.instance)) or r:IsPointInsideConvex(element.position) then
+        if (isInstance and element and isElementWithinColShape(element, r.instance)) or r:IsPointInside(element.position) then
             local distance = math.abs((element.position - Vector3(r.center.x, r.center.y, r.center.z)).length)
             if distance < minDistance then
                 minDistance = distance
@@ -78,30 +143,46 @@ function Region.GetClosest(element, regions, isInstance)
 end
 
 function Region:OnPlayerHit(player)
+    if DEBUG then
+        outputConsole('Region:OnPlayerHit - '..self.name)
+    end
     local story = GetStory(player)
 
+    local previousRegion = player:getData('currentRegion')
     player:setData('currentRegion', self.name)
-    if self.isExplored then
-        return
-    else
-        if self.Episode and (not self.Objects or #self.Objects == 0) then
+    player:setData('currentRegionId', self.Id)
+    -- if self.isExplored then
+    --     return
+    -- else
+        if not previousRegion then
+            story.Logger:Log(player:getData('skinDescription').. ' is in the ' .. self.name, player, true)
+        end
+        if self.Episode and (not self.Objects or #self.Objects == 0 or not self.isExplored) then
+            if DEBUG then
+                outputConsole('Region:OnPlayerHit - '..self.name..' started to identify which objects are inside this region')
+            end
             for i,o in ipairs(self.Episode.Objects) do
                 if o.instance then
                     local r = Region.GetClosest(o, self.Episode.Regions, false)
                     if r == self then
                         table.insert(self.Objects, o)
+                        if DEBUG then
+                            outputConsole(o.Description..' is inside')
+                        end
                     end
                 end
             end
         end
+        local locationMap = self:MapObjectsLocations(player.position, player.matrix.forward, player.matrix.up)
+
         self.isExplored = true
         --describe it here
-        if self.Description and self.Description ~= '' then
-            story.Logger:Log(self.Description, player, true)
-        elseif self.Objects and #self.Objects > 0 then
-            local objectsDescription = story.Logger:DescribeObjects(self.Objects)
-            story.Logger:Log("In the " .. self.name .. " there was " .. objectsDescription, player, true)
-        end
-    end
+        -- if self.Description and self.Description ~= '' then
+        --     story.Logger:Log(self.Description, player, true)
+        -- elseif self.Objects and #self.Objects > 0 then
+            local objectsDescription = story.Logger:DescribeObjects(player, self.name, self.Objects, locationMap, true)
+            story.Logger:Log(objectsDescription, player, true)
+        -- end
+    -- end
 --TODO: change the current camera and so on and so forth
 end

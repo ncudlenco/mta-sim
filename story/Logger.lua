@@ -21,24 +21,95 @@ function Logger:GetElapsedTime()
     end
 end
 
-function Logger:DescribeObjects(objects)
-    local numObjects = 1
-    if #objects > 1 then
-        numObjects = math.random(2, #objects)
+function Logger:DescribeObjects(player, regionName, objects, locationMap, describeAll)
+    local sentenceStart = {
+        'As '..player:getData('genderNominative')..' entered the '..regionName,
+        'In the '..regionName,
+        'Inside the '..regionName
+    }
+    local sentenceLinks = {
+        'there was',
+        player:getData('genderNominative')..' saw',
+        player:getData('genderNominative')..' observed',
+        player:getData('genderNominative')..' noticed'
+    }
+    local possesive = 'his'
+    if player:getData('genderNominative') == 'she' then
+        possesive = 'her'
     end
-    local shuffledObjects = Shuffle(objects)
+    local rightLinks = {
+        'at '..possesive..' right side', 
+        'in '..possesive..' right',
+        'in the right side'
+    }
+    local leftLinks = {
+        'at '..possesive..' left side', 
+        'in '..possesive..' left',
+        'in the left side'
+    }
+    local frontLinks = {
+        'straight ahead', 
+        'in front'
+    }
 
-    local objectsDescription = ""
-    for i=1, numObjects do
-        local objectDescription = shuffledObjects[i].Description or shuffledObjects[i]
-        if i == 1 then
-            objectsDescription = objectsDescription .. " " .. getWordPrefix(objectDescription) .. " " .. objectDescription
-        elseif i == numObjects then
-            objectsDescription = objectsDescription .. " and " .. getWordPrefix(objectDescription) .. " " .. objectDescription
-        else
-            objectsDescription = objectsDescription .. ", " .. getWordPrefix(objectDescription) .. " " .. objectDescription
+    local turns = {1}
+    if locationMap then 
+        turns = {'right','left','front','unknown'} 
+        locationMap.right.links = rightLinks
+        locationMap.left.links = leftLinks
+        locationMap.front.links = frontLinks
+    end
+    local turn = nil
+    local isFirstSentence = true
+    local objectsDescription = ''
+    
+    while #turns > 0 do
+        if locationMap then
+            local idx = math.random(#turns)
+            turn = turns[idx]
+            objects = locationMap[turn]
+            table.remove(turns, idx)
+        end
+
+        local numObjects = #objects
+        if numObjects > 0 then
+            if #objects > 1 and not describeAll then
+                numObjects = math.random(2, #objects)
+            end
+            local shuffledObjects = Shuffle(objects)
+
+            local destiny = math.random(1,2)
+            local nextSentence = ''
+            if destiny == 1 or not objects.links then
+                nextSentence = PickRandom(sentenceLinks)
+                if objects.links then
+                    nextSentence = nextSentence .. ' ' ..PickRandom(objects.links)
+                end
+            else
+                nextSentence = PickRandom(objects.links) .. ' ' .. PickRandom(sentenceLinks)
+            end
+
+            if isFirstSentence then
+                objectsDescription = objectsDescription .. PickRandom(sentenceStart) .. ' ' .. nextSentence
+            else
+                objectsDescription = objectsDescription .. '. ' .. nextSentence:sub(1,1):upper()..nextSentence:sub(2)
+            end
+
+            for i=1, numObjects do
+                local objectDescription = shuffledObjects[i].Description or shuffledObjects[i]
+                if i == 1 then
+                    objectsDescription = objectsDescription .. " " .. getWordPrefix(objectDescription) .. " " .. objectDescription
+                elseif i == numObjects then
+                    objectsDescription = objectsDescription .. " and " .. getWordPrefix(objectDescription) .. " " .. objectDescription
+                else
+                    objectsDescription = objectsDescription .. ", " .. getWordPrefix(objectDescription) .. " " .. objectDescription
+                end
+            end
+
+            isFirstSentence = false
         end
     end
+
     return objectsDescription
 end
 

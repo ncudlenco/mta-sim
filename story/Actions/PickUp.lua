@@ -15,9 +15,30 @@ function PickUp:Apply()
     end
 
     self.TargetItem:Create()
+
+    pickedObjects = self.Performer:getData('pickedObjects')
     
-    story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. getWordPrefix(self.TargetItem.Description) .. " " .. self.TargetItem.Description .. " from " .. self.Where, self.Performer)
+    sameDescription = false
+    sameObject = false
+
+    for i, value in ipairs(pickedObjects) do
+        if value[1] == self.TargetItem.ObjectId then
+            sameObject = true
+        end
+
+        if value[2] == self.TargetItem.Description then
+            sameDescription = true
+        end
+    end
     
+    if sameObject then
+        story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. "the same ".. self.TargetItem.Description .. " from " .. self.Where, self.Performer)
+    elseif sameDescription then
+        story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. "another " .. self.TargetItem.Description .. " from " .. self.Where, self.Performer)
+    else
+        story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. getWordPrefix(self.TargetItem.Description) .. " " .. self.TargetItem.Description .. " from " .. self.Where, self.Performer)
+    end
+
     if self.how == PickUp.eHow.Normal then
         time = 200
         self.TargetItem:updatePositionOffsetStandUp()
@@ -42,6 +63,9 @@ function PickUp:Apply()
                         self.TargetItem.PosOffset.x, self.TargetItem.PosOffset.y, self.TargetItem.PosOffset.z,
                         self.TargetItem.RotOffset.x, self.TargetItem.RotOffset.y, self.TargetItem.RotOffset.z)
     end)
+
+    table.insert(pickedObjects, {self.TargetItem.ObjectId, self.TargetItem.Description})
+    self.Performer:setData('pickedObjects', pickedObjects)
 end
 
 function PickUp:GetDynamicString()

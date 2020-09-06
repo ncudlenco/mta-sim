@@ -192,7 +192,7 @@ function House10:Initialize(...)
     table.insert(livingRoomSofa2Location.PossibleActions, sitOnSofa2Action)
     local standUpSofa2Action = StandUp {how = StandUp.eHow.fromSofa, performer = player, nextLocation = livingRoomSofa2Location, targetItem = livingroomSofa2, graphId = self.graphId}
     sitOnSofa2Action.NextAction = standUpSofa2Action
-    moveToPOS3Action = Move { performer = player, nextLocation = pointsOfInterests[5], targetItem = pointsOfInterests[3], graphId = self.graphId }
+    moveToPOS3Action = Move { performer = player, nextLocation = pointsOfInterests[3], targetItem = pointsOfInterests[3], graphId = self.graphId }
     standUpSofa2Action.NextAction = moveToPOS3Action
     sitOnSofa2Action.ClosingAction = moveToPOS3Action
 
@@ -225,7 +225,7 @@ function House10:Initialize(...)
     pickUpFoodAction.NextAction = eatFoodAction
     local standUpKitchenChairAction = StandUp {how = StandUp.eHow.fromDesk, performer = player, nextLocation = kitchenChairLocation, targetItem = kitchenChair, graphId = self.graphId}
     eatFoodAction.NextAction = standUpKitchenChairAction
-    local moveToPOS5Action = Move { performer = player, nextLocation = pointsOfInterests[3], targetItem = pointsOfInterests[5], graphId = self.graphId }
+    local moveToPOS5Action = Move { performer = player, nextLocation = pointsOfInterests[5], targetItem = pointsOfInterests[5], graphId = self.graphId }
     standUpKitchenChairAction.NextAction = moveToPOS5Action
     sitDownKitchenChairAction.ClosingAction = moveToPOS5Action
 

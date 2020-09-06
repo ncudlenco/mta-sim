@@ -76,7 +76,7 @@ function Move.destinationReached(player, matchingDimension)
         if DEBUG then
             outputConsole("Move:Apply - getting next valid action")
         end
-        lastAction.NextLocation:GetNextValidAction(lastAction.Performer):Apply()
+        OnGlobalActionFinished(0, player:getData('id'), player:getData('storyId'))
 	end
 	removeEventHandler("onMarkerHit", source, destinationReached)
 	source:destroy()
@@ -86,10 +86,7 @@ function Move:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History, self)
 
-    --TODO: Implement the isPointInsidePolygon function; on region initialization assign all the POI and objects to a region by their location.
-    --TODO: For now we're comparing the POI descriptions with region names and assume they are the same, we also assume the names of all the regions are unique
-    --TODO: This is ugly
-    if self.TargetItem.Description ~= self.Performer:getData('currentRegion') then
+    if self.TargetItem.Region and self.TargetItem.Region.Id ~= self.Performer:getData('currentRegionId') then
         story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. " " .. self.TargetItem.Description, self.Performer)
     end
 

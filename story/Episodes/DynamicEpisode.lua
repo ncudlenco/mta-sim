@@ -57,6 +57,7 @@ function DynamicEpisode:Initialize(...)
 end
 
 function DynamicEpisode:Play(...)
+    StoryEpisodeBase.ProcessRegions(self)
     local player = nil
     for i,v in ipairs(arg) do
         player = v

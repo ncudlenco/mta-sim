@@ -270,6 +270,7 @@ function House12:Initialize(...)
 end
 
 function House12:Play(...)
+    StoryEpisodeBase.ProcessRegions(self)
     local player = nil
     for i,v in ipairs(arg) do
         player = v

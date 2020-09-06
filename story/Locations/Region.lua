@@ -188,9 +188,10 @@ function Region:OnPlayerHit(player)
     local previousRegion = player:getData('currentRegion')
     player:setData('currentRegion', self.name)
     player:setData('currentRegionId', self.Id)
-    -- if self.isExplored then
-    --     return
-    -- else
+
+    if self.isExplored then
+        return
+    else
         if not previousRegion then
             story.Logger:Log(player:getData('skinDescription').. ' is in the ' .. self.name, player, true)
         end
@@ -205,6 +206,6 @@ function Region:OnPlayerHit(player)
             local objectsDescription = story.Logger:DescribeObjects(player, self.name, self.Objects, locationMap, true)
             story.Logger:Log(objectsDescription, player, true)
         -- end
-    -- end
+    end
 --TODO: change the current camera and so on and so forth
 end

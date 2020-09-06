@@ -78,6 +78,8 @@ function Story:Play()
     if not FREE_ROAM then
         self.CurrentEpisode:Initialize(self.Actor)
     end
+
+    self.Actor:setData('pickedObjects', {})
     self.CurrentEpisode:Play(self.Actor)
 
     if DEBUG then

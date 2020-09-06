@@ -60,7 +60,7 @@ function OpenDoor.destinationReached(player, matchingDimension)
         if DEBUG then
             outputConsole("OpenDoor:Apply - getting next valid action")
         end
-        lastAction.NextLocation:GetNextValidAction(lastAction.Performer):Apply()
+        OnGlobalActionFinished(0, player:getData('id'), player:getData('storyId'))
 	end
 	removeEventHandler("onMarkerHit", source, destinationReached)
 	source:destroy()

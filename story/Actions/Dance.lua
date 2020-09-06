@@ -7,7 +7,7 @@ function Dance:Apply()
     table.insert(story.History, self)
     
     story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. 
-                     ". When " .. self.Performer:getData('genderNominative') .. " finishes dancing " .. self.Performer:getData('genderNominative') .. " ", self.Performer)
+                     ". When " .. self.Performer:getData('genderNominative') .. " finishes dancing " .. self.Performer:getData('genderNominative'), self.Performer)
     -- self.TargetItem.instance:setCollisionsEnabled(false)
 
     math.randomseed(os.time())

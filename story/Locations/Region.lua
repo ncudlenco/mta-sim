@@ -9,6 +9,7 @@ Region = class(function(o, params)
     o.Id = Guid().Id
     o.Objects = params.Objects or params.objects or {}
     o.POI = params.POI or params.poi or {}
+    o.cameras = params.cameras or {}
 end)
 
 function Region.VertexToVector3(v)
@@ -22,13 +23,6 @@ function Region:GetNormal()
 
     local n = (b - a):cross(c - a)
     n:normalize()
-    if DEBUG then
-        if n then
-            outputConsole('Normal is not null')
-        else
-            outputConsole('Normal is null')
-        end
-    end
     return n
 end
 
@@ -167,6 +161,7 @@ end
 
 function Region.GetClosest(element, regions, isInstance)
     local minDistance = 9999999;
+    local closestRegion = nil
     for k,r in ipairs(regions) do
         if r:IsPointInside(element.position) then
             local distance = math.abs(r:GetDistanceByNormal(element.position))
@@ -189,9 +184,9 @@ function Region:OnPlayerHit(player)
     player:setData('currentRegion', self.name)
     player:setData('currentRegionId', self.Id)
 
-    if self.isExplored then
-        return
-    else
+    self.Episode.CurrentRegion = self
+
+    if not self.isExplored then
         if not previousRegion then
             story.Logger:Log(player:getData('skinDescription').. ' is in the ' .. self.name, player, true)
         end
@@ -208,4 +203,9 @@ function Region:OnPlayerHit(player)
         -- end
     end
 --TODO: change the current camera and so on and so forth
+    if STATIC_CAMERA and self.cameras and #self.cameras > 0 then
+        local cameraPos = PickRandom(self.cameras)
+        player:setCameraMatrix(cameraPos.x, cameraPos.y, cameraPos.z, cameraPos.lx, cameraPos.ly, cameraPos.lz, cameraPos.roll, cameraPos.fov)
+    end
+
 end

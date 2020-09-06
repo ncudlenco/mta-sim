@@ -6,43 +6,44 @@ StoryEpisodeBase = class(function(o, name, storyTimeOfDay, storyWeather, startin
     o.Objects = {}
     o.Regions = {}
     o.Disposed = false
-    o.Regions = {}
+    o.CurrentRegion = nil
     o.InteriorId = nil
     o.graphPath = nil
     o.ObjectsToDelete = {}
     o.POI = {}
     o.name = name or ""
-    o.cameras = {}
     o.regionsGroup = nil
 end)
 
 function StoryEpisodeBase:Initialize(...)
-    self.regionsGroup = createElement("regions")
-    for i,region in ipairs(self.Regions) do
-        local coords = {region.center.x, region.center.y}
-        for j,v in ipairs(region.vertexes) do
-            table.insert(coords, v.x)
-            table.insert(coords, v.y)
+    if not DEFINING_EPISODES then
+        self.regionsGroup = createElement("regions")
+        for i,region in ipairs(self.Regions) do
+            local coords = {region.center.x, region.center.y}
+            for j,v in ipairs(region.vertexes) do
+                table.insert(coords, v.x)
+                table.insert(coords, v.y)
+            end
+            local regionCollisionInstance = createColPolygon(unpack(coords))
+            if DEBUG and not regionCollisionInstance then
+                outputConsole("StoryEpisodeBase:Initialize - [ERROR] Could not create a collision instance "..i)
+            end
+            if regionCollisionInstance then
+                region.instance = regionCollisionInstance
+                setElementParent(regionCollisionInstance, self.regionsGroup)
+            end
         end
-        local regionCollisionInstance = createColPolygon(unpack(coords))
-        if DEBUG and not regionCollisionInstance then
-            outputConsole("StoryEpisodeBase:Initialize - [ERROR] Could not create a collision instance "..i)
-        end
-        if regionCollisionInstance then
-            region.instance = regionCollisionInstance
-            setElementParent(regionCollisionInstance, self.regionsGroup)
-        end
+        addEventHandler( "onColShapeHit", self.regionsGroup, function(player)
+            if DEBUG then
+                outputConsole('StoryEpisodeBase:Initialize - Region hit')
+            end
+            local regionsInRange = Region.FilterWithinRange(player.position, self.Regions, 1.5)
+            local closestRegion = Region.GetClosest(player, regionsInRange, true)
+            if closestRegion then
+                closestRegion:OnPlayerHit(player)
+            end
+        end)
     end
-    addEventHandler( "onColShapeHit", self.regionsGroup, function(player)
-        if DEBUG then
-            outputConsole('StoryEpisodeBase:Initialize - Region hit')
-        end
-        local regionsInRange = Region.FilterWithinRange(player.position, self.Regions, 1.5)
-        local closestRegion = Region.GetClosest(player, regionsInRange, true)
-        if closestRegion then
-            closestRegion:OnPlayerHit(player)
-        end
-    end)
 end
 
 function StoryEpisodeBase:ProcessRegions()
@@ -52,9 +53,15 @@ function StoryEpisodeBase:ProcessRegions()
     for i,o in ipairs(self.Objects) do
         if o.instance then
             local r = Region.GetClosest(o, self.Regions, false)
-            table.insert(r.Objects, o)
-            if DEBUG then
-                outputConsole(o.Description..' is inside '..r.name)
+            if r then
+                table.insert(r.Objects, o)
+                if DEBUG then
+                    outputConsole(o.Description..' is inside '..r.name)
+                end
+            else
+                if DEBUG then
+                    outputConsole('WARNING! '..o.Description..' is not inside a region')
+                end
             end
         end
     end
@@ -64,10 +71,16 @@ function StoryEpisodeBase:ProcessRegions()
     for i,o in ipairs(self.POI) do
         if o.position then
             local r = Region.GetClosest(o, self.Regions, false)
-            table.insert(r.POI, o)
-            o.Region = self
-            if DEBUG then
-                outputConsole(o.Description..' is inside '..r.name)
+            if r then
+                table.insert(r.POI, o)
+                o.Region = r
+                if DEBUG then
+                    outputConsole(o.Description..' is inside '..r.name)
+                end
+            else
+                if DEBUG then
+                    outputConsole('WARNING! '..o.Description..' is not inside a region')
+                end
             end
         end
     end
@@ -107,19 +120,21 @@ function StoryEpisodeBase:LoadFromFile()
             self.StoryWeather = Weather(episode.StoryWeather.id, episode.StoryWeather.description)
         end
 
-        self.cameras = episode.cameras
-
         local objects = {}
-        for k,v in ipairs(episode.Objects) do
-            local obj = SampStoryObjectBase(v)
-            obj = loadstring(obj.dynamicString)()
-            table.insert(objects, obj)
+        if episode.Objects then
+            for k,v in ipairs(episode.Objects) do
+                local obj = SampStoryObjectBase(v)
+                obj = loadstring(obj.dynamicString)()
+                table.insert(objects, obj)
+            end
         end
         self.Objects = objects
 
-        for k,v in ipairs(episode.ObjectsToDelete) do
-            local obj = SampStoryObjectBase(v)
-            table.insert(self.ObjectsToDelete, obj)
+        if episode.ObjectsToDelete then
+            for k,v in ipairs(episode.ObjectsToDelete) do
+                local obj = SampStoryObjectBase(v)
+                table.insert(self.ObjectsToDelete, obj)
+            end
         end
 
         local deserializedPOI = {}

@@ -20,17 +20,9 @@ function Location:SpawnPlayerHere(player)
     player:spawn(self.X, self.Y, self.Z, self.Angle, player.model, self.Interior)
     player:fadeCamera (true)
     local story = GetStory(player)
---TODO: define surveillance regions inside an episode, along with camera positions
---add events for each region (onEnter, onLeave) and describe only what is currently in the field of view of that camera
---decide how to change the current active region
-    if STATIC_CAMERA and story.CurrentEpisode.cameras and #story.CurrentEpisode.cameras > 0 then
-        local cameraPos = PickRandom(story.CurrentEpisode.cameras)
-        player:setCameraMatrix(cameraPos.x, cameraPos.y, cameraPos.z, cameraPos.lx, cameraPos.ly, cameraPos.lz, cameraPos.roll, cameraPos.fov)
-    else
+    if not STATIC_CAMERA then
         player:setCameraTarget (player)
     end
-    -- player:setPosition(self.X, self.Y, self.Z, warp)
-    -- player:setRotation(0,0,self.Angle,"default",true)
     if DEBUG then
         outputConsole("Location:SpawnPlayerHere")
     end

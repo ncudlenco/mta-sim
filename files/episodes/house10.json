@@ -4,23 +4,37 @@
         "ValidStartingLocations": [],
         "cameras": [],
         "ObjectsToDelete": [],
+        "Objects": [],
+        "name": "house10",
+        "Disposed": false,
         "Regions": [
             {
-                "isExplored": false,
-                "name": "house exit",
+                "Description": "",
+                "cameras": [
+                    {
+                        "y": -1210.512084960938,
+                        "x": 2271.906884774566,
+                        "lz": 1048.0234375,
+                        "z": 1050.223388671875,
+                        "lx": 2265.60693359375,
+                        "ly": -1210.512573242188,
+                        "roll": 0,
+                        "fov": 70
+                    }
+                ],
+                "Objects": [],
                 "center": {
                     "y": -1210.493530273438,
                     "x": 2267.045654296875,
                     "z": 1047.29296875
                 },
-                "Description": "",
+                "name": "house exit",
                 "vertexes": [
                     {
                         "y": -1208.839721679688,
                         "x": 2270.3369140625,
                         "z": 1046.5625
                     },
-
                     {
                         "y": -1208.828857421875,
                         "x": 2263.790771484375,
@@ -31,7 +45,6 @@
                         "x": 2263.77978515625,
                         "z": 1048.0234375
                     },
-
                     {
                         "y": -1212.12646484375,
                         "x": 2270.334228515625,
@@ -40,15 +53,30 @@
                 ]
             },
             {
-                "isExplored": false,
-                "name": "living room",
+                "Description": "",
+                "cameras": [
+                    {
+                        "y": -1214.372509777546,
+                        "x": 2262.723193377256,
+                        "lz": 1048.0234375,
+                        "z": 1051.823388695717,
+                        "lx": 2258.72314453125,
+                        "ly": -1210.072998046875,
+                        "roll": 0,
+                        "fov": 70
+                    }
+                ],
+                "Objects": [
+                    "tea table",
+                    "big TV",
+                    "flower in a pot"
+                ],
                 "center": {
                     "y": -1209.205810546875,
                     "x": 2258.688232421875,
                     "z": 1048.0244140625
                 },
-                "objects": ["tea table", "big TV", "flower in a pot"],
-                "Description": "",
+                "name": "living room",
                 "vertexes": [
                     {
                         "y": -1214.126220703125,
@@ -88,15 +116,19 @@
                 ]
             },
             {
-                "isExplored": false,
-                "name": "kitchen",
+                "Description": "",
+                "cameras": [],
+                "Objects": [
+                    "chair",
+                    "fridge",
+                    "gas cooker"
+                ],
                 "center": {
                     "y": -1210.656982421875,
                     "x": 2250.39990234375,
                     "z": 1048.025268554688
                 },
-                "objects": ["chair", "fridge", "gas cooker"],
-                "Description": "",
+                "name": "kitchen",
                 "vertexes": [
                     {
                         "y": -1206.82666015625,
@@ -121,15 +153,17 @@
                 ]
             },
             {
-                "isExplored": false,
-                "name": "hallway",
-                "objects": ["empty flower pot"],
+                "Description": "",
+                "cameras": [],
+                "Objects": [
+                    "empty flower pot"
+                ],
                 "center": {
                     "y": -1216.76953125,
                     "x": 2260.135009765625,
                     "z": 1048.0234375
                 },
-                "Description": "",
+                "name": "hallway",
                 "vertexes": [
                     {
                         "y": -1215.130981445313,
@@ -154,15 +188,18 @@
                 ]
             },
             {
-                "isExplored": false,
-                "name": "bathroom",
+                "Description": "",
+                "cameras": [],
+                "Objects": [
+                    "wc",
+                    "shower"
+                ],
                 "center": {
                     "y": -1216.841064453125,
                     "x": 2253.7021484375,
                     "z": 1048.208862304688
                 },
-                "objects": ["wc", "shower"],
-                "Description": "",
+                "name": "bathroom",
                 "vertexes": [
                     {
                         "y": -1218.414794921875,
@@ -187,15 +224,17 @@
                 ]
             },
             {
-                "isExplored": false,
-                "name": "bedroom",
+                "Description": "",
+                "cameras": [],
+                "Objects": [
+                    "wardrobe"
+                ],
                 "center": {
                     "y": -1222.060302734375,
                     "x": 2260.06787109375,
                     "z": 1048.0234375
                 },
-                "objects": ["wardrobe"],
-                "Description": "",
+                "name": "bedroom",
                 "vertexes": [
                     {
                         "y": -1219.412963867188,
@@ -220,9 +259,6 @@
                 ]
             }
         ],
-        "name": "house10",
-        "Disposed": false,
-        "Objects": [],
         "POI": []
     }
 ]

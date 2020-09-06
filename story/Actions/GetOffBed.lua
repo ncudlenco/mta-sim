@@ -7,7 +7,7 @@ function GetOffBed:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History, self)
 
-    story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. " the " .. self.TargetItem.Description, self.Performer)
+    story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. "the " .. self.TargetItem.Description, self.Performer)
 
     -- self.TargetItem.instance:setCollisionsEnabled(false)
 

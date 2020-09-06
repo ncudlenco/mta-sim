@@ -23,12 +23,12 @@ end
 
 function Logger:DescribeObjects(player, regionName, objects, locationMap, describeAll)
     local sentenceStart = {
-        'As '..player:getData('genderNominative')..' enters the '..regionName,
-        'In the '..regionName,
-        'Inside the '..regionName
+        '. As '..player:getData('genderNominative')..' enters the '..regionName,
+        '. In the '..regionName,
+        '. Inside the '..regionName
     }
     local sentenceLinks = {
-        'there was',
+        'there is',
         player:getData('genderNominative')..' sees',
         player:getData('genderNominative')..' observes',
         player:getData('genderNominative')..' notices'
@@ -102,6 +102,8 @@ function Logger:DescribeObjects(player, regionName, objects, locationMap, descri
                 end
             end
 
+            print(objectsDescription)
+
             isFirstSentence = false
         end
     end
@@ -139,13 +141,15 @@ function Logger:Log(text, ...)
                 math.randomseed(os.time())
                 dice = math.random()
 
-                if dice > 0.4 and self.PreviousAnd == false then -- chance of getting a link between phrases with "and"
+                if dice > 0.3 and self.PreviousAnd == false then -- chance of getting a link between phrases with "and"
                     logText = " and" .. text
                     self.PreviousAnd = true
-                else
+                elseif dice >=0.3 and dice <=0.8 then
                     phraseLink = PickRandom(self.PhraseLinks) -- chance of getting a link with "dot"
                     logText = phraseLink .. " " .. player:getData('genderNominative') .. text
                     self.PreviousAnd = false
+                else
+                    logText = ". " .. player:getData('genderNominative'):sub(1,1):upper() .. player:getData('genderNominative'):sub(2) .. text
                 end
             end
 

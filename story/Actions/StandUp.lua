@@ -20,7 +20,7 @@ function StandUp:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History, self)
     
-    story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. " from the " .. self.TargetItem.Description, self.Performer)
+    story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. "from the " .. self.TargetItem.Description, self.Performer)
     self.TargetItem.instance:setCollisionsEnabled(false)
     local animationLib = "INT_OFFICE"
     local animationId = "OFF_Sit_2Idle_180"

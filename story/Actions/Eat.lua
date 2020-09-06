@@ -8,7 +8,7 @@ function Eat:Apply()
     table.insert(story.History, self)
     
     story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. 
-                    ". When " .. self.Performer:getData('genderNominative') .. " finishes eating " .. self.Performer:getData('genderNominative') .. " ", self.Performer)
+                    ". When " .. self.Performer:getData('genderNominative') .. " finishes eating " .. self.Performer:getData('genderNominative'), self.Performer)
 
     math.randomseed(os.time())
     time = math.random(5000, 10000)

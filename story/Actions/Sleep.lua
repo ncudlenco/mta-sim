@@ -8,7 +8,7 @@ function Sleep:Apply()
     table.insert(story.History, self)
     
     story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. 
-                     ". When " .. self.Performer:getData('genderNominative') .. " wakes up " .. self.Performer:getData('genderNominative') .. " ", self.Performer)
+                     ". When " .. self.Performer:getData('genderNominative') .. " wakes up " .. self.Performer:getData('genderNominative'), self.Performer)
     -- self.TargetItem.instance:setCollisionsEnabled(false)
     self.Performer.rotation = self.Performer.rotation + Vector3(0,0,180)
 

@@ -79,3 +79,13 @@ function split_string (inputstr, sep)
     end
     return t
 end
+
+function inList(targetValue, arr)
+    for i, value in ipairs(arr) do
+        if targetValue == value then
+            return true
+        end
+    end
+
+    return false
+end

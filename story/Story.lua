@@ -5,9 +5,9 @@ Story = class(StoryBase, function(o, actor, maxActions, logData)
     o.Episodes = {
         --add an episode here
         -- House1()
-        House3()
+        -- House3()
         -- House8()
-        -- House10()
+        House10()
         -- House12()
     }
     o.DynamicEpisodes = {
@@ -35,6 +35,11 @@ function Story:Play()
         local episode = DynamicEpisode(episode_name)
         episode:LoadFromFile()
         table.insert(self.Episodes, episode)
+    end
+
+    local worldObjects = Element.getAllByType('object')
+    for i, o in ipairs(worldObjects) do
+        o.collisions = false
     end
 
     self.StartTime = os.time()

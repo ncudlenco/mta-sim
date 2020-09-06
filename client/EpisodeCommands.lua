@@ -1,7 +1,9 @@
 addEvent ( "onElementDoneEditing", true )
 addEvent ( "onActionRetrieved", true )
+--TODO: add cameras on regions
+--TODO: when defining regions -> show a black marker for each vertex, after a vertex is added, offer the possibility to move it, then confirm the location
 
-DEFINING_EPISODES = false
+DEFINING_EPISODES = true
 if DEFINING_EPISODES then
     addEventHandler ( "onClientPlayerSpawn", getLocalPlayer(), function()
         CLIENT_STORY = Story(localPlayer, 10000, true)
@@ -14,13 +16,24 @@ end
 local episode = DynamicEpisode()
 local markers = {}
 local function text_render ( )
-    if episode.cameras then
-        for i, c in ipairs(episode.cameras) do
-            local sx, sy, _ = getScreenFromWorldPosition(c.x, c.y, c.z)
-            if sx then 
-                local sw, sh = guiGetScreenSize ( )
-                dxDrawText ("cam"..i, sx, sy, sw, sh, tocolor ( 255, 255, 0, 255 ), 2.0, "default-bold" ) 
-            end     
+    if episode.Regions then
+        for _, r in ipairs(episode.Regions) do
+            if r.cameras then
+                for i,c in ipairs(r.cameras) do
+                    local sx, sy, _ = getScreenFromWorldPosition(c.x, c.y, c.z)
+                    if sx then 
+                        local sw, sh = guiGetScreenSize ( )
+                        dxDrawText ("cam"..i, sx, sy, sw, sh, tocolor ( 255, 255, 0, 255 ), 2.0, "default-bold" ) 
+                    end
+                end
+            end
+            for i,v in ipairs(r.vertexes) do
+                local sx, sy, _ = getScreenFromWorldPosition(v.x, v.y, v.z)
+                if sx then 
+                    local sw, sh = guiGetScreenSize ( )
+                    dxDrawText ('v'..i..': '..r.name, sx, sy, sw, sh, tocolor ( 0, 0, 0, 255 ), 2.0, "default-bold" ) 
+                end
+            end
         end
     end
     for i, obj in ipairs(episode.ObjectsToDelete) do
@@ -492,6 +505,13 @@ addCommandHandler("episode",
                     })
                 end
                 episode.POI = serializedPOI
+                for _,r in ipairs(episode.Regions) do
+                    r.Episode = nil
+                    r.instance = nil
+                    r.Id = nil
+                    r.POI = nil
+                    r.isExplored = nil
+                end
                 local fileHandle = fileCreate("files/episodes/"..param1..".json")
                 if fileHandle then
                     local jsonStr = toJSON(episode)
@@ -829,6 +849,13 @@ addCommandHandler("episode",
                     getAction(actionName, params)
                 end
             elseif param1 == "camera" then
+                local regionsInRange = Region.FilterWithinRange(localPlayer.position, episode.Regions, 1.5)
+                local closestRegion = Region.GetClosest(localPlayer, regionsInRange, true)
+                if closestRegion == nil then
+                    outputChatBox('A region for the current player location could not be found. Make sure you create a region for it first.')
+                    return
+                end
+        
                 outputChatBox('Set the camera as you desire and press enter')
                 setCamera = true
                 moveTarget = false
@@ -867,10 +894,10 @@ addCommandHandler("episode",
                 )
                 localPlayer.cameraInterior = localPlayer.interior
                 local function addCamera(element)
-                    if not episode.cameras then
-                        episode.cameras = {}
+                    if not closestRegion.cameras then
+                        closestRegion.cameras = {}
                     end
-                    table.insert(episode.cameras, element)
+                    table.insert(closestRegion.cameras, element)
                     showCursor(false)
                     setCameraTarget(localPlayer)
                     removeEventHandler("onElementDoneEditing", getRootElement(), addCamera)
@@ -907,9 +934,8 @@ addCommandHandler("episode",
                 currentRegion = {
                     name = name,
                     Description = description,
-                    objects = objects,
+                    Objects = objects,
                     vertexes = {},
-                    isExplored = false,
                     center = Vector3(0,0,0)
                 }
                 outputChatBox("Started recording vertexes for the region "..name)
@@ -1060,13 +1086,20 @@ addCommandHandler("episode",
                 localPlayer.rotation = poi.rotation
                 poi:GetNextValidAction(localPlayer):Apply()
             elseif param1 == "camera" then
-                if not episode.cameras then
-                    outputChatBox("The episode has no cameras defined",255,255,0)
+                local regionsInRange = Region.FilterWithinRange(localPlayer.position, episode.Regions, 1.5)
+                local closestRegion = Region.GetClosest(localPlayer, regionsInRange, true)
+                if closestRegion == nil then
+                    outputChatBox('A region for the current player location could not be found. Make sure you create regions first.')
+                    return
+                end
+
+                if not closestRegion.cameras then
+                    outputChatBox("The region has no cameras defined",255,255,0)
                     return
                 end
                 local cam = nil
                 local minDist = 1000
-                for i,v in ipairs (episode.cameras) do
+                for i,v in ipairs (closestRegion.cameras) do
                     local dist = math.abs((localPlayer.position - Vector3(v.x, v.y, v.z)).length)
                     if dist < minDist then
                         minDist = dist

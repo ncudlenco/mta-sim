@@ -144,7 +144,7 @@ function House10:Initialize(...)
     local livingRoomEntranceLocation = Location(2268.8281, -1210.2188, 1047.5547, 90, self.InteriorId, "hallway")
     local livingRoomSofa1Location = Location(2260.131591796875, -1212.724375, 1049.0234375, 45, self.InteriorId, "living room")
     local livingRoomSofa2Location = Location(2258.73193359375, -1208.188510742188, 1049.0234375, 180, self.InteriorId, "living room")
-    local livingRoomTurnTableLocation = Location(2261.96025390625, -1208.617553710938, 1049.0234375, 270, self.InteriorId, "living room")
+    local livingRoomTurnTableLocation = Location(2261.96025390625, -1208.617553710938, 1049.0234375, 270, self.InteriorId, "living room turn table")
     local livingRoomTurnTableLocation2 = Location(2260.27001953125, -1208.896508789063, 1049.0234375, 270, self.InteriorId, "living room")
 
     local kitchenSinkLocation = Location(2247.92060546875, -1209.934448242188, 1049.0234375, 90, self.InteriorId, "kitchen")

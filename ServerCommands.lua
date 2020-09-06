@@ -86,13 +86,33 @@ addCommandHandler("angle",
 	end
 )
 
+addCommandHandler("marker",
+	function (thePlayer, commandName, param1, param2, param3)
+		outputConsole("Got: "..commandName .. ", "..param1..", "..param2..", "..param3)
+		local x = tonumber(param1)
+		local y = tonumber(param2)
+		local z = tonumber(param3)
+		outputConsole("Got: "..commandName .. ", "..x..", "..y..", "..z)
+		local marker = Marker(x, y, z, "cylinder", 1, 255, 0, 0, 128)
+		marker.interior = thePlayer.interior
+	end
+)
+
 addCommandHandler("isPointInside",
-	function (thePlayer)
+	function (thePlayer, commandName, param1, param2, param3)
+		local x = tonumber(param1)
+		local y = tonumber(param2)
+		local z = tonumber(param3)
+
+		local point = thePlayer.position
+		if x and y and z then
+			point = Vector3(x,y,z)
+		end
 		local story = GetStory(thePlayer)
 		if story then
 			for _,r in ipairs(story.CurrentEpisode.Regions) do
 				if r.Id == thePlayer:getData('currentRegionId') then
-					local isPoint = r:IsPointInsideConvex(thePlayer.position)
+					local isPoint = r:IsPointInside(point)
 					local answer = ''
 					if not isPoint then
 						answer = 'not '

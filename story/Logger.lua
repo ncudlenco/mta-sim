@@ -33,18 +33,14 @@ function Logger:DescribeObjects(player, regionName, objects, locationMap, descri
         player:getData('genderNominative')..' observed',
         player:getData('genderNominative')..' noticed'
     }
-    local possesive = 'his'
-    if player:getData('genderNominative') == 'she' then
-        possesive = 'her'
-    end
     local rightLinks = {
-        'at '..possesive..' right side', 
-        'in '..possesive..' right',
+        'at '..player:getData('genderGenitive')..' right side', 
+        'in '..player:getData('genderGenitive')..' right',
         'in the right side'
     }
     local leftLinks = {
-        'at '..possesive..' left side', 
-        'in '..possesive..' left',
+        'at '..player:getData('genderGenitive')..' left side', 
+        'in '..player:getData('genderGenitive')..' left',
         'in the left side'
     }
     local frontLinks = {

@@ -174,7 +174,7 @@ function House10:Initialize(...)
     player:setData('location', livingRoomEntranceLocation.Description)
     player:setData('prevLocations', {})
 
-    local pointsOfInterests = {livingRoomSofa1Location, livingRoomTurnTableLocation, livingRoomSofa2Location, kitchenSinkLocation, bedroomEntranceLocation, bathroomEntranceLocation, livingRoomEndLocation}
+    local pointsOfInterests = {livingRoomTurnTableLocation, livingRoomSofa1Location, livingRoomSofa2Location, kitchenSinkLocation, bedroomEntranceLocation, bathroomEntranceLocation, livingRoomEndLocation}
     -- pointsOfInterests = Shuffle(pointsOfInterests)
 
     if pointsOfInterests[1] == livingRoomEndLocation then
@@ -282,6 +282,7 @@ function House10:Initialize(...)
 end
 
 function House10:Play(...)
+    StoryEpisodeBase.ProcessRegions(self)
     local player = nil
     for i,v in ipairs(arg) do
         player = v

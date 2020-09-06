@@ -188,6 +188,7 @@ function House1:Initialize(...)
 end
 
 function House1:Play(...)
+    StoryEpisodeBase.ProcessRegions(self)
     local player = nil
     for i,v in ipairs(arg) do
         player = v

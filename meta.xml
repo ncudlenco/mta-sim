@@ -31,12 +31,12 @@
   <!-- Client -->
   <script src="client/Handlers.lua" type="shared"/>
   <script src="client/EngineLoader.lua" type="client" />
-  <script src="client/MappingCommands.lua" type="client" />
   <!-- Generic utils -->
+  <script src="utils/class.lua" type="shared"/>
   <script src="utils/others.lua" type="shared"/>
   <script src="utils/arrayUtils.lua" type="shared"/>
   <script src="utils/VectorUtils.lua" type="shared"/>
-  <script src="utils/class.lua" type="shared"/>
+  <script src="utils/Plane3.lua" type="shared"/>
   <script src="utils/enum.lua" type="shared"/>
   <script src="utils/Extent3.lua" type="shared"/>
   <script src="utils/guid.lua" type="shared"/>
@@ -147,5 +147,6 @@
   <!-- Commands -->
   <script src="ServerCommands.lua" type="server" />
   <script src="client/EpisodeCommands.lua" type="client" />
+  <script src="client/MappingCommands.lua" type="client" />
   <min_mta_version server="1.5.5-9.14370" client="1.5.5-9.14370" />
 </meta>

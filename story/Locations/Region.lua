@@ -8,7 +8,34 @@ Region = class(function(o, params)
     o.Episode = nil
     o.Id = Guid().Id
     o.Objects = params.Objects or params.objects or {}
+    o.POI = params.POI or params.poi or {}
 end)
+
+function Region.VertexToVector3(v)
+    return Vector3(v.x, v.y, v.z)
+end
+
+function Region:GetNormal()
+    local a = Region.VertexToVector3(self.vertexes[1])
+    local b = Region.VertexToVector3(self.vertexes[2])
+    local c = Region.VertexToVector3(self.vertexes[3])
+
+    local n = (b - a):cross(c - a)
+    n:normalize()
+    if DEBUG then
+        if n then
+            outputConsole('Normal is not null')
+        else
+            outputConsole('Normal is null')
+        end
+    end
+    return n
+end
+
+function Region:GetDistanceByNormal(point)
+    local plane = Plane3(self.center, self:GetNormal())
+    return plane:distanceTo(point)
+end
 
 function Region:MapObjectsLocations(pointOfView, forward, up)
     local locationMap = {
@@ -128,11 +155,21 @@ function Region:__eq(other)
     return other and other:is_a(Region) and self.Id == other.Id
 end
 
+function Region.FilterWithinRange(point, regions, range)
+    local filtered = {}
+    for k,r in ipairs(regions) do
+        if math.abs(r:GetDistanceByNormal(point)) < range then
+            table.insert(filtered, r)
+        end
+    end
+    return filtered
+end
+
 function Region.GetClosest(element, regions, isInstance)
     local minDistance = 9999999;
     for k,r in ipairs(regions) do
-        if (isInstance and element and isElementWithinColShape(element, r.instance)) or r:IsPointInside(element.position) then
-            local distance = math.abs((element.position - Vector3(r.center.x, r.center.y, r.center.z)).length)
+        if r:IsPointInside(element.position) then
+            local distance = math.abs(r:GetDistanceByNormal(element.position))
             if distance < minDistance then
                 minDistance = distance
                 closestRegion = r
@@ -157,22 +194,7 @@ function Region:OnPlayerHit(player)
         if not previousRegion then
             story.Logger:Log(player:getData('skinDescription').. ' is in the ' .. self.name, player, true)
         end
-        if self.Episode and (not self.Objects or #self.Objects == 0 or not self.isExplored) then
-            if DEBUG then
-                outputConsole('Region:OnPlayerHit - '..self.name..' started to identify which objects are inside this region')
-            end
-            for i,o in ipairs(self.Episode.Objects) do
-                if o.instance then
-                    local r = Region.GetClosest(o, self.Episode.Regions, false)
-                    if r == self then
-                        table.insert(self.Objects, o)
-                        if DEBUG then
-                            outputConsole(o.Description..' is inside')
-                        end
-                    end
-                end
-            end
-        end
+        
         local locationMap = self:MapObjectsLocations(player.position, player.matrix.forward, player.matrix.up)
 
         self.isExplored = true

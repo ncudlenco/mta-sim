@@ -37,11 +37,40 @@ function StoryEpisodeBase:Initialize(...)
         if DEBUG then
             outputConsole('StoryEpisodeBase:Initialize - Region hit')
         end
-        local closestRegion = Region.GetClosest(player, self.Regions, true)
+        local regionsInRange = Region.FilterWithinRange(player.position, self.Regions, 1.5)
+        local closestRegion = Region.GetClosest(player, regionsInRange, true)
         if closestRegion then
             closestRegion:OnPlayerHit(player)
         end
     end)
+end
+
+function StoryEpisodeBase:ProcessRegions()
+    if DEBUG then
+        outputConsole('StoryEpisodeBase:ProcessRegions - '..self.name..' started to identify which objects are inside which region')
+    end
+    for i,o in ipairs(self.Objects) do
+        if o.instance then
+            local r = Region.GetClosest(o, self.Regions, false)
+            table.insert(r.Objects, o)
+            if DEBUG then
+                outputConsole(o.Description..' is inside '..r.name)
+            end
+        end
+    end
+    if DEBUG then
+        outputConsole('StoryEpisodeBase:ProcessRegions - '..self.name..' started to identify which POI are inside which region')
+    end
+    for i,o in ipairs(self.POI) do
+        if o.position then
+            local r = Region.GetClosest(o, self.Regions, false)
+            table.insert(r.POI, o)
+            o.Region = self
+            if DEBUG then
+                outputConsole(o.Description..' is inside '..r.name)
+            end
+        end
+    end
 end
 
 function StoryEpisodeBase:Play(...)

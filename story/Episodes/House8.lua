@@ -219,6 +219,7 @@ function House8:Initialize(...)
     sleepAction2.ClosingAction = getOffBed2Action
 
     for i,p1 in ipairs(POI) do
+        table.insert(self.POI, p1)
         table.insert(self.ValidStartingLocations, p1)
         for j, p2 in ipairs(POI) do
             if i ~= j then
@@ -238,6 +239,7 @@ function House8:Initialize(...)
 end
 
 function House8:Play(...)
+    StoryEpisodeBase.ProcessRegions(self)
     local player = nil
     for i,v in ipairs(arg) do
         player = v

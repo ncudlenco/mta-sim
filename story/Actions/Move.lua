@@ -89,6 +89,7 @@ function Move:Apply()
     --TODO: Implement the isPointInsidePolygon function; on region initialization assign all the POI and objects to a region by their location.
     --TODO: For now we're comparing the POI descriptions with region names and assume they are the same, we also assume the names of all the regions are unique
     --TODO: This is ugly
+    
     if self.TargetItem.Description ~= self.Performer:getData('currentRegion') then
         story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. " " .. self.TargetItem.Description, self.Performer)
     end

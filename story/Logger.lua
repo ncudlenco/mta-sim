@@ -102,8 +102,6 @@ function Logger:DescribeObjects(player, regionName, objects, locationMap, descri
                 end
             end
 
-            print(objectsDescription)
-
             isFirstSentence = false
         end
     end
@@ -141,7 +139,7 @@ function Logger:Log(text, ...)
                 math.randomseed(os.time())
                 dice = math.random()
 
-                if dice > 0.3 and self.PreviousAnd == false then -- chance of getting a link between phrases with "and"
+                if dice < 0.3 and self.PreviousAnd == false then -- chance of getting a link between phrases with "and"
                     logText = " and" .. text
                     self.PreviousAnd = true
                 elseif dice >=0.3 and dice <=0.8 then

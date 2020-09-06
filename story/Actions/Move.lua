@@ -90,6 +90,7 @@ function Move:Apply()
     --TODO: For now we're comparing the POI descriptions with region names and assume they are the same, we also assume the names of all the regions are unique
     --TODO: This is ugly
     
+    print(self.Performer:getData('currentRegion'))
     if self.TargetItem.Description ~= self.Performer:getData('currentRegion') then
         story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. " " .. self.TargetItem.Description, self.Performer)
     end

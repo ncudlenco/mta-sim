@@ -23,15 +23,15 @@ end
 
 function Logger:DescribeObjects(player, regionName, objects, locationMap, describeAll)
     local sentenceStart = {
-        'As '..player:getData('genderNominative')..' entered the '..regionName,
+        'As '..player:getData('genderNominative')..' enters the '..regionName,
         'In the '..regionName,
         'Inside the '..regionName
     }
     local sentenceLinks = {
         'there was',
-        player:getData('genderNominative')..' saw',
-        player:getData('genderNominative')..' observed',
-        player:getData('genderNominative')..' noticed'
+        player:getData('genderNominative')..' sees',
+        player:getData('genderNominative')..' observes',
+        player:getData('genderNominative')..' notices'
     }
     local rightLinks = {
         'at '..player:getData('genderGenitive')..' right side', 

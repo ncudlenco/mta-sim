@@ -13,6 +13,6 @@ function Plane3:distanceTo(point)
     return v:dot(self.normal)
 end
 
-function Plane3:getPointProjection(point)
+function Plane3:project(point)
     return point - self:distanceTo(point) * self.normal
 end

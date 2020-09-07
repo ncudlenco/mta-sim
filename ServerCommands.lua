@@ -98,6 +98,38 @@ addCommandHandler("marker",
 	end
 )
 
+addCommandHandler("projectPoint",
+	function (thePlayer, commandName, param1, param2, param3)
+		local x = tonumber(param1)
+		local y = tonumber(param2)
+		local z = tonumber(param3)
+
+		local point = thePlayer.position
+		if x and y and z then
+			point = Vector3(x,y,z)
+		end
+		local story = GetStory(thePlayer)
+		if story then
+			for _,r in ipairs(story.CurrentEpisode.Regions) do
+				if r.Id == thePlayer:getData('currentRegionId') then
+					local plane = Plane3(r.center, r:GetNormal())
+					local projection = plane:project(point)
+					outputConsole("Distance to plane: "..(projection - point).length)
+					outputConsole("Distance to plane2: "..r:GetDistanceByNormal(point))
+
+					local v = point - Region.VertexToVector3(r.center)
+					outputConsole(r:GetNormal().length)
+					v = v:projectOnAxis(r:GetNormal())
+					outputConsole("Distance to plane3: "..v.length)
+					outputConsole("Projected point: "..projection.x..' '..projection.y..' '..projection.z)
+					return
+				end
+			end
+			outputConsole("Point is not inside")
+		end
+	end
+)
+
 addCommandHandler("isPointInside",
 	function (thePlayer, commandName, param1, param2, param3)
 		local x = tonumber(param1)

@@ -34,13 +34,13 @@ function Logger:DescribeObjects(player, regionName, objects, locationMap, descri
         player:getData('genderNominative')..' notices'
     }
     local rightLinks = {
-        'at '..player:getData('genderGenitive')..' right side', 
-        'in '..player:getData('genderGenitive')..' right',
+        'at the right side',
+        'in right',
         'in the right side'
     }
     local leftLinks = {
-        'at '..player:getData('genderGenitive')..' left side', 
-        'in '..player:getData('genderGenitive')..' left',
+        'at the left side', 
+        'in left',
         'in the left side'
     }
     local frontLinks = {

@@ -3,7 +3,7 @@ addEvent ( "onActionRetrieved", true )
 --TODO: add cameras on regions
 --TODO: when defining regions -> show a black marker for each vertex, after a vertex is added, offer the possibility to move it, then confirm the location
 
-DEFINING_EPISODES = true
+DEFINING_EPISODES = false
 if DEFINING_EPISODES then
     addEventHandler ( "onClientPlayerSpawn", getLocalPlayer(), function()
         CLIENT_STORY = Story(localPlayer, 10000, true)
@@ -17,9 +17,11 @@ local episode = DynamicEpisode()
 local markers = {}
 local function text_render ( )
     if episode.Regions then
-        for _, r in ipairs(episode.Regions) do
-            if r.cameras then
-                for i,c in ipairs(r.cameras) do
+        local regionsInRange = Region.FilterWithinRange(localPlayer.position, episode.Regions, 1.5)
+        local closestRegion = Region.GetClosest(localPlayer, regionsInRange, true)
+        if closestRegion then
+            if closestRegion.cameras then
+                for i,c in ipairs(closestRegion.cameras) do
                     local sx, sy, _ = getScreenFromWorldPosition(c.x, c.y, c.z)
                     if sx then 
                         local sw, sh = guiGetScreenSize ( )
@@ -27,13 +29,13 @@ local function text_render ( )
                     end
                 end
             end
-            for i,v in ipairs(r.vertexes) do
+            for i,v in ipairs(closestRegion.vertexes) do
                 local sx, sy, _ = getScreenFromWorldPosition(v.x, v.y, v.z)
                 if sx then 
                     local sw, sh = guiGetScreenSize ( )
-                    dxDrawText ('v'..i..': '..r.name, sx, sy, sw, sh, tocolor ( 0, 0, 0, 255 ), 2.0, "default-bold" ) 
+                    dxDrawText ('v'..i..': '..closestRegion.name, sx, sy, sw, sh, tocolor ( 0, 0, 0, 255 ), 2.0, "default-bold" ) 
                 end
-            end
+            end 
         end
     end
     for i, obj in ipairs(episode.ObjectsToDelete) do

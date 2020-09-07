@@ -21,7 +21,7 @@ function Region:GetNormal()
     local b = Region.VertexToVector3(self.vertexes[2])
     local c = Region.VertexToVector3(self.vertexes[3])
 
-    local n = (b - a):cross(c - a)
+    local n = (a - b):cross(c - b)
     n:normalize()
     return n
 end
@@ -58,34 +58,51 @@ function Region:MapObjectsLocations(pointOfView, forward, up)
     end
     return locationMap
 end
-
---     Globals which should be set before calling this function:
---     
---     int    polyCorners  =  how many corners the polygon has (no repeats)
---     float  polyX[]      =  horizontal coordinates of corners
---     float  polyY[]      =  vertical coordinates of corners
---     float  x, y         =  point to be tested
---     
---     (Globals are used in this example for purposes of speed.  Change as
---     desired.)
---     
---     The function will return YES if the point x,y is inside the polygon, or
---     NO if it is not.  If the point is exactly on the edge of the polygon,
---     then the function may return YES or NO.
+   
+--     The function will return true if the point is inside the polygon, or
+--     false if it is not.  If the point is exactly on the edge of the polygon,
+--     then the function may return true or false.
+--     Note that this only works in 2D, so the point should be coplanar to the polygon
 --     
 --     Note that division by zero is avoided because the division is protected
 --     by the "if" clause which surrounds it.
     
-function Region:IsPointInside(testPoint)
+function Region:IsPointInside(_testPoint, transformToPolygonCoordinates)
+    local testPoint = _testPoint
+    local vertexes = self.vertexes
+
+    if transformToPolygonCoordinates then
+        local o = Region.VertexToVector3(self.vertexes[2])
+        local oX = Region.VertexToVector3(self.vertexes[3]) - Region.VertexToVector3(self.vertexes[2])
+        local oY = Region.VertexToVector3(self.vertexes[1]) - Region.VertexToVector3(self.vertexes[2])
+        local oZ = oX:cross(oY)
+        oY = oZ:cross(oX)
+        oX:normalize()
+        oY:normalize()
+        oZ:normalize()
+
+        function transformCoordinates(p, o, oX, oY, oZ)
+            local t = p - o
+            return Vector3(oX:dot(t), oY:dot(t), oZ:dot(t))
+        end
+
+        local plane = Plane3(self.center, self:GetNormal())
+
+        testPoint = transformCoordinates(plane:project(_testPoint), o, oX, oY, oZ)
+        vertexes = {}
+        for _,v in ipairs(self.vertexes) do
+            table.insert(vertexes, transformCoordinates(Region.VertexToVector3(v), o, oX, oY, oZ))
+        end
+    end
 
     local i = 1
-    local j = #self.vertexes
+    local j = #vertexes
     local oddNodes = false
 
-    while i <= #self.vertexes do
-        if self.vertexes[i].y < testPoint.y and self.vertexes[j].y >= testPoint.y
-            or  self.vertexes[j].y < testPoint.y and self.vertexes[i].y >= testPoint.y then
-            if self.vertexes[i].x + (testPoint.y - self.vertexes[i].y) / (self.vertexes[j].y - self.vertexes[i].y) * (self.vertexes[j].x - self.vertexes[i].x) < testPoint.x then
+    while i <= #vertexes do
+        if vertexes[i].y < testPoint.y and vertexes[j].y >= testPoint.y
+            or  vertexes[j].y < testPoint.y and vertexes[i].y >= testPoint.y then
+            if vertexes[i].x + (testPoint.y - vertexes[i].y) / (vertexes[j].y - vertexes[i].y) * (vertexes[j].x - vertexes[i].x) < testPoint.x then
                 oddNodes = not oddNodes
             end
         end
@@ -152,7 +169,8 @@ end
 function Region.FilterWithinRange(point, regions, range)
     local filtered = {}
     for k,r in ipairs(regions) do
-        if math.abs(r:GetDistanceByNormal(point)) < range then
+        local dist = r:GetDistanceByNormal(point)
+        if math.abs(dist) < range then
             table.insert(filtered, r)
         end
     end
@@ -163,7 +181,7 @@ function Region.GetClosest(element, regions, isInstance)
     local minDistance = 9999999;
     local closestRegion = nil
     for k,r in ipairs(regions) do
-        if r:IsPointInside(element.position) then
+        if (isInstance and element and isElementWithinColShape(element, r.instance)) or r:IsPointInside(element.position) then
             local distance = math.abs(r:GetDistanceByNormal(element.position))
             if distance < minDistance then
                 minDistance = distance
@@ -185,13 +203,25 @@ function Region:OnPlayerHit(player)
     player:setData('currentRegionId', self.Id)
 
     self.Episode.CurrentRegion = self
+    --TODO: change the current camera and so on and so forth
+    if STATIC_CAMERA and self.cameras and #self.cameras > 0 then
+        local cameraPos = PickRandom(self.cameras)
+        player:setCameraMatrix(cameraPos.x, cameraPos.y, cameraPos.z, cameraPos.lx, cameraPos.ly, cameraPos.lz, cameraPos.roll, cameraPos.fov)
+    end
 
     if not self.isExplored then
         if not previousRegion then
             story.Logger:Log(player:getData('skinDescription').. ' is in the ' .. self.name, player, true)
         end
         
-        local locationMap = self:MapObjectsLocations(player.position, player.matrix.forward, player.matrix.up)
+        local pointOfView = player.position
+        local pointOfViewForward = player.matrix.forward
+        if STATIC_CAMERA and self.cameras and #self.cameras > 0 then
+            local x, y, z, lx, ly, lz = player:getCameraMatrix()
+            pointOfView = Vector3(x,y,z)
+            pointOfViewForward = Vector3(lx,ly,lz) - pointOfView
+        end
+        local locationMap = self:MapObjectsLocations(pointOfView, pointOfViewForward, player.matrix.up)
 
         self.isExplored = true
         --describe it here
@@ -202,10 +232,4 @@ function Region:OnPlayerHit(player)
             story.Logger:Log(objectsDescription, player, true)
         -- end
     end
---TODO: change the current camera and so on and so forth
-    if STATIC_CAMERA and self.cameras and #self.cameras > 0 then
-        local cameraPos = PickRandom(self.cameras)
-        player:setCameraMatrix(cameraPos.x, cameraPos.y, cameraPos.z, cameraPos.lx, cameraPos.ly, cameraPos.lz, cameraPos.roll, cameraPos.fov)
-    end
-
 end

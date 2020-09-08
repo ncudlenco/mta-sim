@@ -6,28 +6,30 @@ function AnswerPhone:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History, self)
     
+    -- this might not be ok
     if not self.TargetItem then
         self.TargetItem = MobilePhone {
-            modelid = MobilePhone.eModel.MobilePhone1,
+            modelid = MobilePhone.eModel[PickRandom(MobilePhone.eModel)],
             position = Vector3(0,0,0),
             rotation = Vector3(0,0,0),
             noCollisions = true,
             interior = self.Performer.interior
         }
-        self.TargetItem:Create()
-        attachElementToBone(self.TargetItem.instance, self.Performer, 12, 
-                            self.TargetItem.PosOffset.x, self.TargetItem.PosOffset.y, self.TargetItem.PosOffset.z,
-                            self.TargetItem.RotOffset.x, self.TargetItem.RotOffset.y, self.TargetItem.RotOffset.z)
-    end    
+    end  
+    
+    self.TargetItem:Create()
+    attachElementToBone(self.TargetItem.instance, self.Performer, 12, 
+                        self.TargetItem.PosOffset.x, self.TargetItem.PosOffset.y, self.TargetItem.PosOffset.z,
+                        self.TargetItem.RotOffset.x, self.TargetItem.RotOffset.y, self.TargetItem.RotOffset.z)
+
     story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. self.TargetItem.Description, self.Performer)
-    self.Performer:setAnimation("PED", "PHONE_IN", 3000, true, true, false, true)
-    --Create phone in hand and attach it
+    self.Performer:setAnimation("PED", "PHONE_IN", 2000, true, true, false, true)
 
     if DEBUG then
         outputConsole("AnswerPhone:Apply")
     end
 
-    OnGlobalActionFinished(1000, self.Performer:getData('id'), self.Performer:getData('storyId'))
+    OnGlobalActionFinished(2000, self.Performer:getData('id'), self.Performer:getData('storyId'))
 end
 
 function AnswerPhone:GetDynamicString()

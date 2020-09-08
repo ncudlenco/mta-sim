@@ -11,7 +11,7 @@ end
 
 function MobilePhone:updatePositionOffsetStandUp()
     if self.modelid == MobilePhone.eModel.MobilePhone1 then
-        self.PosOffset = self.PosOffset or Vector3(-0.01999999955296516,-0.009999999776482582,0)
+        self.PosOffset = self.PosOffset or Vector3(-0.01999999955296516, -0.009999999776482582, 0)
     end
 
     return self.Description

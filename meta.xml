@@ -87,6 +87,7 @@
   <script src="story/Actions/EndStory.lua" type="shared" />
   <script src="story/Actions/GetInBed.lua" type="shared" />
   <script src="story/Actions/GetOffBed.lua" type="shared" />
+  <script src="story/Actions/HangUp.lua" type="shared" />
   <script src="story/Actions/Sleep.lua" type="shared" />
   <script src="story/Actions/SetPlayerSkin.lua" type="shared" />
   <script src="story/Actions/Move.lua" type="shared" />
@@ -104,6 +105,7 @@
   <script src="story/Actions/PutIn.lua" type="shared" />
   <script src="story/Actions/Wait.lua" type="shared" />
   <script src="story/Actions/PutDown.lua" type="shared" />
+  <script src="story/Actions/TalkPhone.lua" type="shared" />
   <script src="story/Actions/TurnOn.lua" type="shared" />
   <script src="story/Actions/TurnOff.lua" type="shared" />
   <script src="story/Actions/Dance.lua" type="shared" />

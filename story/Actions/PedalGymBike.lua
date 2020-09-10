@@ -23,7 +23,7 @@ function PedalGymBike:Apply()
 
     math.randomseed(os.time())
     local time = math.random(8000, 15000)
-    self.Performer:setAnimation("GYMNASIUM", self.how, time, true, true, false, true)
+    self.Performer:setAnimation("GYMNASIUM", self.how, time, true, false, false, true)
 
     if DEBUG then
         outputConsole("PedalGymBike:Apply")

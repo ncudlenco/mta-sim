@@ -88,7 +88,10 @@
   <script src="story/Actions/GetInBed.lua" type="shared" />
   <script src="story/Actions/GetOffBed.lua" type="shared" />
   <script src="story/Actions/GetOnGymBike.lua" type="shared" />
+  <script src="story/Actions/GetOnTreadmill.lua" type="shared" />
   <script src="story/Actions/GetOffGymBike.lua" type="shared" />
+  <script src="story/Actions/GetOffTreadmill.lua" type="shared" />
+  <script src="story/Actions/JogTreadmill.lua" type="shared" />
   <script src="story/Actions/PedalGymBike.lua" type="shared" />
   <script src="story/Actions/HangUp.lua" type="shared" />
   <script src="story/Actions/Sleep.lua" type="shared" />

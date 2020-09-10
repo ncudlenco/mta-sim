@@ -7,7 +7,7 @@ function Read:Apply()
     table.insert(story.History, self)
     
     math.randomseed(os.time())
-    time = math.random(3000, 12000)
+    local time = math.random(3000, 12000)
     story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. self.TargetItem.Description .. ". When " .. self.Performer:getData('genderNominative') .. " finishes ", self.Performer)
     self.Performer:setAnimation("INT_OFFICE", "OFF_Sit_Read", time, true, true, false, true)
 

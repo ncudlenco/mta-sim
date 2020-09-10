@@ -87,6 +87,9 @@
   <script src="story/Actions/EndStory.lua" type="shared" />
   <script src="story/Actions/GetInBed.lua" type="shared" />
   <script src="story/Actions/GetOffBed.lua" type="shared" />
+  <script src="story/Actions/GetOnGymBike.lua" type="shared" />
+  <script src="story/Actions/GetOffGymBike.lua" type="shared" />
+  <script src="story/Actions/PedalGymBike.lua" type="shared" />
   <script src="story/Actions/HangUp.lua" type="shared" />
   <script src="story/Actions/Sleep.lua" type="shared" />
   <script src="story/Actions/SetPlayerSkin.lua" type="shared" />

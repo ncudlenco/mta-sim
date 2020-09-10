@@ -179,6 +179,7 @@ function House10:Initialize(...)
         self.POI[1], self.POI[i] = self.POI[i], self.POI[1]
     end
 
+    -- table.insert(livingRoomEntranceLocation.PossibleActions, PedalGymBike { performer = player, nextLocation = self.POI[1], targetItem = phone, graphId = self.graphId })
     table.insert(livingRoomEntranceLocation.PossibleActions, Move { performer = player, nextLocation = self.POI[1], targetItem = self.POI[1], graphId = self.graphId })
     
     -- sit on sofa1

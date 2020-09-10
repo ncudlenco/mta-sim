@@ -141,11 +141,20 @@ function House10:Initialize(...)
     bathroomSink:Create()
     table.insert(self.Objects, bathroomSink)
 
+    phone = MobilePhone {
+        modelid = MobilePhone.eModel[PickRandom(MobilePhone.eModel)],
+        position = Vector3(0,0,0),
+        rotation = Vector3(0,0,0),
+        noCollisions = true,
+        interior = self.InteriorId
+    }
+
     local livingRoomEntranceLocation = Location(2268.8281, -1210.2188, 1047.5547, 90, self.InteriorId, "hallway")
     local livingRoomSofa1Location = Location(2260.131591796875, -1212.724375, 1049.0234375, 45, self.InteriorId, "living room")
     local livingRoomSofa2Location = Location(2258.73193359375, -1208.188510742188, 1049.0234375, 180, self.InteriorId, "living room")
     local livingRoomTurnTableLocation = Location(2261.96025390625, -1208.617553710938, 1049.0234375, 270, self.InteriorId, "living room turn table")
     local livingRoomTurnTableLocation2 = Location(2260.27001953125, -1208.896508789063, 1049.0234375, 270, self.InteriorId, "living room")
+    local livingRoomAnswerPhoneLocation = Location(2256.88818359375, -1211.824951171875, 1049.0234375, 90, self.InteriorId, "living room")
 
     local kitchenSinkLocation = Location(2247.92060546875, -1209.934448242188, 1049.0234375, 90, self.InteriorId, "kitchen")
     local kitchenChairLocation = Location(2250.29248046875, -1210.4216796875, 1049.0234375, 180, self.InteriorId, "kitchen")
@@ -162,29 +171,15 @@ function House10:Initialize(...)
     
     table.insert(self.ValidStartingLocations, livingRoomEntranceLocation)
 
-    self.POI = {livingRoomSofa1Location, livingRoomTurnTableLocation, livingRoomSofa2Location, kitchenSinkLocation, bedroomEntranceLocation, bathroomEntranceLocation, livingRoomEndLocation}
+    self.POI = {livingRoomSofa1Location, livingRoomSofa2Location, livingRoomTurnTableLocation, livingRoomAnswerPhoneLocation, kitchenSinkLocation, 
+                bedroomEntranceLocation, bathroomEntranceLocation, livingRoomEndLocation}
 
     if self.POI[1] == livingRoomEndLocation then
         local i = math.random(6) + 1
         self.POI[1], self.POI[i] = self.POI[i], self.POI[1]
     end
 
-    phone = MobilePhone {
-        modelid = MobilePhone.eModel[PickRandom(MobilePhone.eModel)],
-        position = Vector3(0,0,0),
-        rotation = Vector3(0,0,0),
-        noCollisions = true,
-        interior = self.InteriorId
-    }
-
-    answerPhone = AnswerPhone { performer = player, nextLocation = livingRoomEntranceLocation, targetItem = phone, graphId = self.graphId }
-    table.insert(livingRoomEntranceLocation.PossibleActions, answerPhone)
-
-    talkPhone = HangUp { performer = player, nextLocation = livingRoomEntranceLocation, targetItem = phone, graphId = self.graphId }
-    answerPhone.NextAction = talkPhone
-
-
-    -- table.insert(livingRoomEntranceLocation.PossibleActions, Move { performer = player, nextLocation = self.POI[1], targetItem = self.POI[1], graphId = self.graphId })
+    table.insert(livingRoomEntranceLocation.PossibleActions, Move { performer = player, nextLocation = self.POI[1], targetItem = self.POI[1], graphId = self.graphId })
     
     -- sit on sofa1
     local sitOnSofa1Action = SitDown {how = SitDown.eHow.onSofa, performer = player, nextLocation = livingRoomSofa1Location, targetItem = livingroomSofa1, rotation = Vector3(0,0,225), graphId = self.graphId}
@@ -219,6 +214,17 @@ function House10:Initialize(...)
     turnOffTurnTableAction.NextAction = moveToPOI4Action
     turnOffTurnTableAction.ClosingAction = moveToPOI4Action
 
+    -- answer phone
+    local answerPhoneAction = AnswerPhone { performer = player, nextLocation = livingRoomAnswerPhoneLocation, targetItem = phone, graphId = self.graphId }
+    table.insert(livingRoomAnswerPhoneLocation.PossibleActions, answerPhoneAction)
+    local talkPhoneAction = TalkPhone { performer = player, nextLocation = livingRoomAnswerPhoneLocation, targetItem = phone, graphId = self.graphId }
+    answerPhoneAction.NextAction = talkPhoneAction
+    local hangUpAction = HangUp { performer = player, nextLocation = livingRoomAnswerPhoneLocation, targetItem = phone, graphId = self.graphId }
+    talkPhoneAction.NextAction = hangUpAction
+    local moveToPOI5Action = Move { performer = player, nextLocation = self.POI[5], targetItem = self.POI[5], graphId = self.graphId }
+    hangUpAction.NextAction = moveToPOI5Action
+    answerPhoneAction.ClosingAction = moveToPOI5Action
+
     -- kitchen actions
     local washHandsKitchenAction = WashHands {performer = player, nextLocation = kitchenSinkLocation, targetItem = kitchenSink, graphId = self.graphId}
     table.insert(kitchenSinkLocation.PossibleActions, washHandsKitchenAction)
@@ -233,9 +239,9 @@ function House10:Initialize(...)
     pickUpFoodAction.NextAction = eatFoodAction
     local standUpKitchenChairAction = StandUp {how = StandUp.eHow.fromDesk, performer = player, nextLocation = kitchenChairLocation, targetItem = kitchenChair, graphId = self.graphId}
     eatFoodAction.NextAction = standUpKitchenChairAction
-    local moveToPOI5Action = Move { performer = player, nextLocation = self.POI[5], targetItem = self.POI[5], graphId = self.graphId }
-    standUpKitchenChairAction.NextAction = moveToPOI5Action
-    sitDownKitchenChairAction.ClosingAction = moveToPOI5Action
+    local moveToPOI6Action = Move { performer = player, nextLocation = self.POI[6], targetItem = self.POI[6], graphId = self.graphId }
+    standUpKitchenChairAction.NextAction = moveToPOI6Action
+    sitDownKitchenChairAction.ClosingAction = moveToPOI6Action
 
     -- bedroom actions
     local openBedroomDoorAction = OpenDoor {performer = player, nextLocation = bedroomExitLocation, targetItem = bedroomExitLocation, how = OpenDoor.eHow.Enter, graphId = self.graphId}
@@ -256,9 +262,9 @@ function House10:Initialize(...)
     local openBedroomDoorAction2 = OpenDoor {performer = player, nextLocation = bedroomEntranceLocation, targetItem = bedroomEntranceLocation, how = OpenDoor.eHow.Exit, graphId = self.graphId}
     moveToBedroomExitAction.NextAction = openBedroomDoorAction2
     
-    local moveToPOI6Action = Move { performer = player, nextLocation = self.POI[6], targetItem = self.POI[6], graphId = self.graphId}
-    openBedroomDoorAction2.NextAction = moveToPOI6Action
-    openBedroomDoorAction.ClosingAction = moveToPOI6Action
+    local moveToPOI7Action = Move { performer = player, nextLocation = self.POI[7], targetItem = self.POI[7], graphId = self.graphId}
+    openBedroomDoorAction2.NextAction = moveToPOI7Action
+    openBedroomDoorAction.ClosingAction = moveToPOI7Action
 
     -- bathroom actions
     local openbathRoomAction = OpenDoor {performer = player, nextLocation = bathroomSinkLocation, targetItem = bathroomSink, how = OpenDoor.eHow.Enter, graphId = self.graphId}
@@ -272,9 +278,9 @@ function House10:Initialize(...)
     local openbathRoomAction2 = OpenDoor {performer = player, nextLocation = bathroomEntranceLocation, targetItem = bathroomEntranceLocation, how = OpenDoor.eHow.Exit, graphId = self.graphId}
     table.insert(bathroomExitLocation.PossibleActions, openbathRoomAction2)
 
-    local moveToPOI7Action = Move { performer = player, nextLocation = self.POI[7], targetItem = self.POI[7], graphId = self.graphId}
-    openbathRoomAction2.NextAction = moveToPOI7Action
-    openbathRoomAction.ClosingAction = moveToPOI7Action
+    local moveToPOI8Action = Move { performer = player, nextLocation = self.POI[8], targetItem = self.POI[8], graphId = self.graphId}
+    openbathRoomAction2.NextAction = moveToPOI8Action
+    openbathRoomAction.ClosingAction = moveToPOI8Action
 
     table.insert(livingRoomEndLocation.PossibleActions, EndStory())
 

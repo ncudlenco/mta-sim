@@ -14,11 +14,11 @@ function PutDown:Apply()
     -- self.TargetItem.instance:setCollisionsEnabled(false)
 
     if self.how == PutDown.eHow.Normal then
-        time = 200
-        self.Performer:setAnimation("BAR", "Barserve_bottle", time, true, true, false, true)
+        self.Performer:setAnimation("BAR", "Barserve_bottle", 200, true, true, false, true)
     elseif self.how == PutDown.eHow.Down then
-        time = 500
         self.Performer:setAnimation("MISC", "Case_pickup", 500, true, true, false, true)
+    elseif self.how == PutDown.eHow.FloorBarbell then
+        self.Performer:setAnimation("Freeweights", "gym_free_putdown", 500, true, true, false, true)
     end
 
     if DEBUG then
@@ -36,7 +36,8 @@ end
 
 PutDown.eHow = {
     Normal = 1,
-    Down = 2
+    Down = 2,
+    FloorBarbell = 3
 }
 
 function PutDown:GetDynamicString()

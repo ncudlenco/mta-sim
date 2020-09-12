@@ -122,6 +122,7 @@
   <script src="story/Actions/SmokeIn.lua" type="shared" />
   <script src="story/Actions/SmokeOut.lua" type="shared" />
   <script src="story/Actions/TaiChi.lua" type="shared" />
+  <script src="story/Actions/BarbellExcercise.lua" type="shared" />
   <!-- Objects -->
   <script src="story/Objects/SampStoryObjectBase.lua" type="shared" />
   <script src="story/Objects/MobilePhone.lua" type="shared" />
@@ -142,6 +143,7 @@
   <script src="story/Objects/MusicPlayer.lua" type="shared" />
   <script src="story/Objects/Book.lua" type="shared" />
   <script src="story/Objects/Cigarette.lua" type="shared" />
+  <script src="story/Objects/Dumbbell.lua" type="shared" />
   <!-- Episodes -->
   <script src="story/Episodes/House1.lua" type="server" />
   <script src="story/Episodes/House3.lua" type="server" />

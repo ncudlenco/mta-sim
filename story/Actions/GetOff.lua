@@ -16,7 +16,7 @@ function GetOff:Apply()
     local animation = ""
     
     if self.how == GetOff.eHow.Bed then
-        time = 5000
+        time = 3500
         block = "INT_HOUSE"
 
         if self.how == GetOff.eSide.Left then
@@ -27,7 +27,7 @@ function GetOff:Apply()
 
         Timer(function()
             self.Performer.rotation = self.NextLocation.rotation
-        end, time, 1)
+        end, 3500, 1)
     elseif self.how == GetOff.eHow.GymBike then
         time = 1600
         block = "GYMNASIUM"

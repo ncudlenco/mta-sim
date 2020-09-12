@@ -19,7 +19,7 @@ Move = class(StoryActionBase, function(o, params)
     end
 
     if params.how == Move.eHow.Walk then
-        description = " goes to the "
+        description = PickRandom({" goes to the ", " moves towards the ", " starts moving towards the "})
     elseif params.how == Move.eHow.Run then
         description = " runs "
     elseif params.how == Move.eHow.Skate then

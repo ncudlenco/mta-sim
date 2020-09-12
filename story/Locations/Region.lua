@@ -230,6 +230,7 @@ function Region:OnPlayerHit(player)
         -- elseif self.Objects and #self.Objects > 0 then
             local objectsDescription = story.Logger:DescribeObjects(player, self.name, self.Objects, locationMap, true)
             story.Logger:Log(objectsDescription, player, true)
+            story.Logger.PreviousObjectDescription = true
         -- end
     end
 end

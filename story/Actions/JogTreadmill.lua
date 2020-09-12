@@ -1,5 +1,5 @@
 JogTreadmill = class(StoryActionBase, function(o, params)
-    StoryActionBase.init(o, " gets off ", params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
+    StoryActionBase.init(o, PickRandom({" starts jogging on the ", " jogs on the"}), params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
     o.how = params.how or JogTreadmill.eHow.Normal
 end)
 

@@ -1,5 +1,5 @@
 PedalGymBike = class(StoryActionBase, function(o, params)
-    StoryActionBase.init(o, " pedals ", params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
+    StoryActionBase.init(o, PickRandom({" starts pedalling at the ", " pedals at the "}), params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
     o.how = params.how or PedalGymBike.eHow.Normal
 end)
 

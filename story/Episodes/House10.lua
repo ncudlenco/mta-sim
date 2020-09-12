@@ -179,7 +179,7 @@ function House10:Initialize(...)
         self.POI[1], self.POI[i] = self.POI[i], self.POI[1]
     end
 
-    table.insert(livingRoomEntranceLocation.PossibleActions, BarbellExcercise { performer = player, nextLocation = self.POI[1], targetItem = phone, graphId = self.graphId })
+    table.insert(livingRoomEntranceLocation.PossibleActions, GetOff { performer = player, nextLocation = self.POI[1], targetItem = phone, how = GetOff.eHow.Bed, graphId = self.graphId })
     -- table.insert(livingRoomEntranceLocation.PossibleActions, Move { performer = player, nextLocation = self.POI[1], targetItem = self.POI[1], graphId = self.graphId })
     
     -- sit on sofa1
@@ -251,11 +251,11 @@ function House10:Initialize(...)
     local moveToBedroomBedAction = Move { performer = player, nextLocation = bedroomBedLocation, targetItem = bedroomBedLocation, graphId = self.graphId }
     table.insert(bedroomExitLocation.PossibleActions, moveToBedroomBedAction)
 
-    local getInBedAction = GetInBed{performer = player, targetItem = bedroomBed, nextLocation = bedroomBedLocation, how = GetInBed.eHow.Left, graphId = self.graphId}
+    local getInBedAction = GetOn {performer = player, targetItem = bedroomBed, nextLocation = bedroomBedLocation, how = GetOn.eHow.Bed, side = GetOn.eSide.Left, graphId = self.graphId}
     table.insert(bedroomBedLocation.PossibleActions, getInBedAction)
     local sleepAction = Sleep { nextLocation = bedroomBedLocation, performer = player, targetItem = bedroomBed, how = Sleep.eHow.Left, graphId = self.graphId}
     getInBedAction.NextAction = sleepAction
-    local getOffBedAction = GetOffBed{performer = player, targetItem = bedroomBed, nextLocation = bedroomBedLocation, how = GetOffBed.eHow.Left, graphId = self.graphId}
+    local getOffBedAction = GetOff {performer = player, targetItem = bedroomBed, nextLocation = bedroomBedLocation, how = GetOff.eHow.Bed, graphId = self.graphId}
     sleepAction.NextAction = getOffBedAction
     local moveToBedroomExitAction = Move { performer = player, nextLocation = bedroomExitLocation, targetItem = bedroomExitLocation, graphId = self.graphId}
     getOffBedAction.NextAction = moveToBedroomExitAction

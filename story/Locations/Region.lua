@@ -16,6 +16,47 @@ function Region.VertexToVector3(v)
     return Vector3(v.x, v.y, v.z)
 end
 
+--looks at the vertexes in a region and makes sure all points are coplanar
+--projects all outliers on the majoritary common plane
+function Region.ProcessVertexesPlane(region)
+    --Takes points three by three, counts how many points are not on the plane
+    --Choose the plane with the most points on it
+    local bestFittingPlane = nil
+    local bestPointsOnPlane = -1
+    for i = 1, #region.vertexes do
+        local j = i % #region.vertexes + 1
+        local k = j % #region.vertexes + 1
+        outputChatBox('i: '..i..' j: '..j..' k: '..k)
+        local a = Region.VertexToVector3(region.vertexes[i])
+        local b = Region.VertexToVector3(region.vertexes[j])
+        local c = Region.VertexToVector3(region.vertexes[k])
+    
+        local n = (a - b):cross(c - b)
+        n:normalize()
+        local plane = Plane3(b, n)
+        local pointsOnPlane = 0
+        for _, v in ipairs(region.vertexes) do
+            if plane:isPointOnPlane(Region.VertexToVector3(v)) then
+                pointsOnPlane = pointsOnPlane + 1
+            end
+        end
+        if pointsOnPlane > bestPointsOnPlane then
+            bestFittingPlane = plane
+            bestPointsOnPlane = pointsOnPlane
+        end
+    end
+    --Project all the other points on this plane
+    --Recompute the center
+    region.center = Vector3(0,0,0)
+    for i = 1, #region.vertexes do
+        local v = bestFittingPlane:project(Region.VertexToVector3(region.vertexes[i]))
+        region.vertexes[i] = v:unpack()
+        region.center = region.center + v
+    end
+    region.center = (region.center / #region.vertexes):unpack()
+    return region
+end
+
 function Region:GetNormal()
     local a = Region.VertexToVector3(self.vertexes[1])
     local b = Region.VertexToVector3(self.vertexes[2])

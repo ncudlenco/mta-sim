@@ -1,9 +1,9 @@
 VectorUtils = {}
 
 VectorUtils.Rotate = function (self, rotation)
-    local yaw = rotation.z;
-    local pitch = rotation.y;
-    local roll = rotation.x;
+    local yaw = math.rad(rotation.z);
+    local pitch = math.rad(rotation.y);
+    local roll = math.rad(rotation.x);
 
     local cosa = math.cos(yaw);
     local sina = math.sin(yaw);

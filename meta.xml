@@ -151,6 +151,8 @@
   <!-- Story main items -->
   <script src="story/Player.lua" type="server" />
   <script src="story/Story.lua" type="shared" />
+  <!-- Client classes -->
+  <script src="client/Template.lua" type="client"/>
   <!-- Commands -->
   <script src="ServerCommands.lua" type="server" />
   <script src="client/EpisodeCommands.lua" type="client" />

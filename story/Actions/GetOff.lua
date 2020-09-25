@@ -1,6 +1,7 @@
 GetOff = class(StoryActionBase, function(o, params)
     StoryActionBase.init(o, " gets off the ", params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
     o.how = params.how
+    o.side = params.side or GetOff.eSide.Left
 end)
 
 
@@ -19,9 +20,9 @@ function GetOff:Apply()
         time = 3500
         block = "INT_HOUSE"
 
-        if self.how == GetOff.eSide.Left then
+        if self.side == GetOff.eSide.Left then
             animation = "BED_Out_L"
-        elseif self.how == GetOff.eSide.Right then
+        elseif self.side == GetOff.eSide.Right then
             animation = "BED_Out_R"
         end
 
@@ -53,7 +54,7 @@ function GetOff:Apply()
 end
 
 function GetOff:GetDynamicString()
-    return 'return GetOff{how = '..self.how..'}'
+    return 'return GetOff{how = '..self.how..','..'side = '..self.side..'}'
 end
 
 GetOff.eHow = {

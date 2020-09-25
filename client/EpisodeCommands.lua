@@ -1,7 +1,5 @@
 addEvent ( "onElementDoneEditing", true )
 addEvent ( "onActionRetrieved", true )
---TODO: add cameras on regions
---TODO: when defining regions -> show a black marker for each vertex, after a vertex is added, offer the possibility to move it, then confirm the location
 
 DEFINING_EPISODES = false
 if DEFINING_EPISODES then
@@ -15,27 +13,42 @@ end
 
 local episode = DynamicEpisode()
 local markers = {}
+local currentRegion = nil
 local function text_render ( )
-    if episode.Regions then
+    local closestRegion = nil
+    if currentRegion then
+        closestRegion = currentRegion 
+    elseif episode.Regions then
         local regionsInRange = Region.FilterWithinRange(localPlayer.position, episode.Regions, 1.5)
-        local closestRegion = Region.GetClosest(localPlayer, regionsInRange, true)
-        if closestRegion then
-            if closestRegion.cameras then
-                for i,c in ipairs(closestRegion.cameras) do
-                    local sx, sy, _ = getScreenFromWorldPosition(c.x, c.y, c.z)
-                    if sx then 
-                        local sw, sh = guiGetScreenSize ( )
-                        dxDrawText ("cam"..i, sx, sy, sw, sh, tocolor ( 255, 255, 0, 255 ), 2.0, "default-bold" ) 
-                    end
-                end
-            end
-            for i,v in ipairs(closestRegion.vertexes) do
-                local sx, sy, _ = getScreenFromWorldPosition(v.x, v.y, v.z)
+        closestRegion = Region.GetClosest(localPlayer, regionsInRange, false)
+    end
+    if closestRegion then
+        if closestRegion.cameras then
+            for i,c in ipairs(closestRegion.cameras) do
+                local sx, sy, _ = getScreenFromWorldPosition(c.x, c.y, c.z)
                 if sx then 
                     local sw, sh = guiGetScreenSize ( )
-                    dxDrawText ('v'..i..': '..closestRegion.name, sx, sy, sw, sh, tocolor ( 0, 0, 0, 255 ), 2.0, "default-bold" ) 
+                    dxDrawText ("cam"..i, sx, sy, sw, sh, tocolor ( 255, 255, 0, 255 ), 2.0, "default-bold" ) 
                 end
-            end 
+            end
+        end
+        for i,v in ipairs(closestRegion.vertexes) do
+            local sx, sy, _ = getScreenFromWorldPosition(v.x, v.y, v.z)
+            if sx then 
+                local sw, sh = guiGetScreenSize ( )
+                dxDrawText ('v'..i..': '..closestRegion.name, sx, sy, sw, sh, tocolor ( 0, 0, 0, 255 ), 2.0, "default-bold" ) 
+            end
+        end
+        if not currentRegion then
+            local centerText = closestRegion.name
+            if closestRegion.Objects and #closestRegion.Objects > 0 then
+                centerText = centerText..': '..table.concat( closestRegion.Objects, ", ")
+            end
+            local sx, sy, _ = getScreenFromWorldPosition(closestRegion.center.x, closestRegion.center.y, closestRegion.center.z)
+            if sx then 
+                local sw, sh = guiGetScreenSize ( )
+                dxDrawText (centerText, sx, sy, sw, sh, tocolor ( 0, 0, 0, 255 ), 2.0, "default-bold" ) 
+            end
         end
     end
     for i, obj in ipairs(episode.ObjectsToDelete) do
@@ -132,6 +145,12 @@ local function unloadEpisode(episode)
     for _, marker in pairs ( markers ) do 
         marker:destroy()
     end
+    if currentRegion and currentRegion.markers then
+        for _, m in pairs(currentRegion.markers) do
+            m:destroy()
+        end
+        currentRegion = nil
+    end
     markers = {}
     episode:Destroy()
     return true
@@ -144,6 +163,7 @@ local altPressed = false
 local shiftPressed = false
 local setCamera = false
 local moveTarget = false
+local isTemplate = false
 local function playerPressedKey(button, press)
     if (press) then
         local translationIncrement = 0.1
@@ -210,6 +230,8 @@ local function playerPressedKey(button, press)
             triggerEvent ( "onElementDoneEditing", getRootElement(), editedObject )
             editedObject = nil
             setCamera = false
+            isTemplate = false
+            isEditedObjectAttached = false
             if cameraTargetObject then
                 cameraTargetObject:destroy()
                 cameraTargetObject = nil
@@ -219,7 +241,7 @@ local function playerPressedKey(button, press)
             altPressed = true
         elseif button == "lshift" or button == "rshift" then
             shiftPressed = true
-        elseif button == "u" then
+        elseif setCamera and button == "u" then
             if moveTarget then
                 moveTarget = false
                 outputChatBox("Use w/a/s/d/z/x/q/e to place and roll the camera, use scroll up/down to change the field of view", 255, 0, 0, false)
@@ -273,6 +295,12 @@ local function playerPressedKey(button, press)
             setElementBonePositionOffset(editedObject.instance, editedObject.PosOffset.x, editedObject.PosOffset.y, editedObject.PosOffset.z)
             setElementBoneRotationOffset(editedObject.instance, editedObject.RotOffset.x, editedObject.RotOffset.y, editedObject.RotOffset.z)
             setObjectScale(editedObject.instance, editedObject.scale)
+        elseif isTemplate then
+            if translate then
+                editedObject:UpdatePosition(offset)
+            elseif rotate then
+                editedObject:UpdatePosition(nil, offset, localPlayer.position)
+            end
         else
             if translate then
                 editedObject.position = Vector3(editedObject.position.x, editedObject.position.y, editedObject.position.z) + offset
@@ -297,9 +325,9 @@ local lastAction = nil
 local function getAction(actionName, params)
     params.performer = localPlayer
     local action = loadstring("return function(params) return "..actionName.."(params) end")()(params)
-    --to this point I must have an action either defined or DynamicAction, with description, block, anim and (optional) time (which can be random)
-    --use this to ask for further ids: nextLocation id, targetItem type (object or location) and id
-    --figure a way to chain actions, ex: a1 -mandatory- a2 -random- [a3, a4, a5] -mandatory- --a6 this should probably be a new command
+    --here I have an action either defined or DynamicAction, with description, block, anim and (optional) time (which can be random)
+    --I will ask for further ids: nextLocation id, targetItem type (object or location) and it's id
+    --actions can be chained, ex: a1 -mandatory- a2 -random- [a3, a4, a5] -mandatory- --a6 with the link actions command
     local poi = nil
     local minDist = 1000
     for i,v in ipairs (episode.POI) do
@@ -392,7 +420,6 @@ local function getAction(actionName, params)
     end
 end
 
-local currentRegion = nil
 addCommandHandler("episode",
     function (commandName, command, param1, param2, ...)
         if command == "new" then
@@ -426,7 +453,7 @@ addCommandHandler("episode",
         elseif command == "save" then
             if param1 then
                 episode.name = param1
-                --TODO: check if all the required parameters are given
+                --check if all the required parameters are given
                 if not episode.graphPath then
                     outputChatBox("Warning: the graph_path is not set. Run episode setgraph graph_name to set it.", 255, 0, 0, false)
                 end
@@ -453,58 +480,29 @@ addCommandHandler("episode",
                         obj.RotOffset = obj.RotOffset:unpack()
                     end
                     obj.instance = nil
-                    obj.StoryItemType = nil
+                end
+                for _,obj in ipairs(episode.ObjectsToDelete) do
+                    if obj.position and obj.position.unpack then
+                        obj.position = obj.position:unpack()
+                    end
+                    if obj.rotation and obj.rotation.unpack then
+                        obj.rotation = obj.rotation:unpack()
+                    end
+                    if obj.PosOffset and obj.PosOffset.unpack then
+                        obj.PosOffset = obj.PosOffset:unpack()
+                    end
+                    if obj.RotOffset and obj.RotOffset.unpack then
+                        obj.RotOffset = obj.RotOffset:unpack()
+                    end
+                    obj.instance = nil
                 end
                 local backupPOI = {}
                 local serializedPOI = {}
                 for _,poi in ipairs(episode.POI) do
                     table.insert(backupPOI, poi)
                     --serialize all actions in this poi
-                    local serializedAllActions = {}
-                    for _, a in ipairs(poi.allActions) do
-                        local serializedNextAction = nil
-                        if a.NextAction then
-                            if isArray(a.NextAction) then
-                                for _, na in ipairs(a.NextAction) do
-                                    table.insert(serializedNextAction, {id = na.id})
-                                end
-                            else
-                                serializedNextAction = { id = a.NextAction.id }
-                            end
-                        end
-                        local targetItemType = 'Object'
-                        local targetItemId = LastIndexOf(episode.Objects, a.TargetItem)
-                        if targetItemId < 0 then
-                            local targetItemType = 'Location'
-                            targetItemId = LastIndexOf(episode.POI, a.TargetItem)
-                        end
-                        local closingAction = nil
-                        if a.ClosingAction then
-                            closingAction = {id = a.ClosingAction.id}
-                        end
-                        table.insert(serializedAllActions, {
-                            dynamicString = a:GetDynamicString(),
-                            id = a.id,
-                            nextAction = serializedNextAction,
-                            targetItem = {id = targetItemId, type = targetItemType},
-                            nextLocation = {id = LastIndexOf(episode.POI, a.NextLocation)},
-                            closingAction = closingAction
-                        })
-                    end
-                    local serializedPossibleActions = {}
-                    for _, a in ipairs(poi.PossibleActions) do
-                        table.insert(serializedPossibleActions, {id = a.id})
-                    end
-                    table.insert(serializedPOI, {
-                        X = poi.X,
-                        Y = poi.Y,
-                        Z = poi.Z,
-                        Angle = poi.Angle,
-                        Interior = poi.Interior,
-                        Description = poi.Description,
-                        allActions = serializedAllActions,
-                        PossibleActions = serializedPossibleActions
-                    })
+                    local spoi = poi:Serialize(episode)
+                    table.insert(serializedPOI, spoi)
                 end
                 episode.POI = serializedPOI
                 for _,r in ipairs(episode.Regions) do
@@ -543,6 +541,15 @@ addCommandHandler("episode",
         elseif command == "cancel" then
             removeEventHandler("onClientKey", root, playerPressedKey)
             showCursor(false)
+            if currentRegion and currentRegion.markers then
+                for _,v in currentRegion.markers do
+                    v:destroy()
+                end
+                currentRegion = nil
+            end
+            if editedObject and editedObject:getData('isTemporary') then
+                editedObject:destroy()
+            end
         elseif command == "delete" then
             if param1 == "object" then
                 if not param2 then
@@ -728,6 +735,52 @@ addCommandHandler("episode",
                     removeEventHandler("onClientClick", getRootElement(), onClick)
                 end
                 addEventHandler ( "onClientClick", getRootElement(), onClick)
+            
+            elseif param1 == "vertex" then
+                if episode.Regions then
+                    local regionsInRange = Region.FilterWithinRange(localPlayer.position, episode.Regions, 1.5)
+                    local closestRegion = Region.GetClosest(localPlayer, regionsInRange, true)
+                    if closestRegion then
+                        local closestVertex = nil
+                        local minDist = 1000
+                        local closestIdx = -1
+                        for i,v in ipairs (closestRegion.vertexes) do
+                            local dist = math.abs((localPlayer.position - Vector3(v.x, v.y, v.z)).length)
+                            if dist < minDist then
+                                minDist = dist
+                                closestVertex = v
+                                closestIdx = i
+                            end
+                        end
+                        if closestVertex then
+                            showCursor(true, true)
+                            outputChatBox("Place the vertex marker as desired and press enter", 255, 0, 0, false)
+                            outputChatBox("Use w/a/s/d/z/x/q/e/f/g/h/j to place and rotate the marker", 255, 0, 0, false)
+                            outputChatBox("Press enter to finish", 255, 0, 0, false)
+                            editedObject = Marker(closestVertex.x, closestVertex.y, closestVertex.z, "cylinder", 0.5, 255, 0, 0, 128)
+                            editedObject.interior = localPlayer.interior
+                            editedObject:setData('isTemporary', true)
+
+                            local function vertexMarkerSet(vertexMarker)
+                                removeEventHandler("onElementDoneEditing", getRootElement(), vertexMarkerSet)
+                                showCursor(false)
+                                local vertex = vertexMarker.position
+                                closestRegion.center = (((Vector3(closestRegion.center.x, closestRegion.center.y, closestRegion.center.z) * #closestRegion.vertexes) - Vector3(closestVertex.x, closestVertex.y, closestVertex.z) + vertex) / #closestRegion.vertexes):unpack()
+                                closestRegion.vertexes[closestIdx] = vertex:unpack()
+                                vertexMarker:destroy()
+                            end
+
+                            addEventHandler("onClientKey", root, playerPressedKey)
+                            addEventHandler ( "onElementDoneEditing", getRootElement(), vertexMarkerSet)
+                        else
+                            outputChatBox("Could not find the closest vertex in this region")
+                        end
+                    else
+                        outputChatBox("Could not find a region for this location")
+                    end
+                else
+                    outputChatBox("No region defined yet")
+                end            
             end
         elseif command == "reset" then
             if param1 == "camera" then
@@ -938,7 +991,8 @@ addCommandHandler("episode",
                     Description = description,
                     Objects = objects,
                     vertexes = {},
-                    center = Vector3(0,0,0)
+                    center = Vector3(0,0,0),
+                    markers = {}
                 }
                 outputChatBox("Started recording vertexes for the region "..name)
                 outputChatBox("To add the vertexes, stop in each desired location clockwise or counterclockwise and execute the command: ")
@@ -953,6 +1007,11 @@ addCommandHandler("episode",
                 local function doneAddingVertexes()
                     currentRegion.center = currentRegion.center / #currentRegion.vertexes
                     currentRegion.center = currentRegion.center:unpack()
+                    for _, m in ipairs(currentRegion.markers) do
+                        m:destroy()
+                    end
+                    currentRegion.markers = nil
+                    currentRegion = Region.ProcessVertexesPlane(currentRegion)
                     table.insert(episode.Regions, currentRegion)
                     currentRegion = nil
                     outputChatBox("done adding vertexes")
@@ -963,6 +1022,7 @@ addCommandHandler("episode",
                     return
                 end
 
+                showCursor(true, true)
                 local vertex = localPlayer.position
                 local groundZ = getGroundPosition (vertex.x, vertex.y, vertex.z)
                 if not groundZ or groundZ == 0 then
@@ -970,23 +1030,39 @@ addCommandHandler("episode",
                 end
                 vertex.z = groundZ;
 
-                currentRegion.center = currentRegion.center + vertex
-                table.insert(currentRegion.vertexes, vertex:unpack())
-                outputChatBox("vertex nr " .. #currentRegion.vertexes .. " added")
-                if #currentRegion.vertexes < 3 then
-                    outputChatBox("at least "..(3 - #currentRegion.vertexes).." more needed to create a valid region")
+                outputChatBox("Place the vertex marker as desired and press enter", 255, 0, 0, false)
+                outputChatBox("Use w/a/s/d/z/x/q/e/f/g/h/j to place and rotate the marker", 255, 0, 0, false)
+                outputChatBox("Press enter to finish", 255, 0, 0, false)
+                editedObject = Marker(vertex.x, vertex.y, vertex.z, "cylinder", 0.5, 255, 0, 0, 128)
+                editedObject.interior = localPlayer.interior
+                editedObject:setData('isTemporary', true)
+
+                local function vertexMarkerSet(vertexMarker)
+                    removeEventHandler("onElementDoneEditing", getRootElement(), vertexMarkerSet)
+                    showCursor(false)
+                    local vertex = vertexMarker.position
+                    currentRegion.center = currentRegion.center + vertex
+                    table.insert(currentRegion.vertexes, vertex:unpack())
+                    table.insert(currentRegion.markers, vertexMarker)
+                    outputChatBox("vertex nr " .. #currentRegion.vertexes .. " added")
+                    if #currentRegion.vertexes < 3 then
+                        outputChatBox("at least "..(3 - #currentRegion.vertexes).." more needed to create a valid region")
+                    end
+
+                    if param2 == "last" then
+                        doneAddingVertexes()
+                    else
+                        if #currentRegion.vertexes >= 2 then
+                            outputChatBox("execute 'episode add vertex last' next, if the next vertex is the last one")
+                        end
+                        if #currentRegion.vertexes >= 3 then
+                            outputChatBox("execute 'episode add vertex done' if you are done now and you don't wish to add any more vertexes")
+                        end
+                    end
                 end
 
-                if param2 == "last" then
-                    doneAddingVertexes()
-                else
-                    if #currentRegion.vertexes >= 2 then
-                        outputChatBox("execute 'episode add vertex last' next, if the next vertex is the last one")
-                    end
-                    if #currentRegion.vertexes >= 3 then
-                        outputChatBox("execute 'episode add vertex done' if you are done now and you don't wish to add any more vertexes")
-                    end
-                end
+                addEventHandler("onClientKey", root, playerPressedKey)
+                addEventHandler ( "onElementDoneEditing", getRootElement(), vertexMarkerSet)
             end
         elseif command == "linkactions" then
             local poi = nil
@@ -1172,4 +1248,186 @@ addCommandHandler("episode",
             addEventHandler ( "onElementDoneEditing", getRootElement(), onAttachOffsetsSet)
         end
 	end
+)
+
+addCommandHandler("template",
+    function (commandName, command, param1, param2, ...)
+        if command == "save" then
+            if param2 ~= "o" and fileExists("files/templates/"..param1..".json") then
+                outputChatBox("files/templates/"..param1..".json already exists. To overwrite it type template save template_name o", 255, 0, 0, false)
+                return
+            end
+
+            local poi = nil
+            local minDist = 1000
+            for i,v in ipairs (episode.POI) do
+                local dist = math.abs((localPlayer.position - Vector3(v.X, v.Y, v.Z)).length)
+                if dist < minDist then
+                    minDist = dist
+                    poi = v
+                end
+            end
+
+            if not poi then
+                outputChatBox("Could not find a POI nearby!")
+                return
+            end
+
+            local mainPoi, objects, locations = poi:Serialize(episode, Vector3(poi.position.x, poi.position.y, poi.position.z))
+            local instances = {}
+            for _,obj in ipairs(objects) do
+                table.insert(instances, obj.instance)
+                if obj.position and obj.position.unpack then
+                    obj.position = obj.position:unpack()
+                end
+                if obj.rotation and obj.rotation.unpack then
+                    obj.rotation = obj.rotation:unpack()
+                end
+                if obj.PosOffset and obj.PosOffset.unpack then
+                    obj.PosOffset = obj.PosOffset:unpack()
+                end
+                if obj.RotOffset and obj.RotOffset.unpack then
+                    obj.RotOffset = obj.RotOffset:unpack()
+                end
+                obj.instance = nil
+            end
+
+            local template = {
+                poi = mainPoi,
+                objects = objects,
+                locations = locations
+            }
+            local fileHandle = fileCreate("files/templates/"..param1..".json")
+            if fileHandle then
+                local jsonStr = toJSON(template)
+                fileWrite(fileHandle, jsonStr)
+                fileClose(fileHandle)
+                outputChatBox("Saved files/templates/"..param1..".json", 255, 0, 0, false)
+            end
+            for i,obj in ipairs(objects) do
+                obj.instance = instances[i]
+            end
+        elseif command == "insert" then
+            local file = fileOpen("files/templates/"..param1..".json") 
+            if file then
+                local jsonStr = fileRead(file, fileGetSize(file))
+                local rawTemplate = fromJSON(jsonStr)
+                fileClose(file)
+
+                if not rawTemplate then
+                    outputChatBox("Something went wrong while loading the template from file")
+                    return
+                end
+                local template = Template(rawTemplate)
+                if not template then
+                    outputChatBox("Something went wrong while deserializing the template")
+                    return
+                end
+                --Create the marker for the POI, the objects as dependencies and the markers for the other dependent locations
+                template:Instantiate(localPlayer.interior, localPlayer.position)
+                --First: ask the player to position the main poi
+                local function includeTemplateInEpisode(template)
+                    showCursor(false)
+                    removeEventHandler("onElementDoneEditing", getRootElement(), includeTemplateInEpisode)
+
+                    local objectsMap = {}
+                    local poiMap = {}
+                    --add the dependent objects in the episode objects list
+                    for _,o in ipairs(template.objects) do
+                        local obj = loadstring(o.dynamicString)()
+                        obj.instance = o.instance
+                        obj:UpdateData(true)
+                        table.insert(
+                            episode.Objects,
+                            obj
+                        )
+                        objectsMap[o.id] = #episode.Objects
+                    end
+                    outputChatBox("Template: ".. #template.objects .." dependent objects inserted...", 255, 255, 255, false)
+                    local function addSerializedPoiToTmpList(v, idx)
+                        v.X = v.instance.position.x
+                        v.Y = v.instance.position.y
+                        v.Z = v.instance.position.z + 1
+                        v.Interior = v.instance.interior
+                        v.instance:destroy()
+                        local obj = Location(v.X, v.Y, v.Z, v.Angle, v.Interior, v.Description)
+                        table.insert(episode.POI, obj)
+                        poiMap[v.id] = #episode.POI
+                    end
+                    local allPoi = {template.poi}
+                    --add the current poi in a temporary POI list
+                    addSerializedPoiToTmpList(template.poi)
+                    --add the dependent POI in the temporary POI list
+                    for _,v in ipairs(template.locations) do
+                        addSerializedPoiToTmpList(v)
+                        table.insert(allPoi, v)
+                    end
+                    --remap the action target ids in all POI from the temporary list
+                    for _,rawpoi in ipairs(allPoi) do
+                        local poi = episode.POI[poiMap[rawpoi.id]]
+                        --order is important here!
+                        local deserializedAllActions = {}
+                        for _,a in ipairs(rawpoi.allActions) do
+                            local action = loadstring(a.dynamicString)()
+                            action.id = a.id
+                            action.TargetItem = nil
+                            if a.targetItem then
+                                if a.targetItem.type == "Object" then
+                                    action.TargetItem = episode.Objects[objectsMap[a.targetItem.id] or a.targetItem.id]
+                                elseif a.targetItem.type == "Location" then
+                                    if poiMap[a.targetItem.id] > episode.POI then
+                                        action.TargetItem = episode.POI[poiMap[a.targetItem.id] or a.targetItem.id]
+                                    else
+
+                                    end
+                                end
+                            end
+                            if a.nextLocation then
+                                action.NextLocation = episode.POI[poiMap[a.targetItem.id] or a.targetItem.id]
+                            end
+                            table.insert(deserializedAllActions, action)
+                        end
+                        for i,a in ipairs(rawpoi.allActions) do
+                            local action = deserializedAllActions[i]
+                            if a.nextAction then
+                                if isArray(a.nextAction) then
+                                    action.NextAction = {}
+                                    for _, na in ipairs(a.nextAction) do
+                                        table.insert(action.NextAction, deserializedAllActions[na.id])
+                                    end
+                                else                    
+                                    action.NextAction = deserializedAllActions[a.nextAction.id]
+                                end
+                            end
+                            if a.closingAction then
+                                action.ClosingAction = deserializedAllActions[a.closingAction.id]
+                            end
+                        end
+                        poi.allActions = deserializedAllActions
+                        local deserializedPossibleActions = {}
+                        for _,a in ipairs(rawpoi.PossibleActions) do
+                            table.insert(deserializedPossibleActions, deserializedAllActions[a.id])
+                        end
+                        poi.PossibleActions = deserializedPossibleActions
+                    end
+                    outputChatBox("Template: ".. #template.locations .." dependent poi inserted...", 255, 255, 255, false)
+                    outputChatBox("Done. Template with all dependencies inserted.", 255, 0, 0, false)
+                    return true
+                end
+                showCursor(true, true)
+                outputChatBox("Use w/a/s/d/z/x/q/e/f/g/h/j to place and rotate the object", 255, 0, 0, false)
+                outputChatBox("Press enter to finish", 255, 0, 0, false)
+                editedObject = template
+                isTemplate = true
+                addEventHandler("onClientKey", root, playerPressedKey)
+                addEventHandler ( "onElementDoneEditing", getRootElement(), includeTemplateInEpisode)
+
+            else
+                outputChatBox("Could not open the file files/templates/"..param1..".json")
+            end
+        else
+            outputChatBox("A template is a POI, with actions and their dependencies. The actions dependencies are their target items and next locations.")
+            outputChatBox("Target items can be objects, locations or nothing.")
+        end
+    end
 )

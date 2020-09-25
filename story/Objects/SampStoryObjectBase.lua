@@ -10,8 +10,8 @@ SampStoryObjectBase = class(StoryObjectBase, function(o, params)
     o.instance = nil
     o.size = params.size or 2.5
     o.scale = params.scale or 1
-    o.PosOffset = params.posOffset or Vector3(0,0,0)
-    o.RotOffset = params.rotOffset or Vector3(0,0,0)
+    o.PosOffset = params.posOffset or params.PosOffset or Vector3(0,0,0)
+    o.RotOffset = params.rotOffset or params.RotOffset or Vector3(0,0,0)
     local noCollisionStr = 'false'
     if o.noCollisions then
         noCollisionStr = 'true'
@@ -53,20 +53,28 @@ function SampStoryObjectBase:__tostring()
   end
 
 function SampStoryObjectBase:UpdateData(unpack)
-    if not self.instance then
-        return nil
-    end
-    if self.modelid then
-        self.modelid = self.instance.modelid
-    end
-    if unpack then
-        self.position = self.instance.position:unpack()
-        self.rotation = self.instance.rotation:unpack()        
-    else
+    if self.instance then
+        if self.modelid then
+            self.modelid = self.instance.model
+        end
         self.position = self.instance.position
         self.rotation = self.instance.rotation
+        self.interior = self.instance.interior
     end
-    self.interior = self.instance.interior
+    if unpack then        
+        if self.position and self.position.unpack then
+            self.position = self.position:unpack()
+        end
+        if self.rotation and self.rotation.unpack then
+            self.rotation = self.rotation:unpack()
+        end
+        if self.PosOffset and self.PosOffset.unpack then
+            self.PosOffset = self.PosOffset:unpack()
+        end
+        if self.RotOffset and self.RotOffset.unpack then
+            self.RotOffset = self.RotOffset:unpack()
+        end
+    end
     local noCollisionStr = 'false'
     if self.noCollisions then
         noCollisionStr = 'true'

@@ -36,7 +36,7 @@ function PedalGymBike:Apply()
 end
 
 function PedalGymBike:GetDynamicString()
-    return 'return PedalGymBike{}'
+    return 'return PedalGymBike{how='..self.how..'}'
 end
 
 PedalGymBike.eHow = {

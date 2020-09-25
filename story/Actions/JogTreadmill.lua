@@ -32,7 +32,7 @@ function JogTreadmill:Apply()
 end
 
 function JogTreadmill:GetDynamicString()
-    return 'return JogTreadmill{}'
+    return 'return JogTreadmill{how = '..self.how..'}'
 end
 
 JogTreadmill.eHow = 

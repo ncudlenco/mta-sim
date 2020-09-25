@@ -28,9 +28,9 @@ function GetOn:Apply()
         time = 3500
         block = "INT_HOUSE"
 
-        if self.how == GetOn.eSide.Left then
+        if self.side == GetOn.eSide.Left then
             animation = "BED_In_L"
-        elseif self.how == GetOn.eSide.Right then
+        elseif self.side == GetOn.eSide.Right then
             animation = "BED_In_R"
         end
     elseif self.how == GetOn.eHow.GymBike then
@@ -57,9 +57,8 @@ function GetOn:Apply()
 end
 
 function GetOn:GetDynamicString()
-    return 'return GetOn{how = '..self.how..'}'
+    return 'return GetOn{how = '..self.how..','..'side = '..self.side..'}'
 end
-
 
 GetOn.eHow = {
     Bed = 1,

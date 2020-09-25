@@ -43,11 +43,7 @@
                     "x": 2361.085693359375,
                     "z": 1052.312133789063
                 },
-                "StoryItemType": {
-                    "id": 1,
-                    "idr": 1,
-                    "name": "Object"
-                },
+                "StoryItemType": 1,
                 "modelid": 2255,
                 "size": 2.5
             },
@@ -69,7 +65,7 @@
                     "x": 2367.09716796875,
                     "z": 1050.544067382813
                 },
-                "StoryItemType": "^T^10",
+                "StoryItemType": 1,
                 "modelid": 2331,
                 "size": 2.5
             },
@@ -91,7 +87,7 @@
                     "x": 2359.20458984375,
                     "z": 1050.40234375
                 },
-                "StoryItemType": "^T^10",
+                "StoryItemType": 1,
                 "modelid": 2298,
                 "size": 5.5
             }
@@ -115,7 +111,7 @@
                     "x": 2361.299560546875,
                     "z": 1049.875
                 },
-                "StoryItemType": "^T^10",
+                "StoryItemType": 1,
                 "modelid": 2298,
                 "size": 2.5
             }
@@ -148,7 +144,7 @@
                 ],
                 "allActions": [
                     {
-                        "dynamicString": "return GetInBed{how = 1}",
+                        "dynamicString": "return GetOn{how = 1, side = 1}",
                         "targetItem": {
                             "id": 1,
                             "type": "Object"
@@ -179,7 +175,7 @@
                         }
                     },
                     {
-                        "dynamicString": "return GetOffBed{how = 1}",
+                        "dynamicString": "return GetOff{how = 1, side = 1}",
                         "targetItem": {
                             "id": 1,
                             "type": "Object"

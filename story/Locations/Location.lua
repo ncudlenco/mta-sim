@@ -28,6 +28,118 @@ function Location:SpawnPlayerHere(player)
     end
 end
 
+function Location:Serialize(episode, relativePosition, _objects, _locations, _mainPOI)
+    local objects = {}
+    if _objects then
+        objects = _objects
+    end
+    local locations = {}
+    if _locations then
+        locations = _locations
+    end
+    local serializedAllActions = {}
+    for _, a in ipairs(self.allActions) do
+        local serializedNextAction = nil
+        if a.NextAction then
+            if isArray(a.NextAction) then
+                for _, na in ipairs(a.NextAction) do
+                    table.insert(serializedNextAction, {id = na.id})
+                end
+            else
+                serializedNextAction = { id = a.NextAction.id }
+            end
+        end
+        local targetItemType = 'Object'
+        local targetItemId = LastIndexOf(episode.Objects, a.TargetItem)
+        if targetItemId < 0 then
+            targetItemType = 'Location'
+            targetItemId = LastIndexOf(episode.POI, a.TargetItem)
+            if targetItemId < 0 then
+                targetItemType = 'none'
+            end
+        end
+        local closingAction = nil
+        if a.ClosingAction then
+            closingAction = {id = a.ClosingAction.id}
+        end
+        local serializedAction = {
+            dynamicString = a:GetDynamicString(),
+            id = a.id,
+            nextAction = serializedNextAction,
+            targetItem = {id = targetItemId, type = targetItemType},
+            nextLocation = {id = LastIndexOf(episode.POI, a.NextLocation)},
+            closingAction = closingAction
+        }
+        table.insert(serializedAllActions, serializedAction)
+        local function processLocationDependency(location)
+            local locationCopy = {id = location.id or LastIndexOf(episode.POI, location)}
+            --If next location is not myself and next location is not already processed in recursivity
+            if 
+                locationCopy.id ~= LastIndexOf(episode.POI, self)
+                and #Where(locations, function (x) return x.id == locationCopy.id end) == 0
+                and (not _mainPOI or locationCopy.id ~= LastIndexOf(episode.POI, _mainPOI) )
+            then
+                local targetItemRelativePosition = Vector3(location.position.x, location.position.y, location.position.z) - relativePosition
+
+                locationCopy = location:Serialize(episode, relativePosition, objects, locations, _mainPOI or self)
+                locationCopy.X = targetItemRelativePosition.x
+                locationCopy.Y = targetItemRelativePosition.y
+                locationCopy.Z = targetItemRelativePosition.z
+                --This is probably handled in recursivity already
+                -- for _,v in ipairs(dependentObjects) do
+                --     if #Where(objects, function (x) return x.id == v.id end) == 0 then
+                --         table.insert(objects, v)
+                --     end
+                -- end
+                -- for _,v in ipairs(dependentLocations) do 
+                --     if #Where(locations, function (x) return x.id == v.id end) == 0 then
+                --         table.insert(locations, v)
+                --     end
+                -- end
+                if #Where(locations, function (x) return x.id == locationCopy.id end) == 0 then
+                    table.insert(locations, locationCopy)
+                end
+            end
+        end
+        if a.TargetItem and a.TargetItem.position and relativePosition then
+            if targetItemType == 'Object' then
+                local objectCopy = SampStoryObjectBase(a.TargetItem)
+                local targetItemRelativePosition = Vector3(a.TargetItem.position.x, a.TargetItem.position.y, a.TargetItem.position.z) - relativePosition
+                objectCopy.position = targetItemRelativePosition
+                objectCopy.instance = nil
+                objectCopy:UpdateData(true)
+                objectCopy.id = targetItemId
+                if #Where(objects, function (x) return x.id == objectCopy.id end) == 0 then
+                    table.insert(objects, {
+                        id = objectCopy.id, 
+                        dynamicString = objectCopy.dynamicString
+                    })
+                end
+            elseif targetItemType == 'Location' then
+                processLocationDependency(a.TargetItem)
+            end
+        end
+        if relativePosition then
+            processLocationDependency(a.NextLocation)
+        end
+    end
+    local serializedPossibleActions = {}
+    for _, a in ipairs(self.PossibleActions) do
+        table.insert(serializedPossibleActions, {id = a.id})
+    end
+    return {
+        X = self.X,
+        Y = self.Y,
+        Z = self.Z,
+        Angle = self.Angle,
+        Interior = self.Interior,
+        Description = self.Description,
+        allActions = serializedAllActions,
+        PossibleActions = serializedPossibleActions,
+        id = LastIndexOf(episode.POI, self)
+    }, objects, locations
+end
+
 function Location:GetNextValidAction(player)
     if DEBUG then
         outputConsole("Location:GetNextValidAction")

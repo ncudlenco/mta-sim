@@ -10,11 +10,10 @@ function PickUp:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History, self)
     
+    print(self.TargetObjectExists)
     if self.TargetObjectExists then
         self.TargetItem:Destroy()
     end
-
-    self.TargetItem:Create()
 
     pickedObjects = self.Performer:getData('pickedObjects')
     
@@ -60,6 +59,7 @@ function PickUp:Apply()
     end
 
     OnGlobalActionFinished(time, self.Performer:getData('id'), self.Performer:getData('storyId'), function()
+        self.TargetItem:Create()
         attachElementToBone(self.TargetItem.instance, self.Performer, self.hand, 
                         self.TargetItem.PosOffset.x, self.TargetItem.PosOffset.y, self.TargetItem.PosOffset.z,
                         self.TargetItem.RotOffset.x, self.TargetItem.RotOffset.y, self.TargetItem.RotOffset.z)

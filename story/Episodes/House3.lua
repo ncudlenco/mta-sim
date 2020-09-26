@@ -130,6 +130,10 @@ function House3:Initialize(...)
     drink:Create()
     table.insert(self.Objects, drink)
 
+    if DEBUG then
+        outputConsole("House3: Objects initialized")
+    end
+
     local livingRoomEntranceLocation = Location(2496.212, -1694.371459, 1014.7422, 181.8800, self.InteriorId, "entrance")
     local kitchenSinkLocation = Location(2500.235859375, -1709.40225585938, 1014.7422, 270.000, self.InteriorId, "kitchen")
     local kitchenTableLocation = Location(2494.2033, -1708.3198, 1014.7422, 90, self.InteriorId, "kitchen")
@@ -138,7 +142,7 @@ function House3:Initialize(...)
     local bedroomBedLocation = Location(2495.2177734375, -1703.923217773438, 1018.34375, 0, self.InteriorId, "bedroom")
     local livingRoomEndLocation = Location(2496.0610, -1694.2596, 1014.7422, 0, self.InteriorId, "living room exit")
 
-    table.insert(self.ValidStartingLocations, livingRoomEntranceLocation)
+    table.insert(self.ValidStartingLocations, bedroomBedLocation)
 
     self.POI = {livingroomSofaLocation, livingroomTableLocation, kitchenSinkLocation, bedroomBedLocation, livingRoomEndLocation}
     -- self.POI = Shuffle(self.POI)
@@ -195,11 +199,11 @@ function House3:Initialize(...)
     pickUpDrinkAction.ClosingAction = moveToPOI4Action
 
     -- get in bed
-    local getInBedAction = GetOn{performer = player, targetItem = bedroomBed, nextLocation = bedroomBedLocation, how = GetOn.eHow.Bed, side = GetOn.eSide.Left, graphId = self.graphId}
+    local getInBedAction = GetOn{performer = player, targetItem = bedroomBed, nextLocation = bedroomBedLocation, how = GetOn.eHow.Bed, side = GetOn.eSide.Right, graphId = self.graphId}
     table.insert(bedroomBedLocation.PossibleActions, getInBedAction)
     local sleepAction = Sleep { nextLocation = bedroomBed, performer = player, targetItem = bedroomBed, how = Sleep.eHow.Right, graphId = self.graphId}
     getInBedAction.NextAction = sleepAction
-    local getOffBedAction = GetOff{performer = player, targetItem = bedroomBed, nextLocation = bedroomBedLocation,  how = GetOff.eHow.Bed, graphId = self.graphId}
+    local getOffBedAction = GetOff{performer = player, targetItem = bedroomBed, nextLocation = bedroomBedLocation,  how = GetOff.eHow.Bed, side = GetOff.eSide.Right, graphId = self.graphId}
     sleepAction.NextAction = getOffBedAction
     local moveToPOI5Action = Move { performer = player, nextLocation = self.POI[5], targetItem = self.POI[5], graphId = self.graphId}
     getOffBedAction.NextAction = moveToPOI5Action
@@ -223,7 +227,6 @@ function House3:Play(...)
     if player == nil then
         return false
     end
-
     if self.StartingLocation == nil then
         self.StartingLocation = PickRandom(self.ValidStartingLocations)
     end

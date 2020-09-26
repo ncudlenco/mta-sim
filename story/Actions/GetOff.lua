@@ -17,7 +17,7 @@ function GetOff:Apply()
     local animation = ""
     
     if self.how == GetOff.eHow.Bed then
-        time = 3500
+        time = 3100
         block = "INT_HOUSE"
 
         if self.side == GetOff.eSide.Left then

@@ -13,12 +13,14 @@ function PutDown:Apply()
     story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. self.TargetItem.Description .. " on " .. self.Where, self.Performer)
     -- self.TargetItem.instance:setCollisionsEnabled(false)
 
+    local time = 500
     if self.how == PutDown.eHow.Normal then
-        self.Performer:setAnimation("BAR", "Barserve_bottle", 200, true, true, false, true)
+        time = 200
+        self.Performer:setAnimation("BAR", "Barserve_bottle", time, true, true, false, true)
     elseif self.how == PutDown.eHow.Down then
-        self.Performer:setAnimation("MISC", "Case_pickup", 500, true, true, false, true)
+        self.Performer:setAnimation("MISC", "Case_pickup", time, true, true, false, true)
     elseif self.how == PutDown.eHow.FloorBarbell then
-        self.Performer:setAnimation("Freeweights", "gym_free_putdown", 500, true, true, false, true)
+        self.Performer:setAnimation("Freeweights", "gym_free_putdown", time, true, true, false, true)
     end
 
     if DEBUG then

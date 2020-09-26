@@ -25,7 +25,7 @@ function GetOn:Apply()
     local animation = ""
     
     if self.how == GetOn.eHow.Bed then
-        time = 3500
+        time = 3100
         block = "INT_HOUSE"
 
         if self.side == GetOn.eSide.Left then

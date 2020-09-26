@@ -39,18 +39,20 @@ function PickUp:Apply()
         story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. getWordPrefix(self.TargetItem.Description) .. " " .. self.TargetItem.Description .. " from " .. self.Where, self.Performer)
     end
 
+    local time = 500
     if self.how == PickUp.eHow.Normal then
+        time = 200
         self.TargetItem:updatePositionOffsetStandUp()
         self.TargetItem:updateRotOffsetStandUp()
-        self.Performer:setAnimation("BAR", "Barserve_bottle", 200, true, true, false, true)
+        self.Performer:setAnimation("BAR", "Barserve_bottle", time, true, true, false, true)
     elseif self.how == PickUp.eHow.Down then
-        self.Performer:setAnimation("MISC", "Case_pickup", 500, true, true, false, true)
+        self.Performer:setAnimation("MISC", "Case_pickup", time, true, true, false, true)
     elseif self.how == PickUp.eHow.Sit then
         self.TargetItem:updatePositionOffsetSitDown()
         self.TargetItem:updateRotOffsetSitDown()
-        self.Performer:setAnimation("INT_OFFICE", "OFF_Sit_Drink", 500, true, true, false, true)
+        self.Performer:setAnimation("INT_OFFICE", "OFF_Sit_Drink", time, true, true, false, true)
     elseif self.how == PickUp.eHow.FloorBarbell then
-        self.Performer:setAnimation("Freeweights", "gym_free_pickup", 500, true, true, false, true)
+        self.Performer:setAnimation("Freeweights", "gym_free_pickup", time, true, true, false, true)
     end
 
     if DEBUG then

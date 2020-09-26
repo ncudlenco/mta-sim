@@ -8,6 +8,7 @@ function OnGlobalActionFinished(delay, playerId, storyId, callback, destroyedIte
         if callback then
             callback(playerId, storyId)
         end
+
         if lastAction.NextAction then
             if isArray(lastAction.NextAction) then
                 PickRandom(lastAction.NextAction):Apply()
@@ -17,5 +18,6 @@ function OnGlobalActionFinished(delay, playerId, storyId, callback, destroyedIte
         elseif lastAction.NextLocation then
             lastAction.NextLocation:GetNextValidAction(lastAction.Performer):Apply()
         end
+
     end, delay, 1, playerId, storyId)    
 end

@@ -104,7 +104,7 @@ function House1:Initialize(...)
 
     local livingRoomEndLocation = Location(-2170.126708984375, 638.444580078125, 1057.5971, 180, self.InteriorId, "house exit")
 
-    table.insert(self.ValidStartingLocations, kitchenChairLocation)
+    table.insert(self.ValidStartingLocations, livingRoomEntranceLocation)
 
     self.POI = {livingRoomSofaLocation, livingRoomMusicPlayerLocation, kitchenChairLocation, kitchenTableLocation, livingRoomSmokeLocation, livingRoomEndLocation}
     -- self.POI = Shuffle(self.POI)

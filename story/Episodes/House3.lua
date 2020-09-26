@@ -195,11 +195,11 @@ function House3:Initialize(...)
     pickUpDrinkAction.ClosingAction = moveToPOI4Action
 
     -- get in bed
-    local getInBedAction = GetInBed{performer = player, targetItem = bedroomBed, nextLocation = bedroomBedLocation, how = GetInBed.eHow.Right, graphId = self.graphId}
+    local getInBedAction = GetOn{performer = player, targetItem = bedroomBed, nextLocation = bedroomBedLocation, how = GetOn.eHow.Bed, side = GetOn.eSide.Left, graphId = self.graphId}
     table.insert(bedroomBedLocation.PossibleActions, getInBedAction)
     local sleepAction = Sleep { nextLocation = bedroomBed, performer = player, targetItem = bedroomBed, how = Sleep.eHow.Right, graphId = self.graphId}
     getInBedAction.NextAction = sleepAction
-    local getOffBedAction = GetOffBed{performer = player, targetItem = bedroomBed, nextLocation = bedroomBedLocation, how = GetOffBed.eHow.Right, graphId = self.graphId}
+    local getOffBedAction = GetOff{performer = player, targetItem = bedroomBed, nextLocation = bedroomBedLocation,  how = GetOff.eHow.Bed, graphId = self.graphId}
     sleepAction.NextAction = getOffBedAction
     local moveToPOI5Action = Move { performer = player, nextLocation = self.POI[5], targetItem = self.POI[5], graphId = self.graphId}
     getOffBedAction.NextAction = moveToPOI5Action

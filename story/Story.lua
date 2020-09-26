@@ -5,7 +5,7 @@ Story = class(StoryBase, function(o, actor, maxActions, logData)
     o.Episodes = {
         --add an episode here
         -- House1()
-        -- House3()
+        House3()
         -- House8()
         -- House10()
         -- House12()

@@ -10,7 +10,6 @@ function PickUp:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History, self)
     
-    print(self.TargetObjectExists)
     if self.TargetObjectExists then
         self.TargetItem:Destroy()
     end

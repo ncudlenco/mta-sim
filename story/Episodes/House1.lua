@@ -74,7 +74,7 @@ function House1:Initialize(...)
     kitchenBook:Create()
     table.insert(self.Objects, kitchenBook)
     
-    drink = Drinks {
+    local drink = Drinks {
         modelid = Drinks.eModel[PickRandom(Drinks.eModel)],
         position =     Vector3(-2162.421044921875, 639.2874145507813, 1057.5271),
         rotation =     Vector3(0, 0.0000, 0),
@@ -85,7 +85,7 @@ function House1:Initialize(...)
     drink:Create()
     table.insert(self.Objects, drink)
 
-    cigarette = Cigarette {
+    local cigarette = Cigarette {
         modelid = Cigarette.eModel.Cigarette1,
         position =     Vector3(0, 0, 0),
         rotation =     Vector3(0, 0.0000, 0),

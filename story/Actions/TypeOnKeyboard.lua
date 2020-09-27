@@ -1,5 +1,5 @@
 TypeOnKeyboard = class(StoryActionBase, function(o, params)
-    StoryActionBase.init(o, " is typing ", params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
+    StoryActionBase.init(o, " types ", params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
 end)
 
 function TypeOnKeyboard:Apply()

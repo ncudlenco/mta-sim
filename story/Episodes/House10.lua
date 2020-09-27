@@ -27,7 +27,7 @@ function House10:Initialize(...)
         return false
     end
 
-    livingroomSofa1 = Sofa {
+    local livingroomSofa1 = Sofa {
         modelid = Sofa.eModel.Couch01,
         position =     Vector3(2261.4609, -1212.0625, 1048.0078),
         rotation =     Vector3(0, 0.0000, 225),
@@ -39,7 +39,7 @@ function House10:Initialize(...)
     livingroomSofa1:Create()
     table.insert(self.Objects, livingroomSofa1)
 
-    livingroomSofa2 = Sofa {
+    local livingroomSofa2 = Sofa {
         modelid = Sofa.eModel.Couch01,
         position =     Vector3(2257.6172, -1207.7266, 1048.0078),
         rotation =     Vector3(0, 0.0000, 0),
@@ -51,7 +51,7 @@ function House10:Initialize(...)
     livingroomSofa2:Create()
     table.insert(self.Objects, livingroomSofa2)
 
-    livingroomTurnTable = TurnTable {
+    local livingroomTurnTable = TurnTable {
         modelid = TurnTable.eModel.Unknown01,
         position =     Vector3(2262.8047, -1208.4922, 1048.0156),
         rotation =     Vector3(0, 0.0000, 270),
@@ -63,7 +63,7 @@ function House10:Initialize(...)
     livingroomTurnTable:Create()
     table.insert(self.Objects, livingroomTurnTable)
 
-    kitchenSink = Furniture {
+    local kitchenSink = Furniture {
         modelid = Furniture.eModel.House10Kitchen1,
         position =     Vector3(2247.5469, -1210.9688, 1048.0156),
         rotation =     Vector3(0, 0.0000, 90),
@@ -75,7 +75,7 @@ function House10:Initialize(...)
     kitchenSink:Create()
     table.insert(self.Objects, kitchenSink)
 
-    kitchenChair = Chair {
+    local kitchenChair = Chair {
         modelid = Chair.eModel.RedChair,
         position =     Vector3(2250.3047, -1211.0984, 1048.5234),
         rotation =     Vector3(0, 0.0000, 0),
@@ -87,7 +87,7 @@ function House10:Initialize(...)
     kitchenChair:Create()
     table.insert(self.Objects, kitchenChair)
 
-    kitchenTable = Table {
+    local kitchenTable = Table {
         modelid = Table.eModel.WoodRoundTable,
         position =     Vector3(2250.2813, -1212.2500, 1048.4141),
         rotation =     Vector3(0, 0.0000, 0),
@@ -141,7 +141,7 @@ function House10:Initialize(...)
     bathroomSink:Create()
     table.insert(self.Objects, bathroomSink)
 
-    phone = MobilePhone {
+    local phone = MobilePhone {
         modelid = MobilePhone.eModel[PickRandom(MobilePhone.eModel)],
         position = Vector3(0,0,0),
         rotation = Vector3(0,0,0),

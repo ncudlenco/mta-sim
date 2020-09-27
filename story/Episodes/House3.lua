@@ -119,7 +119,7 @@ function House3:Initialize(...)
     plate:Create()
     table.insert(self.Objects, plate)
 
-    drink = Drinks {
+    local drink = Drinks {
         modelid = Drinks.eModel[PickRandom(Drinks.eModel)],
         position =     Vector3(2493.5433, -1702.5198, 1014.5922),
         rotation =     Vector3(0, 0.0000, 0),
@@ -148,7 +148,7 @@ function House3:Initialize(...)
     -- self.POI = Shuffle(self.POI)
 
     if self.POI[1] == livingRoomEndLocation then
-        local i = math.random(4) + 1
+        local i = math.random(#self.POI - 1) + 1
         self.POI[1], self.POI[i] = self.POI[i], self.POI[1]
     end
 

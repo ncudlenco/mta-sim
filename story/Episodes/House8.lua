@@ -138,7 +138,6 @@ function House8:Initialize(...)
     local rightSofa = Location(2370.9368, -1124.0031, 1050.8750, 95.8058, self.InteriorId, " right sofa in the living room ")
     local leftSofa = Location(2374.1345, -1124.0991, 1050.8750, 262.7906, self.InteriorId, " left sofa in the living room ")
     local centralSofa = Location(2372.0334, -1122.0536, 1050.8750, 356.7915, self.InteriorId, " central sofa in the living room ")
-    local livingRoomNearPhotos = Location(2373.7715, -1128.37, 1050.8826, 213.83502, self.InteriorId, " living room near the dresser ")
     local kitchenNearTheSink = Location(2373.8518, -1132.2216, 1050.875, 270.25897, self.InteriorId, " kitchen at the sink ")
     local bedroom2 = Location(2359.0698, -1134.0743, 1050.8750, 357.9942, self.InteriorId, " bedroom near the bed ")
     local hallwayToEntrance = Location(2365.3000, -1132.9200, 1050.8750, 180, self.InteriorId, " hallway to entrance door ")
@@ -149,17 +148,16 @@ function House8:Initialize(...)
         rightSofa,
         leftSofa,
         centralSofa,
-        livingRoomNearPhotos,
         kitchenNearTheSink,
         bedroom2,
         hallwayToEntrance 
     }
     
-    local getInBedAction = GetInBed{performer = player, targetItem = bedroom1Bed, nextLocation = bedroom1}
+    local getInBedAction = GetOn{performer = player, targetItem = bedroom1Bed, nextLocation = bedroom1, how = GetOn.eHow.Bed, side = GetOn.eSide.Left, graphId = self.graphId}
     table.insert(bedroom1.PossibleActions, getInBedAction)
     local sleepAction = Sleep{performer = player, targetItem = bedroom1Bed, nextLocation = bedroom1}
     getInBedAction.NextAction = sleepAction    
-    local getOffBedAction = GetOffBed{performer = player, targetItem = bedroom1Bed, nextLocation = bedroom1}
+    local getOffBedAction = GetOff{performer = player, targetItem = bedroom1Bed, nextLocation = bedroom1,  how = GetOff.eHow.Bed, side = GetOff.eSide.Left, graphId = self.graphId}
     sleepAction.NextAction = getOffBedAction
     getInBedAction.ClosingAction = getOffBedAction
     
@@ -202,19 +200,16 @@ function House8:Initialize(...)
     local standUpFromLeftSofaAction = StandUp{ how = StandUp.eHow.fromSofa, performer = player, nextLocation = leftSofa, targetItem = sofaLeft }
     sitOnLeftSofaAction.ClosingAction = standUpFromLeftSofaAction
     sitOnLeftSofaAction.NextAction = standUpFromLeftSofaAction
-
-    local lookAtPhotosAction = LookAtObject { performer = player, nextLocation = livingRoomNearPhotos, targetItem = photos }
-    table.insert(livingRoomNearPhotos.PossibleActions, lookAtPhotosAction)
     
     local washHandsAction = WashHands { performer = player, nextLocation = kitchenNearTheSink, targetItem = kitchenNearTheSink }
     table.insert(kitchenNearTheSink.PossibleActions, washHandsAction)
     
-    local getInBed2Action = GetInBed { nextLocation = bedroom2, performer = player, targetItem = bedroom2Bed }
+    local getInBed2Action = GetOn{performer = player, targetItem = bedroom2Bed, nextLocation = bedroom2, how = GetOn.eHow.Bed, side = GetOn.eSide.Left, graphId = self.graphId}
     table.insert(bedroom2.PossibleActions, getInBed2Action)
 
     local sleepAction2 = Sleep { nextLocation = bedroom2, performer = player, targetItem = bedroom2Bed }
     getInBed2Action.NextAction = sleepAction2
-    local getOffBed2Action = GetOffBed { nextLocation = bedroom2, performer = player, targetItem = bedroom2Bed }
+    local getOffBed2Action = GetOff{performer = player, targetItem = bedroom2Bed, nextLocation = bedroom2,  how = GetOff.eHow.Bed, side = GetOff.eSide.Left, graphId = self.graphId}
     sleepAction2.NextAction = getOffBed2Action
     sleepAction2.ClosingAction = getOffBed2Action
 

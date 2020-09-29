@@ -6,7 +6,6 @@ DynamicEpisode = class(StoryEpisodeBase, function(o, name)
     o.ObjectsToDelete = {}
     o.POI = {}
     o.name = name or ""
-    o.cameras = {}
 end)
 
 

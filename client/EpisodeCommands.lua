@@ -183,6 +183,19 @@ local function playerPressedKey(button, press)
         local translate = false
         local rotate = false
         local changeSize = false
+        local function done()
+            showCursor(false)
+            removeEventHandler("onClientKey", root, playerPressedKey)
+            triggerEvent ( "onElementDoneEditing", getRootElement(), editedObject )
+            editedObject = nil
+            setCamera = false
+            isTemplate = false
+            isEditedObjectAttached = false
+            if cameraTargetObject then
+                cameraTargetObject:destroy()
+                cameraTargetObject = nil
+            end
+        end
         if button == "w" then
             translate = true
             offset = Vector3(translationIncrement,0,0)
@@ -224,18 +237,15 @@ local function playerPressedKey(button, press)
         elseif button == "mouse_wheel_down" then
             changeSize = true
             sizeIncrement = -1 * sizeIncrement
-        elseif button == "enter" then
-            showCursor(false)
-            removeEventHandler("onClientKey", root, playerPressedKey)
-            triggerEvent ( "onElementDoneEditing", getRootElement(), editedObject )
-            editedObject = nil
-            setCamera = false
-            isTemplate = false
-            isEditedObjectAttached = false
-            if cameraTargetObject then
-                cameraTargetObject:destroy()
-                cameraTargetObject = nil
+        elseif button == "n" then
+            if editedObject:getData('isTemporary') and editedObject.destroy then
+                editedObject:destroy()
             end
+            editedObject = nil
+            done()
+            return
+        elseif button == "enter" then
+            done()
             return
         elseif button == "lalt" or button == "ralt" then
             altPressed = true
@@ -423,6 +433,7 @@ end
 addCommandHandler("episode",
     function (commandName, command, param1, param2, ...)
         if command == "new" then
+            DEFINING_EPISODES = true
             unloadEpisode(episode)
             episode = DynamicEpisode()
             episode.InteriorId = localPlayer.interior
@@ -437,6 +448,7 @@ addCommandHandler("episode",
             episode:Initialize(localPlayer)
             episode:Play(localPlayer)
         elseif command == "load" then
+            DEFINING_EPISODES = true
             unloadEpisode(episode)
             if param1 then
                 episode = DynamicEpisode(param1)
@@ -451,6 +463,7 @@ addCommandHandler("episode",
             end
 		    addEventHandler("onClientRender", getRootElement(), text_render)
         elseif command == "save" then
+            DEFINING_EPISODES = true
             if param1 then
                 episode.name = param1
                 --check if all the required parameters are given
@@ -961,30 +974,30 @@ addCommandHandler("episode",
                 addEventHandler ( "onElementDoneEditing", getRootElement(), addCamera)
             elseif param1 == "region" then
                 if not param2 or param2 == '' then
-                    outputChatBox("region short name expected: episode add region name [; optional description] or region name [; addobjects ; object1; object2 ; object3]")
-                    outputChatBox("if the region name has multiple words then use ; to divide the region name from the description")
+                    outputChatBox("region short name expected: episode add region name <end with ; > [ description optional ;] [ objects ; object1; object2 ; object3 optional]")
+                    outputChatBox("don't forget to place a ; at the end of the name")
                     return
                 end
                 local name = param2;
                 if #arg == 0 then
                     outputChatBox("info: region description was not provided")
                 end
-                local description = table.concat( arg, " " )
+                local wholeStr = table.concat( arg, " " )
+                local description = ''
 
-                local t = split_string(description, ';')
+                local t = split_string(wholeStr, ';')
                 local objects = {}
-                if #t > 1 then
-                    name = name .. " " .. t[1]
-                    description = t[2]
-                    if description == 'addobjects' then
-                        for i,obj in ipairs(argv) do
-                            if i > 2 then
-                                table.insert(objects, obj)
-                            end
+                for i,obj in ipairs(t) do
+                    if trim(obj) ~= 'objects' then
+                        if i == 1 then
+                            name = name .. " " .. trim(obj)
+                        elseif i == 2 then
+                            description = trim(obj)
+                        else
+                            table.insert(objects, trim(obj))
                         end
                     end
                 end
-                description = description:gsub("%s*;%s*", "")
 
                 currentRegion = {
                     name = name,
@@ -1012,7 +1025,7 @@ addCommandHandler("episode",
                     end
                     currentRegion.markers = nil
                     currentRegion = Region.ProcessVertexesPlane(currentRegion)
-                    table.insert(episode.Regions, currentRegion)
+                    table.insert(episode.Regions, Region(currentRegion))
                     currentRegion = nil
                     outputChatBox("done adding vertexes")
                 end
@@ -1032,7 +1045,7 @@ addCommandHandler("episode",
 
                 outputChatBox("Place the vertex marker as desired and press enter", 255, 0, 0, false)
                 outputChatBox("Use w/a/s/d/z/x/q/e/f/g/h/j to place and rotate the marker", 255, 0, 0, false)
-                outputChatBox("Press enter to finish", 255, 0, 0, false)
+                outputChatBox("Press enter to finish or n to cancel", 255, 0, 0, false)
                 editedObject = Marker(vertex.x, vertex.y, vertex.z, "cylinder", 0.5, 255, 0, 0, 128)
                 editedObject.interior = localPlayer.interior
                 editedObject:setData('isTemporary', true)
@@ -1040,13 +1053,17 @@ addCommandHandler("episode",
                 local function vertexMarkerSet(vertexMarker)
                     removeEventHandler("onElementDoneEditing", getRootElement(), vertexMarkerSet)
                     showCursor(false)
-                    local vertex = vertexMarker.position
-                    currentRegion.center = currentRegion.center + vertex
-                    table.insert(currentRegion.vertexes, vertex:unpack())
-                    table.insert(currentRegion.markers, vertexMarker)
-                    outputChatBox("vertex nr " .. #currentRegion.vertexes .. " added")
-                    if #currentRegion.vertexes < 3 then
-                        outputChatBox("at least "..(3 - #currentRegion.vertexes).." more needed to create a valid region")
+                    if vertexMarker == nil then
+                        outputChatBox("Cancelled adding vertex")
+                    else
+                        local vertex = vertexMarker.position
+                        currentRegion.center = currentRegion.center + vertex
+                        table.insert(currentRegion.vertexes, vertex:unpack())
+                        table.insert(currentRegion.markers, vertexMarker)
+                        outputChatBox("vertex nr " .. #currentRegion.vertexes .. " added")
+                        if #currentRegion.vertexes < 3 then
+                            outputChatBox("at least "..(3 - #currentRegion.vertexes).." more needed to create a valid region")
+                        end
                     end
 
                     if param2 == "last" then

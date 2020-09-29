@@ -80,6 +80,10 @@ function split_string (inputstr, sep)
     return t
 end
 
+function trim(s)
+    return s:match'^%s*(.*%S)' or ''
+ end
+
 function inList(targetValue, arr)
     for i, value in ipairs(arr) do
         if targetValue == value then

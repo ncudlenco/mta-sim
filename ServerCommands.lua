@@ -43,6 +43,13 @@ addCommandHandler("eat",
 	end
 )
 
+addCommandHandler("interior",
+	function (thePlayer, commandName, param1)
+		thePlayer.interior = tonumber(param1)
+		fadeCamera(thePlayer, true) 
+	end
+)
+
 addCommandHandler("getInBed",
 	function (thePlayer)
 		if not thePlayer:getData("sleeping") then

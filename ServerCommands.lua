@@ -166,9 +166,17 @@ addCommandHandler("isPointInside",
 )
 
 addCommandHandler("teleport",
-	function (thePlayer)
-		local gantonHouse = Location(2495.0720, -1687.5278, 13.5150, 360, 0, " front of the house ");
-		gantonHouse:SpawnPlayerHere(thePlayer)
+	function (thePlayer, commandName, param1, param2, param3, param4)
+		local x = tonumber(param1)
+		local y = tonumber(param2)
+		local z = tonumber(param3)
+		local int = tonumber(param4)
+
+		local location = Location(2495.0720, -1687.5278, 13.5150, 360, 0, " front of the Ganton house ");
+		if x and y and z then
+			location = Location(x,y,z,int or thePlayer.interior, " custom location")
+		end
+		location:SpawnPlayerHere(thePlayer)
 	end
 )
 

@@ -10,7 +10,7 @@ end
 
 function Dumbbell:updatePositionOffset()
     if self.modelid == Dumbbell.eModel.Dumbbell1 then
-        self.PosOffset = Vector3(0, 0, 0)
+        self.PosOffset = Vector3(-0.01000003702938557, 0.08999998867511749, -0.009999999776482582)
     end
     return self.Description
 end

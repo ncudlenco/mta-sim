@@ -174,7 +174,7 @@ addCommandHandler("teleport",
 
 		local location = Location(2495.0720, -1687.5278, 13.5150, 360, 0, " front of the Ganton house ");
 		if x and y and z then
-			location = Location(x,y,z,int or thePlayer.interior, " custom location")
+			location = Location(x, y, z, 0, int or thePlayer.interior, " custom location")
 		end
 		location:SpawnPlayerHere(thePlayer)
 	end

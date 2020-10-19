@@ -1,6 +1,6 @@
 PedalGymBike = class(StoryActionBase, function(o, params)
     StoryActionBase.init(o, PickRandom({" starts pedalling at the ", " pedals at the "}), params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
-    o.how = params.how or PedalGymBike.eHow.Normal
+    o.how = PedalGymBike.eHow[PickRandom(PedalGymBike.eHow)]
 end)
 
 function PedalGymBike:Apply()
@@ -8,15 +8,15 @@ function PedalGymBike:Apply()
     table.insert(story.History, self)
 
     if self.how == PedalGymBike.eHow.Still then
-        self.Description = " stands still on "
+        self.Description = " stands still on the"
     elseif self.how == PedalGymBike.eHow.Slow then
-        self.Description = " pedals slowly "
+        self.Description = PickRandom({" starts pedalling slowly at the ", " pedals slowly at the "})
     elseif self.how == PedalGymBike.eHow.Normal then
-        self.Description = " pedals "
+        self.Description = PickRandom({" starts pedalling at the ", " pedals at the "})
     elseif self.how == PedalGymBike.eHow.Fast then
-        self.Description = " pedals fast "
+        self.Description = PickRandom({" starts pedalling fast at the ", " pedals fast at the "})
     elseif self.how == PedalGymBike.eHow.Faster then
-        self.Description = " pedals very fast "
+        self.Description = PickRandom({" starts pedalling very fast at the ", " pedals very fast at the "})
     end
         
     story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. self.TargetItem.Description, self.Performer)
@@ -33,7 +33,7 @@ function PedalGymBike:Apply()
 end
 
 function PedalGymBike:GetDynamicString()
-    return 'return PedalGymBike{how='..self.how..'}'
+    return 'return PedalGymBike{how=\"'..self.how..'\"}'
 end
 
 PedalGymBike.eHow = {

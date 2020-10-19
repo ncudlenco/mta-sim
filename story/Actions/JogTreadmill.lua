@@ -26,8 +26,7 @@ function JogTreadmill:Apply()
     end
 
     OnGlobalActionFinished(time, self.Performer:getData('id'), self.Performer:getData('storyId'), function()
-        detachElementFromBone(self.TargetItem.instance)
-        self.TargetItem:Destroy()
+        
     end)
 end
 

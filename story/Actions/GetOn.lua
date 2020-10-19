@@ -23,7 +23,8 @@ function GetOn:Apply()
 
     local block = ""
     local animation = ""
-    
+    local updatePedPosition = true
+
     if self.how == GetOn.eHow.Bed then
         time = 3100
         block = "INT_HOUSE"
@@ -38,9 +39,10 @@ function GetOn:Apply()
         block = "GYMNASIUM"
         animation = "gym_bike_geton"
     elseif self.how == GetOn.eHow.Treadmill then
-        time = 3200
+        time = 1600
         block = "GYMNASIUM"
         animation = "gym_tread_geton"
+        updatePedPosition = false
     elseif self.how == GetOn.eHow.Benchpress then
         time = 4000
         block = "GYMNASIUM"
@@ -48,7 +50,7 @@ function GetOn:Apply()
     end
 
     story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. self.TargetItem.Description, self.Performer)
-    self.Performer:setAnimation(block, animation, time, true, true, false, true)
+    self.Performer:setAnimation(block, animation, time, true, updatePedPosition, false, true)
 
     if DEBUG then
         outputConsole("GetOn:Apply")

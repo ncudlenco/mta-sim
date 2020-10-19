@@ -1,7 +1,7 @@
 addEvent ( "onElementDoneEditing", true )
 addEvent ( "onActionRetrieved", true )
 
-DEFINING_EPISODES = false
+DEFINING_EPISODES = true
 if DEFINING_EPISODES then
     addEventHandler ( "onClientPlayerSpawn", getLocalPlayer(), function()
         CLIENT_STORY = Story(localPlayer, 10000, true)
@@ -911,8 +911,8 @@ addCommandHandler("episode",
                         else
                             paramName = v
                         end
-                        break
                     end
+
                     addEventHandler ( "onActionRetrieved", getRootElement(), addAction)
                     getAction(actionName, params)
                 end

@@ -238,6 +238,7 @@
 			}
 		],
 		"name": "gym1",
+		"graphPath": "files\/paths\/gym1.json",
 		"Disposed": false,
 		"Regions": [
 			{
@@ -338,7 +339,7 @@
 						}
 					},
 					{
-						"dynamicString": "return JogTreadmill{how = gym_tread_jog}",
+						"dynamicString": "return JogTreadmill{}",
 						"targetItem": {
 							"id": 1,
 							"type": "Object"
@@ -396,7 +397,7 @@
 						}
 					},
 					{
-						"dynamicString": "return PedalGymBike{how=gym_bike_slow}",
+						"dynamicString": "return PedalGymBike{}",
 						"targetItem": {
 							"id": 2,
 							"type": "Object"
@@ -481,7 +482,7 @@
 						}
 					},
 					{
-						"dynamicString": "return PedalGymBike{how=gym_bike_pedal}",
+						"dynamicString": "return PedalGymBike{}",
 						"targetItem": {
 							"id": 3,
 							"type": "Object"
@@ -539,7 +540,7 @@
 						}
 					},
 					{
-						"dynamicString": "return PedalGymBike{how=gym_bike_fast}",
+						"dynamicString": "return PedalGymBike{}",
 						"targetItem": {
 							"id": 4,
 							"type": "Object"
@@ -597,7 +598,7 @@
 						}
 					},
 					{
-						"dynamicString": "return JogTreadmill{how = gym_tread_sprint}",
+						"dynamicString": "return JogTreadmill{}",
 						"targetItem": {
 							"id": 5,
 							"type": "Object"

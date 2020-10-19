@@ -29,10 +29,7 @@ function PedalGymBike:Apply()
         outputConsole("PedalGymBike:Apply")
     end
 
-    OnGlobalActionFinished(time, self.Performer:getData('id'), self.Performer:getData('storyId'), function()
-        detachElementFromBone(self.TargetItem.instance)
-        self.TargetItem:Destroy()
-    end)
+    OnGlobalActionFinished(time, self.Performer:getData('id'), self.Performer:getData('storyId'))
 end
 
 function PedalGymBike:GetDynamicString()

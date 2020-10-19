@@ -11,7 +11,9 @@ Story = class(StoryBase, function(o, actor, maxActions, logData)
         -- House12()
     }
     o.DynamicEpisodes = {
-       "house3"
+      -- "house3",
+      -- "house1_sweet"
+      "gym1"
     }
     o.Disposed = false
     if not o.Actor then
@@ -80,10 +82,9 @@ function Story:Play()
     skin.Performer = self.Actor
     skin:Apply()
     self.CurrentEpisode = PickRandom(self.Episodes)
-    if not FREE_ROAM then
-        self.CurrentEpisode:Initialize(self.Actor)
-    end
 
+    self.CurrentEpisode:Initialize(self.Actor)
+    
     self.Actor:setData('pickedObjects', {})
     self.CurrentEpisode:Play(self.Actor)
 

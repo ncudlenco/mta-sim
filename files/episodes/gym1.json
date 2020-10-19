@@ -73,7 +73,7 @@
 		"Objects": [
 			{
 				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=true, modelid=2627, interior=5, position=Vector3(773.37585449219,-1.1457362174988,999.62438964844), rotation=Vector3(0,0,270.00036621094), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
-				"type": "SampStoryObjectBase",
+				"type": "Treadmill",
 				"Description": "",
 				"RotOffset": {
 					"y": 0,
@@ -110,7 +110,7 @@
 					"x": 0,
 					"z": 0
 				},
-				"type": "SampStoryObjectBase",
+				"type": "GymBike",
 				"Description": "",
 				"noCollisions": true,
 				"interior": 5,
@@ -143,7 +143,7 @@
 					"x": 0,
 					"z": 0
 				},
-				"type": "SampStoryObjectBase",
+				"type": "GymBike",
 				"Description": "",
 				"noCollisions": true,
 				"interior": 5,
@@ -176,7 +176,7 @@
 					"x": 0,
 					"z": 0
 				},
-				"type": "SampStoryObjectBase",
+				"type": "GymBike",
 				"Description": "",
 				"noCollisions": true,
 				"interior": 5,
@@ -209,7 +209,7 @@
 					"x": 0,
 					"z": 0
 				},
-				"type": "SampStoryObjectBase",
+				"type": "Treadmill",
 				"Description": "",
 				"noCollisions": true,
 				"interior": 5,

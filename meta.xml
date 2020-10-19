@@ -142,6 +142,7 @@
   <script src="story/Objects/Cigarette.lua" type="shared" />
   <script src="story/Objects/Dumbbell.lua" type="shared" />
   <script src="story/Objects/Treadmill.lua" type="shared" />
+  <script src="story/Objects/GymBike.lua" type="shared" />
   <!-- Episodes -->
   <script src="story/Episodes/House1.lua" type="server" />
   <script src="story/Episodes/House3.lua" type="server" />

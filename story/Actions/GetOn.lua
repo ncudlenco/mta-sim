@@ -35,9 +35,10 @@ function GetOn:Apply()
             animation = "BED_In_R"
         end
     elseif self.how == GetOn.eHow.GymBike then
-        time = 1600
+        time = 1300
         block = "GYMNASIUM"
         animation = "gym_bike_geton"
+        updatePedPosition = false
     elseif self.how == GetOn.eHow.Treadmill then
         time = 1600
         block = "GYMNASIUM"

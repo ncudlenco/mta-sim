@@ -45,12 +45,15 @@ Move.eHow = {
 
 function Move.destinationReached(player, matchingDimension)
     local playerId = source:getData("id")
+    if player:getData('id') ~= playerId then
+        return
+    end
     local storyId = source:getData("storyId")
-    local story = STORIES[playerId][storyId]
-    local lastAction = story.History[#story.History]
+    local story = CURRENT_STORY
+    local lastAction = story.History[playerId][#story.History[playerId]]
 
 	if lastAction.path and DEBUG then
-		outputConsole("Player "..player.name.." reached marker "..source:getData("idx").." / "..#lastAction.path)
+		outputConsole("Player "..player:getData('name').." reached marker "..source:getData("idx").." / "..#lastAction.path)
 	end
 	if (lastAction.path and source:getData("idx") + 1 <= #lastAction.path) then
 		local idx = source:getData("idx") + 1
@@ -84,7 +87,7 @@ end
 
 function Move:Apply()
     local story = GetStory(self.Performer)
-    table.insert(story.History, self)
+    table.insert(story.History[self.Performer:getData('id')], self)
 
     if self.TargetItem.Region and self.TargetItem.Region.Id ~= self.Performer:getData('currentRegionId') then
         if DEBUG then

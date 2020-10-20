@@ -5,7 +5,9 @@ function (prevA, curA)
     --Set a player specific id to be able to differentiate between players the logged data
     local g = Guid()
     source:setData("id", g.Id)
-    Story(source, MAX_ACTIONS, LOG_DATA)
+    source:setData("isPed", false)
+
+    CURRENT_STORY = Story(source, MAX_ACTIONS, LOG_DATA)
 
     if DEBUG then
         outputConsole("New player joined the server. Id ".. source:getData('id') .. " story id " .. source:getData('storyId'))
@@ -34,27 +36,30 @@ function (prevA, curA)
     end
 
     Timer(function(playerId, storyId)
-        local story = STORIES[playerId][storyId]
-        story:Play()
+        CURRENT_STORY:Play()
     end, 1000, 1, source:getData('id'), source:getData('storyId'))
 end
 )
-
---TODO: think of all the objects inside the universe
 
 addEventHandler("onPlayerSpawn", getRootElement(),
 function (prevA, curA)
     if DEBUG then
         outputConsole("Player spawned ")
     end
-    if STORIES and STORIES[source:getData('id')]  then
-        local story = STORIES[source:getData("id")][source:getData('storyId')]
+    if CURRENT_STORY  then
+        local story = CURRENT_STORY
         if DEBUG then
             outputConsole("Found story for the spawned player. Picking a random action ")
         end
         if story and not FREE_ROAM then
             Timer(function()
                 story.CurrentEpisode.StartingLocation:GetNextValidAction(story.Actor):Apply()
+                for _,ped in ipairs(story.CurrentEpisode.peds) do
+                    local idx = ped:getData('startingPoiIdx')
+                    if idx > 0 then
+                        story.CurrentEpisode.POI[idx]:GetNextValidAction(ped):Apply()
+                    end
+                end
             end, 5000, 1)
         end
     end
@@ -66,8 +71,8 @@ function ( quitType )
     if DEBUG then
         outputConsole(getPlayerName(source).. " has left the server (" .. quitType .. ")")
     end
-    if STORIES and STORIES[source:getData('id')]  then
-        local story = STORIES[source:getData("id")][source:getData('storyId')]
+    if CURRENT_STORY then
+        local story = CURRENT_STORY
         if DEBUG then
             outputConsole("Found story for the player that quit. Trying to clear the objects")
         end
@@ -86,7 +91,7 @@ function ( theResource, status, pixels, timestamp, tag )
     local playerId = tag:sub(0, 36)
     local storyId = tag:sub(37, 72)
     local playerName = tag:sub(73)
-    local story = STORIES[playerId][storyId]
+    local story = CURRENT_STORY
 
     if not SCREENSHOTS[playerId] then
         SCREENSHOTS[playerId] = {}
@@ -126,5 +131,5 @@ function GetStory(player)
         end
         return nil
     end
-    return STORIES[playerId][storyId]
+    return CURRENT_STORY
 end

@@ -4,7 +4,7 @@ end)
 
 function HangUp:Apply()
     local story = GetStory(self.Performer)
-    table.insert(story.History, self)
+    table.insert(story.History[self.Performer:getData('id')], self)
     
     story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description, self.Performer)
     self.Performer:setAnimation("PED", "PHONE_OUT", 2000, true, true, false, true)

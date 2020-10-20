@@ -4,7 +4,7 @@ end)
 
 function LookAtTheWatch:Apply()
     local story = GetStory(self.Performer)
-    table.insert(story.History, self)
+    table.insert(story.History[self.Performer:getData('id')], self)
     
     story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description, self.Performer)
     self.Performer:setAnimation("INT_OFFICE", "OFF_Sit_Watch", -1, false, true, false, true)

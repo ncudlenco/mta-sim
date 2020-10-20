@@ -4,7 +4,7 @@ end)
 
 function Read:Apply()
     local story = GetStory(self.Performer)
-    table.insert(story.History, self)
+    table.insert(story.History[self.Performer:getData('id')], self)
     
     math.randomseed(os.time())
     local time = math.random(3000, 12000)

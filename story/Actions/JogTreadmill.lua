@@ -5,7 +5,7 @@ end)
 
 function JogTreadmill:Apply()
     local story = GetStory(self.Performer)
-    table.insert(story.History, self)
+    table.insert(story.History[self.Performer:getData('id')], self)
 
     if self.how == JogTreadmill.eHow.Slow then
         self.Description = " walks on "

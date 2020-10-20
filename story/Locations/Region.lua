@@ -245,7 +245,7 @@ function Region:OnPlayerHit(player)
 
     self.Episode.CurrentRegion = self
     --TODO: change the current camera and so on and so forth
-    if STATIC_CAMERA and self.cameras and #self.cameras > 0 then
+    if STATIC_CAMERA and self.cameras and #self.cameras > 0 and not player:getData('isPed') then
         local cameraPos = PickRandom(self.cameras)
         player:setCameraMatrix(cameraPos.x, cameraPos.y, cameraPos.z, cameraPos.lx, cameraPos.ly, cameraPos.lz, cameraPos.roll, cameraPos.fov)
     end

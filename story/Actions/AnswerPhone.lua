@@ -4,7 +4,7 @@ end)
 
 function AnswerPhone:Apply()
     local story = GetStory(self.Performer)
-    table.insert(story.History, self)
+    table.insert(story.History[self.Performer:getData('id')], self)
     
     -- this might not be ok
     if not self.TargetItem then

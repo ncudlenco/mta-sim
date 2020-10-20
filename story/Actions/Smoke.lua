@@ -4,7 +4,7 @@ end)
 
 function Smoke:Apply()
     local story = GetStory(self.Performer)
-    table.insert(story.History, self)
+    table.insert(story.History[self.Performer:getData('id')], self)
     
     math.randomseed(os.time())
     time = math.random(5000, 12000)

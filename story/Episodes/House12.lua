@@ -1,5 +1,5 @@
 House12 = class(StoryEpisodeBase, function(o)
-    StoryEpisodeBase.init(o, 'house12', nil, nil, nil)
+    StoryEpisodeBase.init(o, {name = 'house12'})
     o:LoadFromFile()
     o.InteriorId = 12
     if not loadPathGraph then

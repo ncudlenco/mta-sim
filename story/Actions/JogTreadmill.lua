@@ -1,6 +1,6 @@
 JogTreadmill = class(StoryActionBase, function(o, params)
     StoryActionBase.init(o, PickRandom({" starts jogging on the ", " jogs on the"}), params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
-    o.how = params.how or JogTreadmill.eHow.Normal
+    o.how = JogTreadmill.eHow[PickRandom(JogTreadmill.eHow)]
 end)
 
 function JogTreadmill:Apply()
@@ -8,11 +8,11 @@ function JogTreadmill:Apply()
     table.insert(story.History[self.Performer:getData('id')], self)
 
     if self.how == JogTreadmill.eHow.Slow then
-        self.Description = " walks on "
+        self.Description = PickRandom({" starts walking on the ", " walks on the "})
     elseif self.how == JogTreadmill.eHow.Normal then
-        self.Description = " runs on "
+        self.Description = PickRandom({" starts running on the ", " runs on the "})
     elseif self.how == JogTreadmill.eHow.Fast then
-        self.Description = " sprints on "
+        self.Description = PickRandom({" starts sprinting on the ", " sprints on the "})
     end
     
     story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. self.TargetItem.Description, self.Performer)

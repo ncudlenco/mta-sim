@@ -4,7 +4,7 @@ end)
 
 function SmokeOut:Apply()
     local story = GetStory(self.Performer)
-    table.insert(story.History, self)
+    table.insert(story.History[self.Performer:getData('id')], self)
     
     story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. self.TargetItem.Description .. " from  " .. self.Performer:getData('genderGenitive') 
                      ..  " hand when " .. self.Performer:getData('genderNominative') .. " finishes it", self.Performer)

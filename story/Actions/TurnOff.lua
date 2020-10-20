@@ -4,7 +4,7 @@ end)
 
 function TurnOff:Apply()
     local story = GetStory(self.Performer)
-    table.insert(story.History, self)
+    table.insert(story.History[self.Performer:getData('id')], self)
     
     story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. self.TargetItem.Description, self.Performer)
     -- self.TargetItem.instance:setCollisionsEnabled(false)

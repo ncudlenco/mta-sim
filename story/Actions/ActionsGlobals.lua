@@ -1,7 +1,7 @@
 function OnGlobalActionFinished(delay, playerId, storyId, callback, destroyedItem)
     Timer(function(playerId, storyId)
-        local story = STORIES[playerId][storyId]
-        local lastAction = story.History[#story.History]
+        local story = CURRENT_STORY
+        local lastAction = story.History[playerId][#story.History[playerId]]
         if DEBUG then
             outputConsole("GlobalAction:Apply - getting next valid action")
         end
@@ -9,15 +9,18 @@ function OnGlobalActionFinished(delay, playerId, storyId, callback, destroyedIte
             callback(playerId, storyId)
         end
 
+        local nextAction = nil
         if lastAction.NextAction then
             if isArray(lastAction.NextAction) then
-                PickRandom(lastAction.NextAction):Apply()
+                nextAction = PickRandom(lastAction.NextAction)
             else
-                lastAction.NextAction:Apply()
+                nextAction = lastAction.NextAction
             end
         elseif lastAction.NextLocation then
-            lastAction.NextLocation:GetNextValidAction(lastAction.Performer):Apply()
+            nextAction = lastAction.NextLocation:GetNextValidAction(lastAction.Performer)
         end
+        nextAction.Performer = lastAction.Performer
+        nextAction:Apply()
 
     end, delay, 1, playerId, storyId)    
 end

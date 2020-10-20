@@ -5,7 +5,7 @@ end)
 
 function Sleep:Apply()
     local story = GetStory(self.Performer)
-    table.insert(story.History, self)
+    table.insert(story.History[self.Performer:getData('id')], self)
     
     story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. 
                      ". When " .. self.Performer:getData('genderNominative') .. PickRandom({" wakes up ", " finishes sleeping "}) .. self.Performer:getData('genderNominative'), self.Performer)

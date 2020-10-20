@@ -173,9 +173,9 @@ function Logger:Log(text, ...)
         end
     end
     if self.ShowOnScreen then
-        if player then
-            if player.outputChat then
-                player:outputChat(logText, 255, 0, 0, false)
+        if CURRENT_STORY.Actor then
+            if CURRENT_STORY.Actor.outputChat then
+                CURRENT_STORY.Actor:outputChat(logText, 255, 0, 0, false)
             else
                 outputChatBox(logText, 255, 0, 0, false)
             end

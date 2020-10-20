@@ -4,7 +4,7 @@ end)
 
 function TaiChi:Apply()
     local story = GetStory(self.Performer)
-    table.insert(story.History, self)
+    table.insert(story.History[self.Performer:getData('id')], self)
     
     story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description, self.Performer)
     self.Performer:setAnimation("PARK", "Tai_Chi_in", 3000, true, true, false, true)

@@ -33,7 +33,7 @@ function TimeOfDay:Apply(...)
     setTime(self.Hour, self.Minute)
     local id = player:getData("id")
     local scenarioId = player:getData("scenarioId")
-    local story = STORIES[id][scenarioId]
+    local story = CURRENT_STORY
 
     if not story then
         outputConsole("Error: the story is null "..id.." ---> "..scenarioId)

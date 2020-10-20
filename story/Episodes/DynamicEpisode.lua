@@ -1,5 +1,5 @@
 DynamicEpisode = class(StoryEpisodeBase, function(o, name)
-    StoryEpisodeBase.init(o, name, nil, nil, nil)
+    StoryEpisodeBase.init(o, {name = name})
     
     o.InteriorId = nil
     o.graphPath = nil
@@ -10,8 +10,6 @@ end)
 
 
 function DynamicEpisode:Initialize(...)
-    StoryEpisodeBase.Initialize(self, arg)
-    
     local player = nil
     for i,v in ipairs(arg) do
         player = v
@@ -19,14 +17,6 @@ function DynamicEpisode:Initialize(...)
     end
     if player == nil then
         return false
-    end
-    --Delete objects
-    for i,v in ipairs(self.ObjectsToDelete) do
-        removeWorldModel(v.modelid, v.size, v.position.x, v.position.y, v.position.z)
-    end
-    --Create objects
-    for i,v in ipairs(self.Objects) do
-        v:Create()
     end
 
     --Link the POI with move actions between them
@@ -53,6 +43,17 @@ function DynamicEpisode:Initialize(...)
             end
         end
     end
+
+    StoryEpisodeBase.Initialize(self, arg)
+    
+    --Delete objects
+    for i,v in ipairs(self.ObjectsToDelete) do
+        removeWorldModel(v.modelid, v.size, v.position.x, v.position.y, v.position.z)
+    end
+    --Create objects
+    for i,v in ipairs(self.Objects) do
+        v:Create()
+    end
 end
 
 function DynamicEpisode:Play(...)
@@ -67,7 +68,9 @@ function DynamicEpisode:Play(...)
     end
 
     if self.StartingLocation == nil then
-        self.StartingLocation = PickRandom(self.POI)
+        self.StartingLocation = PickRandom(Where(self.ValidStartingLocations, function(x)
+            return not x.isBusy
+        end))
     end
     self.StartingLocation:SpawnPlayerHere(player)
     if DEBUG then

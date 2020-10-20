@@ -1,9 +1,10 @@
-STORIES = {}
+CURRENT_STORY = nil
 SCREENSHOTS = {}
-MAX_ACTIONS = 10000
+MAX_ACTIONS = 15
 STATIC_CAMERA = true
 LOG_DATA = false
 LOG_FREQUENCY = 1000 / 30 --in milliseconds
 DEBUG = true
-FREE_ROAM = true
+FREE_ROAM = false
 TIME_STAMP = false
+DEFAULT_PEDS_NR = 3

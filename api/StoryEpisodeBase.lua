@@ -1,7 +1,7 @@
-StoryEpisodeBase = class(function(o, name, storyTimeOfDay, storyWeather, startingLocation)
-    o.StoryTimeOfDay = storyTimeOfDay
-    o.StoryWeather = storyWeather
-    o.StartingLocation = startingLocation
+StoryEpisodeBase = class(function(o, params)
+    o.StoryTimeOfDay = params.storyTimeOfDay or nil
+    o.StoryWeather = params.storyWeather or nil
+    o.StartingLocation = startingLocation or nil
     o.ValidStartingLocations = {}
     o.Objects = {}
     o.Regions = {}
@@ -11,8 +11,10 @@ StoryEpisodeBase = class(function(o, name, storyTimeOfDay, storyWeather, startin
     o.graphPath = nil
     o.ObjectsToDelete = {}
     o.POI = {}
-    o.name = name or ""
+    o.name = params.name or ""
     o.regionsGroup = nil
+    o.pedsNr = params.pedsNr or DEFAULT_PEDS_NR
+    o.peds = {}
 end)
 
 function StoryEpisodeBase:Initialize(...)
@@ -43,6 +45,35 @@ function StoryEpisodeBase:Initialize(...)
                 closestRegion:OnPlayerHit(player)
             end
         end)
+
+        if (self.pedsNr + 1) > #self.ValidStartingLocations then
+            if DEBUG then
+                outputConsole('[Warning] StoryEpisodeBase:Initialize: number of peds and player is greater than the available starting locations. A max of '..(#self.ValidStartingLocations-1)..' peds will be spawned')
+            end
+        end
+        for i = 1,(self.pedsNr) do
+            local validStartingPoi = PickRandom(Where(self.ValidStartingLocations, function(x)
+                --find a valid starting location where there are no other players
+                return not x.isBusy
+            end))
+            local skin = PickRandom(Where(SetPlayerSkin.PlayerSkins, function(s)
+                return not s.isTaken
+            end))
+            validStartingPoi.isBusy = true
+            local ped = Ped(skin.Id, validStartingPoi.X, validStartingPoi.Y, validStartingPoi.Z, validStartingPoi.Angle)
+            ped.interior = validStartingPoi.Interior
+            local g = Guid()
+            ped:setData("id", g.Id)
+            ped:setData("isPed", true)
+            ped:setData('startingPoiIdx', LastIndexOf(self.POI, validStartingPoi))
+            if not CURRENT_STORY.History[ped:getData('id')] then
+                CURRENT_STORY.History[ped:getData('id')] = {}
+            end        
+            skin.TargetItem = ped
+            skin.Performer = ped
+            skin:Apply()
+            table.insert(self.peds, ped)
+        end
     end
 end
 
@@ -93,6 +124,9 @@ function StoryEpisodeBase:Destroy()
     if self.regionsGroup then
         self.regionsGroup:destroy() --should also handle the events defined for this element
         self.regionsGroup = nil
+    end
+    for i,p in ipairs(self.peds) do
+        p:destroy()
     end
     self.Disposed = true
 end

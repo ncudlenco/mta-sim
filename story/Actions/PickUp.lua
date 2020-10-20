@@ -8,7 +8,7 @@ end)
 
 function PickUp:Apply()
     local story = GetStory(self.Performer)
-    table.insert(story.History, self)
+    table.insert(story.History[self.Performer:getData('id')], self)
     
     if self.TargetObjectExists then
         self.TargetItem:Destroy()

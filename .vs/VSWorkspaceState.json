@@ -2,8 +2,8 @@
   "ExpandedNodes": [
     "",
     "\\story",
-    "\\story\\Actions"
+    "\\story\\Episodes"
   ],
-  "SelectedNode": "\\story\\Actions\\Move.lua",
+  "SelectedNode": "\\story\\Actions",
   "PreviewInSolutionExplorer": false
 }

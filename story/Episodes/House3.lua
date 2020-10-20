@@ -1,5 +1,5 @@
 House3 = class(StoryEpisodeBase, function(o)
-    StoryEpisodeBase.init(o, 'house3', nil, nil, nil)
+    StoryEpisodeBase.init(o, {name = 'house3'})
     o:LoadFromFile()
 
     o.InteriorId = 3

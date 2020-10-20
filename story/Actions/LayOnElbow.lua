@@ -4,7 +4,7 @@ end)
 
 function LayOnElbow:Apply()
     local story = GetStory(self.Performer)
-    table.insert(story.History, self)
+    table.insert(story.History[self.Performer:getData('id')], self)
     
     story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description  .. self.Performer:getData('genderGenitive') ..  " head on the elbow", self.Performer)
 

@@ -30,8 +30,8 @@ OpenDoor.eHow = {
 function OpenDoor.destinationReached(player, matchingDimension)
     local playerId = source:getData("id")
     local storyId = source:getData("storyId")
-    local story = STORIES[playerId][storyId]
-    local lastAction = story.History[#story.History]
+    local story = CURRENT_STORY
+    local lastAction = story.History[playerId][#story.History[playerId]]
 
 	if lastAction.path and DEBUG then
 		outputConsole("Player "..player.name.." reached marker "..source:getData("idx").." / "..#lastAction.path)
@@ -68,7 +68,7 @@ end
 
 function OpenDoor:Apply()
     local story = GetStory(self.Performer)
-    table.insert(story.History, self)
+    table.insert(story.History[self.Performer:getData('id')], self)
     
     story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description, self.Performer)
     if DEBUG then

@@ -35,6 +35,10 @@ function PickRandom(arr)
             table.insert(keys, key)
         end
 
+        if #keys == 0 then
+            return  nil
+        end
+
         return keys[math.random(#keys)]
     else
         return arr[math.random(#arr)]

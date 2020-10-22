@@ -1,5 +1,6 @@
 BenchpressWorkOut = class(StoryActionBase, function(o, params)
-    StoryActionBase.init(o, " works out at the ", params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
+    params.description = " works out at the "
+    StoryActionBase.init(o, params)
 end)
 
 function BenchpressWorkOut:Apply()
@@ -8,7 +9,7 @@ function BenchpressWorkOut:Apply()
     
     math.randomseed(os.time())
     local time = math.random(8000, 18000)
-    story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. self.TargetItem.Description .. ". When " .. self.Performer:getData('genderNominative') .. " finishes ", self.Performer)
+    story.Logger:Log(self.Description .. self.TargetItem.Description, self, false, true, {"finishes", "finishes working out"})
     
     self.Performer:setAnimation("benchpress", "gym_bp_up_A", time, true, false, false, true)
 

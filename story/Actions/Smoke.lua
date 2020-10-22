@@ -1,5 +1,6 @@
 Smoke = class(StoryActionBase, function(o, params)
-    StoryActionBase.init(o, PickRandom({" smokes a ", " starts smoking a "}), params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
+    params.description = PickRandom({" smokes a ", " starts smoking a "})
+    StoryActionBase.init(o,params)
 end)
 
 function Smoke:Apply()
@@ -8,7 +9,7 @@ function Smoke:Apply()
     
     math.randomseed(os.time())
     time = math.random(5000, 12000)
-    story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. self.TargetItem.Description, self.Performer)
+    story.Logger:Log(self.Description .. self.TargetItem.Description, self)
     self.Performer:setAnimation("SMOKING", "M_smk_drag", time, true, true, false, true)
 
     if DEBUG then

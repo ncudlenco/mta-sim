@@ -9,14 +9,15 @@ OpenDoor = class(StoryActionBase, function(o, params)
     -- elseif type(params.graphId) ~= "number" then
     --     error("OpenDoor: graphId not given in the constructor")
     -- end
-
+    local description = ''
     if params.how == OpenDoor.eHow.Exit then 
         description = " opens the door and exits the room"
     else
         description = " and opens the door to enter the room"
     end
 
-    StoryActionBase.init(o, description, params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
+    params.description = description
+    StoryActionBase.init(o,params)
     o.path = {}
     o.graphId = params.graphId
     o.how = "WALK_civi"
@@ -70,7 +71,11 @@ function OpenDoor:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
     
-    story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description, self.Performer)
+    if self.how == OpenDoor.eHow.Exit then
+        story.Logger:Log(self.Description, self)
+    else
+        story.Logger:Log(self.Description, self, 'skipNominative')
+    end
     if DEBUG then
         outputConsole("OpenDoor:Apply")
     end

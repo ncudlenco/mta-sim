@@ -1,12 +1,13 @@
 WashHands = class(StoryActionBase, function(o, params)
-    StoryActionBase.init(o, " washes ", params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
+    params.description = " washes "
+    StoryActionBase.init(o,params)
 end)
 
 function WashHands:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
     
-    story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description  .. self.Performer:getData('genderGenitive') .. " hands in the " .. self.TargetItem.Description, self.Performer)
+    story.Logger:Log(self.Description  .. self.Performer:getData('genderGenitive') .. " hands in the " .. self.TargetItem.Description, self)
     -- self.TargetItem.instance:setCollisionsEnabled(false)
 
     math.randomseed(os.time())

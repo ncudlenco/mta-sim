@@ -26,7 +26,8 @@ Move = class(StoryActionBase, function(o, params)
         description = " skates "
     end
 
-    StoryActionBase.init(o, description, params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
+    params.description = description
+    StoryActionBase.init(o,params)
     o.path = {}
     o.graphId = params.graphId
     o.how = params.how or Move.eHow.Walk
@@ -94,7 +95,7 @@ function Move:Apply()
             outputConsole("Move:Apply: Logging data because the next region is "..self.TargetItem.Region.name..' but the current region is '..story.CurrentEpisode.CurrentRegion.name)
             -- outputConsole("Move:Apply: ("..self.TargetItem.Region.Id..' vs '..self.Performer:getData('currentRegionId')..' - '..story.CurrentEpisode.CurrentRegion.Id)
         end
-        story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. " " .. self.TargetItem.Description, self.Performer)
+        story.Logger:Log(self.Description .. " " .. self.TargetItem.Description, self)
     end
 
     if DEBUG then

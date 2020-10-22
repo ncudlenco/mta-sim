@@ -1,5 +1,6 @@
 PedalGymBike = class(StoryActionBase, function(o, params)
-    StoryActionBase.init(o, PickRandom({" starts pedalling at the ", " pedals at the "}), params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
+    params.description = PickRandom({" starts pedalling ", " pedals "})
+    StoryActionBase.init(o,params)
     o.how = PedalGymBike.eHow[PickRandom(PedalGymBike.eHow)]
 end)
 
@@ -8,18 +9,18 @@ function PedalGymBike:Apply()
     table.insert(story.History[self.Performer:getData('id')], self)
 
     if self.how == PedalGymBike.eHow.Still then
-        self.Description = " stands still on the"
+        self.Description = " stands still "
     elseif self.how == PedalGymBike.eHow.Slow then
-        self.Description = PickRandom({" starts pedalling slowly at the ", " pedals slowly at the "})
+        self.Description = PickRandom({" starts pedalling slowly ", " pedals slowly "})
     elseif self.how == PedalGymBike.eHow.Normal then
-        self.Description = PickRandom({" starts pedalling at the ", " pedals at the "})
+        self.Description = PickRandom({" starts pedalling ", " pedals "})
     elseif self.how == PedalGymBike.eHow.Fast then
-        self.Description = PickRandom({" starts pedalling fast at the ", " pedals fast at the "})
+        self.Description = PickRandom({" starts pedalling fast ", " pedals fast "})
     elseif self.how == PedalGymBike.eHow.Faster then
-        self.Description = PickRandom({" starts pedalling very fast at the ", " pedals very fast at the "})
+        self.Description = PickRandom({" starts pedalling very fast ", " pedals very fast "})
     end
         
-    story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. self.TargetItem.Description, self.Performer)
+    story.Logger:Log(self.Description, self)
 
     math.randomseed(os.time())
     local time = math.random(8000, 15000)
@@ -37,7 +38,7 @@ function PedalGymBike:GetDynamicString()
 end
 
 PedalGymBike.eHow = {
-    Still = "gym_bike_slow",
+    Still = "gym_bike_still",
     Slow = "gym_bike_slow",
     Normal = "gym_bike_pedal",
     Fast = "gym_bike_fast",

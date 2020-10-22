@@ -1,12 +1,13 @@
 TurnOff = class(StoryActionBase, function(o, params)
-    StoryActionBase.init(o, " turns off the ", params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
+    params.description = " turns off the "
+    StoryActionBase.init(o,params)
 end)
 
 function TurnOff:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
     
-    story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. self.TargetItem.Description, self.Performer)
+    story.Logger:Log(self.Description .. self.TargetItem.Description, self)
     -- self.TargetItem.instance:setCollisionsEnabled(false)
 
     self.Performer:setAnimation("INT_SHOP", "shop_loop", 500, true, true, false, true)

@@ -12,6 +12,11 @@ SampStoryObjectBase = class(StoryObjectBase, function(o, params)
     o.scale = params.scale or 1
     o.PosOffset = params.posOffset or params.PosOffset or Vector3(0,0,0)
     o.RotOffset = params.rotOffset or params.RotOffset or Vector3(0,0,0)
+    if not params.pluralTemplate and params.description and params.description ~= '' then
+        o:SetSimplePluralTemplate()
+    else
+        o.pluralTemplate = params.pluralTemplate or ''
+    end
     local noCollisionStr = 'false'
     if o.noCollisions then
         noCollisionStr = 'true'
@@ -22,10 +27,17 @@ SampStoryObjectBase = class(StoryObjectBase, function(o, params)
         o.modelid = loadstring('return '..o.type..'.eModel[PickRandom('..o.type..'.eModel)]')()
     end
     o.isRandomModelId = false
-    local modelid = o.modelid
-    local type = o.type
-    local i = 5
 end)
+
+function SampStoryObjectBase:SetSimplePluralTemplate()
+    local words = {}
+    words[1], words[2] = self.Description:match("(%w+) (.+)")
+    if not words[1] then
+        words[1] = self.Description
+        words[2] = ''
+    end
+    self.pluralTemplate = '{count} ' ..  words[1] .. 's' .. words[2]
+end
 
 function SampStoryObjectBase:__tostring()
     local noCollisionsStr = 'false'

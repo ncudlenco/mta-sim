@@ -1,15 +1,17 @@
-StoryActionBase = class(IStoryItem, function(o, description, performer, targetItem, nextLocation, prerequisites, closingAction, nextAction, topologicalOrder, penalties, rewards)
-    IStoryItem.init(o, description, eStoryItemType.Action)
-    o.Performer = performer
-    o.TargetItem = targetItem
-    o.NextLocation = nextLocation
-    o.Prerequisites = prerequisites
-    o.ClosingAction = closingAction
-    o.NextAction = nextAction
+StoryActionBase = class(IStoryItem, function(o, params)
+    IStoryItem.init(o, params.description or params.Description or '', eStoryItemType.Action)
+    o.Performer = params.performer or params.Performer or nil
+    o.TargetItem = params.targetItem or params.TargetItem or nil
+    o.NextLocation = params.nextLocation or params.NextLocation or nil
+    o.Prerequisites = params.prerequisites or params.Prerequisites or {}
+    o.ClosingAction = params.closingAction or params.ClosingAction or nil
+    o.NextAction = params.nextAction or params.NextAction or nil
     o.ActionId = Guid().Id
-    o.TopologicalOrder = topologicalOrder or -1
-    o.Penalties = penalties or {}
-    o.Rewards = rewards or {}
+    o.TopologicalOrder = params.topologicalOrder or params.TopologicalOrder or -1
+    o.Penalties = params.penalties or params.Penalties or {}
+    o.Rewards = params.rewards or params.Rewards or {}
+    o.IsClosingAction = params.isClosingAction or params.IsClosingAction or false
+    o.Buffer = {}
 end)
 
 function StoryActionBase:__tostring()

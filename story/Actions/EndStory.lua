@@ -1,5 +1,6 @@
 EndStory = class(StoryActionBase, function(o, player)
-    StoryActionBase.init(o, "", player, nil, nil, {}, nil, nil)
+    params.performer = player
+    StoryActionBase.init(o, params)
 end)
 
 function EndStory:Apply()
@@ -8,6 +9,9 @@ function EndStory:Apply()
     end
     local story = GetStory(self.Performer)
     story:End()
+    if not story.LogData and not story.RecorderTimer then
+        story.Actor:kick("story ended")
+    end
 end
 
 function EndStory:GetDynamicString()

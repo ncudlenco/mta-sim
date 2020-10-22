@@ -71,7 +71,8 @@ function Location:Serialize(episode, relativePosition, _objects, _locations, _ma
             nextAction = serializedNextAction,
             targetItem = {id = targetItemId, type = targetItemType},
             nextLocation = {id = LastIndexOf(episode.POI, a.NextLocation)},
-            closingAction = closingAction
+            closingAction = closingAction,
+            isClosingAction = a.IsClosingAction
         }
         table.insert(serializedAllActions, serializedAction)
         local function processLocationDependency(location)
@@ -145,6 +146,9 @@ end
 
 lock = false
 function Location:GetNextValidAction(player)
+    if CURRENT_STORY.Disposed then
+        return EmptyAction({Performer = player})
+    end
     while lock do 
         Timer(function()end, 500, 1)
     end

@@ -7,7 +7,8 @@ StandUp = class(StoryActionBase, function(o, params)
     -- elseif type(params.nextLocation) ~= "table" then
     --     error("StandUp: nextLocation not given in the constructor")
     -- end
-    StoryActionBase.init(o, " stands up ", params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
+    params.description = " stands up "
+    StoryActionBase.init(o,params)
     o.how = params.how or StandUp.eHow.atDesk
 end)
 
@@ -20,7 +21,7 @@ function StandUp:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
     
-    story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. "from the " .. self.TargetItem.Description, self.Performer)
+    story.Logger:Log(self.Description .. "from the " .. self.TargetItem.Description, self)
     self.TargetItem.instance:setCollisionsEnabled(false)
     local animationLib = "INT_OFFICE"
     local animationId = "OFF_Sit_2Idle_180"

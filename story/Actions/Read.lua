@@ -1,5 +1,6 @@
 Read = class(StoryActionBase, function(o, params)
-    StoryActionBase.init(o, PickRandom({" starts reading ", " reads "}), params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
+    params.description = PickRandom({" starts reading ", " reads "})
+    StoryActionBase.init(o,params)
 end)
 
 function Read:Apply()
@@ -8,8 +9,7 @@ function Read:Apply()
     
     math.randomseed(os.time())
     local time = math.random(3000, 12000)
-    story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. self.TargetItem.Description .. ". When " ..
-                     self.Performer:getData('genderNominative') .. PickRandom({" finishes ", " finishes reading "}), self.Performer)
+    story.Logger:Log(self.Description .. self.TargetItem.Description, self, false, true, {"finishes", "finishes drinking"})
     self.Performer:setAnimation("INT_OFFICE", "OFF_Sit_Read", time, true, true, false, true)
 
     if DEBUG then

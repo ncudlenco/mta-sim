@@ -24,6 +24,7 @@ end
 )
 
 function Food:updateDescription()
+    local pluralSet = false
     if self.modelid == Food.eModel.Shawarma then
         self.Description = "shawarma"
     elseif self.modelid == Food.eModel.Burger then
@@ -32,12 +33,19 @@ function Food:updateDescription()
         self.Description = "slice of pizza"
     elseif self.modelid == Food.eModel.RedApple then
         self.Description = "red apple"
+        self.pluralTemplate = '{count} red apples'
+        pluralSet = true
     elseif self.modelid == Food.eModel.GreenApple then
         self.Description = "green apple"
+        self.pluralTemplate = '{count} green apples'
+        pluralSet = true
     elseif self.modelid == Food.eModel.Cake then
         self.Description = "slice of cake"
     elseif self.modelid == Food.eModel.Banana then
         self.Description = "banana"
+    end
+    if not pluralSet then
+        self:SetSimplePluralTemplate()
     end
     return self.Description
 end

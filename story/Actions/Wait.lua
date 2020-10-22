@@ -1,5 +1,6 @@
 Wait = class(StoryActionBase, function(o, params)
-    StoryActionBase.init(o, " is waiting ", params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
+    params.description = " is waiting "
+    StoryActionBase.init(o,params)
     o.Time = params.time
 end)
 
@@ -7,7 +8,7 @@ function Wait:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
     
-    story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description, self.Performer)
+    story.Logger:Log(self.Description, self)
     self.Performer:setAnimation("CASINO", "Slot_wait", self.Time, true, true, false, true)
 
     if DEBUG then

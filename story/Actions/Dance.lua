@@ -1,13 +1,13 @@
 Dance = class(StoryActionBase, function(o, params)
-    StoryActionBase.init(o, PickRandom({" starts dancing", " dances"}), params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
+    params.description = PickRandom({" starts dancing", " dances"})
+    StoryActionBase.init(o, params)
 end)
 
 function Dance:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
     
-    story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. 
-                     ". When " .. self.Performer:getData('genderNominative') .. PickRandom({" finishes dancing ", " finishes "}) .. self.Performer:getData('genderNominative'), self.Performer)
+    story.Logger:Log(self.Description, self, false, true, {"finishes", "finishes dancing"})
     -- self.TargetItem.instance:setCollisionsEnabled(false)
 
     math.randomseed(os.time())

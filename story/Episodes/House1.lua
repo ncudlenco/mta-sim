@@ -16,7 +16,6 @@ House1 = class(StoryEpisodeBase, function(o)
 end)
 
 function House1:Initialize(...)
-    StoryEpisodeBase.Initialize(self, arg)
 
     local player = nil
     for i,v in ipairs(arg) do
@@ -104,9 +103,10 @@ function House1:Initialize(...)
 
     local livingRoomEndLocation = Location(-2170.126708984375, 638.444580078125, 1057.5971, 180, self.InteriorId, "house exit")
 
-    table.insert(self.ValidStartingLocations, livingRoomEntranceLocation)
-
-    self.POI = {livingRoomSofaLocation, livingRoomMusicPlayerLocation, kitchenChairLocation, kitchenTableLocation, livingRoomSmokeLocation, livingRoomEndLocation}
+    
+    self.POI = {livingRoomSofaLocation, livingRoomMusicPlayerLocation, kitchenChairLocation, kitchenTableLocation, livingRoomSmokeLocation, livingRoomEndLocation, livingRoomEntranceLocation}
+    self.ValidStartingLocations = {livingRoomSofaLocation, livingRoomMusicPlayerLocation, kitchenChairLocation, kitchenTableLocation, livingRoomSmokeLocation, livingRoomEndLocation, livingRoomEntranceLocation}
+    -- table.insert(self.ValidStartingLocations, livingRoomEntranceLocation)
     -- self.POI = Shuffle(self.POI)
 
     if self.POI[1] == livingRoomEndLocation then
@@ -177,6 +177,8 @@ function House1:Initialize(...)
     livingroomSmokeInAction.ClosingAction = moveToPOI6Action
 
     table.insert(livingRoomEndLocation.PossibleActions, EndStory())
+
+    StoryEpisodeBase.Initialize(self, arg)
 
     if DEBUG then
         outputConsole("House1:Initialized")

@@ -13,7 +13,6 @@ StoryEpisodeBase = class(function(o, params)
     o.POI = {}
     o.name = params.name or ""
     o.regionsGroup = nil
-    o.pedsNr = params.pedsNr or DEFAULT_PEDS_NR
     o.peds = {}
 end)
 
@@ -46,12 +45,14 @@ function StoryEpisodeBase:Initialize(...)
             end
         end)
 
-        if (self.pedsNr + 1) > #self.ValidStartingLocations then
+        local pedsNr = math.max(math.floor(#self.ValidStartingLocations * ACTORS_CROWDING_FACTOR) - 1, 0)
+
+        if (pedsNr + 1) > #self.ValidStartingLocations then
             if DEBUG then
                 outputConsole('[Warning] StoryEpisodeBase:Initialize: number of peds and player is greater than the available starting locations. A max of '..(#self.ValidStartingLocations-1)..' peds will be spawned')
             end
         end
-        for i = 1,(self.pedsNr) do
+        for i = 1,(pedsNr) do
             local validStartingPoi = PickRandom(Where(self.ValidStartingLocations, function(x)
                 --find a valid starting location where there are no other players
                 return not x.isBusy
@@ -121,6 +122,11 @@ function StoryEpisodeBase:Play(...)
 end
 
 function StoryEpisodeBase:Destroy()
+    for _, ped in ipairs(self.peds) do
+        CURRENT_STORY.Logger:FlushBuffer(ped, true)
+    end
+    CURRENT_STORY.Logger:FlushBuffer(CURRENT_STORY.Actor, true)
+
     if self.regionsGroup then
         self.regionsGroup:destroy() --should also handle the events defined for this element
         self.regionsGroup = nil
@@ -220,6 +226,7 @@ function StoryEpisodeBase:LoadFromFile()
                     end
                     if a.closingAction then
                         deserializedAllActions[idx].ClosingAction = deserializedAllActions[a.closingAction.id]
+                        deserializedAllActions[a.closingAction.id].IsClosingAction = true
                     end
                 end
                 poi.allActions = deserializedAllActions

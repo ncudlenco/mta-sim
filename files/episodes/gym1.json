@@ -281,7 +281,7 @@
 					"x": 765.0390014648438,
 					"z": 999.71630859375
 				},
-				"name": "gym main room",
+				"name": "gym",
 				"vertexes": [
 					{
 						"y": -5.499334335327148,
@@ -361,7 +361,8 @@
 						"id": 3,
 						"nextLocation": {
 							"id": 1
-						}
+						},
+						"isClosingAction": true
 					}
 				]
 			},

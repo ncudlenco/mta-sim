@@ -167,9 +167,12 @@ function House12:Initialize(...)
 
     local livingRoomEndLocation = Location(2324.4219, -1147.9844, 1050.875, 180, self.InteriorId, "end")
 
-    table.insert(self.ValidStartingLocations, livingRoomEntranceLocation)
-
-    self.POI = {livingRoomSofa1Location, livingRoomSofa2Location, livingRoomChairLocation, kitchenTableLocation1, bedroom1EntranceLocation, bedroom2EntranceLocation, livingRoomEndLocation}
+    
+    self.POI = {livingRoomSofa1Location, livingRoomSofa2Location, livingRoomChairLocation, kitchenTableLocation1, bedroom1EntranceLocation, bedroom2EntranceLocation, livingRoomEndLocation, livingRoomEntranceLocation}
+    for _,p in ipairs(self.POI) do
+        table.insert(self.ValidStartingLocations, p)
+    end
+    -- table.insert(self.ValidStartingLocations, livingRoomEntranceLocation)
     -- self.POI = Shuffle(self.POI)
 
     if self.POI[1] == livingRoomEndLocation then

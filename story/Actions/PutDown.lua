@@ -1,5 +1,6 @@
 PutDown = class(StoryActionBase, function(o, params)
-    StoryActionBase.init(o, " puts the ", params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
+    params.description = " puts the "
+    StoryActionBase.init(o,params)
     o.Where = params.where
     o.TargetObjectPosition = params.targetObjectPosition
     o.TargetObjectRotation = params.targetObjectRotation
@@ -10,7 +11,7 @@ function PutDown:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
     
-    story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. self.TargetItem.Description .. " on " .. self.Where, self.Performer)
+    story.Logger:Log(self.Description .. self.TargetItem.Description .. " on " .. self.Where, self)
     -- self.TargetItem.instance:setCollisionsEnabled(false)
 
     local time = 500

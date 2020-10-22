@@ -12,8 +12,8 @@ Story = class(StoryBase, function(o, actor, maxActions, logData)
     }
     o.DynamicEpisodes = {
       -- "house3",
-      -- "house1_sweet"
-      "gym1"
+      "house1_sweet"
+    --   "gym1"
     }
     o.Disposed = false
     if not o.Actor then

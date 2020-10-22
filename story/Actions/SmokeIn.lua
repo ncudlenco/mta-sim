@@ -1,12 +1,13 @@
 SmokeIn = class(StoryActionBase, function(o, params)
-    StoryActionBase.init(o, " takes out ", params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
+    params.description = " takes out "
+    StoryActionBase.init(o,params)
 end)
 
 function SmokeIn:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
     
-    story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. getWordPrefix(self.TargetItem.Description) .. " " .. self.TargetItem.Description .. " from " .. self.Performer:getData('genderGenitive') .. " pocket", self.Performer)
+    story.Logger:Log(self.Description .. getWordPrefix(self.TargetItem.Description) .. " " .. self.TargetItem.Description .. " from " .. self.Performer:getData('genderGenitive') .. " pocket", self)
     self.Performer:setAnimation("SMOKING", "M_smk_in", 3000, true, true, false, true)
     self.TargetItem:Create()
     attachElementToBone(self.TargetItem.instance, self.Performer, 12, 

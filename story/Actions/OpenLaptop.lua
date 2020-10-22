@@ -1,12 +1,13 @@
 OpenLaptop = class(StoryActionBase, function(o, params)
-    StoryActionBase.init(o, " opens the laptop lid ", params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
+    params.description = " opens the laptop lid "
+    StoryActionBase.init(o,params)
 end)
 
 function OpenLaptop:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
     
-    story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description, self.Performer)
+    story.Logger:Log(self.Description, self)
     self.TargetItem:ChangeModel(Laptop.eModel.Open)
 
     if DEBUG then

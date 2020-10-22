@@ -840,7 +840,13 @@ addCommandHandler("episode",
                     outputChatBox("Clicked at "..worldX..", "..worldY..", "..worldZ, 255, 0, 0, false)
                     outputChatBox('description: ...'..description..'...')
                     local modelId = tonumber(param2) or tonumber(description)
-                    outputChatBox('modelid: ...'..modelId..'...')
+                    local strModelId = ''
+                    if modelId then
+                        strModelId = ''..modelId
+                    else
+                        strModelId = ' random'
+                    end
+                    outputChatBox('modelid: ...'..strModelId..'...')
                     local type = nil
                     if tonumber(param2) == nil then
                         type = param2

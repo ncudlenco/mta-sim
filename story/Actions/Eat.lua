@@ -1,5 +1,6 @@
 Eat = class(StoryActionBase, function(o, params)
-    StoryActionBase.init(o, PickRandom({" starts eating from it", " eats from it"}), params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
+    params.description = PickRandom({" starts eating from it", " eats from it"})
+    StoryActionBase.init(o, params)
     o.how = params.how or Eat.eHow.StandUp
 end)
 
@@ -7,8 +8,7 @@ function Eat:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
     
-    story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. 
-                    ". When " .. self.Performer:getData('genderNominative') .. PickRandom({" finishes ", " finishes eating "}) .. self.Performer:getData('genderNominative'), self.Performer)
+    story.Logger:Log(self.Description, self, false, true, {"finishes", "finishes drinking"})
 
     math.randomseed(os.time())
     time = math.random(5000, 10000)

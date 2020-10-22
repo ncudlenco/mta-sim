@@ -1,13 +1,5 @@
 DynamicAction = class(StoryActionBase, function(o, params)
-    StoryActionBase.init(o,
-        params.description,
-        params.performer,
-        params.targetItem,
-        params.nextLocation,
-        params.prerequisites or {},
-        params.closingAction or nil,
-        params.nextAction or nil
-    )
+    StoryActionBase.init(o,params)
     o.block = params.block
     o.anim = params.anim
     o.time = params.time
@@ -21,7 +13,7 @@ function DynamicAction:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
     
-    story.Logger:Log(self.Performer:getData('skinDescription') .. " " ..self.Description, self.Performer)
+    story.Logger:Log(" " ..self.Description, self)
 
     setPedAnimation(self.Performer, self.block, self.anim, self.time or 3000, self.loop or true, self.updatePosition or true, self.interruptable or false, self.freezeLastFrame or true)
 

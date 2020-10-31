@@ -34,39 +34,55 @@ function Logger:DescribeRegion(regionName, actors)
         'persons',
         'individuals'
     }
+    local verb = "are"
+
+    if #actors == 1 then
+        verb = "is"
+        subject = {"person", "individual"}
+    end
+
     local prefix = getWordPrefix(regionName)
     if not self.FirstPhrase then
         prefix = 'the'
     end
     local sentences = {
-        'There are ' .. #actors .. ' '..PickRandom(subject)..' i' .. PickRandom(where)..' '..prefix..' '..regionName..': ',
-        #actors .. ' '..PickRandom(subject)..' are i' .. PickRandom(where)..' '..prefix..' '..regionName..': ',
-        'I'..PickRandom(where)..' '..prefix..' '..regionName..' there are ' .. #actors..' '..PickRandom(subject)..': '
+        'There ' .. verb .. ' ' .. #actors .. ' '..PickRandom(subject)..' i' .. PickRandom(where) .. ' ' .. prefix .. ' ' .. regionName .. ': ',
+        #actors .. ' '..PickRandom(subject)..' ' .. verb .. ' i' .. PickRandom(where) .. ' ' .. prefix..' ' .. regionName .. ': ',
+        'I'..PickRandom(where)..' '..prefix..' '..regionName..' there ' .. verb .. ' ' .. #actors..' ' .. PickRandom(subject) .. ': '
     }
     local sentence = sentences[3]
     if self.FirstPhrase then
         sentence = PickRandom(sentences)
     end
     local foundOneNewActor = false
-    for i,a in ipairs(actors) do
-        if i == #actors then
-            sentence = sentence..' and '
-        elseif i > 1 then
-            sentence = sentence..', '
-        end
-        if a:getData('isIntroduced') then
-            sentence = sentence..a:getData('name')
-        else
-            foundOneNewActor = true
-            local skinDescription = a:getData('skinDescription')
-            sentence = sentence..skinDescription:sub(1,1):lower() .. skinDescription:sub(2) .. ' named ' .. a:getData('name')
-        end
-        a:setData('isIntroduced', true)
-    end
-    if foundOneNewActor then
+    
+    if #actors == 1 then
+        local skinDescription = actors[1]:getData('skinDescription')
+        sentence = sentence .. skinDescription:sub(1,1):lower() .. skinDescription:sub(2) .. ' named ' .. actors[1]:getData('name')
+
         return sentence
     else
-        return nil
+        for i,a in ipairs(actors) do
+            if i == #actors then
+                sentence = sentence..' and '
+            elseif i > 1 then
+                sentence = sentence..', '
+            end
+            if a:getData('isIntroduced') then
+                sentence = sentence..a:getData('name')
+            else
+                foundOneNewActor = true
+                local skinDescription = a:getData('skinDescription')
+                sentence = sentence..skinDescription:sub(1,1):lower() .. skinDescription:sub(2) .. ' named ' .. a:getData('name')
+            end
+            a:setData('isIntroduced', true)
+        end
+
+        if foundOneNewActor then
+            return sentence
+        else
+            return nil
+        end
     end
 end
 

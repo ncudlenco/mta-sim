@@ -21,9 +21,14 @@ function GetOn:Apply()
     -- player.Position = new Vector3(centerTopLeft.X, centerTopLeft.Y, player.Position.Z);
     --self.TargetItem.instance:setCollisionsEnabled(false)
 
+    if DEBUG then
+        outputConsole("GetOn:Apply")
+    end
+
     local block = ""
     local animation = ""
     local updatePedPosition = true
+    local time = 3100
 
     if self.how == GetOn.eHow.Bed then
         time = 3100
@@ -44,18 +49,16 @@ function GetOn:Apply()
         block = "GYMNASIUM"
         animation = "gym_tread_geton"
         updatePedPosition = false
-    elseif self.how == GetOn.eHow.Benchpress then
+    elseif self.how == GetOn.eHow.BenchPress then
         time = 4000
-        block = "GYMNASIUM"
+        block = "benchpress"
         animation = "gym_bp_geton"
+        updatePedPosition = false
     end
 
     story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. self.TargetItem.Description, self.Performer)
     self.Performer:setAnimation(block, animation, time, true, updatePedPosition, false, true)
 
-    if DEBUG then
-        outputConsole("GetOn:Apply")
-    end
     OnGlobalActionFinished(time, self.Performer:getData('id'), self.Performer:getData('storyId'))
 end
 
@@ -67,7 +70,7 @@ GetOn.eHow = {
     Bed = 1,
     GymBike = 2,
     Treadmill = 3,
-    Benchpress = 4
+    BenchPress = 4
 }
 
 GetOn.eSide = {

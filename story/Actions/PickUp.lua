@@ -11,7 +11,7 @@ function PickUp:Apply()
     table.insert(story.History, self)
     
     if self.TargetObjectExists then
-        self.TargetItem:Destroy()
+        self.TargetItem:Create()
     end
 
     pickedObjects = self.Performer:getData('pickedObjects')
@@ -50,7 +50,8 @@ function PickUp:Apply()
         self.TargetItem:updateRotOffsetSitDown()
         self.Performer:setAnimation("INT_OFFICE", "OFF_Sit_Drink", time, true, true, false, true)
     elseif self.how == PickUp.eHow.FloorBarbell then
-        self.Performer:setAnimation("Freeweights", "gym_free_pickup", time, true, true, false, true)
+        time = 2500
+        self.Performer:setAnimation("freeweights", "gym_free_pickup", time, true, false, false, true)
     end
 
     if DEBUG then
@@ -58,7 +59,6 @@ function PickUp:Apply()
     end
 
     OnGlobalActionFinished(time, self.Performer:getData('id'), self.Performer:getData('storyId'), function()
-        self.TargetItem:Create()
         attachElementToBone(self.TargetItem.instance, self.Performer, self.hand, 
                         self.TargetItem.PosOffset.x, self.TargetItem.PosOffset.y, self.TargetItem.PosOffset.z,
                         self.TargetItem.RotOffset.x, self.TargetItem.RotOffset.y, self.TargetItem.RotOffset.z)

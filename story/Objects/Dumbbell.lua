@@ -24,5 +24,5 @@ end
 
 Dumbbell.eModel = 
 {
-    Dumbbell1 = 2916
+    Dumbbell1 = 2916,
 }

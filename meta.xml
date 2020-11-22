@@ -118,7 +118,6 @@
   <script src="story/Actions/SmokeIn.lua" type="shared" />
   <script src="story/Actions/SmokeOut.lua" type="shared" />
   <script src="story/Actions/TaiChi.lua" type="shared" />
-  <script src="story/Actions/BarbellWorkOut.lua" type="shared" />
   <script src="story/Actions/BenchpressWorkOut.lua" type="shared" />
   <script src="story/Actions/Punch.lua" type="shared" />
   <script src="story/Actions/DumbbellsWorkOut.lua" type="shared" />

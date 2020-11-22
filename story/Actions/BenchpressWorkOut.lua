@@ -1,6 +1,6 @@
 BenchpressWorkOut = class(StoryActionBase, function(o, params)
     StoryActionBase.init(o, " working out with the ", params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
-    o.how = BenchpressWorkOut.eHow[PickRandom(BenchpressWorkOut.eHow)]
+    o.how = BenchpressWorkOut.eHow.Slow
 end)
 
 function BenchpressWorkOut:Apply()
@@ -10,9 +10,15 @@ function BenchpressWorkOut:Apply()
     math.randomseed(os.time())
     local time = math.random(8000, 18000)
 
+    local initialPosition = self.TargetItem.position
+    local initialRotation = self.TargetItem.rotation
+
+    print(initialPosition)
+    print(initialRotation)
+
     attachElementToBone(self.TargetItem.instance, self.Performer, 12, 
-                        0,0,0,
-                        0,0,0)
+                        self.TargetItem.PosOffset.x, self.TargetItem.PosOffset.y, self.TargetItem.PosOffset.z,
+                        self.TargetItem.RotOffset.x, self.TargetItem.RotOffset.y, self.TargetItem.RotOffset.z)
 
     story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. self.TargetItem.Description .. ". When " .. self.Performer:getData('genderNominative') .. " finishes ", self.Performer)
     
@@ -24,7 +30,8 @@ function BenchpressWorkOut:Apply()
 
     OnGlobalActionFinished(time, self.Performer:getData('id'), self.Performer:getData('storyId'), function()
         detachElementFromBone(self.TargetItem.instance)
-        self.TargetItem.position.y = self.TargetItem.position + 0.05
+        setElementPosition(self.TargetItem.instance, initialPosition)
+        setElementRotation(self.TargetItem.instance, initialRotation)
     end)
 end
 

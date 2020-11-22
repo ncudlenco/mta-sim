@@ -14,7 +14,7 @@
                 },
                 "scale": 1,
                 "isRandomModelId": false,
-                "ObjectId": "47d1122e-45d0-4d3e-9433-dded9022572e",
+                "ObjectId": "128ce1dd-68a7-44ff-a942-397537bfaf38",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -47,7 +47,7 @@
                 },
                 "scale": 1,
                 "isRandomModelId": false,
-                "ObjectId": "98e8bffd-d254-42fb-a0ad-bd1b6aee0c70",
+                "ObjectId": "3e758955-243e-4bca-a4c1-bd5070d9899c",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -80,7 +80,7 @@
                 },
                 "scale": 1,
                 "isRandomModelId": false,
-                "ObjectId": "362e83ce-30c3-48cd-98fd-a3d5508615e3",
+                "ObjectId": "abcd26c0-7084-413f-a915-fd5340f2134c",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -113,7 +113,7 @@
                 },
                 "scale": 1,
                 "isRandomModelId": false,
-                "ObjectId": "f2de73a8-960d-4244-a8f9-c6db2800b5e7",
+                "ObjectId": "a142392a-17c5-404b-b9d1-cfa9993f3034",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -146,7 +146,7 @@
                 },
                 "scale": 1,
                 "isRandomModelId": false,
-                "ObjectId": "c0a0af8b-4da9-44d7-a507-a66049e6e680",
+                "ObjectId": "6c4e6b30-955a-4f3e-9fa3-4584311bdad0",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -181,7 +181,7 @@
                 },
                 "scale": 1,
                 "isRandomModelId": false,
-                "ObjectId": "52bf9050-a2dd-49bd-82b9-3129555acc89",
+                "ObjectId": "60c204c3-5707-489c-95df-9f09d6440960",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -214,7 +214,7 @@
                 },
                 "scale": 1,
                 "isRandomModelId": false,
-                "ObjectId": "f018614e-322e-4100-9e66-fd8db6408f63",
+                "ObjectId": "28ecf3ec-fdea-4294-9bc2-b71cd1497c3b",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -247,7 +247,7 @@
                 },
                 "scale": 1,
                 "isRandomModelId": false,
-                "ObjectId": "dab18f04-2f94-4e5b-8238-e1e71c2fcd37",
+                "ObjectId": "5ae89074-6d71-49bc-bd4d-abdcdee8715d",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -280,7 +280,7 @@
                 },
                 "scale": 1,
                 "isRandomModelId": false,
-                "ObjectId": "650c3169-132a-479b-9a6d-93fe6f2e97ab",
+                "ObjectId": "f734c579-1fc2-47bf-ba9f-b4948b387fac",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -313,7 +313,7 @@
                 },
                 "scale": 1,
                 "isRandomModelId": false,
-                "ObjectId": "7b111054-b261-4ab3-a9a8-180f7fb8ab56",
+                "ObjectId": "02a55a66-3a27-48c6-8562-dbeaa8bbf751",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -346,7 +346,7 @@
                 },
                 "scale": 1,
                 "isRandomModelId": false,
-                "ObjectId": "7de6b9ce-991c-4799-ada5-0453c5d1bae2",
+                "ObjectId": "3f364130-cce0-476c-97b3-81eed07abc4e",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -369,7 +369,7 @@
                 "size": 2.5
             },
             {
-                "dynamicString": "return BenchPressBar{description=\"bench press bar\", noCollisions=true, modelid=2913, interior=5, position=Vector3(774.01049804688,1.9642009735107,1000.6451416016), rotation=Vector3(90,0,0), posOffset=Vector3(0.13,0.03,0.020000007003546), rotOffset=Vector3(0,-92,1)}",
+                "dynamicString": "return BenchPressBar{description=\"bench press bar\", noCollisions=true, modelid=2913, interior=5, position=Vector3(774.01049804688,1.9642009735107,1000.6451416016), rotation=Vector3(90,0,0), posOffset=Vector3(0.12999999523163,0.029999999329448,0.020000007003546), rotOffset=Vector3(0,-92,1)}",
                 "type": "BenchPressBar",
                 "Description": "bench press bar",
                 "RotOffset": {
@@ -379,15 +379,15 @@
                 },
                 "scale": 1,
                 "isRandomModelId": false,
-                "ObjectId": "0ab214ad-85c3-4a33-b40c-2005a56618b5",
+                "ObjectId": "a47d1122-e45d-40d3-b443-3dded9022572",
                 "rotation": {
                     "y": 0,
                     "x": 90,
                     "z": 0
                 },
                 "PosOffset": {
-                    "y": 0.03,
-                    "x": 0.13,
+                    "y": 0.02999999932944775,
+                    "x": 0.1299999952316284,
                     "z": 0.02000000700354576
                 },
                 "noCollisions": true,
@@ -412,7 +412,7 @@
                 },
                 "scale": 1,
                 "isRandomModelId": false,
-                "ObjectId": "20ac116a-c220-450f-a0ea-6036ac0d2a8f",
+                "ObjectId": "0362e83c-e30c-438c-b58f-da3d5508615e",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -435,7 +435,7 @@
                 "size": 2.5
             },
             {
-                "dynamicString": "return BenchPressBar{description=\"bench press bar\", noCollisions=true, modelid=2913, interior=5, position=Vector3(774.03979492188,3.8083665370941,1000.6416015625), rotation=Vector3(90,0,0), posOffset=Vector3(0.13,0.03,0.020000007003546), rotOffset=Vector3(0,-92,1)}",
+                "dynamicString": "return BenchPressBar{description=\"bench press bar\", noCollisions=true, modelid=2913, interior=5, position=Vector3(774.03979492188,3.8083665370941,1000.6416015625), rotation=Vector3(90,0,0), posOffset=Vector3(0.12999999523163,0.029999999329448,0.020000007003546), rotOffset=Vector3(0,-92,1)}",
                 "type": "BenchPressBar",
                 "Description": "bench press bar",
                 "RotOffset": {
@@ -445,15 +445,15 @@
                 },
                 "scale": 1,
                 "isRandomModelId": false,
-                "ObjectId": "7cbf3ae9-e877-4ef2-93bf-a0a08870f290",
+                "ObjectId": "7c0a0af8-b4da-494d-9b50-7a66049e6e68",
                 "rotation": {
                     "y": 0,
                     "x": 90,
                     "z": 0
                 },
                 "PosOffset": {
-                    "y": 0.03,
-                    "x": 0.13,
+                    "y": 0.02999999932944775,
+                    "x": 0.1299999952316284,
                     "z": 0.02000000700354576
                 },
                 "noCollisions": true,
@@ -478,7 +478,7 @@
                 },
                 "scale": 1,
                 "isRandomModelId": false,
-                "ObjectId": "d71dc06e-1231-4919-abbe-a4c6fc326293",
+                "ObjectId": "44bd337e-90f0-4942-837f-0154876e9476",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -511,7 +511,7 @@
                 },
                 "scale": 1,
                 "isRandomModelId": false,
-                "ObjectId": "3808cb0b-8eec-4467-8a0c-c320a05bc6fa",
+                "ObjectId": "370105b6-242b-4208-9c2e-202d3958adef",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -532,9 +532,75 @@
                 },
                 "modelid": 1985,
                 "size": 2.5
+            },
+            {
+                "PosOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "type": "TwoDumbbells",
+                "Description": "",
+                "noCollisions": false,
+                "interior": 5,
+                "isRandomModelId": false,
+                "ObjectId": "f3df67bc-de01-4211-b6b8-22bd884c63ca",
+                "dynamicString": "return TwoDumbbells{description=\"two dumbbells\", noCollisions=false, modelid=2915, interior=5, position=Vector3(767.01116943359,7.048939704895,999.80560302734), rotation=Vector3(0,0,90), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,-30)}",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 90
+                },
+                "RotOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": -30
+                },
+                "scale": 1,
+                "position": {
+                    "y": 7.04893970489502,
+                    "x": 767.0111694335938,
+                    "z": 999.8056030273438
+                },
+                "StoryItemType": 1,
+                "modelid": 2915,
+                "size": 2.5
+            },
+            {
+                "PosOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "type": "TwoDumbbells",
+                "Description": "",
+                "noCollisions": false,
+                "interior": 5,
+                "isRandomModelId": false,
+                "ObjectId": "c6532cf0-a102-45b0-83c5-ff67e9244632",
+                "dynamicString": "return TwoDumbbells{description=\"\", noCollisions=false, modelid=2915, interior=5, position=Vector3(767.02679443359,4.2014136314392,999.81231689453), rotation=Vector3(0,0,90), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,-30)}",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 90
+                },
+                "RotOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": -30
+                },
+                "scale": 1,
+                "position": {
+                    "y": 4.201413631439209,
+                    "x": 767.0267944335938,
+                    "z": 999.8123168945312
+                },
+                "StoryItemType": 1,
+                "modelid": 2915,
+                "size": 2.5
             }
         ],
-        "name": "gym1",
+        "name": "gym1_a",
         "graphPath": "files/paths/gym1.json",
         "Disposed": false,
         "Regions": [
@@ -546,30 +612,30 @@
                         "x": 756.8151245117188,
                         "lz": 999.732421875,
                         "z": 1002.932434082031,
-                        "lx": 773.8126831054688,
-                        "ly": -4.242314338684082,
+                        "fov": 70,
                         "roll": 0,
-                        "fov": 70
+                        "ly": -4.242314338684082,
+                        "lx": 773.8126831054688
                     },
                     {
                         "y": 17.14634866267443,
                         "x": 775.0087524354458,
                         "lz": 999.6915283203125,
                         "z": 1002.591540530324,
-                        "lx": 755.433349609375,
-                        "ly": -5.252615451812744,
+                        "fov": 80,
                         "roll": 0,
-                        "fov": 80
+                        "ly": -5.252615451812744,
+                        "lx": 755.433349609375
                     },
                     {
                         "y": -6.410044096410275,
                         "x": 755.061022952199,
                         "lz": 999.69189453125,
                         "z": 1002.891906738281,
-                        "lx": 774.6347045898438,
-                        "ly": 15.65832996368408,
+                        "fov": 78.5,
                         "roll": 0,
-                        "fov": 78.5
+                        "ly": 15.65832996368408,
+                        "lx": 774.6347045898438
                     }
                 ],
                 "Objects": [],
@@ -636,7 +702,7 @@
                         }
                     },
                     {
-                        "dynamicString": "return JogTreadmill{how = gym_tread_jog}",
+                        "dynamicString": "return JogTreadmill{how = gym_tread_walk}",
                         "targetItem": {
                             "id": 1,
                             "type": "Object"
@@ -779,7 +845,7 @@
                         }
                     },
                     {
-                        "dynamicString": "return PedalGymBike{how=\"gym_bike_slow\"}",
+                        "dynamicString": "return PedalGymBike{how=\"gym_bike_fast\"}",
                         "targetItem": {
                             "id": 3,
                             "type": "Object"
@@ -837,7 +903,7 @@
                         }
                     },
                     {
-                        "dynamicString": "return PedalGymBike{how=\"gym_bike_slow\"}",
+                        "dynamicString": "return PedalGymBike{how=\"gym_bike_faster\"}",
                         "targetItem": {
                             "id": 4,
                             "type": "Object"
@@ -1087,6 +1153,122 @@
                         "id": 1,
                         "nextLocation": {
                             "id": 10
+                        }
+                    }
+                ]
+            },
+            {
+                "Description": "dumbbells ",
+                "Interior": 5,
+                "Y": 6.87065601348877,
+                "X": 768.0431518554688,
+                "Z": 1000.714233398438,
+                "id": 11,
+                "Angle": 90.5308837890625,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "allActions": [
+                    {
+                        "dynamicString": "return PickUp{where = \"floor\", targetObjectExists = false, hand = 11, how = 4}",
+                        "targetItem": {
+                            "id": 12,
+                            "type": "Object"
+                        },
+                        "id": 1,
+                        "nextAction": {
+                            "id": 2
+                        },
+                        "closingAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 11
+                        }
+                    },
+                    {
+                        "dynamicString": "return DumbbellsWorkOut{}",
+                        "targetItem": {
+                            "id": 12,
+                            "type": "Object"
+                        },
+                        "id": 2,
+                        "nextAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 11
+                        }
+                    },
+                    {
+                        "dynamicString": "return PutDown{where = \"floor\", how = 3}",
+                        "targetItem": {
+                            "id": 12,
+                            "type": "Object"
+                        },
+                        "id": 3,
+                        "nextLocation": {
+                            "id": 11
+                        }
+                    }
+                ]
+            },
+            {
+                "Description": "dumbbells ",
+                "Interior": 5,
+                "Y": 4.023129940032959,
+                "X": 768.0587768554688,
+                "Z": 1000.720947265625,
+                "id": 12,
+                "Angle": 90.5308837890625,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "allActions": [
+                    {
+                        "dynamicString": "return PickUp{where = \"floor\", targetObjectExists = false, hand = 11, how = 4}",
+                        "targetItem": {
+                            "id": 13,
+                            "type": "Object"
+                        },
+                        "id": 1,
+                        "nextAction": {
+                            "id": 2
+                        },
+                        "closingAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 12
+                        }
+                    },
+                    {
+                        "dynamicString": "return DumbbellsWorkOut{}",
+                        "targetItem": {
+                            "id": 13,
+                            "type": "Object"
+                        },
+                        "id": 2,
+                        "nextAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 12
+                        }
+                    },
+                    {
+                        "dynamicString": "return PutDown{where = \"floor\", how = 3}",
+                        "targetItem": {
+                            "id": 13,
+                            "type": "Object"
+                        },
+                        "id": 3,
+                        "nextLocation": {
+                            "id": 12
                         }
                     }
                 ]

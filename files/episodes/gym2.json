@@ -303,9 +303,9 @@
 				"size": 2.5
 			},
 			{
-				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=true, modelid=2627, interior=6, position=Vector3(758.82147216797,-48.38761138916,999.48370361328), rotation=Vector3(0,0,180.00038146973), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
-				"type": "SampStoryObjectBase",
-				"Description": "",
+				"dynamicString": "return Treadmill{description=\"treadmill\", noCollisions=true, modelid=2627, interior=6, position=Vector3(758.82147216797,-48.38761138916,999.48370361328), rotation=Vector3(0,0,180.00038146973), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "Treadmill",
+				"Description": "treadmill",
 				"RotOffset": {
 					"y": 0,
 					"x": 0,
@@ -336,9 +336,9 @@
 				"size": 2.5
 			},
 			{
-				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=true, modelid=2627, interior=6, position=Vector3(760.42346191406,-48.366512298584,999.48370361328), rotation=Vector3(0,0,180.00038146973), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
-				"type": "SampStoryObjectBase",
-				"Description": "",
+				"dynamicString": "return Treadmill{description=\"\", noCollisions=true, modelid=2627, interior=6, position=Vector3(760.42346191406,-48.366512298584,999.48370361328), rotation=Vector3(0,0,180.00038146973), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "Treadmill",
+				"Description": "treadmill",
 				"RotOffset": {
 					"y": 0,
 					"x": 0,
@@ -501,9 +501,9 @@
 				"size": 2.5
 			},
 			{
-				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=true, modelid=2630, interior=6, position=Vector3(766.81713867188,-19.679388046265,999.58532714844), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
-				"type": "SampStoryObjectBase",
-				"Description": "",
+				"dynamicString": "return GymBike{description=\"gym bike\", noCollisions=true, modelid=2630, interior=6, position=Vector3(766.81713867188,-19.679388046265,999.58532714844), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "GymBike",
+				"Description": "gym bike",
 				"RotOffset": {
 					"y": 0,
 					"x": 0,
@@ -534,9 +534,9 @@
 				"size": 2.5
 			},
 			{
-				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=true, modelid=2630, interior=6, position=Vector3(766.81481933594,-23.043968200684,999.58532714844), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
-				"type": "SampStoryObjectBase",
-				"Description": "",
+				"dynamicString": "return GymBike{description=\"gym bike\", noCollisions=true, modelid=2630, interior=6, position=Vector3(766.81481933594,-23.043968200684,999.58532714844), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "GymBike",
+				"Description": "gym bike",
 				"RotOffset": {
 					"y": 0,
 					"x": 0,
@@ -567,9 +567,9 @@
 				"size": 2.5
 			},
 			{
-				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=true, modelid=2630, interior=6, position=Vector3(766.81567382813,-26.021129608154,999.58532714844), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
-				"type": "SampStoryObjectBase",
-				"Description": "",
+				"dynamicString": "return GymBike{description=\"gym bike\", noCollisions=true, modelid=2630, interior=6, position=Vector3(766.81567382813,-26.021129608154,999.58532714844), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "GymBike",
+				"Description": "gym bike",
 				"RotOffset": {
 					"y": 0,
 					"x": 0,
@@ -600,9 +600,9 @@
 				"size": 2.5
 			},
 			{
-				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=true, modelid=2630, interior=6, position=Vector3(763.12860107422,-26.019496917725,999.58532714844), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
-				"type": "SampStoryObjectBase",
-				"Description": "",
+				"dynamicString": "return GymBike{description=\"gym bike\", noCollisions=true, modelid=2630, interior=6, position=Vector3(763.12860107422,-26.019496917725,999.58532714844), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "GymBike",
+				"Description": "gym bike",
 				"RotOffset": {
 					"y": 0,
 					"x": 0,
@@ -633,9 +633,9 @@
 				"size": 2.5
 			},
 			{
-				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=true, modelid=2630, interior=6, position=Vector3(763.11895751953,-23.019504547119,999.58532714844), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
-				"type": "SampStoryObjectBase",
-				"Description": "",
+				"dynamicString": "return GymBike{description=\"gym bike\", noCollisions=true, modelid=2630, interior=6, position=Vector3(763.11895751953,-23.019504547119,999.58532714844), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "GymBike",
+				"Description": "gym bike",
 				"RotOffset": {
 					"y": 0,
 					"x": 0,
@@ -671,13 +671,13 @@
 					"x": 0,
 					"z": 0
 				},
-				"type": "SampStoryObjectBase",
-				"Description": "",
+				"type": "GymBike",
+				"Description": "gym bike",
 				"noCollisions": true,
 				"interior": 6,
 				"isRandomModelId": false,
 				"ObjectId": "5c1f0518-4b6a-4a98-8bc7-2d748227d679",
-				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=true, modelid=2630, interior=6, position=Vector3(763.11669921875,-19.678247451782,999.58532714844), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"dynamicString": "return GymBike{description=\"gym bike\", noCollisions=true, modelid=2630, interior=6, position=Vector3(763.11669921875,-19.678247451782,999.58532714844), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
 				"rotation": {
 					"y": 0,
 					"x": 0,

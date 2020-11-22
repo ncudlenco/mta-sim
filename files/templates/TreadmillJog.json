@@ -2,7 +2,7 @@
     {
         "objects": [
             {
-                "dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=true, modelid=2627, interior=5, position=Vector3(1.3707275390625,-0.016012907028198,-1.1022338867188), rotation=Vector3(0,0,270.00036621094), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "dynamicString": "return Treadmill{description=\"treadmill\", noCollisions=true, modelid=2627, interior=5, position=Vector3(1.3707275390625,-0.016012907028198,-1.1022338867188), rotation=Vector3(0,0,270.00036621094), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
                 "id": 1
             }
         ],

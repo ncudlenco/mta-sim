@@ -12,10 +12,7 @@ function BenchpressWorkOut:Apply()
 
     local initialPosition = self.TargetItem.position
     local initialRotation = self.TargetItem.rotation
-
-    print(initialPosition)
-    print(initialRotation)
-
+    
     attachElementToBone(self.TargetItem.instance, self.Performer, 12, 
                         self.TargetItem.PosOffset.x, self.TargetItem.PosOffset.y, self.TargetItem.PosOffset.z,
                         self.TargetItem.RotOffset.x, self.TargetItem.RotOffset.y, self.TargetItem.RotOffset.z)

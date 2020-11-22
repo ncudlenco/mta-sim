@@ -1,0 +1,1833 @@
+[
+	{
+		"InteriorId": 6,
+		"ValidStartingLocations": [],
+		"ObjectsToDelete": [
+			{
+				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2630, interior=6, position=Vector3(769.23101806641,-47.942543029785,999.71710205078), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "SampStoryObjectBase",
+				"Description": "",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"scale": 1,
+				"isRandomModelId": false,
+				"ObjectId": "18614dcb-58d6-477a-8fd3-c428355f14fb",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"noCollisions": false,
+				"StoryItemType": 1,
+				"interior": 6,
+				"position": {
+					"y": -47.94254302978516,
+					"x": 769.2310180664063,
+					"z": 999.7171020507813
+				},
+				"modelid": 2630,
+				"size": 2.5
+			},
+			{
+				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2629, interior=6, position=Vector3(766.30535888672,-48.311805725098,999.73309326172), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "SampStoryObjectBase",
+				"Description": "",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"scale": 1,
+				"isRandomModelId": false,
+				"ObjectId": "1207855f-b05b-4f92-a95b-e15779e2b481",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"noCollisions": false,
+				"StoryItemType": 1,
+				"interior": 6,
+				"position": {
+					"y": -48.31180572509766,
+					"x": 766.3053588867188,
+					"z": 999.7330932617188
+				},
+				"modelid": 2629,
+				"size": 2.5
+			},
+			{
+				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2627, interior=6, position=Vector3(759.69763183594,-48.589057922363,999.5859375), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "SampStoryObjectBase",
+				"Description": "",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"scale": 1,
+				"isRandomModelId": false,
+				"ObjectId": "4320cfa8-dc2e-478c-ba9f-5a1687b079bd",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"noCollisions": false,
+				"StoryItemType": 1,
+				"interior": 6,
+				"position": {
+					"y": -48.58905792236328,
+					"x": 759.6976318359375,
+					"z": 999.5859375
+				},
+				"modelid": 2627,
+				"size": 4
+			}
+		],
+		"Objects": [
+			{
+				"dynamicString": "return BenchPress{description=\"bench press\", noCollisions=true, modelid=2629, interior=6, position=Vector3(771.60656738281,-49.300975799561,999.58508300781), rotation=Vector3(0,0,180.00001525879), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "BenchPress",
+				"Description": "bench press",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"scale": 1,
+				"isRandomModelId": false,
+				"ObjectId": "54587046-6b2b-4a2e-96e4-07b9acd26620",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 180.0000152587891
+				},
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"noCollisions": true,
+				"StoryItemType": 1,
+				"interior": 6,
+				"position": {
+					"y": -49.30097579956055,
+					"x": 771.6065673828125,
+					"z": 999.5850830078125
+				},
+				"modelid": 2629,
+				"size": 2.5
+			},
+			{
+				"dynamicString": "return BenchPressBar{description=\"bench press bar\", noCollisions=true, modelid=2913, interior=6, position=Vector3(772.06201171875,-49.758739471436,1000.5100708008), rotation=Vector3(90,0,270), posOffset=Vector3(0.12999999523163,0.029999999329448,0.020000007003546), rotOffset=Vector3(0,-92,1)}",
+				"type": "BenchPressBar",
+				"Description": "bench press bar",
+				"RotOffset": {
+					"y": -92,
+					"x": 0,
+					"z": 1
+				},
+				"scale": 1,
+				"isRandomModelId": false,
+				"ObjectId": "288395e1-b8fa-40b6-b65f-195c1ccde93b",
+				"rotation": {
+					"y": 0,
+					"x": 90,
+					"z": 270
+				},
+				"PosOffset": {
+					"y": 0.02999999932944775,
+					"x": 0.1299999952316284,
+					"z": 0.02000000700354576
+				},
+				"noCollisions": true,
+				"StoryItemType": 1,
+				"interior": 6,
+				"position": {
+					"y": -49.75873947143555,
+					"x": 772.06201171875,
+					"z": 1000.510070800781
+				},
+				"modelid": 2913,
+				"size": 2.5
+			},
+			{
+				"dynamicString": "return BenchPress{description=\"bench press\", noCollisions=true, modelid=2629, interior=6, position=Vector3(769.07025146484,-49.293972015381,999.58508300781), rotation=Vector3(0,0,180.00001525879), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "BenchPress",
+				"Description": "bench press",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"scale": 1,
+				"isRandomModelId": false,
+				"ObjectId": "d6f7b615-1ff9-44d8-bf75-e8e7429080c6",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 180.0000152587891
+				},
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"noCollisions": true,
+				"StoryItemType": 1,
+				"interior": 6,
+				"position": {
+					"y": -49.29397201538086,
+					"x": 769.0702514648438,
+					"z": 999.5850830078125
+				},
+				"modelid": 2629,
+				"size": 2.5
+			},
+			{
+				"dynamicString": "return BenchPressBar{description=\"bench press bar\", noCollisions=true, modelid=2913, interior=6, position=Vector3(769.52569580078,-49.751735687256,1000.5100708008), rotation=Vector3(90,0,270), posOffset=Vector3(0.12999999523163,0.029999999329448,0.020000007003546), rotOffset=Vector3(0,-92,1)}",
+				"type": "BenchPressBar",
+				"Description": "bench press bar",
+				"RotOffset": {
+					"y": -92,
+					"x": 0,
+					"z": 1
+				},
+				"scale": 1,
+				"isRandomModelId": false,
+				"ObjectId": "730b344d-f0aa-4d6c-b731-7e2bf3d5045d",
+				"rotation": {
+					"y": 0,
+					"x": 90,
+					"z": 270
+				},
+				"PosOffset": {
+					"y": 0.02999999932944775,
+					"x": 0.1299999952316284,
+					"z": 0.02000000700354576
+				},
+				"noCollisions": true,
+				"StoryItemType": 1,
+				"interior": 6,
+				"position": {
+					"y": -49.75173568725586,
+					"x": 769.5256958007813,
+					"z": 1000.510070800781
+				},
+				"modelid": 2913,
+				"size": 2.5
+			},
+			{
+				"dynamicString": "return BenchPress{description=\"bench press\", noCollisions=true, modelid=2629, interior=6, position=Vector3(766.16186523438,-49.302982330322,999.58508300781), rotation=Vector3(0,0,180.00001525879), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "BenchPress",
+				"Description": "bench press",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"scale": 1,
+				"isRandomModelId": false,
+				"ObjectId": "dcc25492-0ef5-4ac8-964f-ce8fe55bbb9d",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 180.0000152587891
+				},
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"noCollisions": true,
+				"StoryItemType": 1,
+				"interior": 6,
+				"position": {
+					"y": -49.30298233032227,
+					"x": 766.161865234375,
+					"z": 999.5850830078125
+				},
+				"modelid": 2629,
+				"size": 2.5
+			},
+			{
+				"dynamicString": "return BenchPressBar{description=\"bench press bar\", noCollisions=true, modelid=2913, interior=6, position=Vector3(766.61730957031,-49.760746002197,1000.5100708008), rotation=Vector3(90,0,270), posOffset=Vector3(0.12999999523163,0.029999999329448,0.020000007003546), rotOffset=Vector3(0,-92,1)}",
+				"type": "BenchPressBar",
+				"Description": "bench press bar",
+				"RotOffset": {
+					"y": -92,
+					"x": 0,
+					"z": 1
+				},
+				"scale": 1,
+				"isRandomModelId": false,
+				"ObjectId": "1f0d9367-3968-43ad-aa39-ac537b2f83de",
+				"rotation": {
+					"y": 0,
+					"x": 90,
+					"z": 270
+				},
+				"PosOffset": {
+					"y": 0.02999999932944775,
+					"x": 0.1299999952316284,
+					"z": 0.02000000700354576
+				},
+				"noCollisions": true,
+				"StoryItemType": 1,
+				"interior": 6,
+				"position": {
+					"y": -49.76074600219727,
+					"x": 766.6173095703125,
+					"z": 1000.510070800781
+				},
+				"modelid": 2913,
+				"size": 2.5
+			},
+			{
+				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=true, modelid=2627, interior=6, position=Vector3(758.82147216797,-48.38761138916,999.48370361328), rotation=Vector3(0,0,180.00038146973), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "SampStoryObjectBase",
+				"Description": "",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"scale": 1,
+				"isRandomModelId": false,
+				"ObjectId": "b828f0f1-3ea9-4236-8459-733442bfa998",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 180.0003814697266
+				},
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"noCollisions": true,
+				"StoryItemType": 1,
+				"interior": 6,
+				"position": {
+					"y": -48.38761138916016,
+					"x": 758.8214721679688,
+					"z": 999.4837036132813
+				},
+				"modelid": 2627,
+				"size": 2.5
+			},
+			{
+				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=true, modelid=2627, interior=6, position=Vector3(760.42346191406,-48.366512298584,999.48370361328), rotation=Vector3(0,0,180.00038146973), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "SampStoryObjectBase",
+				"Description": "",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"scale": 1,
+				"isRandomModelId": false,
+				"ObjectId": "a89c91c5-ad60-42cc-bcf9-7eebb14520aa",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 180.0003814697266
+				},
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"noCollisions": true,
+				"StoryItemType": 1,
+				"interior": 6,
+				"position": {
+					"y": -48.36651229858398,
+					"x": 760.4234619140625,
+					"z": 999.4837036132813
+				},
+				"modelid": 2627,
+				"size": 2.5
+			},
+			{
+				"dynamicString": "return TwoDumbbells{description=\"two dumbbells\", noCollisions=false, modelid=2915, interior=6, position=Vector3(772.2451171875,-21.887998580933,999.67730712891), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,-30)}",
+				"type": "TwoDumbbells",
+				"Description": "two dumbbells",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": -30
+				},
+				"scale": 1,
+				"isRandomModelId": false,
+				"ObjectId": "6a34f176-68a2-4096-8ffe-4f6dff87a23a",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 270
+				},
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"noCollisions": false,
+				"StoryItemType": 1,
+				"interior": 6,
+				"position": {
+					"y": -21.88799858093262,
+					"x": 772.2451171875,
+					"z": 999.6773071289063
+				},
+				"modelid": 2915,
+				"size": 2.5
+			},
+			{
+				"dynamicString": "return TwoDumbbells{description=\"two dumbbells\", noCollisions=false, modelid=2915, interior=6, position=Vector3(772.2333984375,-24.403272628784,999.67730712891), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,-30)}",
+				"type": "TwoDumbbells",
+				"Description": "two dumbbells",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": -30
+				},
+				"scale": 1,
+				"isRandomModelId": false,
+				"ObjectId": "682ac44f-5a09-4a2a-b632-507043664331",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 270
+				},
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"noCollisions": false,
+				"StoryItemType": 1,
+				"interior": 6,
+				"position": {
+					"y": -24.40327262878418,
+					"x": 772.2333984375,
+					"z": 999.6773071289063
+				},
+				"modelid": 2915,
+				"size": 2.5
+			},
+			{
+				"dynamicString": "return TwoDumbbells{description=\"two dumbbells\", noCollisions=false, modelid=2915, interior=6, position=Vector3(772.23999023438,-26.600444793701,999.67730712891), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,-30)}",
+				"type": "TwoDumbbells",
+				"Description": "two dumbbells",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": -30
+				},
+				"scale": 1,
+				"isRandomModelId": false,
+				"ObjectId": "e26db0ff-854a-484c-a57f-139e8da1af48",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 270
+				},
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"noCollisions": false,
+				"StoryItemType": 1,
+				"interior": 6,
+				"position": {
+					"y": -26.60044479370117,
+					"x": 772.239990234375,
+					"z": 999.6773071289063
+				},
+				"modelid": 2915,
+				"size": 2.5
+			},
+			{
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"type": "TwoDumbbells",
+				"Description": "two dumbbells",
+				"noCollisions": false,
+				"interior": 6,
+				"isRandomModelId": false,
+				"ObjectId": "343edb4e-c442-4086-85e9-49de5a61b3dd",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 270
+				},
+				"dynamicString": "return TwoDumbbells{description=\"two dumbbells\", noCollisions=false, modelid=2915, interior=6, position=Vector3(772.26342773438,-19.705429077148,999.67730712891), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,-30)}",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": -30
+				},
+				"position": {
+					"y": -19.70542907714844,
+					"x": 772.263427734375,
+					"z": 999.6773071289063
+				},
+				"scale": 1,
+				"StoryItemType": 1,
+				"modelid": 2915,
+				"size": 2.5
+			},
+			{
+				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=true, modelid=2630, interior=6, position=Vector3(766.81713867188,-19.679388046265,999.58532714844), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "SampStoryObjectBase",
+				"Description": "",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"scale": 1,
+				"isRandomModelId": false,
+				"ObjectId": "dcfbbcdc-bc38-40fb-835e-b798f121a1da",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 270
+				},
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"noCollisions": true,
+				"StoryItemType": 1,
+				"interior": 6,
+				"position": {
+					"y": -19.67938804626465,
+					"x": 766.817138671875,
+					"z": 999.5853271484375
+				},
+				"modelid": 2630,
+				"size": 2.5
+			},
+			{
+				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=true, modelid=2630, interior=6, position=Vector3(766.81481933594,-23.043968200684,999.58532714844), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "SampStoryObjectBase",
+				"Description": "",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"scale": 1,
+				"isRandomModelId": false,
+				"ObjectId": "cb23c3b4-83d7-4fcb-9595-f14e2a3e3f62",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 270
+				},
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"noCollisions": true,
+				"StoryItemType": 1,
+				"interior": 6,
+				"position": {
+					"y": -23.04396820068359,
+					"x": 766.8148193359375,
+					"z": 999.5853271484375
+				},
+				"modelid": 2630,
+				"size": 2.5
+			},
+			{
+				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=true, modelid=2630, interior=6, position=Vector3(766.81567382813,-26.021129608154,999.58532714844), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "SampStoryObjectBase",
+				"Description": "",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"scale": 1,
+				"isRandomModelId": false,
+				"ObjectId": "374f3efa-ddac-4e18-85a9-b4c09d7cb5e5",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 270
+				},
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"noCollisions": true,
+				"StoryItemType": 1,
+				"interior": 6,
+				"position": {
+					"y": -26.0211296081543,
+					"x": 766.815673828125,
+					"z": 999.5853271484375
+				},
+				"modelid": 2630,
+				"size": 2.5
+			},
+			{
+				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=true, modelid=2630, interior=6, position=Vector3(763.12860107422,-26.019496917725,999.58532714844), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "SampStoryObjectBase",
+				"Description": "",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"scale": 1,
+				"isRandomModelId": false,
+				"ObjectId": "8f2f5e2f-69ab-459d-b997-bd88584df429",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 270
+				},
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"noCollisions": true,
+				"StoryItemType": 1,
+				"interior": 6,
+				"position": {
+					"y": -26.01949691772461,
+					"x": 763.1286010742188,
+					"z": 999.5853271484375
+				},
+				"modelid": 2630,
+				"size": 2.5
+			},
+			{
+				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=true, modelid=2630, interior=6, position=Vector3(763.11895751953,-23.019504547119,999.58532714844), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "SampStoryObjectBase",
+				"Description": "",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"scale": 1,
+				"isRandomModelId": false,
+				"ObjectId": "d4f3db2a-2717-45cd-91ef-64f7f1014eba",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 270
+				},
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"noCollisions": true,
+				"StoryItemType": 1,
+				"interior": 6,
+				"position": {
+					"y": -23.01950454711914,
+					"x": 763.1189575195313,
+					"z": 999.5853271484375
+				},
+				"modelid": 2630,
+				"size": 2.5
+			},
+			{
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"type": "SampStoryObjectBase",
+				"Description": "",
+				"noCollisions": true,
+				"interior": 6,
+				"isRandomModelId": false,
+				"ObjectId": "5c1f0518-4b6a-4a98-8bc7-2d748227d679",
+				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=true, modelid=2630, interior=6, position=Vector3(763.11669921875,-19.678247451782,999.58532714844), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 270
+				},
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"scale": 1,
+				"position": {
+					"y": -19.67824745178223,
+					"x": 763.11669921875,
+					"z": 999.5853271484375
+				},
+				"StoryItemType": 1,
+				"modelid": 2630,
+				"size": 2.5
+			}
+		],
+		"name": "gym2_a",
+		"graphPath": "files/paths/gym2.json",
+		"Disposed": false,
+		"Regions": [
+			{
+				"Description": "",
+				"cameras": [
+					{
+						"y": -50.67165564745665,
+						"x": 753.6307617425919,
+						"lz": 999.5859375,
+						"z": 1003.085949704051,
+						"lx": 777.00439453125,
+						"ly": -30.97022247314453,
+						"roll": 0,
+						"fov": 76.5
+					},
+					{
+						"y": -22.80564109236002,
+						"x": 760.2536621391773,
+						"lz": 999.5859375,
+						"z": 1004.985949717462,
+						"lx": 777.091796875,
+						"ly": -49.6644401550293,
+						"roll": 0,
+						"fov": 70
+					},
+					{
+						"y": -28.31619185954332,
+						"x": 777.7801025435329,
+						"lz": 999.5859375,
+						"z": 1002.780224621296,
+						"lx": 756.0318603515625,
+						"ly": -49.35159301757813,
+						"roll": 0,
+						"fov": 73
+					}
+				],
+				"Objects": [],
+				"center": {
+					"y": -39.80596923828125,
+					"x": 766.488525390625,
+					"z": 999.5859375
+				},
+				"name": "gym main room",
+				"vertexes": [
+					{
+						"y": -50.91176223754883,
+						"x": 778.7036743164063,
+						"z": 999.5859375
+					},
+					{
+						"y": -50.85374069213867,
+						"x": 754.2830200195313,
+						"z": 999.5859375
+					},
+					{
+						"y": -28.70135879516602,
+						"x": 754.1472778320313,
+						"z": 999.5859375
+					},
+					{
+						"y": -28.75702476501465,
+						"x": 778.820068359375,
+						"z": 999.5859375
+					}
+				]
+			},
+			{
+				"Description": "",
+				"cameras": [
+					{
+						"y": -16.82053222507238,
+						"x": 751.9840941950679,
+						"lz": 999.5859375,
+						"z": 1003.885949708521,
+						"lx": 775.4059448242188,
+						"ly": -26.54969215393066,
+						"roll": 0,
+						"fov": 70
+					},
+					{
+						"y": -29.84241369366646,
+						"x": 754.2197875976563,
+						"lz": 999.5859375,
+						"z": 1005.285949707031,
+						"lx": 777.0939331054688,
+						"ly": -16.72030448913574,
+						"roll": 0,
+						"fov": 70
+					}
+				],
+				"Objects": [],
+				"center": {
+					"y": -22.15839004516602,
+					"x": 766.2052612304688,
+					"z": 999.5859375
+				},
+				"name": "gym backroom",
+				"vertexes": [
+					{
+						"y": -28.39453887939453,
+						"x": 752.8609008789063,
+						"z": 999.5859375
+					},
+					{
+						"y": -15.71061706542969,
+						"x": 754.4790649414063,
+						"z": 999.5859375
+					},
+					{
+						"y": -15.94713592529297,
+						"x": 778.7207641601563,
+						"z": 999.5859375
+					},
+					{
+						"y": -28.58126640319824,
+						"x": 778.76025390625,
+						"z": 999.5859375
+					}
+				]
+			}
+		],
+		"POI": [
+			{
+				"Description": "benchpress ",
+				"Interior": 6,
+				"Y": -48.4705924987793,
+				"X": 771.576171875,
+				"Z": 1000.5859375,
+				"id": 1,
+				"Angle": 182.6027221679688,
+				"PossibleActions": [
+					{
+						"id": 1
+					}
+				],
+				"allActions": [
+					{
+						"dynamicString": "return GetOn{how = 4,side = 1}",
+						"targetItem": {
+							"id": 1,
+							"type": "Object"
+						},
+						"id": 1,
+						"nextAction": {
+							"id": 2
+						},
+						"closingAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 1
+						}
+					},
+					{
+						"dynamicString": "return BenchpressWorkOut{}",
+						"targetItem": {
+							"id": 2,
+							"type": "Object"
+						},
+						"id": 2,
+						"nextAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 1
+						}
+					},
+					{
+						"dynamicString": "return GetOff{how = 4,side = 1}",
+						"targetItem": {
+							"id": 1,
+							"type": "Object"
+						},
+						"id": 3,
+						"nextLocation": {
+							"id": 1
+						}
+					}
+				]
+			},
+			{
+				"Description": "benchpress ",
+				"Interior": 6,
+				"Y": -48.46358871459961,
+				"X": 769.0398559570313,
+				"Z": 1000.5859375,
+				"id": 2,
+				"Angle": 182.6027221679688,
+				"PossibleActions": [
+					{
+						"id": 1
+					}
+				],
+				"allActions": [
+					{
+						"dynamicString": "return GetOn{how = 4,side = 1}",
+						"targetItem": {
+							"id": 3,
+							"type": "Object"
+						},
+						"id": 1,
+						"nextAction": {
+							"id": 2
+						},
+						"closingAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 2
+						}
+					},
+					{
+						"dynamicString": "return BenchpressWorkOut{}",
+						"targetItem": {
+							"id": 4,
+							"type": "Object"
+						},
+						"id": 2,
+						"nextAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 2
+						}
+					},
+					{
+						"dynamicString": "return GetOff{how = 4,side = 1}",
+						"targetItem": {
+							"id": 3,
+							"type": "Object"
+						},
+						"id": 3,
+						"nextLocation": {
+							"id": 2
+						}
+					}
+				]
+			},
+			{
+				"Description": "benchpress ",
+				"Interior": 6,
+				"Y": -48.47259902954102,
+				"X": 766.1314697265625,
+				"Z": 1000.5859375,
+				"id": 3,
+				"Angle": 182.6027221679688,
+				"PossibleActions": [
+					{
+						"id": 1
+					}
+				],
+				"allActions": [
+					{
+						"dynamicString": "return GetOn{how = 4,side = 1}",
+						"targetItem": {
+							"id": 5,
+							"type": "Object"
+						},
+						"id": 1,
+						"nextAction": {
+							"id": 2
+						},
+						"closingAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 3
+						}
+					},
+					{
+						"dynamicString": "return BenchpressWorkOut{}",
+						"targetItem": {
+							"id": 6,
+							"type": "Object"
+						},
+						"id": 2,
+						"nextAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 3
+						}
+					},
+					{
+						"dynamicString": "return GetOff{how = 4,side = 1}",
+						"targetItem": {
+							"id": 5,
+							"type": "Object"
+						},
+						"id": 3,
+						"nextLocation": {
+							"id": 3
+						}
+					}
+				]
+			},
+			{
+				"Description": "treadmill ",
+				"Interior": 6,
+				"Y": -47.01688385009766,
+				"X": 758.8374633789063,
+				"Z": 1000.5859375,
+				"id": 4,
+				"Angle": 178.8193054199219,
+				"PossibleActions": [
+					{
+						"id": 1
+					}
+				],
+				"allActions": [
+					{
+						"dynamicString": "return GetOn{how = 3,side = 1}",
+						"targetItem": {
+							"id": 7,
+							"type": "Object"
+						},
+						"id": 1,
+						"nextAction": {
+							"id": 2
+						},
+						"closingAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 4
+						}
+					},
+					{
+						"dynamicString": "return JogTreadmill{how = gym_tread_walk}",
+						"targetItem": {
+							"id": 7,
+							"type": "Object"
+						},
+						"id": 2,
+						"nextAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 4
+						}
+					},
+					{
+						"dynamicString": "return GetOff{how = 3,side = 1}",
+						"targetItem": {
+							"id": 7,
+							"type": "Object"
+						},
+						"id": 3,
+						"nextLocation": {
+							"id": 4
+						}
+					}
+				]
+			},
+			{
+				"Description": "treadmill ",
+				"Interior": 6,
+				"Y": -46.99578475952148,
+				"X": 760.439453125,
+				"Z": 1000.5859375,
+				"id": 5,
+				"Angle": 178.8193054199219,
+				"PossibleActions": [
+					{
+						"id": 1
+					}
+				],
+				"allActions": [
+					{
+						"dynamicString": "return GetOn{how = 3,side = 1}",
+						"targetItem": {
+							"id": 8,
+							"type": "Object"
+						},
+						"id": 1,
+						"nextAction": {
+							"id": 2
+						},
+						"closingAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 5
+						}
+					},
+					{
+						"dynamicString": "return JogTreadmill{how = gym_tread_sprint}",
+						"targetItem": {
+							"id": 8,
+							"type": "Object"
+						},
+						"id": 2,
+						"nextAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 5
+						}
+					},
+					{
+						"dynamicString": "return GetOff{how = 3,side = 1}",
+						"targetItem": {
+							"id": 8,
+							"type": "Object"
+						},
+						"id": 3,
+						"nextLocation": {
+							"id": 5
+						}
+					}
+				]
+			},
+			{
+				"Description": "taichi1 ",
+				"Interior": 6,
+				"Y": -40.97414779663086,
+				"X": 764.0880737304688,
+				"Z": 1000.686462402344,
+				"id": 6,
+				"Angle": 315.12060546875,
+				"PossibleActions": [
+					{
+						"id": 1
+					}
+				],
+				"allActions": [
+					{
+						"dynamicString": "return TaiChi{}",
+						"targetItem": {
+							"id": -1,
+							"type": "none"
+						},
+						"id": 1,
+						"nextLocation": {
+							"id": 6
+						}
+					}
+				]
+			},
+			{
+				"Description": "taichi2 ",
+				"Interior": 6,
+				"Y": -40.93305206298828,
+				"X": 772.2739868164063,
+				"Z": 1000.686462402344,
+				"id": 7,
+				"Angle": 41.2880859375,
+				"PossibleActions": [
+					{
+						"id": 1
+					}
+				],
+				"allActions": [
+					{
+						"dynamicString": "return TaiChi{}",
+						"targetItem": {
+							"id": -1,
+							"type": "none"
+						},
+						"id": 1,
+						"nextLocation": {
+							"id": 7
+						}
+					}
+				]
+			},
+			{
+				"Description": "taichi3 ",
+				"Interior": 6,
+				"Y": -32.81214904785156,
+				"X": 772.1615600585938,
+				"Z": 1000.686462402344,
+				"id": 8,
+				"Angle": 141.2423706054688,
+				"PossibleActions": [
+					{
+						"id": 1
+					}
+				],
+				"allActions": [
+					{
+						"dynamicString": "return TaiChi{}",
+						"targetItem": {
+							"id": -1,
+							"type": "none"
+						},
+						"id": 1,
+						"nextLocation": {
+							"id": 8
+						}
+					}
+				]
+			},
+			{
+				"Description": "taichi4 ",
+				"Interior": 6,
+				"Y": -32.82757568359375,
+				"X": 764.135498046875,
+				"Z": 1000.686462402344,
+				"id": 9,
+				"Angle": 217.6964111328125,
+				"PossibleActions": [
+					{
+						"id": 1
+					}
+				],
+				"allActions": [
+					{
+						"dynamicString": "return TaiChi{}",
+						"targetItem": {
+							"id": -1,
+							"type": "none"
+						},
+						"id": 1,
+						"nextLocation": {
+							"id": 9
+						}
+					}
+				]
+			},
+			{
+				"Description": "taichi5 ",
+				"Interior": 6,
+				"Y": -36.68843841552734,
+				"X": 768.1578979492188,
+				"Z": 1000.686462402344,
+				"id": 10,
+				"Angle": 182.602783203125,
+				"PossibleActions": [
+					{
+						"id": 1
+					}
+				],
+				"allActions": [
+					{
+						"dynamicString": "return TaiChi{}",
+						"targetItem": {
+							"id": -1,
+							"type": "none"
+						},
+						"id": 1,
+						"nextLocation": {
+							"id": 10
+						}
+					}
+				]
+			},
+			{
+				"Description": "dumbbells ",
+				"Interior": 6,
+				"Y": -21.70971488952637,
+				"X": 771.213134765625,
+				"Z": 1000.5859375,
+				"id": 11,
+				"Angle": 270.5308837890625,
+				"PossibleActions": [
+					{
+						"id": 1
+					}
+				],
+				"allActions": [
+					{
+						"dynamicString": "return PickUp{where = \"floor\", targetObjectExists = false, hand = 11, how = 4}",
+						"targetItem": {
+							"id": 9,
+							"type": "Object"
+						},
+						"id": 1,
+						"nextAction": {
+							"id": 2
+						},
+						"closingAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 11
+						}
+					},
+					{
+						"dynamicString": "return DumbbellsWorkOut{}",
+						"targetItem": {
+							"id": 9,
+							"type": "Object"
+						},
+						"id": 2,
+						"nextAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 11
+						}
+					},
+					{
+						"dynamicString": "return PutDown{where = \"floor\", how = 3}",
+						"targetItem": {
+							"id": 9,
+							"type": "Object"
+						},
+						"id": 3,
+						"nextLocation": {
+							"id": 11
+						}
+					}
+				]
+			},
+			{
+				"Description": "dumbbells ",
+				"Interior": 6,
+				"Y": -24.22498893737793,
+				"X": 771.201416015625,
+				"Z": 1000.5859375,
+				"id": 12,
+				"Angle": 270.5308837890625,
+				"PossibleActions": [
+					{
+						"id": 1
+					}
+				],
+				"allActions": [
+					{
+						"dynamicString": "return PickUp{where = \"floor\", targetObjectExists = false, hand = 11, how = 4}",
+						"targetItem": {
+							"id": 10,
+							"type": "Object"
+						},
+						"id": 1,
+						"nextAction": {
+							"id": 2
+						},
+						"closingAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 12
+						}
+					},
+					{
+						"dynamicString": "return DumbbellsWorkOut{}",
+						"targetItem": {
+							"id": 10,
+							"type": "Object"
+						},
+						"id": 2,
+						"nextAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 12
+						}
+					},
+					{
+						"dynamicString": "return PutDown{where = \"floor\", how = 3}",
+						"targetItem": {
+							"id": 10,
+							"type": "Object"
+						},
+						"id": 3,
+						"nextLocation": {
+							"id": 12
+						}
+					}
+				]
+			},
+			{
+				"Description": "dumbbells ",
+				"Interior": 6,
+				"Y": -26.42216110229492,
+				"X": 771.2080078125,
+				"Z": 1000.5859375,
+				"id": 13,
+				"Angle": 270.5308837890625,
+				"PossibleActions": [
+					{
+						"id": 1
+					}
+				],
+				"allActions": [
+					{
+						"dynamicString": "return PickUp{where = \"floor\", targetObjectExists = false, hand = 11, how = 4}",
+						"targetItem": {
+							"id": 11,
+							"type": "Object"
+						},
+						"id": 1,
+						"nextAction": {
+							"id": 2
+						},
+						"closingAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 13
+						}
+					},
+					{
+						"dynamicString": "return DumbbellsWorkOut{}",
+						"targetItem": {
+							"id": 11,
+							"type": "Object"
+						},
+						"id": 2,
+						"nextAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 13
+						}
+					},
+					{
+						"dynamicString": "return PutDown{where = \"floor\", how = 3}",
+						"targetItem": {
+							"id": 11,
+							"type": "Object"
+						},
+						"id": 3,
+						"nextLocation": {
+							"id": 13
+						}
+					}
+				]
+			},
+			{
+				"Description": "dumbbells ",
+				"Interior": 6,
+				"Y": -19.52714538574219,
+				"X": 771.2314453125,
+				"Z": 1000.5859375,
+				"id": 14,
+				"Angle": 270.5308837890625,
+				"PossibleActions": [
+					{
+						"id": 1
+					}
+				],
+				"allActions": [
+					{
+						"dynamicString": "return PickUp{where = \"floor\", targetObjectExists = false, hand = 11, how = 4}",
+						"targetItem": {
+							"id": 12,
+							"type": "Object"
+						},
+						"id": 1,
+						"nextAction": {
+							"id": 2
+						},
+						"closingAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 14
+						}
+					},
+					{
+						"dynamicString": "return DumbbellsWorkOut{}",
+						"targetItem": {
+							"id": 12,
+							"type": "Object"
+						},
+						"id": 2,
+						"nextAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 14
+						}
+					},
+					{
+						"dynamicString": "return PutDown{where = \"floor\", how = 3}",
+						"targetItem": {
+							"id": 12,
+							"type": "Object"
+						},
+						"id": 3,
+						"nextLocation": {
+							"id": 14
+						}
+					}
+				]
+			},
+			{
+				"Description": "gym bike",
+				"Interior": 6,
+				"Y": -20.15706825256348,
+				"X": 767.3123168945313,
+				"Z": 1000.5859375,
+				"id": 15,
+				"Angle": 92.12103271484375,
+				"PossibleActions": [
+					{
+						"id": 1
+					}
+				],
+				"allActions": [
+					{
+						"dynamicString": "return GetOn{how = 2,side = 1}",
+						"targetItem": {
+							"id": 13,
+							"type": "Object"
+						},
+						"id": 1,
+						"nextAction": {
+							"id": 2
+						},
+						"closingAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 15
+						}
+					},
+					{
+						"dynamicString": "return PedalGymBike{how=\"gym_bike_slow\"}",
+						"targetItem": {
+							"id": 13,
+							"type": "Object"
+						},
+						"id": 2,
+						"nextAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 15
+						}
+					},
+					{
+						"dynamicString": "return GetOff{how = 2,side = 1}",
+						"targetItem": {
+							"id": 13,
+							"type": "Object"
+						},
+						"id": 3,
+						"nextLocation": {
+							"id": 15
+						}
+					}
+				]
+			},
+			{
+				"Description": "gym bike",
+				"Interior": 6,
+				"Y": -23.52164840698242,
+				"X": 767.3099975585938,
+				"Z": 1000.5859375,
+				"id": 16,
+				"Angle": 92.12103271484375,
+				"PossibleActions": [
+					{
+						"id": 1
+					}
+				],
+				"allActions": [
+					{
+						"dynamicString": "return GetOn{how = 2,side = 1}",
+						"targetItem": {
+							"id": 14,
+							"type": "Object"
+						},
+						"id": 1,
+						"nextAction": {
+							"id": 2
+						},
+						"closingAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 16
+						}
+					},
+					{
+						"dynamicString": "return PedalGymBike{how=\"gym_bike_faster\"}",
+						"targetItem": {
+							"id": 14,
+							"type": "Object"
+						},
+						"id": 2,
+						"nextAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 16
+						}
+					},
+					{
+						"dynamicString": "return GetOff{how = 2,side = 1}",
+						"targetItem": {
+							"id": 14,
+							"type": "Object"
+						},
+						"id": 3,
+						"nextLocation": {
+							"id": 16
+						}
+					}
+				]
+			},
+			{
+				"Description": "gym bike",
+				"Interior": 6,
+				"Y": -26.49880981445313,
+				"X": 767.3108520507813,
+				"Z": 1000.5859375,
+				"id": 17,
+				"Angle": 92.12103271484375,
+				"PossibleActions": [
+					{
+						"id": 1
+					}
+				],
+				"allActions": [
+					{
+						"dynamicString": "return GetOn{how = 2,side = 1}",
+						"targetItem": {
+							"id": 15,
+							"type": "Object"
+						},
+						"id": 1,
+						"nextAction": {
+							"id": 2
+						},
+						"closingAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 17
+						}
+					},
+					{
+						"dynamicString": "return PedalGymBike{how=\"gym_bike_slow\"}",
+						"targetItem": {
+							"id": 15,
+							"type": "Object"
+						},
+						"id": 2,
+						"nextAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 17
+						}
+					},
+					{
+						"dynamicString": "return GetOff{how = 2,side = 1}",
+						"targetItem": {
+							"id": 15,
+							"type": "Object"
+						},
+						"id": 3,
+						"nextLocation": {
+							"id": 17
+						}
+					}
+				]
+			},
+			{
+				"Description": "gym bike",
+				"Interior": 6,
+				"Y": -26.49717712402344,
+				"X": 763.623779296875,
+				"Z": 1000.5859375,
+				"id": 18,
+				"Angle": 92.12103271484375,
+				"PossibleActions": [
+					{
+						"id": 1
+					}
+				],
+				"allActions": [
+					{
+						"dynamicString": "return GetOn{how = 2,side = 1}",
+						"targetItem": {
+							"id": 16,
+							"type": "Object"
+						},
+						"id": 1,
+						"nextAction": {
+							"id": 2
+						},
+						"closingAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 18
+						}
+					},
+					{
+						"dynamicString": "return PedalGymBike{how=\"gym_bike_slow\"}",
+						"targetItem": {
+							"id": 16,
+							"type": "Object"
+						},
+						"id": 2,
+						"nextAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 18
+						}
+					},
+					{
+						"dynamicString": "return GetOff{how = 2,side = 1}",
+						"targetItem": {
+							"id": 16,
+							"type": "Object"
+						},
+						"id": 3,
+						"nextLocation": {
+							"id": 18
+						}
+					}
+				]
+			},
+			{
+				"Description": "gym bike",
+				"Interior": 6,
+				"Y": -23.49718475341797,
+				"X": 763.6141357421875,
+				"Z": 1000.5859375,
+				"id": 19,
+				"Angle": 92.12103271484375,
+				"PossibleActions": [
+					{
+						"id": 1
+					}
+				],
+				"allActions": [
+					{
+						"dynamicString": "return GetOn{how = 2,side = 1}",
+						"targetItem": {
+							"id": 17,
+							"type": "Object"
+						},
+						"id": 1,
+						"nextAction": {
+							"id": 2
+						},
+						"closingAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 19
+						}
+					},
+					{
+						"dynamicString": "return PedalGymBike{how=\"gym_bike_faster\"}",
+						"targetItem": {
+							"id": 17,
+							"type": "Object"
+						},
+						"id": 2,
+						"nextAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 19
+						}
+					},
+					{
+						"dynamicString": "return GetOff{how = 2,side = 1}",
+						"targetItem": {
+							"id": 17,
+							"type": "Object"
+						},
+						"id": 3,
+						"nextLocation": {
+							"id": 19
+						}
+					}
+				]
+			},
+			{
+				"Description": "gym bike",
+				"Interior": 6,
+				"Y": -20.15592765808105,
+				"X": 763.6118774414063,
+				"Z": 1000.5859375,
+				"id": 20,
+				"Angle": 92.12103271484375,
+				"PossibleActions": [
+					{
+						"id": 1
+					}
+				],
+				"allActions": [
+					{
+						"dynamicString": "return GetOn{how = 2,side = 1}",
+						"targetItem": {
+							"id": 18,
+							"type": "Object"
+						},
+						"id": 1,
+						"nextAction": {
+							"id": 2
+						},
+						"closingAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 20
+						}
+					},
+					{
+						"dynamicString": "return PedalGymBike{how=\"gym_bike_fast\"}",
+						"targetItem": {
+							"id": 18,
+							"type": "Object"
+						},
+						"id": 2,
+						"nextAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 20
+						}
+					},
+					{
+						"dynamicString": "return GetOff{how = 2,side = 1}",
+						"targetItem": {
+							"id": 18,
+							"type": "Object"
+						},
+						"id": 3,
+						"nextLocation": {
+							"id": 20
+						}
+					}
+				]
+			}
+		]
+	}
+]

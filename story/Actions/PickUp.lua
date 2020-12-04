@@ -54,15 +54,15 @@ function PickUp:Apply()
         self.Performer:setAnimation("freeweights", "gym_free_pickup", time, true, false, false, true)
     end
 
-    if DEBUG then
-        outputConsole("PickUp:Apply")
-    end
-
     OnGlobalActionFinished(time, self.Performer:getData('id'), self.Performer:getData('storyId'), function()
         attachElementToBone(self.TargetItem.instance, self.Performer, self.hand, 
                         self.TargetItem.PosOffset.x, self.TargetItem.PosOffset.y, self.TargetItem.PosOffset.z,
                         self.TargetItem.RotOffset.x, self.TargetItem.RotOffset.y, self.TargetItem.RotOffset.z)
     end)
+
+    if DEBUG then
+        outputChatBox("PickUp:Apply - Applied animation")
+    end
 
     table.insert(pickedObjects, {self.TargetItem.ObjectId, self.TargetItem.Description})
     self.Performer:setData('pickedObjects', pickedObjects)

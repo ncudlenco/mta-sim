@@ -1,7 +1,7 @@
 addEvent ( "onElementDoneEditing", true )
 addEvent ( "onActionRetrieved", true )
 
-DEFINING_EPISODES = false
+DEFINING_EPISODES = true
 if DEFINING_EPISODES then
     addEventHandler ( "onClientPlayerSpawn", getLocalPlayer(), function()
         CLIENT_STORY = Story(localPlayer, 10000, true)
@@ -838,19 +838,26 @@ addCommandHandler("episode",
                 showCursor(true, true)
                 function onClick(button, state, absoluteX, absoluteY, worldX, worldY, worldZ, element)
                     outputChatBox("Clicked at "..worldX..", "..worldY..", "..worldZ, 255, 0, 0, false)
-                    outputChatBox('description: ...'..description..'...')
-                    local modelId = tonumber(param2) or tonumber(description)
-                    outputChatBox('modelid: ...'..modelId..'...')
                     local type = nil
-                    if tonumber(param2) == nil then
-                        type = param2
-                        description = ''
-                    end
-                    local randomModelid = false
-                    if modelId == nil and type ~= nil then
+                    local randomModelid = true
+                    local modelId = nil
+
+                    if description == "" then
                         randomModelid = true
+                        type = param2
                         modelId = loadstring('return '..type..'.eModel[PickRandom('..type..'.eModel)]')()
                         outputChatBox('Will choose a random modelid. For now it is : ...'..modelId..'...')
+                    else
+                        if tonumber(param2) ~= nil then
+                            modelId = tonumber(param2)
+                            outputChatBox('modelid: ...'..modelId..'...')
+                            outputChatBox('description: ...'..description..'...')
+                        else
+                            type = param2
+                            modelId = tonumber(description)
+                            outputChatBox('type: ...'..type..'...')
+                            outputChatBox('modelId: ...'..modelId..'...')
+                        end
                     end
 
                     local function addObjectToCreate(obj)
@@ -867,7 +874,7 @@ addCommandHandler("episode",
                             rotation = obj.rotation:unpack(),
                             interior = obj.interior,
                             type = type,
-                            noCollisions = true
+                            noCollisions = obj.noCollisions
                         }
                         table.insert(
                             episode.Objects,
@@ -908,11 +915,12 @@ addCommandHandler("episode",
                     for i,v in ipairs(arg) do
                         if i % 2 == 0 then
                             params[paramName] = loadstring('return '..v)()
+                            print(params[paramName])
+                            print(paramName)
                         else
                             paramName = v
                         end
                     end
-
                     addEventHandler ( "onActionRetrieved", getRootElement(), addAction)
                     getAction(actionName, params)
                 end

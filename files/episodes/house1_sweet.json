@@ -14,7 +14,7 @@
 				},
 				"scale": 1,
 				"isRandomModelId": false,
-				"ObjectId": "7ed9f197-5df7-4f07-9286-6bb41b0dc5c8",
+				"ObjectId": "fbb0adbd-1b6a-4ee0-b703-62e83ce30c38",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -47,7 +47,7 @@
 				},
 				"scale": 1,
 				"isRandomModelId": false,
-				"ObjectId": "5fbc4a01-8af0-4f22-bacf-1ef5ffc8c5bb",
+				"ObjectId": "cd58fda3-d550-4861-9e3f-2de73a8960d2",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -68,6 +68,39 @@
 				},
 				"modelid": 2103,
 				"size": 2.5
+			},
+			{
+				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2100, interior=1, position=Vector3(2532.2124023438,-1671.9254150391,1014.6558837891), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "SampStoryObjectBase",
+				"Description": "",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"scale": 1,
+				"isRandomModelId": false,
+				"ObjectId": "44a8f9c6-db28-400b-9e7c-0a0af8b4da94",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"noCollisions": false,
+				"StoryItemType": 1,
+				"interior": 1,
+				"position": {
+					"y": -1671.925415039063,
+					"x": 2532.21240234375,
+					"z": 1014.655883789063
+				},
+				"modelid": 2100,
+				"size": 2.5
 			}
 		],
 		"Objects": [
@@ -82,7 +115,7 @@
 				},
 				"scale": 1,
 				"isRandomModelId": false,
-				"ObjectId": "1d8c83e1-b7a8-47fb-957b-2bc1b8c53a14",
+				"ObjectId": "f3caae7e-a2a9-46f8-a846-50c3169132a7",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -115,7 +148,7 @@
 				},
 				"scale": 1,
 				"isRandomModelId": false,
-				"ObjectId": "bee107fa-6834-419e-8eac-aca533d0787a",
+				"ObjectId": "95bbbb23-4ae5-481e-88a7-b111054b261a",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -148,7 +181,7 @@
 				},
 				"scale": 1,
 				"isRandomModelId": false,
-				"ObjectId": "492e7965-b193-4fd0-9f97-a5f42ff6d5dc",
+				"ObjectId": "c65df9f0-9d64-4409-9007-de6b9ce991c7",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -176,12 +209,12 @@
 					"x": -0.02999999932944775,
 					"z": 0.07999999821186066
 				},
-				"Description": "bottle of cider",
+				"Description": "",
 				"noCollisions": false,
 				"scale": 1,
 				"isRandomModelId": false,
 				"size": 2.5,
-				"dynamicString": "return Drinks{description=\"drink\", noCollisions=false, modelid=1543, interior=1, position=Vector3(2525.7531738281,-1672.3140869141,1015.4075317383), rotation=Vector3(0,0,0), posOffset=Vector3(-0.029999999329448,0.029999999329448,0.079999998211861), rotOffset=Vector3(0,90,0)}",
+				"dynamicString": "return Drinks{description=\"drink\", noCollisions=false, modelid=nil, interior=1, position=Vector3(2525.7531738281,-1672.3140869141,1015.1672973633), rotation=Vector3(0,0,0), posOffset=Vector3(-0.029999999329448,0.029999999329448,0.079999998211861), rotOffset=Vector3(0,90,0)}",
 				"type": "Drinks",
 				"RotOffset": {
 					"y": 90,
@@ -189,7 +222,7 @@
 					"z": 0
 				},
 				"interior": 1,
-				"ObjectId": "b841c8da-60b8-45a3-9a1b-0b37701bc7ec",
+				"ObjectId": "44bc2b71-cd14-497c-8bf0-ab214ad85c3a",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -198,16 +231,16 @@
 				"position": {
 					"y": -1672.314086914063,
 					"x": 2525.753173828125,
-					"z": 1015.407531738281
+					"z": 1015.467297363281
 				},
 				"StoryItemType": 1,
-				"modelid": 1543,
-				"Description2": "cider from it"
+				"modelid": null,
+				"Description2": ""
 			},
 			{
-				"dynamicString": "return Food{description=\"food\", noCollisions=false, modelid=2703, interior=1, position=Vector3(2524.53515625,-1676.1000976563,1015.4868164063), rotation=Vector3(270,0,200), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"dynamicString": "return Food{description=\"food\", noCollisions=false, modelid=nill, interior=1, position=Vector3(2524.53515625,-1676.1000976563,1015.4868164063), rotation=Vector3(270,0,200), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
 				"type": "Food",
-				"Description": "burger",
+				"Description": "",
 				"RotOffset": {
 					"y": 0,
 					"x": 0,
@@ -215,7 +248,7 @@
 				},
 				"scale": 1,
 				"isRandomModelId": false,
-				"ObjectId": "6e4058c3-5a78-4efa-adfa-d9aec732cfc2",
+				"ObjectId": "cdd4dabd-cdee-4871-9d62-0ac116ac2205",
 				"rotation": {
 					"y": 0,
 					"x": 270,
@@ -234,34 +267,34 @@
 					"x": 2524.53515625,
 					"z": 1015.48681640625
 				},
-				"modelid": 2703,
+				"modelid": null,
 				"size": 2.5
 			},
 			{
-				"PosOffset": {
-					"y": 0,
-					"x": 0,
-					"z": 0
-				},
+				"dynamicString": "return Plate{description=\"plate\", noCollisions=false, modelid=2812, interior=1, position=Vector3(2524.2397460938,-1676.1051025391,1015.416809082), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
 				"type": "Plate",
-				"Description": "",
-				"noCollisions": false,
-				"interior": 1,
-				"isRandomModelId": false,
-				"ObjectId": "d45664df-0a6e-4036-b56b-5dbc7f594ebf",
-				"rotation": {
-					"y": 0,
-					"x": 0,
-					"z": 0
-				},
-				"dynamicString": "return Plate{description=\"\", noCollisions=false, modelid=Plate.eModel[PickRandom(Plate.eModel)], interior=1, position=Vector3(2524.2397460938,-1676.1051025391,1015.416809082), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"Description": "plate",
 				"RotOffset": {
 					"y": 0,
 					"x": 0,
 					"z": 0
 				},
-				"StoryItemType": 1,
 				"scale": 1,
+				"isRandomModelId": false,
+				"ObjectId": "fca9fb49-48b3-487f-ac97-cbf3ae9e877e",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"noCollisions": false,
+				"StoryItemType": 1,
+				"interior": 1,
 				"position": {
 					"y": -1676.105102539063,
 					"x": 2524.23974609375,
@@ -269,6 +302,106 @@
 				},
 				"modelid": 2812,
 				"size": 2.5
+			},
+			{
+				"dynamicString": "return TurnTable{description=\"turn table\", noCollisions=false, modelid=2099, interior=1, position=Vector3(2530.1982421875,-1671.5501708984,1014.60546875), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "TurnTable",
+				"Description": "turn table",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"scale": 1,
+				"isRandomModelId": false,
+				"ObjectId": "60562dbe-aa8b-4bf7-91ed-71dc06e12319",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"noCollisions": false,
+				"StoryItemType": 1,
+				"interior": 1,
+				"position": {
+					"y": -1671.550170898438,
+					"x": 2530.1982421875,
+					"z": 1014.60546875
+				},
+				"modelid": 2099,
+				"size": 2.5
+			},
+			{
+				"dynamicString": "return Cigarette{description=\"cigarette\", noCollisions=false, modelid=3027, interior=1, position=Vector3(2536.4108886719,-1674.6053466797,1014.1463623047), rotation=Vector3(0,0,0), posOffset=Vector3(-0.019999999552965,0.050000000745058,0.10000000149012), rotOffset=Vector3(0,90,0)}",
+				"type": "Cigarette",
+				"Description": "cigarette",
+				"RotOffset": {
+					"y": 90,
+					"x": 0,
+					"z": 0
+				},
+				"scale": 1,
+				"isRandomModelId": false,
+				"ObjectId": "c77b381e-ed07-4abc-9ec3-808cb0b8eec4",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"PosOffset": {
+					"y": 0.05000000074505806,
+					"x": -0.01999999955296516,
+					"z": 0.1000000014901161
+				},
+				"noCollisions": false,
+				"StoryItemType": 1,
+				"interior": 1,
+				"position": {
+					"y": -1674.605346679688,
+					"x": 2536.410888671875,
+					"z": 1014.146362304688
+				},
+				"modelid": 3027,
+				"size": 2.5
+			},
+			{
+				"PosOffset": {
+					"y": 0,
+					"x": 0.02999996580183506,
+					"z": -0.009999999776482582
+				},
+				"Description": "mobile phone",
+				"noCollisions": false,
+				"scale": 1,
+				"isRandomModelId": false,
+				"size": 2.5,
+				"dynamicString": "return MobilePhone{description=\"mobile phone\", noCollisions=false, modelid=330, interior=1, position=Vector3(2525.4931640625,-1679.7817382813,1013.9985961914), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "MobilePhone",
+				"RotOffset": {
+					"y": 273,
+					"x": 0,
+					"z": 0
+				},
+				"interior": 1,
+				"ObjectId": "3e4433dd-ed90-4225-92e9-8e8bffdd2542",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"position": {
+					"y": -1679.78173828125,
+					"x": 2525.4931640625,
+					"z": 1013.998596191406
+				},
+				"description": "",
+				"modelid": 330,
+				"StoryItemType": 1
 			}
 		],
 		"name": "house1_sweet",
@@ -511,8 +644,55 @@
 				"Z": 1015.498596191406,
 				"id": 1,
 				"Angle": 278.1958618164063,
-				"PossibleActions": [],
-				"allActions": []
+				"PossibleActions": [
+					{
+						"id": 1
+					}
+				],
+				"allActions": [
+					{
+						"dynamicString": "return AnswerPhone{}",
+						"targetItem": {
+							"id": 9,
+							"type": "Object"
+						},
+						"id": 1,
+						"nextAction": {
+							"id": 2
+						},
+						"closingAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 1
+						}
+					},
+					{
+						"dynamicString": "return TalkPhone{}",
+						"targetItem": {
+							"id": 9,
+							"type": "Object"
+						},
+						"id": 2,
+						"nextAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 1
+						}
+					},
+					{
+						"dynamicString": "return HangUp{}",
+						"targetItem": {
+							"id": 9,
+							"type": "Object"
+						},
+						"id": 3,
+						"nextLocation": {
+							"id": 1
+						}
+					}
+				]
 			},
 			{
 				"Description": "bathroom sink",
@@ -542,23 +722,12 @@
 				]
 			},
 			{
-				"Description": "livingroom turn table",
-				"Interior": 1,
-				"Y": -1672.803100585938,
-				"X": 2532.36865234375,
-				"Z": 1015.498596191406,
-				"id": 3,
-				"Angle": 13.11331176757813,
-				"PossibleActions": [],
-				"allActions": []
-			},
-			{
 				"Description": "livingroom sofa",
 				"Interior": 1,
 				"Y": -1672.849487304688,
 				"X": 2535.792724609375,
 				"Z": 1015.498596191406,
-				"id": 4,
+				"id": 3,
 				"Angle": 0,
 				"PossibleActions": [
 					{
@@ -580,7 +749,7 @@
 							"id": 2
 						},
 						"nextLocation": {
-							"id": 4
+							"id": 3
 						}
 					},
 					{
@@ -591,21 +760,10 @@
 						},
 						"id": 2,
 						"nextLocation": {
-							"id": 4
+							"id": 3
 						}
 					}
 				]
-			},
-			{
-				"Description": "livingroom near the mirror",
-				"Interior": 1,
-				"Y": -1674.218383789063,
-				"X": 2537.18896484375,
-				"Z": 1015.498596191406,
-				"id": 5,
-				"Angle": 268.7490234375,
-				"PossibleActions": [],
-				"allActions": []
 			},
 			{
 				"Description": "kitchen sink",
@@ -613,7 +771,7 @@
 				"Y": -1672.770874023438,
 				"X": 2527.828857421875,
 				"Z": 1015.498596191406,
-				"id": 6,
+				"id": 4,
 				"Angle": 358.653076171875,
 				"PossibleActions": [
 					{
@@ -629,18 +787,18 @@
 						},
 						"id": 1,
 						"nextLocation": {
-							"id": 6
+							"id": 4
 						}
 					}
 				]
 			},
 			{
-				"Description": "kitchen near the sink",
+				"Description": "kitchen counter",
 				"Interior": 1,
 				"Y": -1672.77294921875,
 				"X": 2526.007080078125,
 				"Z": 1015.498596191406,
-				"id": 7,
+				"id": 5,
 				"Angle": 0.53314208984375,
 				"PossibleActions": [
 					{
@@ -662,7 +820,7 @@
 							"id": 3
 						},
 						"nextLocation": {
-							"id": 7
+							"id": 5
 						}
 					},
 					{
@@ -676,7 +834,7 @@
 							"id": 3
 						},
 						"nextLocation": {
-							"id": 7
+							"id": 5
 						}
 					},
 					{
@@ -687,18 +845,18 @@
 						},
 						"id": 3,
 						"nextLocation": {
-							"id": 7
+							"id": 5
 						}
 					}
 				]
 			},
 			{
-				"Description": "kitchen food",
+				"Description": "kitchen counter",
 				"Interior": 1,
 				"Y": -1675.921997070313,
 				"X": 2525.0166015625,
 				"Z": 1015.498596191406,
-				"id": 8,
+				"id": 6,
 				"Angle": 90.55416870117188,
 				"PossibleActions": [
 					{
@@ -720,7 +878,7 @@
 							"id": 2
 						},
 						"nextLocation": {
-							"id": 8
+							"id": 6
 						}
 					},
 					{
@@ -731,7 +889,170 @@
 						},
 						"id": 2,
 						"nextLocation": {
+							"id": 6
+						}
+					}
+				]
+			},
+			{
+				"Description": "livingroom turntable",
+				"Interior": 1,
+				"Y": -1672.80810546875,
+				"X": 2530.26953125,
+				"Z": 1015.498596191406,
+				"id": 7,
+				"Angle": 359.9065856933594,
+				"PossibleActions": [
+					{
+						"id": 1
+					}
+				],
+				"allActions": [
+					{
+						"dynamicString": "return TurnOn{}",
+						"targetItem": {
+							"id": 7,
+							"type": "Object"
+						},
+						"id": 1,
+						"nextAction": {
+							"id": 2
+						},
+						"closingAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 7
+						}
+					},
+					{
+						"dynamicString": "return Dance{}",
+						"targetItem": {
+							"id": -1,
+							"type": "none"
+						},
+						"id": 2,
+						"nextAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 7
+						}
+					},
+					{
+						"dynamicString": "return TurnOff{}",
+						"targetItem": {
+							"id": 7,
+							"type": "Object"
+						},
+						"id": 3,
+						"nextLocation": {
+							"id": 7
+						}
+					}
+				]
+			},
+			{
+				"Description": "livingroom sofa",
+				"Interior": 1,
+				"Y": -1675.203491210938,
+				"X": 2533.015625,
+				"Z": 1015.498596191406,
+				"id": 8,
+				"Angle": 92.70074462890625,
+				"PossibleActions": [
+					{
+						"id": 1
+					}
+				],
+				"allActions": [
+					{
+						"dynamicString": "return SitDown{how = 2, rotation = nil}",
+						"targetItem": {
+							"id": 1,
+							"type": "Object"
+						},
+						"id": 1,
+						"nextAction": {
+							"id": 2
+						},
+						"closingAction": {
+							"id": 2
+						},
+						"nextLocation": {
 							"id": 8
+						}
+					},
+					{
+						"dynamicString": "return StandUp{how = 2}",
+						"targetItem": {
+							"id": 1,
+							"type": "Object"
+						},
+						"id": 2,
+						"nextLocation": {
+							"id": 8
+						}
+					}
+				]
+			},
+			{
+				"Description": "livingroom near the mirror",
+				"Interior": 1,
+				"Y": -1674.702392578125,
+				"X": 2536.500732421875,
+				"Z": 1015.498596191406,
+				"id": 9,
+				"Angle": 272.7989501953125,
+				"PossibleActions": [
+					{
+						"id": 1
+					},
+					{
+						"id": 1
+					}
+				],
+				"allActions": [
+					{
+						"dynamicString": "return SmokeIn{}",
+						"targetItem": {
+							"id": 8,
+							"type": "Object"
+						},
+						"id": 1,
+						"nextAction": {
+							"id": 2
+						},
+						"closingAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 9
+						}
+					},
+					{
+						"dynamicString": "return Smoke{}",
+						"targetItem": {
+							"id": 8,
+							"type": "Object"
+						},
+						"id": 2,
+						"nextAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 9
+						}
+					},
+					{
+						"dynamicString": "return SmokeOut{}",
+						"targetItem": {
+							"id": 8,
+							"type": "Object"
+						},
+						"id": 3,
+						"nextLocation": {
+							"id": 9
 						}
 					}
 				]

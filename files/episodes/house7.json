@@ -1,0 +1,720 @@
+[
+	{
+		"InteriorId": 7,
+		"ValidStartingLocations": [],
+		"ObjectsToDelete": [],
+		"Objects": [
+			{
+				"dynamicString": "return MobilePhone{description=\"mobile phone\", noCollisions=false, modelid=330, interior=7, position=Vector3(230.60122680664,1034.4450683594,1082.5155029297), rotation=Vector3(0,0,0), posOffset=Vector3(0.029999965801835,0,-0.0099999997764826), rotOffset=Vector3(0,273,0)}",
+				"type": "MobilePhone",
+				"Description": "mobile phone",
+				"RotOffset": {
+					"y": 273,
+					"x": 0,
+					"z": 0
+				},
+				"scale": 1,
+				"isRandomModelId": false,
+				"ObjectId": "7133ef1c-898f-4acb-80bd-31450dd4cf52",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"PosOffset": {
+					"y": 0,
+					"x": 0.02999996580183506,
+					"z": -0.009999999776482582
+				},
+				"noCollisions": false,
+				"StoryItemType": 1,
+				"interior": 7,
+				"position": {
+					"y": 1034.445068359375,
+					"x": 230.6012268066406,
+					"z": 1082.515502929688
+				},
+				"modelid": 330,
+				"size": 2.5
+			},
+			{
+				"dynamicString": "return MobilePhone{description=\"mobile phone\", noCollisions=false, modelid=330, interior=7, position=Vector3(237.28897094727,1028.1879882813,1082.5078125), rotation=Vector3(0,0,0), posOffset=Vector3(0.029999965801835,0,-0.0099999997764826), rotOffset=Vector3(0,273,0)}",
+				"type": "MobilePhone",
+				"Description": "mobile phone",
+				"RotOffset": {
+					"y": 273,
+					"x": 0,
+					"z": 0
+				},
+				"scale": 1,
+				"isRandomModelId": false,
+				"ObjectId": "567b6121-63a2-4acb-80ab-92105335dac5",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"PosOffset": {
+					"y": 0,
+					"x": 0.02999996580183506,
+					"z": -0.009999999776482582
+				},
+				"noCollisions": false,
+				"StoryItemType": 1,
+				"interior": 7,
+				"position": {
+					"y": 1028.18798828125,
+					"x": 237.2889709472656,
+					"z": 1082.5078125
+				},
+				"modelid": 330,
+				"size": 2.5
+			},
+			{
+				"dynamicString": "return MobilePhone{description=\"mobile phone\", noCollisions=false, modelid=330, interior=7, position=Vector3(247.85467529297,1034.8637695313,1083.2359619141), rotation=Vector3(0,0,0), posOffset=Vector3(0.029999965801835,0,-0.0099999997764826), rotOffset=Vector3(0,273,0)}",
+				"type": "MobilePhone",
+				"Description": "mobile phone",
+				"RotOffset": {
+					"y": 273,
+					"x": 0,
+					"z": 0
+				},
+				"scale": 1,
+				"isRandomModelId": false,
+				"ObjectId": "af8bf0bf-d5dd-4162-9026-e2f7ef9bcf59",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"PosOffset": {
+					"y": 0,
+					"x": 0.02999996580183506,
+					"z": -0.009999999776482582
+				},
+				"noCollisions": false,
+				"StoryItemType": 1,
+				"interior": 7,
+				"position": {
+					"y": 1034.86376953125,
+					"x": 247.8546752929688,
+					"z": 1083.235961914063
+				},
+				"modelid": 330,
+				"size": 2.5
+			},
+			{
+				"dynamicString": "return Food{description=\"food\", noCollisions=false, modelid=2040, interior=7, position=Vector3(237.0361328125,1017.6265258789,1084.0631103516), rotation=Vector3(0,0,280.00036621094), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "Food",
+				"Description": "slice of cake",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"scale": 1,
+				"isRandomModelId": false,
+				"ObjectId": "bd9fd543-9e4a-43ae-89dd-adf34cfc02c8",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 280.0003662109375
+				},
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"noCollisions": false,
+				"StoryItemType": 1,
+				"interior": 7,
+				"position": {
+					"y": 1017.626525878906,
+					"x": 237.0361328125,
+					"z": 1084.163110351563
+				},
+				"modelid": 2040,
+				"size": 2.5
+			},
+			{
+				"dynamicString": "return Plate{description=\"plate\", noCollisions=false, modelid=2812, interior=7, position=Vector3(236.86457824707,1017.4733276367,1084.0959472656), rotation=Vector3(0,0,180.00028991699), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "Plate",
+				"Description": "plate",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"scale": 1,
+				"isRandomModelId": false,
+				"ObjectId": "1d535719-2fbb-4829-8991-1c4d645711e4",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 180.0002899169922
+				},
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"noCollisions": false,
+				"StoryItemType": 1,
+				"interior": 7,
+				"position": {
+					"y": 1017.473327636719,
+					"x": 236.8645782470703,
+					"z": 1084.095947265625
+				},
+				"modelid": 2812,
+				"size": 2.5
+			},
+			{
+				"PosOffset": {
+					"y": 0.02999999932944775,
+					"x": -0.02999999932944775,
+					"z": 0.07999999821186066
+				},
+				"Description": "bottle of cider",
+				"noCollisions": false,
+				"scale": 1,
+				"isRandomModelId": false,
+				"size": 2.5,
+				"dynamicString": "return Drinks{description=\"drink\", noCollisions=false, modelid=nill, interior=7, position=Vector3(240.1960144043,1017.5654296875,1084.1114501953), rotation=Vector3(0,0,155), posOffset=Vector3(-0.029999999329448,0.029999999329448,0.079999998211861), rotOffset=Vector3(0,90,0)}",
+				"type": "Drinks",
+				"RotOffset": {
+					"y": 90,
+					"x": 0,
+					"z": 0
+				},
+				"interior": 7,
+				"ObjectId": "78bcab96-da58-4daa-84a2-617534859e47",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 155
+				},
+				"position": {
+					"y": 1017.5654296875,
+					"x": 240.1960144042969,
+					"z": 1084.121450195313
+				},
+				"StoryItemType": 1,
+				"modelid": null,
+				"Description2": "cider from it"
+			},
+			{
+				"PosOffset": {
+					"y": 0.02999999932944775,
+					"x": -0.02999999932944775,
+					"z": 0.07999999821186066
+				},
+				"Description": "glass of beer",
+				"noCollisions": false,
+				"scale": 1,
+				"isRandomModelId": false,
+				"size": 2.5,
+				"dynamicString": "return Drinks{description=\"glass of beer\", noCollisions=false, modelid=nill, interior=7, position=Vector3(242.09913635254,1017.6499023438,1084.1834716797), rotation=Vector3(0,0,150.00006103516), posOffset=Vector3(-0.029999999329448,0.029999999329448,0.079999998211861), rotOffset=Vector3(0,90,0)}",
+				"type": "Drinks",
+				"RotOffset": {
+					"y": 90,
+					"x": 0,
+					"z": 0
+				},
+				"interior": 7,
+				"ObjectId": "ebc4857c-6f1e-4275-9242-ca571ebe2046",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 150.0000610351563
+				},
+				"position": {
+					"y": 1017.64990234375,
+					"x": 242.0991363525391,
+					"z": 1084.123471679688
+				},
+				"StoryItemType": 1,
+				"modelid": null,
+				"Description2": "beer from it"
+			}
+		],
+		"name": "house7",
+		"Disposed": false,
+		"Regions": [
+			{
+				"Description": "",
+				"cameras": [
+					{
+						"y": 1039.921655274928,
+						"x": 221.9439941421151,
+						"lz": 1083.0078125,
+						"z": 1085.007763668895,
+						"lx": 244.2828216552734,
+						"ly": 1024.07421875,
+						"roll": 0,
+						"fov": 70
+					},
+					{
+						"y": 1023.801733396947,
+						"x": 222.4135650619864,
+						"lz": 1083.014526367188,
+						"z": 1085.414477542043,
+						"lx": 244.2878875732422,
+						"ly": 1038.818481445313,
+						"roll": 0,
+						"fov": 70
+					}
+				],
+				"Objects": [],
+				"center": {
+					"y": 1030.840209960938,
+					"x": 238.5269775390625,
+					"z": 1083.011108398438
+				},
+				"name": "livingroom",
+				"vertexes": [
+					{
+						"y": 1038.46142578125,
+						"x": 251.3681945800781,
+						"z": 1083.013671875
+					},
+					{
+						"y": 1030.847900390625,
+						"x": 251.3159790039063,
+						"z": 1083.01123046875
+					},
+					{
+						"y": 1030.704956054688,
+						"x": 244.9141540527344,
+						"z": 1083.011108398438
+					},
+					{
+						"y": 1023.5390625,
+						"x": 244.757568359375,
+						"z": 1083.0087890625
+					},
+					{
+						"y": 1023.535888671875,
+						"x": 228.3242797851563,
+						"z": 1083.008666992188
+					},
+					{
+						"y": 1021.031494140625,
+						"x": 228.1748809814453,
+						"z": 1083.0078125
+					},
+					{
+						"y": 1021.131469726563,
+						"x": 223.5748443603516,
+						"z": 1083.0078125
+					},
+					{
+						"y": 1040.26806640625,
+						"x": 223.5088653564453,
+						"z": 1083.014038085938
+					},
+					{
+						"y": 1040.172607421875,
+						"x": 244.4315643310547,
+						"z": 1083.01416015625
+					},
+					{
+						"y": 1038.71044921875,
+						"x": 244.8993682861328,
+						"z": 1083.013671875
+					}
+				]
+			},
+			{
+				"Description": "",
+				"cameras": [
+					{
+						"y": 1022.369750976563,
+						"x": 232.3689575195313,
+						"lz": 1083.013305664063,
+						"z": 1085.613256841898,
+						"lx": 243.3395690917969,
+						"ly": 1018.164123535156,
+						"roll": 0,
+						"fov": 70
+					},
+					{
+						"y": 1022.924011237919,
+						"x": 244.3242187425494,
+						"lz": 1083.014526367188,
+						"z": 1085.514477543533,
+						"lx": 234.8009948730469,
+						"ly": 1018.297119140625,
+						"roll": 0,
+						"fov": 70
+					}
+				],
+				"Objects": [],
+				"center": {
+					"y": 1020.363647460938,
+					"x": 239.0614013671875,
+					"z": 1083.013305664063
+				},
+				"name": "kitchen",
+				"vertexes": [
+					{
+						"y": 1023.105895996094,
+						"x": 233.4673919677734,
+						"z": 1083.0078125
+					},
+					{
+						"y": 1023.179138183594,
+						"x": 244.7447204589844,
+						"z": 1083.018676757813
+					},
+					{
+						"y": 1017.95849609375,
+						"x": 244.4539184570313,
+						"z": 1083.018676757813
+					},
+					{
+						"y": 1017.210998535156,
+						"x": 233.5795593261719,
+						"z": 1083.008178710938
+					}
+				]
+			}
+		],
+		"POI": [
+			{
+				"Description": "living room",
+				"Interior": 7,
+				"Y": 1034.509155273438,
+				"X": 230.5091857910156,
+				"Z": 1084.015502929688,
+				"id": 1,
+				"Angle": 278.1958618164063,
+				"PossibleActions": [
+					{
+						"id": 1
+					}
+				],
+				"allActions": [
+					{
+						"dynamicString": "return AnswerPhone{}",
+						"targetItem": {
+							"id": 1,
+							"type": "Object"
+						},
+						"id": 1,
+						"nextAction": {
+							"id": 2
+						},
+						"closingAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 1
+						}
+					},
+					{
+						"dynamicString": "return TalkPhone{}",
+						"targetItem": {
+							"id": 1,
+							"type": "Object"
+						},
+						"id": 2,
+						"nextAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 1
+						}
+					},
+					{
+						"dynamicString": "return HangUp{}",
+						"targetItem": {
+							"id": 1,
+							"type": "Object"
+						},
+						"id": 3,
+						"nextLocation": {
+							"id": 1
+						}
+					}
+				]
+			},
+			{
+				"Description": "living room",
+				"Interior": 7,
+				"Y": 1028.252075195313,
+				"X": 237.1969299316406,
+				"Z": 1084.0078125,
+				"id": 2,
+				"Angle": 278.1958618164063,
+				"PossibleActions": [
+					{
+						"id": 1
+					}
+				],
+				"allActions": [
+					{
+						"dynamicString": "return AnswerPhone{}",
+						"targetItem": {
+							"id": 2,
+							"type": "Object"
+						},
+						"id": 1,
+						"nextAction": {
+							"id": 2
+						},
+						"closingAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 2
+						}
+					},
+					{
+						"dynamicString": "return TalkPhone{}",
+						"targetItem": {
+							"id": 2,
+							"type": "Object"
+						},
+						"id": 2,
+						"nextAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 2
+						}
+					},
+					{
+						"dynamicString": "return HangUp{}",
+						"targetItem": {
+							"id": 2,
+							"type": "Object"
+						},
+						"id": 3,
+						"nextLocation": {
+							"id": 2
+						}
+					}
+				]
+			},
+			{
+				"Description": "living room",
+				"Interior": 7,
+				"Y": 1034.927856445313,
+				"X": 247.7626342773438,
+				"Z": 1084.735961914063,
+				"id": 3,
+				"Angle": 278.1958618164063,
+				"PossibleActions": [
+					{
+						"id": 1
+					}
+				],
+				"allActions": [
+					{
+						"dynamicString": "return AnswerPhone{}",
+						"targetItem": {
+							"id": 3,
+							"type": "Object"
+						},
+						"id": 1,
+						"nextAction": {
+							"id": 2
+						},
+						"closingAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 3
+						}
+					},
+					{
+						"dynamicString": "return TalkPhone{}",
+						"targetItem": {
+							"id": 3,
+							"type": "Object"
+						},
+						"id": 2,
+						"nextAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 3
+						}
+					},
+					{
+						"dynamicString": "return HangUp{}",
+						"targetItem": {
+							"id": 3,
+							"type": "Object"
+						},
+						"id": 3,
+						"nextLocation": {
+							"id": 3
+						}
+					}
+				]
+			},
+			{
+				"Description": "kitchen food",
+				"Interior": 7,
+				"Y": 1018.131530761719,
+				"X": 236.9445190429688,
+				"Z": 1084.144897460938,
+				"id": 4,
+				"Angle": 170.5541687011719,
+				"PossibleActions": [
+					{
+						"id": 1
+					}
+				],
+				"allActions": [
+					{
+						"dynamicString": "return PickUp{where = \"kitchen counter\", targetObjectExists = true, hand = 11, how = 1}",
+						"targetItem": {
+							"id": 4,
+							"type": "Object"
+						},
+						"id": 1,
+						"nextAction": {
+							"id": 2
+						},
+						"closingAction": {
+							"id": 2
+						},
+						"nextLocation": {
+							"id": 4
+						}
+					},
+					{
+						"dynamicString": "return Eat{how = 2}",
+						"targetItem": {
+							"id": 4,
+							"type": "Object"
+						},
+						"id": 2,
+						"nextLocation": {
+							"id": 4
+						}
+					}
+				]
+			},
+			{
+				"Description": "kitchen counter",
+				"Interior": 7,
+				"Y": 1018.088562011719,
+				"X": 240.1597290039063,
+				"Z": 1084.11279296875,
+				"id": 5,
+				"Angle": 515.5331420898438,
+				"PossibleActions": [
+					{
+						"id": 1
+					}
+				],
+				"allActions": [
+					{
+						"dynamicString": "return PickUp{where = \"kitchen counter\", targetObjectExists = true, hand = 11, how = 1}",
+						"targetItem": {
+							"id": 6,
+							"type": "Object"
+						},
+						"id": 1,
+						"nextAction": {
+							"id": 2
+						},
+						"closingAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 5
+						}
+					},
+					{
+						"dynamicString": "return Drink{}",
+						"targetItem": {
+							"id": 6,
+							"type": "Object"
+						},
+						"id": 2,
+						"nextAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 5
+						}
+					},
+					{
+						"dynamicString": "return PutDown{where = \"kitchen counter\", how = 1}",
+						"targetItem": {
+							"id": 6,
+							"type": "Object"
+						},
+						"id": 3,
+						"nextLocation": {
+							"id": 5
+						}
+					}
+				]
+			},
+			{
+				"Description": "kitchen counter",
+				"Interior": 7,
+				"Y": 1018.174255371094,
+				"X": 242.108642578125,
+				"Z": 1084.11474609375,
+				"id": 6,
+				"Angle": 150.5331420898438,
+				"PossibleActions": [
+					{
+						"id": 1
+					}
+				],
+				"allActions": [
+					{
+						"dynamicString": "return PickUp{where = \"kitchen counter\", targetObjectExists = true, hand = 11, how = 1}",
+						"targetItem": {
+							"id": 7,
+							"type": "Object"
+						},
+						"id": 1,
+						"nextAction": {
+							"id": 2
+						},
+						"closingAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 6
+						}
+					},
+					{
+						"dynamicString": "return Drink{}",
+						"targetItem": {
+							"id": 7,
+							"type": "Object"
+						},
+						"id": 2,
+						"nextAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 6
+						}
+					},
+					{
+						"dynamicString": "return PutDown{where = \"kitchen counter\", how = 1}",
+						"targetItem": {
+							"id": 7,
+							"type": "Object"
+						},
+						"id": 3,
+						"nextLocation": {
+							"id": 6
+						}
+					}
+				]
+			}
+		]
+	}
+]

@@ -148,6 +148,7 @@
   <script src="story/Objects/BenchPressBar.lua" type="shared" />
   <script src="story/Objects/PunchingBag.lua" type="shared" />
   <script src="story/Objects/TwoDumbbells.lua" type="shared" />
+  <script src="story/Objects/Painting.lua" type="shared" />
   <!-- Episodes -->
   <script src="story/Episodes/House1.lua" type="server" />
   <script src="story/Episodes/House3.lua" type="server" />

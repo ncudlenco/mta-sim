@@ -14,7 +14,7 @@
 				},
 				"scale": 1,
 				"isRandomModelId": false,
-				"ObjectId": "fbb0adbd-1b6a-4ee0-b703-62e83ce30c38",
+				"ObjectId": "7ff16bd7-5bb7-4617-93f8-3a960df206f1",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -47,7 +47,7 @@
 				},
 				"scale": 1,
 				"isRandomModelId": false,
-				"ObjectId": "cd58fda3-d550-4861-9e3f-2de73a8960d2",
+				"ObjectId": "9609b7c5-51e9-4777-95c5-690606958f1b",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -80,7 +80,7 @@
 				},
 				"scale": 1,
 				"isRandomModelId": false,
-				"ObjectId": "44a8f9c6-db28-400b-9e7c-0a0af8b4da94",
+				"ObjectId": "cbda1ffc-77fc-4465-a997-c5790c5795d7",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -115,7 +115,7 @@
 				},
 				"scale": 1,
 				"isRandomModelId": false,
-				"ObjectId": "f3caae7e-a2a9-46f8-a846-50c3169132a7",
+				"ObjectId": "39e6f2e3-030e-4d2e-8505-8487e600252e",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -148,7 +148,7 @@
 				},
 				"scale": 1,
 				"isRandomModelId": false,
-				"ObjectId": "95bbbb23-4ae5-481e-88a7-b111054b261a",
+				"ObjectId": "d3738833-8c5a-44c2-bbc6-48a831c8a722",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -181,7 +181,7 @@
 				},
 				"scale": 1,
 				"isRandomModelId": false,
-				"ObjectId": "c65df9f0-9d64-4409-9007-de6b9ce991c7",
+				"ObjectId": "2b69c1f9-da47-4173-8772-4ccfadcbd66d",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -209,12 +209,12 @@
 					"x": -0.02999999932944775,
 					"z": 0.07999999821186066
 				},
-				"Description": "",
+				"Description": "bottle of vodka",
 				"noCollisions": false,
 				"scale": 1,
 				"isRandomModelId": false,
 				"size": 2.5,
-				"dynamicString": "return Drinks{description=\"drink\", noCollisions=false, modelid=nil, interior=1, position=Vector3(2525.7531738281,-1672.3140869141,1015.1672973633), rotation=Vector3(0,0,0), posOffset=Vector3(-0.029999999329448,0.029999999329448,0.079999998211861), rotOffset=Vector3(0,90,0)}",
+				"dynamicString": "return Drinks{description=\"drink\", noCollisions=false, modelid=nill, interior=1, position=Vector3(2525.7531738281,-1672.3140869141,1015.5972900391), rotation=Vector3(0,0,0), posOffset=Vector3(-0.029999999329448,0.029999999329448,0.079999998211861), rotOffset=Vector3(0,90,0)}",
 				"type": "Drinks",
 				"RotOffset": {
 					"y": 90,
@@ -222,7 +222,7 @@
 					"z": 0
 				},
 				"interior": 1,
-				"ObjectId": "44bc2b71-cd14-497c-8bf0-ab214ad85c3a",
+				"ObjectId": "49fec5b0-6eb3-42e2-889a-49ce25e737bf",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -231,16 +231,16 @@
 				"position": {
 					"y": -1672.314086914063,
 					"x": 2525.753173828125,
-					"z": 1015.467297363281
+					"z": 1015.597290039063
 				},
 				"StoryItemType": 1,
 				"modelid": null,
-				"Description2": ""
+				"Description2": "vodka from it"
 			},
 			{
 				"dynamicString": "return Food{description=\"food\", noCollisions=false, modelid=nill, interior=1, position=Vector3(2524.53515625,-1676.1000976563,1015.4868164063), rotation=Vector3(270,0,200), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
 				"type": "Food",
-				"Description": "",
+				"Description": "burger",
 				"RotOffset": {
 					"y": 0,
 					"x": 0,
@@ -248,10 +248,10 @@
 				},
 				"scale": 1,
 				"isRandomModelId": false,
-				"ObjectId": "cdd4dabd-cdee-4871-9d62-0ac116ac2205",
+				"ObjectId": "7a019cbd-ee2a-41be-bc22-e92e4b939d57",
 				"rotation": {
 					"y": 0,
-					"x": 270,
+					"x": 0,
 					"z": 200
 				},
 				"PosOffset": {
@@ -281,7 +281,7 @@
 				},
 				"scale": 1,
 				"isRandomModelId": false,
-				"ObjectId": "fca9fb49-48b3-487f-ac97-cbf3ae9e877e",
+				"ObjectId": "6de44ac6-89e1-42cb-8c1f-b2b121916310",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -314,7 +314,7 @@
 				},
 				"scale": 1,
 				"isRandomModelId": false,
-				"ObjectId": "60562dbe-aa8b-4bf7-91ed-71dc06e12319",
+				"ObjectId": "6ddc4529-8f23-457e-87a9-e649dc913074",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -347,7 +347,7 @@
 				},
 				"scale": 1,
 				"isRandomModelId": false,
-				"ObjectId": "c77b381e-ed07-4abc-9ec3-808cb0b8eec4",
+				"ObjectId": "209313e3-8469-413d-90a5-cb705fcdb0dc",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -370,38 +370,70 @@
 				"size": 2.5
 			},
 			{
-				"PosOffset": {
-					"y": 0,
-					"x": 0.02999996580183506,
-					"z": -0.009999999776482582
-				},
-				"Description": "mobile phone",
-				"noCollisions": false,
-				"scale": 1,
-				"isRandomModelId": false,
-				"size": 2.5,
-				"dynamicString": "return MobilePhone{description=\"mobile phone\", noCollisions=false, modelid=330, interior=1, position=Vector3(2525.4931640625,-1679.7817382813,1013.9985961914), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"dynamicString": "return MobilePhone{description=\"mobile phone\", noCollisions=false, modelid=330, interior=1, position=Vector3(2525.4931640625,-1679.7817382813,1013.9985961914), rotation=Vector3(0,0,0), posOffset=Vector3(0.029999965801835,0,-0.0099999997764826), rotOffset=Vector3(0,273,0)}",
 				"type": "MobilePhone",
+				"Description": "mobile phone",
 				"RotOffset": {
 					"y": 273,
 					"x": 0,
 					"z": 0
 				},
-				"interior": 1,
-				"ObjectId": "3e4433dd-ed90-4225-92e9-8e8bffdd2542",
+				"scale": 1,
+				"isRandomModelId": false,
+				"ObjectId": "e036f56b-5dbc-47f5-a4eb-fa3d50f4a158",
 				"rotation": {
 					"y": 0,
 					"x": 0,
 					"z": 0
 				},
+				"PosOffset": {
+					"y": 0,
+					"x": 0.02999996580183506,
+					"z": -0.009999999776482582
+				},
+				"noCollisions": false,
+				"StoryItemType": 1,
+				"interior": 1,
 				"position": {
 					"y": -1679.78173828125,
 					"x": 2525.4931640625,
 					"z": 1013.998596191406
 				},
-				"description": "",
 				"modelid": 330,
-				"StoryItemType": 1
+				"size": 2.5
+			},
+			{
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"type": "Painting",
+				"Description": "",
+				"noCollisions": false,
+				"interior": 1,
+				"isRandomModelId": false,
+				"ObjectId": "eb6fc6c2-accc-4327-965d-2e0d52985254",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"dynamicString": "return Painting{description=\"\", noCollisions=false, modelid=nill, interior=1, position=Vector3(2532.5827636719,-1672.0397949219,1016.5584716797), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"StoryItemType": 1,
+				"scale": 1,
+				"position": {
+					"y": -1672.039794921875,
+					"x": 2532.582763671875,
+					"z": 1016.558471679688
+				},
+				"modelid": null,
+				"size": 2.5
 			}
 		],
 		"name": "house1_sweet",
@@ -416,10 +448,10 @@
 						"x": 2534.45556640625,
 						"lz": 1014.498596191406,
 						"z": 1017.198608398438,
-						"lx": 2524.756103515625,
-						"ly": -1679.269165039063,
+						"fov": 70,
 						"roll": 0,
-						"fov": 70
+						"ly": -1679.269165039063,
+						"lx": 2524.756103515625
 					}
 				],
 				"Objects": [],
@@ -460,20 +492,20 @@
 						"x": 2532.98681640625,
 						"lz": 1014.498596191406,
 						"z": 1017.298608399928,
-						"lx": 2537.528076171875,
-						"ly": -1680.169921875,
+						"fov": 79,
 						"roll": 0,
-						"fov": 79
+						"ly": -1680.169921875,
+						"lx": 2537.528076171875
 					},
 					{
 						"y": -1681.47021484375,
 						"x": 2538.640624992549,
 						"lz": 1014.498596191406,
 						"z": 1017.898608408868,
-						"lx": 2533.78271484375,
-						"ly": -1678.631103515625,
+						"fov": 100,
 						"roll": 0,
-						"fov": 100
+						"ly": -1678.631103515625,
+						"lx": 2533.78271484375
 					}
 				],
 				"Objects": [],
@@ -514,30 +546,30 @@
 						"x": 2541.03173828125,
 						"lz": 1014.498596191406,
 						"z": 1017.198608398438,
-						"fov": 70,
-						"roll": 0,
+						"lx": 2529.72119140625,
 						"ly": -1676.770141601563,
-						"lx": 2529.72119140625
+						"roll": 0,
+						"fov": 70
 					},
 					{
 						"y": -1677.5849609375,
 						"x": 2528.853515625,
 						"lz": 1014.498596191406,
 						"z": 1017.698608398438,
-						"fov": 70,
-						"roll": 0,
+						"lx": 2537.81591796875,
 						"ly": -1672.368041992188,
-						"lx": 2537.81591796875
+						"roll": 0,
+						"fov": 70
 					},
 					{
 						"y": -1672.40673828125,
 						"x": 2528.44482421875,
 						"lz": 1014.498596191406,
 						"z": 1017.698608398438,
-						"fov": 70,
-						"roll": 0,
+						"lx": 2537.502685546875,
 						"ly": -1676.473388671875,
-						"lx": 2537.502685546875
+						"roll": 0,
+						"fov": 70
 					}
 				],
 				"Objects": [],
@@ -578,30 +610,30 @@
 						"x": 2525.225927732885,
 						"lz": 1014.498596191406,
 						"z": 1017.498608395457,
-						"lx": 2525.236328125,
-						"ly": -1673.239013671875,
+						"fov": 76.5,
 						"roll": 0,
-						"fov": 76.5
+						"ly": -1673.239013671875,
+						"lx": 2525.236328125
 					},
 					{
 						"y": -1671.905126973987,
 						"x": 2524.26369140856,
 						"lz": 1014.498596191406,
 						"z": 1017.198608398438,
-						"lx": 2527.82861328125,
-						"ly": -1676.904174804688,
+						"fov": 100,
 						"roll": 0,
-						"fov": 100
+						"ly": -1676.904174804688,
+						"lx": 2527.82861328125
 					},
 					{
 						"y": -1678.056518554688,
 						"x": 2527.801513671875,
 						"lz": 1014.498596191406,
 						"z": 1017.698608398438,
-						"lx": 2525.101318359375,
-						"ly": -1673.08203125,
+						"fov": 70,
 						"roll": 0,
-						"fov": 70
+						"ly": -1673.08203125,
+						"lx": 2525.101318359375
 					}
 				],
 				"Objects": [],

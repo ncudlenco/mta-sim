@@ -35,10 +35,11 @@ function GetOff:Apply()
         block = "GYMNASIUM"
         animation = "gym_tread_getoff"
         updatePedPosition = false
-    elseif self.how == GetOff.eHow.Benchpress then
-        time = 4000
-        block = "GYMNASIUM"
+    elseif self.how == GetOff.eHow.BenchPress then
+        time = 8000
+        block = "benchpress"
         animation = "gym_bp_getoff"
+        updatePedPosition = false
     end
 
     story.Logger:Log(self.Description .. self.TargetItem.Description, self)
@@ -59,7 +60,7 @@ GetOff.eHow = {
     Bed = 1,
     GymBike = 2,
     Treadmill = 3,
-    Benchpress = 4
+    BenchPress = 4
 }
 
 GetOff.eSide = {

@@ -1,0 +1,73 @@
+[
+    {
+        "objects": [
+            {
+                "dynamicString": "return BenchPress{description=\"\", noCollisions=true, modelid=2629, interior=5, position=Vector3(0.83038330078125,0.030418753623962,-1.0008544921875), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "id": 6
+            },
+            {
+                "dynamicString": "return BenchPressBar{description=\"\", noCollisions=true, modelid=2913, interior=5, position=Vector3(1.2881469726563,0.48583114147186,-0.07586669921875), rotation=Vector3(90,0,0), posOffset=Vector3(0.13,0.03,0.020000007003546), rotOffset=Vector3(0,-92,1)}",
+                "id": 7
+            }
+        ],
+        "poi": {
+            "Description": "benchpress ",
+            "Interior": 5,
+            "Y": 1.478369832038879,
+            "X": 772.7223510742188,
+            "Z": 1000.721008300781,
+            "id": 7,
+            "Angle": 272.6027221679688,
+            "PossibleActions": [
+                {
+                    "id": 1
+                }
+            ],
+            "allActions": [
+                {
+                    "dynamicString": "return GetOn{how = 4,side = 1}",
+                    "targetItem": {
+                        "id": 6,
+                        "type": "Object"
+                    },
+                    "id": 1,
+                    "nextAction": {
+                        "id": 2
+                    },
+                    "closingAction": {
+                        "id": 3
+                    },
+                    "nextLocation": {
+                        "id": 7
+                    }
+                },
+                {
+                    "dynamicString": "return BenchpressWorkOut{}",
+                    "targetItem": {
+                        "id": 7,
+                        "type": "Object"
+                    },
+                    "id": 2,
+                    "nextAction": {
+                        "id": 3
+                    },
+                    "nextLocation": {
+                        "id": 7
+                    }
+                },
+                {
+                    "dynamicString": "return GetOff{how = 4,side = 1}",
+                    "targetItem": {
+                        "id": 6,
+                        "type": "Object"
+                    },
+                    "id": 3,
+                    "nextLocation": {
+                        "id": 7
+                    }
+                }
+            ]
+        },
+        "locations": []
+    }
+]

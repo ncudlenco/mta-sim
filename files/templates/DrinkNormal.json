@@ -1,0 +1,69 @@
+[
+	{
+		"objects": [
+			{
+				"dynamicString": "return Drinks{description=\"\", noCollisions=false, modelid=1666, interior=1, position=Vector3(-0.25390625,0.4588623046875,0.0186767578125), rotation=Vector3(0,0,0), posOffset=Vector3(-0.029999999329448,0.029999999329448,0.079999998211861), rotOffset=Vector3(0,90,0)}",
+				"id": 4
+			}
+		],
+		"poi": {
+			"Description": "kitchen counter",
+			"Interior": 1,
+			"Y": -1672.77294921875,
+			"X": 2526.007080078125,
+			"Z": 1015.498596191406,
+			"id": 5,
+			"Angle": 0.53314208984375,
+			"PossibleActions": [
+				{
+					"id": 1
+				}
+			],
+			"allActions": [
+				{
+					"dynamicString": "return PickUp{where = \"kitchen counter\", targetObjectExists = true, hand = 11, how = 1}",
+					"targetItem": {
+						"id": 4,
+						"type": "Object"
+					},
+					"id": 1,
+					"nextAction": {
+						"id": 2
+					},
+					"closingAction": {
+						"id": 3
+					},
+					"nextLocation": {
+						"id": 5
+					}
+				},
+				{
+					"dynamicString": "return Drink{}",
+					"targetItem": {
+						"id": 4,
+						"type": "Object"
+					},
+					"id": 2,
+					"nextAction": {
+						"id": 3
+					},
+					"nextLocation": {
+						"id": 5
+					}
+				},
+				{
+					"dynamicString": "return PutDown{where = \"kitchen counter\", how = 1}",
+					"targetItem": {
+						"id": 4,
+						"type": "Object"
+					},
+					"id": 3,
+					"nextLocation": {
+						"id": 5
+					}
+				}
+			]
+		},
+		"locations": []
+	}
+]

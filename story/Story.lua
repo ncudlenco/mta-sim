@@ -5,14 +5,15 @@ Story = class(StoryBase, function(o, actor, maxActions, logData)
     o.Episodes = {
         --add an episode here
         -- House1()
-        -- House3()
+        House3()
         -- House8()
         -- House10()
         -- House12()
     }
     o.DynamicEpisodes = {
       -- "house3",
-      "house1_sweet",
+      -- "house1_sweet",
+      -- "house7"
       -- "gym1"
       -- "gym2",
       -- "gym3"

@@ -33,6 +33,16 @@ function StoryEpisodeBase:Initialize(...)
                 setElementParent(regionCollisionInstance, self.regionsGroup)
             end
         end
+
+        --Delete objects
+        for i,v in ipairs(self.ObjectsToDelete) do
+            removeWorldModel(v.modelid, v.size, v.position.x, v.position.y, v.position.z)
+        end
+        --Create objects
+        for i,v in ipairs(self.Objects) do
+            v:Create()
+        end
+
         addEventHandler( "onColShapeHit", self.regionsGroup, function(player)
             if DEBUG then
                 outputConsole('StoryEpisodeBase:Initialize - Region hit')
@@ -125,6 +135,7 @@ function StoryEpisodeBase:LoadFromFile()
             for k,v in ipairs(episode.Objects) do
                 local obj = SampStoryObjectBase(v)
                 obj = loadstring(obj.dynamicString)()
+                -- print(obj.dynamicString)
                 table.insert(objects, obj)
             end
         end

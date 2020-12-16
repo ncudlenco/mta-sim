@@ -20,14 +20,6 @@ function DynamicEpisode:Initialize(...)
     if player == nil then
         return false
     end
-    --Delete objects
-    for i,v in ipairs(self.ObjectsToDelete) do
-        removeWorldModel(v.modelid, v.size, v.position.x, v.position.y, v.position.z)
-    end
-    --Create objects
-    for i,v in ipairs(self.Objects) do
-        v:Create()
-    end
 
     --Link the POI with move actions between them
     if self.graphId then

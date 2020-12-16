@@ -1,11 +1,6 @@
 BenchpressWorkOut = class(StoryActionBase, function(o, params)
-<<<<<<< HEAD
     StoryActionBase.init(o, " working out with the ", params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
     o.how = BenchpressWorkOut.eHow.Slow
-=======
-    params.description = " works out at the "
-    StoryActionBase.init(o, params)
->>>>>>> mta
 end)
 
 function BenchpressWorkOut:Apply()

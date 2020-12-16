@@ -26,7 +26,8 @@ Move = class(StoryActionBase, function(o, params)
         description = " skates "
     end
 
-    StoryActionBase.init(o, description, params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
+    params.description = description
+    StoryActionBase.init(o,params)
     o.path = {}
     o.graphId = params.graphId
     o.how = params.how or Move.eHow.Walk
@@ -45,12 +46,15 @@ Move.eHow = {
 
 function Move.destinationReached(player, matchingDimension)
     local playerId = source:getData("id")
+    if player:getData('id') ~= playerId then
+        return
+    end
     local storyId = source:getData("storyId")
-    local story = STORIES[playerId][storyId]
-    local lastAction = story.History[#story.History]
+    local story = CURRENT_STORY
+    local lastAction = story.History[playerId][#story.History[playerId]]
 
 	if lastAction.path and DEBUG then
-		outputConsole("Player "..player.name.." reached marker "..source:getData("idx").." / "..#lastAction.path)
+		outputConsole("Player "..player:getData('name').." reached marker "..source:getData("idx").." / "..#lastAction.path)
 	end
 	if (lastAction.path and source:getData("idx") + 1 <= #lastAction.path) then
 		local idx = source:getData("idx") + 1
@@ -84,14 +88,14 @@ end
 
 function Move:Apply()
     local story = GetStory(self.Performer)
-    table.insert(story.History, self)
+    table.insert(story.History[self.Performer:getData('id')], self)
 
     if self.TargetItem.Region and self.TargetItem.Region.Id ~= self.Performer:getData('currentRegionId') then
         if DEBUG then
             outputConsole("Move:Apply: Logging data because the next region is "..self.TargetItem.Region.name..' but the current region is '..story.CurrentEpisode.CurrentRegion.name)
             -- outputConsole("Move:Apply: ("..self.TargetItem.Region.Id..' vs '..self.Performer:getData('currentRegionId')..' - '..story.CurrentEpisode.CurrentRegion.Id)
         end
-        story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. " " .. self.TargetItem.Description, self.Performer)
+        story.Logger:Log(self.Description .. " " .. self.TargetItem.Description, self)
     end
 
     if DEBUG then

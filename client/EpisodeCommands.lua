@@ -838,6 +838,18 @@ addCommandHandler("episode",
                 showCursor(true, true)
                 function onClick(button, state, absoluteX, absoluteY, worldX, worldY, worldZ, element)
                     outputChatBox("Clicked at "..worldX..", "..worldY..", "..worldZ, 255, 0, 0, false)
+<<<<<<< HEAD
+=======
+                    outputChatBox('description: ...'..description..'...')
+                    local modelId = tonumber(param2) or tonumber(description)
+                    local strModelId = ''
+                    if modelId then
+                        strModelId = ''..modelId
+                    else
+                        strModelId = ' random'
+                    end
+                    outputChatBox('modelid: ...'..strModelId..'...')
+>>>>>>> mta
                     local type = nil
                     local randomModelid = true
                     local modelId = nil

@@ -1,12 +1,14 @@
 GetOn = class(StoryActionBase, function(o, params)
-    StoryActionBase.init(o, " gets on the ", params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
+    params.description = " gets{temp}on the "
+    StoryActionBase.init(o, params)
     o.how = params.how
     o.side = params.side or GetOn.eSide.Left
 end)
 
 function GetOn:Apply()
+    local id = self.Performer:getData('id')
     local story = GetStory(self.Performer)
-    table.insert(story.History, self)
+    table.insert(story.History[self.Performer:getData('id')], self)
     
     ----Bounding box is a function for client side only. eventually develop a mechanism to trigger a client side call then send back to 
     ----the server the result and continue with other processes
@@ -56,9 +58,30 @@ function GetOn:Apply()
         updatePedPosition = false
     end
 
-    story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. self.TargetItem.Description, self.Performer)
-    self.Performer:setAnimation(block, animation, time, true, updatePedPosition, false, true)
+    local selfDescription = ''
+    if self.Buffer[id] then
+        if self.Buffer[id] == self.TargetItem then
+            selfDescription = self.Description:gsub('{temp}', ' back ')
+            selfDescription = selfDescription .. 'same '
+        else
+            selfDescription = self.Description:gsub('{temp}', ' ')
+            if self.Buffer[id].type and self.TargetItem.type and self.Buffer[id].type == self.TargetItem.type then
+                selfDescription = selfDescription:gsub('the', PickRandom({'a different ', 'another '}))
+            end
+        end
+    else
+        selfDescription = self.Description:gsub('{temp}', ' ')
+    end
+    story.Logger:Log(selfDescription .. self.TargetItem.Description, self)
+    self.Performer:setAnimation(block, animation, time, false, updatePedPosition, false, true)
 
+<<<<<<< HEAD
+=======
+    self.Buffer[id] = self.TargetItem
+    if DEBUG then
+        outputConsole("GetOn:Apply")
+    end
+>>>>>>> mta
     OnGlobalActionFinished(time, self.Performer:getData('id'), self.Performer:getData('storyId'))
 end
 

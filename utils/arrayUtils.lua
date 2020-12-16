@@ -1,3 +1,15 @@
+function Select(arr, func)
+    if not func then
+        error('Select: func expected -> got nil')
+    end
+    local res = {}
+    for k, a in pairs(arr) do --this will work on arrays and tables
+        local val = func(a, k)
+        table.insert(res, val)
+    end
+    return res
+end
+
 function Where(arr, func)
     local res = {}
     for _, a in pairs(arr) do --I don't care about the order, this will work on arrays and tables
@@ -33,6 +45,10 @@ function PickRandom(arr)
         local keys = {}
         for key, _ in pairs(arr) do
             table.insert(keys, key)
+        end
+
+        if #keys == 0 then
+            return  nil
         end
 
         return keys[math.random(#keys)]

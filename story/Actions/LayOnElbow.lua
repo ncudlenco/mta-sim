@@ -1,12 +1,13 @@
 LayOnElbow = class(StoryActionBase, function(o, params)
-    StoryActionBase.init(o, " lays ", params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
+    params.description = " lays "
+    StoryActionBase.init(o, params)
 end)
 
 function LayOnElbow:Apply()
     local story = GetStory(self.Performer)
-    table.insert(story.History, self)
+    table.insert(story.History[self.Performer:getData('id')], self)
     
-    story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description  .. self.Performer:getData('genderGenitive') ..  " head on the elbow", self.Performer)
+    story.Logger:Log(self.Description  .. self.Performer:getData('genderGenitive') ..  " head on the elbow", self)
 
     math.randomseed(os.time())
     time = math.random(3000, 8000)

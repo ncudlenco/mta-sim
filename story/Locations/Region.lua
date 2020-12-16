@@ -10,6 +10,7 @@ Region = class(function(o, params)
     o.Objects = params.Objects or params.objects or {}
     o.POI = params.POI or params.poi or {}
     o.cameras = params.cameras or {}
+    o.EvaluatingRegion = false
 end)
 
 function Region.VertexToVector3(v)
@@ -72,14 +73,14 @@ function Region:GetDistanceByNormal(point)
     return plane:distanceTo(point)
 end
 
-function Region:MapObjectsLocations(pointOfView, forward, up)
+function Region:MapObjectsAndPedsLocations(pointOfView, forward, up)
     local locationMap = {
         right={},
         left={},
         front={},
         unknown={}
     }
-    for _,o in ipairs(self.Objects) do
+    local function mapElement(o)
         if o.position then
             local angle = forward:angleAboutAxis(o.position - pointOfView, up)
             angle = math.deg(angle)
@@ -97,6 +98,20 @@ function Region:MapObjectsLocations(pointOfView, forward, up)
             table.insert(locationMap.unknown, o)
         end
     end
+    for _,o in ipairs(self.Objects) do
+        mapElement(o)
+    end
+    -- for _,ped in ipairs(self.Episode.peds) do
+    --     if ped:getData('currentRegionId') == self.Id then
+    --         mapElement(ped)
+    --     end
+    -- end
+    -- local players = getElementsByType ( "player" )
+    -- for _,player in ipairs(self.Episode.peds) do
+    --     if player:getData('currentRegionId') == self.Id then
+    --         mapElement(player)
+    --     end
+    -- end
     return locationMap
 end
    
@@ -237,31 +252,54 @@ function Region:OnPlayerHit(player)
     if DEBUG then
         outputConsole('Region:OnPlayerHit - '..self.name)
     end
-    local story = GetStory(player)
-
     local previousRegion = player:getData('currentRegion')
+    local previousRegionId = player:getData('currentRegionId')
     player:setData('currentRegion', self.name)
     player:setData('currentRegionId', self.Id)
+    local story = GetStory(player)
 
-    self.Episode.CurrentRegion = self
-    --TODO: change the current camera and so on and so forth
-    if STATIC_CAMERA and self.cameras and #self.cameras > 0 then
-        local cameraPos = PickRandom(self.cameras)
-        player:setCameraMatrix(cameraPos.x, cameraPos.y, cameraPos.z, cameraPos.lx, cameraPos.ly, cameraPos.lz, cameraPos.roll, cameraPos.fov)
+    if self.EvaluatingRegion then
+        return
     end
+    if self.Episode.CurrentRegion == self then
+        return
+    end
+    
+    self.EvaluatingRegion = true
+    --delay so that all the regionHit events are processed
+    Timer(function()        
+        --Set the camera in the region with the maximum number of actors
+        local actorsInRegions = {}
+        local maxValue = 0
+        local maxRegionId = story.Actor:getData('currentRegionId')
+        if maxRegionId then
+            maxValue = 1
+            actorsInRegions[maxRegionId] = {story.Actor}
+        end
 
-    if not self.isExplored then
-        if not previousRegion then
-            story.Logger:Log(player:getData('skinDescription').. ' is in the ' .. self.name, player, true)
+        for _,ped in ipairs(self.Episode.peds) do
+            local rid = ped:getData('currentRegionId')
+            if not actorsInRegions[rid] then
+                actorsInRegions[rid] = {ped}
+            else
+                table.insert(actorsInRegions[rid], ped)
+            end
+            if #actorsInRegions[rid] > maxValue then
+                maxValue = #actorsInRegions[rid]
+                maxRegionId = rid
+            end
         end
-        
-        local pointOfView = player.position
-        local pointOfViewForward = player.matrix.forward
+
+        if maxRegionId ~= self.Id then
+            return
+        end
+        self.Episode.CurrentRegion = self
+        --change the current camera
         if STATIC_CAMERA and self.cameras and #self.cameras > 0 then
-            local x, y, z, lx, ly, lz = player:getCameraMatrix()
-            pointOfView = Vector3(x,y,z)
-            pointOfViewForward = Vector3(lx,ly,lz) - pointOfView
+            local cameraPos = PickRandom(self.cameras)
+            story.Actor:setCameraMatrix(cameraPos.x, cameraPos.y, cameraPos.z, cameraPos.lx, cameraPos.ly, cameraPos.lz, cameraPos.roll, cameraPos.fov)
         end
+<<<<<<< HEAD
         local locationMap = self:MapObjectsLocations(pointOfView, pointOfViewForward, player.matrix.up)
 
         self.isExplored = true
@@ -275,4 +313,34 @@ function Region:OnPlayerHit(player)
             story.Logger.PreviousObjectDescription = true
         -- end
     end
+=======
+    
+        --If the region is not explored then describe the objects in it
+        --if there are some players that weren't introduced before, then describe them
+        local actorsDescription = story.Logger:DescribeRegion(self.name, actorsInRegions[self.Id])
+        if actorsDescription then
+            story.Logger:Log(actorsDescription, player, true)
+        end
+        if not self.isExplored then          
+            local pointOfView = player.position
+            local pointOfViewForward = player.matrix.forward
+            if STATIC_CAMERA and self.cameras and #self.cameras > 0 then
+                local x, y, z, lx, ly, lz = story.Actor:getCameraMatrix()
+                pointOfView = Vector3(x,y,z)
+                pointOfViewForward = Vector3(lx,ly,lz) - pointOfView
+            end
+            local locationMap = self:MapObjectsAndPedsLocations(pointOfView, pointOfViewForward, player.matrix.up)
+    
+            self.isExplored = true
+            --describe it here
+            -- if self.Description and self.Description ~= '' then
+            --     story.Logger:Log(self.Description, player, true)
+            if self.Objects and #self.Objects > 0 then
+                local objectsDescription = story.Logger:DescribeObjects(player, self.name, self.Objects, locationMap, true)
+                story.Logger:Log(objectsDescription, player, true)
+            end
+        end
+        self.EvaluatingRegion = false
+    end, 500, 1)
+>>>>>>> mta
 end

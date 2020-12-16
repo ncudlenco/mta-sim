@@ -1,4 +1,5 @@
 [
+<<<<<<< HEAD
     {
         "InteriorId": 5,
         "ValidStartingLocations": [],
@@ -1275,4 +1276,634 @@
             }
         ]
     }
+=======
+	{
+		"InteriorId": 5,
+		"ValidStartingLocations": [],
+		"ObjectsToDelete": [
+			{
+				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2627, interior=5, position=Vector3(773.48571777344,-2.3857407569885,999.84790039063), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "SampStoryObjectBase",
+				"Description": "",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"scale": 1,
+				"isRandomModelId": false,
+				"ObjectId": "ad1cabc8-a2bb-4c0d-ab18-f042f94e5b32",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"noCollisions": false,
+				"StoryItemType": 1,
+				"interior": 5,
+				"position": {
+					"y": -2.385740756988525,
+					"x": 773.4857177734375,
+					"z": 999.847900390625
+				},
+				"modelid": 2627,
+				"size": 2.5
+			},
+			{
+				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2630, interior=5, position=Vector3(772.01165771484,9.2034511566162,999.70642089844), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "SampStoryObjectBase",
+				"Description": "",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"scale": 1,
+				"isRandomModelId": false,
+				"ObjectId": "38e1e71c-2fcd-4370-b164-f043329ef3ca",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"noCollisions": false,
+				"StoryItemType": 1,
+				"interior": 5,
+				"position": {
+					"y": 9.203451156616211,
+					"x": 772.0116577148438,
+					"z": 999.7064208984375
+				},
+				"modelid": 2630,
+				"size": 2.5
+			}
+		],
+		"Objects": [
+			{
+				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=true, modelid=2627, interior=5, position=Vector3(773.37585449219,-1.1457362174988,999.62438964844), rotation=Vector3(0,0,270.00036621094), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "Treadmill",
+				"Description": "",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"scale": 1,
+				"isRandomModelId": false,
+				"ObjectId": "9add9b96-2b8e-4339-a957-1b99bc29de9b",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 270.0003662109375
+				},
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"noCollisions": true,
+				"StoryItemType": 1,
+				"interior": 5,
+				"position": {
+					"y": -1.145736217498779,
+					"x": 773.3758544921875,
+					"z": 999.6243896484375
+				},
+				"modelid": 2627,
+				"size": 2.5
+			},
+			{
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"type": "GymBike",
+				"Description": "",
+				"noCollisions": true,
+				"interior": 5,
+				"isRandomModelId": false,
+				"ObjectId": "4f21c89f-1ea5-4183-9e8a-1767c86b8960",
+				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=true, modelid=2630, interior=5, position=Vector3(772.41375732422,7.8085460662842,999.70910644531), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 270
+				},
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"scale": 1,
+				"position": {
+					"y": 7.80854606628418,
+					"x": 772.4137573242188,
+					"z": 999.7091064453125
+				},
+				"StoryItemType": 1,
+				"modelid": 2630,
+				"size": 2.5
+			},
+			{
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"type": "GymBike",
+				"Description": "",
+				"noCollisions": true,
+				"interior": 5,
+				"isRandomModelId": false,
+				"ObjectId": "b9312955-5acc-489c-b2a6-42d16948341c",
+				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=true, modelid=2630, interior=5, position=Vector3(772.41583251953,9.4133281707764,999.70733642578), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 270
+				},
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"scale": 1,
+				"position": {
+					"y": 9.413328170776368,
+					"x": 772.4158325195313,
+					"z": 999.7073364257813
+				},
+				"StoryItemType": 1,
+				"modelid": 2630,
+				"size": 2.5
+			},
+			{
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"type": "GymBike",
+				"Description": "",
+				"noCollisions": true,
+				"interior": 5,
+				"isRandomModelId": false,
+				"ObjectId": "66fd8db6-408f-4639-9af6-e0f9c9236061",
+				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=true, modelid=2630, interior=5, position=Vector3(772.42572021484,11.21332359314,999.70733642578), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 270
+				},
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"scale": 1,
+				"position": {
+					"y": 11.21332359313965,
+					"x": 772.4257202148438,
+					"z": 999.7073364257813
+				},
+				"StoryItemType": 1,
+				"modelid": 2630,
+				"size": 2.5
+			},
+			{
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"type": "Treadmill",
+				"Description": "",
+				"noCollisions": true,
+				"interior": 5,
+				"isRandomModelId": false,
+				"ObjectId": "ece92569-be85-4065-bc32-ba38278d3595",
+				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=true, modelid=2627, interior=5, position=Vector3(773.37408447266,-3.1487774848938,999.62335205078), rotation=Vector3(0,0,270.00036621094), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 270.0003662109375
+				},
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"scale": 1,
+				"position": {
+					"y": -3.148777484893799,
+					"x": 773.3740844726563,
+					"z": 999.6233520507813
+				},
+				"StoryItemType": 1,
+				"modelid": 2627,
+				"size": 2.5
+			}
+		],
+		"name": "gym1",
+		"graphPath": "files\/paths\/gym1.json",
+		"Disposed": false,
+		"Regions": [
+			{
+				"Description": "",
+				"cameras": [
+					{
+						"y": 15.92468070983887,
+						"x": 756.8151245117188,
+						"lz": 999.732421875,
+						"z": 1002.932434082031,
+						"fov": 70,
+						"roll": 0,
+						"ly": -4.242314338684082,
+						"lx": 773.8126831054688
+					},
+					{
+						"y": 17.14634866267443,
+						"x": 775.0087524354458,
+						"lz": 999.6915283203125,
+						"z": 1002.591540530324,
+						"fov": 80,
+						"roll": 0,
+						"ly": -5.252615451812744,
+						"lx": 755.433349609375
+					},
+					{
+						"y": -6.410044096410275,
+						"x": 755.061022952199,
+						"lz": 999.69189453125,
+						"z": 1002.891906738281,
+						"fov": 78.5,
+						"roll": 0,
+						"ly": 15.65832996368408,
+						"lx": 774.6347045898438
+					}
+				],
+				"Objects": [],
+				"center": {
+					"y": 5.447854995727539,
+					"x": 765.0390014648438,
+					"z": 999.71630859375
+				},
+				"name": "gym",
+				"vertexes": [
+					{
+						"y": -5.499334335327148,
+						"x": 775.0650024414063,
+						"z": 999.7300415039063
+					},
+					{
+						"y": -5.578876972198486,
+						"x": 754.9635620117188,
+						"z": 999.6987915039063
+					},
+					{
+						"y": 16.41493988037109,
+						"x": 754.993896484375,
+						"z": 999.7025146484375
+					},
+					{
+						"y": 16.45469093322754,
+						"x": 775.1336059570313,
+						"z": 999.7338256835938
+					}
+				]
+			}
+		],
+		"POI": [
+			{
+				"Description": "treadmill ",
+				"Interior": 5,
+				"Y": -1.129723310470581,
+				"X": 772.005126953125,
+				"Z": 1000.726623535156,
+				"id": 1,
+				"Angle": 268.8193054199219,
+				"PossibleActions": [
+					{
+						"id": 1
+					}
+				],
+				"allActions": [
+					{
+						"dynamicString": "return GetOn{how = 3,side = 1}",
+						"targetItem": {
+							"id": 1,
+							"type": "Object"
+						},
+						"id": 1,
+						"nextAction": {
+							"id": 2
+						},
+						"closingAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 1
+						}
+					},
+					{
+						"dynamicString": "return JogTreadmill{}",
+						"targetItem": {
+							"id": 1,
+							"type": "Object"
+						},
+						"id": 2,
+						"nextAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 1
+						}
+					},
+					{
+						"dynamicString": "return GetOff{how = 3,side = 1}",
+						"targetItem": {
+							"id": 1,
+							"type": "Object"
+						},
+						"id": 3,
+						"nextLocation": {
+							"id": 1
+						},
+						"isClosingAction": true
+					}
+				]
+			},
+			{
+				"Description": "gym bike",
+				"Interior": 5,
+				"Y": 7.330866432189941,
+				"X": 772.9089599609375,
+				"Z": 1000.709716796875,
+				"id": 2,
+				"Angle": 92.12103271484375,
+				"PossibleActions": [
+					{
+						"id": 1
+					}
+				],
+				"allActions": [
+					{
+						"dynamicString": "return GetOn{how = 2,side = 1}",
+						"targetItem": {
+							"id": 2,
+							"type": "Object"
+						},
+						"id": 1,
+						"nextAction": {
+							"id": 2
+						},
+						"closingAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 2
+						}
+					},
+					{
+						"dynamicString": "return PedalGymBike{}",
+						"targetItem": {
+							"id": 2,
+							"type": "Object"
+						},
+						"id": 2,
+						"nextAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 2
+						}
+					},
+					{
+						"dynamicString": "return GetOff{how = 2,side = 1}",
+						"targetItem": {
+							"id": 2,
+							"type": "Object"
+						},
+						"id": 3,
+						"nextLocation": {
+							"id": 2
+						}
+					}
+				]
+			},
+			{
+				"Description": "pink carpet",
+				"Interior": 5,
+				"Y": 5.147973537445068,
+				"X": 772.712646484375,
+				"Z": 1000.780212402344,
+				"id": 3,
+				"Angle": 88.9642333984375,
+				"PossibleActions": [
+					{
+						"id": 1
+					}
+				],
+				"allActions": [
+					{
+						"dynamicString": "return TaiChi{}",
+						"targetItem": {
+							"id": -1,
+							"type": "none"
+						},
+						"id": 1,
+						"nextLocation": {
+							"id": 3
+						}
+					}
+				]
+			},
+			{
+				"Description": "gym bike",
+				"Interior": 5,
+				"Y": 8.935646057128907,
+				"X": 772.9110107421875,
+				"Z": 1000.707946777344,
+				"id": 4,
+				"Angle": 92.12103271484375,
+				"PossibleActions": [
+					{
+						"id": 1
+					}
+				],
+				"allActions": [
+					{
+						"dynamicString": "return GetOn{how = 2,side = 1}",
+						"targetItem": {
+							"id": 3,
+							"type": "Object"
+						},
+						"id": 1,
+						"nextAction": {
+							"id": 2
+						},
+						"closingAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 4
+						}
+					},
+					{
+						"dynamicString": "return PedalGymBike{}",
+						"targetItem": {
+							"id": 3,
+							"type": "Object"
+						},
+						"id": 2,
+						"nextAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 4
+						}
+					},
+					{
+						"dynamicString": "return GetOff{how = 2,side = 1}",
+						"targetItem": {
+							"id": 3,
+							"type": "Object"
+						},
+						"id": 3,
+						"nextLocation": {
+							"id": 4
+						}
+					}
+				]
+			},
+			{
+				"Description": "gym bike",
+				"Interior": 5,
+				"Y": 10.73564338684082,
+				"X": 772.9208984375,
+				"Z": 1000.707946777344,
+				"id": 5,
+				"Angle": 92.12103271484375,
+				"PossibleActions": [
+					{
+						"id": 1
+					}
+				],
+				"allActions": [
+					{
+						"dynamicString": "return GetOn{how = 2,side = 1}",
+						"targetItem": {
+							"id": 4,
+							"type": "Object"
+						},
+						"id": 1,
+						"nextAction": {
+							"id": 2
+						},
+						"closingAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 5
+						}
+					},
+					{
+						"dynamicString": "return PedalGymBike{}",
+						"targetItem": {
+							"id": 4,
+							"type": "Object"
+						},
+						"id": 2,
+						"nextAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 5
+						}
+					},
+					{
+						"dynamicString": "return GetOff{how = 2,side = 1}",
+						"targetItem": {
+							"id": 4,
+							"type": "Object"
+						},
+						"id": 3,
+						"nextLocation": {
+							"id": 5
+						}
+					}
+				]
+			},
+			{
+				"Description": "treadmill ",
+				"Interior": 5,
+				"Y": -3.13276481628418,
+				"X": 772.0033569335938,
+				"Z": 1000.7255859375,
+				"id": 6,
+				"Angle": 268.8193054199219,
+				"PossibleActions": [
+					{
+						"id": 1
+					}
+				],
+				"allActions": [
+					{
+						"dynamicString": "return GetOn{how = 3,side = 1}",
+						"targetItem": {
+							"id": 5,
+							"type": "Object"
+						},
+						"id": 1,
+						"nextAction": {
+							"id": 2
+						},
+						"closingAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 6
+						}
+					},
+					{
+						"dynamicString": "return JogTreadmill{}",
+						"targetItem": {
+							"id": 5,
+							"type": "Object"
+						},
+						"id": 2,
+						"nextAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 6
+						}
+					},
+					{
+						"dynamicString": "return GetOff{how = 3,side = 1}",
+						"targetItem": {
+							"id": 5,
+							"type": "Object"
+						},
+						"id": 3,
+						"nextLocation": {
+							"id": 6
+						}
+					}
+				]
+			}
+		]
+	}
+>>>>>>> mta
 ]

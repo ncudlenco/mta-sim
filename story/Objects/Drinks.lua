@@ -60,51 +60,39 @@ end
 
 function Drinks:updateDescription()
     if self.modelid == Drinks.eModel.AppleJuice then
-        self.Description2 = "green apple juice"
         self.Description = "carton of apple juice"
     elseif self.modelid == Drinks.eModel.OrangeJuice then
-        self.Description2 = "orange juice from it"
         self.Description = "carton of orange juice"
     elseif self.modelid == Drinks.eModel.MilkCarton then
-        self.Description2 = "milk from it"
         self.Description = "carton of milk"
     elseif self.modelid == Drinks.eModel.CoffeCup then
-        self.Description2 = "cup of coffe"
         self.Description = "cup of coffe"
     elseif self.modelid == Drinks.eModel.SodaCup1 or self.modelid == Drinks.eModel.SodaCup2 then
-        self.Description2 = "cup of soda"
         self.Description = "cup of soda"
     elseif self.modelid == Drinks.eModel.MilkBottle then
-        self.Description2 = "milk from it"
         self.Description = "bottle of milk"
     elseif self.modelid == Drinks.eModel.BottleAlcohol1 or self.modelid == Drinks.eModel.BottleAlcohol2 or 
            self.modelid == Drinks.eModel.BottleAlcohol3 or self.modelid == Drinks.eModel.BottleAlcohol4 or
            self.modelid == Drinks.eModel.BottleAlcohol5 then
-        self.Description2 = "alcohol from it"
         self.Description = "bottle of alcohol"
     elseif self.modelid == Drinks.eModel.BottleCider1 or self.modelid == Drinks.eModel.BottleCider2 then
-        self.Description2 = "cider from it"
         self.Description = "bottle of cider"
     elseif self.modelid == Drinks.eModel.BottleWine1 or self.modelid == Drinks.eModel.BottleWine2 or 
            self.modelid == Drinks.eModel.BottleWine3 or self.modelid == Drinks.eModel.BottleWine4 then
-        self.Description2 = "wine from it"
         self.Description = "bottle of wine"
     elseif self.modelid == Drinks.eModel.GlassBeer then
-        self.Description2 = "beer from it"
         self.Description = "glass of beer"
     elseif self.modelid == Drinks.eModel.GlassAlcohol then
-        self.Description2 = "alcohol from it"
         self.Description = "glass of alcohol"
     elseif self.modelid == Drinks.eModel.GlassWine1 or self.modelid == Drinks.eModel.GlassWine2 or self.modelid == Drinks.eModel.GlassWine3 then
-        self.Description2 = "wine from it"
         self.Description = "glass of wine"
     elseif self.modelid == Drinks.eModel.BottleVodka1 or self.modelid == Drinks.eModel.BottleVodka2 then
-        self.Description2 = "vodka from it"
         self.Description = "bottle of vodka"
     elseif self.modelid == Drinks.eModel.BottleBeer1 or self.modelid == Drinks.eModel.BottleBeer2 then
-        self.Description2 = "beer from it"
         self.Description = "bottle of beer"
     end
+
+    self:SetSimplePluralTemplate()
 
     return self.Description
 end

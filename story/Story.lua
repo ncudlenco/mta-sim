@@ -12,11 +12,16 @@ Story = class(StoryBase, function(o, actor, maxActions, logData)
     }
     o.DynamicEpisodes = {
       -- "house3",
+<<<<<<< HEAD
       -- "house1_sweet",
       -- "house7"
       -- "gym1"
       -- "gym2",
       -- "gym3"
+=======
+      "house1_sweet"
+    --   "gym1"
+>>>>>>> mta
     }
     o.Disposed = false
     if not o.Actor then
@@ -24,15 +29,12 @@ Story = class(StoryBase, function(o, actor, maxActions, logData)
     end
     o.Actor:setData('storyId', o.Id)
 
-    if not STORIES then
-        STORIES = {}
+    if not CURRENT_STORY then
+        CURRENT_STORY = o
     end
-
-    if not STORIES[o.Actor:getData('id')] then
-        STORIES[o.Actor:getData('id')] = {}
+    if not CURRENT_STORY.History[o.Actor:getData('id')] then
+        CURRENT_STORY.History[o.Actor:getData('id')] = {}
     end
-    STORIES[o.Actor:getData('id')][o.Id] = o
-
 end)
 
 function Story:Play()
@@ -53,7 +55,7 @@ function Story:Play()
     if self.LogData then
         self.RecorderTimer = Timer(
             function (playerId, storyId)
-                local story = STORIES[playerId][storyId]
+                local story = CURRENT_STORY
                 local player = story.Actor
 
                 if not story.Disposed then
@@ -82,7 +84,9 @@ function Story:Play()
         	end
         , LOG_FREQUENCY, 0, self.Actor:getData('id'), self.Id)
     end
-    local skin = PickRandom(SetPlayerSkin.PlayerSkins)
+    local skin = PickRandom(Where(SetPlayerSkin.PlayerSkins, function(s)
+        return not s.isTaken
+    end))
     skin.TargetItem = self.Actor
     skin.Performer = self.Actor
     skin:Apply()
@@ -103,5 +107,6 @@ function Story:End()
         outputConsole("Story:End")
     end
 
+    self.CurrentEpisode:Destroy()
     self.Disposed = true
 end

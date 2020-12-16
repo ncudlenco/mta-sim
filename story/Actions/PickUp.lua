@@ -1,5 +1,6 @@
 PickUp = class(StoryActionBase, function(o, params)
-    StoryActionBase.init(o, " picks up ", params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
+    params.description = " picks up "
+    StoryActionBase.init(o,params)
     o.Where = params.where
     o.TargetObjectExists = params.targetObjectExists
     o.how = params.how or PickUp.eHow.Normal
@@ -8,7 +9,7 @@ end)
 
 function PickUp:Apply()
     local story = GetStory(self.Performer)
-    table.insert(story.History, self)
+    table.insert(story.History[self.Performer:getData('id')], self)
     
     if self.TargetObjectExists then
         self.TargetItem:Create()
@@ -30,11 +31,11 @@ function PickUp:Apply()
     end
     
     if sameObject then
-        story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. "the same ".. self.TargetItem.Description .. " from " .. self.Where, self.Performer)
+        story.Logger:Log(self.Description .. "the same ".. self.TargetItem.Description .. " from " .. self.Where, self)
     elseif sameDescription then
-        story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. "another " .. self.TargetItem.Description .. " from " .. self.Where, self.Performer)
+        story.Logger:Log(self.Description .. "another " .. self.TargetItem.Description .. " from " .. self.Where, self)
     else
-        story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. getWordPrefix(self.TargetItem.Description) .. " " .. self.TargetItem.Description .. " from " .. self.Where, self.Performer)
+        story.Logger:Log(self.Description .. getWordPrefix(self.TargetItem.Description) .. " " .. self.TargetItem.Description .. " from " .. self.Where, self)
     end
 
     local time = 500

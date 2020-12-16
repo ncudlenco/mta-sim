@@ -75,13 +75,11 @@ function GetOn:Apply()
     story.Logger:Log(selfDescription .. self.TargetItem.Description, self)
     self.Performer:setAnimation(block, animation, time, false, updatePedPosition, false, true)
 
-<<<<<<< HEAD
-=======
     self.Buffer[id] = self.TargetItem
     if DEBUG then
         outputConsole("GetOn:Apply")
     end
->>>>>>> mta
+
     OnGlobalActionFinished(time, self.Performer:getData('id'), self.Performer:getData('storyId'))
 end
 

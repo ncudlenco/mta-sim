@@ -2,43 +2,341 @@
 	{
 		"InteriorId": 12,
 		"ValidStartingLocations": [],
-		"cameras": [],
-		"ObjectsToDelete": [],
-		"Objects": [],
+		"ObjectsToDelete": [
+			{
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"type": "SampStoryObjectBase",
+				"Description": "",
+				"noCollisions": false,
+				"interior": 12,
+				"isRandomModelId": false,
+				"ObjectId": "ae57a038-ed3c-4a43-88cd-0cf20da66c1e",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2257, interior=12, position=Vector3(2320.5717773438,-1134.578125,1052.8708496094), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"position": {
+					"y": -1134.578125,
+					"x": 2320.57177734375,
+					"z": 1052.870849609375
+				},
+				"scale": 1,
+				"StoryItemType": 1,
+				"modelid": 2257,
+				"size": 2.5
+			},
+			{
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"type": "SampStoryObjectBase",
+				"Description": "",
+				"noCollisions": false,
+				"interior": 12,
+				"isRandomModelId": false,
+				"ObjectId": "5ddc3aca-b76b-48b4-ae7c-f6d9bfc880a6",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2254, interior=12, position=Vector3(2328.3347167969,-1134.578125,1053.1264648438), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"position": {
+					"y": -1134.578125,
+					"x": 2328.334716796875,
+					"z": 1053.12646484375
+				},
+				"scale": 1,
+				"StoryItemType": 1,
+				"modelid": 2254,
+				"size": 2.5
+			},
+			{
+				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2271, interior=12, position=Vector3(2337.8083496094,-1134.8359375,1054.4957275391), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "SampStoryObjectBase",
+				"Description": "",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"scale": 1,
+				"isRandomModelId": false,
+				"ObjectId": "28fb904c-373f-4e75-b002-f67a3b90078f",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"noCollisions": false,
+				"StoryItemType": 1,
+				"interior": 12,
+				"position": {
+					"y": -1134.8359375,
+					"x": 2337.808349609375,
+					"z": 1054.495727539063
+				},
+				"modelid": 2271,
+				"size": 2.5
+			},
+			{
+				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2281, interior=12, position=Vector3(2334.7890625,-1136.5415039063,1054.4940185547), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "SampStoryObjectBase",
+				"Description": "",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"scale": 1,
+				"isRandomModelId": false,
+				"ObjectId": "43903e3b-c6dc-43fa-9400-6d35020f820b",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"noCollisions": false,
+				"StoryItemType": 1,
+				"interior": 12,
+				"position": {
+					"y": -1136.54150390625,
+					"x": 2334.7890625,
+					"z": 1054.494018554688
+				},
+				"modelid": 2281,
+				"size": 2.5
+			},
+			{
+				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2270, interior=12, position=Vector3(2341.0815429688,-1141.6154785156,1054.2866210938), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "SampStoryObjectBase",
+				"Description": "",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"scale": 1,
+				"isRandomModelId": false,
+				"ObjectId": "17a1704a-3398-4dd9-8fca-535b33df111a",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"noCollisions": false,
+				"StoryItemType": 1,
+				"interior": 12,
+				"position": {
+					"y": -1141.615478515625,
+					"x": 2341.08154296875,
+					"z": 1054.28662109375
+				},
+				"modelid": 2270,
+				"size": 2.5
+			}
+		],
+		"Objects": [
+			{
+				"dynamicString": "return Painting{description=\"painting\", noCollisions=false, modelid=nill, interior=12, position=Vector3(2320.8286132813,-1135.078125,1053.4041748047), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "Painting",
+				"Description": "painting",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"scale": 1,
+				"isRandomModelId": false,
+				"ObjectId": "63dc5103-8697-4e63-ae89-3a7c498af240",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"noCollisions": false,
+				"StoryItemType": 1,
+				"interior": 12,
+				"position": {
+					"y": -1135.078125,
+					"x": 2320.82861328125,
+					"z": 1053.404174804688
+				},
+				"modelid": null,
+				"size": 2.5
+			},
+			{
+				"dynamicString": "return Painting{description=\"painting\", noCollisions=false, modelid=nill, interior=12, position=Vector3(2328.4323730469,-1135.0882568359,1053.7047119141), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "Painting",
+				"Description": "painting",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"scale": 1,
+				"isRandomModelId": false,
+				"ObjectId": "633d7a05-2ff8-4d18-bb69-ba4d96ad8225",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"noCollisions": false,
+				"StoryItemType": 1,
+				"interior": 12,
+				"position": {
+					"y": -1135.088256835938,
+					"x": 2328.432373046875,
+					"z": 1053.704711914063
+				},
+				"modelid": null,
+				"size": 2.5
+			},
+			{
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"type": "Painting",
+				"Description": "",
+				"noCollisions": false,
+				"interior": 12,
+				"isRandomModelId": false,
+				"ObjectId": "55682626-0d42-40bc-afcd-1fc510b9df5e",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 90
+				},
+				"dynamicString": "return Painting{description=\"\", noCollisions=false, modelid=nill, interior=12, position=Vector3(2308.5886230469,-1141.5126953125,1055.1602783203), rotation=Vector3(0,0,90), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"StoryItemType": 1,
+				"scale": 1,
+				"position": {
+					"y": -1141.5126953125,
+					"x": 2308.588623046875,
+					"z": 1055.160278320313
+				},
+				"modelid": null,
+				"size": 2.5
+			},
+			{
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"type": "Painting",
+				"Description": "",
+				"noCollisions": false,
+				"interior": 12,
+				"isRandomModelId": false,
+				"ObjectId": "01bc7ecb-96b8-441e-acea-8a918e778d4f",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"dynamicString": "return Painting{description=\"\", noCollisions=false, modelid=nill, interior=12, position=Vector3(2337.9423828125,-1135.3359375,1054.7634277344), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"StoryItemType": 1,
+				"scale": 1,
+				"position": {
+					"y": -1135.3359375,
+					"x": 2337.9423828125,
+					"z": 1054.763427734375
+				},
+				"modelid": null,
+				"size": 2.5
+			}
+		],
 		"name": "house12",
 		"Disposed": false,
 		"Regions": [
 			{
+				"Description": "two stairs two red pots and a small table",
+				"cameras": [
+					{
+						"y": -1150.79296875,
+						"x": 2316.8840332031,
+						"lz": 1049.703125,
+						"z": 1052.4030761719,
+						"fov": 70,
+						"roll": 0,
+						"ly": -1137.0952148438,
+						"lx": 2328.8112792969
+					},
+					{
+						"y": -1150.8556152359,
+						"x": 2331.8638183624,
+						"lz": 1049.703125,
+						"z": 1052.4030761719,
+						"fov": 70,
+						"roll": 0,
+						"ly": -1137.0968017578,
+						"lx": 2320.3520507813
+					}
+				],
 				"Objects": [],
-				"name": "livingroom",
 				"center": {
 					"y": -1143.285034179688,
 					"x": 2324.4306640625,
 					"z": 1049.493896484375
 				},
-				"Description": "two stairs two red pots and a small table",
-				"cameras": [
-                    {
-                        "y": -1150.79296875,
-                        "x": 2316.8840332031,
-                        "lz": 1049.703125,
-                        "z": 1052.4030761719,
-                        "fov": 70,
-                        "roll": 0,
-                        "ly": -1137.0952148438,
-                        "lx": 2328.8112792969
-                    },
-					{
-                        "y": -1150.8556152359,
-                        "x": 2331.8638183624,
-                        "lz": 1049.703125,
-                        "z": 1052.4030761719,
-                        "fov": 70,
-                        "roll": 0,
-                        "ly": -1137.0968017578,
-                        "lx": 2320.3520507813
-                    }
-                ],
+				"name": "livingroom",
 				"vertexes": [
 					{
 						"y": -1136.601318359375,
@@ -63,26 +361,26 @@
 				]
 			},
 			{
+				"Description": "four white chairs around a glass table",
+				"cameras": [
+					{
+						"y": -1139.7974853516,
+						"x": 2312.1628417969,
+						"lz": 1049.703125,
+						"z": 1052.9030761719,
+						"fov": 70,
+						"roll": 0,
+						"ly": -1149.4967041016,
+						"lx": 2316.2053222656
+					}
+				],
 				"Objects": [],
-				"name": "workspace",
 				"center": {
 					"y": -1146.024291992188,
 					"x": 2314.57470703125,
 					"z": 1049.703125
 				},
-				"Description": "four white chairs around a glass table",
-				"cameras": [
-                    {
-                        "y": -1139.7974853516,
-                        "x": 2312.1628417969,
-                        "lz": 1049.703125,
-                        "z": 1052.9030761719,
-                        "fov": 70,
-                        "roll": 0,
-                        "ly": -1149.4967041016,
-                        "lx": 2316.2053222656
-                    }
-                ],
+				"name": "workspace",
 				"vertexes": [
 					{
 						"y": -1150.00732421875,
@@ -117,14 +415,15 @@
 				]
 			},
 			{
+				"Description": "",
+				"cameras": [],
 				"Objects": [],
-				"name": "kitchenentrance",
 				"center": {
 					"y": -1147.346923828125,
 					"x": 2333.73486328125,
 					"z": 1049.703125
 				},
-				"Description": "",
+				"name": "kitchenentrance",
 				"vertexes": [
 					{
 						"y": -1144.883544921875,
@@ -149,36 +448,36 @@
 				]
 			},
 			{
+				"Description": "six chairs around a wooden table",
+				"cameras": [
+					{
+						"y": -1133.2934570313,
+						"x": 2337.0549316406,
+						"lz": 1049.703125,
+						"z": 1052.4030761719,
+						"fov": 70,
+						"roll": 0,
+						"ly": -1143.3845214844,
+						"lx": 2332.0551757813
+					},
+					{
+						"y": -1133.4859374911,
+						"x": 2331.4187011719,
+						"lz": 1049.703125,
+						"z": 1052.4030761719,
+						"fov": 70,
+						"roll": 0,
+						"ly": -1143.2742919922,
+						"lx": 2336.5852050781
+					}
+				],
 				"Objects": [],
 				"center": {
 					"y": -1139.51220703125,
 					"x": 2334.31884765625,
 					"z": 1049.706787109375
 				},
-				"Description": "six chairs around a wooden table",
 				"name": "kitchen",
-				"cameras": [
-                    {
-                        "y": -1133.2934570313,
-                        "x": 2337.0549316406,
-                        "lz": 1049.703125,
-                        "z": 1052.4030761719,
-                        "fov": 70,
-                        "roll": 0,
-                        "ly": -1143.3845214844,
-                        "lx": 2332.0551757813
-                    },
-					{
-                        "y": -1133.4859374911,
-                        "x": 2331.4187011719,
-                        "lz": 1049.703125,
-                        "z": 1052.4030761719,
-                        "fov": 70,
-                        "roll": 0,
-                        "ly": -1143.2742919922,
-                        "lx": 2336.5852050781
-                    }
-                ],
 				"vertexes": [
 					{
 						"y": -1134.59765625,
@@ -203,26 +502,26 @@
 				]
 			},
 			{
+				"Description": "",
+				"cameras": [
+					{
+						"y": -1145.3292724639,
+						"x": 2315.072265625,
+						"lz": 1053.3046875,
+						"z": 1056.0046386719,
+						"fov": 70,
+						"roll": 0,
+						"ly": -1134.9301757813,
+						"lx": 2317.6186523438
+					}
+				],
 				"Objects": [],
 				"center": {
 					"y": -1139.608642578125,
 					"x": 2316.176513671875,
 					"z": 1053.3046875
 				},
-				"Description": "",
 				"name": "upstairs left bedroom hallway",
-				"cameras": [
-                    {
-                        "y": -1145.3292724639,
-                        "x": 2315.072265625,
-                        "lz": 1053.3046875,
-                        "z": 1056.0046386719,
-                        "fov": 70,
-                        "roll": 0,
-                        "ly": -1134.9301757813,
-                        "lx": 2317.6186523438
-                    }
-                ],
 				"vertexes": [
 					{
 						"y": -1134.467407226563,
@@ -247,26 +546,26 @@
 				]
 			},
 			{
+				"Description": "two wardrobes and a windows",
+				"cameras": [
+					{
+						"y": -1134.4117431641,
+						"x": 2313.9663085938,
+						"lz": 1053.3046875,
+						"z": 1056.0046386719,
+						"fov": 70,
+						"roll": 0,
+						"ly": -1142.4855957031,
+						"lx": 2308.4306640625
+					}
+				],
 				"Objects": [],
 				"center": {
 					"y": -1138.774169921875,
 					"x": 2311.18896484375,
 					"z": 1053.3046875
 				},
-				"Description": "two wardrobes and a windows",
 				"name": "upstairs bedroom on the left",
-				"cameras": [
-                    {
-                        "y": -1134.4117431641,
-                        "x": 2313.9663085938,
-                        "lz": 1053.3046875,
-                        "z": 1056.0046386719,
-                        "fov": 70,
-                        "roll": 0,
-                        "ly": -1142.4855957031,
-                        "lx": 2308.4306640625
-                    }
-                ],
 				"vertexes": [
 					{
 						"y": -1134.7685546875,
@@ -291,26 +590,26 @@
 				]
 			},
 			{
+				"Description": "",
+				"cameras": [
+					{
+						"y": -1144.6120605469,
+						"x": 2333.3796386719,
+						"lz": 1053.296875,
+						"z": 1055.9968261719,
+						"fov": 70,
+						"roll": 0,
+						"ly": -1134.935546875,
+						"lx": 2331.1157226563
+					}
+				],
 				"Objects": [],
 				"center": {
 					"y": -1139.674072265625,
 					"x": 2332.64794921875,
 					"z": 1053.30078125
 				},
-				"Description": "",
 				"name": "upstairs right bedroom hallway",
-				"cameras": [
-                    {
-                        "y": -1144.6120605469,
-                        "x": 2333.3796386719,
-                        "lz": 1053.296875,
-                        "z": 1055.9968261719,
-                        "fov": 70,
-                        "roll": 0,
-                        "ly": -1134.935546875,
-                        "lx": 2331.1157226563
-                    }
-                ],
 				"vertexes": [
 					{
 						"y": -1134.533569335938,
@@ -335,26 +634,26 @@
 				]
 			},
 			{
+				"Description": "a wardrobe and three paintings",
+				"cameras": [
+					{
+						"y": -1143.4425048754,
+						"x": 2335.3459472656,
+						"lz": 1053.3046875,
+						"z": 1056.0046386719,
+						"fov": 70,
+						"roll": 0,
+						"ly": -1135.3562011719,
+						"lx": 2340.3557128906
+					}
+				],
 				"Objects": [],
 				"center": {
 					"y": -1138.847290039063,
 					"x": 2337.81591796875,
 					"z": 1053.3046875
 				},
-				"Description": "a wardrobe and three paintings",
 				"name": "upstairs bedroom on the right",
-				"cameras": [
-                    {
-                        "y": -1143.4425048754,
-                        "x": 2335.3459472656,
-                        "lz": 1053.3046875,
-                        "z": 1056.0046386719,
-                        "fov": 70,
-                        "roll": 0,
-                        "ly": -1135.3562011719,
-                        "lx": 2340.3557128906
-                    }
-                ],
 				"vertexes": [
 					{
 						"y": -1142.9267578125,

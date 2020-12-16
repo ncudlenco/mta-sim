@@ -118,8 +118,9 @@
   <script src="story/Actions/SmokeIn.lua" type="shared" />
   <script src="story/Actions/SmokeOut.lua" type="shared" />
   <script src="story/Actions/TaiChi.lua" type="shared" />
-  <script src="story/Actions/BarbellWorkOut.lua" type="shared" />
   <script src="story/Actions/BenchpressWorkOut.lua" type="shared" />
+  <script src="story/Actions/Punch.lua" type="shared" />
+  <script src="story/Actions/DumbbellsWorkOut.lua" type="shared" />
   <!-- Objects -->
   <script src="story/Objects/SampStoryObjectBase.lua" type="shared" />
   <script src="story/Objects/MobilePhone.lua" type="shared" />
@@ -143,6 +144,11 @@
   <script src="story/Objects/Dumbbell.lua" type="shared" />
   <script src="story/Objects/Treadmill.lua" type="shared" />
   <script src="story/Objects/GymBike.lua" type="shared" />
+  <script src="story/Objects/BenchPress.lua" type="shared" />
+  <script src="story/Objects/BenchPressBar.lua" type="shared" />
+  <script src="story/Objects/PunchingBag.lua" type="shared" />
+  <script src="story/Objects/TwoDumbbells.lua" type="shared" />
+  <script src="story/Objects/Painting.lua" type="shared" />
   <!-- Episodes -->
   <script src="story/Episodes/House1.lua" type="server" />
   <script src="story/Episodes/House3.lua" type="server" />

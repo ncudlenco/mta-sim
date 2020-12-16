@@ -8,5 +8,6 @@ end
 )
 
 TurnTable.eModel = {
-    Unknown01 = 2099
+    Unknown01 = 2099,
+    Unknown02 = 2100
 }

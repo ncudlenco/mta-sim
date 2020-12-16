@@ -299,6 +299,21 @@ function Region:OnPlayerHit(player)
             local cameraPos = PickRandom(self.cameras)
             story.Actor:setCameraMatrix(cameraPos.x, cameraPos.y, cameraPos.z, cameraPos.lx, cameraPos.ly, cameraPos.lz, cameraPos.roll, cameraPos.fov)
         end
+<<<<<<< HEAD
+        local locationMap = self:MapObjectsLocations(pointOfView, pointOfViewForward, player.matrix.up)
+
+        self.isExplored = true
+        --describe it here
+        -- if self.Description and self.Description ~= '' then
+        --     story.Logger:Log(self.Description, player, true)
+        -- elseif self.Objects and #self.Objects > 0 then
+        
+            local objectsDescription = story.Logger:DescribeObjects(player, self.name, self.Objects, locationMap, true)
+            story.Logger:Log(objectsDescription, player, true)
+            story.Logger.PreviousObjectDescription = true
+        -- end
+    end
+=======
     
         --If the region is not explored then describe the objects in it
         --if there are some players that weren't introduced before, then describe them
@@ -327,4 +342,5 @@ function Region:OnPlayerHit(player)
         end
         self.EvaluatingRegion = false
     end, 500, 1)
+>>>>>>> mta
 end

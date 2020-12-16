@@ -1,4 +1,1282 @@
 [
+<<<<<<< HEAD
+    {
+        "InteriorId": 5,
+        "ValidStartingLocations": [],
+        "ObjectsToDelete": [
+            {
+                "dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2627, interior=5, position=Vector3(773.48571777344,-2.3857407569885,999.84790039063), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "type": "SampStoryObjectBase",
+                "Description": "",
+                "RotOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "scale": 1,
+                "isRandomModelId": false,
+                "ObjectId": "128ce1dd-68a7-44ff-a942-397537bfaf38",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "PosOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "noCollisions": false,
+                "StoryItemType": 1,
+                "interior": 5,
+                "position": {
+                    "y": -2.385740756988525,
+                    "x": 773.4857177734375,
+                    "z": 999.847900390625
+                },
+                "modelid": 2627,
+                "size": 2.5
+            },
+            {
+                "dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2630, interior=5, position=Vector3(772.01165771484,9.2034511566162,999.70642089844), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "type": "SampStoryObjectBase",
+                "Description": "",
+                "RotOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "scale": 1,
+                "isRandomModelId": false,
+                "ObjectId": "3e758955-243e-4bca-a4c1-bd5070d9899c",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "PosOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "noCollisions": false,
+                "StoryItemType": 1,
+                "interior": 5,
+                "position": {
+                    "y": 9.203451156616211,
+                    "x": 772.0116577148438,
+                    "z": 999.7064208984375
+                },
+                "modelid": 2630,
+                "size": 2.5
+            },
+            {
+                "dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2629, interior=5, position=Vector3(774.09558105469,1.6002839803696,999.83941650391), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "type": "SampStoryObjectBase",
+                "Description": "",
+                "RotOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "scale": 1,
+                "isRandomModelId": false,
+                "ObjectId": "abcd26c0-7084-413f-a915-fd5340f2134c",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "PosOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "noCollisions": false,
+                "StoryItemType": 1,
+                "interior": 5,
+                "position": {
+                    "y": 1.600283980369568,
+                    "x": 774.0955810546875,
+                    "z": 999.8394165039062
+                },
+                "modelid": 2629,
+                "size": 2.5
+            },
+            {
+                "dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=1985, interior=5, position=Vector3(769.56903076172,-3.2233757972717,1000.0234985352), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "type": "SampStoryObjectBase",
+                "Description": "",
+                "RotOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "scale": 1,
+                "isRandomModelId": false,
+                "ObjectId": "a142392a-17c5-404b-b9d1-cfa9993f3034",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "PosOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "noCollisions": false,
+                "StoryItemType": 1,
+                "interior": 5,
+                "position": {
+                    "y": -3.223375797271729,
+                    "x": 769.5690307617188,
+                    "z": 1000.023498535156
+                },
+                "modelid": 1985,
+                "size": 2.5
+            },
+            {
+                "dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=1985, interior=5, position=Vector3(767.23291015625,-2.9472517967224,1000.0185546875), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "type": "SampStoryObjectBase",
+                "Description": "",
+                "RotOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "scale": 1,
+                "isRandomModelId": false,
+                "ObjectId": "6c4e6b30-955a-4f3e-9fa3-4584311bdad0",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "PosOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "noCollisions": false,
+                "StoryItemType": 1,
+                "interior": 5,
+                "position": {
+                    "y": -2.947251796722412,
+                    "x": 767.23291015625,
+                    "z": 1000.0185546875
+                },
+                "modelid": 1985,
+                "size": 2.5
+            }
+        ],
+        "Objects": [
+            {
+                "dynamicString": "return Treadmill{description=\"treadmill\", noCollisions=true, modelid=2627, interior=5, position=Vector3(773.37585449219,-1.1457362174988,999.62438964844), rotation=Vector3(0,0,270.00036621094), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "type": "Treadmill",
+                "Description": "treadmill",
+                "RotOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "scale": 1,
+                "isRandomModelId": false,
+                "ObjectId": "60c204c3-5707-489c-95df-9f09d6440960",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 270.0003662109375
+                },
+                "PosOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "noCollisions": true,
+                "StoryItemType": 1,
+                "interior": 5,
+                "position": {
+                    "y": -1.145736217498779,
+                    "x": 773.3758544921875,
+                    "z": 999.6243896484375
+                },
+                "modelid": 2627,
+                "size": 2.5
+            },
+            {
+                "dynamicString": "return GymBike{description=\"gym bike\", noCollisions=true, modelid=2630, interior=5, position=Vector3(772.41375732422,7.8085460662842,999.70910644531), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "type": "GymBike",
+                "Description": "gym bike",
+                "RotOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "scale": 1,
+                "isRandomModelId": false,
+                "ObjectId": "28ecf3ec-fdea-4294-9bc2-b71cd1497c3b",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 270
+                },
+                "PosOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "noCollisions": true,
+                "StoryItemType": 1,
+                "interior": 5,
+                "position": {
+                    "y": 7.80854606628418,
+                    "x": 772.4137573242188,
+                    "z": 999.7091064453125
+                },
+                "modelid": 2630,
+                "size": 2.5
+            },
+            {
+                "dynamicString": "return GymBike{description=\"gym bike\", noCollisions=true, modelid=2630, interior=5, position=Vector3(772.41583251953,9.4133281707764,999.70733642578), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "type": "GymBike",
+                "Description": "gym bike",
+                "RotOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "scale": 1,
+                "isRandomModelId": false,
+                "ObjectId": "5ae89074-6d71-49bc-bd4d-abdcdee8715d",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 270
+                },
+                "PosOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "noCollisions": true,
+                "StoryItemType": 1,
+                "interior": 5,
+                "position": {
+                    "y": 9.413328170776367,
+                    "x": 772.4158325195312,
+                    "z": 999.7073364257812
+                },
+                "modelid": 2630,
+                "size": 2.5
+            },
+            {
+                "dynamicString": "return GymBike{description=\"gym bike\", noCollisions=true, modelid=2630, interior=5, position=Vector3(772.42572021484,11.21332359314,999.70733642578), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "type": "GymBike",
+                "Description": "gym bike",
+                "RotOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "scale": 1,
+                "isRandomModelId": false,
+                "ObjectId": "f734c579-1fc2-47bf-ba9f-b4948b387fac",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 270
+                },
+                "PosOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "noCollisions": true,
+                "StoryItemType": 1,
+                "interior": 5,
+                "position": {
+                    "y": 11.21332359313965,
+                    "x": 772.4257202148438,
+                    "z": 999.7073364257812
+                },
+                "modelid": 2630,
+                "size": 2.5
+            },
+            {
+                "dynamicString": "return Treadmill{description=\"treadmill\", noCollisions=true, modelid=2627, interior=5, position=Vector3(773.37408447266,-3.1487774848938,999.62335205078), rotation=Vector3(0,0,270.00036621094), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "type": "Treadmill",
+                "Description": "treadmill",
+                "RotOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "scale": 1,
+                "isRandomModelId": false,
+                "ObjectId": "02a55a66-3a27-48c6-8562-dbeaa8bbf751",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 270.0003662109375
+                },
+                "PosOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "noCollisions": true,
+                "StoryItemType": 1,
+                "interior": 5,
+                "position": {
+                    "y": -3.148777484893799,
+                    "x": 773.3740844726562,
+                    "z": 999.6233520507812
+                },
+                "modelid": 2627,
+                "size": 2.5
+            },
+            {
+                "dynamicString": "return BenchPress{description=\"bench press\", noCollisions=true, modelid=2629, interior=5, position=Vector3(773.552734375,1.5087885856628,999.72015380859), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "type": "BenchPress",
+                "Description": "bench press",
+                "RotOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "scale": 1,
+                "isRandomModelId": false,
+                "ObjectId": "3f364130-cce0-476c-97b3-81eed07abc4e",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 270
+                },
+                "PosOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "noCollisions": true,
+                "StoryItemType": 1,
+                "interior": 5,
+                "position": {
+                    "y": 1.508788585662842,
+                    "x": 773.552734375,
+                    "z": 999.7201538085938
+                },
+                "modelid": 2629,
+                "size": 2.5
+            },
+            {
+                "dynamicString": "return BenchPressBar{description=\"bench press bar\", noCollisions=true, modelid=2913, interior=5, position=Vector3(774.01049804688,1.9642009735107,1000.6451416016), rotation=Vector3(90,0,0), posOffset=Vector3(0.12999999523163,0.029999999329448,0.020000007003546), rotOffset=Vector3(0,-92,1)}",
+                "type": "BenchPressBar",
+                "Description": "bench press bar",
+                "RotOffset": {
+                    "y": -92,
+                    "x": 0,
+                    "z": 1
+                },
+                "scale": 1,
+                "isRandomModelId": false,
+                "ObjectId": "a47d1122-e45d-40d3-b443-3dded9022572",
+                "rotation": {
+                    "y": 0,
+                    "x": 90,
+                    "z": 0
+                },
+                "PosOffset": {
+                    "y": 0.02999999932944775,
+                    "x": 0.1299999952316284,
+                    "z": 0.02000000700354576
+                },
+                "noCollisions": true,
+                "StoryItemType": 1,
+                "interior": 5,
+                "position": {
+                    "y": 1.964200973510742,
+                    "x": 774.010498046875,
+                    "z": 1000.645141601563
+                },
+                "modelid": 2913,
+                "size": 2.5
+            },
+            {
+                "dynamicString": "return BenchPress{description=\"bench press\", noCollisions=true, modelid=2629, interior=5, position=Vector3(773.58203125,3.3529541492462,999.71661376953), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "type": "BenchPress",
+                "Description": "bench press",
+                "RotOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "scale": 1,
+                "isRandomModelId": false,
+                "ObjectId": "0362e83c-e30c-438c-b58f-da3d5508615e",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 270
+                },
+                "PosOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "noCollisions": true,
+                "StoryItemType": 1,
+                "interior": 5,
+                "position": {
+                    "y": 3.352954149246216,
+                    "x": 773.58203125,
+                    "z": 999.7166137695312
+                },
+                "modelid": 2629,
+                "size": 2.5
+            },
+            {
+                "dynamicString": "return BenchPressBar{description=\"bench press bar\", noCollisions=true, modelid=2913, interior=5, position=Vector3(774.03979492188,3.8083665370941,1000.6416015625), rotation=Vector3(90,0,0), posOffset=Vector3(0.12999999523163,0.029999999329448,0.020000007003546), rotOffset=Vector3(0,-92,1)}",
+                "type": "BenchPressBar",
+                "Description": "bench press bar",
+                "RotOffset": {
+                    "y": -92,
+                    "x": 0,
+                    "z": 1
+                },
+                "scale": 1,
+                "isRandomModelId": false,
+                "ObjectId": "7c0a0af8-b4da-494d-9b50-7a66049e6e68",
+                "rotation": {
+                    "y": 0,
+                    "x": 90,
+                    "z": 0
+                },
+                "PosOffset": {
+                    "y": 0.02999999932944775,
+                    "x": 0.1299999952316284,
+                    "z": 0.02000000700354576
+                },
+                "noCollisions": true,
+                "StoryItemType": 1,
+                "interior": 5,
+                "position": {
+                    "y": 3.808366537094116,
+                    "x": 774.039794921875,
+                    "z": 1000.6416015625
+                },
+                "modelid": 2913,
+                "size": 2.5
+            },
+            {
+                "dynamicString": "return PunchingBag{description=\"punching bag\", noCollisions=true, modelid=1985, interior=5, position=Vector3(769.45837402344,-3.2030017375946,1002.4515380859), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "type": "PunchingBag",
+                "Description": "punching bag",
+                "RotOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "scale": 1,
+                "isRandomModelId": false,
+                "ObjectId": "44bd337e-90f0-4942-837f-0154876e9476",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "PosOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "noCollisions": true,
+                "StoryItemType": 1,
+                "interior": 5,
+                "position": {
+                    "y": -3.203001737594604,
+                    "x": 769.4583740234375,
+                    "z": 1002.451538085938
+                },
+                "modelid": 1985,
+                "size": 2.5
+            },
+            {
+                "dynamicString": "return PunchingBag{description=\"punching bag\", noCollisions=true, modelid=1985, interior=5, position=Vector3(767.18566894531,-3.2054498195648,1002.4344482422), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "type": "PunchingBag",
+                "Description": "punching bag",
+                "RotOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "scale": 1,
+                "isRandomModelId": false,
+                "ObjectId": "370105b6-242b-4208-9c2e-202d3958adef",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "PosOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "noCollisions": true,
+                "StoryItemType": 1,
+                "interior": 5,
+                "position": {
+                    "y": -3.205449819564819,
+                    "x": 767.1856689453125,
+                    "z": 1002.434448242188
+                },
+                "modelid": 1985,
+                "size": 2.5
+            },
+            {
+                "PosOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "type": "TwoDumbbells",
+                "Description": "",
+                "noCollisions": false,
+                "interior": 5,
+                "isRandomModelId": false,
+                "ObjectId": "f3df67bc-de01-4211-b6b8-22bd884c63ca",
+                "dynamicString": "return TwoDumbbells{description=\"two dumbbells\", noCollisions=false, modelid=2915, interior=5, position=Vector3(767.01116943359,7.048939704895,999.80560302734), rotation=Vector3(0,0,90), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,-30)}",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 90
+                },
+                "RotOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": -30
+                },
+                "scale": 1,
+                "position": {
+                    "y": 7.04893970489502,
+                    "x": 767.0111694335938,
+                    "z": 999.8056030273438
+                },
+                "StoryItemType": 1,
+                "modelid": 2915,
+                "size": 2.5
+            },
+            {
+                "PosOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "type": "TwoDumbbells",
+                "Description": "",
+                "noCollisions": false,
+                "interior": 5,
+                "isRandomModelId": false,
+                "ObjectId": "c6532cf0-a102-45b0-83c5-ff67e9244632",
+                "dynamicString": "return TwoDumbbells{description=\"\", noCollisions=false, modelid=2915, interior=5, position=Vector3(767.02679443359,4.2014136314392,999.81231689453), rotation=Vector3(0,0,90), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,-30)}",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 90
+                },
+                "RotOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": -30
+                },
+                "scale": 1,
+                "position": {
+                    "y": 4.201413631439209,
+                    "x": 767.0267944335938,
+                    "z": 999.8123168945312
+                },
+                "StoryItemType": 1,
+                "modelid": 2915,
+                "size": 2.5
+            }
+        ],
+        "name": "gym1_a",
+        "graphPath": "files/paths/gym1.json",
+        "Disposed": false,
+        "Regions": [
+            {
+                "Description": "",
+                "cameras": [
+                    {
+                        "y": 15.92468070983887,
+                        "x": 756.8151245117188,
+                        "lz": 999.732421875,
+                        "z": 1002.932434082031,
+                        "fov": 70,
+                        "roll": 0,
+                        "ly": -4.242314338684082,
+                        "lx": 773.8126831054688
+                    },
+                    {
+                        "y": 17.14634866267443,
+                        "x": 775.0087524354458,
+                        "lz": 999.6915283203125,
+                        "z": 1002.591540530324,
+                        "fov": 80,
+                        "roll": 0,
+                        "ly": -5.252615451812744,
+                        "lx": 755.433349609375
+                    },
+                    {
+                        "y": -6.410044096410275,
+                        "x": 755.061022952199,
+                        "lz": 999.69189453125,
+                        "z": 1002.891906738281,
+                        "fov": 78.5,
+                        "roll": 0,
+                        "ly": 15.65832996368408,
+                        "lx": 774.6347045898438
+                    }
+                ],
+                "Objects": [],
+                "center": {
+                    "y": 5.447854995727539,
+                    "x": 765.0390014648438,
+                    "z": 999.71630859375
+                },
+                "name": "gym main room",
+                "vertexes": [
+                    {
+                        "y": -5.499334335327148,
+                        "x": 775.0650024414062,
+                        "z": 999.7300415039062
+                    },
+                    {
+                        "y": -5.578876972198486,
+                        "x": 754.9635620117188,
+                        "z": 999.6987915039062
+                    },
+                    {
+                        "y": 16.41493988037109,
+                        "x": 754.993896484375,
+                        "z": 999.7025146484375
+                    },
+                    {
+                        "y": 16.45469093322754,
+                        "x": 775.1336059570312,
+                        "z": 999.7338256835938
+                    }
+                ]
+            }
+        ],
+        "POI": [
+            {
+                "Description": "treadmill ",
+                "Interior": 5,
+                "Y": -1.129723310470581,
+                "X": 772.005126953125,
+                "Z": 1000.726623535156,
+                "id": 1,
+                "Angle": 268.8193054199219,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "allActions": [
+                    {
+                        "dynamicString": "return GetOn{how = 3,side = 1}",
+                        "targetItem": {
+                            "id": 1,
+                            "type": "Object"
+                        },
+                        "id": 1,
+                        "nextAction": {
+                            "id": 2
+                        },
+                        "closingAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 1
+                        }
+                    },
+                    {
+                        "dynamicString": "return JogTreadmill{how = gym_tread_walk}",
+                        "targetItem": {
+                            "id": 1,
+                            "type": "Object"
+                        },
+                        "id": 2,
+                        "nextAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 1
+                        }
+                    },
+                    {
+                        "dynamicString": "return GetOff{how = 3,side = 1}",
+                        "targetItem": {
+                            "id": 1,
+                            "type": "Object"
+                        },
+                        "id": 3,
+                        "nextLocation": {
+                            "id": 1
+                        }
+                    }
+                ]
+            },
+            {
+                "Description": "gym bike",
+                "Interior": 5,
+                "Y": 7.330866432189941,
+                "X": 772.9089599609375,
+                "Z": 1000.709716796875,
+                "id": 2,
+                "Angle": 92.12103271484375,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "allActions": [
+                    {
+                        "dynamicString": "return GetOn{how = 2,side = 1}",
+                        "targetItem": {
+                            "id": 2,
+                            "type": "Object"
+                        },
+                        "id": 1,
+                        "nextAction": {
+                            "id": 2
+                        },
+                        "closingAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 2
+                        }
+                    },
+                    {
+                        "dynamicString": "return PedalGymBike{how=\"gym_bike_slow\"}",
+                        "targetItem": {
+                            "id": 2,
+                            "type": "Object"
+                        },
+                        "id": 2,
+                        "nextAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 2
+                        }
+                    },
+                    {
+                        "dynamicString": "return GetOff{how = 2,side = 1}",
+                        "targetItem": {
+                            "id": 2,
+                            "type": "Object"
+                        },
+                        "id": 3,
+                        "nextLocation": {
+                            "id": 2
+                        }
+                    }
+                ]
+            },
+            {
+                "Description": "pink carpet",
+                "Interior": 5,
+                "Y": 5.147973537445068,
+                "X": 772.712646484375,
+                "Z": 1000.780212402344,
+                "id": 3,
+                "Angle": 88.9642333984375,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "allActions": [
+                    {
+                        "dynamicString": "return TaiChi{}",
+                        "targetItem": {
+                            "id": -1,
+                            "type": "none"
+                        },
+                        "id": 1,
+                        "nextLocation": {
+                            "id": 3
+                        }
+                    }
+                ]
+            },
+            {
+                "Description": "gym bike",
+                "Interior": 5,
+                "Y": 8.935646057128906,
+                "X": 772.9110107421875,
+                "Z": 1000.707946777344,
+                "id": 4,
+                "Angle": 92.12103271484375,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "allActions": [
+                    {
+                        "dynamicString": "return GetOn{how = 2,side = 1}",
+                        "targetItem": {
+                            "id": 3,
+                            "type": "Object"
+                        },
+                        "id": 1,
+                        "nextAction": {
+                            "id": 2
+                        },
+                        "closingAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 4
+                        }
+                    },
+                    {
+                        "dynamicString": "return PedalGymBike{how=\"gym_bike_fast\"}",
+                        "targetItem": {
+                            "id": 3,
+                            "type": "Object"
+                        },
+                        "id": 2,
+                        "nextAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 4
+                        }
+                    },
+                    {
+                        "dynamicString": "return GetOff{how = 2,side = 1}",
+                        "targetItem": {
+                            "id": 3,
+                            "type": "Object"
+                        },
+                        "id": 3,
+                        "nextLocation": {
+                            "id": 4
+                        }
+                    }
+                ]
+            },
+            {
+                "Description": "gym bike",
+                "Interior": 5,
+                "Y": 10.73564338684082,
+                "X": 772.9208984375,
+                "Z": 1000.707946777344,
+                "id": 5,
+                "Angle": 92.12103271484375,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "allActions": [
+                    {
+                        "dynamicString": "return GetOn{how = 2,side = 1}",
+                        "targetItem": {
+                            "id": 4,
+                            "type": "Object"
+                        },
+                        "id": 1,
+                        "nextAction": {
+                            "id": 2
+                        },
+                        "closingAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 5
+                        }
+                    },
+                    {
+                        "dynamicString": "return PedalGymBike{how=\"gym_bike_faster\"}",
+                        "targetItem": {
+                            "id": 4,
+                            "type": "Object"
+                        },
+                        "id": 2,
+                        "nextAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 5
+                        }
+                    },
+                    {
+                        "dynamicString": "return GetOff{how = 2,side = 1}",
+                        "targetItem": {
+                            "id": 4,
+                            "type": "Object"
+                        },
+                        "id": 3,
+                        "nextLocation": {
+                            "id": 5
+                        }
+                    }
+                ]
+            },
+            {
+                "Description": "treadmill ",
+                "Interior": 5,
+                "Y": -3.13276481628418,
+                "X": 772.0033569335938,
+                "Z": 1000.7255859375,
+                "id": 6,
+                "Angle": 268.8193054199219,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "allActions": [
+                    {
+                        "dynamicString": "return GetOn{how = 3,side = 1}",
+                        "targetItem": {
+                            "id": 5,
+                            "type": "Object"
+                        },
+                        "id": 1,
+                        "nextAction": {
+                            "id": 2
+                        },
+                        "closingAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 6
+                        }
+                    },
+                    {
+                        "dynamicString": "return JogTreadmill{how = gym_tread_sprint}",
+                        "targetItem": {
+                            "id": 5,
+                            "type": "Object"
+                        },
+                        "id": 2,
+                        "nextAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 6
+                        }
+                    },
+                    {
+                        "dynamicString": "return GetOff{how = 3,side = 1}",
+                        "targetItem": {
+                            "id": 5,
+                            "type": "Object"
+                        },
+                        "id": 3,
+                        "nextLocation": {
+                            "id": 6
+                        }
+                    }
+                ]
+            },
+            {
+                "Description": "benchpress ",
+                "Interior": 5,
+                "Y": 1.478369832038879,
+                "X": 772.7223510742188,
+                "Z": 1000.721008300781,
+                "id": 7,
+                "Angle": 272.6027221679688,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "allActions": [
+                    {
+                        "dynamicString": "return GetOn{how = 4,side = 1}",
+                        "targetItem": {
+                            "id": 6,
+                            "type": "Object"
+                        },
+                        "id": 1,
+                        "nextAction": {
+                            "id": 2
+                        },
+                        "closingAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 7
+                        }
+                    },
+                    {
+                        "dynamicString": "return BenchpressWorkOut{}",
+                        "targetItem": {
+                            "id": 7,
+                            "type": "Object"
+                        },
+                        "id": 2,
+                        "nextAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 7
+                        }
+                    },
+                    {
+                        "dynamicString": "return GetOff{how = 4,side = 1}",
+                        "targetItem": {
+                            "id": 6,
+                            "type": "Object"
+                        },
+                        "id": 3,
+                        "nextLocation": {
+                            "id": 7
+                        }
+                    }
+                ]
+            },
+            {
+                "Description": "benchpress ",
+                "Interior": 5,
+                "Y": 3.322535276412964,
+                "X": 772.7516479492188,
+                "Z": 1000.717468261719,
+                "id": 8,
+                "Angle": 272.6027221679688,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "allActions": [
+                    {
+                        "dynamicString": "return GetOn{how = 4,side = 1}",
+                        "targetItem": {
+                            "id": 8,
+                            "type": "Object"
+                        },
+                        "id": 1,
+                        "nextAction": {
+                            "id": 2
+                        },
+                        "closingAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 8
+                        }
+                    },
+                    {
+                        "dynamicString": "return BenchpressWorkOut{}",
+                        "targetItem": {
+                            "id": 9,
+                            "type": "Object"
+                        },
+                        "id": 2,
+                        "nextAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 8
+                        }
+                    },
+                    {
+                        "dynamicString": "return GetOff{how = 4,side = 1}",
+                        "targetItem": {
+                            "id": 8,
+                            "type": "Object"
+                        },
+                        "id": 3,
+                        "nextLocation": {
+                            "id": 8
+                        }
+                    }
+                ]
+            },
+            {
+                "Description": "punchbag ",
+                "Interior": 5,
+                "Y": -1.667350172996521,
+                "X": 769.383544921875,
+                "Z": 1000.723937988281,
+                "id": 9,
+                "Angle": 176.408447265625,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "allActions": [
+                    {
+                        "dynamicString": "return Punch{}",
+                        "targetItem": {
+                            "id": 10,
+                            "type": "Object"
+                        },
+                        "id": 1,
+                        "nextLocation": {
+                            "id": 9
+                        }
+                    }
+                ]
+            },
+            {
+                "Description": "punchbag ",
+                "Interior": 5,
+                "Y": -1.669799447059631,
+                "X": 767.11083984375,
+                "Z": 1000.706848144531,
+                "id": 10,
+                "Angle": 176.408447265625,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "allActions": [
+                    {
+                        "dynamicString": "return Punch{}",
+                        "targetItem": {
+                            "id": 11,
+                            "type": "Object"
+                        },
+                        "id": 1,
+                        "nextLocation": {
+                            "id": 10
+                        }
+                    }
+                ]
+            },
+            {
+                "Description": "dumbbells ",
+                "Interior": 5,
+                "Y": 6.87065601348877,
+                "X": 768.0431518554688,
+                "Z": 1000.714233398438,
+                "id": 11,
+                "Angle": 90.5308837890625,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "allActions": [
+                    {
+                        "dynamicString": "return PickUp{where = \"floor\", targetObjectExists = false, hand = 11, how = 4}",
+                        "targetItem": {
+                            "id": 12,
+                            "type": "Object"
+                        },
+                        "id": 1,
+                        "nextAction": {
+                            "id": 2
+                        },
+                        "closingAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 11
+                        }
+                    },
+                    {
+                        "dynamicString": "return DumbbellsWorkOut{}",
+                        "targetItem": {
+                            "id": 12,
+                            "type": "Object"
+                        },
+                        "id": 2,
+                        "nextAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 11
+                        }
+                    },
+                    {
+                        "dynamicString": "return PutDown{where = \"floor\", how = 3}",
+                        "targetItem": {
+                            "id": 12,
+                            "type": "Object"
+                        },
+                        "id": 3,
+                        "nextLocation": {
+                            "id": 11
+                        }
+                    }
+                ]
+            },
+            {
+                "Description": "dumbbells ",
+                "Interior": 5,
+                "Y": 4.023129940032959,
+                "X": 768.0587768554688,
+                "Z": 1000.720947265625,
+                "id": 12,
+                "Angle": 90.5308837890625,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "allActions": [
+                    {
+                        "dynamicString": "return PickUp{where = \"floor\", targetObjectExists = false, hand = 11, how = 4}",
+                        "targetItem": {
+                            "id": 13,
+                            "type": "Object"
+                        },
+                        "id": 1,
+                        "nextAction": {
+                            "id": 2
+                        },
+                        "closingAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 12
+                        }
+                    },
+                    {
+                        "dynamicString": "return DumbbellsWorkOut{}",
+                        "targetItem": {
+                            "id": 13,
+                            "type": "Object"
+                        },
+                        "id": 2,
+                        "nextAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 12
+                        }
+                    },
+                    {
+                        "dynamicString": "return PutDown{where = \"floor\", how = 3}",
+                        "targetItem": {
+                            "id": 13,
+                            "type": "Object"
+                        },
+                        "id": 3,
+                        "nextLocation": {
+                            "id": 12
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+=======
 	{
 		"InteriorId": 5,
 		"ValidStartingLocations": [],
@@ -627,4 +1905,5 @@
 			}
 		]
 	}
+>>>>>>> mta
 ]

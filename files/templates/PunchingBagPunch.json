@@ -1,0 +1,38 @@
+[
+    {
+        "objects": [
+            {
+                "dynamicString": "return PunchingBag{description=\"\", noCollisions=true, modelid=1985, interior=5, position=Vector3(0.0748291015625,-1.5356515645981,1.7276000976563), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "id": 10
+            }
+        ],
+        "poi": {
+            "Description": "punchbag ",
+            "Interior": 5,
+            "Y": -1.667350172996521,
+            "X": 769.383544921875,
+            "Z": 1000.723937988281,
+            "id": 9,
+            "Angle": 176.408447265625,
+            "PossibleActions": [
+                {
+                    "id": 1
+                }
+            ],
+            "allActions": [
+                {
+                    "dynamicString": "return Punch{}",
+                    "targetItem": {
+                        "id": 10,
+                        "type": "Object"
+                    },
+                    "id": 1,
+                    "nextLocation": {
+                        "id": 9
+                    }
+                }
+            ]
+        },
+        "locations": []
+    }
+]

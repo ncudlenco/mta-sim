@@ -92,7 +92,7 @@ function SampStoryObjectBase:UpdateData(unpack)
         noCollisionStr = 'true'
     end
     local modelid = self.modelid
-    if isRandomModelId then
+    if self.isRandomModelId then
         modelid = self.type..'.eModel[PickRandom('..self.type..'.eModel)]'
     end
     self.dynamicString = 'return '..self.type..'{description="'..self.Description..'", noCollisions='..noCollisionStr..', modelid='..(modelid or 'nil')..', interior='..self.interior..', position=Vector3('..self.position.x..','..self.position.y..','..self.position.z..'), rotation=Vector3('..self.rotation.x..','..self.rotation.y..','..self.rotation.z..'), posOffset=Vector3('..self.PosOffset.x..','..self.PosOffset.y..','..self.PosOffset.z..'), rotOffset=Vector3('..self.RotOffset.x..','..self.RotOffset.y..','..self.RotOffset.z..')}'

@@ -14,7 +14,6 @@ function BenchpressWorkOut:Apply()
     
     math.randomseed(os.time())
     local time = math.random(8000, 18000)
-<<<<<<< HEAD
 
     local initialPosition = self.TargetItem.position
     local initialRotation = self.TargetItem.rotation
@@ -24,9 +23,6 @@ function BenchpressWorkOut:Apply()
                         self.TargetItem.RotOffset.x, self.TargetItem.RotOffset.y, self.TargetItem.RotOffset.z)
 
     story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. self.TargetItem.Description .. ". When " .. self.Performer:getData('genderNominative') .. " finishes ", self.Performer)
-=======
-    story.Logger:Log(self.Description .. self.TargetItem.Description, self, false, true, {"finishes", "finishes working out"})
->>>>>>> mta
     
     self.Performer:setAnimation("benchpress", self.how, time, true, false, false, true)
 

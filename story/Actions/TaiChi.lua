@@ -1,12 +1,13 @@
 TaiChi = class(StoryActionBase, function(o, params)
-    StoryActionBase.init(o, " starts doing tai chi ", params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
+    params.description = " starts doing tai chi "
+    StoryActionBase.init(o,params)
 end)
 
 function TaiChi:Apply()
     local story = GetStory(self.Performer)
-    table.insert(story.History, self)
+    table.insert(story.History[self.Performer:getData('id')], self)
     
-    story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description, self.Performer)
+    story.Logger:Log(self.Description, self)
     self.Performer:setAnimation("PARK", "Tai_Chi_in", 3000, true, true, false, true)
 
     math.randomseed(os.time())

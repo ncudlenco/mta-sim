@@ -7,6 +7,7 @@ Location = class(StoryLocationBase, function(o, x, y, z, angle, interior, descri
     o.Interior = interior
     o.History = {}
     o.Region = region
+    o.isBusy = false
     if not compact then
         o.position = Vector3(x,y,z)
         o.rotation = Vector3(0,0,angle)
@@ -17,6 +18,8 @@ Location = class(StoryLocationBase, function(o, x, y, z, angle, interior, descri
 end)
 
 function Location:SpawnPlayerHere(player)
+    self.isBusy = true
+    player:setData('locationId', self.LocationId)
     player:spawn(self.X, self.Y, self.Z, self.Angle, player.model, self.Interior)
     player:fadeCamera (true)
     local story = GetStory(player)
@@ -68,7 +71,8 @@ function Location:Serialize(episode, relativePosition, _objects, _locations, _ma
             nextAction = serializedNextAction,
             targetItem = {id = targetItemId, type = targetItemType},
             nextLocation = {id = LastIndexOf(episode.POI, a.NextLocation)},
-            closingAction = closingAction
+            closingAction = closingAction,
+            isClosingAction = a.IsClosingAction
         }
         table.insert(serializedAllActions, serializedAction)
         local function processLocationDependency(location)
@@ -140,7 +144,15 @@ function Location:Serialize(episode, relativePosition, _objects, _locations, _ma
     }, objects, locations
 end
 
+lock = false
 function Location:GetNextValidAction(player)
+    if CURRENT_STORY.Disposed then
+        return EmptyAction({Performer = player})
+    end
+    while lock do 
+        Timer(function()end, 500, 1)
+    end
+    lock = true
     if DEBUG then
         outputConsole("Location:GetNextValidAction")
     end
@@ -151,21 +163,25 @@ function Location:GetNextValidAction(player)
     if DEBUG and story == nil then
         outputConsole("Error Location:GetNextValidAction: story is null")
     end
-    if #story.History >= story.MaxActions then
+    if not self.History[player:getData('id')] then
+        self.History[player:getData('id')] = {}
+    end
+    if #story.History[player:getData('id')] >= story.MaxActions then
         if DEBUG then
             outputConsole("Location:GetNextValidAction - max story actions reached. Ending the current story")
         end
+        lock = false
         return EndStory(player)
     end
     local previousAction = nil
-    if #story.History >= 1 then
-        previousAction = story.History[#story.History]
+    if #story.History[player:getData('id')] >= 1 then
+        previousAction = story.History[player:getData('id')][#story.History]
     end
 
     local nextValidActions = Where(self.PossibleActions, function(x)
-        return x ~= previousAction and All(x.Prerequisites, function(p)
-            local li = LastIndexOf(self.History, p)
-            local lic = LastIndexOf(self.History, p.ClosingAction)
+        return (x.NextLocation == self or not x.NextLocation.isBusy) and x ~= previousAction and All(x.Prerequisites, function(p)
+            local li = LastIndexOf(self.History[player:getData('id')], p)
+            local lic = LastIndexOf(self.History[player:getData('id')], p.ClosingAction)
             if DEBUG then
                 outputConsole("Evaluating validity of action "..x.Description)
                 outputConsole("Has prerequisite "..p.Description)
@@ -191,6 +207,7 @@ function Location:GetNextValidAction(player)
         if DEBUG then
             outputConsole("Location:GetNextValidAction - No more valid story actions found. Ending the current story")
         end
+        lock = false
         return EndStory(player)
     end
     local next = PickRandom(nextValidActions);
@@ -198,17 +215,25 @@ function Location:GetNextValidAction(player)
         if DEBUG then
             outputConsole("Location:GetNextValidAction - next action was null. Ending the current story")
         end
+        lock = false
         return EndStory(player)
     else
         if DEBUG then
             outputConsole("Next action chosen: "..next.Description)
         end
         if next.NextLocation == self then
-            table.insert(self.History, next)
+            table.insert(self.History[player:getData('id')], next)
         else
-            self.History = {}
-            table.insert(next.NextLocation.History, next)
+            self.History[player:getData('id')] = {}
+            next.NextLocation.History[player:getData('id')] = {next}
+            --the actor will change the location
+            self.isBusy = false
+            next.NextLocation.isBusy = true
+            player:setData('locationId', next.NextLocation.LocationId)
+        
         end
     end
+    lock = false
+    next.Performer = player
     return next
 end

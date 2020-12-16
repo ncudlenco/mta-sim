@@ -1,14 +1,20 @@
 BenchpressWorkOut = class(StoryActionBase, function(o, params)
+<<<<<<< HEAD
     StoryActionBase.init(o, " working out with the ", params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
     o.how = BenchpressWorkOut.eHow.Slow
+=======
+    params.description = " works out at the "
+    StoryActionBase.init(o, params)
+>>>>>>> mta
 end)
 
 function BenchpressWorkOut:Apply()
     local story = GetStory(self.Performer)
-    table.insert(story.History, self)
+    table.insert(story.History[self.Performer:getData('id')], self)
     
     math.randomseed(os.time())
     local time = math.random(8000, 18000)
+<<<<<<< HEAD
 
     local initialPosition = self.TargetItem.position
     local initialRotation = self.TargetItem.rotation
@@ -18,6 +24,9 @@ function BenchpressWorkOut:Apply()
                         self.TargetItem.RotOffset.x, self.TargetItem.RotOffset.y, self.TargetItem.RotOffset.z)
 
     story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. self.TargetItem.Description .. ". When " .. self.Performer:getData('genderNominative') .. " finishes ", self.Performer)
+=======
+    story.Logger:Log(self.Description .. self.TargetItem.Description, self, false, true, {"finishes", "finishes working out"})
+>>>>>>> mta
     
     self.Performer:setAnimation("benchpress", self.how, time, true, false, false, true)
 

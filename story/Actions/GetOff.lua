@@ -1,5 +1,6 @@
 GetOff = class(StoryActionBase, function(o, params)
-    StoryActionBase.init(o, " gets off the ", params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
+    params.description = " gets off the "
+    StoryActionBase.init(o, params)
     o.how = params.how
     o.side = params.side or GetOff.eSide.Left
 end)
@@ -7,7 +8,7 @@ end)
 
 function GetOff:Apply()
     local story = GetStory(self.Performer)
-    table.insert(story.History, self)
+    table.insert(story.History[self.Performer:getData('id')], self)
 
     -- self.TargetItem.instance:setCollisionsEnabled(false)
 
@@ -41,8 +42,8 @@ function GetOff:Apply()
         updatePedPosition = false
     end
 
-    story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. self.TargetItem.Description, self.Performer)
-    self.Performer:setAnimation(block, animation, time, true, updatePedPosition, false, true)
+    story.Logger:Log(self.Description .. self.TargetItem.Description, self)
+    self.Performer:setAnimation(block, animation, time, false, updatePedPosition, false, true)
     
     if DEBUG then
         outputConsole("GetOff:Apply")

@@ -1,5 +1,6 @@
 MobilePhone = class(SampStoryObjectBase, function(o, params)
     params.description = "mobile phone"
+    params.pluralTemplate = "{count} mobile phones"
     params.type = 'MobilePhone'
 
     SampStoryObjectBase.init(o, params)

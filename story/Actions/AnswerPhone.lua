@@ -1,10 +1,11 @@
 AnswerPhone = class(StoryActionBase, function(o, params)
-    StoryActionBase.init(o, " answers the ", params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
+    params.description = " answers the "
+    StoryActionBase.init(o, params)
 end)
 
 function AnswerPhone:Apply()
     local story = GetStory(self.Performer)
-    table.insert(story.History, self)
+    table.insert(story.History[self.Performer:getData('id')], self)
     
     -- this might not be ok
     if not self.TargetItem then
@@ -22,7 +23,7 @@ function AnswerPhone:Apply()
                         self.TargetItem.PosOffset.x, self.TargetItem.PosOffset.y, self.TargetItem.PosOffset.z,
                         self.TargetItem.RotOffset.x, self.TargetItem.RotOffset.y, self.TargetItem.RotOffset.z)
 
-    story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. self.TargetItem.Description, self.Performer)
+    story.Logger:Log(self.Description .. self.TargetItem.Description, self)
     self.Performer:setAnimation("PED", "PHONE_IN", 2000, true, true, false, true)
 
     if DEBUG then

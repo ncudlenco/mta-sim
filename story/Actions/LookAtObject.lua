@@ -1,12 +1,13 @@
 LookAtObject = class(StoryActionBase, function(o, params)
-    StoryActionBase.init(o, " is looking at ", params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
+    params.description = " is looking at "
+    StoryActionBase.init(o,params)
 end)
 
 function LookAtObject:Apply()
     local story = GetStory(self.Performer)
-    table.insert(story.History, self)
+    table.insert(story.History[self.Performer:getData('id')], self)
     
-    story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. " the " .. self.TargetItem.Description, self.Performer)
+    story.Logger:Log(self.Description .. " the " .. self.TargetItem.Description, self)
     
     local playerEyesPosition = self.Performer.position + self.Performer.matrix.up * 1.2
     self.Performer:setCameraMatrix(playerEyesPosition, self.TargetItem.position)

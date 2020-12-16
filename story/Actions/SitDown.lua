@@ -7,7 +7,8 @@ SitDown = class(StoryActionBase, function(o, params)
     -- elseif type(params.nextLocation) ~= "table" then
     --     error("SitDown: nextLocation not given in the constructor")
     -- end
-    StoryActionBase.init(o, " sits down", params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
+    params.description = " sits down"
+    StoryActionBase.init(o,params)
     o.how = params.how or SitDown.eHow.atDesk
     o.rotation= params.rotation or nil
 end)
@@ -19,9 +20,9 @@ SitDown.eHow = {
 
 function SitDown:Apply()
     local story = GetStory(self.Performer)
-    table.insert(story.History, self)
+    table.insert(story.History[self.Performer:getData('id')], self)
     
-    story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. " on the " .. self.TargetItem.Description, self.Performer)
+    story.Logger:Log(self.Description .. " on the " .. self.TargetItem.Description, self)
     self.TargetItem.instance:setCollisionsEnabled(false)
 
     if not (self.rotation == nil) then

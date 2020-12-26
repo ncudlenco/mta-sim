@@ -9,8 +9,7 @@ function Punch:Apply()
     
     story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. self.TargetItem.Description, self.Performer)
 
-    math.randomseed(os.time())
-    time = math.random(8000, 15000)
+    time = random(8000, 19000)
 
     if self.how == Punch.eHow.Punch1 then
         block = "fight_b"

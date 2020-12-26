@@ -7,8 +7,7 @@ function Read:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
     
-    math.randomseed(os.time())
-    local time = math.random(3000, 12000)
+    local time = random(3000, 18000)
     story.Logger:Log(self.Description .. self.TargetItem.Description, self, false, true, {"finishes", "finishes drinking"})
     self.Performer:setAnimation("INT_OFFICE", "OFF_Sit_Read", time, true, true, false, true)
 

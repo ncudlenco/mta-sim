@@ -1,3 +1,5 @@
+PREV_RANDOM_NUMBER = -1
+
 --Busy waiting, not useful at all
 function sleep(n, ...)  -- n: max seconds to wait; args[0]: wake up condition func
     local wakeUp = false
@@ -38,4 +40,18 @@ function getWordPrefix(word)
     else 
         return "a"
     end
+end
+
+function random(a, b)
+    local random_number = PREV_RANDOM_NUMBER
+
+    while random_number == PREV_RANDOM_NUMBER do
+        math.randomseed(os.time())
+        math.random(a, b); math.random(a, b); math.random(a, b);
+        random_number = math.random(a, b)
+    end
+
+    PREV_RANDOM_NUMBER = random_number
+
+    return  random_number
 end

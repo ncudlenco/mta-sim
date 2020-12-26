@@ -9,8 +9,7 @@ function LayOnElbow:Apply()
     
     story.Logger:Log(self.Description  .. self.Performer:getData('genderGenitive') ..  " head on the elbow", self)
 
-    math.randomseed(os.time())
-    time = math.random(3000, 8000)
+    time = random(3000, 8000)
     self.Performer:setAnimation("INT_OFFICE", "OFF_Sit_Bored_Loop", time, true, true, false, true)
 
     if DEBUG then

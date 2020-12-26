@@ -10,8 +10,7 @@ function Eat:Apply()
     
     story.Logger:Log(self.Description, self, false, true, {"finishes", "finishes drinking"})
 
-    math.randomseed(os.time())
-    time = math.random(5000, 10000)
+    time = random(5000, 14000)
     
     if self.how == Eat.eHow.StandUp then
         setPedAnimation(self.Performer, "VENDING", "vend_eat1_P", time, true, true, false, true)

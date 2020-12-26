@@ -8,8 +8,7 @@ function DumbbellsWorkOut:Apply()
     
     story.Logger:Log(self.Performer:getData('skinDescription') .. self.Description .. self.TargetItem.Description, self.Performer)
     
-    math.randomseed(os.time())
-    local time = math.random(8000, 18000)
+    local time = random(8000, 18000)
     self.Performer:setAnimation("freeweights", "gym_free_a", time, true, false, false, true)
 
     if DEBUG then

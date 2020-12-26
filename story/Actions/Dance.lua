@@ -10,8 +10,7 @@ function Dance:Apply()
     story.Logger:Log(self.Description, self, false, true, {"finishes", "finishes dancing"})
     -- self.TargetItem.instance:setCollisionsEnabled(false)
 
-    math.randomseed(os.time())
-    time = math.random(4000, 10000)
+    time = random(4000, 15000)
 
     self.Performer:setAnimation("DANCING", "dance_loop", time, true, true, false, true)
 

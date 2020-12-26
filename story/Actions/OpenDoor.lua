@@ -35,7 +35,7 @@ function OpenDoor.destinationReached(player, matchingDimension)
     local lastAction = story.History[playerId][#story.History[playerId]]
 
 	if lastAction.path and DEBUG then
-		outputConsole("Player "..player.name.." reached marker "..source:getData("idx").." / "..#lastAction.path)
+		outputConsole("Player "..player:getData('name').." reached marker "..source:getData("idx").." / "..#lastAction.path)
 	end
 	if (lastAction.path and source:getData("idx") + 1 <= #lastAction.path) then
 		local idx = source:getData("idx") + 1

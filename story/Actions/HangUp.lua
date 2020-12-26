@@ -17,6 +17,7 @@ function HangUp:Apply()
     OnGlobalActionFinished(2000, self.Performer:getData('id'), self.Performer:getData('storyId'), function()
         detachElementFromBone(self.TargetItem.instance)
         self.TargetItem:Destroy()
+        self.TargetItem:Create()
     end)
 end
 

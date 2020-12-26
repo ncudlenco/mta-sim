@@ -16,8 +16,6 @@ House8 = class(StoryEpisodeBase, function(o)
 end)
 
 function House8:Initialize(...)
-    StoryEpisodeBase.Initialize(self, arg)
-
     local player = nil
     for i,v in ipairs(arg) do
         player = v
@@ -41,7 +39,6 @@ function House8:Initialize(...)
         noCollisions = true,
         interior =     self.InteriorId
     }
-    bedroomChair:Create()
     table.insert(self.Objects, bedroomChair)
 
     removeWorldModel(2333, 0.25, Vector3(2367.5703, -1122.1484, 1049.8672))
@@ -52,7 +49,6 @@ function House8:Initialize(...)
         noCollisions = true,
         interior =     self.InteriorId
     }
-    desk:Create()
     table.insert(self.Objects, desk)
     --Create a closed laptop on the table
     local laptop = Laptop{
@@ -62,7 +58,6 @@ function House8:Initialize(...)
         noCollisions = true,
         interior =     self.InteriorId
     }
-    laptop:Create()
     table.insert(self.Objects, laptop)
 
     local photos = Photos 
@@ -82,7 +77,6 @@ function House8:Initialize(...)
         interior =     self.InteriorId
     }
     removeWorldModel(Bed.eModel.LowBed, 0.25, bedroom1Bed.position)    
-    bedroom1Bed:Create()
     table.insert(self.Objects, bedroom1Bed)
     
     local bedroom2Bed = Bed{
@@ -93,7 +87,6 @@ function House8:Initialize(...)
         interior =     self.InteriorId
     }
     removeWorldModel(Bed.eModel.SwankBed7, 0.25, bedroom2Bed.position)    
-    bedroom2Bed:Create()
     table.insert(self.Objects, bedroom2Bed)
 
     local sofaRight = Sofa
@@ -105,7 +98,6 @@ function House8:Initialize(...)
         interior = self.InteriorId
     }
     removeWorldModel(Sofa.eModel.Couch02, 0.25, sofaRight.position)    
-    sofaRight:Create()
     table.insert(self.Objects, sofaRight)
 
     local sofaCenter = Sofa
@@ -117,7 +109,6 @@ function House8:Initialize(...)
         interior = self.InteriorId
     }
     removeWorldModel(Sofa.eModel.Couch02, 0.25, sofaCenter.position)    
-    sofaCenter:Create()
     table.insert(self.Objects, sofaCenter)
 
     local sofaLeft = Sofa
@@ -129,7 +120,6 @@ function House8:Initialize(...)
         interior = self.InteriorId
     }
     removeWorldModel(Sofa.eModel.Couch02, 0.25, sofaLeft.position)    
-    sofaLeft:Create()
     table.insert(self.Objects, sofaLeft)
     
     --define the points of interest, set them all as valid starting locations and define walk actions between all of them
@@ -142,7 +132,7 @@ function House8:Initialize(...)
     local bedroom2 = Location(2359.0698, -1134.0743, 1050.8750, 357.9942, self.InteriorId, " bedroom near the bed ")
     local hallwayToEntrance = Location(2365.3000, -1132.9200, 1050.8750, 180, self.InteriorId, " hallway to entrance door ")
 
-    local POI = {
+    self.POI = {
         bedroom1,
         atDesk,
         rightSofa,
@@ -213,44 +203,13 @@ function House8:Initialize(...)
     sleepAction2.NextAction = getOffBed2Action
     sleepAction2.ClosingAction = getOffBed2Action
 
-    for i,p1 in ipairs(POI) do
-        table.insert(self.POI, p1)
-        table.insert(self.ValidStartingLocations, p1)
-        for j, p2 in ipairs(POI) do
-            if i ~= j then
-                local prerequisites = {}
-                if #p1.PossibleActions > 0 then
-                    prerequisites = {p1.PossibleActions[1]}
-                end
-                table.insert(p1.PossibleActions, Move{performer = player, targetItem = p2, nextLocation = p2, prerequisites = prerequisites, graphId = self.graphId})
-            end
-        end
-    end
+    StoryEpisodeBase.Initialize(self, arg)
 
     if DEBUG then
         outputConsole("House8:Initialized")
     end
+
     return true
-end
-
-function House8:Play(...)
-    StoryEpisodeBase.ProcessRegions(self)
-    local player = nil
-    for i,v in ipairs(arg) do
-        player = v
-        break
-    end
-    if player == nil then
-        return false
-    end
-
-    if self.StartingLocation == nil then
-        self.StartingLocation = PickRandom(self.ValidStartingLocations)
-    end
-    self.StartingLocation:SpawnPlayerHere(player)
-    if DEBUG then
-        outputConsole("House8:Play - picked random location "..self.StartingLocation.Description.." Spawn scheduled")
-    end
 end
 
 function House8:Destroy()

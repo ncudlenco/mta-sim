@@ -18,6 +18,38 @@ end)
 
 function StoryEpisodeBase:Initialize(...)
     if not DEFINING_EPISODES then
+        local player = nil
+        for i,v in ipairs(arg) do
+            player = v
+            break
+        end
+        if player == nil then
+            return false
+        end
+
+        if self.graphId then
+            for i,p1 in ipairs(self.POI) do
+                table.insert(self.ValidStartingLocations, p1)
+                for j, p2 in ipairs(self.POI) do
+                    if i ~= j then
+                        local prerequisites = {}
+                        if #p1.PossibleActions > 0 then
+                            prerequisites = {p1.PossibleActions[1]}
+                        end
+                        table.insert(p1.PossibleActions, Move{performer = player, targetItem = p2, nextLocation = p2, prerequisites = prerequisites, graphId = self.graphId})
+                    end
+                end
+            end
+        end
+
+        for _,poi in ipairs(self.POI) do
+            if poi.allActions then
+                for _,a in ipairs(poi.allActions) do
+                    a.Performer = player
+                end
+            end
+        end
+
         self.regionsGroup = createElement("regions")
         for i,region in ipairs(self.Regions) do
             local coords = {region.center.x, region.center.y}
@@ -129,21 +161,45 @@ function StoryEpisodeBase:ProcessRegions()
 end
 
 function StoryEpisodeBase:Play(...)
+    StoryEpisodeBase.ProcessRegions(self)
+    local player = nil
+    for i,v in ipairs(arg) do
+        player = v
+        break
+    end
+    if player == nil then
+        return false
+    end
+
+    if self.StartingLocation == nil then
+        self.StartingLocation = PickRandom(Where(self.ValidStartingLocations, function(x)
+            return not x.isBusy
+        end))
+    end
+    self.StartingLocation:SpawnPlayerHere(player)
+    if DEBUG then
+        outputConsole(self.name..":Play - picked random location "..self.StartingLocation.Description.." Spawn scheduled")
+    end
 end
 
 function StoryEpisodeBase:Destroy()
-    for _, ped in ipairs(self.peds) do
-        CURRENT_STORY.Logger:FlushBuffer(ped, true)
-    end
-    CURRENT_STORY.Logger:FlushBuffer(CURRENT_STORY.Actor, true)
+   -- outputChatBox(self)
+   -- outputChatBox(CURRENT_STORY)
+    --for _, ped in ipairs(self.peds) do
+     --   outputChatBox(CURRENT_STORY)
+      --  CURRENT_STORY.Logger:FlushBuffer(ped, true)
+    --end
+   -- CURRENT_STORY.Logger:FlushBuffer(CURRENT_STORY.Actor, true)
 
     if self.regionsGroup then
         self.regionsGroup:destroy() --should also handle the events defined for this element
         self.regionsGroup = nil
     end
-    for i,p in ipairs(self.peds) do
-        p:destroy()
-    end
+
+    --for i,p in ipairs(self.peds) do
+      --  p:destroy()
+    --end
+
     self.Disposed = true
 end
 

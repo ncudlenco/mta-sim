@@ -9,8 +9,7 @@ function Drink:Apply()
     
     story.Logger:Log(self.Description, self, false, true, {"finishes", "finishes drinking"})
 
-    math.randomseed(os.time())
-    time = math.random(2000, 6000)
+    time = random(2000, 6000)
     setPedAnimation(self.Performer, "VENDING", "VEND_Drink2_P", time, true, true, false, true)
 
     if DEBUG then

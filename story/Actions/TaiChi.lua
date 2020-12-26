@@ -10,8 +10,7 @@ function TaiChi:Apply()
     story.Logger:Log(self.Description, self)
     self.Performer:setAnimation("PARK", "Tai_Chi_in", 3000, true, true, false, true)
 
-    math.randomseed(os.time())
-    time = math.random(8000, 15000)
+    time = random(8000, 15000)
 
     self.Performer:setAnimation("PARK", "Tai_Chi_Loop", time, true, true, false, true)
 

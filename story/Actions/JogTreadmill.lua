@@ -18,8 +18,7 @@ function JogTreadmill:Apply()
     
     story.Logger:Log(self.Description, self)
 
-    math.randomseed(os.time())
-    local time = math.random(8000, 18000)
+    local time = random(6000, 18000)
     self.Performer:setAnimation("GYMNASIUM", self.how, time, true, false, false, true)
 
     if DEBUG then

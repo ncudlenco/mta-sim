@@ -9,8 +9,7 @@ function TypeOnKeyboard:Apply()
     
     story.Logger:Log(self.Description .. " on the " .. self.TargetItem.Description, self)
 
-    math.randomseed(os.time())
-    time = math.random(4000, 12000)
+    time = random(4000, 12000)
     self.Performer:setAnimation("INT_OFFICE", "OFF_Sit_Type_Loop", time, true, true, false, true)
     if DEBUG then
         outputConsole("TypeOnKeyboard:Apply")

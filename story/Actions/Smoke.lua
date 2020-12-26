@@ -7,8 +7,7 @@ function Smoke:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
     
-    math.randomseed(os.time())
-    time = math.random(5000, 12000)
+    time = random(5000, 16000)
     story.Logger:Log(self.Description .. self.TargetItem.Description, self)
     self.Performer:setAnimation("SMOKING", "M_smk_drag", time, true, true, false, true)
 

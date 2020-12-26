@@ -10,8 +10,7 @@ function WashHands:Apply()
     story.Logger:Log(self.Description  .. self.Performer:getData('genderGenitive') .. " hands in the " .. self.TargetItem.Description, self)
     -- self.TargetItem.instance:setCollisionsEnabled(false)
 
-    math.randomseed(os.time())
-    time = math.random(2000, 5000)
+    time = random(2000, 8000)
     self.Performer:setAnimation("INT_HOUSE", "wash_up", time, true, true, false, true)
 
     if DEBUG then

@@ -12,8 +12,7 @@ function Sleep:Apply()
     -- self.TargetItem.instance:setCollisionsEnabled(false)
     self.Performer.rotation = self.Performer.rotation + Vector3(0,0,180)
 
-    math.randomseed(os.time())
-    local time = math.random(3, 8) * 1000
+    local time = random(3000, 18000)
     if self.how == Sleep.eHow.Left then
         self.Performer:setAnimation("INT_HOUSE", "BED_Loop_L", time, true, true, false, true)
     elseif self.how == Sleep.eHow.Right then

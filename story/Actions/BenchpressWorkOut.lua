@@ -6,9 +6,8 @@ end)
 function BenchpressWorkOut:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
-    
-    math.randomseed(os.time())
-    local time = math.random(8000, 18000)
+
+    local time = random(7000, 18000)
 
     local initialPosition = self.TargetItem.position
     local initialRotation = self.TargetItem.rotation

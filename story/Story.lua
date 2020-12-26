@@ -14,8 +14,8 @@ Story = class(StoryBase, function(o, actor, maxActions, logData)
       -- "house3",
       -- "house1_sweet",
       -- "house7"
-      "gym1"
-      -- "gym2",
+      -- "gym1"
+      "gym2",
       -- "gym3"
     }
     o.Disposed = false

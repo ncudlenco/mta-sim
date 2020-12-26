@@ -22,8 +22,7 @@ function PedalGymBike:Apply()
         
     story.Logger:Log(self.Description, self)
 
-    math.randomseed(os.time())
-    local time = math.random(8000, 15000)
+    local time = random(8000, 21000)
     self.Performer:setAnimation("GYMNASIUM", self.how, time, true, false, false, true)
 
     if DEBUG then

@@ -935,7 +935,7 @@
 				],
 				"allActions": [
 					{
-						"dynamicString": "return PickUp{where = \"floor\", targetObjectExists = false, hand = 11, how = 4}",
+						"dynamicString": "return PickUp{where = \"floor\", targetObjectExists = true, hand = 11, how = 4}",
 						"targetItem": {
 							"id": 7,
 							"type": "Object"
@@ -993,7 +993,7 @@
 				],
 				"allActions": [
 					{
-						"dynamicString": "return PickUp{where = \"floor\", targetObjectExists = false, hand = 11, how = 4}",
+						"dynamicString": "return PickUp{where = \"floor\", targetObjectExists = true, hand = 11, how = 4}",
 						"targetItem": {
 							"id": 8,
 							"type": "Object"

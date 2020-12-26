@@ -79,7 +79,6 @@ function GetOn:Apply()
     if DEBUG then
         outputConsole("GetOn:Apply")
     end
-
     OnGlobalActionFinished(time, self.Performer:getData('id'), self.Performer:getData('storyId'))
 end
 

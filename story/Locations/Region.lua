@@ -299,7 +299,7 @@ function Region:OnPlayerHit(player)
             local cameraPos = PickRandom(self.cameras)
             story.Actor:setCameraMatrix(cameraPos.x, cameraPos.y, cameraPos.z, cameraPos.lx, cameraPos.ly, cameraPos.lz, cameraPos.roll, cameraPos.fov)
         end
-        
+    
         --If the region is not explored then describe the objects in it
         --if there are some players that weren't introduced before, then describe them
         local actorsDescription = story.Logger:DescribeRegion(self.name, actorsInRegions[self.Id])

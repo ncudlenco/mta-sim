@@ -105,9 +105,8 @@ function House1:Initialize(...)
 
     
     self.POI = {livingRoomSofaLocation, livingRoomMusicPlayerLocation, kitchenChairLocation, kitchenTableLocation, livingRoomSmokeLocation, livingRoomEndLocation, livingRoomEntranceLocation}
-    self.ValidStartingLocations = {livingRoomSofaLocation, livingRoomMusicPlayerLocation, kitchenChairLocation, kitchenTableLocation, livingRoomSmokeLocation, livingRoomEndLocation, livingRoomEntranceLocation}
-    -- table.insert(self.ValidStartingLocations, livingRoomEntranceLocation)
-    -- self.POI = Shuffle(self.POI)
+    table.insert(self.ValidStartingLocations, livingRoomEntranceLocation)
+    self.POI = Shuffle(self.POI)
 
     if self.POI[1] == livingRoomEndLocation then
         local i = math.random(#self.POI - 1) + 1

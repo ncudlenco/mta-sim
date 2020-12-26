@@ -2,7 +2,7 @@ PickUp = class(StoryActionBase, function(o, params)
     params.description = " picks up "
     StoryActionBase.init(o,params)
     o.Where = params.where
-    o.TargetObjectExists = params.targetObjectExists
+    o.TargetObjectExists = params.targetObjectExists or true
     o.how = params.how or PickUp.eHow.Normal
     o.hand = params.hand or PickUp.eHand.Right
 end)
@@ -10,12 +10,16 @@ end)
 function PickUp:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
-    
-    if self.TargetObjectExists then
+
+    if not self.TargetObjectExists then
         self.TargetItem:Create()
     end
 
     pickedObjects = self.Performer:getData('pickedObjects')
+
+    if type(pickedObjects) == 'boolean' then
+        pickedObjects = {}
+    end
     
     sameDescription = false
     sameObject = false
@@ -74,7 +78,7 @@ function PickUp:GetDynamicString()
     if self.TargetObjectExists then
         TargetObjectExistsStr = 'true'
     end
-    return 'return PickUp{where = "'..self.Where..'", targetObjectExists = '.. TargetObjectExistsStr ..', hand = '..self.hand..', how = '..self.how..'}'
+    return 'return PickUp{where = "'..self.Where..'", targetObjectExists = '.. self.TargetObjectExistsStr ..', hand = '..self.hand..', how = '..self.how..'}'
 end
 
 PickUp.eHow = {

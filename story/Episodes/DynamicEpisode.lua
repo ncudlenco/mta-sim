@@ -79,5 +79,5 @@ function DynamicEpisode:Destroy()
     if DEBUG then
         outputConsole(self.name..":Destroyed")
     end
-    StoryEpisodeBase.Destroy(self)
+    StoryEpisodeBase:Destroy()
 end

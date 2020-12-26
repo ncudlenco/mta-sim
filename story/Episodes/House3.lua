@@ -17,8 +17,6 @@ House3 = class(StoryEpisodeBase, function(o)
 end)
 
 function House3:Initialize(...)
-    StoryEpisodeBase.Initialize(self, arg)
-
     local player = nil
     for i,v in ipairs(arg) do
         player = v
@@ -39,7 +37,6 @@ function House3:Initialize(...)
         noCollisions = true,
         interior =     self.InteriorId
     }
-    kitchenChair2:Create()
     table.insert(self.Objects, kitchenChair2)
 
     local livingroomRemote = Remote {
@@ -49,7 +46,6 @@ function House3:Initialize(...)
         noCollisions = true,
         interior =     self.InteriorId
     }
-    livingroomRemote:Create()
     table.insert(self.Objects, livingroomRemote)
 
     local livingroomSofa = Furniture {
@@ -61,7 +57,6 @@ function House3:Initialize(...)
     }
 
     removeWorldModel(Furniture.eModel.House3LivingRoom1, 10.25, livingroomSofa.position)    
-    livingroomSofa:Create()
     table.insert(self.Objects, livingroomSofa)
 
     local kitchenSink = Furniture {
@@ -73,7 +68,6 @@ function House3:Initialize(...)
     }
 
     removeWorldModel(Furniture.eModel.House3Kitchen1, 10.25, kitchenSink.position)    
-    kitchenSink:Create()
     table.insert(self.Objects, kitchenSink)
 
     local livingroomSofa1 = Sofa {
@@ -84,8 +78,8 @@ function House3:Initialize(...)
         interior = self.InteriorId
     }
 
-    removeWorldModel(14477, 10.25, livingroomSofa1.position)    
-    livingroomSofa1:Create()
+    removeWorldModel(14477, 10.25, livingroomSofa1.position)
+    table.insert(self.Objects, livingroomSofa1)    
 
     local bedroomBed = Bed{
         modelid =      Bed.eModel.Unknown3,
@@ -95,7 +89,6 @@ function House3:Initialize(...)
         interior =     self.InteriorId
     }
     removeWorldModel(Bed.eModel.Unknown3, 5.25, bedroomBed.position)
-    bedroomBed:Create()
     table.insert(self.Objects, bedroomBed)
 
     -- get food from the fridge
@@ -106,7 +99,6 @@ function House3:Initialize(...)
         rotation =     Vector3(0, 0, 0),
         interior = self.InteriorId
     }
-    food:Create()
     table.insert(self.Objects, food)
 
     local plate = Plate {
@@ -116,7 +108,6 @@ function House3:Initialize(...)
         rotation =     Vector3(0, 0, 0),
         interior = self.InteriorId
     }
-    plate:Create()
     table.insert(self.Objects, plate)
 
     local drink = Drinks {
@@ -126,8 +117,6 @@ function House3:Initialize(...)
         noCollisions = true,
         interior = self.InteriorId
     }
-
-    drink:Create()
     table.insert(self.Objects, drink)
 
     if DEBUG then
@@ -140,20 +129,8 @@ function House3:Initialize(...)
     local livingroomSofaLocation = Location(2492.5772, -1699.004663085938, 1014.7422, 0, self.InteriorId, "living room")
     local livingroomTableLocation = Location(2494.0677734375, -1702.523217773438, 1014.7422, 90, self.InteriorId, "living room")
     local bedroomBedLocation = Location(2495.2177734375, -1703.923217773438, 1018.34375, 0, self.InteriorId, "bedroom")
-    local livingRoomEndLocation = Location(2496.0610, -1694.2596, 1014.7422, 0, self.InteriorId, "living room exit")
 
-    table.insert(self.ValidStartingLocations, livingRoomEntranceLocation)
-
-    self.POI = {livingroomSofaLocation, livingroomTableLocation, kitchenSinkLocation, bedroomBedLocation, livingRoomEndLocation}
-    -- self.POI = Shuffle(self.POI)
-
-    if self.POI[1] == livingRoomEndLocation then
-        local i = math.random(#self.POI - 1) + 1
-        self.POI[1], self.POI[i] = self.POI[i], self.POI[1]
-    end
-
-    -- Go to the sink in the kitchen
-    table.insert(livingRoomEntranceLocation.PossibleActions, Move { performer = player, nextLocation = self.POI[1], targetItem = self.POI[1], graphId = self.graphId })
+    self.POI = {kitchenSinkLocation, kitchenTableLocation, livingroomSofaLocation, livingroomTableLocation, bedroomBedLocation, livingRoomEntranceLocation}
 
     -- Wash Hands at the sink
     local washHandsAction = WashHands { performer = player, nextLocation = kitchenSinkLocation, targetItem = kitchenSink, graphId = self.graphId }
@@ -166,9 +143,7 @@ function House3:Initialize(...)
     table.insert(kitchenTableLocation.PossibleActions, pickUpFoodAction)
     local eatFoodAction = Eat {performer = player, nextLocation = kitchenTableLocation, targetItem = food, graphId = self.graphId}
     pickUpFoodAction.NextAction = eatFoodAction
-    local moveToPOI2Action = Move {performer = player, nextLocation = self.POI[2], targetItem = self.POI[2], graphId = self.graphId}
-    eatFoodAction.NextAction = moveToPOI2Action
-    pickUpFoodAction.ClosingAction = moveToPOI2Action
+    pickUpFoodAction.ClosingAction = eatFoodAction
 
     -- sit on the sofa
     local pickUpLivingroomRemoteAction = PickUp {performer = player, nextLocation = livingroomSofaLocation, targetItem = livingroomRemote, where = "the table", targetObjectExists = true, how = PickUp.eHow.Down, graphId = self.graphId}
@@ -180,10 +155,7 @@ function House3:Initialize(...)
     local putDownLivingroomAction = PutDown {performer = player, nextLocation = livingroomSofaLocation, targetItem = livingroomRemote, where = "the table", targetObjectPosition = Vector3(2492.8154, -1698.0571, 1014.3103),
                                              targetObjectRotation = Vector3(0, 0, 0), how = PutDown.eHow.Down, graphId = self.graphId}
     standUpLivingroomAction.NextAction = putDownLivingroomAction
-
-    local moveToPOI3Action = Move { performer = player, nextLocation = self.POI[3], targetItem = self.POI[3], graphId = self.graphId}
-    putDownLivingroomAction.NextAction = moveToPOI3Action
-    pickUpLivingroomRemoteAction.ClosingAction = moveToPOI3Action
+    pickUpLivingroomRemoteAction.ClosingAction = putDownLivingroomAction
 
     -- drink at table
     local pickUpDrinkAction = PickUp {performer = player, nextLocation = livingroomTableLocation, targetItem = drink, where = "the table", targetObjectExists = true, how = PickUp.eHow.Normal, hand = PickUp.eHand.Left, graphId = self.graphId}
@@ -193,10 +165,7 @@ function House3:Initialize(...)
     local putDownDrinkAction = PutDown {performer = player, nextLocation = livingroomTableLocation, targetItem = drink, where = "the table", targetObjectPosition = Vector3(2493.5433, -1702.5198, 1014.5922),
                                         targetObjectRotation = Vector3(0, 0, 0), graphId = self.graphId}
     drinkAction.NextAction = putDownDrinkAction
-
-    local moveToPOI4Action = Move { performer = player, nextLocation = self.POI[4], targetItem = self.POI[4], graphId = self.graphId}
-    putDownDrinkAction.NextAction = moveToPOI4Action
-    pickUpDrinkAction.ClosingAction = moveToPOI4Action
+    pickUpDrinkAction.ClosingAction = putDownDrinkAction
 
     -- get in bed
     local getInBedAction = GetOn{performer = player, targetItem = bedroomBed, nextLocation = bedroomBedLocation, how = GetOn.eHow.Bed, side = GetOn.eSide.Right, graphId = self.graphId}
@@ -205,35 +174,14 @@ function House3:Initialize(...)
     getInBedAction.NextAction = sleepAction
     local getOffBedAction = GetOff{performer = player, targetItem = bedroomBed, nextLocation = bedroomBedLocation,  how = GetOff.eHow.Bed, side = GetOff.eSide.Right, graphId = self.graphId}
     sleepAction.NextAction = getOffBedAction
-    local moveToPOI5Action = Move { performer = player, nextLocation = self.POI[5], targetItem = self.POI[5], graphId = self.graphId}
-    getOffBedAction.NextAction = moveToPOI5Action
-    getInBedAction.ClosingAction = moveToPOI5Action
+    getInBedAction.ClosingAction = getOffBedAction
 
-    table.insert(livingRoomEndLocation.PossibleActions, EndStory())
+    StoryEpisodeBase.Initialize(self, arg)
 
     if DEBUG then
         outputConsole("House3:Initialized")
     end
     return true
-end
-
-function House3:Play(...)
-    StoryEpisodeBase.ProcessRegions(self)
-    local player = nil
-    for i,v in ipairs(arg) do
-        player = v
-        break
-    end
-    if player == nil then
-        return false
-    end
-    if self.StartingLocation == nil then
-        self.StartingLocation = PickRandom(self.ValidStartingLocations)
-    end
-    self.StartingLocation:SpawnPlayerHere(player)
-    if DEBUG then
-        outputConsole("House3:Play - picked random location "..self.StartingLocation.Description.." Spawn scheduled")
-    end
 end
     
 function House3:Destroy()

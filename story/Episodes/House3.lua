@@ -123,21 +123,17 @@ function House3:Initialize(...)
         outputConsole("House3: Objects initialized")
     end
 
-    local livingRoomEntranceLocation = Location(2496.212, -1694.371459, 1014.7422, 181.8800, self.InteriorId, "entrance")
     local kitchenSinkLocation = Location(2500.235859375, -1709.40225585938, 1014.7422, 270.000, self.InteriorId, "kitchen")
     local kitchenTableLocation = Location(2494.2033, -1708.3198, 1014.7422, 90, self.InteriorId, "kitchen")
     local livingroomSofaLocation = Location(2492.5772, -1699.004663085938, 1014.7422, 0, self.InteriorId, "living room")
     local livingroomTableLocation = Location(2494.0677734375, -1702.523217773438, 1014.7422, 90, self.InteriorId, "living room")
     local bedroomBedLocation = Location(2495.2177734375, -1703.923217773438, 1018.34375, 0, self.InteriorId, "bedroom")
 
-    self.POI = {kitchenSinkLocation, kitchenTableLocation, livingroomSofaLocation, livingroomTableLocation, bedroomBedLocation, livingRoomEntranceLocation}
+    self.POI = {kitchenSinkLocation, kitchenTableLocation, livingroomSofaLocation, livingroomTableLocation, bedroomBedLocation}
 
     -- Wash Hands at the sink
     local washHandsAction = WashHands { performer = player, nextLocation = kitchenSinkLocation, targetItem = kitchenSink, graphId = self.graphId }
     table.insert(kitchenSinkLocation.PossibleActions, washHandsAction)
-    local moveToTableAction = Move {performer = player, nextLocation = kitchenTableLocation, targetItem = kitchenTableLocation, graphId = self.graphId}
-    washHandsAction.NextAction = moveToTableAction
-    washHandsAction.ClosingAction = moveToTableAction
 
     local pickUpFoodAction = PickUp {performer = player, nextLocation = kitchenTableLocation, targetItem = food, where = "the table", targetObjectExists = true, how = PickUp.eHow.Normal, hand = PickUp.eHand.Left, graphId = self.graphId}
     table.insert(kitchenTableLocation.PossibleActions, pickUpFoodAction)

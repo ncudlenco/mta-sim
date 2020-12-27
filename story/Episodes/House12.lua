@@ -144,18 +144,18 @@ function House12:Initialize(...)
     local kitchenTableLocation2 = Location(2331.906640625, -1142.846923828125, 1050.875, 90, self.InteriorId, "table again")
     local kitchenTableLocation1Back = Location(2331.906640625, -1140.846923828125, 1050.875, 90, self.InteriorId, "table again")
 
-    local bedroom1EntranceLocation = Location(2334.14599609375, -1138.757934570313, 1054.3046875, 270, self.InteriorId, "bedroom")
-    local bedroom1EntranceLocation2 = Location(2332.56298828125, -1138.757934570313, 1054.3046875, 90, self.InteriorId, "bedroom")
-    local bedroom1ExitLocation = Location(2335.93798828125, -1138.809692382813, 1054.3046875, 90, self.InteriorId, "bedroom")
+    -- local bedroom1EntranceLocation = Location(2334.14599609375, -1138.757934570313, 1054.3046875, 270, self.InteriorId, "bedroom")
+    -- local bedroom1EntranceLocation2 = Location(2332.56298828125, -1138.757934570313, 1054.3046875, 90, self.InteriorId, "bedroom")
+    -- local bedroom1ExitLocation = Location(2335.93798828125, -1138.809692382813, 1054.3046875, 90, self.InteriorId, "bedroom")
     local bedroom1BedLocation = Location(2336.332763671875, -1136.330444335938, 1054.3046875, 270, self.InteriorId, "bed")
 
-    local bedroom2EntranceLocation = Location(2314.76806640625, -1138.866088867188, 1054.3046875, 90, self.InteriorId, "bedroom")
-    local bedroom2EntranceLocation2 = Location(2315.981689453125, -1139.005859375, 1054.3046875, 270, self.InteriorId, "bedroom")
-    local bedroom2ExitLocation = Location(2312.735107421875, -1138.976074218755, 1054.3046875, 270, self.InteriorId, "bedroom")
+    -- local bedroom2EntranceLocation = Location(2314.76806640625, -1138.866088867188, 1054.3046875, 90, self.InteriorId, "bedroom")
+    -- local bedroom2EntranceLocation2 = Location(2315.981689453125, -1139.005859375, 1054.3046875, 270, self.InteriorId, "bedroom")
+    -- local bedroom2ExitLocation = Location(2312.735107421875, -1138.976074218755, 1054.3046875, 270, self.InteriorId, "bedroom")
     local bedroom2BedLocation = Location(2310.430419921875, -1141.222900390625, 1054.3046875, 90, self.InteriorId, "bed")
 
     
-    self.POI = {livingRoomSofa1Location, livingRoomSofa2Location, livingRoomChairLocation, kitchenTableLocation1, bedroom1EntranceLocation, bedroom2EntranceLocation, livingRoomEntranceLocation}  
+    self.POI = {livingRoomSofa1Location, livingRoomSofa2Location, livingRoomChairLocation, kitchenTableLocation1, bedroom1BedLocation, bedroom2BedLocation, livingRoomEntranceLocation}  
     -- sit on sofa1
     local sitOnSofa1Action = SitDown {how = SitDown.eHow.onSofa, performer = player, nextLocation = livingRoomSofa1Location, targetItem = livingroomSofa1, rotation = Vector3(0,0,90), graphId = self.graphId}
     table.insert(livingRoomSofa1Location.PossibleActions, sitOnSofa1Action)
@@ -226,8 +226,8 @@ function House12:Initialize(...)
     pickUpDrinkAction2.ClosingAction = putDownDrinkAction2
 
     -- bedroom 1 actions
-    local opendoorBedRoom1Location = OpenDoor { performer = player, nextLocation = bedroom1BedLocation, targetItem = bedroom1BedLocation, how = OpenDoor.eHow.Enter, graphId = self.graphId }
-    table.insert(bedroom1EntranceLocation.PossibleActions, opendoorBedRoom1Location)
+    -- local opendoorBedRoom1Location = OpenDoor { performer = player, nextLocation = bedroom1BedLocation, targetItem = bedroom1BedLocation, how = OpenDoor.eHow.Enter, graphId = self.graphId }
+    -- table.insert(bedroom1EntranceLocation.PossibleActions, opendoorBedRoom1Location)
 
     local getInBed1Action = GetOn{performer = player, targetItem = bedroom1Bed, nextLocation = bedroom1BedLocation, how = GetOn.eHow.Bed, side = GetOn.eSide.Left, graphId = self.graphId}
     table.insert(bedroom1BedLocation.PossibleActions, getInBed1Action)
@@ -235,16 +235,16 @@ function House12:Initialize(...)
     getInBed1Action.NextAction = slee1pAction
     local getOffBed1Action = GetOff{performer = player, targetItem = bedroom1Bed, nextLocation = bedroom1BedLocation,  how = GetOff.eHow.Bed, side = GetOff.eSide.Left, graphId = self.graphId}
     slee1pAction.NextAction = getOffBed1Action
-    local moveToBedroom1ExitAction = Move { performer = player, nextLocation = bedroom1ExitLocation, targetItem = bedroom1ExitLocation, graphId = self.graphId}
-    getOffBed1Action.NextAction = moveToBedroom1ExitAction
-    getInBed1Action.ClosingAction = moveToBedroom1ExitAction
+    getInBed1Action.ClosingAction = getOffBed1Action
+    -- local moveToBedroom1ExitAction = Move { performer = player, nextLocation = bedroom1ExitLocation, targetItem = bedroom1ExitLocation, graphId = self.graphId}
+    -- getOffBed1Action.NextAction = moveToBedroom1ExitAction
 
-    local openBedroom1DoorAction2 = OpenDoor {performer = player, nextLocation = bedroom1EntranceLocation2, targetItem = bedroom1EntranceLocation2, how = OpenDoor.eHow.Exit, graphId = self.graphId}
-    table.insert(bedroom1ExitLocation.PossibleActions, openBedroom1DoorAction2)
+    -- local openBedroom1DoorAction2 = OpenDoor {performer = player, nextLocation = bedroom1EntranceLocation2, targetItem = bedroom1EntranceLocation2, how = OpenDoor.eHow.Exit, graphId = self.graphId}
+    -- table.insert(bedroom1ExitLocation.PossibleActions, openBedroom1DoorAction2)
 
     -- bedroom 2 actions
-    local opendoorBedRoom2Location = OpenDoor { performer = player, nextLocation = bedroom2BedLocation, targetItem = bedroom2BedLocation, how = OpenDoor.eHow.Enter, graphId = self.graphId }
-    table.insert(bedroom2EntranceLocation.PossibleActions, opendoorBedRoom2Location)
+    -- local opendoorBedRoom2Location = OpenDoor { performer = player, nextLocation = bedroom2BedLocation, targetItem = bedroom2BedLocation, how = OpenDoor.eHow.Enter, graphId = self.graphId }
+    -- table.insert(bedroom2EntranceLocation.PossibleActions, opendoorBedRoom2Location)
 
     local getInBed2Action =  GetOn{performer = player, targetItem = bedroom2Bed, nextLocation = bedroom2BedLocation, how = GetOn.eHow.Bed, side = GetOn.eSide.Left, graphId = self.graphId}
     table.insert(bedroom2BedLocation.PossibleActions, getInBed2Action)
@@ -254,8 +254,8 @@ function House12:Initialize(...)
     slee2pAction.NextAction = getOffBed2Action
     getInBed2Action.ClosingAction = getOffBed2Action
 
-    local openBedroom2DoorAction2 = OpenDoor {performer = player, nextLocation = bedroom2EntranceLocation2, targetItem = bedroom2EntranceLocation2, how = OpenDoor.eHow.Exit, graphId = self.graphId}
-    table.insert(bedroom2ExitLocation.PossibleActions, openBedroom2DoorAction2)
+    -- local openBedroom2DoorAction2 = OpenDoor {performer = player, nextLocation = bedroom2EntranceLocation2, targetItem = bedroom2EntranceLocation2, how = OpenDoor.eHow.Exit, graphId = self.graphId}
+    -- table.insert(bedroom2ExitLocation.PossibleActions, openBedroom2DoorAction2)
 
     StoryEpisodeBase.Initialize(self, arg)
 

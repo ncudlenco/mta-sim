@@ -12,7 +12,6 @@ Painting.eModel =
     Painting02 = 2265,
     Painting03 = 2276,
     Painting04 = 2282,
-    Painting05 = 2277,
     Painting06 = 2274,
     Painting07 = 2280,
     Painting09 = 2275,

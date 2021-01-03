@@ -33,6 +33,8 @@ function PickUp:Apply()
             sameDescription = true
         end
     end
+
+    outputChatBox("HEREEEEE")
     
     if sameObject then
         story.Logger:Log(self.Description .. "the same ".. self.TargetItem.Description .. " from " .. self.Where, self)
@@ -65,20 +67,12 @@ function PickUp:Apply()
                         self.TargetItem.RotOffset.x, self.TargetItem.RotOffset.y, self.TargetItem.RotOffset.z)
     end)
 
-    if DEBUG then
-        outputChatBox("PickUp:Apply - Applied animation")
-    end
-
     table.insert(pickedObjects, {self.TargetItem.ObjectId, self.TargetItem.Description})
     self.Performer:setData('pickedObjects', pickedObjects)
 end
 
 function PickUp:GetDynamicString()
-    local TargetObjectExistsStr = 'false'
-    if self.TargetObjectExists then
-        TargetObjectExistsStr = 'true'
-    end
-    return 'return PickUp{where = "'..self.Where..'", targetObjectExists = '.. self.TargetObjectExistsStr ..', hand = '..self.hand..', how = '..self.how..'}'
+    return 'return PickUp{where = "'..self.Where..'", targetObjectExists = '.. tostring(self.TargetObjectExists) ..', hand = '..self.hand..', how = '..self.how..'}'
 end
 
 PickUp.eHow = {

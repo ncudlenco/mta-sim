@@ -3,8 +3,8 @@ SampStoryObjectBase = class(StoryObjectBase, function(o, params)
     StoryObjectBase.init(o, params.description)
     o.type = params.type or 'SampStoryObjectBase'
     o.modelid = params.modelid
-    o.position = params.position
-    o.rotation = params.rotation
+    o.position = Vector3(params.position)
+    o.rotation = Vector3(params.rotation)
     o.noCollisions = params.noCollisions or false
     o.interior = params.interior or 0
     o.instance = nil
@@ -12,6 +12,7 @@ SampStoryObjectBase = class(StoryObjectBase, function(o, params)
     o.scale = params.scale or 1
     o.PosOffset = params.posOffset or params.PosOffset or Vector3(0,0,0)
     o.RotOffset = params.rotOffset or params.RotOffset or Vector3(0,0,0)
+    
     if not params.pluralTemplate and params.description and params.description ~= '' then
         o:SetSimplePluralTemplate()
     else
@@ -21,12 +22,14 @@ SampStoryObjectBase = class(StoryObjectBase, function(o, params)
     if o.noCollisions then
         noCollisionStr = 'true'
     end
+
     o.dynamicString = 'return '..o.type..'{description="'..params.description..'", noCollisions='..noCollisionStr..', modelid='..(params.modelid or o.type..'.eModel[PickRandom('..o.type..'.eModel)]')..', interior='..params.interior..', position=Vector3('..params.position.x..','..params.position.y..','..params.position.z..'), rotation=Vector3('..params.rotation.x..','..params.rotation.y..','..params.rotation.z..'), posOffset=Vector3('..o.PosOffset.x..','..o.PosOffset.y..','..o.PosOffset.z..'), rotOffset=Vector3('..o.RotOffset.x..','..o.RotOffset.y..','..o.RotOffset.z..')}'
-    if o.modelid == nil or o.modelid < 0 then
+    if o.modelid == nil or o.modelid < 0 or params.isRandomModelId then
         o.isRandomModelId = true
         o.modelid = loadstring('return '..o.type..'.eModel[PickRandom('..o.type..'.eModel)]')()
+    else
+        o.isRandomModelId = false
     end
-    o.isRandomModelId = false
 end)
 
 function SampStoryObjectBase:SetSimplePluralTemplate()

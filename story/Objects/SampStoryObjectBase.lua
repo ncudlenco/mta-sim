@@ -23,13 +23,17 @@ SampStoryObjectBase = class(StoryObjectBase, function(o, params)
         noCollisionStr = 'true'
     end
 
-    o.dynamicString = 'return '..o.type..'{description="'..params.description..'", noCollisions='..noCollisionStr..', modelid='..(params.modelid or o.type..'.eModel[PickRandom('..o.type..'.eModel)]')..', interior='..params.interior..', position=Vector3('..params.position.x..','..params.position.y..','..params.position.z..'), rotation=Vector3('..params.rotation.x..','..params.rotation.y..','..params.rotation.z..'), posOffset=Vector3('..o.PosOffset.x..','..o.PosOffset.y..','..o.PosOffset.z..'), rotOffset=Vector3('..o.RotOffset.x..','..o.RotOffset.y..','..o.RotOffset.z..')}'
-    if o.modelid == nil or o.modelid < 0 or params.isRandomModelId then
+    o.isRandomModelId = params.isRandomModelId or false
+
+    if o.modelid == nil or o.modelid < 0 then
         o.isRandomModelId = true
-        o.modelid = loadstring('return '..o.type..'.eModel[PickRandom('..o.type..'.eModel)]')()
-    else
-        o.isRandomModelId = false
     end
+
+    if o.isRandomModelId then
+        o.modelid = loadstring('return '..o.type..'.eModel[PickRandom('..o.type..'.eModel)]')()
+    end
+
+    o.dynamicString = 'return '..o.type..'{description="'..params.description..'", noCollisions='..noCollisionStr..', modelid='..(params.modelid or o.type..'.eModel[PickRandom('..o.type..'.eModel)]')..', isRandomModelId='..tostring(o.isRandomModelId)..', interior='..params.interior..', position=Vector3('..params.position.x..','..params.position.y..','..params.position.z..'), rotation=Vector3('..params.rotation.x..','..params.rotation.y..','..params.rotation.z..'), posOffset=Vector3('..o.PosOffset.x..','..o.PosOffset.y..','..o.PosOffset.z..'), rotOffset=Vector3('..o.RotOffset.x..','..o.RotOffset.y..','..o.RotOffset.z..')}'
 end)
 
 function SampStoryObjectBase:SetSimplePluralTemplate()
@@ -55,6 +59,7 @@ function SampStoryObjectBase:__tostring()
         "\tDescription = ".. self.Description ..
         "\t type = ".. self.type ..
         "\t modelid = ".. self.modelid ..
+        "\t isRandomModelId=".. tostring(self.isRandomModelId)..
         "\t position = ".. Vector3.__tostring(self.position) ..
         "\t rotation = ".. Vector3.__tostring(self.rotation) ..
         "\t noCollisions = ".. noCollisionsStr ..
@@ -98,7 +103,7 @@ function SampStoryObjectBase:UpdateData(unpack)
     if self.isRandomModelId then
         modelid = self.type..'.eModel[PickRandom('..self.type..'.eModel)]'
     end
-    self.dynamicString = 'return '..self.type..'{description="'..self.Description..'", noCollisions='..noCollisionStr..', modelid='..(modelid or 'nil')..', interior='..self.interior..', position=Vector3('..self.position.x..','..self.position.y..','..self.position.z..'), rotation=Vector3('..self.rotation.x..','..self.rotation.y..','..self.rotation.z..'), posOffset=Vector3('..self.PosOffset.x..','..self.PosOffset.y..','..self.PosOffset.z..'), rotOffset=Vector3('..self.RotOffset.x..','..self.RotOffset.y..','..self.RotOffset.z..')}'
+    self.dynamicString = 'return '..self.type..'{description="'..self.Description..'", noCollisions='..noCollisionStr..', modelid='..(modelid or 'nil')..', isRandomModelId='.. tostring(self.isRandomModelId) .. ', interior='..self.interior..', position=Vector3('..self.position.x..','..self.position.y..','..self.position.z..'), rotation=Vector3('..self.rotation.x..','..self.rotation.y..','..self.rotation.z..'), posOffset=Vector3('..self.PosOffset.x..','..self.PosOffset.y..','..self.PosOffset.z..'), rotOffset=Vector3('..self.RotOffset.x..','..self.RotOffset.y..','..self.RotOffset.z..')}'
 end
 
 SampStoryObjectBase.eModel = {None = -1}

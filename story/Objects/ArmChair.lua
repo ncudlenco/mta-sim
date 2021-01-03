@@ -7,5 +7,11 @@ end
 )
 
 ArmChair.eModel = {
-    Couch01 = 1755,
+    ArmChair01 = 1755,
+    ArmChair02 = 1767,
+    ArmChair03 = 1758,
+    ArmChair04 = 1759,
+    ArmChair05 = 1765,
+    ArmChair06 = 1769,
+    ArmChair07 = 2291,
 }

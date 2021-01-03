@@ -230,8 +230,8 @@ function StoryEpisodeBase:LoadFromFile()
         if episode.Objects then
             for k,v in ipairs(episode.Objects) do
                 local obj = SampStoryObjectBase(v)
-                -- I dont understand why we firstly load it statically and then from dynamic string.
-                -- obj = loadstring(obj.dynamicString)()
+                obj = loadstring(obj.dynamicString)()
+
                 table.insert(objects, obj)
             end
         end

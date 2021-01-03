@@ -33,7 +33,7 @@ SampStoryObjectBase = class(StoryObjectBase, function(o, params)
         o.modelid = loadstring('return '..o.type..'.eModel[PickRandom('..o.type..'.eModel)]')()
     end
 
-    o.dynamicString = 'return '..o.type..'{description="'..params.description..'", noCollisions='..noCollisionStr..', modelid='..(params.modelid or o.type..'.eModel[PickRandom('..o.type..'.eModel)]')..', isRandomModelId='..tostring(o.isRandomModelId)..', interior='..params.interior..', position=Vector3('..params.position.x..','..params.position.y..','..params.position.z..'), rotation=Vector3('..params.rotation.x..','..params.rotation.y..','..params.rotation.z..'), posOffset=Vector3('..o.PosOffset.x..','..o.PosOffset.y..','..o.PosOffset.z..'), rotOffset=Vector3('..o.RotOffset.x..','..o.RotOffset.y..','..o.RotOffset.z..')}'
+    o.dynamicString = 'return '..o.type..'{description="'..params.description..'", noCollisions='..noCollisionStr..', modelid='..o.modelid..', isRandomModelId='..tostring(o.isRandomModelId)..', interior='..params.interior..', position=Vector3('..params.position.x..','..params.position.y..','..params.position.z..'), rotation=Vector3('..params.rotation.x..','..params.rotation.y..','..params.rotation.z..'), posOffset=Vector3('..o.PosOffset.x..','..o.PosOffset.y..','..o.PosOffset.z..'), rotOffset=Vector3('..o.RotOffset.x..','..o.RotOffset.y..','..o.RotOffset.z..')}'
 end)
 
 function SampStoryObjectBase:SetSimplePluralTemplate()
@@ -111,6 +111,7 @@ SampStoryObjectBase.eModel = {None = -1}
 function SampStoryObjectBase:Create(...)
     self.instance = Object(self.modelid, self.position, self.rotation, self.noCollisions)
     self.instance:setInterior(self.interior)
+
     setObjectScale(self.instance, self.scale)
 end
 
@@ -128,5 +129,11 @@ function SampStoryObjectBase:ChangeModel(newModelid)
     end
     if self.updateDescription then
         self:updateDescription()
+    end
+end
+
+function SampStoryObjectBase:Destroy()
+    if self.instance ~= nil then
+        self.instance:destroy()
     end
 end

@@ -106,7 +106,6 @@ function Location:Serialize(episode, relativePosition, _objects, _locations, _ma
                 end
             end
         end
-        
         if a.TargetItem and a.TargetItem.position and relativePosition then
             if targetItemType == 'Object' then
                 local objectCopy = SampStoryObjectBase(a.TargetItem)

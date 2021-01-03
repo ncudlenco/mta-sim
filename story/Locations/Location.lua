@@ -74,6 +74,7 @@ function Location:Serialize(episode, relativePosition, _objects, _locations, _ma
             closingAction = closingAction,
             isClosingAction = a.IsClosingAction
         }
+
         table.insert(serializedAllActions, serializedAction)
         local function processLocationDependency(location)
             local locationCopy = {id = location.id or LastIndexOf(episode.POI, location)}
@@ -105,6 +106,7 @@ function Location:Serialize(episode, relativePosition, _objects, _locations, _ma
                 end
             end
         end
+        
         if a.TargetItem and a.TargetItem.position and relativePosition then
             if targetItemType == 'Object' then
                 local objectCopy = SampStoryObjectBase(a.TargetItem)
@@ -127,6 +129,7 @@ function Location:Serialize(episode, relativePosition, _objects, _locations, _ma
             processLocationDependency(a.NextLocation)
         end
     end
+
     local serializedPossibleActions = {}
     for _, a in ipairs(self.PossibleActions) do
         table.insert(serializedPossibleActions, {id = a.id})

@@ -2,7 +2,7 @@
 	{
 		"objects": [
 			{
-				"dynamicString": "return Drinks{description=\"\", noCollisions=false, modelid=1666, interior=1, position=Vector3(-0.25390625,0.4588623046875,0.0186767578125), rotation=Vector3(0,0,0), posOffset=Vector3(-0.029999999329448,0.029999999329448,0.079999998211861), rotOffset=Vector3(0,90,0)}",
+				"dynamicString": "return Drinks{description=\"\", noCollisions=true, modelid=1517, isRandomModelId=true, interior=1, position=Vector3(-0.25390625,0.4588623046875,0.0186767578125), rotation=Vector3(0,0,0), posOffset=Vector3(-0.029999999329448,0.029999999329448,0.079999998211861), rotOffset=Vector3(0,90,0)}",
 				"id": 4
 			}
 		],

@@ -29,8 +29,6 @@ function SitDown:Apply()
         self.Performer.rotation = self.rotation
     end
 
-    print("HEREEEEEEEEE")
-
     local animationLib = "INT_OFFICE"
     local animationId = "OFF_Sit_In"
     local duration = 5000

@@ -7,8 +7,6 @@ end
 
 Bed.eModel = 
 {
-    Unknown1 = 2603,
-    Unknown2 = 1771,
     LowBed = 2302,
     Unknown3 = 1794,
     Unknown4 = 14866,
@@ -17,10 +15,8 @@ Bed.eModel =
     Unknown7 = 2300,
     Unknown8 = 2301,
     Unknown9 = 2090,
-    Unknown10 = 14446,
     SwankBed7 = 2298,
     Unknown12 = 2299,
-    Unknown13 = 1812,
     Unknown14 = 1797,
     Unknown15 = 1701,
     Unknown16 = 1745,
@@ -29,7 +25,6 @@ Bed.eModel =
     Unknown19 = 1795,
     Unknown20 = 1798,
     Unknown21 = 1799,
-    Unknown22 = 1800,
     Unknown23 = 1801,
     Unknown24 = 1802,
     Unknown25 = 1803

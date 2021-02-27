@@ -1,0 +1,72 @@
+[
+	{
+		"objects": [
+			{
+				"dynamicString": "return Bed{description=\"\", noCollisions=true, modelid=Bed.eModel[PickRandom(Bed.eModel)], isRandomModelId=true, interior=9, position=Vector3(0.75244140625,-2.10546875,-1), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"id": 21
+			}
+		],
+		"poi": {
+			"Description": "bed ",
+			"Interior": 9,
+			"Y": -1008.155603027344,
+			"X": 2325.081298828125,
+			"Z": 1054.71875,
+			"id": 12,
+			"Angle": 270.8631286621094,
+			"PossibleActions": [
+				{
+					"id": 1
+				}
+			],
+			"allActions": [
+				{
+					"dynamicString": "return GetOn{how = 1,side = 1}",
+					"isClosingAction": false,
+					"targetItem": {
+						"id": 21,
+						"type": "Object"
+					},
+					"id": 1,
+					"nextAction": {
+						"id": 2
+					},
+					"closingAction": {
+						"id": 3
+					},
+					"nextLocation": {
+						"id": 12
+					}
+				},
+				{
+					"dynamicString": "return Sleep{how = 1}",
+					"isClosingAction": false,
+					"targetItem": {
+						"id": 21,
+						"type": "Object"
+					},
+					"id": 2,
+					"nextAction": {
+						"id": 3
+					},
+					"nextLocation": {
+						"id": 12
+					}
+				},
+				{
+					"dynamicString": "return GetOff{how = 1,side = 1}",
+					"isClosingAction": true,
+					"targetItem": {
+						"id": 21,
+						"type": "Object"
+					},
+					"id": 3,
+					"nextLocation": {
+						"id": 12
+					}
+				}
+			]
+		},
+		"locations": []
+	}
+]

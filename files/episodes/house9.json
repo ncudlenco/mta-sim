@@ -1817,7 +1817,7 @@
 				"Description": "carton of orange juice",
 				"noCollisions": true,
 				"scale": 1,
-				"isRandomModelId": false,
+				"isRandomModelId": true,
 				"pluralTemplate": "{count} cartonsof orange juice",
 				"size": 2.5,
 				"dynamicString": "return Drinks{description=\"drink\", noCollisions=true, modelid=3788, isRandomModelId=false, interior=9, position=Vector3(2323.6506347656,-1014.8950195313,1050.0958251953), rotation=Vector3(0,0,175), posOffset=Vector3(-0.20000000298023,0.029999999329448,0.079999998211861), rotOffset=Vector3(0,90,0)}",
@@ -1851,7 +1851,7 @@
 				"Description": "bottle of alcohol",
 				"noCollisions": true,
 				"scale": 1,
-				"isRandomModelId": false,
+				"isRandomModelId": true,
 				"pluralTemplate": "{count} bottlesof alcohol",
 				"size": 2.5,
 				"dynamicString": "return Drinks{description=\"drink\", noCollisions=true, modelid=1520, isRandomModelId=false, interior=9, position=Vector3(2325.13671875,-1014.9509277344,1050.3095703125), rotation=Vector3(0,0,160), posOffset=Vector3(-0.029999999329448,0.029999999329448,0.10999999940395), rotOffset=Vector3(0,90,0)}",
@@ -1905,7 +1905,7 @@
 				"position": {
 					"y": -1009.662170410156,
 					"x": 2317.298095703125,
-					"z": 1050.33627929688
+					"z": 1050.36627929688
 				},
 				"modelid": 2703,
 				"StoryItemType": 1

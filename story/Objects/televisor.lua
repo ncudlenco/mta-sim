@@ -1,5 +1,5 @@
 Televisor = class(SampStoryObjectBase, function(o, params)
-    params.description = "televisor"
+    params.description = PickRandom({"televisor", "TV"})
     params.type = 'Televisor'
     SampStoryObjectBase.init(o, params)
 end

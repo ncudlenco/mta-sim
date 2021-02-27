@@ -3512,7 +3512,7 @@
 				]
 			},
 			{
-				"Description": "kitchen counter",
+				"Description": "barroom counter",
 				"Interior": 9,
 				"Y": -1014.416137695313,
 				"X": 2323.437744140625,
@@ -3573,7 +3573,7 @@
 				]
 			},
 			{
-				"Description": "kitchen counter",
+				"Description": "barroom counter",
 				"Interior": 9,
 				"Y": -1014.432800292969,
 				"X": 2325.05517578125,
@@ -3680,7 +3680,7 @@
 				]
 			},
 			{
-				"Description": "bathroom sink",
+				"Description": "kitchen sink",
 				"Interior": 9,
 				"Y": -1009.709106445313,
 				"X": 2312.85888671875,
@@ -3708,7 +3708,7 @@
 				]
 			},
 			{
-				"Description": "house entrance",
+				"Description": "second floor hallway",
 				"Interior": 9,
 				"Y": -1012.636291503906,
 				"X": 2318.3037109375,
@@ -3769,7 +3769,7 @@
 				]
 			},
 			{
-				"Description": "bed ",
+				"Description": "bedroom bed",
 				"Interior": 9,
 				"Y": -1008.155603027344,
 				"X": 2325.081298828125,

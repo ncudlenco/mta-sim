@@ -3113,7 +3113,7 @@ SetPlayerSkin.PlayerSkins = {
     SetPlayerSkin(96, "A young white man in a white sleeveless t-shirt with gray strides and gray and red shorts"),
     SetPlayerSkin(97, "A young white man in red shorts"),
     SetPlayerSkin(98, "A young white man in a white shirt with a black vest and blue jeans"),
-    SetPlayerSkin(99, "A young white man in a white t-shirt, black shorts and a gray helmet"),
+    -- SetPlayerSkin(99, "A young white man in a white t-shirt, black shorts and a gray helmet"),
     SetPlayerSkin(100, "A middle-aged white man with a long blonde tail, in a gray jacket, beige pants, with black glasses and brown gloves"),
     SetPlayerSkin(101, "A young white man with blonde hair, in a khaki jacket and white t-shirt, and black pants"),
     SetPlayerSkin(102, "A middle-aged black man with black hair, in a white t-shirt, purple shorts and with a purple headband"),

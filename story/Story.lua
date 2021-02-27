@@ -33,7 +33,7 @@ end)
 
 function Story:Play()
     if DEBUG then
-        print("Loading dynamic episodes..")
+        print("Story: Loading dynamic episodes..")
     end
 
     for i,episode_name in ipairs(self.DynamicEpisodes) do
@@ -84,7 +84,7 @@ function Story:Play()
     end
 
     if DEBUG then
-        print("Picking a random skin...")
+        print("Story: Picking a random skin...")
     end 
 
     local skin = PickRandom(Where(SetPlayerSkin.PlayerSkins, function(s)
@@ -95,7 +95,7 @@ function Story:Play()
     skin:Apply()
 
     if DEBUG then
-        print("Loading a random episode...")
+        print("Story: Loading a random episode...")
     end
     self.CurrentEpisode = PickRandom(self.Episodes)
     self.CurrentEpisode:Initialize(self.Actor)
@@ -103,12 +103,12 @@ function Story:Play()
     self.Actor:setData('pickedObjects', {})
 
     if DEBUG then
-        print("Playing the picked episode...")
+        print("Story: Playing the picked episode...")
     end
     self.CurrentEpisode:Play(self.Actor)
 
     if DEBUG then
-        print("Story:Play - chosen random skin and episode. Playing episode")
+        print("Story: Play - chosen random skin and episode. Playing episode")
     end
 end
 

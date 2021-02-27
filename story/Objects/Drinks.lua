@@ -2,6 +2,10 @@ Drinks = class(SampStoryObjectBase, function(o, params)
     params.description = "drink"
     params.type = 'Drinks'
 
+    if DEBUG_OBJECTS then
+        print("Object: Creating drink...")
+    end
+
     if ( params.modelid == Drinks.eModel.AppleJuice or params.modelid == Drinks.eModel.OrangeJuice or 
          params.modelid == Drinks.eModel.MilkCarton or params.modelid == Drinks.eModel.MilkBottle) then
         params.position.z = params.position.z - 0.02

@@ -137,14 +137,16 @@ function Logger:DescribeObjects(player, regionName, objects, locationMap, descri
             if o and not o:is_a(SampStoryObjectBase) and trim(o) ~= '' then
                 o = SampStoryObjectBase({description = trim(o)})
             end
-            local objectDescription = o.Description
-            if objectDescription then
-                objectDescription = trim(objectDescription)
-                if objectDescription ~= '' then
-                    if not objectsHashTable[objectDescription] then
-                        objectsHashTable[objectDescription] = {pluralTemplate = o.pluralTemplate, nr = 1}
-                    else
-                        objectsHashTable[objectDescription].nr = objectsHashTable[objectDescription].nr + 1
+            if o.type ~= "Cigarette" and o.type ~= "MobilePhone" and o.type then
+                local objectDescription = o.Description
+                if objectDescription then
+                    objectDescription = trim(objectDescription)
+                    if objectDescription ~= '' then
+                        if not objectsHashTable[objectDescription] then
+                            objectsHashTable[objectDescription] = {pluralTemplate = o.pluralTemplate, nr = 1}
+                        else
+                            objectsHashTable[objectDescription].nr = objectsHashTable[objectDescription].nr + 1
+                        end
                     end
                 end
             end

@@ -1,5 +1,5 @@
 Sofa = class(SampStoryObjectBase, function(o, params)
-    params.description = "sofa"
+    params.description = PickRandom({"sofa", "couch"})
     params.type = 'Sofa'
 
     SampStoryObjectBase.init(o, params)

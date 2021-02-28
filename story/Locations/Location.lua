@@ -212,7 +212,26 @@ function Location:GetNextValidAction(player)
         lock = false
         return EndStory(player)
     end
+
+    if #nextValidActions > 1 then
+        table.remove(nextValidActions, 1)
+    end
+
     local next = PickRandom(nextValidActions);
+
+    if DEBUG_ACTIONS then
+        if previousAction then
+            str_act = "Actions: Previous action " .. string.sub(previousAction.ActionId, 1, 8) .. "-"
+        else
+            str_act = "Actions: no previous action - "
+        end
+
+        for i, action in ipairs(nextValidActions) do
+            str_act = str_act .. string.sub(action.ActionId, 1, 8) .. " "
+        end
+        print(str_act)
+    end
+
     if not next then
         if DEBUG then
             outputConsole("Location:GetNextValidAction - next action was null. Ending the current story")

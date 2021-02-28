@@ -160,7 +160,7 @@ function Logger:DescribeObjects(player, regionName, objects, locationMap, descri
 
                 return {noun = getWordPrefix(k) .. ' ' .. k, isPlural = false}
             else 
-                return {noun = v.pluralTemplate:gsub('{count}', ''..v.nr), isPlural = true}
+                return {noun = v.pluralTemplate:gsub('{count}', ''..num2word(v.nr)), isPlural = true}
             end
         end)
 

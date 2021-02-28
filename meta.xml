@@ -157,6 +157,9 @@
   <script src="story/Objects/Wardrobe.lua" type="shared" />
   <script src="story/Objects/Toilet.lua" type="shared" />
   <script src="story/Objects/Bookshelf.lua" type="shared" />
+  <script src="story/Objects/Fridge.lua" type="shared" />
+  <script src="story/Objects/GasCooker.lua" type="shared" />
+  <script src="story/Objects/Microwave.lua" type="shared" />
   <!-- Episodes -->
   <script src="story/Episodes/House1.lua" type="server" />
   <script src="story/Episodes/House3.lua" type="server" />

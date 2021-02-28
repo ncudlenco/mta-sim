@@ -1,5 +1,5 @@
 Toilet = class(SampStoryObjectBase, function(o, params)
-    params.description = "toilet"
+    params.description = PickRandom({"toilet", "water closet", "toilet bowl"})
     params.type = 'Toilet'
 
     SampStoryObjectBase.init(o, params)

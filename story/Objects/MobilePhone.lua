@@ -1,5 +1,5 @@
 MobilePhone = class(SampStoryObjectBase, function(o, params)
-    params.description = "mobile phone"
+    params.description = PickRandom({"mobile phone", "phone", "cell phone"})
     params.pluralTemplate = "{count} mobile phones"
     params.type = 'MobilePhone'
 

@@ -33,7 +33,7 @@ function getPedMaxHealth(ped)
 end
 
 function getWordPrefix(word)
-    if word[1] == "a" or word[1] == "e" or word[1] == "i" or word[1] == "o" or word[1] == "u" then
+    if string.sub(word, 1, 1) == "a" or string.sub(word, 1, 1) == "e" or string.sub(word, 1, 1) == "i" or string.sub(word, 1, 1) == "o" or string.sub(word, 1, 1) == "u" then
         return "an"
     elseif word:sub(1, 4) == "two " or word:sub(1, 5) == "three " or word:sub(1, 5) == "four " then
         return ""

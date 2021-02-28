@@ -154,6 +154,10 @@ function Logger:DescribeObjects(player, regionName, objects, locationMap, descri
 
         local objs = Select(objectsHashTable, function(v,k) 
             if v.nr == 1 or not v.pluralTemplate then 
+                if DEBUG_LOGGER then
+                    print("Logger: Correct prefix " .. getWordPrefix(k) .. ' ' .. k)
+                end
+
                 return {noun = getWordPrefix(k) .. ' ' .. k, isPlural = false}
             else 
                 return {noun = v.pluralTemplate:gsub('{count}', ''..v.nr), isPlural = true}

@@ -493,6 +493,12 @@ addCommandHandler("episode",
                         obj.RotOffset = obj.RotOffset:unpack()
                     end
                     obj.instance = nil
+                    
+                    -- outputChatBox(tostring(obj["removeZOffset"] ~= nil))
+
+                    if obj["removeZOffset"] ~= nil then
+                        obj:removeZOffset()
+                    end
                 end
                 for _,obj in ipairs(episode.ObjectsToDelete) do
                     if obj.position and obj.position.unpack then

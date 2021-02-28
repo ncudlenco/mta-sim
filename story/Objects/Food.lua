@@ -122,6 +122,23 @@ function Food:updateRotOffsetStandUp()
     return self.Description
 end
 
+function Food:removeZOffset()
+    if self.modelid == Food.eModel.Shawarma then
+        self.position.z = self.position.z + 0.02
+    elseif self.modelid == Food.eModel.Burger then
+        self.rotation = Vector3(270, 0, 200)
+    elseif self.modelid == Food.eModel.Pizza then
+        self.rotation = Vector3(180, 90, 0)
+        self.position.z = self.position.z + 0.06
+    elseif (self.modelid == Food.eModel.RedApple or self.modelid == Food.eModel.GreenApple) then
+        self.position.z = self.position.z + 0.02
+    elseif self.modelid == Food.eModel.Cake then
+        self.position.z = self.position.z + 0.05
+    elseif self.modelid == Food.eModel.Banana then
+        self.position.z = self.position.z + 0.03
+    end
+end
+
 Food.eModel = 
 {
     Shawarma = 2769,

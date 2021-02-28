@@ -256,7 +256,6 @@ function StoryEpisodeBase:LoadFromFile()
             for k,v in ipairs(episode.Objects) do
                 local obj = SampStoryObjectBase(v)
                 obj = loadstring(obj.dynamicString)()
-
                 table.insert(objects, obj)
             end
         end

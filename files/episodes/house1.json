@@ -24,7 +24,7 @@
 					"z": 0
 				},
 				"interior": 1,
-				"ObjectId": "3e3bc6dc-3fa6-4400-9d35-020f820b9a45",
+				"ObjectId": "23faf788-bd84-428a-94dc-6532cf0a1025",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -58,7 +58,7 @@
 					"z": 0
 				},
 				"interior": 1,
-				"ObjectId": "23ee2a82-cbbd-49d8-89b1-a59b69db0087",
+				"ObjectId": "b033c5ff-67e9-4244-9321-d8c83e1b7a87",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -92,7 +92,7 @@
 					"z": 0
 				},
 				"interior": 1,
-				"ObjectId": "81cf0a9c-0059-496c-bcfd-78289ea4879e",
+				"ObjectId": "fb457b2b-c1b8-4c53-a142-ad9db5c6f26b",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -126,7 +126,7 @@
 					"z": 0
 				},
 				"interior": 1,
-				"ObjectId": "72c7cbde-a640-4a0d-bcf5-d142b69a608f",
+				"ObjectId": "127924f1-d257-4f81-9fcb-ee107fa68341",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -162,7 +162,7 @@
 					"z": 0
 				},
 				"interior": 1,
-				"ObjectId": "73fe75c0-02f6-47a3-a900-78f0f34f8e21",
+				"ObjectId": "2ae160af-f57e-4c46-ad92-5c9cd93e57d8",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -185,41 +185,7 @@
 				"Description": "painting",
 				"noCollisions": false,
 				"scale": 1,
-				"isRandomModelId": false,
-				"pluralTemplate": "{count} paintings",
-				"size": 2.5,
-				"dynamicString": "return Painting{description=\"painting\", noCollisions=false, modelid=2272, isRandomModelId=false, interior=1, position=Vector3(-2161.9296875,646.75341796875,1058.4981689453), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
-				"type": "Painting",
-				"RotOffset": {
-					"y": 0,
-					"x": 0,
-					"z": 0
-				},
-				"interior": 1,
-				"ObjectId": "4412d80c-5ae9-4b34-9239-d2d82792c828",
-				"rotation": {
-					"y": 0,
-					"x": 0,
-					"z": 0
-				},
-				"position": {
-					"y": 646.75341796875,
-					"x": -2161.9296875,
-					"z": 1058.498168945313
-				},
-				"modelid": 2272,
-				"StoryItemType": 1
-			},
-			{
-				"PosOffset": {
-					"y": 0,
-					"x": 0,
-					"z": 0
-				},
-				"Description": "painting",
-				"noCollisions": false,
-				"scale": 1,
-				"isRandomModelId": false,
+				"isRandomModelId": true,
 				"pluralTemplate": "{count} paintings",
 				"size": 2.5,
 				"dynamicString": "return Painting{description=\"painting\", noCollisions=false, modelid=2285, isRandomModelId=false, interior=1, position=Vector3(-2158.4775390625,646.75341796875,1058.7052001953), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
@@ -230,7 +196,7 @@
 					"z": 0
 				},
 				"interior": 1,
-				"ObjectId": "59fd7b26-4ff4-4626-b37b-65ff0ffc4390",
+				"ObjectId": "4f08a77f-9f17-4a17-84a3-398dd92fca53",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -253,10 +219,10 @@
 				"Description": "bookshelf",
 				"noCollisions": false,
 				"scale": 1,
-				"isRandomModelId": true,
+				"isRandomModelId": false,
 				"pluralTemplate": "{count} bookshelfs",
 				"size": 2.5,
-				"dynamicString": "return Bookshelf{description=\"bookshelf\", noCollisions=false, modelid=1742, isRandomModelId=true, interior=1, position=Vector3(-2160.5053710938,647.36761474609,1056.5860595703), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"dynamicString": "return Bookshelf{description=\"bookshelf\", noCollisions=false, modelid=1742, isRandomModelId=false, interior=1, position=Vector3(-2160.5053710938,647.36761474609,1056.5860595703), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
 				"type": "Bookshelf",
 				"RotOffset": {
 					"y": 0,
@@ -264,7 +230,7 @@
 					"z": 0
 				},
 				"interior": 1,
-				"ObjectId": "5f834d2b-c31d-4915-be4b-5d023b84492e",
+				"ObjectId": "4bb19649-680f-4990-8a89-146eeb14ef46",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -276,6 +242,108 @@
 					"z": 1056.586059570313
 				},
 				"modelid": 1742,
+				"StoryItemType": 1
+			},
+			{
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"Description": "gas cooker",
+				"noCollisions": false,
+				"scale": 1,
+				"isRandomModelId": false,
+				"pluralTemplate": "{count} gasscooker",
+				"size": 2.5,
+				"dynamicString": "return GasCooker{description=\"gas cooker\", noCollisions=false, modelid=2417, isRandomModelId=false, interior=1, position=Vector3(-2160.5329589844,640.97369384766,1056.3937988281), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "GasCooker",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"interior": 1,
+				"ObjectId": "679e53fb-8b14-4fcf-b3ca-0e1dbbacb28e",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"position": {
+					"y": 640.9736938476563,
+					"x": -2160.532958984375,
+					"z": 1056.393798828125
+				},
+				"modelid": 2417,
+				"StoryItemType": 1
+			},
+			{
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"Description": "",
+				"noCollisions": false,
+				"scale": 1,
+				"isRandomModelId": true,
+				"pluralTemplate": "",
+				"size": 2.5,
+				"dynamicString": "return Painting{description=\"\", noCollisions=false, modelid=2278, isRandomModelId=false, interior=1, position=Vector3(-2165.9240722656,641.18609619141,1058.4306640625), rotation=Vector3(0,0,180.00001525879), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "Painting",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"interior": 1,
+				"ObjectId": "c31295bc-4a0a-4f33-ad17-1421f36f8f11",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 180.0000152587891
+				},
+				"position": {
+					"y": 641.1860961914063,
+					"x": -2165.924072265625,
+					"z": 1058.4306640625
+				},
+				"modelid": 2278,
+				"StoryItemType": 1
+			},
+			{
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"Description": "",
+				"noCollisions": false,
+				"scale": 1,
+				"isRandomModelId": true,
+				"pluralTemplate": "",
+				"size": 2.5,
+				"dynamicString": "return Sofa{description=\"\", noCollisions=false, modelid=1756, isRandomModelId=false, interior=1, position=Vector3(-2165.0910644531,645.47705078125,1055.2940673828), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "Sofa",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"interior": 1,
+				"ObjectId": "21d48c85-84e7-4e27-aafa-15df037e3f66",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 270
+				},
+				"position": {
+					"y": 645.47705078125,
+					"x": -2165.091064453125,
+					"z": 1055.294067382813
+				},
+				"modelid": 1756,
 				"StoryItemType": 1
 			}
 		],
@@ -339,7 +407,7 @@
 				]
 			},
 			{
-				"Description": "a music player, a tv, two red sofas and a book shelf",
+				"Description": "",
 				"cameras": [
 					{
 						"y": 647.35192871094,
@@ -384,7 +452,7 @@
 				]
 			},
 			{
-				"Description": "four chairs and a gascooker",
+				"Description": "",
 				"cameras": [
 					{
 						"y": 636.08653564006,

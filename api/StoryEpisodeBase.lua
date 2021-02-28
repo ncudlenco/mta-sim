@@ -31,13 +31,22 @@ function StoryEpisodeBase:Initialize(...)
             for i,p1 in ipairs(self.POI) do
                 table.insert(self.ValidStartingLocations, p1)
                 for j, p2 in ipairs(self.POI) do
-                    if i ~= j and j ~= i then
+                    if i ~= j and p1.LocationId ~= p2.LocationId then
                         local prerequisites = {}
                         if #p1.PossibleActions > 0 then
                             prerequisites = {p1.PossibleActions[1]}
                         end
                         table.insert(p1.PossibleActions, Move{performer = player, targetItem = p2, nextLocation = p2, prerequisites = prerequisites, graphId = self.graphId})
                     end
+                end
+                if DEBUG_EPISODE then
+                    str_PA = "Episode: Possible move actions for " .. string.sub(p1.LocationId, 1, 8) .. ": "
+
+                    for k,action in ipairs(p1.PossibleActions) do
+                        str_PA = str_PA .. string.sub(action.NextLocation.LocationId, 1, 8) .. ", "
+                    end
+
+                    print(str_PA)
                 end
             end
         end

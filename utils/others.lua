@@ -55,3 +55,25 @@ function random(a, b)
 
     return  random_number
 end
+
+function num2word(number) 
+    if number == 1 then
+        return "one"
+    elseif number == 2 then 
+        return "two"
+    elseif number == 3 then
+        return "three"
+    elseif number == 4 then 
+        return "four"
+    elseif number == 5 then
+        return "five"
+    elseif number == 6 then
+        return "six"
+    elseif numbre == 7 then
+        return "seven"
+    elseif number == 8 then 
+        return "eight"
+    else
+        return nil
+    end
+end

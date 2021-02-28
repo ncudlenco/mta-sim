@@ -88,13 +88,13 @@ function House1:Initialize(...)
     table.insert(self.Objects, cigarette)
 
     local livingRoomEntranceLocation = Location(-2170.126708984375, 638.444580078125, 1057.5971, 0, self.InteriorId, "living room")
-    local livingRoomSofaLocation = Location(-2165.447412109375, 643.7353515625, 1057.5971, 0, self.InteriorId, "living room")
-    local livingRoomMusicPlayerLocation = Location(-2166.1552734375, 641.7701416015625, 1057.5971, 180, self.InteriorId, "living room")
+    local livingRoomSofaLocation = Location(-2165.447412109375, 643.7353515625, 1057.5971, 0, self.InteriorId, "living room sofa")
+    local livingRoomMusicPlayerLocation = Location(-2166.1552734375, 641.7701416015625, 1057.5971, 180, self.InteriorId, "living room music player")
     local livingRoomMusicPlayerLocation2 = Location(-2166.1552734375, 642.8620361328125, 1057.5971, 180, self.InteriorId, "living room")
     local livingRoomSmokeLocation = Location(-2164.91796875, 646.1671142578125, 1057.5971, 0, self.InteriorId, "living room")
     
-    local kitchenChairLocation = Location(-2160.218017578125, 642.3208129882813, 1057.5971, 0, self.InteriorId, "kitchen")
-    local kitchenTableLocation = Location(-2161.821044921875, 639.2874145507813, 1057.5971, 90, self.InteriorId, "kitchen")
+    local kitchenChairLocation = Location(-2160.218017578125, 642.3208129882813, 1057.5971, 0, self.InteriorId, "kitchen table")
+    local kitchenTableLocation = Location(-2161.821044921875, 639.2874145507813, 1057.5971, 90, self.InteriorId, "kitchen counter")
 
     
     self.POI = {livingRoomSofaLocation, livingRoomMusicPlayerLocation, kitchenChairLocation, kitchenTableLocation, livingRoomSmokeLocation}
@@ -129,11 +129,11 @@ function House1:Initialize(...)
     sitDownKitchenChairAction.ClosingAction = standUpKitchenChairAction
 
     -- drink at table
-    local pickUpDrinkAction = PickUp {performer = player, nextLocation = kitchenTableLocation, targetItem = drink, where = "the table", targetObjectExists = true, how = PickUp.eHow.Normal, hand = PickUp.eHand.Left, graphId = self.graphId}
+    local pickUpDrinkAction = PickUp {performer = player, nextLocation = kitchenTableLocation, targetItem = drink, where = "the kitchen counter", targetObjectExists = true, how = PickUp.eHow.Normal, hand = PickUp.eHand.Left, graphId = self.graphId}
     table.insert(kitchenTableLocation.PossibleActions, pickUpDrinkAction)
     local drinkAction = Drink {performer = player, nextLocation = kitchenTableLocation, targetItem = drink, graphId = self.graphId}
     pickUpDrinkAction.NextAction = drinkAction
-    local putDownDrinkAction = PutDown {performer = player, nextLocation = kitchenTableLocation, targetItem = drink, where = "the table", targetObjectPosition = Vector3(-2162.421044921875, 639.2874145507813, 1057.5271),
+    local putDownDrinkAction = PutDown {performer = player, nextLocation = kitchenTableLocation, targetItem = drink, where = "the kitchen counter", targetObjectPosition = Vector3(-2162.421044921875, 639.2874145507813, 1057.5271),
                                         targetObjectRotation = Vector3(0, 0, 0), graphId = self.graphId}
     drinkAction.NextAction = putDownDrinkAction
     pickUpDrinkAction.ClosingAction = putDownDrinkAction

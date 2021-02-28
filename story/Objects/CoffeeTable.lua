@@ -8,5 +8,6 @@ end
 
 CoffeeTable.eModel = 
 {
-    Unknown01 = 1822
+    Unknown01 = 1822,
+    Unknown02 = 1819
 }

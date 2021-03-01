@@ -1,41 +1,42 @@
 [
 	{
 		"InteriorId": 10,
+		"peds": [],
 		"ValidStartingLocations": [],
-		"ObjectsToDelete": [],
-		"Objects": [
+		"ObjectsToDelete": [
 			{
 				"PosOffset": {
 					"y": 0,
 					"x": 0,
 					"z": 0
 				},
-				"type": "Painting",
 				"Description": "",
 				"noCollisions": false,
-				"interior": 10,
+				"scale": 1,
 				"isRandomModelId": false,
-				"ObjectId": "bf925dcb-fc11-40f7-8a35-caf2a2616ccd",
-				"rotation": {
-					"y": 0,
-					"x": 0,
-					"z": 90
-				},
-				"dynamicString": "return Painting{description=\"\", noCollisions=false, modelid=nill, interior=10, position=Vector3(2257.6479492188,-1223.5294189453,1050.3874511719), rotation=Vector3(0,0,90), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"pluralTemplate": "",
+				"size": 2.5,
+				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=1741, isRandomModelId=false, noRandomId=true, interior=10, position=Vector3(2262.16796875,-1224.3929443359,1048.0234375), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "SampStoryObjectBase",
 				"RotOffset": {
 					"y": 0,
 					"x": 0,
 					"z": 0
 				},
-				"StoryItemType": 1,
-				"scale": 1,
-				"position": {
-					"y": -1223.529418945313,
-					"x": 2257.64794921875,
-					"z": 1050.387451171875
+				"interior": 10,
+				"ObjectId": "ce66984e-d722-4ae1-a71b-304c81d4ed2e",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 0
 				},
-				"modelid": null,
-				"size": 2.5
+				"position": {
+					"y": -1224.392944335938,
+					"x": 2262.16796875,
+					"z": 1048.0234375
+				},
+				"modelid": 1741,
+				"StoryItemType": 1
 			},
 			{
 				"PosOffset": {
@@ -43,35 +44,413 @@
 					"x": 0,
 					"z": 0
 				},
-				"type": "Painting",
 				"Description": "",
 				"noCollisions": false,
-				"interior": 10,
+				"scale": 1,
 				"isRandomModelId": false,
-				"ObjectId": "f5b9896a-3595-4479-8de3-7ef05c179e59",
-				"rotation": {
-					"y": 0,
-					"x": 0,
-					"z": 180.0000152587891
-				},
-				"dynamicString": "return Painting{description=\"\", noCollisions=false, modelid=nill, interior=10, position=Vector3(2256.8920898438,-1214.0065917969,1050.2745361328), rotation=Vector3(0,0,180.00001525879), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"pluralTemplate": "",
+				"size": 2.5,
+				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2088, isRandomModelId=false, noRandomId=true, interior=10, position=Vector3(2259.2822265625,-1219.9095458984,1048.3188476563), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "SampStoryObjectBase",
 				"RotOffset": {
 					"y": 0,
 					"x": 0,
 					"z": 0
 				},
-				"StoryItemType": 1,
-				"scale": 1,
+				"interior": 10,
+				"ObjectId": "dc8598e3-f628-4e06-937f-4c276703b3aa",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
 				"position": {
-					"y": -1213.906591796875,
+					"y": -1219.909545898438,
+					"x": 2259.2822265625,
+					"z": 1048.31884765625
+				},
+				"modelid": 2088,
+				"StoryItemType": 1
+			},
+			{
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"Description": "",
+				"noCollisions": false,
+				"scale": 1,
+				"isRandomModelId": false,
+				"pluralTemplate": "",
+				"size": 2.5,
+				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2528, isRandomModelId=false, noRandomId=true, interior=10, position=Vector3(2254.5451660156,-1217.91015625,1048.2708740234), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "SampStoryObjectBase",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"interior": 10,
+				"ObjectId": "9e35ede5-9d82-4a84-9511-0632c3a78f26",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"position": {
+					"y": -1217.91015625,
+					"x": 2254.545166015625,
+					"z": 1048.270874023438
+				},
+				"modelid": 2528,
+				"StoryItemType": 1
+			},
+			{
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"Description": "",
+				"noCollisions": false,
+				"scale": 1,
+				"isRandomModelId": false,
+				"pluralTemplate": "",
+				"size": 2.5,
+				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2240, isRandomModelId=nil, noRandomId=true, interior=10, position=Vector3(2254.5712890625,-1207.2139892578,1047.76953125), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "SampStoryObjectBase",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"interior": 10,
+				"ObjectId": "b68439e6-f2e3-4030-bd2e-25058487e600",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"position": {
+					"y": -1207.213989257813,
+					"x": 2254.5712890625,
+					"z": 1047.76953125
+				},
+				"modelid": 2240,
+				"StoryItemType": 1
+			}
+		],
+		"Objects": [
+			{
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"Description": "painting",
+				"noCollisions": false,
+				"scale": 1,
+				"isRandomModelId": true,
+				"pluralTemplate": "{count} paintings",
+				"size": 2.5,
+				"dynamicString": "return Painting{description=\"painting\", noCollisions=false, modelid=2288, isRandomModelId=false, noRandomId=true, interior=10, position=Vector3(2257.6479492188,-1223.5294189453,1050.3874511719), rotation=Vector3(0,0,90), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "Painting",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"interior": 10,
+				"ObjectId": "2446321d-8c83-4e1b-9a87-fb457b2bc1b8",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 90
+				},
+				"position": {
+					"y": -1223.529418945313,
+					"x": 2257.64794921875,
+					"z": 1050.387451171875
+				},
+				"modelid": 2288,
+				"StoryItemType": 1
+			},
+			{
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"Description": "painting",
+				"noCollisions": false,
+				"scale": 1,
+				"isRandomModelId": true,
+				"pluralTemplate": "{count} paintings",
+				"size": 2.5,
+				"dynamicString": "return Painting{description=\"painting\", noCollisions=false, modelid=2285, isRandomModelId=false, noRandomId=true, interior=10, position=Vector3(2256.8920898438,-1213.9066162109,1050.2745361328), rotation=Vector3(0,0,180.00001525879), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "Painting",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"interior": 10,
+				"ObjectId": "f814fcbe-e107-4fa6-a341-9e3eacaca533",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 180.0000152587891
+				},
+				"position": {
+					"y": -1213.906616210938,
 					"x": 2256.89208984375,
 					"z": 1050.274536132813
 				},
-				"modelid": null,
-				"size": 2.5
+				"modelid": 2285,
+				"StoryItemType": 1
+			},
+			{
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"Description": "coffee table",
+				"noCollisions": false,
+				"scale": 1,
+				"isRandomModelId": true,
+				"pluralTemplate": "{count} coffeestable",
+				"size": 2.5,
+				"dynamicString": "return CoffeeTable{description=\"coffee table\", noCollisions=false, modelid=1819, isRandomModelId=true, noRandomId=true, interior=10, position=Vector3(2258.1918945313,-1210.3134765625,1046.7235107422), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "CoffeeTable",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"interior": 10,
+				"ObjectId": "23b84492-e796-45b1-a3fd-07f97a5f42ff",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"position": {
+					"y": -1210.3134765625,
+					"x": 2258.19189453125,
+					"z": 1046.723510742188
+				},
+				"modelid": 1819,
+				"StoryItemType": 1
+			},
+			{
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"Description": "televisor",
+				"noCollisions": false,
+				"scale": 1,
+				"isRandomModelId": true,
+				"pluralTemplate": "{count} televisors",
+				"size": 2.5,
+				"dynamicString": "return Televisor{description=\"televisor\", noCollisions=false, modelid=2224, isRandomModelId=true, noRandomId=true, interior=10, position=Vector3(2255.9448242188,-1213.4969482422,1046.5246582031), rotation=Vector3(0,0,84.999877929688), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "Televisor",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"interior": 10,
+				"ObjectId": "8dbb841c-8da6-40b8-9a36-a1b0b37701bc",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 84.9998779296875
+				},
+				"position": {
+					"y": -1213.496948242188,
+					"x": 2255.94482421875,
+					"z": 1046.524658203125
+				},
+				"modelid": 2224,
+				"StoryItemType": 1
+			},
+			{
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"Description": "wardrobe",
+				"noCollisions": false,
+				"scale": 1,
+				"isRandomModelId": true,
+				"pluralTemplate": "{count} wardrobes",
+				"size": 2.5,
+				"dynamicString": "return Wardrobe{description=\"wardrobe\", noCollisions=false, modelid=2088, isRandomModelId=true, noRandomId=true, interior=10, position=Vector3(2261.5717773438,-1222.8974609375,1048.0034179688), rotation=Vector3(0,0,230.00004577637), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "Wardrobe",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"interior": 10,
+				"ObjectId": "df896e40-58c3-45a7-aefa-adfad9aec732",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 230.0000457763672
+				},
+				"position": {
+					"y": -1222.8974609375,
+					"x": 2261.57177734375,
+					"z": 1048.00341796875
+				},
+				"modelid": 2088,
+				"StoryItemType": 1
+			},
+			{
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"Description": "water closet",
+				"noCollisions": false,
+				"scale": 1,
+				"isRandomModelId": true,
+				"pluralTemplate": "{count} waterscloset",
+				"size": 2.5,
+				"dynamicString": "return Toilet{description=\"water closet\", noCollisions=false, modelid=2514, isRandomModelId=true, noRandomId=true, interior=10, position=Vector3(2253.0363769531,-1218.2528076172,1048.0234375), rotation=Vector3(0,0,180.00001525879), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "Toilet",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"interior": 10,
+				"ObjectId": "c85fbc4a-018a-4f0f-82ca-cf1ef5ffc8c5",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 180.0000152587891
+				},
+				"position": {
+					"y": -1218.252807617188,
+					"x": 2253.036376953125,
+					"z": 1048.0234375
+				},
+				"modelid": 2514,
+				"StoryItemType": 1
+			},
+			{
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"Description": "chair",
+				"noCollisions": false,
+				"scale": 1,
+				"isRandomModelId": true,
+				"pluralTemplate": "{count} chairs",
+				"size": 2.5,
+				"dynamicString": "return Chair{description=\"chair\", noCollisions=false, modelid=1811, isRandomModelId=true, noRandomId=true, interior=10, position=Vector3(2249.2185058594,-1211.4556884766,1046.3791503906), rotation=Vector3(0,0,135.00006103516), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "Chair",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"interior": 10,
+				"ObjectId": "238ef609-ca1b-4e92-af51-e9dfebe7729a",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 135.0000610351563
+				},
+				"position": {
+					"y": -1211.455688476563,
+					"x": 2249.218505859375,
+					"z": 1046.379150390625
+				},
+				"modelid": 1811,
+				"StoryItemType": 1
+			},
+			{
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"Description": "chair",
+				"noCollisions": false,
+				"scale": 1,
+				"isRandomModelId": true,
+				"pluralTemplate": "{count} chairs",
+				"size": 2.5,
+				"dynamicString": "return Chair{description=\"chair\", noCollisions=false, modelid=2121, isRandomModelId=true, noRandomId=true, interior=10, position=Vector3(2249.9819335938,-1214.4282226563,1046.8251953125), rotation=Vector3(0,0,180.00001525879), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "Chair",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"interior": 10,
+				"ObjectId": "c9c162a0-497a-486e-b814-7b3d8c0a1cd8",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 180.0000152587891
+				},
+				"position": {
+					"y": -1214.42822265625,
+					"x": 2249.98193359375,
+					"z": 1046.8251953125
+				},
+				"modelid": 2121,
+				"StoryItemType": 1
+			},
+			{
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"Description": "gas cooker",
+				"noCollisions": false,
+				"scale": 1,
+				"isRandomModelId": true,
+				"pluralTemplate": "{count} gasscooker",
+				"size": 2.5,
+				"dynamicString": "return GasCooker{description=\"gas cooker\", noCollisions=false, modelid=2417, isRandomModelId=true, noRandomId=true, interior=10, position=Vector3(2248.5390625,-1206.6448974609,1048.0234375), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "GasCooker",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"interior": 10,
+				"ObjectId": "789a8794-99e2-4bb0-931f-41c7c40362b6",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"position": {
+					"y": -1206.644897460938,
+					"x": 2248.5390625,
+					"z": 1048.0234375
+				},
+				"modelid": 2417,
+				"StoryItemType": 1
 			}
 		],
 		"name": "house10",
+		"graphPath": "files/paths/house_10.json",
 		"Disposed": false,
 		"Regions": [
 			{
@@ -82,20 +461,20 @@
 						"x": 2271.906884774566,
 						"lz": 1048.0234375,
 						"z": 1050.223388671875,
-						"lx": 2265.60693359375,
-						"ly": -1210.512573242188,
+						"fov": 70,
 						"roll": 0,
-						"fov": 70
+						"ly": -1210.512573242188,
+						"lx": 2265.60693359375
 					},
 					{
 						"y": -1210.561499021947,
 						"x": 2263.01630859822,
 						"lz": 1046.5625,
 						"z": 1052.462451189756,
-						"fov": 70,
-						"roll": 0,
+						"lx": 2269.41357421875,
 						"ly": -1210.580810546875,
-						"lx": 2269.41357421875
+						"roll": 0,
+						"fov": 70
 					}
 				],
 				"Objects": [],
@@ -104,6 +483,7 @@
 					"x": 2267.045654296875,
 					"z": 1047.29296875
 				},
+				"EvaluatingRegion": false,
 				"name": "house exit",
 				"vertexes": [
 					{
@@ -132,34 +512,34 @@
 				"Description": "",
 				"cameras": [
 					{
-						"y": -1214.372509777546,
-						"x": 2262.723193377256,
-						"lz": 1048.0234375,
-						"z": 1051.823388695717,
-						"lx": 2258.72314453125,
-						"ly": -1210.072998046875,
-						"roll": 0,
-						"fov": 70
-					},
-					{
 						"y": -1205.690820328891,
 						"x": 2254.517333976924,
 						"lz": 1048.0234375,
 						"z": 1053.223388671875,
-						"fov": 70,
-						"roll": 0,
+						"lx": 2258.830322265625,
 						"ly": -1211.57470703125,
-						"lx": 2258.830322265625
+						"roll": 0,
+						"fov": 70
 					},
 					{
-						"y": -1211.182739257813,
-						"x": 2252.59218750149,
-						"lz": 1048.03076171875,
-						"z": 1052.530712880194,
-						"fov": 70,
+						"y": -1205.4853515625,
+						"x": 2262.8359375,
+						"lz": 1048.0234375,
+						"z": 1051.723388664424,
+						"lx": 2255.393310546875,
+						"ly": -1212.227905273438,
 						"roll": 0,
-						"ly": -1210.3037109375,
-						"lx": 2260.80908203125
+						"fov": 86.5
+					},
+					{
+						"y": -1203.49970703572,
+						"x": 2259.163037106395,
+						"lz": 1048.0234375,
+						"z": 1052.423388704658,
+						"lx": 2257.79638671875,
+						"ly": -1213.397827148438,
+						"roll": 0,
+						"fov": 70
 					}
 				],
 				"Objects": [
@@ -172,6 +552,7 @@
 					"x": 2258.688232421875,
 					"z": 1048.0244140625
 				},
+				"EvaluatingRegion": false,
 				"name": "living room",
 				"vertexes": [
 					{
@@ -215,24 +596,24 @@
 				"Description": "",
 				"cameras": [
 					{
-						"y": -1206.088696330786,
-						"x": 2247.542040981352,
-						"lz": 1048.0234375,
-						"z": 1052.823388658464,
-						"fov": 70,
-						"roll": 0,
-						"ly": -1211.487915039063,
-						"lx": 2250.385986328125
-					},
-					{
 						"y": -1213.388696290553,
 						"x": 2247.94204095751,
 						"lz": 1048.0234375,
 						"z": 1053.723388671875,
-						"fov": 70,
-						"roll": 0,
+						"lx": 2250.385009765625,
 						"ly": -1210.487670898438,
-						"lx": 2250.385009765625
+						"roll": 0,
+						"fov": 70
+					},
+					{
+						"y": -1214.910327158868,
+						"x": 2252.673632822931,
+						"lz": 1048.0234375,
+						"z": 1051.223388686776,
+						"fov": 88.5,
+						"roll": 0,
+						"ly": -1207.666625976563,
+						"lx": 2248.38134765625
 					}
 				],
 				"Objects": [
@@ -245,6 +626,7 @@
 					"x": 2250.39990234375,
 					"z": 1048.025268554688
 				},
+				"EvaluatingRegion": false,
 				"name": "kitchen",
 				"vertexes": [
 					{
@@ -277,20 +659,20 @@
 						"x": 2256.525146469474,
 						"lz": 1048.0234375,
 						"z": 1052.523388668895,
-						"fov": 70,
-						"roll": 0,
+						"lx": 2262.3251953125,
 						"ly": -1216.609619140625,
-						"lx": 2262.3251953125
+						"roll": 0,
+						"fov": 70
 					},
 					{
 						"y": -1216.90878906846,
 						"x": 2263.778076171875,
 						"lz": 1048.0234375,
 						"z": 1052.223388671875,
-						"fov": 70,
-						"roll": 0,
+						"lx": 2257.5810546875,
 						"ly": -1216.593994140625,
-						"lx": 2257.5810546875
+						"roll": 0,
+						"fov": 70
 					}
 				],
 				"Objects": [
@@ -301,6 +683,7 @@
 					"x": 2260.135009765625,
 					"z": 1048.0234375
 				},
+				"EvaluatingRegion": false,
 				"name": "hallway",
 				"vertexes": [
 					{
@@ -333,20 +716,20 @@
 						"x": 2249.63916015625,
 						"lz": 1048.0234375,
 						"z": 1052.223388671875,
-						"fov": 70,
-						"roll": 0,
+						"lx": 2256.31396484375,
 						"ly": -1216.960693359375,
-						"lx": 2256.31396484375
+						"roll": 0,
+						"fov": 70
 					},
 					{
 						"y": -1216.935424804688,
 						"x": 2256.264892578125,
 						"lz": 1048.0234375,
 						"z": 1051.223388649523,
-						"fov": 119,
-						"roll": 0,
+						"lx": 2251.06494140625,
 						"ly": -1216.929321289063,
-						"lx": 2251.06494140625
+						"roll": 0,
+						"fov": 119
 					}
 				],
 				"Objects": [
@@ -358,6 +741,7 @@
 					"x": 2253.7021484375,
 					"z": 1048.208862304688
 				},
+				"EvaluatingRegion": false,
 				"name": "bathroom",
 				"vertexes": [
 					{
@@ -390,30 +774,20 @@
 						"x": 2263.373535141349,
 						"lz": 1048.0234375,
 						"z": 1051.123388648033,
-						"fov": 70,
-						"roll": 0,
+						"lx": 2258.252197265625,
 						"ly": -1223.755859375,
-						"lx": 2258.252197265625
-					},
-					{
-						"y": -1225.010375976563,
-						"x": 2263.041015625,
-						"lz": 1048.0234375,
-						"z": 1052.223388671875,
-						"fov": 70,
 						"roll": 0,
-						"ly": -1219.689575195313,
-						"lx": 2257.5302734375
+						"fov": 70
 					},
 					{
 						"y": -1218.882617168128,
 						"x": 2257.634667955339,
 						"lz": 1048.0234375,
 						"z": 1052.323388643563,
-						"fov": 70,
-						"roll": 0,
+						"lx": 2262.142822265625,
 						"ly": -1224.308715820313,
-						"lx": 2262.142822265625
+						"roll": 0,
+						"fov": 70
 					}
 				],
 				"Objects": [
@@ -424,6 +798,7 @@
 					"x": 2260.06787109375,
 					"z": 1048.0234375
 				},
+				"EvaluatingRegion": false,
 				"name": "bedroom",
 				"vertexes": [
 					{

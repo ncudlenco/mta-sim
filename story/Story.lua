@@ -4,10 +4,10 @@ Story = class(StoryBase, function(o, actor, maxActions, logData)
     o.Logger = Logger('data/'..actor:getData('id')..'/'..o.Id..'/labels.txt', true, o)
     o.Episodes = {
         -- House1()
-        House3()
+        -- House3()
         -- House8()
         -- House10()
-        -- House12()
+        House12()
     }
     o.DynamicEpisodes = {
       -- "house1_sweet",

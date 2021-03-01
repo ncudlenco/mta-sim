@@ -31,13 +31,22 @@ function StoryEpisodeBase:Initialize(...)
             for i,p1 in ipairs(self.POI) do
                 table.insert(self.ValidStartingLocations, p1)
                 for j, p2 in ipairs(self.POI) do
-                    if i ~= j then
+                    if i ~= j and p1.LocationId ~= p2.LocationId then
                         local prerequisites = {}
                         if #p1.PossibleActions > 0 then
                             prerequisites = {p1.PossibleActions[1]}
                         end
                         table.insert(p1.PossibleActions, Move{performer = player, targetItem = p2, nextLocation = p2, prerequisites = prerequisites, graphId = self.graphId})
                     end
+                end
+                if DEBUG_EPISODE then
+                    str_PA = "Episode: Possible move actions for " .. string.sub(p1.LocationId, 1, 8) .. ": "
+
+                    for k,action in ipairs(p1.PossibleActions) do
+                        str_PA = str_PA .. string.sub(action.NextLocation.LocationId, 1, 8) .. ", "
+                    end
+
+                    print(str_PA)
                 end
             end
         end
@@ -204,11 +213,19 @@ function StoryEpisodeBase:Destroy()
 end
 
 function StoryEpisodeBase:LoadFromFile()
+    if DEBUG then
+        print("Episode: Loading episode from "..self.name.. ".json")
+    end
+
     local file = fileOpen("files/episodes/"..self.name..".json") 
     if file then
         local jsonStr = fileRead(file, fileGetSize(file))
         local episode = fromJSON(jsonStr)
         fileClose(file)
+        
+        if DEBUG then
+            print("Episode: Setting the graph path to ".. episode.graphPath)
+        end
 
         self.InteriorId = episode.InteriorId
         self.graphPath = episode.graphPath
@@ -216,6 +233,10 @@ function StoryEpisodeBase:LoadFromFile()
             if loadPathGraph then
                 self.graphId = loadPathGraph(self.graphPath)
             end
+        end
+
+        if DEBUG then
+            print("Episode: Setting the time of the day")
         end
 
         self.name = episode.name
@@ -226,22 +247,32 @@ function StoryEpisodeBase:LoadFromFile()
             self.StoryWeather = Weather(episode.StoryWeather.id, episode.StoryWeather.description)
         end
 
+        if DEBUG then
+            print("Episode: Setting the objects in the environment")
+        end
+
         local objects = {}
         if episode.Objects then
             for k,v in ipairs(episode.Objects) do
                 local obj = SampStoryObjectBase(v)
                 obj = loadstring(obj.dynamicString)()
-
                 table.insert(objects, obj)
             end
         end
         self.Objects = objects
-
+        
+        if DEBUG then
+            print("Episode: Deleting the removed objects from the environemnt")
+        end
         if episode.ObjectsToDelete then
             for k,v in ipairs(episode.ObjectsToDelete) do
                 local obj = SampStoryObjectBase(v)
                 table.insert(self.ObjectsToDelete, obj)
             end
+        end
+        
+        if DEBUG then
+            print("Episode: Setting the points of interest and their actions")
         end
 
         local deserializedPOI = {}

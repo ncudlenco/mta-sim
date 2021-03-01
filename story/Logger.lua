@@ -134,17 +134,25 @@ function Logger:DescribeObjects(player, regionName, objects, locationMap, descri
 
         local objectsHashTable = {}
         for _,o in ipairs(objects) do
-            if o and not o:is_a(SampStoryObjectBase) and trim(o) ~= '' then
-                o = SampStoryObjectBase({description = trim(o)})
-            end
-            local objectDescription = o.Description
-            if objectDescription then
-                objectDescription = trim(objectDescription)
-                if objectDescription ~= '' then
-                    if not objectsHashTable[objectDescription] then
-                        objectsHashTable[objectDescription] = {pluralTemplate = o.pluralTemplate, nr = 1}
-                    else
-                        objectsHashTable[objectDescription].nr = objectsHashTable[objectDescription].nr + 1
+            if o.type ~= nil then
+                if DEBUG_LOGGER then
+                    print("Logger: Creating description for region using object " .. o.type)
+                end
+
+                if o and not o:is_a(SampStoryObjectBase) and trim(o) ~= '' then
+                    o = SampStoryObjectBase({description = trim(o)})
+                end
+                if o.type ~= "Cigarette" and o.type ~= "MobilePhone" and o.type then
+                    local objectDescription = o.Description
+                    if objectDescription then
+                        objectDescription = trim(objectDescription)
+                        if objectDescription ~= '' then
+                            if not objectsHashTable[objectDescription] then
+                                objectsHashTable[objectDescription] = {pluralTemplate = o.pluralTemplate, nr = 1}
+                            else
+                                objectsHashTable[objectDescription].nr = objectsHashTable[objectDescription].nr + 1
+                            end
+                        end
                     end
                 end
             end
@@ -152,9 +160,13 @@ function Logger:DescribeObjects(player, regionName, objects, locationMap, descri
 
         local objs = Select(objectsHashTable, function(v,k) 
             if v.nr == 1 or not v.pluralTemplate then 
+                if DEBUG_LOGGER then
+                    print("Logger: Correct prefix " .. getWordPrefix(k) .. ' ' .. k)
+                end
+
                 return {noun = getWordPrefix(k) .. ' ' .. k, isPlural = false}
             else 
-                return {noun = v.pluralTemplate:gsub('{count}', ''..v.nr), isPlural = true}
+                return {noun = v.pluralTemplate:gsub('{count}', ''..num2word(v.nr)), isPlural = true}
             end
         end)
 

@@ -147,6 +147,51 @@ function Drinks:updatePositionOffsetStandUp()
     return self.Description
 end
 
+
+function Drinks:removeZOffset()
+    if ( self.modelid == Drinks.eModel.AppleJuice or self.modelid == Drinks.eModel.OrangeJuice or 
+         self.modelid == Drinks.eModel.MilkCarton or self.modelid == Drinks.eModel.MilkBottle) then
+            self.position.z = self.position.z + 0.02
+    elseif self.modelid == Drinks.eModel.CoffeCup or self.modelid == Drinks.eModel.SodaCup2 then
+        self.position.z = self.position.z - 0.04
+    elseif self.modelid == Drinks.eModel.SodaCup1 then
+        self.position.z = self.position.z - 0.05
+    elseif self.modelid == Drinks.eModel.BottleAlcohol1 then
+        self.position.z = self.position.z - 0.1
+    elseif self.modelid == Drinks.eModel.BottleAlcohol2 or self.modelid == Drinks.eModel.BottleAlcohol3 then
+        self.position.z = self.position.z - 0.15
+    elseif self.modelid == Drinks.eModel.BottleCider1 or self.modelid == Drinks.eModel.BottleCider2 then
+        self.position.z = self.position.z + 0.03
+    elseif self.modelid == Drinks.eModel.BottleWine1 then
+        self.position.z = self.position.z - 0.1
+    elseif self.modelid == Drinks.eModel.GlassBeer then
+        self.position.z = self.position.z - 0.05
+    elseif self.modelid == Drinks.eModel.GlassAlcohol then
+        self.position.z = self.position.z - 0.05
+    elseif self.modelid == Drinks.eModel.GlassWine1 then
+        self.position.z = self.position.z - 0.07
+    elseif self.modelid == Drinks.eModel.BottleVodka1 then
+        self.position.z = self.position.z - 0.13
+    elseif self.modelid == Drinks.eModel.BottleBeer1 or self.modelid == Drinks.eModel.BottleBeer2 then
+        self.position.z = self.position.z - 0.1
+    elseif self.modelid == Drinks.eModel.BottleWine2 then
+        self.position.z = self.position.z + 0.02
+    elseif self.modelid == Drinks.eModel.BottleWine3 then
+        self.position.z = self.position.z + 0.02
+    elseif self.modelid == Drinks.eModel.BottleVodka2 then
+        self.position.z = self.position.z + 0.02
+    elseif self.modelid == Drinks.eModel.BottleAlcohol5 then
+        self.position.z = self.position.z + 0.02
+    elseif self.modelid == Drinks.eModel.BottleWine4 then
+        self.position.z = self.position.z + 0.03
+    elseif self.modelid == Drinks.eModel.GlassWine2 then
+        self.position.z = self.position.z - 0.03
+    elseif self.modelid == Drinks.eModel.GlassWine3 then
+        self.position.z = self.position.z - 0.03
+    end
+end
+
+
 function Drinks:updateRotOffsetStandUp()
     --if (self.modelid == Drinks.eModel.AppleJuice or self.modelid == Drinks.eModel.OrangeJuice or 
      --   self.modelid == Drinks.eModel.MilkCarton or self.modelid == Drinks.eModel.MilkBottle)  then

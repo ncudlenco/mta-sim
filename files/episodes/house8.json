@@ -1,40 +1,280 @@
 [
 	{
 		"InteriorId": 8,
+		"peds": [],
 		"ValidStartingLocations": [],
 		"ObjectsToDelete": [
 			{
-				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2271, interior=8, position=Vector3(2357.3349609375,-1132.9624023438,1051.0018310547), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
-				"type": "SampStoryObjectBase",
-				"Description": "",
-				"RotOffset": {
-					"y": 0,
-					"x": 0,
-					"z": 0
-				},
-				"scale": 1,
-				"isRandomModelId": false,
-				"ObjectId": "b3238e1e-71c2-4fcd-870c-164f043329ef",
-				"rotation": {
-					"y": 0,
-					"x": 0,
-					"z": 0
-				},
 				"PosOffset": {
 					"y": 0,
 					"x": 0,
 					"z": 0
 				},
+				"Description": "",
 				"noCollisions": false,
-				"StoryItemType": 1,
+				"scale": 1,
+				"isRandomModelId": false,
+				"pluralTemplate": "",
+				"size": 2.5,
+				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2271, isRandomModelId=false, noRandomId=true, interior=8, position=Vector3(2357.3349609375,-1132.9624023438,1051.0018310547), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "SampStoryObjectBase",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
 				"interior": 8,
+				"ObjectId": "3419e3ea-caca-4533-b078-7a512b5f834d",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
 				"position": {
 					"y": -1132.96240234375,
 					"x": 2357.3349609375,
 					"z": 1051.001831054688
 				},
 				"modelid": 2271,
-				"size": 2.5
+				"StoryItemType": 1
+			},
+			{
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"Description": "",
+				"noCollisions": false,
+				"scale": 1,
+				"isRandomModelId": false,
+				"pluralTemplate": "",
+				"size": 2.5,
+				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2281, isRandomModelId=false, noRandomId=true, interior=8, position=Vector3(2376.259765625,-1128.1373291016,1051.2022705078), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "SampStoryObjectBase",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"interior": 8,
+				"ObjectId": "2bc31d91-5ce4-4b5d-823b-84492e7965b1",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"position": {
+					"y": -1128.137329101563,
+					"x": 2376.259765625,
+					"z": 1051.202270507813
+				},
+				"modelid": 2281,
+				"StoryItemType": 1
+			},
+			{
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"Description": "",
+				"noCollisions": false,
+				"scale": 1,
+				"isRandomModelId": false,
+				"pluralTemplate": "",
+				"size": 2.5,
+				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2260, isRandomModelId=false, noRandomId=true, interior=8, position=Vector3(2369.1342773438,-1123.7105712891,1051.9635009766), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "SampStoryObjectBase",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"interior": 8,
+				"ObjectId": "93fd07f9-7a5f-442f-b6d5-dcf54f4050f7",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"position": {
+					"y": -1123.710571289063,
+					"x": 2369.13427734375,
+					"z": 1051.963500976563
+				},
+				"modelid": 2260,
+				"StoryItemType": 1
+			},
+			{
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"Description": "",
+				"noCollisions": false,
+				"scale": 1,
+				"isRandomModelId": false,
+				"pluralTemplate": "",
+				"size": 2.5,
+				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2280, isRandomModelId=false, noRandomId=true, interior=8, position=Vector3(2376.1596679688,-1122.4417724609,1051.7147216797), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "SampStoryObjectBase",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"interior": 8,
+				"ObjectId": "f6a368e3-6bd3-4e64-9528-dbb841c8da60",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"position": {
+					"y": -1122.441772460938,
+					"x": 2376.15966796875,
+					"z": 1051.714721679688
+				},
+				"modelid": 2280,
+				"StoryItemType": 1
+			},
+			{
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"Description": "",
+				"noCollisions": false,
+				"scale": 1,
+				"isRandomModelId": false,
+				"pluralTemplate": "",
+				"size": 2.5,
+				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2278, isRandomModelId=nil, noRandomId=true, interior=8, position=Vector3(2372.2741699219,-1135.9317626953,1051.6665039063), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "SampStoryObjectBase",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"interior": 8,
+				"ObjectId": "a86ed814-7b3d-48c0-a1cd-812958f2ede9",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"position": {
+					"y": -1135.931762695313,
+					"x": 2372.274169921875,
+					"z": 1051.66650390625
+				},
+				"modelid": 2278,
+				"StoryItemType": 1
+			},
+			{
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"Description": "",
+				"noCollisions": false,
+				"scale": 1,
+				"isRandomModelId": false,
+				"pluralTemplate": "",
+				"size": 2.5,
+				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2279, isRandomModelId=nil, noRandomId=true, interior=8, position=Vector3(2369.8544921875,-1136.0374755859,1051.8487548828), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "SampStoryObjectBase",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"interior": 8,
+				"ObjectId": "9e35ede5-9d82-4a84-9511-0632c3a78f26",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"position": {
+					"y": -1136.037475585938,
+					"x": 2369.8544921875,
+					"z": 1051.848754882813
+				},
+				"modelid": 2279,
+				"StoryItemType": 1
+			},
+			{
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"Description": "",
+				"noCollisions": false,
+				"scale": 1,
+				"isRandomModelId": false,
+				"pluralTemplate": "",
+				"size": 2.5,
+				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2288, isRandomModelId=nil, noRandomId=true, interior=8, position=Vector3(2373.5734863281,-1129.9302978516,1051.5510253906), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "SampStoryObjectBase",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"interior": 8,
+				"ObjectId": "3a83ad2b-ed98-4fff-a6ba-cdd339fe103d",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"position": {
+					"y": -1129.930297851563,
+					"x": 2373.573486328125,
+					"z": 1051.551025390625
+				},
+				"modelid": 2288,
+				"StoryItemType": 1
+			},
+			{
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"Description": "",
+				"noCollisions": false,
+				"scale": 1,
+				"isRandomModelId": false,
+				"pluralTemplate": "",
+				"size": 2.5,
+				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2812, isRandomModelId=nil, noRandomId=true, interior=8, position=Vector3(2371.0715332031,-1132.6494140625,1050.4334716797), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "SampStoryObjectBase",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"interior": 8,
+				"ObjectId": "4d79da63-b34e-48d5-bd95-e9a5456ab8d4",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"position": {
+					"y": -1132.6494140625,
+					"x": 2371.071533203125,
+					"z": 1050.433471679688
+				},
+				"modelid": 2812,
+				"StoryItemType": 1
 			}
 		],
 		"Objects": [
@@ -44,32 +284,33 @@
 					"x": 0,
 					"z": 0
 				},
-				"type": "Painting",
-				"Description": "",
+				"Description": "painting",
 				"noCollisions": false,
-				"interior": 8,
+				"scale": 1,
 				"isRandomModelId": false,
-				"ObjectId": "cc320a05-bc6f-4a47-b112-2e45d0d3e443",
-				"rotation": {
-					"y": 0,
-					"x": 0,
-					"z": 90
-				},
-				"dynamicString": "return Painting{description=\"\", noCollisions=false, modelid=nill, interior=8, position=Vector3(2357.833984375,-1132.7891845703,1051.8131103516), rotation=Vector3(0,0,90), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"pluralTemplate": "{count} paintings",
+				"size": 2.5,
+				"dynamicString": "return Painting{description=\"painting\", noCollisions=false, modelid=2269, isRandomModelId=false, noRandomId=true, interior=8, position=Vector3(2357.833984375,-1132.7891845703,1051.8131103516), rotation=Vector3(0,0,90), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "Painting",
 				"RotOffset": {
 					"y": 0,
 					"x": 0,
 					"z": 0
 				},
-				"StoryItemType": 1,
-				"scale": 1,
+				"interior": 8,
+				"ObjectId": "8e2126f4-ea9e-45b0-b724-52e718277668",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 90
+				},
 				"position": {
 					"y": -1132.789184570313,
 					"x": 2357.833984375,
 					"z": 1051.813110351563
 				},
-				"modelid": null,
-				"size": 2.5
+				"modelid": 2269,
+				"StoryItemType": 1
 			},
 			{
 				"PosOffset": {
@@ -77,12 +318,13 @@
 					"x": -0.02999999932944775,
 					"z": 0.07999999821186066
 				},
-				"Description": "glass of beer",
+				"Description": "glass of wine",
 				"noCollisions": false,
 				"scale": 1,
-				"isRandomModelId": false,
+				"isRandomModelId": true,
+				"pluralTemplate": "{count} glasssof wine",
 				"size": 2.5,
-				"dynamicString": "return Drinks{description=\"glass of beer\", noCollisions=false, modelid=nill, interior=8, position=Vector3(2370.4614257813,-1132.7697753906,1050.7540283203), rotation=Vector3(0,0,240.00030517578), posOffset=Vector3(-0.029999999329448,0.029999999329448,0.079999998211861), rotOffset=Vector3(0,90,0)}",
+				"dynamicString": "return Drinks{description=\"drink\", noCollisions=false, modelid=1667, isRandomModelId=false, noRandomId=true, interior=8, position=Vector3(2370.4614257813,-1132.7697753906,1050.6838378906), rotation=Vector3(0,0,240.00030517578), posOffset=Vector3(-0.029999999329448,0.029999999329448,0.079999998211861), rotOffset=Vector3(0,90,0)}",
 				"type": "Drinks",
 				"RotOffset": {
 					"y": 90,
@@ -90,7 +332,7 @@
 					"z": 0
 				},
 				"interior": 8,
-				"ObjectId": "de75d51a-ac5f-45c4-8476-483e60e653cf",
+				"ObjectId": "c828bcf5-b989-46a3-9954-791de37ef05c",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -99,14 +341,320 @@
 				"position": {
 					"y": -1132.769775390625,
 					"x": 2370.46142578125,
-					"z": 1050.754028320313
+					"z": 1050.693837890625
 				},
-				"StoryItemType": 1,
-				"modelid": null,
-				"Description2": "beer from it"
+				"modelid": 1667,
+				"StoryItemType": 1
+			},
+			{
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"Description": "painting",
+				"noCollisions": false,
+				"scale": 1,
+				"isRandomModelId": true,
+				"pluralTemplate": "{count} paintings",
+				"size": 2.5,
+				"dynamicString": "return Painting{description=\"painting\", noCollisions=false, modelid=2260, isRandomModelId=true, noRandomId=true, interior=8, position=Vector3(2369.7548828125,-1123.2036132813,1052.1168212891), rotation=Vector3(0,0,90), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "Painting",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"interior": 8,
+				"ObjectId": "3903e3bc-6dc3-4fa6-9006-d35020f820b9",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 90
+				},
+				"position": {
+					"y": -1123.20361328125,
+					"x": 2369.7548828125,
+					"z": 1052.116821289063
+				},
+				"modelid": 2260,
+				"StoryItemType": 1
+			},
+			{
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"Description": "painting",
+				"noCollisions": false,
+				"scale": 1,
+				"isRandomModelId": true,
+				"pluralTemplate": "{count} paintings",
+				"size": 2.5,
+				"dynamicString": "return Painting{description=\"painting\", noCollisions=false, modelid=2279, isRandomModelId=true, noRandomId=true, interior=8, position=Vector3(2375.6401367188,-1122.3277587891,1051.9871826172), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "Painting",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"interior": 8,
+				"ObjectId": "8781cf0a-9c00-4599-9cfc-fd78289ea487",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 270
+				},
+				"position": {
+					"y": -1122.327758789063,
+					"x": 2375.64013671875,
+					"z": 1051.987182617188
+				},
+				"modelid": 2279,
+				"StoryItemType": 1
+			},
+			{
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"Description": "coffee table",
+				"noCollisions": false,
+				"scale": 1,
+				"isRandomModelId": true,
+				"pluralTemplate": "{count} coffeestable",
+				"size": 2.5,
+				"dynamicString": "return CoffeeTable{description=\"coffee table\", noCollisions=false, modelid=1822, isRandomModelId=true, noRandomId=true, interior=8, position=Vector3(2372.08203125,-1124.4405517578,1049.0052490234), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "CoffeeTable",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"interior": 8,
+				"ObjectId": "f98dd702-ae16-40af-b57e-c469d925c9cd",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"position": {
+					"y": -1124.440551757813,
+					"x": 2372.08203125,
+					"z": 1049.005249023438
+				},
+				"modelid": 1822,
+				"StoryItemType": 1
+			},
+			{
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"Description": "table",
+				"noCollisions": false,
+				"scale": 1,
+				"isRandomModelId": true,
+				"pluralTemplate": "{count} tables",
+				"size": 2.5,
+				"dynamicString": "return Table{description=\"table\", noCollisions=false, modelid=2109, isRandomModelId=true, noRandomId=true, interior=8, position=Vector3(2370.9033203125,-1132.8267822266,1048.9886474609), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "Table",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"interior": 8,
+				"ObjectId": "f915504f-08a7-47f9-b17a-1704a3398dd9",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"position": {
+					"y": -1132.826782226563,
+					"x": 2370.9033203125,
+					"z": 1048.988647460938
+				},
+				"modelid": 2109,
+				"StoryItemType": 1
+			},
+			{
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"Description": "fridge",
+				"noCollisions": false,
+				"scale": 1,
+				"isRandomModelId": true,
+				"pluralTemplate": "{count} fridges",
+				"size": 2.5,
+				"dynamicString": "return Fridge{description=\"fridge\", noCollisions=false, modelid=2529, isRandomModelId=true, noRandomId=true, interior=8, position=Vector3(2374.6159667969,-1135.4158935547,1049.875), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "Fridge",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"interior": 8,
+				"ObjectId": "f9a2a4bb-1964-4968-8f99-01a89146eeb1",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 270
+				},
+				"position": {
+					"y": -1135.415893554688,
+					"x": 2374.615966796875,
+					"z": 1049.875
+				},
+				"modelid": 2529,
+				"StoryItemType": 1
+			},
+			{
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"Description": "chair",
+				"noCollisions": false,
+				"scale": 1,
+				"isRandomModelId": true,
+				"pluralTemplate": "{count} chairs",
+				"size": 2.5,
+				"dynamicString": "return Chair{description=\"chair\", noCollisions=false, modelid=2331, isRandomModelId=true, noRandomId=true, interior=8, position=Vector3(2370.4816894531,-1131.9437255859,1048.7253417969), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "Chair",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"interior": 8,
+				"ObjectId": "da016679-e53f-4b8b-84fc-ff3ca0e1dbba",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"position": {
+					"y": -1131.943725585938,
+					"x": 2370.481689453125,
+					"z": 1048.725341796875
+				},
+				"modelid": 2331,
+				"StoryItemType": 1
+			},
+			{
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"Description": "chair",
+				"noCollisions": false,
+				"scale": 1,
+				"isRandomModelId": true,
+				"pluralTemplate": "{count} chairs",
+				"size": 2.5,
+				"dynamicString": "return Chair{description=\"chair\", noCollisions=false, modelid=2331, isRandomModelId=true, noRandomId=true, interior=8, position=Vector3(2370.6394042969,-1134.1794433594,1049.1763916016), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "Chair",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"interior": 8,
+				"ObjectId": "1025b033-c5ff-467e-a244-6321d8c83e1b",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"position": {
+					"y": -1134.179443359375,
+					"x": 2370.639404296875,
+					"z": 1049.176391601563
+				},
+				"modelid": 2331,
+				"StoryItemType": 1
+			},
+			{
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"Description": "chair",
+				"noCollisions": false,
+				"scale": 1,
+				"isRandomModelId": true,
+				"pluralTemplate": "{count} chairs",
+				"size": 2.5,
+				"dynamicString": "return Chair{description=\"chair\", noCollisions=false, modelid=2123, isRandomModelId=true, noRandomId=true, interior=8, position=Vector3(2371.4177246094,-1131.8332519531,1048.3236083984), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "Chair",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"interior": 8,
+				"ObjectId": "26b12792-4f1d-4257-b814-fcbee107fa68",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"position": {
+					"y": -1131.833251953125,
+					"x": 2371.417724609375,
+					"z": 1048.323608398438
+				},
+				"modelid": 2123,
+				"StoryItemType": 1
+			},
+			{
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"Description": "",
+				"noCollisions": false,
+				"scale": 1,
+				"isRandomModelId": true,
+				"pluralTemplate": "",
+				"size": 2.5,
+				"dynamicString": "return Painting{description=\"\", noCollisions=false, modelid=2272, isRandomModelId=nil, noRandomId=true, interior=8, position=Vector3(2374.408203125,-1131.0070800781,1052.1551513672), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "Painting",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"interior": 8,
+				"ObjectId": "2eb11d55-9438-4731-a805-0c6d2ebb8412",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 270
+				},
+				"position": {
+					"y": -1131.007080078125,
+					"x": 2374.408203125,
+					"z": 1052.155151367188
+				},
+				"modelid": 2272,
+				"StoryItemType": 1
 			}
 		],
 		"name": "house8",
+		"graphPath": "files/paths/house_8.json",
 		"Disposed": false,
 		"Regions": [
 			{
@@ -123,14 +671,14 @@
 						"fov": 70
 					},
 					{
-						"y": -1135.843994140625,
-						"x": 2357.328369140625,
-						"lz": 1049.875,
-						"z": 1053.074951171875,
-						"fov": 70,
+						"y": -1129.86083984375,
+						"x": 2363.2724609375,
+						"lz": 1049.882568359375,
+						"z": 1053.08251953125,
+						"lx": 2358.732421875,
+						"ly": -1133.959594726563,
 						"roll": 0,
-						"ly": -1131.323120117188,
-						"lx": 2362.459228515625
+						"fov": 81
 					}
 				],
 				"Objects": [],
@@ -139,6 +687,7 @@
 					"x": 2360.30810546875,
 					"z": 1049.876953125
 				},
+				"EvaluatingRegion": false,
 				"name": "bedroom",
 				"vertexes": [
 					{
@@ -175,16 +724,6 @@
 						"roll": 0,
 						"ly": -1134.83203125,
 						"lx": 2364.19873046875
-					},
-					{
-						"y": -1135.938720703125,
-						"x": 2364.381591796875,
-						"lz": 1049.882568359375,
-						"z": 1052.58251953125,
-						"fov": 70,
-						"roll": 0,
-						"ly": -1126.7939453125,
-						"lx": 2364.521728515625
 					}
 				],
 				"Objects": [],
@@ -193,6 +732,7 @@
 					"x": 2366.3759765625,
 					"z": 1049.878784179688
 				},
+				"EvaluatingRegion": false,
 				"name": "hallway",
 				"vertexes": [
 					{
@@ -241,14 +781,14 @@
 						"fov": 70
 					},
 					{
-						"y": -1119.443603515625,
-						"x": 2369.548320312053,
+						"y": -1120.214086912572,
+						"x": 2360.7529296875,
 						"lz": 1049.875,
-						"z": 1052.574951171875,
-						"lx": 2362.532470703125,
-						"ly": -1124.113159179688,
+						"z": 1053.574951171875,
+						"lx": 2367.635986328125,
+						"ly": -1124.126586914063,
 						"roll": 0,
-						"fov": 70
+						"fov": 77.5
 					}
 				],
 				"Objects": [],
@@ -257,6 +797,7 @@
 					"x": 2365.090087890625,
 					"z": 1049.875
 				},
+				"EvaluatingRegion": false,
 				"name": "bedroom",
 				"vertexes": [
 					{
@@ -303,26 +844,6 @@
 						"ly": -1122.31884765625,
 						"roll": 0,
 						"fov": 70
-					},
-					{
-						"y": -1119.993281252682,
-						"x": 2369.18798828125,
-						"lz": 1049.875,
-						"z": 1052.574951171875,
-						"lx": 2375.282470703125,
-						"ly": -1128.155639648438,
-						"roll": 0,
-						"fov": 70
-					},
-					{
-						"y": -1120.019135741517,
-						"x": 2375.901406245306,
-						"lz": 1049.875,
-						"z": 1053.074951171875,
-						"lx": 2370.500244140625,
-						"ly": -1127.970092773438,
-						"roll": 0,
-						"fov": 70
 					}
 				],
 				"Objects": [],
@@ -331,6 +852,7 @@
 					"x": 2372.697509765625,
 					"z": 1049.875
 				},
+				"EvaluatingRegion": false,
 				"name": "living room ",
 				"vertexes": [
 					{
@@ -377,16 +899,6 @@
 						"ly": -1131.069946289063,
 						"roll": 0,
 						"fov": 70
-					},
-					{
-						"y": -1129.998808583245,
-						"x": 2375.642050785944,
-						"lz": 1049.882568359375,
-						"z": 1052.58251953125,
-						"lx": 2368.225830078125,
-						"ly": -1135.552490234375,
-						"roll": 0,
-						"fov": 70
 					}
 				],
 				"Objects": [],
@@ -395,6 +907,7 @@
 					"x": 2370.831787109375,
 					"z": 1049.876953125
 				},
+				"EvaluatingRegion": false,
 				"name": "kitchen",
 				"vertexes": [
 					{
@@ -411,11 +924,6 @@
 						"y": -1135.563720703125,
 						"x": 2368.220458984375,
 						"z": 1049.882568359375
-					},
-					{
-						"y": -1130.29736328125,
-						"x": 2367.4150390625,
-						"z": 1049.875
 					}
 				]
 			}

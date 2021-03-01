@@ -3077,9 +3077,9 @@ SetPlayerSkin.PlayerSkins = {
     SetPlayerSkin(60, "A young white man in a brown sweater with blue jeans"),
     SetPlayerSkin(61, "A middle-aged white man in a black pilot suit"),
     SetPlayerSkin(62, "A old white man in a ligh blue with white stripes pajamas"),
-    SetPlayerSkin(63, "A young black woman in a pink bra and black skirt"),
-    SetPlayerSkin(64, "A young white woman in a black t-shirt and pink skirt"),
-    -- SetPlayerSkin(65, "Kendl Johnson"),                                  ---> not working
+    -- SetPlayerSkin(63, "A young black woman in a pink bra and black skirt"),  --> too vulgar...
+    -- SetPlayerSkin(64, "A young white woman in a black t-shirt and pink skirt"),  --> too vulgar...
+    SetPlayerSkin(65, "Kendl Johnson"),                                  ---> not working
     SetPlayerSkin(66, "A middle-aged black man in a navy blue and white jacket and black jeans"),
     -- SetPlayerSkin(67, "Pool Player"),                                    ---> same as 66
     SetPlayerSkin(68, "An old white man in a black suit"),
@@ -3104,16 +3104,16 @@ SetPlayerSkin.PlayerSkins = {
     -- SetPlayerSkin(87, "Stripper"),                                       ---> not working
     SetPlayerSkin(88, "An old woman in a red polo t-shirt and biege three quarter pants"),
     SetPlayerSkin(89, "An old woman in a ligh blue dress and with a red headband"),
-    SetPlayerSkin(90, "A young woman in a brown t-shirt, a black skirt and with a green headband"),
+    -- SetPlayerSkin(90, "A young woman in a brown t-shirt, a black skirt and with a green headband"),    --> too vulgar
     -- SetPlayerSkin(91, "Rich Woman"),                                     ---> same as 90
-    SetPlayerSkin(92, "A young white woman in a navy blue swim suit"),
+    -- SetPlayerSkin(92, "A young white woman in a navy blue swim suit"),             --> too vulgar
     SetPlayerSkin(93, "A young white woman in a black blouse and black jeans"),
     SetPlayerSkin(94, "An old white man in a white shirt, gray three quarter pants and a gray hat"),
     SetPlayerSkin(95, "An old man in a white shirt and blue jeans"),
     SetPlayerSkin(96, "A young white man in a white sleeveless t-shirt with gray strides and gray and red shorts"),
     SetPlayerSkin(97, "A young white man in red shorts"),
     SetPlayerSkin(98, "A young white man in a white shirt with a black vest and blue jeans"),
-    SetPlayerSkin(99, "A young white man in a white t-shirt, black shorts and a gray helmet"),
+    -- SetPlayerSkin(99, "A young white man in a white t-shirt, black shorts and a gray helmet"),
     SetPlayerSkin(100, "A middle-aged white man with a long blonde tail, in a gray jacket, beige pants, with black glasses and brown gloves"),
     SetPlayerSkin(101, "A young white man with blonde hair, in a khaki jacket and white t-shirt, and black pants"),
     SetPlayerSkin(102, "A middle-aged black man with black hair, in a white t-shirt, purple shorts and with a purple headband"),
@@ -3151,7 +3151,7 @@ SetPlayerSkin.PlayerSkins = {
     SetPlayerSkin(134, "An old black man in a white shirt, gray shorts and with a khaki cap"),
     SetPlayerSkin(135, "An old white man with long white hair in a red shirt, khaki shorts and with a khaki winter hat"),
     SetPlayerSkin(136, "And old black man with one tail gray hair, gray sweater, purple pants and a red, green and yellow winter hat"),
-    SetPlayerSkin(137, "A middle-aged man in a khaki t-shirt, blue three quarter jeans and with a box on head"),
+    -- SetPlayerSkin(137, "A middle-aged man in a khaki t-shirt, blue three quarter jeans and with a box on head"),
     -- SetPlayerSkin(138, "White woman in a swim suit"),                       ---> TO DO
     -- SetPlayerSkin(139, "Black woman in a swim suit"),                       ---> TO DO
     -- SetPlayerSkin(140, "Asian woman in a swim suit"),                       ---> TO DO

@@ -7,12 +7,12 @@ Story = class(StoryBase, function(o, actor, maxActions, logData)
         -- House3()
         -- House8()
         -- House10()
-        -- House12()
+        House12()
     }
     o.DynamicEpisodes = {
       -- "house1_sweet",
       -- "house7"
-      "house9"
+      -- "house9"
       -- "gym1"
       -- "gym2",
       -- "gym3"
@@ -32,6 +32,10 @@ Story = class(StoryBase, function(o, actor, maxActions, logData)
 end)
 
 function Story:Play()
+    if DEBUG then
+        print("Story: Loading dynamic episodes..")
+    end
+
     for i,episode_name in ipairs(self.DynamicEpisodes) do
         print(episode_name)
         local episode = DynamicEpisode(episode_name)
@@ -78,21 +82,33 @@ function Story:Play()
         	end
         , LOG_FREQUENCY, 0, self.Actor:getData('id'), self.Id)
     end
+
+    if DEBUG then
+        print("Story: Picking a random skin...")
+    end 
+
     local skin = PickRandom(Where(SetPlayerSkin.PlayerSkins, function(s)
         return not s.isTaken
     end))
     skin.TargetItem = self.Actor
     skin.Performer = self.Actor
     skin:Apply()
-    self.CurrentEpisode = PickRandom(self.Episodes)
 
+    if DEBUG then
+        print("Story: Loading a random episode...")
+    end
+    self.CurrentEpisode = PickRandom(self.Episodes)
     self.CurrentEpisode:Initialize(self.Actor)
     
     self.Actor:setData('pickedObjects', {})
+
+    if DEBUG then
+        print("Story: Playing the picked episode...")
+    end
     self.CurrentEpisode:Play(self.Actor)
 
     if DEBUG then
-        outputConsole("Story:Play - chosen random skin and episode. Playing episode")
+        print("Story: Play - chosen random skin and episode. Playing episode")
     end
 end
 

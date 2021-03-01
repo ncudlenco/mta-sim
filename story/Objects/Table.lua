@@ -9,5 +9,7 @@ end
 Table.eModel = 
 {
     GlassTable = 2086,
-    WoodRoundTable = 2109
+    WoodRoundTable = 2109,
+    Unknown01 = 2117,
+    Unknown02 = 2115
 }

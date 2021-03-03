@@ -80,38 +80,56 @@ function Region:MapObjectsAndPedsLocations(pointOfView, forward, up)
         front={},
         unknown={}
     }
-    local function mapElement(o)
+    local function mapElement(o, ignoreMap)
         if o.position then
             local angle = forward:angleAboutAxis(o.position - pointOfView, up)
             angle = math.deg(angle)
 --between -15 and 15 the object is in front of the player
             if math.abs(angle) <= 15 then
-                table.insert(locationMap.front, o)
+                if not ignoreMap then
+                    table.insert(locationMap.front, o)
+                end
+                if o.setData then
+                    o:setData('relativePosition', 'front')
+                end
 --between 15 and 180 the object is on the left side
             elseif angle > 0 and angle <= 135 then
-                table.insert(locationMap.left, o)
---between -180 and -15 the object is on the right side
+                if not ignoreMap then
+                    table.insert(locationMap.left, o)
+                end
+                if o.setData then
+                    o:setData('relativePosition', 'left')
+                end
+                --between -180 and -15 the object is on the right side
             elseif angle < 0 and angle >= -135 then
-                table.insert(locationMap.right, o)
+                if not ignoreMap then
+                    table.insert(locationMap.right, o)
+                end
+                if o.setData then
+                    o:setData('relativePosition', 'right')
+                end
             end
         else
-            table.insert(locationMap.unknown, o)
+            if not ignoreMap then
+                table.insert(locationMap.unknown, o)
+            end
+            if o.setData then
+                o:setData('relativePosition', 'unknown')
+            end
         end
     end
     for _,o in ipairs(self.Objects) do
         mapElement(o)
     end
-    -- for _,ped in ipairs(self.Episode.peds) do
-    --     if ped:getData('currentRegionId') == self.Id then
-    --         mapElement(ped)
-    --     end
-    -- end
-    -- local players = getElementsByType ( "player" )
-    -- for _,player in ipairs(self.Episode.peds) do
-    --     if player:getData('currentRegionId') == self.Id then
-    --         mapElement(player)
-    --     end
-    -- end
+    for _,ped in ipairs(self.Episode.peds) do
+        if ped:getData('currentRegionId') == self.Id then
+            mapElement(ped, true)
+        end
+    end
+    mapElement(CURRENT_STORY.Actor, true)
+    for _,poi in ipairs(self.POI) do
+        mapElement(poi, true)
+    end
     return locationMap
 end
    

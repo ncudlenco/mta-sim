@@ -3351,6 +3351,10 @@ function SetPlayerSkin:Apply(...)
 
     player:setData('genderNominative', playerGenderNominative)
     player:setData('genderGenitive', playerGenderGenitive)
+
+    --TODO: log atomic event here
+    local event = {id = player:getData('id'), Name = player:getData('name')}
+    GRAPH.AtomicEvents[event.id] = event
 end
 
 function SetPlayerSkin:GetDynamicString()

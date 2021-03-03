@@ -15,7 +15,19 @@ Location = class(StoryLocationBase, function(o, x, y, z, angle, interior, descri
         o.position = {x=x, y=y, z=z}
         o.rotation = {x=0, y=0, z=angle}
     end
+    o.metatable = {}
+    --TODO: log atomic action here (location exists)
+    local event = {id = o.LocationId, Name = o.Description}
+    GRAPH.AtomicEvents[event.id] = event
 end)
+
+function Location:getData(key)
+    return self.metatable[key]
+end
+
+function Location:setData(key, value)
+    self.metatable[key] = value
+end
 
 function Location:SpawnPlayerHere(player)
     self.isBusy = true

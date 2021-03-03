@@ -111,19 +111,41 @@ function SampStoryObjectBase:UpdateData(unpack)
     if self.isRandomModelId then
         modelid = self.type..'.eModel[PickRandom('..self.type..'.eModel)]'
     end
+    self.metadata = {}
     self.dynamicString = 'return '..self.type..'{description="'..self.Description..'", noCollisions='..noCollisionStr..', modelid='..(modelid or 'nil')..', isRandomModelId='.. tostring(self.isRandomModelId) .. ', interior='..self.interior..', position=Vector3('..self.position.x..','..self.position.y..','..self.position.z..'), rotation=Vector3('..self.rotation.x..','..self.rotation.y..','..self.rotation.z..'), posOffset=Vector3('..self.PosOffset.x..','..self.PosOffset.y..','..self.PosOffset.z..'), rotOffset=Vector3('..self.RotOffset.x..','..self.RotOffset.y..','..self.RotOffset.z..')}'
 end
 
 SampStoryObjectBase.eModel = {None = -1}
+
+function SampStoryObjectBase:setData(key, value)
+    if self.instance then
+        self.instance:setData(key, value)
+    else
+        self.metadata[key] = value
+    end
+end
+
+function SampStoryObjectBase:getData(key)
+    if self.instance then
+        return self.instance:getData(key)
+    else
+        return self.metadata[key]
+    end
+    return nil
+end
 
 function SampStoryObjectBase:Create(...)
     self.instance = Object(self.modelid, self.position, self.rotation, self.noCollisions)
     self.instance:setInterior(self.interior)
 
     setObjectScale(self.instance, self.scale)
+    --TODO: log atomic event here
+    local event = {id = self.ObjectId, Name = self.Description}
+    GRAPH.AtomicEvents[event.id] = event
 end
 
 function SampStoryObjectBase:Destroy(...)
+    --TODO: if needed -> here we could set the end time for the atomic event Object exists
     if self.instance ~= nil then
         self.instance:destroy()
     end

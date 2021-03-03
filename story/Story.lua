@@ -1,7 +1,7 @@
 Story = class(StoryBase, function(o, actor, maxActions, logData)
     StoryBase.init(o, actor, maxActions)
     o.LogData = logData
-    o.Logger = Logger('data/'..actor:getData('id')..'/'..o.Id..'/labels.txt', true, o)
+    o.Logger = Logger('data/'..actor:getData('id')..'/'..o.Id, true, o)
     o.Episodes = {
         -- House1()
         -- House3()

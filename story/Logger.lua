@@ -217,6 +217,17 @@ function Logger:DescribeObjects(player, regionName, objects, locationMap, descri
     return objectsDescription
 end
 
+function Logger:LogGraph()
+    local fileHandle = fileCreate(self.Path .. '/graph.json')
+    if fileHandle then
+        local jsonStr = toJSON(GRAPH)
+        fileWrite(fileHandle, jsonStr)
+        fileClose(fileHandle)
+    else
+        outputConsole("Unable to open "..self.Path .. '/graph.json')
+    end
+end
+
 function Logger:Log(text, ...)
     local isImpersonal = false
     local commit = false
@@ -359,15 +370,16 @@ function Logger:FlushBuffer(player, endSentence)
         self.Buffer[player:getData('id')].text = self.Buffer[player:getData('id')].text..'.'
     end
     if LOG_DATA then
-        local file = File(self.Path)
+        local file = File(self.Path .. '/labels.txt')
         if file then                               -- check if it was successfully opened
             file:setPos(file:getSize())            -- move position to the end of the file
             file:write(self.Buffer[player:getData('id')].text..' ')                    -- append data
             file:flush()                           -- Flush the appended data into the file.
             file:close()                           -- close the file once we're done with it
         else
-            outputConsole("Unable to open "..self.Path)
+            outputConsole("Unable to open "..self.Path .. '/labels.txt')
         end
+        self:LogGraph()
     end
     if self.ShowOnScreen then
         if CURRENT_STORY.Actor then

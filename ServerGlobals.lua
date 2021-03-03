@@ -12,3 +12,7 @@ DEBUG_ACTIONS = true
 FREE_ROAM = false
 TIME_STAMP = false
 ACTORS_CROWDING_FACTOR = 0.0
+GRAPH = {
+    AtomicEvents = {},
+    Events = {}
+}

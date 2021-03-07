@@ -121,6 +121,10 @@
   <script src="story/Actions/BenchpressWorkOut.lua" type="shared" />
   <script src="story/Actions/Punch.lua" type="shared" />
   <script src="story/Actions/DumbbellsWorkOut.lua" type="shared" />
+  <script src="story/Actions/Talk.lua" type="shared" />
+  <script src="story/Actions/Laugh.lua" type="shared" />
+  <script src="story/Actions/HandShake.lua" type="shared" />
+  <script src="story/Actions/Hug.lua" type="shared" />
   <!-- Objects -->
   <script src="story/Objects/SampStoryObjectBase.lua" type="shared" />
   <script src="story/Objects/MobilePhone.lua" type="shared" />

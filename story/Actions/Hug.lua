@@ -13,7 +13,7 @@ function Hug:Apply()
     story.Logger:Log(" and " .. self.TargetPlayer:getData('name') .. self.Description, self)
 
     self.Performer:setAnimation("gangs", "hndshkfa_swt", time, true, false, false, false)
-    -- self.TargetPlayer:setAnimation("gangs", "hndshkfa_swt", time, true, false, false, false)
+    self.TargetPlayer:setAnimation("gangs", "hndshkfa_swt", time, true, false, false, false)
 
     if DEBUG then
         outputConsole("Hug:Apply")

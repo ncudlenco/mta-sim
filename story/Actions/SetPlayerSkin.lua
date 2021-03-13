@@ -3353,7 +3353,7 @@ function SetPlayerSkin:Apply(...)
     player:setData('genderGenitive', playerGenderGenitive)
 
     --TODO: log atomic event here
-    local event = {id = player:getData('id'), Name = player:getData('name')}
+    local event = {id = player:getData('id'), Name = player:getData('name'), Description = player:getData('skinDescription'), Gender = player:getData('genderNominative')}
     GRAPH.AtomicEvents[event.id] = event
 end
 

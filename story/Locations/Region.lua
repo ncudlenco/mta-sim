@@ -91,6 +91,9 @@ function Region:MapObjectsAndPedsLocations(pointOfView, forward, up)
                 end
                 if o.setData then
                     o:setData('relativePosition', 'front')
+                    if o.ObjectId ~= nil then
+                        GRAPH.AtomicEvents[o.ObjectId] = {id = o.ObjectId, Name = o.Description, Region = self.name, RelativePosition = "front"}
+                    end
                 end
 --between 15 and 180 the object is on the left side
             elseif angle > 0 and angle <= 135 then
@@ -99,6 +102,9 @@ function Region:MapObjectsAndPedsLocations(pointOfView, forward, up)
                 end
                 if o.setData then
                     o:setData('relativePosition', 'left')
+                    if o.ObjectId ~= nil then
+                        GRAPH.AtomicEvents[o.ObjectId] = {id = o.ObjectId, Name = o.Description, Region = self.name, RelativePosition = "front"}
+                    end
                 end
                 --between -180 and -15 the object is on the right side
             elseif angle < 0 and angle >= -135 then
@@ -107,6 +113,9 @@ function Region:MapObjectsAndPedsLocations(pointOfView, forward, up)
                 end
                 if o.setData then
                     o:setData('relativePosition', 'right')
+                    if o.ObjectId ~= nil then
+                        GRAPH.AtomicEvents[o.ObjectId] = {id = o.ObjectId, Name = o.Description, Region = self.name, RelativePosition = "front"}
+                    end
                 end
             end
         else

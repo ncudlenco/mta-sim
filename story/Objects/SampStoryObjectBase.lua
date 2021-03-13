@@ -140,8 +140,8 @@ function SampStoryObjectBase:Create(...)
 
     setObjectScale(self.instance, self.scale)
     --TODO: log atomic event here
-    local event = {id = self.ObjectId, Name = self.Description}
-    GRAPH.AtomicEvents[event.id] = event
+    -- local event = {id = self.ObjectId, Name = self.Description}
+    -- GRAPH.AtomicEvents[event.id] = event
 end
 
 function SampStoryObjectBase:Destroy(...)

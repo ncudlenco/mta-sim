@@ -17,8 +17,8 @@ Location = class(StoryLocationBase, function(o, x, y, z, angle, interior, descri
     end
     o.metatable = {}
     --TODO: log atomic action here (location exists)
-    local event = {id = o.LocationId, Name = o.Description}
-    GRAPH.AtomicEvents[event.id] = event
+    --local event = {id = o.LocationId, Name = o.Description}
+    --GRAPH.AtomicEvents[event.id] = event
 end)
 
 function Location:getData(key)

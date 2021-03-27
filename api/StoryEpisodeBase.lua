@@ -45,8 +45,6 @@ function StoryEpisodeBase:Initialize(...)
                     for k,action in ipairs(p1.PossibleActions) do
                         str_PA = str_PA .. string.sub(action.NextLocation.LocationId, 1, 8) .. ", "
                     end
-
-                    print(str_PA)
                 end
             end
         end

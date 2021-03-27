@@ -31,6 +31,7 @@ Move = class(StoryActionBase, function(o, params)
     o.path = {}
     o.graphId = params.graphId
     o.how = params.how or Move.eHow.Walk
+    o.isMove = true
 end)
 
 Move.eLib = {
@@ -92,7 +93,7 @@ function Move:Apply()
 
     if self.TargetItem.Region and self.TargetItem.Region.Id ~= self.Performer:getData('currentRegionId') then
         if DEBUG then
-            outputConsole("Move:Apply: Logging data because the next region is "..self.TargetItem.Region.name..' but the current region is '..story.CurrentEpisode.CurrentRegion.name)
+            -- outputConsole("Move:Apply: Logging data because the next region is "..self.TargetItem.Region.name..' but the current region is '..story.CurrentEpisode.CurrentRegion.name)
             -- outputConsole("Move:Apply: ("..self.TargetItem.Region.Id..' vs '..self.Performer:getData('currentRegionId')..' - '..story.CurrentEpisode.CurrentRegion.Id)
         end
         story.Logger:Log(self.Description .. " " .. self.TargetItem.Description, self)

@@ -10,7 +10,7 @@ function EndStory:Apply()
     local story = GetStory(self.Performer)
     story:End()
     if not story.LogData and not story.RecorderTimer then
-        story.Actor:kick("story ended")
+        story.Actor:kick("story ended - end story call")
     end
 end
 

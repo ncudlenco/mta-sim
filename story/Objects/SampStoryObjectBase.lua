@@ -25,7 +25,6 @@ SampStoryObjectBase = class(StoryObjectBase, function(o, params)
 
     o.isRandomModelId = params.isRandomModelId or false
     
-    print(params.noRandomId)
     if params.noRandomId ~= true then
 
         if o.modelid == nil or o.modelid < 0 then

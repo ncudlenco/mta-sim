@@ -3,24 +3,24 @@ Talk = class(StoryActionBase, function(o, params)
     StoryActionBase.init(o,params)
 
     o.TargetPlayer = params.targetPlayer
+    o.Time = params.time
 end)
 
 function Talk:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
-    
-    local time = random(5000, 16000)
+    print(self.Time)
     story.Logger:Log(self.Description .. self.TargetPlayer:getData('name'), self)
     local talkType = PickRandom({"prtial_gngtlka", "prtial_gngtlkb", "prtial_gngtlkc", 
                                  "prtial_gngtlkd", "prtial_gngtlke", "prtial_gngtlkf", 
                                  "prtial_gngtlkg", "prtial_gngtlkh"})
-    self.Performer:setAnimation("gangs", talkType, time, true, false, false, false)
+    self.Performer:setAnimation("gangs", talkType, self.Time, true, false, false, false)
 
     if DEBUG then
         outputConsole("Talk:Apply")
     end
 
-    OnGlobalActionFinished(time, self.Performer:getData('id'), self.Performer:getData('storyId'))
+    OnGlobalActionFinished(self.Time, self.Performer:getData('id'), self.Performer:getData('storyId'))
 end
 
 function Talk:GetDynamicString()

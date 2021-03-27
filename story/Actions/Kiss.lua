@@ -21,14 +21,7 @@ function Kiss:Apply()
         performerKissType = PickRandom({"grlfrd_kiss_01", "grlfrd_kiss_02", "grlfrd_kiss_03"})
     end
 
-    if self.TargetPlayer:getData('genderNominative') == "she" then
-        targetKissType = PickRandom({"playa_kiss_01", "playa_kiss_02", "playa_kiss_03"})
-    else
-        targetKissType = PickRandom({"grlfrd_kiss_01", "grlfrd_kiss_02", "grlfrd_kiss_03"})
-    end
-
     self.Performer:setAnimation("kissing", performerKissType, time, true, false, false, false)
-    self.TargetPlayer:setAnimation("kissing", targetKissType, time, true, false, false, false)
 
     if DEBUG then
         outputConsole("Kiss:Apply")

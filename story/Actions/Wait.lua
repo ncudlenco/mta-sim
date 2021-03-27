@@ -1,5 +1,5 @@
 Wait = class(StoryActionBase, function(o, params)
-    params.description = " is waiting "
+    params.description = PickRandom({" is waiting for something ", " is looking around "})
     StoryActionBase.init(o,params)
     o.Time = params.time
 end)
@@ -9,7 +9,7 @@ function Wait:Apply()
     table.insert(story.History[self.Performer:getData('id')], self)
     
     story.Logger:Log(self.Description, self)
-    self.Performer:setAnimation("CASINO", "Slot_wait", self.Time, true, true, false, true)
+    self.Performer:setAnimation("cop_ambient", "coplook_loop", self.Time, true, false, false, true)
 
     if DEBUG then
         outputConsole("Wait:Apply")

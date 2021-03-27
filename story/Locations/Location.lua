@@ -241,7 +241,6 @@ function Location:GetNextValidAction(player)
         for i, action in ipairs(nextValidActions) do
             str_act = str_act .. string.sub(action.ActionId, 1, 8) .. " "
         end
-        print(str_act)
     end
 
     if not next then

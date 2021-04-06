@@ -450,7 +450,7 @@
 			}
 		],
 		"name": "house10",
-		"graphPath": "files/paths/house_10.json",
+		"graphPath": "files/paths/house10.json",
 		"Disposed": false,
 		"Regions": [
 			{

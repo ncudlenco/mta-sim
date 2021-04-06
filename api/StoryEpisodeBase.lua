@@ -95,7 +95,7 @@ function StoryEpisodeBase:Initialize(...)
         end)
 
         local pedsNr = math.max(math.floor(#self.ValidStartingLocations * ACTORS_CROWDING_FACTOR) - 1, 0)
-
+        print('Peds nr '..pedsNr)
         if (pedsNr + 1) > #self.ValidStartingLocations then
             if DEBUG then
                 outputConsole('[Warning] StoryEpisodeBase:Initialize: number of peds and player is greater than the available starting locations. A max of '..(#self.ValidStartingLocations-1)..' peds will be spawned')

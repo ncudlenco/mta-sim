@@ -1,6 +1,6 @@
 CURRENT_STORY = nil
 SCREENSHOTS = {}
-MAX_ACTIONS = 100
+MAX_ACTIONS = 10
 STATIC_CAMERA = true
 LOG_DATA = false
 LOG_FREQUENCY = 1000 / 30 --in milliseconds
@@ -11,7 +11,7 @@ DEBUG_EPISODE = true
 DEBUG_ACTIONS = true
 FREE_ROAM = false
 TIME_STAMP = false
-ACTORS_CROWDING_FACTOR = 0.0
+ACTORS_CROWDING_FACTOR = 0.5
 GRAPH = {
     AtomicEvents = {},
     Events = {}

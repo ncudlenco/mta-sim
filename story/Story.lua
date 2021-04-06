@@ -7,15 +7,18 @@ Story = class(StoryBase, function(o, actor, maxActions, logData)
         -- House3()
         -- House8()
         -- House10()
-        House12()
+        -- House12()
     }
     o.DynamicEpisodes = {
-      -- "house1_sweet",
-      -- "house7"
-      -- "house9"
-      -- "gym1"
-      -- "gym2",
-      -- "gym3"
+      "house1_sweet",
+      "house7",
+      "house8",
+      "house9",
+      "house10",
+      "house12",
+      "gym1",
+      "gym2",
+      "gym3"
     }
     o.Disposed = false
     if not o.Actor then
@@ -35,6 +38,9 @@ function Story:Play()
     if DEBUG then
         print("Story: Loading dynamic episodes..")
     end
+
+    math.randomseed(os.time())
+    math.random(); math.random(); math.random()
 
     for i,episode_name in ipairs(self.DynamicEpisodes) do
         print(episode_name)
@@ -98,6 +104,7 @@ function Story:Play()
         print("Story: Loading a random episode...")
     end
     self.CurrentEpisode = PickRandom(self.Episodes)
+    print(self.CurrentEpisode.name)
     self.CurrentEpisode:Initialize(self.Actor)
     
     self.Actor:setData('pickedObjects', {})

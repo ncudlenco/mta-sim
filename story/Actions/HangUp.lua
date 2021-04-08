@@ -6,8 +6,10 @@ end)
 function HangUp:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
-    
-    story.Logger:Log(self.Description, self)
+    if self.Performer:getData("currentRegionId") == story.CurrentEpisode.CurrentRegion.Id then
+        story.Logger:Log(self.Description, self)
+    end
+
     self.Performer:setAnimation("PED", "PHONE_OUT", 2000, true, true, false, true)
 
     if DEBUG then

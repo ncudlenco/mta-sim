@@ -2,7 +2,7 @@ FIRST_ACTOR = nil
 SECOND_ACTOR = nil
 PERFORM_MULTI_ACTION = nil
 PERFORM_MULTI_ACTION_FIRST_ACTOR = nil 
-MULTI_ACTION_DONE = nil
+MULTI_ACTION_DONE = true
 
 function OnGlobalActionFinished(delay, playerId, storyId, callback, destroyedItem)
     --TODO: log events here, update the time taken inside the timer
@@ -12,22 +12,35 @@ function OnGlobalActionFinished(delay, playerId, storyId, callback, destroyedIte
         local lastAction = story.History[playerId][#story.History[playerId]]
         if lastAction then
             --TODO: log events here
-            local event = {
-                Actor = { 
-                    id = lastAction.Performer:getData('id'), 
-                    relativePosition = lastAction.Performer:getData('relativePosition') 
-                },
-                Action = lastAction.Description,
-                Location = lastAction.Performer:getData('currentRegion'),
-                Start = actionStartTime,
-                End = CURRENT_STORY.Logger:GetElapsedTime(),
-                Target = {
+            local target = nil
+            if lastAction.TargetItem then
+                target = {
                     id = lastAction.TargetItem.ObjectId or lastAction.TargetItem.LocationId or lastAction.TargetItem:getData('id'),
                     type = lastAction.TargetItem.StoryItemType,
                     relativePosition = lastAction.TargetItem:getData('relativePosition')
                 }
-            }
-            table.insert(GRAPH.Events, event)
+            else
+                target = {
+                    id = nil,
+                    type = nil,
+                    relativePosition = nil
+                }
+            end
+            
+            if lastAction.Performer:getData("currentRegionId") == story.CurrentEpisode.CurrentRegion.Id then
+                local event = {
+                    Actor = { 
+                        id = lastAction.Performer:getData('id'), 
+                        relativePosition = lastAction.Performer:getData('relativePosition') 
+                    },
+                    Action = lastAction.Description,
+                    Location = lastAction.Performer:getData('currentRegion'),
+                    Start = actionStartTime,
+                    End = CURRENT_STORY.Logger:GetElapsedTime(),
+                    Target = target
+                }
+                table.insert(GRAPH.Events, event)
+            end
         end
         if DEBUG then
             outputConsole("GlobalAction:Apply - getting next valid action")
@@ -41,7 +54,6 @@ function OnGlobalActionFinished(delay, playerId, storyId, callback, destroyedIte
         local nextAction = nil
 
         -- if there are multiple actors select with a random prob a second actor to do a multi-agent actions
-        print(lastAction.isMove)
         if not MULTI_ACTION_DONE and #peds > 1 and lastAction.isMove then
             if #peds> 1 and random(1, 100) < 1000 and SECOND_ACTOR == nil then
                 -- pick another actor - ped2

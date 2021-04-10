@@ -348,8 +348,10 @@ function Region:OnPlayerHit(player)
             -- if self.Description and self.Description ~= '' then
             --     story.Logger:Log(self.Description, player, true)
             if self.Objects and #self.Objects > 0 then
-                local objectsDescription = story.Logger:DescribeObjects(player, self.name, self.Objects, locationMap, true)
-                story.Logger:Log(objectsDescription, player, true)
+                if self.Id == story.CurrentEpisode.CurrentRegion.Id then
+                    local objectsDescription = story.Logger:DescribeObjects(player, self.name, self.Objects, locationMap, true)
+                    story.Logger:Log(objectsDescription, player, true)
+                end
             end
         end
         self.EvaluatingRegion = false

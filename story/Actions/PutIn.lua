@@ -8,7 +8,9 @@ function PutIn:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
     
-    story.Logger:Log(self.Description .. self.TargetItem.Description .. " in " .. self.Where, self)
+    if self.Performer:getData("currentRegionId") == story.CurrentEpisode.CurrentRegion.Id then
+        story.Logger:Log(self.Description .. self.TargetItem.Description .. " in " .. self.Where, self)
+    end
     -- self.TargetItem.instance:setCollisionsEnabled(false)
 
     self.Performer:setAnimation("INT_SHOP", "shop_loop", 500, true, true, false, true)

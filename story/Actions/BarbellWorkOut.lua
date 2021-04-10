@@ -10,7 +10,9 @@ function BarbellWorkOut:Apply()
     local time = random(7000, 19000)
     story.Logger:Log(self.Description .. self.TargetItem.Description, self, false, true, {"finishes", "finishes working out"})
     
-    self.Performer:setAnimation("Freeweights", "gym_free_A", time, true, false, false, true)
+    if self.Performer:getData("currentRegionId") == story.CurrentEpisode.CurrentRegion.Id then
+        self.Performer:setAnimation("Freeweights", "gym_free_A", time, true, false, false, true)
+    end
 
     if DEBUG then
         outputConsole("BarbellWorkOut:Apply")

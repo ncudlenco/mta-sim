@@ -9,7 +9,10 @@ function CloseLaptop:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
     
-    story.Logger:Log(self.Description, self)
+    if self.Performer:getData("currentRegionId") == story.CurrentEpisode.CurrentRegion.Id then
+        story.Logger:Log(self.Description, self)
+    end
+        
     self.TargetItem:ChangeModel(Laptop.eModel.Closed)
 
     if DEBUG then

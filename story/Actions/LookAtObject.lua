@@ -9,7 +9,9 @@ function LookAtObject:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
     
-    story.Logger:Log(self.Description .. " the " .. self.TargetItem.Description, self)
+    if self.Performer:getData("currentRegionId") == story.CurrentEpisode.CurrentRegion.Id then
+        story.Logger:Log(self.Description .. " the " .. self.TargetItem.Description, self)
+    end
     
     local playerEyesPosition = self.Performer.position + self.Performer.matrix.up * 1.2
     self.Performer:setCameraMatrix(playerEyesPosition, self.TargetItem.position)

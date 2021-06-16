@@ -23,7 +23,9 @@ function StandUp:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
     
-    story.Logger:Log(self.Description .. "from the " .. self.TargetItem.Description, self)
+    if self.Performer:getData("currentRegionId") == story.CurrentEpisode.CurrentRegion.Id then
+        story.Logger:Log(self.Description .. "from the " .. self.TargetItem.Description, self)
+    end
     self.TargetItem.instance:setCollisionsEnabled(false)
     local animationLib = "INT_OFFICE"
     local animationId = "OFF_Sit_2Idle_180"

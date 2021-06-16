@@ -23,8 +23,11 @@ SitDown.eHow = {
 function SitDown:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
+
+    if self.Performer:getData("currentRegionId") == story.CurrentEpisode.CurrentRegion.Id then
+        story.Logger:Log(self.Description .. " on the " .. self.TargetItem.Description, self)
+    end
     
-    story.Logger:Log(self.Description .. " on the " .. self.TargetItem.Description, self)
     self.TargetItem.instance:setCollisionsEnabled(false)
 
     if not (self.rotation == nil) then

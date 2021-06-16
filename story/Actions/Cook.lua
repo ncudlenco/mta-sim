@@ -8,8 +8,9 @@ function Cook:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
     
-    story.Logger:Log(self.Description .. " on the " .. self.TargetItem.Description, self)
-
+    if self.Performer:getData("currentRegionId") == story.CurrentEpisode.CurrentRegion.Id then
+        story.Logger:Log(self.Description .. " on the " .. self.TargetItem.Description, self)
+    end
     self.Performer:setAnimation("INT_HOUSE", "wash_up", 3000, true, true, false, true)
     if DEBUG then
         outputConsole("WashHands:Apply")

@@ -35,16 +35,16 @@ function PickUp:Apply()
             sameDescription = true
         end
     end
-
-    outputChatBox("HEREEEEE")
     
-    if sameObject then
-        story.Logger:Log(self.Description .. "the same ".. self.TargetItem.Description .. " from " .. self.Where, self)
-    elseif sameDescription then
-        story.Logger:Log(self.Description .. "another " .. self.TargetItem.Description .. " from " .. self.Where, self)
-    else
-        story.Logger:Log(self.Description .. getWordPrefix(self.TargetItem.Description) .. " " .. self.TargetItem.Description .. " from " .. self.Where, self)
-    end
+    if self.Performer:getData("currentRegionId") == story.CurrentEpisode.CurrentRegion.Id then
+        if sameObject then
+            story.Logger:Log(self.Description .. "the same ".. self.TargetItem.Description .. " from " .. self.Where, self)
+        elseif sameDescription then
+            story.Logger:Log(self.Description .. "another " .. self.TargetItem.Description .. " from " .. self.Where, self)
+        else
+            story.Logger:Log(self.Description .. getWordPrefix(self.TargetItem.Description) .. " " .. self.TargetItem.Description .. " from " .. self.Where, self)
+        end
+    end 
 
     local time = 500
     if self.how == PickUp.eHow.Normal then

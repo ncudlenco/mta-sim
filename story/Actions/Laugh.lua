@@ -12,7 +12,9 @@ function Laugh:Apply()
     table.insert(story.History[self.Performer:getData('id')], self)
     
     local time = random(5000, 16000)
-    story.Logger:Log(self.Description .. self.TargetPlayer:getData('name') .. " joke", self)
+    if self.Performer:getData("currentRegionId") == story.CurrentEpisode.CurrentRegion.Id then
+        story.Logger:Log(self.Description .. self.TargetPlayer:getData('name') .. " joke", self)
+    end
     self.Performer:setAnimation("rapping", "laugh_01", time, true, false, false, false)
 
     if DEBUG then

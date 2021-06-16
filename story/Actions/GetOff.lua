@@ -44,10 +44,7 @@ function GetOff:Apply()
         updatePedPosition = false
     end
 
-    if self.Performer:getData("currentRegionId") == story.CurrentEpisode.CurrentRegion.Id then
-        story.Logger:Log(self.Description .. self.TargetItem.Description, self)
-    end
-
+    story.Logger:Log(self.Description .. self.TargetItem.Description, self)
     self.Performer:setAnimation(block, animation, time, false, updatePedPosition, false, true)
     
     if DEBUG then

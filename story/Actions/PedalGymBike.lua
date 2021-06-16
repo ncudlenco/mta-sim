@@ -21,10 +21,8 @@ function PedalGymBike:Apply()
     elseif self.how == PedalGymBike.eHow.Faster then
         self.Description = PickRandom({" starts pedalling very fast ", " pedals very fast "})
     end
-       
-    if self.Performer:getData("currentRegionId") == story.CurrentEpisode.CurrentRegion.Id then
-        story.Logger:Log(self.Description, self)
-    end
+        
+    story.Logger:Log(self.Description, self)
 
     local time = random(8000, 21000)
     self.Performer:setAnimation("GYMNASIUM", self.how, time, true, false, false, true)

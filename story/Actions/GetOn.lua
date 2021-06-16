@@ -74,11 +74,7 @@ function GetOn:Apply()
     else
         selfDescription = self.Description:gsub('{temp}', ' ')
     end
-
-    if self.Performer:getData("currentRegionId") == story.CurrentEpisode.CurrentRegion.Id then
-        story.Logger:Log(selfDescription .. self.TargetItem.Description, self)
-    end
-    
+    story.Logger:Log(selfDescription .. self.TargetItem.Description, self)
     self.Performer:setAnimation(block, animation, time, false, updatePedPosition, false, true)
 
     self.Buffer[id] = self.TargetItem

@@ -18,9 +18,8 @@ function JogTreadmill:Apply()
         self.Description = PickRandom({" starts sprinting ", " sprints "})
     end
     
-    if self.Performer:getData("currentRegionId") == story.CurrentEpisode.CurrentRegion.Id then
-        story.Logger:Log(self.Description, self)
-    end
+    story.Logger:Log(self.Description, self)
+
     local time = random(6000, 18000)
     self.Performer:setAnimation("GYMNASIUM", self.how, time, true, false, false, true)
 

@@ -9,9 +9,8 @@ function LayOnElbow:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
     
-    if self.Performer:getData("currentRegionId") == story.CurrentEpisode.CurrentRegion.Id then
-        story.Logger:Log(self.Description  .. self.Performer:getData('genderGenitive') ..  " head on the elbow", self)
-    end
+    story.Logger:Log(self.Description  .. self.Performer:getData('genderGenitive') ..  " head on the elbow", self)
+
     time = random(3000, 8000)
     self.Performer:setAnimation("INT_OFFICE", "OFF_Sit_Bored_Loop", time, true, true, false, true)
 

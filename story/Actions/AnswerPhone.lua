@@ -12,9 +12,7 @@ function AnswerPhone:Apply()
                         self.TargetItem.PosOffset.x, self.TargetItem.PosOffset.y, self.TargetItem.PosOffset.z,
                         self.TargetItem.RotOffset.x, self.TargetItem.RotOffset.y, self.TargetItem.RotOffset.z)
 
-    if self.Performer:getData("currentRegionId") == story.CurrentEpisode.CurrentRegion.Id then
-        story.Logger:Log(self.Description .. self.TargetItem.Description, self)
-    end
+    story.Logger:Log(self.Description .. self.TargetItem.Description, self)
     self.Performer:setAnimation("PED", "PHONE_IN", 2000, true, true, false, true)
 
     if DEBUG then

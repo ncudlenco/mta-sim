@@ -19,7 +19,8 @@ class Room:
         return self.__str__()
 
 def get_room_list():
-    R = ["Kitchen", "Living", "BathRoom", "BedRoom", "Gym", ""]
+    # R = ["Kitchen", "Living", "BathRoom", "BedRoom", "Gym", ""]
+    R = ["Kitchen", "Living", "BathRoom", "BedRoom", ""]
     rooms = []
     for room in R:
         rooms.append(Room(room))

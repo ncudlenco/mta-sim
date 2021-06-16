@@ -11,7 +11,8 @@ import networkx as nx
 import matplotlib.pyplot as plt
 
 MIN_OBJECTS = 1
-MAX_OBJECTS = 8
+MAX_OBJECTS = 3
+ACTORS = 1
 
 objects = Objects.get_obj_list()
 actions = Actions.get_action_list()
@@ -22,10 +23,35 @@ Rooms.associate_objects_to_rooms(rooms, objects)
 Objects.associate_actions_to_objects(objects, actions)
 
 def order_events(story):
+    # print(story)
+    # print()
+    actors = get_actors_from_story(story)
+    last_action_for_actor = [None for x in range(len(actors))]
     for i in range(len(story)):
         if i == len(story) - 1:
+            actor_index = actors.index(story[i].actor)
+            if last_action_for_actor[actor_index] != None:
+                last_action_for_actor[actor_index].next_event = story[i]
             break
-        story[i].next_event = story[i+1]
+        # print(story[i], story[i+1])
+        if story[i].actor.id == story[i+1].actor.id:
+            # print("SAME ACTOR", story[i].actor.id, story[i+1].actor.id)
+            # print("Last actions", last_action_for_actor)
+            actor_index = actors.index(story[i].actor)
+            if last_action_for_actor[actor_index] != None:
+                last_action_for_actor[actor_index].next_event = story[i]
+            last_action_for_actor[actor_index]= story[i]
+            story[i].next_event = story[i+1]
+        else:
+            # print("DIFERENT ACTORS",  story[i].actor.id, story[i+1].actor.id)
+            # print("Last actions", last_action_for_actor)
+            actor_index = actors.index(story[i].actor)
+            if last_action_for_actor[actor_index] != None:
+                last_action_for_actor[actor_index].next_event = story[i]
+            last_action_for_actor[actor_index] = story[i]
+        # print("-------")
+    
+
     return story
 
 
@@ -51,38 +77,48 @@ def get_actors_from_story(story):
 
 
 def generate_story():
-
-    actors = 1
-    actor_sex = random.choice([1,2])
-    actor = Actor.Actor("actor0", actor_sex, "NAME")
+    # rooms = [Kitchen, Living, BathRoom, BedRoom, Gym]
     events = []
 
-    # TODO: can be different rooms
-    # rooms = [Kitchen, Living, BathRoom, BedRoom, Gym]
-    r_room = random.choice(rooms)
+    actors = []
+    obj_per_actor = []
+    events_per_actor = []
+
+    # create actors
+    for actor_id in range(ACTORS):
+        actor_sex = random.choice([1,2])
+        actor = Actor.Actor("actor{0}".format(actor_id), actor_sex, "NAME")
+        actors.append(actor)
+        count_objs = random.randint(MIN_OBJECTS, MAX_OBJECTS)
+        obj_per_actor.append(count_objs)
+        events_per_actor.append(0)
     
-    # pick number of objects
-    count_objs = random.randint(MIN_OBJECTS, MAX_OBJECTS)
-    
-    while len(events) < count_objs:
+    print(obj_per_actor)
+    total_obj = sum(obj_per_actor)
+    while len(events) < total_obj:    
         # pick a room each time for the moment
         r_room = random.choice(rooms)
-        # pick an object to interact with
-        r_obj = random.choice(r_room.objects)
-        r_new_obj = copy.deepcopy(r_obj)
-        if len(r_obj.actions) == 0:
-            continue
+        for actor_index, actor in enumerate(actors):
+            if events_per_actor[actor_index] == obj_per_actor[actor_index]:
+                continue
+            # pick an object to interact with 
+            r_obj = random.choice(r_room.objects)
+            r_new_obj = copy.deepcopy(r_obj)
+            if len(r_obj.actions) == 0:
+                print(r_obj)
+                continue
 
-        r_acts = random.sample(r_obj.actions, random.randint(1, 1))
-        for r_act in r_acts:
-            r_new_act = copy.deepcopy(r_act)
-            # TODO: handle this
-            if r_new_act.name == "TalkAtPhone" or r_new_act.name == "SmokeCigarette":
-                e = Event.Event("event{0}".format(len(events)), r_new_act, r_new_obj, actor, empty_room)
-            else:
-                e = Event.Event("event{0}".format(len(events)), r_new_act, r_new_obj, actor, r_room)
-            events.append(e)
-
+            r_acts = random.sample(r_obj.actions, random.randint(1, 1))
+            for r_act in r_acts:
+                r_new_act = copy.deepcopy(r_act)
+                # TODO: handle this
+                if r_new_act.name == "TalkAtPhone" or r_new_act.name == "SmokeCigarette":
+                    e = Event.Event("event{0}".format(len(events)), r_new_act, r_new_obj, actor, empty_room)
+                else:
+                    e = Event.Event("event{0}".format(len(events)), r_new_act, r_new_obj, actor, r_room)
+                events.append(e)
+                events_per_actor[actor_index] += 1
+ 
     return events
 
 
@@ -194,8 +230,9 @@ def get_abstract_graph(graph):
         elif "_inner" in k:
             # print("---inner", v["Action"])
             big_action_id = int(k[len("action"):].split("_")[0])
-            small_action_id = int(k.split("_")[1][len("inner")])
+            actor_id = int(v["Actor"]["id"][len("actor"):])
             if len(acts) == 0:
+                acts.insert(actor_id, 0)
                 acts.insert(big_action_id, 0)
             acts.append(v["Action"])
             
@@ -211,7 +248,7 @@ def get_abstract_graph(graph):
                 full_actions.append(acts)
                 # abstract_graph["action{0}".format(acts[0])] = d
                 crt_action_id = big_action_id
-                acts = [big_action_id, last]
+                acts = [big_action_id, actor_id, last]
             
             
         elif "action" in k:
@@ -221,21 +258,62 @@ def get_abstract_graph(graph):
 
             # abstract_graph[k] = v
             crt_action_id = int(k[len("action"):])
-            acts = [crt_action_id, v["Action"]]
+            actor_id = int(v["Actor"]["id"][len("actor"):])
+            acts = [crt_action_id, actor_id, v["Action"]]
             
     if acts != []:
         full_actions.append(acts)
     
+
+    prev_action_actor = []
+    # print(full_actions)
+    actors = len(set(list(map(lambda x: x[1], full_actions))))
+    prev_action_actor = [None for _ in range(actors)]
+    prev_key = [None for _ in range(actors)]
     for action_id, action in enumerate(full_actions):
-        if len(action) > 2:
+        if len(action) > 3:
+            # print(action)
             # complex action
             node = copy.deepcopy(graph["action{}_inner0".format(action[0])])
             node["id"] = "action{0}".format(action[0])
             if action_id == len(full_actions) - 1:
-                node["Next"] = "None"
+                if prev_action_actor[action[1]] != None:
+                    # print("Settting previous at last", prev_action_actor[action[1]])
+                    # print(prev_action_actor, prev_key, "action{0}".format(full_actions[action_id][0]))
+                    # node["Next"] = "action{0}".format(prev_action_actor[action[1]][0])
+                    pr = action[1]
+                    abstract_graph[prev_key[pr]]["Next"] = "action{0}".format(full_actions[action_id][0])
+
+                    node["Next"] = "None"
+                else:
+                    node["Next"] = "None"
+                
             else:
-                node["Next"] = "action{0}".format(full_actions[action_id+1][0])
-            searched_actions = ' '.join(action[1:])
+                if full_actions[action_id][1] != full_actions[action_id+1][1]:
+                    # print("Different actors", full_actions[action_id][1], full_actions[action_id+1][1])
+                    # print(prev_action_actor, prev_key, "action{0}".format(full_actions[action_id][0]))
+                    if prev_action_actor[action[1]] != None:
+                        # print("Settting previous", prev_action_actor[action[1]])
+                        pr = action[1]
+                        abstract_graph[prev_key[pr]]["Next"] = "action{0}".format(full_actions[action_id][0])
+                        # node["Next"] = "action{0}".format(prev_action_actor[action[1]][0])
+                        node["Next"] = "None"
+                    else:
+                        node["Next"] = "None"
+                    prev_action_actor[action[1]] = action
+                    prev_key[action[1]] = "action{0}".format(action[0])
+
+                else:
+                    # print("SAME ACTOR",  full_actions[action_id][1], full_actions[action_id+1][1])
+                    # print(prev_action_actor, prev_key, "action{0}".format(full_actions[action_id][0]))
+                    pr = action[1]
+                    if prev_key[pr] != None:
+                        abstract_graph[prev_key[pr]]["Next"] = "action{0}".format(full_actions[action_id][0])
+                    prev_action_actor[action[1]] = action
+                    prev_key[action[1]] = "action{0}".format(action[0])
+                    node["Next"] = "action{0}".format(full_actions[action_id+1][0])
+            # print()
+            searched_actions = ' '.join(action[2:])
             action_name = None
             for kk, vv in Actions.COMPLEX_ACTIONS.items():
                 if vv == searched_actions:
@@ -246,9 +324,18 @@ def get_abstract_graph(graph):
                 sys.exit()
             node["Action"] = action_name
             abstract_graph["action{0}".format(action[0])] = node
-        
+            prev_action_actor[action[1]] = action
+
         else:
+            # print("SIMPLE ACTION", action)
+            # print()
             node = copy.deepcopy(graph["action{}".format(action[0])])
+            pr = action[1]
+            if prev_key[pr] != None:
+                abstract_graph[prev_key[pr]]["Next"] = "action{0}".format(full_actions[action_id][0])
+            prev_action_actor[action[1]] = action
+            prev_key[action[1]] = "action{0}".format(action[0])
+
             if "_inner" in node["Next"]:
                 node["Next"] = node["Next"].split("_")[0]
             abstract_graph["action{0}".format(action[0])] = node
@@ -256,19 +343,19 @@ def get_abstract_graph(graph):
     return abstract_graph
 
 
-def generate_files(samples):
-
+def generate_files(samples, folder):
+    
     index = 0
     for _ in range(samples):
         story = generate_story()
         graph = generate_graph(story)
         abstract_graph = get_abstract_graph(graph)
         
-        json.dump(graph, open("samples/g{0}".format(index), "w"), sort_keys=False, indent = 4)
-        json.dump(abstract_graph, open("samples/g{0}.a".format(index), "w"), sort_keys=False, indent = 4)
+        json.dump(graph, open("{1}/g{0}".format(index, folder), "w"), sort_keys=False, indent = 4)
+        json.dump(abstract_graph, open("{1}/g{0}.a".format(index, folder), "w"), sort_keys=False, indent = 4)
 
         # visualize_graph(graph)
-        visualize_graph(abstract_graph, "samples/g{0}".format(index))
+        visualize_graph(abstract_graph, "{1}/g{0}".format(index, folder))
         index += 1
 
 if __name__ == "__main__":
@@ -276,7 +363,14 @@ if __name__ == "__main__":
     print("#objects:", len(objects))
     print("#actions:", len(actions))
 
-    generate_files(20)
+    generate_files(20, "samples_test")
+
+    # d = json.load(open("samples_test/g0", "r"))
+    # # print(d)
+    # a = get_abstract_graph(d)
+    # json.dump(a, open("samples_test/g0.a", "w"), sort_keys=False, indent = 4)
+
+
     
     
 

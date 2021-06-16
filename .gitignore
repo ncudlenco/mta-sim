@@ -1,3 +1,4 @@
 data/
 ServerGlobals.lua
 .vscode/
+story_generator/__pycache__/*

@@ -1,0 +1,129 @@
+{
+    "actor0": {
+        "Actor": {
+            "id": "actor0",
+            "Gender": 1,
+            "Name": "NAME"
+        },
+        "Action": "Exists",
+        "id": "actor0"
+    },
+    "actor1": {
+        "Actor": {
+            "id": "actor1",
+            "Gender": 1,
+            "Name": "NAME"
+        },
+        "Action": "Exists",
+        "id": "actor1"
+    },
+    "actor2": {
+        "Actor": {
+            "id": "actor2",
+            "Gender": 1,
+            "Name": "NAME"
+        },
+        "Action": "Exists",
+        "id": "actor2"
+    },
+    "object0": {
+        "Action": "Exists",
+        "id": "object0",
+        "Target": {
+            "id": "object0",
+            "Name": "MobilePhone"
+        }
+    },
+    "object1": {
+        "Action": "Exists",
+        "id": "object1",
+        "Target": {
+            "id": "object1",
+            "Name": "Cigarette"
+        }
+    },
+    "object2": {
+        "Action": "Exists",
+        "id": "object2",
+        "Target": {
+            "id": "object2",
+            "Name": "Cigarette"
+        }
+    },
+    "object3": {
+        "Action": "Exists",
+        "id": "object3",
+        "Target": {
+            "id": "object3",
+            "Name": "Sink"
+        }
+    },
+    "object4": {
+        "Action": "Exists",
+        "id": "object4",
+        "Target": {
+            "id": "object4",
+            "Name": "MobilePhone"
+        }
+    },
+    "action0": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "TalkAtPhone",
+        "Next": "action3",
+        "id": "action0",
+        "Target": {
+            "id": "object0"
+        },
+        "Location": ""
+    },
+    "action1": {
+        "Actor": {
+            "id": "actor1"
+        },
+        "Action": "SmokeCigarette",
+        "Next": "None",
+        "id": "action1",
+        "Target": {
+            "id": "object1"
+        },
+        "Location": ""
+    },
+    "action2": {
+        "Actor": {
+            "id": "actor2"
+        },
+        "Action": "SmokeCigarette",
+        "Next": "None",
+        "id": "action2",
+        "Target": {
+            "id": "object2"
+        },
+        "Location": ""
+    },
+    "action3": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "WashHands",
+        "Next": "action4",
+        "id": "action3",
+        "Target": {
+            "id": "object3"
+        },
+        "Location": "BathRoom"
+    },
+    "action4": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "TalkAtPhone",
+        "Next": "None",
+        "id": "action4",
+        "Target": {
+            "id": "object4"
+        },
+        "Location": ""
+    }
+}

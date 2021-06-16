@@ -1,0 +1,31 @@
+{
+    "actor0": {
+        "Actor": {
+            "id": "actor0",
+            "Gender": 2,
+            "Name": "NAME"
+        },
+        "Action": "Exists",
+        "id": "actor0"
+    },
+    "object0": {
+        "Action": "Exists",
+        "id": "object0",
+        "Target": {
+            "id": "object0",
+            "Name": "Sink"
+        }
+    },
+    "action0": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "WashHands",
+        "Next": "None",
+        "id": "action0",
+        "Target": {
+            "id": "object0"
+        },
+        "Location": "BathRoom"
+    }
+}

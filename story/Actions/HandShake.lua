@@ -1,5 +1,7 @@
 HandShake = class(StoryActionBase, function(o, params)
     params.description = " shake their hands"
+    params.name = 'HandShake'
+
     StoryActionBase.init(o,params)
 
     o.TargetPlayer = params.targetPlayer

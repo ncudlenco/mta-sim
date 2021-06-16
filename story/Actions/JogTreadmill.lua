@@ -1,5 +1,7 @@
 JogTreadmill = class(StoryActionBase, function(o, params)
     params.description = PickRandom({" starts jogging ", " jogs "})
+    params.name = 'JogTreadmill'
+
     StoryActionBase.init(o, params)
     o.how = JogTreadmill.eHow[PickRandom(JogTreadmill.eHow)]
 end)

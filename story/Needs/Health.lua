@@ -17,7 +17,7 @@ function Health:setForPlayer(player)
 end
 
 function Health:setRandomForPlayer(player)
-    self.max = getPedMaxHealth(source)
+    self.max = getPedMaxHealth(player)
     self.value = math.random(self.min, self.max)
     player:setData(self.name, self.value)
     player.health = self.value

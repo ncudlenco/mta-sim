@@ -1,5 +1,7 @@
 PutIn = class(StoryActionBase, function(o, params)
     params.description = " puts "
+    params.name = 'PutIn'
+
     StoryActionBase.init(o,params)
     o.Where = params.where
 end)

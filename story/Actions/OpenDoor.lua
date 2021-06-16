@@ -17,6 +17,8 @@ OpenDoor = class(StoryActionBase, function(o, params)
     end
 
     params.description = description
+    params.name = 'OpenDoor'
+
     StoryActionBase.init(o,params)
     o.path = {}
     o.graphId = params.graphId

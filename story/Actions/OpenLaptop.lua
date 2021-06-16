@@ -1,5 +1,7 @@
 OpenLaptop = class(StoryActionBase, function(o, params)
     params.description = " opens the laptop lid "
+    params.name = 'OpenLaptop'
+
     StoryActionBase.init(o,params)
 end)
 

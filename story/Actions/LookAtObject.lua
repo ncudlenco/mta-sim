@@ -1,5 +1,7 @@
 LookAtObject = class(StoryActionBase, function(o, params)
     params.description = " is looking at "
+    params.name = 'LookAtObject'
+
     StoryActionBase.init(o,params)
 end)
 

@@ -2,17 +2,6 @@ House1 = class(StoryEpisodeBase, function(o)
     StoryEpisodeBase.init(o, {name = 'house1'})
     o:LoadFromFile()
     o.InteriorId = 1
-    if not loadPathGraph then
-        outputDebugString("Pathfinding module not loaded. Exiting...", 2)
-        return
-    end
-
-    -- Load path graph
-    o.graphId = loadPathGraph("files/paths/house1.json")
-    if not findShortestPathBetween then
-        outputDebugString("Pathfinding module not loaded. Exiting...", 2)
-        return false
-    end
 end)
 
 function House1:Initialize(...)
@@ -106,6 +95,7 @@ function House1:Initialize(...)
     sitOnSofaAction.NextAction = standUpSofaAction
     sitOnSofaAction.ClosingAction = standUpSofaAction
 
+    livingRoomSofaLocation.allActions = {sitOnSofaAction, standUpSofaAction}
     -- dance at the music player
     local turnOnTurnTableAction = TurnOn { performer = player, nextLocation = livingRoomMusicPlayerLocation, targetItem = musicPlayer, graphId = self.graphId }
     table.insert(livingRoomMusicPlayerLocation.PossibleActions, turnOnTurnTableAction)
@@ -119,6 +109,8 @@ function House1:Initialize(...)
     moveToTurnTable3Action.NextAction = turnOffTurnTableAction
     turnOffTurnTableAction.ClosingAction = turnOffTurnTableAction
 
+    livingRoomMusicPlayerLocation = {turnOnTurnTableAction, moveToTurnTable2Action, danceTurnTableAction, moveToTurnTable3Action, turnOffTurnTableAction}
+
     -- sit in the chair
     local sitDownKitchenChairAction = SitDown {how = SitDown.eHow.atDesk, performer = player, nextLocation = kitchenChairLocation, targetItem = kitchenChair, rotation = Vector3(0,0,0), graphId = self.graphId}
     table.insert(kitchenChairLocation.PossibleActions, sitDownKitchenChairAction)
@@ -127,6 +119,8 @@ function House1:Initialize(...)
     local standUpKitchenChairAction = StandUp {how = StandUp.eHow.fromDesk, performer = player, nextLocation = kitchenChairLocation, targetItem = kitchenChair, graphId = self.graphId}
     readKitchenChairAction.NextAction = standUpKitchenChairAction
     sitDownKitchenChairAction.ClosingAction = standUpKitchenChairAction
+
+    kitchenChairLocation = {sitDownKitchenChairAction, readKitchenChairAction, standUpKitchenChairAction}
 
     -- drink at table
     local pickUpDrinkAction = PickUp {performer = player, nextLocation = kitchenTableLocation, targetItem = drink, where = "the kitchen counter", targetObjectExists = true, how = PickUp.eHow.Normal, hand = PickUp.eHand.Left, graphId = self.graphId}
@@ -138,6 +132,8 @@ function House1:Initialize(...)
     drinkAction.NextAction = putDownDrinkAction
     pickUpDrinkAction.ClosingAction = putDownDrinkAction
 
+    kitchenTableLocation.allActions = {pickUpDrinkAction, drinkAction, putDownDrinkAction}
+
     -- smoke at painting
     local livingroomSmokeInAction = SmokeIn { performer = player, nextLocation = livingRoomSmokeLocation, targetItem = cigarette, graphId = self.graphId }
     table.insert(livingRoomSmokeLocation.PossibleActions, livingroomSmokeInAction)
@@ -147,7 +143,9 @@ function House1:Initialize(...)
     livingroomSmokeAction.NextAction = livingroomSmokeOutAction
     livingroomSmokeInAction.ClosingAction = livingroomSmokeOutAction
 
-    StoryEpisodeBase.Initialize(self, arg)
+    livingRoomSmokeLocation.allActions = {livingroomSmokeInAction, livingroomSmokeAction, livingroomSmokeOutAction}
+
+    StoryEpisodeBase.Initialize(self, unpack(arg))
 
     if DEBUG then
         outputConsole("House1:Initialized")

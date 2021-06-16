@@ -8,6 +8,8 @@ SitDown = class(StoryActionBase, function(o, params)
     --     error("SitDown: nextLocation not given in the constructor")
     -- end
     params.description = " sits down"
+    params.name = 'SitDown'
+
     StoryActionBase.init(o,params)
     o.how = params.how or SitDown.eHow.atDesk
     o.rotation= params.rotation or nil

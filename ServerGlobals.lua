@@ -12,7 +12,7 @@ DEBUG_ACTIONS = true
 FREE_ROAM = false
 TIME_STAMP = false
 ACTORS_CROWDING_FACTOR = 0.5
+LOAD_FROM_GRAPH = 'samples/g15'
+INPUT_GRAPHS = {'samples/g19'}
 GRAPH = {
-    AtomicEvents = {},
-    Events = {}
 }

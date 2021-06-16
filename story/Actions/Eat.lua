@@ -1,5 +1,7 @@
 Eat = class(StoryActionBase, function(o, params)
     params.description = PickRandom({" starts eating from it", " eats from it"})
+    params.name = 'Eat'
+
     StoryActionBase.init(o, params)
     o.how = params.how or Eat.eHow.StandUp
 end)

@@ -1,5 +1,8 @@
 Punch = class(StoryActionBase, function(o, params)
-    StoryActionBase.init(o, " is punching the ", params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
+    params.name = 'Punch'
+    params.description = " is punching the "
+
+    StoryActionBase.init(o, params)
     o.how = Punch.eHow[PickRandom(Punch.eHow)]
 end)
 

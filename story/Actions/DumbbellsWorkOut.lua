@@ -1,5 +1,8 @@
 DumbbellsWorkOut = class(StoryActionBase, function(o, params)
-    StoryActionBase.init(o, " starts working out with the ", params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
+    params.name = 'DumbbellsWorkOut'
+    params.description = " starts working out with the "
+
+    StoryActionBase.init(o, params)
 end)
 
 function DumbbellsWorkOut:Apply()

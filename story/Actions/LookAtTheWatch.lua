@@ -1,5 +1,7 @@
 LookAtTheWatch = class(StoryActionBase, function(o, params)
     params.description = " looks at the handwatch "
+    params.name = 'LookAtTheWatch'
+
     StoryActionBase.init(o,params)
 end)
 

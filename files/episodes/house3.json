@@ -994,7 +994,7 @@
 			}
 		],
 		"name": "house3",
-		"graphPath": "files/paths/house_3.json",
+		"graphPath": "files/paths/house3.json",
 		"Disposed": false,
 		"Regions": [
 			{

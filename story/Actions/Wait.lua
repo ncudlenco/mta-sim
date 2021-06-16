@@ -1,5 +1,7 @@
 Wait = class(StoryActionBase, function(o, params)
     params.description = PickRandom({" is waiting for something ", " is looking around "})
+    params.name = 'Wait'
+
     StoryActionBase.init(o,params)
     o.Time = params.time
 end)

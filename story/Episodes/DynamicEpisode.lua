@@ -10,7 +10,7 @@ end)
 
 
 function DynamicEpisode:Initialize(...)
-    StoryEpisodeBase.Initialize(self, arg)
+    StoryEpisodeBase.Initialize(self, unpack(arg))
 end
 
 function DynamicEpisode:Destroy()

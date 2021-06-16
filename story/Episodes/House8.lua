@@ -2,17 +2,6 @@ House8 = class(StoryEpisodeBase, function(o)
     StoryEpisodeBase.init(o, {name = 'house8'})
     o:LoadFromFile()
     o.InteriorId = 8
-    if not loadPathGraph then
-        outputDebugString("Pathfinding module not loaded. Exiting...", 2)
-        return
-    end
-
-    -- Load path graph
-    o.graphId = loadPathGraph("files/paths/house8.json")
-    if not findShortestPathBetween then
-        outputDebugString("Pathfinding module not loaded. Exiting...", 2)
-        return false
-    end
 end)
 
 function House8:Initialize(...)
@@ -151,27 +140,31 @@ function House8:Initialize(...)
     sleepAction.NextAction = getOffBedAction
     getInBedAction.ClosingAction = getOffBedAction
     
+    bedroom1.allActions = {getInBedAction, sleepAction, getOffBedAction}
+
     local sitAtDeskAction = SitDown{how = SitDown.eHow.atDesk, performer = player, nextLocation = atDesk, targetItem = bedroomChair }
     table.insert(atDesk.PossibleActions, sitAtDeskAction)
     local openLaptopAction = OpenLaptop{performer = player, nextLocation = atDesk, targetItem = laptop }
     sitAtDeskAction.NextAction = openLaptopAction
 
     local writeOnLaptop = TypeOnKeyboard{performer = player, nextLocation = atDesk, targetItem = laptop }
-    local punchSeated = PunchSeated{performer = player, nextLocation = atDesk, targetItem = laptop }
+    local PunchDesk = PunchDesk{performer = player, nextLocation = atDesk, targetItem = laptop }
     local layOnElbow = LayOnElbow{performer = player, nextLocation = atDesk, targetItem = laptop }
     local lookAtWatch = LookAtTheWatch{performer = player, nextLocation = atDesk, targetItem = laptop }
     local closeLaptopAction = CloseLaptop{performer = player, nextLocation = atDesk, targetItem = laptop }
 
-    local randomActions = {writeOnLaptop, punchSeated, layOnElbow, lookAtWatch, closeLaptopAction}
+    local randomActions = {writeOnLaptop, PunchDesk, layOnElbow, lookAtWatch, closeLaptopAction}
     openLaptopAction.NextAction = randomActions
     writeOnLaptop.NextAction = randomActions
-    punchSeated.NextAction = randomActions
+    PunchDesk.NextAction = randomActions
     layOnElbow.NextAction = randomActions
     lookAtWatch.NextAction = randomActions
 
     local standUpFromDeskAction = StandUp{ how = StandUp.eHow.fromDesk, performer = player, nextLocation = atDesk, targetItem = bedroomChair }
     closeLaptopAction.NextAction = standUpFromDeskAction
     sitAtDeskAction.ClosingAction = standUpFromDeskAction
+
+    atDesk.allActions = {sitAtDeskAction, openLaptopAction, writeOnLaptop, PunchDesk, layOnElbow, lookAtWatch, closeLaptopAction, standUpFromDeskAction}
         
     local sitOnRightSofaAction = SitDown{how = SitDown.eHow.onSofa, performer = player, nextLocation = rightSofa, targetItem = sofaRight }
     table.insert(rightSofa.PossibleActions, sitOnRightSofaAction)
@@ -179,21 +172,29 @@ function House8:Initialize(...)
     sitOnRightSofaAction.ClosingAction = standUpFromRightSofaAction
     sitOnRightSofaAction.NextAction = standUpFromRightSofaAction
     
+    rightSofa.allActions = {sitOnRightSofaAction, standUpFromRightSofaAction}
+
     local sitOnCentralSofaAction = SitDown{how = SitDown.eHow.onSofa, performer = player, nextLocation = centralSofa, targetItem = sofaCenter }
     table.insert(centralSofa.PossibleActions, sitOnCentralSofaAction)
     local standUpFromCentralSofaAction = StandUp {how = StandUp.eHow.fromSofa, performer = player, nextLocation = centralSofa, targetItem = sofaCenter }
     sitOnCentralSofaAction.ClosingAction = standUpFromCentralSofaAction
     sitOnCentralSofaAction.NextAction = standUpFromCentralSofaAction
     
+    centralSofa.allActions = {sitOnCentralSofaAction, standUpFromCentralSofaAction}
+
     local sitOnLeftSofaAction = SitDown{how = SitDown.eHow.onSofa, performer = player, nextLocation = leftSofa, targetItem = sofaLeft }
     table.insert(leftSofa.PossibleActions, sitOnLeftSofaAction)
     local standUpFromLeftSofaAction = StandUp{ how = StandUp.eHow.fromSofa, performer = player, nextLocation = leftSofa, targetItem = sofaLeft }
     sitOnLeftSofaAction.ClosingAction = standUpFromLeftSofaAction
     sitOnLeftSofaAction.NextAction = standUpFromLeftSofaAction
     
+    leftSofa.allActions = {sitOnLeftSofaAction, standUpFromLeftSofaAction}
+
     local washHandsAction = WashHands { performer = player, nextLocation = kitchenNearTheSink, targetItem = kitchenNearTheSink }
     table.insert(kitchenNearTheSink.PossibleActions, washHandsAction)
     
+    kitchenNearTheSink.allActions = {washHandsAction}
+
     local getInBed2Action = GetOn{performer = player, targetItem = bedroom2Bed, nextLocation = bedroom2, how = GetOn.eHow.Bed, side = GetOn.eSide.Left, graphId = self.graphId}
     table.insert(bedroom2.PossibleActions, getInBed2Action)
 
@@ -203,7 +204,9 @@ function House8:Initialize(...)
     sleepAction2.NextAction = getOffBed2Action
     sleepAction2.ClosingAction = getOffBed2Action
 
-    StoryEpisodeBase.Initialize(self, arg)
+    bedroom2.allActions = {getInBed2Action, sleepAction2, getOffBed2Action}
+
+    StoryEpisodeBase.Initialize(self, unpack(arg))
 
     if DEBUG then
         outputConsole("House8:Initialized")

@@ -2,17 +2,6 @@ House10 = class(StoryEpisodeBase, function(o)
     StoryEpisodeBase.init(o, {name = 'house10'})
     o:LoadFromFile()
     o.InteriorId = 10
-    if not loadPathGraph then
-        outputDebugString("Pathfinding module not loaded. Exiting...", 2)
-        return
-    end
-
-    -- Load path graph
-    o.graphId = loadPathGraph("files/paths/house10.json")
-    if not findShortestPathBetween then
-        outputDebugString("Pathfinding module not loaded. Exiting...", 2)
-        return false
-    end
 end)
 
 function House10:Initialize(...)
@@ -151,7 +140,7 @@ function House10:Initialize(...)
     -- local bathroomExitLocation = Location(2256.31640625, -1216.80224609375, 1049.0234375, 270, self.InteriorId, "bathroom")
     local bathroomSinkLocation = Location(2254.75048828125, -1215.560229492188, 1049.0234375, 0, self.InteriorId, "bathroom sink")
 
-    self.POI = { livingRoomEntranceLocation, livingRoomSofa1Location, livingRoomTurnTableLocation, livingRoomAnswerPhoneLocation,
+    self.POI = { livingRoomEntranceLocation, livingRoomSofa1Location, livingRoomSofa2Location, livingRoomTurnTableLocation, livingRoomAnswerPhoneLocation,
                  kitchenSinkLocation, kitchenChairLocation, bathroomSinkLocation, bedroomBedLocation }
     
     -- sit on sofa1
@@ -161,12 +150,15 @@ function House10:Initialize(...)
     sitOnSofa1Action.NextAction = standUpSofa1Action
     sitOnSofa1Action.ClosingAction = standUpSofa1Action
 
+    livingRoomSofa1Location.allActions = {sitOnSofa1Action, standUpSofa1Action}
     -- sit on sofa2
     local sitOnSofa2Action = SitDown {how = SitDown.eHow.onSofa, performer = player, nextLocation = livingRoomSofa2Location, targetItem = livingroomSofa2, rotation = Vector3(0,0,0), graphId = self.graphId}
     table.insert(livingRoomSofa2Location.PossibleActions, sitOnSofa2Action)
     local standUpSofa2Action = StandUp {how = StandUp.eHow.fromSofa, performer = player, nextLocation = livingRoomSofa2Location, targetItem = livingroomSofa2, graphId = self.graphId}
     sitOnSofa2Action.NextAction = standUpSofa2Action
     sitOnSofa2Action.ClosingAction = standUpSofa2Action
+
+    livingRoomSofa2Location.allActions = {sitOnSofa2Action, standUpSofa2Action}
 
     -- dance next to the turntable
     local turnOnTurnTableAction = TurnOn { performer = player, nextLocation = livingRoomTurnTableLocation, targetItem = livingroomTurnTable, graphId = self.graphId }
@@ -181,6 +173,7 @@ function House10:Initialize(...)
     moveToTurnTable3Action.NextAction = turnOffTurnTableAction
     turnOnTurnTableAction.ClosingAction = turnOffTurnTableAction
 
+    livingRoomTurnTableLocation.allActions = {turnOnTurnTableAction, moveToTurnTable2Action, danceTurnTableAction, moveToTurnTable3Action, turnOffTurnTableAction}
     -- answer phone
     local answerPhoneAction = AnswerPhone { performer = player, nextLocation = livingRoomAnswerPhoneLocation, targetItem = phone, graphId = self.graphId }
     table.insert(livingRoomAnswerPhoneLocation.PossibleActions, answerPhoneAction)
@@ -190,9 +183,12 @@ function House10:Initialize(...)
     talkPhoneAction.NextAction = hangUpAction
     answerPhoneAction.ClosingAction = hangUpAction
 
+    livingRoomAnswerPhoneLocation.allActions = {answerPhoneAction, talkPhoneAction, hangUpAction}
     -- kitchen actions
     local washHandsKitchenAction = WashHands {performer = player, nextLocation = kitchenSinkLocation, targetItem = kitchenSink, graphId = self.graphId}
     table.insert(kitchenSinkLocation.PossibleActions, washHandsKitchenAction)
+
+    kitchenSinkLocation.allActions = {washHandsKitchenAction}
 
     local sitDownKitchenChairAction = SitDown {how = SitDown.eHow.atDesk, performer = player, nextLocation = kitchenChairLocation, targetItem = kitchenChair, rotation = Vector3(0,0,180), graphId = self.graphId}
     table.insert(kitchenChairLocation.PossibleActions, sitDownKitchenChairAction)
@@ -203,6 +199,8 @@ function House10:Initialize(...)
     local standUpKitchenChairAction = StandUp {how = StandUp.eHow.fromDesk, performer = player, nextLocation = kitchenChairLocation, targetItem = kitchenChair, graphId = self.graphId}
     eatFoodAction.NextAction = standUpKitchenChairAction
     sitDownKitchenChairAction.ClosingAction = standUpKitchenChairAction
+
+    kitchenChairLocation.allActions = {sitDownKitchenChairAction, pickUpFoodAction, eatFoodAction, standUpKitchenChairAction}
 
     -- bedroom actions
     -- local openBedroomDoorAction = OpenDoor {performer = player, nextLocation = bedroomBedLocation, targetItem = bedroomBedLocation, how = OpenDoor.eHow.Enter, graphId = self.graphId}
@@ -215,6 +213,9 @@ function House10:Initialize(...)
     local getOffBedAction = GetOff {performer = player, targetItem = bedroomBed, nextLocation = bedroomBedLocation, how = GetOff.eHow.Bed, graphId = self.graphId}
     sleepAction.NextAction = getOffBedAction
     getInBedAction.ClosingAction = getOffBedAction
+
+    bedroomBedLocation.allActions = {getInBedAction, sleepAction, getOffBedAction}
+
     --local moveToBedroomExitAction = Move { performer = player, nextLocation = bedroomExitLocation, targetItem = bedroomExitLocation, graphId = self.graphId}
     --getOffBedAction.NextAction = moveToBedroomExitAction
 
@@ -229,6 +230,8 @@ function House10:Initialize(...)
 
     local washhandsBathroomSinkAction = WashHands {performer = player, nextLocation = bathroomSinkLocation, targetItem = bathroomSink, graphId = self.graphId}
     table.insert(bathroomSinkLocation.PossibleActions, washhandsBathroomSinkAction)
+
+    bathroomSinkLocation.allActions = {washhandsBathroomSinkAction}
     -- local moveToBathroomExitAction = Move { performer = player, nextLocation = bathroomExitLocation, targetItem = bathroomExitLocation, graphId = self.graphId}
     -- washhandsBathroomSinkAction.NextAction = moveToBathroomExitAction
 
@@ -236,7 +239,7 @@ function House10:Initialize(...)
     -- table.insert(bathroomExitLocation.PossibleActions, openbathRoomAction2)
     -- openbathRoomAction.ClosingAction = openbathRoomAction2
 
-    StoryEpisodeBase.Initialize(self, arg)
+    StoryEpisodeBase.Initialize(self, unpack(arg))
 
     if DEBUG then
         outputConsole("House10:Initialized")

@@ -12,6 +12,7 @@ StoryActionBase = class(IStoryItem, function(o, params)
     o.Rewards = params.rewards or params.Rewards or {}
     o.IsClosingAction = params.isClosingAction or params.IsClosingAction or false
     o.Buffer = {}
+    o.Name = params.name or ''
 end)
 
 function StoryActionBase:__tostring()

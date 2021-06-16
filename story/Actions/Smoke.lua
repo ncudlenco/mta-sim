@@ -1,5 +1,7 @@
 Smoke = class(StoryActionBase, function(o, params)
     params.description = PickRandom({" smokes a ", " starts smoking a "})
+    params.name = 'Smoke'
+
     StoryActionBase.init(o,params)
 end)
 

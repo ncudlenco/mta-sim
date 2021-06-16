@@ -1,5 +1,7 @@
 Laugh = class(StoryActionBase, function(o, params)
     params.description = PickRandom(" laughs at ", " is laughing ")
+    params.name = 'Laugh'
+
     StoryActionBase.init(o,params)
 
     o.TargetPlayer = params.targetPlayer

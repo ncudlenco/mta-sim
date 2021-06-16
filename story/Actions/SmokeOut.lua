@@ -1,5 +1,7 @@
 SmokeOut = class(StoryActionBase, function(o, params)
     params.description = " throws the "
+    params.name = 'SmokeOut'
+
     StoryActionBase.init(o,params)
 end)
 

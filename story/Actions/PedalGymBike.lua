@@ -1,5 +1,7 @@
 PedalGymBike = class(StoryActionBase, function(o, params)
     params.description = PickRandom({" starts pedalling ", " pedals "})
+    params.name = 'PedalGymBike'
+
     StoryActionBase.init(o,params)
     o.how = PedalGymBike.eHow[PickRandom(PedalGymBike.eHow)]
 end)

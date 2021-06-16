@@ -1,5 +1,6 @@
 BarbellWorkOut = class(StoryActionBase, function(o, params)
     params.description = " works out with "
+    params.name = 'BarbellWorkOut'
     StoryActionBase.init(o, params)
 end)
 

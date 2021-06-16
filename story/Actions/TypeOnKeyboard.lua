@@ -1,5 +1,7 @@
 TypeOnKeyboard = class(StoryActionBase, function(o, params)
     params.description = " types "
+    params.name = 'TypeOnKeyboard'
+
     StoryActionBase.init(o,params)
 end)
 

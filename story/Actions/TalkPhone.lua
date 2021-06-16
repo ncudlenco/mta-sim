@@ -1,5 +1,7 @@
 TalkPhone = class(StoryActionBase, function(o, params)
     params.description = PickRandom({" talks ", " starts talking "})
+    params.name = 'TalkPhone'
+
     StoryActionBase.init(o,params)
 end)
 

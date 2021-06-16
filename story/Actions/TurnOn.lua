@@ -1,5 +1,7 @@
 TurnOn = class(StoryActionBase, function(o, params)
     params.description = " turns on the "
+    params.name = 'TurnOn'
+
     StoryActionBase.init(o,params)
 end)
 

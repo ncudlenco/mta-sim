@@ -2,17 +2,6 @@ House12 = class(StoryEpisodeBase, function(o)
     StoryEpisodeBase.init(o, {name = 'house12'})
     o:LoadFromFile()
     o.InteriorId = 12
-    if not loadPathGraph then
-        outputDebugString("Pathfinding module not loaded. Exiting...", 2)
-        return
-    end
-
-    -- Load path graph
-    o.graphId = loadPathGraph("files/paths/house12.json")
-    if not findShortestPathBetween then
-        outputDebugString("Pathfinding module not loaded. Exiting...", 2)
-        return false
-    end
 end)
 
 function House12:Initialize(...)
@@ -142,7 +131,6 @@ function House12:Initialize(...)
     local kitchenSinkLocation = Location(2336.946220703125, -1139.029296875, 1050.875, 270, self.InteriorId, "kitchen sink")
     local kitchenTableLocation1 = Location(2331.906640625, -1140.846923828125, 1050.875, 90, self.InteriorId, "kitchen counter")
     local kitchenTableLocation2 = Location(2331.906640625, -1142.846923828125, 1050.875, 90, self.InteriorId, "kitchen counter again")
-    local kitchenTableLocation1Back = Location(2331.906640625, -1140.846923828125, 1050.875, 90, self.InteriorId, "kitchen counter again")
 
     -- local bedroom1EntranceLocation = Location(2334.14599609375, -1138.757934570313, 1054.3046875, 270, self.InteriorId, "bedroom")
     -- local bedroom1EntranceLocation2 = Location(2332.56298828125, -1138.757934570313, 1054.3046875, 90, self.InteriorId, "bedroom")
@@ -155,7 +143,7 @@ function House12:Initialize(...)
     local bedroom2BedLocation = Location(2310.430419921875, -1141.222900390625, 1054.3046875, 90, self.InteriorId, "right bedroom bed")
 
     
-    self.POI = {livingRoomSofa1Location, livingRoomSofa2Location, livingRoomChairLocation, kitchenTableLocation1, bedroom1BedLocation, bedroom2BedLocation, livingRoomEntranceLocation}  
+    self.POI = {livingRoomSofa1Location, livingRoomSofa2Location, livingRoomChairLocation, kitchenSinkLocation, kitchenTableLocation1, kitchenTableLocation2, bedroom1BedLocation, bedroom2BedLocation, livingRoomEntranceLocation}  
     -- sit on sofa1
     local sitOnSofa1Action = SitDown {how = SitDown.eHow.onSofa, performer = player, nextLocation = livingRoomSofa1Location, targetItem = livingroomSofa1, rotation = Vector3(0,0,90), graphId = self.graphId}
     table.insert(livingRoomSofa1Location.PossibleActions, sitOnSofa1Action)
@@ -163,12 +151,15 @@ function House12:Initialize(...)
     sitOnSofa1Action.NextAction = standUpSofa1Action
     sitOnSofa1Action.ClosingAction = standUpSofa1Action
 
+    livingRoomSofa1Location.allActions = {sitOnSofa1Action, standUpSofa1Action}
     -- sit on sofa2
     local sitOnSofa2Action = SitDown {how = SitDown.eHow.onSofa, performer = player, nextLocation = livingRoomSofa2Location, targetItem = livingroomSofa2, rotation = Vector3(0,0,270), graphId = self.graphId}
     table.insert(livingRoomSofa2Location.PossibleActions, sitOnSofa2Action)
     local standUpSofa2Action = StandUp {how = StandUp.eHow.fromSofa, performer = player, nextLocation = livingRoomSofa2Location, targetItem = livingroomSofa2, graphId = self.graphId}
     sitOnSofa2Action.NextAction = standUpSofa2Action
     sitOnSofa2Action.ClosingAction = standUpSofa2Action
+
+    livingRoomSofa2Location.allActions = {sitOnSofa2Action, standUpSofa2Action}
 
     -- sit on chair
     local sitDownLivingRoomChairAction = SitDown {how = SitDown.eHow.atDesk, performer = player, nextLocation = livingRoomChairLocation, targetItem = livingroomChair, rotation = Vector3(0,0,0), graphId = self.graphId}
@@ -187,6 +178,7 @@ function House12:Initialize(...)
     closeLaptopAction.NextAction = standUpLivingRoomChairAction
     sitDownLivingRoomChairAction.ClosingAction = standUpLivingRoomChairAction
 
+    livingRoomChairLocation.allActions = {sitDownLivingRoomChairAction, openLaptopAction, writeOnLaptop, layOnElbow, writeOnLaptop2, closeLaptopAction, standUpLivingRoomChairAction}
     -- kitchen actions
     local pickUpDrinkAction = PickUp {performer = player, nextLocation = kitchenTableLocation1, targetItem = drink1, where = "the kitchen counter", targetObjectExists = true, how = PickUp.eHow.Normal, hand = PickUp.eHand.Left, graphId = self.graphId}
     table.insert(kitchenTableLocation1.PossibleActions, pickUpDrinkAction)
@@ -197,34 +189,22 @@ function House12:Initialize(...)
     drinkAction.NextAction = putDownDrinkAction
     pickUpDrinkAction.ClosingAction = putDownDrinkAction
 
+    kitchenTableLocation1.allActions = {pickUpDrinkAction, drinkAction, putDownDrinkAction}
     local washhandsKitchenSinkAction = WashHands {performer = player, nextLocation = kitchenSinkLocation, targetItem = kitchenSinkLocation, graphId = self.graphId}
     table.insert(kitchenSinkLocation.PossibleActions, washhandsKitchenSinkAction)
     
-    -- pick a random next table location
-    math.randomseed(os.time())
-    dice = math.random(1, 2)
-    
-    if dice == 1 then
-        nextTableLocation = kitchenTableLocation1Back
-        nextDrink = drink1
-    else
-        nextTableLocation = kitchenTableLocation2
-        nextDrink = drink2
-    end
+    kitchenSinkLocation.allActions = {washhandsKitchenSinkAction}
 
-    local moveToNextTableLocation = Move { performer = player, nextLocation = nextTableLocation, targetItem = nextTableLocation, graphId = self.graphId }
-    washhandsKitchenSinkAction.NextAction = moveToNextTableLocation
-    washhandsKitchenSinkAction.ClosingAction = moveToNextTableLocation
-
-    local pickUpDrinkAction2 = PickUp {performer = player, nextLocation = nextTableLocation, targetItem = nextDrink, where = "the kitchen counter", targetObjectExists = true, how = PickUp.eHow.Normal, hand = PickUp.eHand.Left, graphId = self.graphId}
-    table.insert(nextTableLocation.PossibleActions, pickUpDrinkAction2)
-    local drinkAction2 = Drink {performer = player, nextLocation = nextTableLocation, targetItem = nextDrink, graphId = self.graphId}
+    local pickUpDrinkAction2 = PickUp {performer = player, nextLocation = kitchenTableLocation2, targetItem = drink2, where = "the kitchen counter", targetObjectExists = true, how = PickUp.eHow.Normal, hand = PickUp.eHand.Left, graphId = self.graphId}
+    table.insert(kitchenTableLocation2.PossibleActions, pickUpDrinkAction2)
+    local drinkAction2 = Drink {performer = player, nextLocation = kitchenTableLocation2, targetItem = drink2, graphId = self.graphId}
     pickUpDrinkAction2.NextAction = drinkAction2
-    local putDownDrinkAction2 = PutDown {performer = player, nextLocation = nextTableLocation, targetItem = nextDrink, where = "the kitchen counter", targetObjectPosition = Vector3(2331.306640625, -1140.846923828125, 1050.775),
+    local putDownDrinkAction2 = PutDown {performer = player, nextLocation = kitchenTableLocation2, targetItem = drink2, where = "the kitchen counter", targetObjectPosition = Vector3(2331.306640625, -1140.846923828125, 1050.775),
                                        targetObjectRotation = Vector3(0, 0, 0), graphId = self.graphId}
     drinkAction2.NextAction = putDownDrinkAction2
     pickUpDrinkAction2.ClosingAction = putDownDrinkAction2
 
+    kitchenTableLocation2.allActions = {pickUpDrinkAction2, drinkAction2, putDownDrinkAction2}
     -- bedroom 1 actions
     -- local opendoorBedRoom1Location = OpenDoor { performer = player, nextLocation = bedroom1BedLocation, targetItem = bedroom1BedLocation, how = OpenDoor.eHow.Enter, graphId = self.graphId }
     -- table.insert(bedroom1EntranceLocation.PossibleActions, opendoorBedRoom1Location)
@@ -236,6 +216,8 @@ function House12:Initialize(...)
     local getOffBed1Action = GetOff{performer = player, targetItem = bedroom1Bed, nextLocation = bedroom1BedLocation,  how = GetOff.eHow.Bed, side = GetOff.eSide.Left, graphId = self.graphId}
     slee1pAction.NextAction = getOffBed1Action
     getInBed1Action.ClosingAction = getOffBed1Action
+
+    bedroom1BedLocation.allActions = {getInBed1Action, slee1pAction, getOffBed1Action}
     -- local moveToBedroom1ExitAction = Move { performer = player, nextLocation = bedroom1ExitLocation, targetItem = bedroom1ExitLocation, graphId = self.graphId}
     -- getOffBed1Action.NextAction = moveToBedroom1ExitAction
 
@@ -254,10 +236,12 @@ function House12:Initialize(...)
     slee2pAction.NextAction = getOffBed2Action
     getInBed2Action.ClosingAction = getOffBed2Action
 
+    bedroom2BedLocation.allActions = {getInBed2Action, slee2pAction, getOffBed2Action}
+
     -- local openBedroom2DoorAction2 = OpenDoor {performer = player, nextLocation = bedroom2EntranceLocation2, targetItem = bedroom2EntranceLocation2, how = OpenDoor.eHow.Exit, graphId = self.graphId}
     -- table.insert(bedroom2ExitLocation.PossibleActions, openBedroom2DoorAction2)
 
-    StoryEpisodeBase.Initialize(self, arg)
+    StoryEpisodeBase.Initialize(self, unpack(arg))
 
     if DEBUG then
         outputConsole("House12:Initialized")

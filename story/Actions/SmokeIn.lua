@@ -1,5 +1,7 @@
 SmokeIn = class(StoryActionBase, function(o, params)
     params.description = " takes out "
+    params.name = 'SmokeIn'
+
     StoryActionBase.init(o,params)
 end)
 

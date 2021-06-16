@@ -1,5 +1,7 @@
 Sleep = class(StoryActionBase, function(o, params)
     params.description = PickRandom({" starts sleeping on it", " sleeps on it"})
+    params.name = 'Sleep'
+
     StoryActionBase.init(o,params)
     o.how = params.how or Sleep.eHow.Left
 end)

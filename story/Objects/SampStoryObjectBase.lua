@@ -12,7 +12,7 @@ SampStoryObjectBase = class(StoryObjectBase, function(o, params)
     o.scale = params.scale or 1
     o.PosOffset = params.posOffset or params.PosOffset or Vector3(0,0,0)
     o.RotOffset = params.rotOffset or params.RotOffset or Vector3(0,0,0)
-    
+    o.Region = {}
     if not params.pluralTemplate and params.description and params.description ~= '' then
         o:SetSimplePluralTemplate()
     else
@@ -145,7 +145,7 @@ end
 
 function SampStoryObjectBase:Destroy(...)
     --TODO: if needed -> here we could set the end time for the atomic event Object exists
-    if self.instance ~= nil then
+    if self.instance then
         self.instance:destroy()
     end
 end
@@ -162,7 +162,7 @@ function SampStoryObjectBase:ChangeModel(newModelid)
 end
 
 function SampStoryObjectBase:Destroy()
-    if self.instance ~= nil then
+    if isElement(self.instance) then
         self.instance:destroy()
     end
 end

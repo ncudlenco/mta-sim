@@ -1,5 +1,6 @@
 Dance = class(StoryActionBase, function(o, params)
     params.description = PickRandom({" starts dancing", " dances"})
+    params.name = 'Dance'
     StoryActionBase.init(o, params)
 end)
 

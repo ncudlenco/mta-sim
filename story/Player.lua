@@ -1,14 +1,24 @@
-addEventHandler("onPlayerJoin", getRootElement(),
-function (prevA, curA)
+function initializePlayer(source)
     source:fadeCamera (false)
     source:setHudComponentVisible("all", false)
     --Set a player specific id to be able to differentiate between players the logged data
     local g = Guid()
     source:setData("id", g.Id)
     source:setData("isPed", false)
-
-    CURRENT_STORY = Story(source, MAX_ACTIONS, LOG_DATA)
-
+    math.randomseed(os.time())
+    math.random(); math.random(); math.random()
+    
+    SCREENSHOTS = {}
+    CURRENT_STORY = nil
+    GRAPH = {}
+    if #INPUT_GRAPHS > 0 then
+        LOAD_FROM_GRAPH = INPUT_GRAPHS[1]
+    end
+    if LOAD_FROM_GRAPH then
+        CURRENT_STORY = GraphStory(source, LOG_DATA)
+    else
+        CURRENT_STORY = Story(source, MAX_ACTIONS, LOG_DATA)
+    end
     if DEBUG then
         outputConsole("New player joined the server. Id ".. source:getData('id') .. " story id " .. source:getData('storyId'))
     end
@@ -37,7 +47,12 @@ function (prevA, curA)
 
     Timer(function(playerId, storyId)
         CURRENT_STORY:Play()
-    end, 1000, 1, source:getData('id'), source:getData('storyId'))
+    end, 2000, 1, source:getData('id'), source:getData('storyId'))
+end
+
+addEventHandler("onPlayerJoin", getRootElement(),
+function (prevA, curA)
+    initializePlayer(source)
 end
 )
 
@@ -66,17 +81,14 @@ function (prevA, curA)
 end
 )
 
-addEventHandler ( "onPlayerQuit", root, 
-function ( quitType )
-    if DEBUG then
-        outputConsole(getPlayerName(source).. " has left the server (" .. quitType .. ")")
-    end
+function terminatePlayer(player, reason)
+    player:fadeCamera (false)
     if CURRENT_STORY then
         local story = CURRENT_STORY
         if DEBUG then
             outputConsole("Found story for the player that quit. Trying to clear the objects")
         end
-        if story then
+        if story and story.CurrentEpisode then
             Timer(function()
                 if not story.CurrentEpisode.Disposed then
                     story.CurrentEpisode:Destroy()
@@ -84,13 +96,36 @@ function ( quitType )
             end, 5000, 1)
         end
     end
+    SCREENSHOTS = {}
+    CURRENT_STORY = nil
+    GRAPH = {}
+    Timer(function()
+        if #INPUT_GRAPHS > 0 then
+            table.remove(INPUT_GRAPHS, 1)
+            if #INPUT_GRAPHS > 0 then
+                initializePlayer(player)
+            else
+                player:kick(reason)
+            end
+        else
+            player:kick(reason)
+        end
+    end, 10000,1)
+end
+
+addEventHandler ( "onPlayerQuit", root, 
+function ( quitType )
+    if DEBUG then
+        outputConsole(getPlayerName(source).. " has left the server (" .. quitType .. ")")
+    end
 end )
 
 addEventHandler( "onPlayerScreenShot", root,
 function ( theResource, status, pixels, timestamp, tag )
-    local playerId = tag:sub(0, 36)
-    local storyId = tag:sub(37, 72)
-    local playerName = tag:sub(73)
+    local split = tag:split(';')
+    local playerId = split[1]
+    local storyId = split[2]
+    local playerName = split[3]
     local story = CURRENT_STORY
 
     if not SCREENSHOTS[playerId] then

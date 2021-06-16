@@ -8,6 +8,8 @@ StandUp = class(StoryActionBase, function(o, params)
     --     error("StandUp: nextLocation not given in the constructor")
     -- end
     params.description = " stands up "
+    params.name = 'StandUp'
+
     StoryActionBase.init(o,params)
     o.how = params.how or StandUp.eHow.atDesk
 end)

@@ -1,5 +1,7 @@
 GetOn = class(StoryActionBase, function(o, params)
     params.description = " gets{temp}on the "
+    params.name = 'GetOn'
+
     StoryActionBase.init(o, params)
     o.how = params.how
     o.side = params.side or GetOn.eSide.Left

@@ -7,10 +7,12 @@ function EndStory:Apply()
     if DEBUG then
         outputConsole("EndStory:Apply")
     end
+    self.Performer:setAnimation()
+
     local story = GetStory(self.Performer)
     story:End()
     if not story.LogData and not story.RecorderTimer then
-        story.Actor:kick("story ended - end story call")
+        terminatePlayer(story.Actor, "story ended - end story call")
     end
 end
 

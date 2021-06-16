@@ -1,5 +1,7 @@
 WashHands = class(StoryActionBase, function(o, params)
     params.description = " washes "
+    params.name = 'WashHands'
+
     StoryActionBase.init(o,params)
 end)
 

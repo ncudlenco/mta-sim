@@ -1,5 +1,6 @@
 AnswerPhone = class(StoryActionBase, function(o, params)
     params.description = " answers the "
+    params.name = 'AnswerPhone'
     StoryActionBase.init(o, params)
 end)
 

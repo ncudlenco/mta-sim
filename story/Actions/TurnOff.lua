@@ -1,5 +1,7 @@
 TurnOff = class(StoryActionBase, function(o, params)
     params.description = " turns off the "
+    params.name = 'TurnOff'
+
     StoryActionBase.init(o,params)
 end)
 

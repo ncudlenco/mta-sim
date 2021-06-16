@@ -1,5 +1,7 @@
 HangUp = class(StoryActionBase, function(o, params)
     params.description = " hangs up"
+    params.name = 'HangUp'
+
     StoryActionBase.init(o, params)
 end)
 

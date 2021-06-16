@@ -100,7 +100,7 @@
   <script src="story/Actions/OpenLaptop.lua" type="shared" />
   <script src="story/Actions/CloseLaptop.lua" type="shared" />
   <script src="story/Actions/LayOnElbow.lua" type="shared" />
-  <script src="story/Actions/PunchSeated.lua" type="shared" />
+  <script src="story/Actions/PunchDesk.lua" type="shared" />
   <script src="story/Actions/TypeOnKeyboard.lua" type="shared" />
   <script src="story/Actions/LookAtTheWatch.lua" type="shared" />
   <script src="story/Actions/PickUp.lua" type="shared" />
@@ -175,6 +175,7 @@
   <!-- Story main items -->
   <script src="story/Player.lua" type="server" />
   <script src="story/Story.lua" type="shared" />
+  <script src="story/GraphStory.lua" type="shared" />
   <!-- Client classes -->
   <script src="client/Template.lua" type="client"/>
   <!-- Commands -->

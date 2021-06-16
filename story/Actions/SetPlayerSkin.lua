@@ -1,7 +1,14 @@
 --See https://wiki.multitheftauto.com/wiki/Character_Skins for details
-SetPlayerSkin = class(StoryActionBase, function(o, id, description) --maybe add gender here
+SetPlayerSkin = class(StoryActionBase, function(o, id, description, gender) --maybe add gender here
     StoryActionBase.init(o, {description = description})
     o.Id = id
+    o.Gender = gender
+    o.Nominative = 'he'
+    o.Genitive = 'his'
+    if gender == 2 then
+        o.Nominative = 'she'
+        o.Genitive = 'her'
+    end
     o.isTaken = false
 end)
 
@@ -3014,321 +3021,321 @@ SetPlayerSkin.FamilyNames = {
 'ARCHER'
 }
 SetPlayerSkin.PlayerSkins = {
-    SetPlayerSkin(0, "A young black man in a black sleeveless t-shirt and blue jeans"),
-    SetPlayerSkin(1, "An old white man in a red shirt with black and white plaids, khaki pants and with a red headband"),
-    SetPlayerSkin(2, "A young white man in a white hoody, blue jeans and with a white hat"),
-    -- SetPlayerSkin(3, "Andre"),                                           ---> not working
-    -- SetPlayerSkin(4, "Barry \"Big Bear\" Thorne[Thin]"),                 ---> not working
-    -- SetPlayerSkin(5, "Barry \"Big Bear\" Thorne[Big]"),                  ---> not working
-    -- SetPlayerSkin(6, "Emmet"),                                           ---> not working
-    SetPlayerSkin(7, "A young black man in a blue jeans jacket and beige pants"),
-    -- SetPlayerSkin(8, "Janitor"),                                         ---> not working
-    SetPlayerSkin(9, "An old black woman in a brown suit"),
-    SetPlayerSkin(10, "An old woman in a red shirt with black plaid and a khaki skirt"),
-    SetPlayerSkin(11, "A young black woman in a black suit without jacket"),
-    SetPlayerSkin(12, "A young white woman in a black dress"),
-    SetPlayerSkin(13, "A young black woman in a purple t-shirt, blue jeans and with a beige hat"),
-    SetPlayerSkin(14, "An old bald black man in a colorful shirt and brown pants"),
-    SetPlayerSkin(15, "An old bald black man in a white shirt with black plaid and blue jeans"),
-    SetPlayerSkin(16, "A middle-aged black man in a black shirt and orange vest, black jeans and with a black cap and headphones"),
-    SetPlayerSkin(17, "A middle-aged black man in a black suit"),
-    SetPlayerSkin(18, "A young black man in red ang green shorts"),
-    SetPlayerSkin(19, "A young black man in red pants and with a red head"),
-    SetPlayerSkin(20, "A young white man in a yellow and black shirt and black pants"),
-    SetPlayerSkin(21, "A young black man in a navy blue shirt with white stripes and khaki three quarter pants"),
-    SetPlayerSkin(22, "A young black man in a black and orange hoody, black and orange pants and with a black hat"),
-    SetPlayerSkin(23, "A young white man in a gray t-shirt, beige three quarter pants and with a black cap"),
-    SetPlayerSkin(24, "A middle-aged black man in a navy blue jacket, blue jeans and navy blue cap"),
-    SetPlayerSkin(25, "A middle-aged black man in a navy blue and white jacket and black jeans"),
-    SetPlayerSkin(26, "A young white man in a navy blue t-shirt, beige shorts and with a gray backpack"),
-    SetPlayerSkin(27, "A middle-aged white man in a white t-shirt, blue jeans, with a yellow hat and white gloves"),
-    SetPlayerSkin(28, "A young black man in a brown sleeveless t-shirt, gray pants and with a brown hat"),
-    SetPlayerSkin(29, "A middle-aged white man in a white hoody, blue jeans and with a black cap"),
-    SetPlayerSkin(30, "A middle-aged white man in a gray sleeveless t-shirt, gray pants and with black glasses"),
-    SetPlayerSkin(31, "A middle-aged white woman in a white t-shirt, blue jeans and with a white hat"),
-    SetPlayerSkin(32, "An old white man in navy blue shirt, gray jeans and with a navy blue cap"),
-    SetPlayerSkin(33, "A middle-aged white man in a black coat, black pants and with a black hat"),
-    SetPlayerSkin(34, "A middle-aged white man in a blue shirt with gray plaid, blue jeans, with a gray hat and black glasses"),
-    SetPlayerSkin(35, "A middle-aged white man in a pink shirt, beige three quarter pants and with a beige hat"),
-    SetPlayerSkin(36, "A middle-aged white man in a white polo t-shirt, navy blue three quarter pants and with a navy blue cap"),
-    SetPlayerSkin(37, "A middle-aged white man in a green polo t-shirt, khaki three quarter pants and with a red cap"),
-    SetPlayerSkin(38, "An old white woman in a white and khaki shirt, khaki three quarter pants and with a pink headband cap"),
-    SetPlayerSkin(39, "An old white woman in a brown sweater, navy blue skirt and with a blue and brown kerchief"),
-    SetPlayerSkin(40, "A middle-aged white woman in a red dress"),
-    SetPlayerSkin(41, "A young white woman in a light blue and white jacket, light blue and white pants and with a light blue hat"),
-    -- SetPlayerSkin(42, "Jethro"),                                         ---> not working   
-    SetPlayerSkin(43, "A middle-aged white man in a purple shirt, black pants and with black glasses"),
-    SetPlayerSkin(44, "A middle-aged white man in a blue shirt with black plaid and brown jeans"),
-    SetPlayerSkin(45, "A young white man in green shorts and with black glasses"),
-    SetPlayerSkin(46, "A young white man in a white shirt and blue jeans"),
-    SetPlayerSkin(47, "A young white man in a gray shirt with black plaid, beige pants and with black glasses"),
-    SetPlayerSkin(48, "A young white man in a blue polo t-shirt with white stripes, gray pants and black glasses"),
-    SetPlayerSkin(49, "An old white man in a black shirt with red vest and black and red pants"),
-    SetPlayerSkin(50, "A white man in a gray overalls and with a black kerchief"),
-    SetPlayerSkin(51, "A young black man in a orange sleeveless t-shirt, black shorts and with a black helmet"),
-    SetPlayerSkin(52, "A young white man in orange and white shirt, black shorts and with a gray helmet"),
-    SetPlayerSkin(53, "A middle-aged white woman in a khaki shirt, navy blue three quarter pants and a green headband cap"),
-    SetPlayerSkin(54, "A middle-aged white woman in a brown sweater and a purple skirt"),
-    SetPlayerSkin(55, "A young white woman in a black dress with brown strides and brown glasses"),
-    SetPlayerSkin(56, "A young white woman in a green sleeveless t-shirt and a gray skirt"),
-    SetPlayerSkin(57, "An old white man in a black suit"),
-    SetPlayerSkin(58, "A middle-aged white man in a red shirt with black plaid and gray jeans"),
-    SetPlayerSkin(59, "A young white man in a gray shirt with purple strides and black pants"),
-    SetPlayerSkin(60, "A young white man in a brown sweater with blue jeans"),
-    SetPlayerSkin(61, "A middle-aged white man in a black pilot suit"),
-    SetPlayerSkin(62, "A old white man in a ligh blue with white stripes pajamas"),
-    -- SetPlayerSkin(63, "A young black woman in a pink bra and black skirt"),  --> too vulgar...
-    -- SetPlayerSkin(64, "A young white woman in a black t-shirt and pink skirt"),  --> too vulgar...
-    SetPlayerSkin(65, "Kendl Johnson"),                                  ---> not working
-    SetPlayerSkin(66, "A middle-aged black man in a navy blue and white jacket and black jeans"),
-    -- SetPlayerSkin(67, "Pool Player"),                                    ---> same as 66
-    SetPlayerSkin(68, "An old white man in a black suit"),
-    SetPlayerSkin(69, "A young black woman in a sleeveless jeans shirt and blue jeans"),
-    SetPlayerSkin(70, "An old white man in a white white coat and gray pants"),
-    SetPlayerSkin(71, "A middle-aged white man in a blue shirt, navy blue pants and with a navy blue cap"),
-    SetPlayerSkin(72, "A middle-aged white man in a blue shirt with black plaid and blue jeans"),
-    SetPlayerSkin(73, "A middle-aged white man in a khaki t-shirt, camouflage pants and with a blue, red and white kerchief"),
-    -- SetPlayerSkin(74, "-"),                                              ---> not working
-    -- SetPlayerSkin(75, "Prostitute"),                                     ---> not working
-    SetPlayerSkin(76, "A middle-aged black woman in a navy blue suit"),
-    SetPlayerSkin(77, "A middle-aged white woman in a navy blue and green sweater, a khaki skirt and with a pink hat"),
-    SetPlayerSkin(78, "An old white man in a red shirt with white plaid, blue jeans and with a navy blue cap and blue gloves"),
-    SetPlayerSkin(79, "A middle-aged white man with a khaki jacket, blue pants and a navy blue hat"),
-    SetPlayerSkin(80, "A middle-aged black man in red shorts and red boxing gloves"),
-    -- SetPlayerSkin(81, "Boxer"),                                          ---> same as 80
-    SetPlayerSkin(82, "A young white man in a black suit and with black glasses"),
-    SetPlayerSkin(83, "A young black man in a white suit"),
-    SetPlayerSkin(84, "A young black man in a blue suit and with black glasses"),
-    -- SetPlayerSkin(85, "Prostitute"),                                     ---> same as 84
-    -- SetPlayerSkin(86, "Ryder with robbery mask"),                        ---> not working
-    -- SetPlayerSkin(87, "Stripper"),                                       ---> not working
-    SetPlayerSkin(88, "An old woman in a red polo t-shirt and biege three quarter pants"),
-    SetPlayerSkin(89, "An old woman in a ligh blue dress and with a red headband"),
-    -- SetPlayerSkin(90, "A young woman in a brown t-shirt, a black skirt and with a green headband"),    --> too vulgar
-    -- SetPlayerSkin(91, "Rich Woman"),                                     ---> same as 90
-    -- SetPlayerSkin(92, "A young white woman in a navy blue swim suit"),             --> too vulgar
-    SetPlayerSkin(93, "A young white woman in a black blouse and black jeans"),
-    SetPlayerSkin(94, "An old white man in a white shirt, gray three quarter pants and a gray hat"),
-    SetPlayerSkin(95, "An old man in a white shirt and blue jeans"),
-    SetPlayerSkin(96, "A young white man in a white sleeveless t-shirt with gray strides and gray and red shorts"),
-    SetPlayerSkin(97, "A young white man in red shorts"),
-    SetPlayerSkin(98, "A young white man in a white shirt with a black vest and blue jeans"),
-    -- SetPlayerSkin(99, "A young white man in a white t-shirt, black shorts and a gray helmet"),
-    SetPlayerSkin(100, "A middle-aged white man with a long blonde tail, in a gray jacket, beige pants, with black glasses and brown gloves"),
-    SetPlayerSkin(101, "A young white man with blonde hair, in a khaki jacket and white t-shirt, and black pants"),
-    SetPlayerSkin(102, "A middle-aged black man with black hair, in a white t-shirt, purple shorts and with a purple headband"),
-    SetPlayerSkin(103, "A middle-aged black man with a black jacket, black pants and with a purple kerchief"),
-    SetPlayerSkin(104, "A middle-aged black man with a purple jacket, beige pants, with a black hat and glasses"),
-    SetPlayerSkin(105, "A young black man in a green sweater, gray pants and with a green kerchief"),
-    SetPlayerSkin(106, "A young black man with black long hair, green shirt with black strides and beige pants"),
-    SetPlayerSkin(107, "A young black man in a green sleeveless t-shirt, black pants and with a black cap"),
-    SetPlayerSkin(108, "A middle-aged white man in black pants and with a yellow headband"),
-    SetPlayerSkin(109, "A middle-aged white man in a sleeveless white t-shirt, beige pants and with a yellow headband"),
-    SetPlayerSkin(110, "A middle-aged white man in a sleeveless white t-shirt, navy blue three quarter pants and with a yellow headband"),
-    SetPlayerSkin(111, "A middle-aged white man, black hair in a black suit"),
-    SetPlayerSkin(112, "A middle-aged white bald man in a brown jacket, gray t-shirt and beige pants"),
-    SetPlayerSkin(113, "A middle-aged white man with black hair and in a gray suit"),
-    SetPlayerSkin(114, "A young white man in a gray polo with navy blue strides, gray pants and with a light blue headband"),
-    SetPlayerSkin(115, "A young white man in a black jacket, white t-shirt, black pants and with a black cap, black glasses and a light blue headband"),
-    SetPlayerSkin(116, "A young bald white man in a white t-shirt, beige three quarter pants and black glasses"),
-    SetPlayerSkin(117, "A middle-aged asian man with black hair in a black suit"),
-    SetPlayerSkin(118, "A middle-aged asian man with black hair in a black suit"),
-    -- SetPlayerSkin(119, "Johhny Sindacco"),                                     ---> not working
-    SetPlayerSkin(120, "A middle-aged white man with black hair in a gray suit with a black shirt"),
-    SetPlayerSkin(121, "A bald middle-aged asian man in a white shirt with blue jeans, having tatoos on both arms"),
-    SetPlayerSkin(122, "A young white man in a black t-shirt, khaki pants and with a black kerchief"),
-    SetPlayerSkin(123, "A middle-aged white man with black hair, gray shirt with blue and yellow forms, black pants and with black glasses"),
-    SetPlayerSkin(124, "A young white man with black hair in a black t-shirt and black pants"),
-    SetPlayerSkin(125, "A middle-aged white man with black hair, in a black jacket and black pants"),
-    -- SetPlayerSkin(126, "The Mafia"),                                        ---> same as 90
-    SetPlayerSkin(127, "A middle-aged white man with brown hair, in a brown jacket with a light blue shirt, beige pants and with black gloves"),
-    SetPlayerSkin(128, "A middle-aged white man with a long black hair in a khaki shirt and blue jeans"),
-    SetPlayerSkin(129, "An old white woman with one tail white hair in a brown sweater with a brown skirt and with glasses"),
-    SetPlayerSkin(130, "A middle-aged white woman with two tails brown hair in a navy blue shirt and a red skirt"),
-    SetPlayerSkin(131, "A white woman with two tails brown hair in a brown t-shirt and blue jeans"),
-    SetPlayerSkin(132, "A bald white man in a beige shirt, gray pants and with a red headband"),
-    SetPlayerSkin(133, "A middle-aged white man with a gray tails in a khaki shirt, gray jeans and with a red cap"),
-    SetPlayerSkin(134, "An old black man in a white shirt, gray shorts and with a khaki cap"),
-    SetPlayerSkin(135, "An old white man with long white hair in a red shirt, khaki shorts and with a khaki winter hat"),
-    SetPlayerSkin(136, "And old black man with one tail gray hair, gray sweater, purple pants and a red, green and yellow winter hat"),
-    -- SetPlayerSkin(137, "A middle-aged man in a khaki t-shirt, blue three quarter jeans and with a box on head"),
-    -- SetPlayerSkin(138, "White woman in a swim suit"),                       ---> TO DO
-    -- SetPlayerSkin(139, "Black woman in a swim suit"),                       ---> TO DO
-    -- SetPlayerSkin(140, "Asian woman in a swim suit"),                       ---> TO DO
-    SetPlayerSkin(141, "A young asian woman with black hair in a black suit and with glasses"),
-    SetPlayerSkin(142, "A middle-aged black man in a colorful t-shirt, black pants and with a colorful winter hat"),
-    SetPlayerSkin(143, "A middle-aged black man in a light blue shirt, beige pants, with a white hat and black glasses"),
-    SetPlayerSkin(144, "A young white man with black hair, black and white shirt, khaki pants and with a white mask"),
-    -- SetPlayerSkin(145, "Crack Maker"),                                      ---> TO DO - naked woman!
-    SetPlayerSkin(146, "A white young man with black hair in gray shorts"),       
-    SetPlayerSkin(147, "A middle-aged white man with brown hair in a gray suit"),
-    SetPlayerSkin(148, "A middle-aged black woman in a light blue suit"), --can't lay on ground (beach)
-    -- SetPlayerSkin(149, "Big Smoke Armored"),                                ---> Not Working                              
-    SetPlayerSkin(150, "A young white woman with one tails blonde hail, wearing a blue suit with gray stripes"),
-    SetPlayerSkin(151, "A young white woman with brown hair, kakhi t-shirt, blue jeans skirt and glasses"),
-    ---- SetPlayerSkin(152, "Prostitute"),
-    -- SetPlayerSkin(153, "Construction Worker"),
-    -- SetPlayerSkin(154, "Beach Visitor"),
-    -- SetPlayerSkin(155, "Well Stacked Pizza Worker"),
-    -- SetPlayerSkin(156, "Barber"),
-    -- SetPlayerSkin(157, "Hillbilly"),
-    -- SetPlayerSkin(158, "Farmer"),
-    -- SetPlayerSkin(159, "Hillbilly"),
-    -- SetPlayerSkin(160, "Hillbilly"),
-    -- SetPlayerSkin(161, "Farmer"),
-    -- SetPlayerSkin(162, "Hillbilly"),
-    -- SetPlayerSkin(163, "Black Bouncer"),
-    -- SetPlayerSkin(164, "White Bouncer"),
-    -- SetPlayerSkin(165, "White MIB agent"),
-    -- SetPlayerSkin(166, "Black MIB agent"),
-    -- SetPlayerSkin(167, "Cluckin' Bell Worker"),
-    -- SetPlayerSkin(168, "Hotdog / Chilli Dog Vendor"),
-    -- SetPlayerSkin(169, "Normal Ped"),
-    -- SetPlayerSkin(170, "Normal Ped"),
-    -- SetPlayerSkin(171, "Blackjack Dealer"),
-    -- SetPlayerSkin(172, "Casino croupier"),
-    -- SetPlayerSkin(173, "San Fierro Rifa"),
-    -- SetPlayerSkin(174, "San Fierro Rifa"),
-    -- SetPlayerSkin(175, "San Fierro Rifa"),
-    -- SetPlayerSkin(176, "Barber"),
-    -- SetPlayerSkin(177, "Barber"),
-    -- SetPlayerSkin(178, "Whore"),
-    -- SetPlayerSkin(179, "Ammunation Salesman"),
-    -- SetPlayerSkin(180, "Tattoo Artist"),
-    -- SetPlayerSkin(181, "Punk"),
-    -- SetPlayerSkin(182, "Cab Driver"),
-    -- SetPlayerSkin(183, "Normal Ped"),
-    -- SetPlayerSkin(184, "Normal Ped"),
-    -- SetPlayerSkin(185, "Normal Ped"),
-    -- SetPlayerSkin(186, "Normal Ped"),
-    -- SetPlayerSkin(187, "Businessman"),
-    -- SetPlayerSkin(188, "Normal Ped"),
-    -- SetPlayerSkin(189, "Valet"),
-    -- SetPlayerSkin(190, "Barbara Schternvart"),
-    -- SetPlayerSkin(191, "Helena Wankstein"),
-    -- SetPlayerSkin(192, "Michelle Cannes"),
-    -- SetPlayerSkin(193, "Katie Zhan"),
-    -- SetPlayerSkin(194, "Millie Perkins"),
-    -- SetPlayerSkin(195, "Denise Robinson"),
-    -- SetPlayerSkin(196, "Farm - Town inhabitant"),
-    -- SetPlayerSkin(197, "Hillbilly"),
-    -- SetPlayerSkin(198, "Farm - Town inhabitant"),
-    -- SetPlayerSkin(199, "Farm - Town inhabitant"),
-    -- SetPlayerSkin(200, "Hillbilly"),
-    -- SetPlayerSkin(201, "Farmer"),
-    -- SetPlayerSkin(202, "Farmer"),
-    -- SetPlayerSkin(203, "Karate Teacher"),
-    -- SetPlayerSkin(204, "Karate Teacher"),
-    -- SetPlayerSkin(205, "Burger Shot Cashier"),
-    -- SetPlayerSkin(206, "Cab Driver"),
-    ---- SetPlayerSkin(207, "Prostitute"),
-    -- SetPlayerSkin(208, "Su Xi Mu(Suzie)"),
-    -- SetPlayerSkin(209, "Oriental Noodle stand vendor"),
-    -- SetPlayerSkin(210, "Oriental Boating School Instructor"),
-    -- SetPlayerSkin(211, "Clothes shop staff"),
-    -- SetPlayerSkin(212, "Homeless"),
-    -- SetPlayerSkin(213, "Weird old man"),
-    -- SetPlayerSkin(214, "Waitress(Maria Latore)"),
-    -- SetPlayerSkin(215, "Normal Ped"),
-    -- SetPlayerSkin(216, "Normal Ped"),
-    -- SetPlayerSkin(217, "Clothes shop staff"),
-    -- SetPlayerSkin(218, "Normal Ped"),
-    -- SetPlayerSkin(219, "Rich Woman"),
-    -- SetPlayerSkin(220, "Cab Driver"),
-    -- SetPlayerSkin(221, "Normal Ped"),
-    -- SetPlayerSkin(222, "Normal Ped"),
-    -- SetPlayerSkin(223, "Normal Ped"),
-    -- SetPlayerSkin(224, "Normal Ped"),
-    -- SetPlayerSkin(225, "Normal Ped"),
-    -- SetPlayerSkin(226, "Normal Ped"),
-    -- SetPlayerSkin(227, "Oriental Businessman"),
-    -- SetPlayerSkin(228, "Oriental Ped"),
-    -- SetPlayerSkin(229, "Oriental Ped"),
-    -- SetPlayerSkin(230, "Homeless"),
-    -- SetPlayerSkin(231, "Normal Ped"),
-    -- SetPlayerSkin(232, "Normal Ped"),
-    -- SetPlayerSkin(233, "Normal Ped"),
-    -- SetPlayerSkin(234, "Cab Driver"),
-    -- SetPlayerSkin(235, "Normal Ped"),
-    -- SetPlayerSkin(236, "Normal Ped"),
-    ---- SetPlayerSkin(237, "Prostitute"),
-    ---- SetPlayerSkin(238, "Prostitute"),
-    -- SetPlayerSkin(239, "Homeless"),
-    -- SetPlayerSkin(240, "The D.A"),
-    -- SetPlayerSkin(241, "Afro - American"),
-    -- SetPlayerSkin(242, "Mexican"),
-    ---- SetPlayerSkin(243, "Prostitute"),
-    -- SetPlayerSkin(244, "Stripper"),
-    ---- SetPlayerSkin(245, "Prostitute"),
-    -- SetPlayerSkin(246, "Stripper"),
-    -- SetPlayerSkin(247, "Biker"),
-    -- SetPlayerSkin(248, "Biker"),
-    -- SetPlayerSkin(249, "Pimp"),
-    -- SetPlayerSkin(250, "Normal Ped"),
-    -- SetPlayerSkin(251, "Lifeguard"),
-    -- SetPlayerSkin(252, "Naked Valet"),
-    -- SetPlayerSkin(253, "Bus Driver"),
-    -- SetPlayerSkin(254, "Biker Drug Dealer"),
-    -- SetPlayerSkin(255, "Chauffeur(Limo Driver)"),
-    -- SetPlayerSkin(256, "Stripper"),
-    -- SetPlayerSkin(257, "Stripper"),
-    -- SetPlayerSkin(258, "Heckler"),
-    -- SetPlayerSkin(259, "Heckler"),
-    -- SetPlayerSkin(260, "Construction Worker"),
-    -- SetPlayerSkin(261, "Cab driver"),
-    -- SetPlayerSkin(262, "Cab driver"),
-    -- SetPlayerSkin(263, "Normal Ped"),
-    -- SetPlayerSkin(264, "Clown(Ice - cream Van Driver)"),
-    -- SetPlayerSkin(265, "Officer Frank Tenpenny(Corrupt Cop)"),
-    -- SetPlayerSkin(266, "Officer Eddie Pulaski(Corrupt Cop)"),
-    -- SetPlayerSkin(267, "Officer Jimmy Hernandez"),
-    -- SetPlayerSkin(268, "Dwaine / Dwayne"),
-    -- SetPlayerSkin(269, "Melvin \"Big Smoke\" Harris"),
-    -- SetPlayerSkin(270, "Sean 'Sweet' Johnson"),
-    -- SetPlayerSkin(271, "Lance 'Ryder' Wilson"),
-    -- SetPlayerSkin(272, "Mafia Boss"),
-    -- SetPlayerSkin(273, "T - Bone Mendez"),
-    -- SetPlayerSkin(274, "Paramedic(Emergency Medical Technician)"),
-    -- SetPlayerSkin(275, "Paramedic(Emergency Medical Technician)"),
-    -- SetPlayerSkin(276, "Paramedic(Emergency Medical Technician)"),
-    -- SetPlayerSkin(277, "Firefighter"),
-    -- SetPlayerSkin(278, "Firefighter"),
-    -- SetPlayerSkin(279, "Firefighter"),
-    -- SetPlayerSkin(280, "Los Santos Police Officer"),
-    -- SetPlayerSkin(281, "San Fierro Police Officer"),
-    -- SetPlayerSkin(282, "Las Venturas Police Officer"),
-    -- SetPlayerSkin(283, "County Sheriff"),
-    -- SetPlayerSkin(284, "LSPD Motorbike Cop"),
-    -- SetPlayerSkin(285, "S.W.A.T Special Forces"),
-    -- SetPlayerSkin(286, "Federal Agent"),
-    -- SetPlayerSkin(287, "San Andreas Army"),
-    -- SetPlayerSkin(288, "Desert Sheriff"),
-    -- SetPlayerSkin(289, "Zero"),
-    -- SetPlayerSkin(290, "Ken Rosenberg"),
-    -- SetPlayerSkin(291, "Kent Paul"),
-    -- SetPlayerSkin(292, "Cesar Vialpando"),
-    -- SetPlayerSkin(293, "Jeffery \"OG Loc\" Martin / Cross"),
-    -- SetPlayerSkin(294, "Wu Zi Mu(Woozie)"),
-    -- SetPlayerSkin(295, "Michael Toreno"),
-    -- SetPlayerSkin(296, "Jizzy B."),
-    -- SetPlayerSkin(297, "Madd Dogg"),
-    -- SetPlayerSkin(298, "Catalina"),
-    -- SetPlayerSkin(299, "Claude Speed"),
-    -- SetPlayerSkin(300, "Los Santos Police Officer(Without gun holster)"),
-    -- SetPlayerSkin(301, "San Fierro Police Officer(Without gun holster)"),
-    -- SetPlayerSkin(302, "Las Venturas Police Officer(Without gun holster)"),
-    -- SetPlayerSkin(303, "Los Santos Police Officer(Without uniform)"),
-    -- SetPlayerSkin(304, "Los Santos Police Officer(Without uniform)"),
-    -- SetPlayerSkin(305, "Las Venturas Police Officer(Without uniform)"),
-    -- SetPlayerSkin(306, "Los Santos Police Officer"),
-    -- SetPlayerSkin(307, "San Fierro Police Officer"),
-    -- SetPlayerSkin(308, "San Fierro Paramedic(Emergency Medical Technician)"),
-    -- SetPlayerSkin(309, "Las Venturas Police Officer"),
-    -- SetPlayerSkin(310, "Country Sheriff(Without hat)"),
-    -- SetPlayerSkin(311, "Desert Sheriff(Without hat)")
+    SetPlayerSkin(0, "A young black man in a black sleeveless t-shirt and blue jeans", 1),
+    SetPlayerSkin(1, "An old white man in a red shirt with black and white plaids, khaki pants and with a red headband", 1),
+    SetPlayerSkin(2, "A young white man in a white hoody, blue jeans and with a white hat", 1),
+    -- SetPlayerSkin(3, "Andre", 1),                                           ---> not working
+    -- SetPlayerSkin(4, "Barry \"Big Bear\" Thorne[Thin]", 1),                 ---> not working
+    -- SetPlayerSkin(5, "Barry \"Big Bear\" Thorne[Big]", 1),                  ---> not working
+    -- SetPlayerSkin(6, "Emmet", 1),                                           ---> not working
+    SetPlayerSkin(7, "A young black man in a blue jeans jacket and beige pants", 1),
+    -- SetPlayerSkin(8, "Janitor", 1),                                         ---> not working
+    SetPlayerSkin(9, "An old black woman in a brown suit", 2),
+    SetPlayerSkin(10, "An old woman in a red shirt with black plaid and a khaki skirt", 2),
+    SetPlayerSkin(11, "A young black woman in a black suit without jacket", 2),
+    SetPlayerSkin(12, "A young white woman in a black dress", 2),
+    SetPlayerSkin(13, "A young black woman in a purple t-shirt, blue jeans and with a beige hat", 2),
+    SetPlayerSkin(14, "An old bald black man in a colorful shirt and brown pants", 1),
+    SetPlayerSkin(15, "An old bald black man in a white shirt with black plaid and blue jeans", 1),
+    SetPlayerSkin(16, "A middle-aged black man in a black shirt and orange vest, black jeans and with a black cap and headphones", 1),
+    SetPlayerSkin(17, "A middle-aged black man in a black suit", 1),
+    SetPlayerSkin(18, "A young black man in red ang green shorts", 1),
+    SetPlayerSkin(19, "A young black man in red pants and with a red head", 1),
+    SetPlayerSkin(20, "A young white man in a yellow and black shirt and black pants", 1),
+    SetPlayerSkin(21, "A young black man in a navy blue shirt with white stripes and khaki three quarter pants", 1),
+    SetPlayerSkin(22, "A young black man in a black and orange hoody, black and orange pants and with a black hat", 1),
+    SetPlayerSkin(23, "A young white man in a gray t-shirt, beige three quarter pants and with a black cap", 1),
+    SetPlayerSkin(24, "A middle-aged black man in a navy blue jacket, blue jeans and navy blue cap", 1),
+    SetPlayerSkin(25, "A middle-aged black man in a navy blue and white jacket and black jeans", 1),
+    SetPlayerSkin(26, "A young white man in a navy blue t-shirt, beige shorts and with a gray backpack", 1),
+    SetPlayerSkin(27, "A middle-aged white man in a white t-shirt, blue jeans, with a yellow hat and white gloves", 1),
+    SetPlayerSkin(28, "A young black man in a brown sleeveless t-shirt, gray pants and with a brown hat", 1),
+    SetPlayerSkin(29, "A middle-aged white man in a white hoody, blue jeans and with a black cap", 1),
+    SetPlayerSkin(30, "A middle-aged white man in a gray sleeveless t-shirt, gray pants and with black glasses", 1),
+    SetPlayerSkin(31, "A middle-aged white woman in a white t-shirt, blue jeans and with a white hat", 2),
+    SetPlayerSkin(32, "An old white man in navy blue shirt, gray jeans and with a navy blue cap", 1),
+    SetPlayerSkin(33, "A middle-aged white man in a black coat, black pants and with a black hat", 1),
+    SetPlayerSkin(34, "A middle-aged white man in a blue shirt with gray plaid, blue jeans, with a gray hat and black glasses", 1),
+    SetPlayerSkin(35, "A middle-aged white man in a pink shirt, beige three quarter pants and with a beige hat", 1),
+    SetPlayerSkin(36, "A middle-aged white man in a white polo t-shirt, navy blue three quarter pants and with a navy blue cap", 1),
+    SetPlayerSkin(37, "A middle-aged white man in a green polo t-shirt, khaki three quarter pants and with a red cap", 1),
+    SetPlayerSkin(38, "An old white woman in a white and khaki shirt, khaki three quarter pants and with a pink headband cap", 2),
+    SetPlayerSkin(39, "An old white woman in a brown sweater, navy blue skirt and with a blue and brown kerchief", 2),
+    SetPlayerSkin(40, "A middle-aged white woman in a red dress", 2),
+    SetPlayerSkin(41, "A young white woman in a light blue and white jacket, light blue and white pants and with a light blue hat", 2),
+    -- SetPlayerSkin(42, "Jethro", 1),                                         ---> not working   
+    SetPlayerSkin(43, "A middle-aged white man in a purple shirt, black pants and with black glasses", 1),
+    SetPlayerSkin(44, "A middle-aged white man in a blue shirt with black plaid and brown jeans", 1),
+    SetPlayerSkin(45, "A young white man in green shorts and with black glasses", 1),
+    SetPlayerSkin(46, "A young white man in a white shirt and blue jeans", 1),
+    SetPlayerSkin(47, "A young white man in a gray shirt with black plaid, beige pants and with black glasses", 1),
+    SetPlayerSkin(48, "A young white man in a blue polo t-shirt with white stripes, gray pants and black glasses", 1),
+    SetPlayerSkin(49, "An old white man in a black shirt with red vest and black and red pants", 1),
+    SetPlayerSkin(50, "A white man in a gray overalls and with a black kerchief", 1),
+    SetPlayerSkin(51, "A young black man in a orange sleeveless t-shirt, black shorts and with a black helmet", 1),
+    SetPlayerSkin(52, "A young white man in orange and white shirt, black shorts and with a gray helmet", 1),
+    SetPlayerSkin(53, "A middle-aged white woman in a khaki shirt, navy blue three quarter pants and a green headband cap", 2),
+    SetPlayerSkin(54, "A middle-aged white woman in a brown sweater and a purple skirt", 2),
+    SetPlayerSkin(55, "A young white woman in a black dress with brown strides and brown glasses", 2),
+    SetPlayerSkin(56, "A young white woman in a green sleeveless t-shirt and a gray skirt", 2),
+    SetPlayerSkin(57, "An old white man in a black suit", 1),
+    SetPlayerSkin(58, "A middle-aged white man in a red shirt with black plaid and gray jeans", 1),
+    SetPlayerSkin(59, "A young white man in a gray shirt with purple strides and black pants", 1),
+    SetPlayerSkin(60, "A young white man in a brown sweater with blue jeans", 1),
+    SetPlayerSkin(61, "A middle-aged white man in a black pilot suit", 1),
+    SetPlayerSkin(62, "A old white man in a ligh blue with white stripes pajamas", 1),
+    -- SetPlayerSkin(63, "A young black woman in a pink bra and black skirt", 2),  --> too vulgar...
+    -- SetPlayerSkin(64, "A young white woman in a black t-shirt and pink skirt", 2),  --> too vulgar...
+    SetPlayerSkin(65, "Kendl Johnson", 1),                                  ---> not working
+    SetPlayerSkin(66, "A middle-aged black man in a navy blue and white jacket and black jeans", 1),
+    -- SetPlayerSkin(67, "Pool Player", 1),                                    ---> same as 66
+    SetPlayerSkin(68, "An old white man in a black suit", 1),
+    SetPlayerSkin(69, "A young black woman in a sleeveless jeans shirt and blue jeans", 2),
+    SetPlayerSkin(70, "An old white man in a white white coat and gray pants", 1),
+    SetPlayerSkin(71, "A middle-aged white man in a blue shirt, navy blue pants and with a navy blue cap", 1),
+    SetPlayerSkin(72, "A middle-aged white man in a blue shirt with black plaid and blue jeans", 1),
+    SetPlayerSkin(73, "A middle-aged white man in a khaki t-shirt, camouflage pants and with a blue, red and white kerchief", 1),
+    -- SetPlayerSkin(74, "-", 1),                                              ---> not working
+    -- SetPlayerSkin(75, "Prostitute", 1),                                     ---> not working
+    SetPlayerSkin(76, "A middle-aged black woman in a navy blue suit", 2),
+    SetPlayerSkin(77, "A middle-aged white woman in a navy blue and green sweater, a khaki skirt and with a pink hat", 2),
+    SetPlayerSkin(78, "An old white man in a red shirt with white plaid, blue jeans and with a navy blue cap and blue gloves", 1),
+    SetPlayerSkin(79, "A middle-aged white man with a khaki jacket, blue pants and a navy blue hat", 1),
+    SetPlayerSkin(80, "A middle-aged black man in red shorts and red boxing gloves", 1),
+    -- SetPlayerSkin(81, "Boxer", 1),                                          ---> same as 80
+    SetPlayerSkin(82, "A young white man in a black suit and with black glasses", 1),
+    SetPlayerSkin(83, "A young black man in a white suit", 1),
+    SetPlayerSkin(84, "A young black man in a blue suit and with black glasses", 1),
+    -- SetPlayerSkin(85, "Prostitute", 1),                                     ---> same as 84
+    -- SetPlayerSkin(86, "Ryder with robbery mask", 1),                        ---> not working
+    -- SetPlayerSkin(87, "Stripper", 1),                                       ---> not working
+    SetPlayerSkin(88, "An old woman in a red polo t-shirt and biege three quarter pants", 2),
+    SetPlayerSkin(89, "An old woman in a ligh blue dress and with a red headband", 2),
+    -- SetPlayerSkin(90, "A young woman in a brown t-shirt, a black skirt and with a green headband", 2),    --> too vulgar
+    -- SetPlayerSkin(91, "Rich Woman", 2),                                     ---> same as 90
+    -- SetPlayerSkin(92, "A young white woman in a navy blue swim suit", 2),             --> too vulgar
+    SetPlayerSkin(93, "A young white woman in a black blouse and black jeans", 2),
+    SetPlayerSkin(94, "An old white man in a white shirt, gray three quarter pants and a gray hat", 1),
+    SetPlayerSkin(95, "An old man in a white shirt and blue jeans", 1),
+    SetPlayerSkin(96, "A young white man in a white sleeveless t-shirt with gray strides and gray and red shorts", 1),
+    SetPlayerSkin(97, "A young white man in red shorts", 1),
+    SetPlayerSkin(98, "A young white man in a white shirt with a black vest and blue jeans", 1),
+    -- SetPlayerSkin(99, "A young white man in a white t-shirt, black shorts and a gray helmet", 1),
+    SetPlayerSkin(100, "A middle-aged white man with a long blonde tail, in a gray jacket, beige pants, with black glasses and brown gloves", 1),
+    SetPlayerSkin(101, "A young white man with blonde hair, in a khaki jacket and white t-shirt, and black pants", 1),
+    SetPlayerSkin(102, "A middle-aged black man with black hair, in a white t-shirt, purple shorts and with a purple headband", 1),
+    SetPlayerSkin(103, "A middle-aged black man with a black jacket, black pants and with a purple kerchief", 1),
+    SetPlayerSkin(104, "A middle-aged black man with a purple jacket, beige pants, with a black hat and glasses", 1),
+    SetPlayerSkin(105, "A young black man in a green sweater, gray pants and with a green kerchief", 1),
+    SetPlayerSkin(106, "A young black man with black long hair, green shirt with black strides and beige pants", 1),
+    SetPlayerSkin(107, "A young black man in a green sleeveless t-shirt, black pants and with a black cap", 1),
+    SetPlayerSkin(108, "A middle-aged white man in black pants and with a yellow headband", 1),
+    SetPlayerSkin(109, "A middle-aged white man in a sleeveless white t-shirt, beige pants and with a yellow headband", 1),
+    SetPlayerSkin(110, "A middle-aged white man in a sleeveless white t-shirt, navy blue three quarter pants and with a yellow headband", 1),
+    SetPlayerSkin(111, "A middle-aged white man, black hair in a black suit", 1),
+    SetPlayerSkin(112, "A middle-aged white bald man in a brown jacket, gray t-shirt and beige pants", 1),
+    SetPlayerSkin(113, "A middle-aged white man with black hair and in a gray suit", 1),
+    SetPlayerSkin(114, "A young white man in a gray polo with navy blue strides, gray pants and with a light blue headband", 1),
+    SetPlayerSkin(115, "A young white man in a black jacket, white t-shirt, black pants and with a black cap, black glasses and a light blue headband", 1),
+    SetPlayerSkin(116, "A young bald white man in a white t-shirt, beige three quarter pants and black glasses", 1),
+    SetPlayerSkin(117, "A middle-aged asian man with black hair in a black suit", 1),
+    SetPlayerSkin(118, "A middle-aged asian man with black hair in a black suit", 1),
+    -- SetPlayerSkin(119, "Johhny Sindacco", 1),                                     ---> not working
+    SetPlayerSkin(120, "A middle-aged white man with black hair in a gray suit with a black shirt", 1),
+    SetPlayerSkin(121, "A bald middle-aged asian man in a white shirt with blue jeans, having tatoos on both arms", 1),
+    SetPlayerSkin(122, "A young white man in a black t-shirt, khaki pants and with a black kerchief", 1),
+    SetPlayerSkin(123, "A middle-aged white man with black hair, gray shirt with blue and yellow forms, black pants and with black glasses", 1),
+    SetPlayerSkin(124, "A young white man with black hair in a black t-shirt and black pants", 1),
+    SetPlayerSkin(125, "A middle-aged white man with black hair, in a black jacket and black pants", 1),
+    -- SetPlayerSkin(126, "The Mafia", 1),                                        ---> same as 90
+    SetPlayerSkin(127, "A middle-aged white man with brown hair, in a brown jacket with a light blue shirt, beige pants and with black gloves", 1),
+    SetPlayerSkin(128, "A middle-aged white man with a long black hair in a khaki shirt and blue jeans", 1),
+    SetPlayerSkin(129, "An old white woman with one tail white hair in a brown sweater with a brown skirt and with glasses", 2),
+    SetPlayerSkin(130, "A middle-aged white woman with two tails brown hair in a navy blue shirt and a red skirt", 2),
+    SetPlayerSkin(131, "A white woman with two tails brown hair in a brown t-shirt and blue jeans", 2),
+    SetPlayerSkin(132, "A bald white man in a beige shirt, gray pants and with a red headband", 1),
+    SetPlayerSkin(133, "A middle-aged white man with a gray tails in a khaki shirt, gray jeans and with a red cap", 1),
+    SetPlayerSkin(134, "An old black man in a white shirt, gray shorts and with a khaki cap", 1),
+    SetPlayerSkin(135, "An old white man with long white hair in a red shirt, khaki shorts and with a khaki winter hat", 1),
+    SetPlayerSkin(136, "And old black man with one tail gray hair, gray sweater, purple pants and a red, green and yellow winter hat", 1),
+    -- SetPlayerSkin(137, "A middle-aged man in a khaki t-shirt, blue three quarter jeans and with a box on head", 1),
+    -- SetPlayerSkin(138, "White woman in a swim suit", 2),                       ---> TO DO
+    -- SetPlayerSkin(139, "Black woman in a swim suit", 2),                       ---> TO DO
+    -- SetPlayerSkin(140, "Asian woman in a swim suit", 2),                       ---> TO DO
+    SetPlayerSkin(141, "A young asian woman with black hair in a black suit and with glasses", 2),
+    SetPlayerSkin(142, "A middle-aged black man in a colorful t-shirt, black pants and with a colorful winter hat", 1),
+    SetPlayerSkin(143, "A middle-aged black man in a light blue shirt, beige pants, with a white hat and black glasses", 1),
+    SetPlayerSkin(144, "A young white man with black hair, black and white shirt, khaki pants and with a white mask", 1),
+    -- SetPlayerSkin(145, "Crack Maker", 1),                                      ---> TO DO - naked woman!
+    SetPlayerSkin(146, "A white young man with black hair in gray shorts", 1),       
+    SetPlayerSkin(147, "A middle-aged white man with brown hair in a gray suit", 1),
+    SetPlayerSkin(148, "A middle-aged black woman in a light blue suit", 2), --can't lay on ground (beach)
+    -- SetPlayerSkin(149, "Big Smoke Armored", 1),                                ---> Not Working                              
+    SetPlayerSkin(150, "A young white woman with one tails blonde hail, wearing a blue suit with gray stripes", 2),
+    SetPlayerSkin(151, "A young white woman with brown hair, kakhi t-shirt, blue jeans skirt and glasses", 2),
+    ---- SetPlayerSkin(152, "Prostitute", 1),
+    -- SetPlayerSkin(153, "Construction Worker", 1),
+    -- SetPlayerSkin(154, "Beach Visitor", 1),
+    -- SetPlayerSkin(155, "Well Stacked Pizza Worker", 1),
+    -- SetPlayerSkin(156, "Barber", 1),
+    -- SetPlayerSkin(157, "Hillbilly", 1),
+    -- SetPlayerSkin(158, "Farmer", 1),
+    -- SetPlayerSkin(159, "Hillbilly", 1),
+    -- SetPlayerSkin(160, "Hillbilly", 1),
+    -- SetPlayerSkin(161, "Farmer", 1),
+    -- SetPlayerSkin(162, "Hillbilly", 1),
+    -- SetPlayerSkin(163, "Black Bouncer", 1),
+    -- SetPlayerSkin(164, "White Bouncer", 1),
+    -- SetPlayerSkin(165, "White MIB agent", 1),
+    -- SetPlayerSkin(166, "Black MIB agent", 1),
+    -- SetPlayerSkin(167, "Cluckin' Bell Worker", 1),
+    -- SetPlayerSkin(168, "Hotdog / Chilli Dog Vendor", 1),
+    -- SetPlayerSkin(169, "Normal Ped", 1),
+    -- SetPlayerSkin(170, "Normal Ped", 1),
+    -- SetPlayerSkin(171, "Blackjack Dealer", 1),
+    -- SetPlayerSkin(172, "Casino croupier", 1),
+    -- SetPlayerSkin(173, "San Fierro Rifa", 1),
+    -- SetPlayerSkin(174, "San Fierro Rifa", 1),
+    -- SetPlayerSkin(175, "San Fierro Rifa", 1),
+    -- SetPlayerSkin(176, "Barber", 1),
+    -- SetPlayerSkin(177, "Barber", 1),
+    -- SetPlayerSkin(178, "Whore", 1),
+    -- SetPlayerSkin(179, "Ammunation Salesman", 1),
+    -- SetPlayerSkin(180, "Tattoo Artist", 1),
+    -- SetPlayerSkin(181, "Punk", 1),
+    -- SetPlayerSkin(182, "Cab Driver", 1),
+    -- SetPlayerSkin(183, "Normal Ped", 1),
+    -- SetPlayerSkin(184, "Normal Ped", 1),
+    -- SetPlayerSkin(185, "Normal Ped", 1),
+    -- SetPlayerSkin(186, "Normal Ped", 1),
+    -- SetPlayerSkin(187, "Businessman", 1),
+    -- SetPlayerSkin(188, "Normal Ped", 1),
+    -- SetPlayerSkin(189, "Valet", 1),
+    -- SetPlayerSkin(190, "Barbara Schternvart", 1),
+    -- SetPlayerSkin(191, "Helena Wankstein", 1),
+    -- SetPlayerSkin(192, "Michelle Cannes", 1),
+    -- SetPlayerSkin(193, "Katie Zhan", 1),
+    -- SetPlayerSkin(194, "Millie Perkins", 1),
+    -- SetPlayerSkin(195, "Denise Robinson", 1),
+    -- SetPlayerSkin(196, "Farm - Town inhabitant", 1),
+    -- SetPlayerSkin(197, "Hillbilly", 1),
+    -- SetPlayerSkin(198, "Farm - Town inhabitant", 1),
+    -- SetPlayerSkin(199, "Farm - Town inhabitant", 1),
+    -- SetPlayerSkin(200, "Hillbilly", 1),
+    -- SetPlayerSkin(201, "Farmer", 1),
+    -- SetPlayerSkin(202, "Farmer", 1),
+    -- SetPlayerSkin(203, "Karate Teacher", 1),
+    -- SetPlayerSkin(204, "Karate Teacher", 1),
+    -- SetPlayerSkin(205, "Burger Shot Cashier", 1),
+    -- SetPlayerSkin(206, "Cab Driver", 1),
+    ---- SetPlayerSkin(207, "Prostitute", 1),
+    -- SetPlayerSkin(208, "Su Xi Mu(Suzie)", 1),
+    -- SetPlayerSkin(209, "Oriental Noodle stand vendor", 1),
+    -- SetPlayerSkin(210, "Oriental Boating School Instructor", 1),
+    -- SetPlayerSkin(211, "Clothes shop staff", 1),
+    -- SetPlayerSkin(212, "Homeless", 1),
+    -- SetPlayerSkin(213, "Weird old man", 1),
+    -- SetPlayerSkin(214, "Waitress(Maria Latore)", 1),
+    -- SetPlayerSkin(215, "Normal Ped", 1),
+    -- SetPlayerSkin(216, "Normal Ped", 1),
+    -- SetPlayerSkin(217, "Clothes shop staff", 1),
+    -- SetPlayerSkin(218, "Normal Ped", 1),
+    -- SetPlayerSkin(219, "Rich Woman", 2),
+    -- SetPlayerSkin(220, "Cab Driver", 1),
+    -- SetPlayerSkin(221, "Normal Ped", 1),
+    -- SetPlayerSkin(222, "Normal Ped", 1),
+    -- SetPlayerSkin(223, "Normal Ped", 1),
+    -- SetPlayerSkin(224, "Normal Ped", 1),
+    -- SetPlayerSkin(225, "Normal Ped", 1),
+    -- SetPlayerSkin(226, "Normal Ped", 1),
+    -- SetPlayerSkin(227, "Oriental Businessman", 1),
+    -- SetPlayerSkin(228, "Oriental Ped", 1),
+    -- SetPlayerSkin(229, "Oriental Ped", 1),
+    -- SetPlayerSkin(230, "Homeless", 1),
+    -- SetPlayerSkin(231, "Normal Ped", 1),
+    -- SetPlayerSkin(232, "Normal Ped", 1),
+    -- SetPlayerSkin(233, "Normal Ped", 1),
+    -- SetPlayerSkin(234, "Cab Driver", 1),
+    -- SetPlayerSkin(235, "Normal Ped", 1),
+    -- SetPlayerSkin(236, "Normal Ped", 1),
+    ---- SetPlayerSkin(237, "Prostitute", 1),
+    ---- SetPlayerSkin(238, "Prostitute", 1),
+    -- SetPlayerSkin(239, "Homeless", 1),
+    -- SetPlayerSkin(240, "The D.A", 1),
+    -- SetPlayerSkin(241, "Afro - American", 1),
+    -- SetPlayerSkin(242, "Mexican", 1),
+    ---- SetPlayerSkin(243, "Prostitute", 1),
+    -- SetPlayerSkin(244, "Stripper", 1),
+    ---- SetPlayerSkin(245, "Prostitute", 1),
+    -- SetPlayerSkin(246, "Stripper", 1),
+    -- SetPlayerSkin(247, "Biker", 1),
+    -- SetPlayerSkin(248, "Biker", 1),
+    -- SetPlayerSkin(249, "Pimp", 1),
+    -- SetPlayerSkin(250, "Normal Ped", 1),
+    -- SetPlayerSkin(251, "Lifeguard", 1),
+    -- SetPlayerSkin(252, "Naked Valet", 1),
+    -- SetPlayerSkin(253, "Bus Driver", 1),
+    -- SetPlayerSkin(254, "Biker Drug Dealer", 1),
+    -- SetPlayerSkin(255, "Chauffeur(Limo Driver)", 1),
+    -- SetPlayerSkin(256, "Stripper", 1),
+    -- SetPlayerSkin(257, "Stripper", 1),
+    -- SetPlayerSkin(258, "Heckler", 1),
+    -- SetPlayerSkin(259, "Heckler", 1),
+    -- SetPlayerSkin(260, "Construction Worker", 1),
+    -- SetPlayerSkin(261, "Cab driver", 1),
+    -- SetPlayerSkin(262, "Cab driver", 1),
+    -- SetPlayerSkin(263, "Normal Ped", 1),
+    -- SetPlayerSkin(264, "Clown(Ice - cream Van Driver)", 1),
+    -- SetPlayerSkin(265, "Officer Frank Tenpenny(Corrupt Cop)", 1),
+    -- SetPlayerSkin(266, "Officer Eddie Pulaski(Corrupt Cop)", 1),
+    -- SetPlayerSkin(267, "Officer Jimmy Hernandez", 1),
+    -- SetPlayerSkin(268, "Dwaine / Dwayne", 1),
+    -- SetPlayerSkin(269, "Melvin \"Big Smoke\" Harris", 1),
+    -- SetPlayerSkin(270, "Sean 'Sweet' Johnson", 1),
+    -- SetPlayerSkin(271, "Lance 'Ryder' Wilson", 1),
+    -- SetPlayerSkin(272, "Mafia Boss", 1),
+    -- SetPlayerSkin(273, "T - Bone Mendez", 1),
+    -- SetPlayerSkin(274, "Paramedic(Emergency Medical Technician)", 1),
+    -- SetPlayerSkin(275, "Paramedic(Emergency Medical Technician)", 1),
+    -- SetPlayerSkin(276, "Paramedic(Emergency Medical Technician)", 1),
+    -- SetPlayerSkin(277, "Firefighter", 1),
+    -- SetPlayerSkin(278, "Firefighter", 1),
+    -- SetPlayerSkin(279, "Firefighter", 1),
+    -- SetPlayerSkin(280, "Los Santos Police Officer", 1),
+    -- SetPlayerSkin(281, "San Fierro Police Officer", 1),
+    -- SetPlayerSkin(282, "Las Venturas Police Officer", 1),
+    -- SetPlayerSkin(283, "County Sheriff", 1),
+    -- SetPlayerSkin(284, "LSPD Motorbike Cop", 1),
+    -- SetPlayerSkin(285, "S.W.A.T Special Forces", 1),
+    -- SetPlayerSkin(286, "Federal Agent", 1),
+    -- SetPlayerSkin(287, "San Andreas Army", 1),
+    -- SetPlayerSkin(288, "Desert Sheriff", 1),
+    -- SetPlayerSkin(289, "Zero", 1),
+    -- SetPlayerSkin(290, "Ken Rosenberg", 1),
+    -- SetPlayerSkin(291, "Kent Paul", 1),
+    -- SetPlayerSkin(292, "Cesar Vialpando", 1),
+    -- SetPlayerSkin(293, "Jeffery \"OG Loc\" Martin / Cross", 1),
+    -- SetPlayerSkin(294, "Wu Zi Mu(Woozie)", 1),
+    -- SetPlayerSkin(295, "Michael Toreno", 1),
+    -- SetPlayerSkin(296, "Jizzy B.", 1),
+    -- SetPlayerSkin(297, "Madd Dogg", 1),
+    -- SetPlayerSkin(298, "Catalina", 1),
+    -- SetPlayerSkin(299, "Claude Speed", 1),
+    -- SetPlayerSkin(300, "Los Santos Police Officer(Without gun holster)", 1),
+    -- SetPlayerSkin(301, "San Fierro Police Officer(Without gun holster)", 1),
+    -- SetPlayerSkin(302, "Las Venturas Police Officer(Without gun holster)", 1),
+    -- SetPlayerSkin(303, "Los Santos Police Officer(Without uniform)", 1),
+    -- SetPlayerSkin(304, "Los Santos Police Officer(Without uniform)", 1),
+    -- SetPlayerSkin(305, "Las Venturas Police Officer(Without uniform)", 1),
+    -- SetPlayerSkin(306, "Los Santos Police Officer", 1),
+    -- SetPlayerSkin(307, "San Fierro Police Officer", 1),
+    -- SetPlayerSkin(308, "San Fierro Paramedic(Emergency Medical Technician)", 1),
+    -- SetPlayerSkin(309, "Las Venturas Police Officer", 1),
+    -- SetPlayerSkin(310, "Country Sheriff(Without hat)", 1),
+    -- SetPlayerSkin(311, "Desert Sheriff(Without hat)", 1)
 }
 
-function SetPlayerSkin:Apply(...)
+function SetPlayerSkin:Apply(requiredAttributes)
     self.isTaken = true
     local player = self.Performer
     if not player then
@@ -3337,24 +3344,44 @@ function SetPlayerSkin:Apply(...)
     player:setModel(self.Id)
     player:setData('skinDescription', self.Description)
     
-    if string.match(self.Description, "woman") then
-        playerGenderNominative = "she"
-        playerGenderGenitive = "her"
-        player:setData('first_name', PickRandom(SetPlayerSkin.FemaleNames))
+    if requiredAttributes then
+        for k,v in pairs(requiredAttributes) do
+            if DEBUG then
+                print('SetPlayerSkin:Apply: set data '..k:lower()..'='..v)
+            end
+            player:setData(k:lower(), v)
+        end
+        if (player:getData('name')) then
+            local splitName = player:getData('name'):split(' ')
+            if #splitName == 2 then
+                player:setData('first_name', splitName[1])
+                player:setData('surname', splitName[2])
+            else
+                player:setData('first_name', player:getData('name'))
+                player:setData('surname', '')
+            end
+        else
+            error('The graph does not contain a name for the actor with gender' .. self.Gender)
+        end
+        -- player:setData('first_name', requiredAttributes.Name)
+        -- player:setData('surname', requiredAttributes.Surname)
+        -- player:setData('id', requiredAttributes.Id)
     else
-        player:setData('first_name', PickRandom(SetPlayerSkin.MaleNames))
-        playerGenderNominative = "he"
-        playerGenderGenitive = "his"
+        if self.Gender == 2 then
+            player:setData('first_name', PickRandom(SetPlayerSkin.FemaleNames))
+        else
+            player:setData('first_name', PickRandom(SetPlayerSkin.MaleNames))
+        end
+        player:setData('surname', PickRandom(SetPlayerSkin.FamilyNames))
     end
-    player:setData('surname', PickRandom(SetPlayerSkin.FamilyNames))
-    player:setData('name', player:getData('first_name')..' '..player:getData('surname'))
-
-    player:setData('genderNominative', playerGenderNominative)
-    player:setData('genderGenitive', playerGenderGenitive)
+    player:setData('name', trim(player:getData('first_name')..' '..player:getData('surname')))
+    player:setData('genderNominative', self.Nominative)
+    player:setData('genderGenitive', self.Genitive)
+    player:setData('gender', self.Gender)
 
     --TODO: log atomic event here
     local event = {id = player:getData('id'), Name = player:getData('name'), Description = player:getData('skinDescription'), Gender = player:getData('genderNominative')}
-    GRAPH.AtomicEvents[event.id] = event
+    --GRAPH.AtomicEvents[event.id] = event
 end
 
 function SetPlayerSkin:GetDynamicString()

@@ -15,6 +15,7 @@ Location = class(StoryLocationBase, function(o, x, y, z, angle, interior, descri
         o.position = {x=x, y=y, z=z}
         o.rotation = {x=0, y=0, z=angle}
     end
+    o.allActions = {}
     o.metatable = {}
     --TODO: log atomic action here (location exists)
     --local event = {id = o.LocationId, Name = o.Description}
@@ -158,35 +159,9 @@ function Location:Serialize(episode, relativePosition, _objects, _locations, _ma
     }, objects, locations
 end
 
-lock = false
-function Location:GetNextValidAction(player)
-    if CURRENT_STORY.Disposed then
-        return EmptyAction({Performer = player})
-    end
-    while lock do 
-        Timer(function()end, 500, 1)
-    end
-    lock = true
-    if DEBUG then
-        outputConsole("Location:GetNextValidAction")
-    end
-    if player == nil and DEBUG then
-        outputConsole("Error Location:GetNextValidAction: Actor is null ")
-    end
+function Location:GetNextRandomValidAction(player)
     local story = GetStory(player)
-    if DEBUG and story == nil then
-        outputConsole("Error Location:GetNextValidAction: story is null")
-    end
-    if not self.History[player:getData('id')] then
-        self.History[player:getData('id')] = {}
-    end
-    if #story.History[player:getData('id')] >= story.MaxActions then
-        if DEBUG then
-            outputConsole("Location:GetNextValidAction - max story actions reached. Ending the current story")
-        end
-        lock = false
-        return EndStory(player)
-    end
+
     local previousAction = nil
     if #story.History[player:getData('id')] >= 1 then
         previousAction = story.History[player:getData('id')][#story.History]
@@ -229,8 +204,6 @@ function Location:GetNextValidAction(player)
         table.remove(nextValidActions, 1)
     end
 
-    local next = PickRandom(nextValidActions);
-
     if DEBUG_ACTIONS then
         if previousAction then
             str_act = "Actions: Previous action " .. string.sub(previousAction.ActionId, 1, 8) .. "-"
@@ -243,15 +216,64 @@ function Location:GetNextValidAction(player)
         end
     end
 
+    return PickRandom(nextValidActions);
+end
+
+lock = false
+function Location:GetNextValidAction(player)
+    if CURRENT_STORY.Disposed then
+        return EmptyAction({Performer = player})
+    end
+
+    --wait
+    while lock do 
+        Timer(function()end, 500, 1)
+    end
+    lock = true
+    
+    if DEBUG then
+        outputConsole("Location:GetNextValidAction")
+    end
+    if player == nil and DEBUG then
+        outputConsole("Error Location:GetNextValidAction: Actor is null ")
+    end
+    local story = GetStory(player)
+    if DEBUG and story == nil then
+        outputConsole("Error Location:GetNextValidAction: story is null")
+    end
+    if not self.History[player:getData('id')] then
+        self.History[player:getData('id')] = {}
+    end
+    if #story.History[player:getData('id')] >= story.MaxActions then
+        if DEBUG then
+            outputConsole("Location:GetNextValidAction - max story actions reached. Ending the current story")
+        end
+        lock = false
+        return EndStory(player)
+    end
+
+    local next = nil
+    if not LOAD_FROM_GRAPH then
+        next = self:GetNextRandomValidAction(player)
+    else
+        local q = CURRENT_STORY.actionsQueues[player:getData('id')]
+        if #q > 0 then
+            next = q[1]
+            table.remove(q, 1)
+        end
+    end
+
     if not next then
         if DEBUG then
             outputConsole("Location:GetNextValidAction - next action was null. Ending the current story")
+            print("Location:GetNextValidAction - next action was null. Ending the current story")
         end
         lock = false
         return EndStory(player)
     else
         if DEBUG then
             outputConsole("Next action chosen: "..next.Description)
+            print("Next action chosen: "..next.Description)
         end
         if next.NextLocation == self then
             table.insert(self.History[player:getData('id')], next)

@@ -1,5 +1,7 @@
 PutDown = class(StoryActionBase, function(o, params)
     params.description = " puts the "
+    params.name = 'PutDown'
+
     StoryActionBase.init(o,params)
     o.Where = params.where
     o.TargetObjectPosition = params.targetObjectPosition

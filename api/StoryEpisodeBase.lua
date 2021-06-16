@@ -19,14 +19,36 @@ end)
 function StoryEpisodeBase:Initialize(...)
     if not DEFINING_EPISODES then
         local player = nil
+        local temporaryInitialize = false
+        local requiredActors = nil
+        local graphOfEvents = nil
+        
         for i,v in ipairs(arg) do
-            player = v
-            break
+            if i == 1 then
+                player = v
+            elseif i == 2 then
+                temporaryInitialize = v
+            elseif i == 3 then
+                requiredActors = v
+            elseif i == 4 then
+                graphOfEvents = v
+            end
         end
         if player == nil then
             return false
         end
 
+        if DEBUG then
+            print("Episode: Initializing episode "..self.name)
+            local str = 'false'
+            if temporaryInitialize then str = 'true' end
+            print("Episode: Temporary "..str)
+            str = 'nil'
+            if requiredActors then str = #requiredActors end
+            print("Episode: RequiredActors "..str)
+        end
+
+        --if we have a graph for paths, then link all possible locations with move actions
         if self.graphId then
             for i,p1 in ipairs(self.POI) do
                 table.insert(self.ValidStartingLocations, p1)
@@ -36,7 +58,9 @@ function StoryEpisodeBase:Initialize(...)
                         if #p1.PossibleActions > 0 then
                             prerequisites = {p1.PossibleActions[1]}
                         end
-                        table.insert(p1.PossibleActions, Move{performer = player, targetItem = p2, nextLocation = p2, prerequisites = prerequisites, graphId = self.graphId})
+                        local moveAction = Move{performer = player, targetItem = p2, nextLocation = p2, prerequisites = prerequisites, graphId = self.graphId}
+                        table.insert(p1.PossibleActions, moveAction)
+                        table.insert(p1.allActions, moveAction)
                     end
                 end
                 if DEBUG_EPISODE then
@@ -57,6 +81,7 @@ function StoryEpisodeBase:Initialize(...)
             end
         end
 
+        --create collision instances for all regions
         self.regionsGroup = createElement("regions")
         for i,region in ipairs(self.Regions) do
             local coords = {region.center.x, region.center.y}
@@ -83,46 +108,89 @@ function StoryEpisodeBase:Initialize(...)
             v:Create()
         end
 
-        addEventHandler( "onColShapeHit", self.regionsGroup, function(player)
-            if DEBUG then
-                outputConsole('StoryEpisodeBase:Initialize - Region hit')
-            end
-            local regionsInRange = Region.FilterWithinRange(player.position, self.Regions, 1.5)
-            local closestRegion = Region.GetClosest(player, regionsInRange, true)
-            if closestRegion then
-                closestRegion:OnPlayerHit(player)
-            end
-        end)
+        if not temporaryInitialize then
+            addEventHandler( "onColShapeHit", self.regionsGroup, function(player)
+                if DEBUG then
+                    outputConsole('StoryEpisodeBase:Initialize - Region hit')
+                end
+                local regionsInRange = Region.FilterWithinRange(player.position, self.Regions, 1.5)
+                local closestRegion = Region.GetClosest(player, regionsInRange, true)
+                if closestRegion then
+                    closestRegion:OnPlayerHit(player)
+                end
+            end)
 
-        local pedsNr = math.max(math.floor(#self.ValidStartingLocations * ACTORS_CROWDING_FACTOR) - 1, 0)
-        print('Peds nr '..pedsNr)
-        if (pedsNr + 1) > #self.ValidStartingLocations then
+            local pedsNr = math.max(math.floor(#self.ValidStartingLocations * ACTORS_CROWDING_FACTOR) - 1, 0)
             if DEBUG then
-                outputConsole('[Warning] StoryEpisodeBase:Initialize: number of peds and player is greater than the available starting locations. A max of '..(#self.ValidStartingLocations-1)..' peds will be spawned')
+                local nr = 0
+                if requiredActors then
+                    nr = #requiredActors
+                end
+                print('RequiredActors '..nr)
             end
-        end
-        for i = 1,(pedsNr) do
-            local validStartingPoi = PickRandom(Where(self.ValidStartingLocations, function(x)
-                --find a valid starting location where there are no other players
-                return not x.isBusy
-            end))
-            local skin = PickRandom(Where(SetPlayerSkin.PlayerSkins, function(s)
-                return not s.isTaken
-            end))
-            validStartingPoi.isBusy = true
-            local ped = Ped(skin.Id, validStartingPoi.X, validStartingPoi.Y, validStartingPoi.Z, validStartingPoi.Angle)
-            ped.interior = validStartingPoi.Interior
-            local g = Guid()
-            ped:setData("id", g.Id)
-            ped:setData("isPed", true)
-            ped:setData('startingPoiIdx', LastIndexOf(self.POI, validStartingPoi))
-            if not CURRENT_STORY.History[ped:getData('id')] then
-                CURRENT_STORY.History[ped:getData('id')] = {}
-            end        
-            skin.TargetItem = ped
-            skin.Performer = ped
-            skin:Apply()
-            table.insert(self.peds, ped)
+            if requiredActors then
+                pedsNr = #requiredActors - 1
+            end
+            print('Peds nr '..pedsNr)
+            if (pedsNr + 1) > #self.ValidStartingLocations then
+                if DEBUG then
+                    outputConsole('[Warning] StoryEpisodeBase:Initialize: number of peds and player is greater than the available starting locations. A max of '..(#self.ValidStartingLocations-1)..' peds will be spawned')
+                end
+            end
+            for i = 1,(pedsNr) do
+                local validStartingPoi = nil
+                if not LOAD_FROM_GRAPH then
+                    validStartingPoi = PickRandom(Where(self.ValidStartingLocations, function(x)
+                        --find a valid starting location where there are no other players
+                        return not x.isBusy
+                    end))
+                else
+                    local firstEvent = FirstOrDefault(CURRENT_STORY.graph, function(event)
+                        return event.Actor and event.Actor.id == requiredActors[i+1].id and event.Action ~= 'Exists' and All(Where(CURRENT_STORY.graph, 
+                            function(evt) 
+                                return evt.id ~= event.id and evt.Actor and event.Action ~= 'Exists' and evt.Actor.id == event.Actor.id
+                            end), function(evt)
+                            return evt.Next ~= event.id
+                        end)
+                    end)
+                    if not firstEvent then
+                        error('Could not find the first event for actor '..requiredActors[i+1].id)
+                    elseif DEBUG then
+                        print('First event: '..firstEvent.id..' in location '..firstEvent.Location..' with actor '..firstEvent.Actor.id)
+                    end
+                    validStartingPoi = FirstOrDefault(self.ValidStartingLocations, function(poi) 
+                        return not x.isBusy and poi.Region.name:lower():find(firstEvent.Location:lower()) and true or false 
+                            and Any(poi.allActions, function(a) return a.Name:lower() == firstEvent.Action:lower() end) 
+                    end)
+                end
+                if not validStartingPoi then
+                    error('A valid starting point could not be found for ped '..i)
+                end
+                local skin = PickRandom(Where(SetPlayerSkin.PlayerSkins, function(s)
+                    return not s.isTaken and(not requiredActors or requiredActors[i+1].Gender == s.Gender )
+                end))
+                if not skin then
+                    error('A valid skin could not be found for ped '..i)
+                end
+                validStartingPoi.isBusy = true
+                local ped = Ped(skin.Id, validStartingPoi.X, validStartingPoi.Y, validStartingPoi.Z, validStartingPoi.Angle)
+                ped.interior = validStartingPoi.Interior
+                local g = Guid()
+                ped:setData("id", g.Id)
+                ped:setData("isPed", true)
+                ped:setData('startingPoiIdx', LastIndexOf(self.POI, validStartingPoi))
+                skin.TargetItem = ped
+                skin.Performer = ped
+                if requiredActors then
+                    skin:Apply(requiredActors[i+1]) --changes the actor id, name, gender
+                else
+                    skin:Apply()
+                end
+                if not CURRENT_STORY.History[ped:getData('id')] then
+                    CURRENT_STORY.History[ped:getData('id')] = {}
+                end
+                table.insert(self.peds, ped)
+            end
         end
     end
 end
@@ -136,18 +204,19 @@ function StoryEpisodeBase:ProcessRegions()
             local r = Region.GetClosest(o, self.Regions, false)
             if r then
                 table.insert(r.Objects, o)
+                o.Region = r
                 if DEBUG then
-                    outputConsole(o.Description..' is inside '..r.name)
+                    print(o.Description..' is inside '..r.name)
                 end
             else
                 if DEBUG then
-                    outputConsole('WARNING! '..o.Description..' is not inside a region')
+                    print('WARNING! '..o.Description..' is not inside a region')
                 end
             end
         end
     end
     if DEBUG then
-        outputConsole('StoryEpisodeBase:ProcessRegions - '..self.name..' started to identify which POI are inside which region')
+        print('StoryEpisodeBase:ProcessRegions - '..self.name..' started to identify which POI are inside which region')
     end
     for i,o in ipairs(self.POI) do
         if o.position then
@@ -156,11 +225,11 @@ function StoryEpisodeBase:ProcessRegions()
                 table.insert(r.POI, o)
                 o.Region = r
                 if DEBUG then
-                    outputConsole(o.Description..' is inside '..r.name)
+                    print(o.Description..' is inside '..r.name)
                 end
             else
                 if DEBUG then
-                    outputConsole('WARNING! '..o.Description..' is not inside a region')
+                    print('WARNING! '..o.Description..' is not inside a region')
                 end
             end
         end
@@ -168,7 +237,9 @@ function StoryEpisodeBase:ProcessRegions()
 end
 
 function StoryEpisodeBase:Play(...)
-    StoryEpisodeBase.ProcessRegions(self)
+    if not LOAD_FROM_GRAPH then
+        StoryEpisodeBase.ProcessRegions(self)
+    end
     local player = nil
     for i,v in ipairs(arg) do
         player = v
@@ -179,9 +250,33 @@ function StoryEpisodeBase:Play(...)
     end
 
     if self.StartingLocation == nil then
-        self.StartingLocation = PickRandom(Where(self.ValidStartingLocations, function(x)
-            return not x.isBusy
-        end))
+        if not LOAD_FROM_GRAPH then
+            self.StartingLocation = PickRandom(Where(self.ValidStartingLocations, function(x)
+                return not x.isBusy
+            end))
+        else
+            --find the first event for the current actor
+            local firstEvent = FirstOrDefault(CURRENT_STORY.graph, function(event)
+                return event.Actor and event.Actor.id == player:getData('id') and event.Action ~= 'Exists' and All(Where(CURRENT_STORY.graph, 
+                    function(evt) 
+                        return evt.id ~= event.id and evt.Actor and event.Action ~= 'Exists' and evt.Actor.id == event.Actor.id
+                    end), function(evt)
+                    return evt.Next ~= event.id
+                end)
+            end)
+            if not firstEvent then
+                error('Could not find the first event for actor '..player:getData('id'))
+            elseif DEBUG then
+                print('First event: '..firstEvent.id..' in location '..firstEvent.Location..' with actor '..firstEvent.Actor.id)
+            end
+            self.StartingLocation = FirstOrDefault(self.ValidStartingLocations, function(poi) 
+                return poi.Region.name:lower():find(firstEvent.Location:lower()) and true or false 
+                    and Any(poi.allActions, function(a) return a.Name:lower() == firstEvent.Action:lower() end) 
+            end)
+            if not self.StartingLocation then
+                error('StoryEpisodeBase:Play Could not find a starting location in region '..firstEvent.Location)
+            end
+        end
     end
     self.StartingLocation:SpawnPlayerHere(player)
     if DEBUG then
@@ -208,6 +303,42 @@ function StoryEpisodeBase:Destroy()
     --end
 
     self.Disposed = true
+end
+
+function StoryEpisodeBase:ReloadPathGraph()
+    if self.graphPath then
+        if unloadPathGraph then
+            unloadPathGraph(self.graphId)
+        end
+        if loadPathGraph then
+            self.graphId = loadPathGraph(self.graphPath)
+        end
+    end
+    for _, poi in pairs(self.POI) do
+        for _, a in pairs(poi.allActions) do
+            if a.graphId then
+                a.graphId = self.graphId
+            end
+        end
+    end
+end
+
+function StoryEpisodeBase:Reset()
+    self.StoryTimeOfDay = nil
+    self.StoryWeather = nil
+    self.StartingLocation = nil
+    self.ValidStartingLocations = {}
+    self.Objects = {}
+    self.Regions = {}
+    self.Disposed = false
+    self.CurrentRegion = nil
+    self.InteriorId = nil
+    self.graphPath = nil
+    self.ObjectsToDelete = {}
+    self.POI = {}
+    self.name = params.name or ""
+    self.regionsGroup = nil
+    self.peds = {}
 end
 
 function StoryEpisodeBase:LoadFromFile()

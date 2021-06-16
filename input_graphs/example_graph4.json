@@ -1,0 +1,55 @@
+{
+    "actor0": {
+        "Actor": {
+            "id": "actor0",
+            "Gender": 1,
+            "Name": "Leoner CARRILLO"
+        },
+        "Action": "Exists",
+        "id": "actor0"
+    },
+    "object0": {
+        "Action": "Exists",
+        "id": "object0",
+        "Target": {
+            "id": "object0",
+            "Name": "MobilePhone"
+        }
+    },
+    "action0_inner0": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "AnswerPhone",
+        "Next": "action0_inner1",
+        "id": "action0_inner0",
+        "Target": {
+            "id": "object0"
+        },
+        "Location": ""
+    },
+    "action0_inner1": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "TalkPhone",
+        "Next": "action0_inner2",
+        "id": "action0_inner1",
+        "Target": {
+            "id": "object0"
+        },
+        "Location": ""
+    },
+    "action0_inner2": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "HangUp",
+        "Next": null,
+        "id": "action0_inner2",
+        "Target": {
+            "id": "object0"
+        },
+        "Location": ""
+    }
+}

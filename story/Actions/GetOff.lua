@@ -1,5 +1,7 @@
 GetOff = class(StoryActionBase, function(o, params)
     params.description = " gets off the "
+    params.name = 'GetOff'
+
     StoryActionBase.init(o, params)
     o.how = params.how
     o.side = params.side or GetOff.eSide.Left

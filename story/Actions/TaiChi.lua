@@ -1,5 +1,7 @@
 TaiChi = class(StoryActionBase, function(o, params)
     params.description = " starts doing tai chi "
+    params.name = 'TaiChi'
+
     StoryActionBase.init(o,params)
 end)
 

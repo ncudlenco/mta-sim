@@ -1,5 +1,7 @@
 CloseLaptop = class(StoryActionBase, function(o, params)
     params.description = " closes the laptop lid "
+    params.name = 'CloseLaptop'
+
     StoryActionBase.init(o, params)
 end)
 

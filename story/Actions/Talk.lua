@@ -1,5 +1,7 @@
 Talk = class(StoryActionBase, function(o, params)
     params.description = " talks to "
+    params.name = 'Talk'
+
     StoryActionBase.init(o,params)
 
     o.TargetPlayer = params.targetPlayer

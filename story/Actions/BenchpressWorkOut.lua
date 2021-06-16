@@ -1,5 +1,7 @@
 BenchpressWorkOut = class(StoryActionBase, function(o, params)
-    StoryActionBase.init(o, " working out with the ", params.performer, params.targetItem, params.nextLocation, params.prerequisites or {}, params.closingAction or nil, params.nextAction or nil)
+    params.name = 'BenchpressWorkOut'
+    params.description = " working out with the "
+    StoryActionBase.init(o, params)
     o.how = BenchpressWorkOut.eHow.Slow
 end)
 

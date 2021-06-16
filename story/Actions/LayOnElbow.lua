@@ -1,5 +1,7 @@
 LayOnElbow = class(StoryActionBase, function(o, params)
     params.description = " lays "
+    params.name = 'LayOnElbow'
+
     StoryActionBase.init(o, params)
 end)
 

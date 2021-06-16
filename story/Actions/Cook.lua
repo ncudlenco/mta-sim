@@ -1,5 +1,6 @@
 Cook = class(StoryActionBase, function(o, params)
     params.description = " is cooking food "
+    params.name = 'Cook'
     StoryActionBase.init(o, params)
 end)
 

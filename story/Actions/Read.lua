@@ -1,5 +1,7 @@
 Read = class(StoryActionBase, function(o, params)
     params.description = PickRandom({" starts reading ", " reads "})
+    params.name = 'Read'
+
     StoryActionBase.init(o,params)
 end)
 

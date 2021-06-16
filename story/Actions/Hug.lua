@@ -1,5 +1,7 @@
 Hug = class(StoryActionBase, function(o, params)
     params.description = " hug each other "
+    params.name = 'Hug'
+
     StoryActionBase.init(o,params)
 
     o.TargetPlayer = params.targetPlayer

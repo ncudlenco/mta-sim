@@ -1,19 +1,6 @@
 House3 = class(StoryEpisodeBase, function(o)
     StoryEpisodeBase.init(o, {name = 'house3'})
     o:LoadFromFile()
-
-    o.InteriorId = 3
-    if not loadPathGraph then
-        outputDebugString("Pathfinding module not loaded. Exiting...", 2)
-        return
-    end
-
-    -- Load path graph
-    o.graphId = loadPathGraph("files/paths/house3.json")
-    if not findShortestPathBetween then
-        outputDebugString("Pathfinding module not loaded. Exiting...", 2)
-        return false
-    end
 end)
 
 function House3:Initialize(...)
@@ -134,12 +121,15 @@ function House3:Initialize(...)
     -- Wash Hands at the sink
     local washHandsAction = WashHands { performer = player, nextLocation = kitchenSinkLocation, targetItem = kitchenSink, graphId = self.graphId }
     table.insert(kitchenSinkLocation.PossibleActions, washHandsAction)
+    kitchenSinkLocation.allActions = {washHandsAction}
 
     local pickUpFoodAction = PickUp {performer = player, nextLocation = kitchenTableLocation, targetItem = food, where = "the table", targetObjectExists = true, how = PickUp.eHow.Normal, hand = PickUp.eHand.Left, graphId = self.graphId}
     table.insert(kitchenTableLocation.PossibleActions, pickUpFoodAction)
     local eatFoodAction = Eat {performer = player, nextLocation = kitchenTableLocation, targetItem = food, graphId = self.graphId}
     pickUpFoodAction.NextAction = eatFoodAction
     pickUpFoodAction.ClosingAction = eatFoodAction
+
+    kitchenTableLocation.allActions = {pickUpFoodAction, eatFoodAction}
 
     -- sit on the sofa
     local pickUpLivingroomRemoteAction = PickUp {performer = player, nextLocation = livingroomSofaLocation, targetItem = livingroomRemote, where = "the table", targetObjectExists = true, how = PickUp.eHow.Down, graphId = self.graphId}
@@ -153,6 +143,8 @@ function House3:Initialize(...)
     standUpLivingroomAction.NextAction = putDownLivingroomAction
     pickUpLivingroomRemoteAction.ClosingAction = putDownLivingroomAction
 
+    livingroomSofaLocation.allActions = {pickUpLivingroomRemoteAction, sitDownLivingroomAction, standUpLivingroomAction, putDownLivingroomAction}
+
     -- drink at table
     local pickUpDrinkAction = PickUp {performer = player, nextLocation = livingroomTableLocation, targetItem = drink, where = "the table", targetObjectExists = true, how = PickUp.eHow.Normal, hand = PickUp.eHand.Left, graphId = self.graphId}
     table.insert(livingroomTableLocation.PossibleActions, pickUpDrinkAction)
@@ -163,6 +155,8 @@ function House3:Initialize(...)
     drinkAction.NextAction = putDownDrinkAction
     pickUpDrinkAction.ClosingAction = putDownDrinkAction
 
+    livingroomTableLocation.allActions = {pickUpDrinkAction, drinkAction, putDownDrinkAction}
+
     -- get in bed
     local getInBedAction = GetOn{performer = player, targetItem = bedroomBed, nextLocation = bedroomBedLocation, how = GetOn.eHow.Bed, side = GetOn.eSide.Right, graphId = self.graphId}
     table.insert(bedroomBedLocation.PossibleActions, getInBedAction)
@@ -172,7 +166,8 @@ function House3:Initialize(...)
     sleepAction.NextAction = getOffBedAction
     getInBedAction.ClosingAction = getOffBedAction
 
-    StoryEpisodeBase.Initialize(self, arg)
+    bedroomBedLocation.allActions = {getInBedAction, sleepAction, getOffBedAction}
+    StoryEpisodeBase.Initialize(self, unpack(arg))
 
     if DEBUG then
         outputConsole("House3:Initialized")

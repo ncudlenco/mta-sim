@@ -1,5 +1,7 @@
 Kiss = class(StoryActionBase, function(o, params)
     params.description = " kiss each other "
+    params.name = 'Kiss'
+
     StoryActionBase.init(o,params)
 
     o.TargetPlayer = params.targetPlayer

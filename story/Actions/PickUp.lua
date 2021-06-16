@@ -1,5 +1,7 @@
 PickUp = class(StoryActionBase, function(o, params)
     params.description = " picks up "
+    params.name = 'PickUp'
+
     StoryActionBase.init(o,params)
     o.Where = params.where
     o.TargetObjectExists = params.targetObjectExists or true

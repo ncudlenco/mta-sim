@@ -1,5 +1,6 @@
 Drink = class(StoryActionBase, function(o, params)
     params.description = PickRandom({" starts drinking from it", " drinks from it"})
+    params.name = 'Drink'
     StoryActionBase.init(o, params)
 end)
 

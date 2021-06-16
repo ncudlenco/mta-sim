@@ -27,6 +27,8 @@ Move = class(StoryActionBase, function(o, params)
     end
 
     params.description = description
+    params.name = 'Move'
+
     StoryActionBase.init(o,params)
     o.path = {}
     o.graphId = params.graphId

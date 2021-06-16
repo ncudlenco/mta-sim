@@ -1,3 +1,11 @@
+function FirstOrDefault(arr, func)
+    local res = Where(arr, func)
+    if res and #res > 0 then
+        return res[1]
+    end
+    return nil
+end
+
 function Select(arr, func)
     if not func then
         error('Select: func expected -> got nil')
@@ -6,6 +14,22 @@ function Select(arr, func)
     for k, a in pairs(arr) do --this will work on arrays and tables
         local val = func(a, k)
         table.insert(res, val)
+    end
+    return res
+end
+
+function UniqueStr(arr, func)
+    local res = {}
+    local set = {}
+    for k, v in pairs(arr) do
+        local val = v
+        if func then
+            val = func(v, k)
+        end
+        set[v] = true
+    end
+    for k, v in pairs(set) do
+        table.insert(res, k)
     end
     return res
 end
@@ -39,7 +63,18 @@ function All(arr, func)
     return true
 end
 
+function Any(arr, func)
+    for _, a in ipairs(arr) do
+        if func(a) then 
+            return true
+        end
+    end
+    return false
+end
+
 function PickRandom(arr)
+    math.randomseed(os.time())
+    math.random(); math.random(); math.random()
     if #arr == 0 then
         -- then this is a dictionary
         local keys = {}

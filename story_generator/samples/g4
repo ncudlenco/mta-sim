@@ -1,0 +1,315 @@
+{
+    "actor0": {
+        "Actor": {
+            "id": "actor0",
+            "Gender": 1,
+            "Name": "NAME"
+        },
+        "Action": "Exists",
+        "id": "actor0"
+    },
+    "object0": {
+        "Action": "Exists",
+        "id": "object0",
+        "Target": {
+            "id": "object0",
+            "Name": "Bed"
+        }
+    },
+    "object1": {
+        "Action": "Exists",
+        "id": "object1",
+        "Target": {
+            "id": "object1",
+            "Name": "MobilePhone"
+        }
+    },
+    "object2": {
+        "Action": "Exists",
+        "id": "object2",
+        "Target": {
+            "id": "object2",
+            "Name": "Sink"
+        }
+    },
+    "object3": {
+        "Action": "Exists",
+        "id": "object3",
+        "Target": {
+            "id": "object3",
+            "Name": "MobilePhone"
+        }
+    },
+    "object4": {
+        "Action": "Exists",
+        "id": "object4",
+        "Target": {
+            "id": "object4",
+            "Name": "Sink"
+        }
+    },
+    "object5": {
+        "Action": "Exists",
+        "id": "object5",
+        "Target": {
+            "id": "object5",
+            "Name": "Bed"
+        }
+    },
+    "object6": {
+        "Action": "Exists",
+        "id": "object6",
+        "Target": {
+            "id": "object6",
+            "Name": "Cigarette"
+        }
+    },
+    "object7": {
+        "Action": "Exists",
+        "id": "object7",
+        "Target": {
+            "id": "object7",
+            "Name": "Cigarette"
+        }
+    },
+    "action0_inner0": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "GetOn",
+        "Next": "action0_inner1",
+        "id": "action0_inner0",
+        "Target": {
+            "id": "object0"
+        },
+        "Location": "BedRoom"
+    },
+    "action0_inner1": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "Sleep",
+        "Next": "action0_inner2",
+        "id": "action0_inner1",
+        "Target": {
+            "id": "object0"
+        },
+        "Location": "BedRoom"
+    },
+    "action0_inner2": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "GetOff",
+        "Next": "action1_inner0",
+        "id": "action0_inner2",
+        "Target": {
+            "id": "object0"
+        },
+        "Location": "BedRoom"
+    },
+    "action1_inner0": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "AnswerPhone",
+        "Next": "action1_inner1",
+        "id": "action1_inner0",
+        "Target": {
+            "id": "object1"
+        },
+        "Location": ""
+    },
+    "action1_inner1": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "TalkPhone",
+        "Next": "action1_inner2",
+        "id": "action1_inner1",
+        "Target": {
+            "id": "object1"
+        },
+        "Location": ""
+    },
+    "action1_inner2": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "HangUp",
+        "Next": "action2",
+        "id": "action1_inner2",
+        "Target": {
+            "id": "object1"
+        },
+        "Location": ""
+    },
+    "action2": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "WashHands",
+        "Next": "action3_inner0",
+        "id": "action2",
+        "Target": {
+            "id": "object2"
+        },
+        "Location": "BathRoom"
+    },
+    "action3_inner0": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "AnswerPhone",
+        "Next": "action3_inner1",
+        "id": "action3_inner0",
+        "Target": {
+            "id": "object3"
+        },
+        "Location": ""
+    },
+    "action3_inner1": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "TalkPhone",
+        "Next": "action3_inner2",
+        "id": "action3_inner1",
+        "Target": {
+            "id": "object3"
+        },
+        "Location": ""
+    },
+    "action3_inner2": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "HangUp",
+        "Next": "action4",
+        "id": "action3_inner2",
+        "Target": {
+            "id": "object3"
+        },
+        "Location": ""
+    },
+    "action4": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "WashHands",
+        "Next": "action5_inner0",
+        "id": "action4",
+        "Target": {
+            "id": "object4"
+        },
+        "Location": "BathRoom"
+    },
+    "action5_inner0": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "GetOn",
+        "Next": "action5_inner1",
+        "id": "action5_inner0",
+        "Target": {
+            "id": "object5"
+        },
+        "Location": "BedRoom"
+    },
+    "action5_inner1": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "Sleep",
+        "Next": "action5_inner2",
+        "id": "action5_inner1",
+        "Target": {
+            "id": "object5"
+        },
+        "Location": "BedRoom"
+    },
+    "action5_inner2": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "GetOff",
+        "Next": "action6_inner0",
+        "id": "action5_inner2",
+        "Target": {
+            "id": "object5"
+        },
+        "Location": "BedRoom"
+    },
+    "action6_inner0": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "SmokeIn",
+        "Next": "action6_inner1",
+        "id": "action6_inner0",
+        "Target": {
+            "id": "object6"
+        },
+        "Location": ""
+    },
+    "action6_inner1": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "Smoke",
+        "Next": "action6_inner2",
+        "id": "action6_inner1",
+        "Target": {
+            "id": "object6"
+        },
+        "Location": ""
+    },
+    "action6_inner2": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "SmokeOut",
+        "Next": "action7_inner0",
+        "id": "action6_inner2",
+        "Target": {
+            "id": "object6"
+        },
+        "Location": ""
+    },
+    "action7_inner0": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "SmokeIn",
+        "Next": "action7_inner1",
+        "id": "action7_inner0",
+        "Target": {
+            "id": "object7"
+        },
+        "Location": ""
+    },
+    "action7_inner1": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "Smoke",
+        "Next": "action7_inner2",
+        "id": "action7_inner1",
+        "Target": {
+            "id": "object7"
+        },
+        "Location": ""
+    },
+    "action7_inner2": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "SmokeOut",
+        "Next": "None",
+        "id": "action7_inner2",
+        "Target": {
+            "id": "object7"
+        },
+        "Location": ""
+    }
+}

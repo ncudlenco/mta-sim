@@ -10,8 +10,8 @@ import Event
 import networkx as nx
 import matplotlib.pyplot as plt
 
-MIN_OBJECTS = 1
-MAX_OBJECTS = 3
+MIN_OBJECTS = 2
+MAX_OBJECTS = 8
 ACTORS = 1
 
 objects = Objects.get_obj_list()
@@ -363,7 +363,7 @@ if __name__ == "__main__":
     print("#objects:", len(objects))
     print("#actions:", len(actions))
 
-    generate_files(20, "samples_test")
+    generate_files(20, "samples")
 
     # d = json.load(open("samples_test/g0", "r"))
     # # print(d)

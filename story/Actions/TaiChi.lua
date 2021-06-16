@@ -8,9 +8,8 @@ end)
 function TaiChi:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
-    if self.Performer:getData("currentRegionId") == story.CurrentEpisode.CurrentRegion.Id then
-        story.Logger:Log(self.Description, self)
-    end
+    
+    story.Logger:Log(self.Description, self)
     self.Performer:setAnimation("PARK", "Tai_Chi_in", 3000, true, true, false, true)
 
     time = random(8000, 15000)

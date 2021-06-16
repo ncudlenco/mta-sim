@@ -12,9 +12,8 @@ function Kiss:Apply()
     table.insert(story.History[self.Performer:getData('id')], self)
     
     local time = 4000
-    if self.Performer:getData("currentRegionId") == story.CurrentEpisode.CurrentRegion.Id then
-        story.Logger:Log(" and " .. self.TargetPlayer:getData('name') .. self.Description, self)
-    end
+    story.Logger:Log(" and " .. self.TargetPlayer:getData('name') .. self.Description, self)
+
     local performerKissType = nil
     local targetKissType = nil
 

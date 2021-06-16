@@ -9,10 +9,7 @@ function OpenLaptop:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
     
-    if self.Performer:getData("currentRegionId") == story.CurrentEpisode.CurrentRegion.Id then
-        story.Logger:Log(self.Description, self)
-    end
-
+    story.Logger:Log(self.Description, self)
     self.TargetItem:ChangeModel(Laptop.eModel.Open)
 
     if DEBUG then

@@ -98,9 +98,7 @@ function Move:Apply()
             -- outputConsole("Move:Apply: Logging data because the next region is "..self.TargetItem.Region.name..' but the current region is '..story.CurrentEpisode.CurrentRegion.name)
             -- outputConsole("Move:Apply: ("..self.TargetItem.Region.Id..' vs '..self.Performer:getData('currentRegionId')..' - '..story.CurrentEpisode.CurrentRegion.Id)
         end
-        if self.Performer:getData("currentRegionId") == story.CurrentEpisode.CurrentRegion.Id then
-            story.Logger:Log(self.Description .. " " .. self.TargetItem.Description, self)
-        end
+        story.Logger:Log(self.Description .. " " .. self.TargetItem.Description, self)
     end
 
     if DEBUG then

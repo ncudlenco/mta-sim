@@ -73,13 +73,11 @@ function OpenDoor:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
     
-    if self.Performer:getData("currentRegionId") == story.CurrentEpisode.CurrentRegion.Id then
-        if self.how == OpenDoor.eHow.Exit then
-            story.Logger:Log(self.Description, self)
-        else
-            story.Logger:Log(self.Description, self, 'skipNominative')
-        end
-    end 
+    if self.how == OpenDoor.eHow.Exit then
+        story.Logger:Log(self.Description, self)
+    else
+        story.Logger:Log(self.Description, self, 'skipNominative')
+    end
     if DEBUG then
         outputConsole("OpenDoor:Apply")
     end

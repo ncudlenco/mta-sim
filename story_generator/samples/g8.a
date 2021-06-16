@@ -1,0 +1,91 @@
+{
+    "actor0": {
+        "Actor": {
+            "id": "actor0",
+            "Gender": 1,
+            "Name": "NAME"
+        },
+        "Action": "Exists",
+        "id": "actor0"
+    },
+    "object0": {
+        "Action": "Exists",
+        "id": "object0",
+        "Target": {
+            "id": "object0",
+            "Name": "MobilePhone"
+        }
+    },
+    "object1": {
+        "Action": "Exists",
+        "id": "object1",
+        "Target": {
+            "id": "object1",
+            "Name": "Sofa"
+        }
+    },
+    "object2": {
+        "Action": "Exists",
+        "id": "object2",
+        "Target": {
+            "id": "object2",
+            "Name": "MobilePhone"
+        }
+    },
+    "object3": {
+        "Action": "Exists",
+        "id": "object3",
+        "Target": {
+            "id": "object3",
+            "Name": "Sink"
+        }
+    },
+    "action0": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "TalkAtPhone",
+        "Next": "action1",
+        "id": "action0",
+        "Target": {
+            "id": "object0"
+        },
+        "Location": ""
+    },
+    "action1": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "SitAndStand",
+        "Next": "action2",
+        "id": "action1",
+        "Target": {
+            "id": "object1"
+        },
+        "Location": "Living"
+    },
+    "action2": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "TalkAtPhone",
+        "Next": "action3",
+        "id": "action2",
+        "Target": {
+            "id": "object2"
+        },
+        "Location": ""
+    },
+    "action3": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "WashHands",
+        "Next": "None",
+        "id": "action3",
+        "Target": {
+            "id": "object3"
+        },
+        "Location": "Kitchen"
+    }
+}

@@ -1,0 +1,181 @@
+{
+    "actor0": {
+        "Actor": {
+            "id": "actor0",
+            "Gender": 2,
+            "Name": "NAME"
+        },
+        "Action": "Exists",
+        "id": "actor0"
+    },
+    "actor1": {
+        "Actor": {
+            "id": "actor1",
+            "Gender": 2,
+            "Name": "NAME"
+        },
+        "Action": "Exists",
+        "id": "actor1"
+    },
+    "actor2": {
+        "Actor": {
+            "id": "actor2",
+            "Gender": 1,
+            "Name": "NAME"
+        },
+        "Action": "Exists",
+        "id": "actor2"
+    },
+    "object0": {
+        "Action": "Exists",
+        "id": "object0",
+        "Target": {
+            "id": "object0",
+            "Name": "MobilePhone"
+        }
+    },
+    "object1": {
+        "Action": "Exists",
+        "id": "object1",
+        "Target": {
+            "id": "object1",
+            "Name": "Sofa"
+        }
+    },
+    "object2": {
+        "Action": "Exists",
+        "id": "object2",
+        "Target": {
+            "id": "object2",
+            "Name": "Sofa"
+        }
+    },
+    "object3": {
+        "Action": "Exists",
+        "id": "object3",
+        "Target": {
+            "id": "object3",
+            "Name": "MobilePhone"
+        }
+    },
+    "action0_inner0": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "AnswerPhone",
+        "Next": "action0_inner1",
+        "id": "action0_inner0",
+        "Target": {
+            "id": "object0"
+        },
+        "Location": ""
+    },
+    "action0_inner1": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "TalkPhone",
+        "Next": "action0_inner2",
+        "id": "action0_inner1",
+        "Target": {
+            "id": "object0"
+        },
+        "Location": ""
+    },
+    "action0_inner2": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "HangUp",
+        "Next": "None",
+        "id": "action0_inner2",
+        "Target": {
+            "id": "object0"
+        },
+        "Location": ""
+    },
+    "action1_inner0": {
+        "Actor": {
+            "id": "actor1"
+        },
+        "Action": "SitDown",
+        "Next": "action1_inner1",
+        "id": "action1_inner0",
+        "Target": {
+            "id": "object1"
+        },
+        "Location": "Living"
+    },
+    "action1_inner1": {
+        "Actor": {
+            "id": "actor1"
+        },
+        "Action": "StandUp",
+        "Next": "action3_inner0",
+        "id": "action1_inner1",
+        "Target": {
+            "id": "object1"
+        },
+        "Location": "Living"
+    },
+    "action2_inner0": {
+        "Actor": {
+            "id": "actor2"
+        },
+        "Action": "SitDown",
+        "Next": "action2_inner1",
+        "id": "action2_inner0",
+        "Target": {
+            "id": "object2"
+        },
+        "Location": "Living"
+    },
+    "action2_inner1": {
+        "Actor": {
+            "id": "actor2"
+        },
+        "Action": "StandUp",
+        "Next": "None",
+        "id": "action2_inner1",
+        "Target": {
+            "id": "object2"
+        },
+        "Location": "Living"
+    },
+    "action3_inner0": {
+        "Actor": {
+            "id": "actor1"
+        },
+        "Action": "AnswerPhone",
+        "Next": "action3_inner1",
+        "id": "action3_inner0",
+        "Target": {
+            "id": "object3"
+        },
+        "Location": ""
+    },
+    "action3_inner1": {
+        "Actor": {
+            "id": "actor1"
+        },
+        "Action": "TalkPhone",
+        "Next": "action3_inner2",
+        "id": "action3_inner1",
+        "Target": {
+            "id": "object3"
+        },
+        "Location": ""
+    },
+    "action3_inner2": {
+        "Actor": {
+            "id": "actor1"
+        },
+        "Action": "HangUp",
+        "Next": "None",
+        "id": "action3_inner2",
+        "Target": {
+            "id": "object3"
+        },
+        "Location": ""
+    }
+}

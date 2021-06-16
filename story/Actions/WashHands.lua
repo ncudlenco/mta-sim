@@ -9,7 +9,9 @@ function WashHands:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
     
-    story.Logger:Log(self.Description  .. self.Performer:getData('genderGenitive') .. " hands in the " .. self.TargetItem.Description, self)
+    if self.Performer:getData("currentRegionId") == story.CurrentEpisode.CurrentRegion.Id then
+        story.Logger:Log(self.Description  .. self.Performer:getData('genderGenitive') .. " hands in the " .. self.TargetItem.Description, self)
+    end
     -- self.TargetItem.instance:setCollisionsEnabled(false)
 
     time = random(2000, 8000)

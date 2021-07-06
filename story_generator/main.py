@@ -10,9 +10,9 @@ import Event
 import networkx as nx
 import matplotlib.pyplot as plt
 
-MIN_OBJECTS = 2
-MAX_OBJECTS = 8
-ACTORS = 1
+MIN_OBJECTS = 1
+MAX_OBJECTS = 3
+ACTORS = 2
 
 objects = Objects.get_obj_list()
 actions = Actions.get_action_list()
@@ -20,7 +20,8 @@ rooms   = Rooms.get_room_list()[:-1]
 empty_room = Rooms.get_room_list()[-1]
 
 Rooms.associate_objects_to_rooms(rooms, objects)
-Objects.associate_actions_to_objects(objects, actions)
+# Objects.associate_actions_to_objects(objects, actions)
+actions = Actions.associate_objects_to_actions(actions, objects)
 
 def order_events(story):
     # print(story)
@@ -58,11 +59,14 @@ def order_events(story):
 def get_objects_from_story(story):
     objects = []
     for event in story:
-        objects.append(event.object)
-    
-    # print(objects)
-    # objects = list(set(objects))
-    # print(objects)
+        if type(event.object) == list:
+            # complex object
+            objs = []
+            for act in event.action.action_components:
+                objs.append(act.targets)
+            objects.extend(list(set(objs)))
+        else:
+            objects.append(event.object)
     return objects
 
 
@@ -79,10 +83,9 @@ def get_actors_from_story(story):
 def generate_story():
     # rooms = [Kitchen, Living, BathRoom, BedRoom, Gym]
     events = []
-
     actors = []
-    obj_per_actor = []
-    events_per_actor = []
+    total_crt_events_per_actor = []
+    crt_events_per_actor = []
 
     # create actors
     for actor_id in range(ACTORS):
@@ -90,34 +93,57 @@ def generate_story():
         actor = Actor.Actor("actor{0}".format(actor_id), actor_sex, "NAME")
         actors.append(actor)
         count_objs = random.randint(MIN_OBJECTS, MAX_OBJECTS)
-        obj_per_actor.append(count_objs)
-        events_per_actor.append(0)
+        total_crt_events_per_actor.append(count_objs)
+        crt_events_per_actor.append(0)
     
-    print(obj_per_actor)
-    total_obj = sum(obj_per_actor)
-    while len(events) < total_obj:    
+    print("Actions per actor:", total_crt_events_per_actor)
+
+    total_events = sum(total_crt_events_per_actor)
+    while len(events) < total_events:    
+
         # pick a room each time for the moment
         r_room = random.choice(rooms)
-        for actor_index, actor in enumerate(actors):
-            if events_per_actor[actor_index] == obj_per_actor[actor_index]:
-                continue
-            # pick an object to interact with 
-            r_obj = random.choice(r_room.objects)
-            r_new_obj = copy.deepcopy(r_obj)
-            if len(r_obj.actions) == 0:
-                print(r_obj)
-                continue
 
-            r_acts = random.sample(r_obj.actions, random.randint(1, 1))
-            for r_act in r_acts:
-                r_new_act = copy.deepcopy(r_act)
-                # TODO: handle this
-                if r_new_act.name == "TalkAtPhone" or r_new_act.name == "SmokeCigarette":
-                    e = Event.Event("event{0}".format(len(events)), r_new_act, r_new_obj, actor, empty_room)
-                else:
-                    e = Event.Event("event{0}".format(len(events)), r_new_act, r_new_obj, actor, r_room)
-                events.append(e)
-                events_per_actor[actor_index] += 1
+        for actor_index, actor in enumerate(actors):
+            # if we have enough events for current actor just pass
+            if crt_events_per_actor[actor_index] == total_crt_events_per_actor[actor_index]:
+                continue
+            
+            # pick an action in the givem room
+            possible_actions = Actions.filter_actions_by_rooms(actions, r_room)
+            r_act = random.choice(possible_actions)
+
+            # print(r_room, r_act)
+            r_new_act = copy.deepcopy(r_act)
+
+            # print(r_act.targets)
+            # if r_act.targets != []:
+            # print(r_act.targets, type(r_act.targets))
+            r_new_obj = copy.deepcopy(r_act.targets)
+            if r_new_act.name == "TalkAtPhone" or r_new_act.name == "SmokeCigarette":
+                e = Event.Event("event{0}".format(len(events)), r_new_act, r_new_obj, actor, empty_room)
+            else:
+                e = Event.Event("event{0}".format(len(events)), r_new_act, r_new_obj, actor, r_room)
+            events.append(e)
+            crt_events_per_actor[actor_index] += 1
+
+            # pick an object to interact with 
+            # r_obj = random.choice(r_room.objects)
+            # r_new_obj = copy.deepcopy(r_obj)
+            # if len(r_obj.actions) == 0:
+            #     print("Object \"{0}\" has no actions available".format(r_obj))
+            #     continue
+
+            # r_acts = random.sample(r_obj.actions, random.randint(1, 1))
+            # for r_act in r_acts:
+            #     r_new_act = copy.deepcopy(r_act)
+            #     # TODO: handle this
+            #     if r_new_act.name == "TalkAtPhone" or r_new_act.name == "SmokeCigarette":
+            #         e = Event.Event("event{0}".format(len(events)), r_new_act, r_new_obj, actor, empty_room)
+            #     else:
+            #         e = Event.Event("event{0}".format(len(events)), r_new_act, r_new_obj, actor, r_room)
+            #     events.append(e)
+            #     crt_events_per_actor[actor_index] += 1
  
     return events
 
@@ -175,7 +201,7 @@ def visualize_graph(graph, save=False):
 def generate_graph(story):
     graph_dict = {}
 
-    #  generate nodes for actors    
+    # generate nodes for actors    
     actors = get_actors_from_story(story)
     for actor in actors:
         d = actor.generate_node()
@@ -208,7 +234,9 @@ def generate_graph(story):
                 graph_dict[innner_action_id] = inner_dict
         else:
             graph_dict[event.action.id] = d
-
+    
+    # print(story)
+    # print(graph_dict)
     # print(json.dumps(graph_dict, sort_keys = False, indent = 4))
     # json.dump(graph_dict, open("example_graph", "w"), sort_keys=False, indent = 4)
     return graph_dict
@@ -363,12 +391,14 @@ if __name__ == "__main__":
     print("#objects:", len(objects))
     print("#actions:", len(actions))
 
-    generate_files(20, "samples")
+    # generate_files(20, "story_generator/samples")
+    generate_files(1, "story_generator/samples_test")
 
-    # d = json.load(open("samples_test/g0", "r"))
+
+    # d = json.load(open("story_generator/samples_test/g0", "r"))
     # # print(d)
     # a = get_abstract_graph(d)
-    # json.dump(a, open("samples_test/g0.a", "w"), sort_keys=False, indent = 4)
+    # json.dump(a, open("story_generator/samples_test/g0.a", "w"), sort_keys=False, indent = 4)
 
 
     

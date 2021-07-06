@@ -39,6 +39,13 @@ class Object:
 
         return obj_dict
 
+    def get_obj_rooms(self, rooms):
+        rs = []
+        for k, v in rooms.items():
+            if self.name in v:
+                rs.append(k)
+        return list(set(rs))
+
 def get_obj_list():
     OBJECT_CLASSES = ["ArmChair", "Bed", "BenchPress", "BenchPressBar", "Book", "Bookshelf", "Chair", "Cigarette",
                  "CoffeeTable", "Desk", "Drink", "Dumbbell", "FlowerPot", "Food", "Fridge", "Furniture",
@@ -54,12 +61,13 @@ def get_obj_list():
     OBJECT_CLASSES.remove("GasCooker")
     OBJECT_CLASSES.remove("Microwave")
     OBJECT_CLASSES.remove("MusicPlayer")
-    OBJECT_CLASSES.remove("OfficeChair")
     OBJECT_CLASSES.remove("Photos")
     OBJECT_CLASSES.remove("Plate")
     OBJECT_CLASSES.remove("Toilet")
-    # OBJECT_CLASSES.remove("TurnTable")
     OBJECT_CLASSES.remove("Wardrobe")
+
+    OBJECT_CLASSES.remove("Painting")
+    OBJECT_CLASSES.remove("Table")
     
 
     objects = []
@@ -69,6 +77,10 @@ def get_obj_list():
     return objects
 
 def associate_actions_to_objects(objects, actions):
+
+    # TODO: pickup remote, SitAndStand sofa, putdown remote; watch TV in between? from house3.lua line 134
+    # TODO: handle laptop + desk random order and number of actions; from house8.lua line 145
+    # TODO: handle sitting and eating; from house10.lua line 193
 
     DAOP = {
             "MobilePhone": "TalkAtPhone",
@@ -85,7 +97,13 @@ def associate_actions_to_objects(objects, actions):
             "Sink": "WashHands",
             "PedalGymBike": "PedalOnGymBike", 
             "ArmChair": "SitAndStand", 
-            "BenchPress": "BenchpressWorkOut"
+            "BenchPress": "BenchpressWorkOut",
+            "Book": "Read",
+            "Remote": "HandleRemote",
+            "Desk": "SitAndStand",
+            "Laptop": "OpenAndCloseLaptop",
+            "Chair": "SitAndStand",
+            "OfficeChair": "SitAndStand"
             }
 
     for obj in objects:
@@ -97,6 +115,9 @@ def associate_actions_to_objects(objects, actions):
                     sys.exit()
                 # print("Adding action {0} for object {1} ".format(actions[index], obj))
                 obj.add_action(actions[index])
+
+
+
 
 def find_obj_by_name(obj_name, objects):
     for index, obj in enumerate(objects):

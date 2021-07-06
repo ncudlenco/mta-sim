@@ -27,12 +27,16 @@ class Event:
             inner_actions_ids = ["{0}_inner{1}".format(self.action.id,i) for i in range(len(self.action.action_components))]
             action_dicts = []
             for i, inner_action_name in enumerate(self.action.action_components):
+                inner_action_name = inner_action_name.name
                 inner_action_dict = {}
                 actor_dict = {}
                 actor_dict["id"] = self.actor.id
                 
-                obj_dict = {}        
-                obj_dict["id"] = self.object.id
+                obj_dict = {}
+                if type(self.object) == list:
+                    obj_dict["id"] = self.action.action_components[i].targets.id
+                else:        
+                    obj_dict["id"] = self.object.id
 
                 inner_action_dict["Actor"] = actor_dict
                 inner_action_dict["Action"] = inner_action_name

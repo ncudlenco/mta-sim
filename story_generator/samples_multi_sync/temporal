@@ -1,0 +1,46 @@
+{
+    "temporal_stuff2": {
+            starting_actions:{
+                actor0: a0,
+                actor1: a1
+            },
+            a0: {
+                id: a0
+                relations: [t1],
+                next: a2
+            },
+            a2: {
+                id: a2
+                relations: [t2],
+                next: a4
+            },
+            a4: {
+                id: a4
+                relations: null,
+                next: null
+            },
+            t1: {
+                id: t1,
+                type: 'starts_with',
+            },
+            t2: {
+                id: t2,
+                type: 'starts_after',
+            },
+            t3: {
+                id: t3,
+                type: 'ends_with'
+
+            },
+            a1: {
+                id: a1,
+                relations: null,
+                next: a3
+            },
+            a3: {
+                id: a3,
+                relations: [t1],
+                next: null
+            }
+    }
+}

@@ -1,0 +1,359 @@
+{
+    "actor0": {
+        "Actor": {
+            "id": "actor0",
+            "Gender": 2,
+            "Name": "NAME"
+        },
+        "Action": "Exists",
+        "id": "actor0"
+    },
+    "actor1": {
+        "Actor": {
+            "id": "actor1",
+            "Gender": 2,
+            "Name": "NAME"
+        },
+        "Action": "Exists",
+        "id": "actor1"
+    },
+    "actor2": {
+        "Actor": {
+            "id": "actor2",
+            "Gender": 2,
+            "Name": "NAME"
+        },
+        "Action": "Exists",
+        "id": "actor2"
+    },
+    "object0": {
+        "Action": "Exists",
+        "id": "object0",
+        "Target": {
+            "id": "object0",
+            "Name": "MobilePhone"
+        }
+    },
+    "object1": {
+        "Action": "Exists",
+        "id": "object1",
+        "Target": {
+            "id": "object1",
+            "Name": "Book"
+        }
+    },
+    "object2": {
+        "Action": "Exists",
+        "id": "object2",
+        "Target": {
+            "id": "object2",
+            "Name": "Sofa"
+        }
+    },
+    "object3": {
+        "Action": "Exists",
+        "id": "object3",
+        "Target": {
+            "id": "object3",
+            "Name": "Remote"
+        }
+    },
+    "object4": {
+        "Action": "Exists",
+        "id": "object4",
+        "Target": {
+            "id": "object4",
+            "Name": "MobilePhone"
+        }
+    },
+    "object5": {
+        "Action": "Exists",
+        "id": "object5",
+        "Target": {
+            "id": "object5",
+            "Name": "Cigarette"
+        }
+    },
+    "action0_inner0": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "AnswerPhone",
+        "Next": "action0_inner1",
+        "id": "action0_inner0",
+        "Target": {
+            "id": "object0"
+        },
+        "Location": ""
+    },
+    "action0_inner1": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "TalkPhone",
+        "Next": "action0_inner2",
+        "id": "action0_inner1",
+        "Target": {
+            "id": "object0"
+        },
+        "Location": ""
+    },
+    "action0_inner2": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "HangUp",
+        "Next": "action3_inner0",
+        "id": "action0_inner2",
+        "Target": {
+            "id": "object0"
+        },
+        "Location": ""
+    },
+    "action1": {
+        "Actor": {
+            "id": "actor1"
+        },
+        "Action": "Read",
+        "Next": "action4_inner0",
+        "id": "action1",
+        "Target": {
+            "id": "object1"
+        },
+        "Location": "Living"
+    },
+    "action2_inner0": {
+        "Actor": {
+            "id": "actor2"
+        },
+        "Action": "PickUp",
+        "Next": "action2_inner1",
+        "id": "action2_inner0",
+        "Target": {
+            "id": "object3"
+        },
+        "Location": "Living"
+    },
+    "action2_inner1": {
+        "Actor": {
+            "id": "actor2"
+        },
+        "Action": "SitDown",
+        "Next": "action2_inner2",
+        "id": "action2_inner1",
+        "Target": {
+            "id": "object2"
+        },
+        "Location": "Living"
+    },
+    "action2_inner2": {
+        "Actor": {
+            "id": "actor2"
+        },
+        "Action": "StandUp",
+        "Next": "action2_inner3",
+        "id": "action2_inner2",
+        "Target": {
+            "id": "object2"
+        },
+        "Location": "Living"
+    },
+    "action2_inner3": {
+        "Actor": {
+            "id": "actor2"
+        },
+        "Action": "PutDown",
+        "Next": "None",
+        "id": "action2_inner3",
+        "Target": {
+            "id": "object3"
+        },
+        "Location": "Living"
+    },
+    "action3_inner0": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "AnswerPhone",
+        "Next": "action3_inner1",
+        "id": "action3_inner0",
+        "Target": {
+            "id": "object4"
+        },
+        "Location": ""
+    },
+    "action3_inner1": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "TalkPhone",
+        "Next": "action3_inner2",
+        "id": "action3_inner1",
+        "Target": {
+            "id": "object4"
+        },
+        "Location": ""
+    },
+    "action3_inner2": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "HangUp",
+        "Next": "None",
+        "id": "action3_inner2",
+        "Target": {
+            "id": "object4"
+        },
+        "Location": ""
+    },
+    "action4_inner0": {
+        "Actor": {
+            "id": "actor1"
+        },
+        "Action": "SmokeIn",
+        "Next": "action4_inner1",
+        "id": "action4_inner0",
+        "Target": {
+            "id": "object5"
+        },
+        "Location": ""
+    },
+    "action4_inner1": {
+        "Actor": {
+            "id": "actor1"
+        },
+        "Action": "Smoke",
+        "Next": "action4_inner2",
+        "id": "action4_inner1",
+        "Target": {
+            "id": "object5"
+        },
+        "Location": ""
+    },
+    "action4_inner2": {
+        "Actor": {
+            "id": "actor1"
+        },
+        "Action": "SmokeOut",
+        "Next": "None",
+        "id": "action4_inner2",
+        "Target": {
+            "id": "object5"
+        },
+        "Location": ""
+    },
+    "temporal": {
+        "timeline": {
+            "actor0": "[('action0_inner0', 'AnswerPhone'), ('action0_inner1', 'TalkPhone'), ('action0_inner2', 'HangUp'), ('action3_inner0', 'AnswerPhone'), ('action3_inner1', 'TalkPhone'), ('action3_inner2', 'HangUp')]",
+            "actor1": "[('action1', 'Read'), ('action4_inner0', 'SmokeIn'), ('action4_inner1', 'Smoke'), ('action4_inner2', 'SmokeOut')]",
+            "actor2": "[('action2_inner0', 'PickUp'), ('action2_inner1', 'SitDown'), ('action2_inner2', 'StandUp'), ('action2_inner3', 'PutDown')]"
+        },
+        "starting_actions": {
+            "actor0": "action0_inner0",
+            "actor1": "action1",
+            "actor2": "action2_inner0"
+        },
+        "action0_inner0": {
+            "relations": null,
+            "next": "action0_inner1"
+        },
+        "action0_inner1": {
+            "relations": null,
+            "next": "action0_inner2"
+        },
+        "action0_inner2": {
+            "relations": null,
+            "next": "action3_inner0"
+        },
+        "action3_inner0": {
+            "relations": null,
+            "next": "action3_inner1"
+        },
+        "action3_inner1": {
+            "relations": null,
+            "next": "action3_inner2"
+        },
+        "action3_inner2": {
+            "relations": null,
+            "next": null
+        },
+        "action1": {
+            "relations": null,
+            "next": "action4_inner0"
+        },
+        "t0": {
+            "type": "starts_with"
+        },
+        "action4_inner0": {
+            "relations": [
+                "t0"
+            ],
+            "next": "action4_inner1"
+        },
+        "action4_inner1": {
+            "relations": [],
+            "next": "action4_inner2"
+        },
+        "action4_inner2": {
+            "relations": [],
+            "next": null
+        },
+        "action2_inner0": {
+            "relations": [
+                "t0"
+            ],
+            "next": "action2_inner1"
+        },
+        "action2_inner1": {
+            "relations": [],
+            "next": "action2_inner2"
+        },
+        "action2_inner2": {
+            "relations": [],
+            "next": "action2_inner3"
+        },
+        "action2_inner3": {
+            "relations": [],
+            "next": null
+        }
+    },
+    "temporal_abs": {
+        "timeline": {
+            "actor0": "[('action0', 'TalkAtPhone'), ('action3', 'TalkAtPhone')]",
+            "actor1": "[('action1', 'Read'), ('action4', 'SmokeCigarette')]",
+            "actor2": "[('action2', 'HandleRemote')]"
+        },
+        "starting_actions": {
+            "actor0": "action0",
+            "actor1": "action1",
+            "actor2": "action2"
+        },
+        "action0": {
+            "relations": null,
+            "next": "action3"
+        },
+        "action3": {
+            "relations": null,
+            "next": null
+        },
+        "action1": {
+            "relations": null,
+            "next": "action4"
+        },
+        "t0": {
+            "type": "starts_with"
+        },
+        "action4": {
+            "relations": [
+                "t0"
+            ],
+            "next": null
+        },
+        "action2": {
+            "relations": [
+                "t0"
+            ],
+            "next": null
+        }
+    }
+}

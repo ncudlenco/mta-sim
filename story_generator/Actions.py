@@ -63,7 +63,7 @@ class Action:
             self.possible_locations = rs
     
     def __str__(self):
-        return str(self.name) + ": " +  str(self.id) + " " + str(self.action_components) + " " + str(self.targets) + " " + str(self.possible_locations)
+        return str(self.name)# + ": " +  str(self.id) + " " + str(self.action_components) + " " + str(self.targets) + " " + str(self.possible_locations)
     
     def __repr__(self):
         return self.__str__()

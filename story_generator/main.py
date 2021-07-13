@@ -12,7 +12,10 @@ import matplotlib.pyplot as plt
 
 MIN_OBJECTS = 1
 MAX_OBJECTS = 3
-ACTORS = 2
+ACTORS = 3
+MIN_SYNC_EVENTS = 1
+MAX_SYNC_EVENTS = 2
+
 
 objects = Objects.get_obj_list()
 actions = Actions.get_action_list()
@@ -24,36 +27,81 @@ Rooms.associate_objects_to_rooms(rooms, objects)
 actions = Actions.associate_objects_to_actions(actions, objects)
 
 def order_events(story):
-    # print(story)
-    # print()
     actors = get_actors_from_story(story)
     last_action_for_actor = [None for x in range(len(actors))]
     for i in range(len(story)):
         if i == len(story) - 1:
+            # LAST ACTION
             actor_index = actors.index(story[i].actor)
             if last_action_for_actor[actor_index] != None:
                 last_action_for_actor[actor_index].next_event = story[i]
             break
-        # print(story[i], story[i+1])
         if story[i].actor.id == story[i+1].actor.id:
-            # print("SAME ACTOR", story[i].actor.id, story[i+1].actor.id)
-            # print("Last actions", last_action_for_actor)
+            # SAME ACTOR FOR CONSECUTIVE ACTIONS
             actor_index = actors.index(story[i].actor)
             if last_action_for_actor[actor_index] != None:
                 last_action_for_actor[actor_index].next_event = story[i]
             last_action_for_actor[actor_index]= story[i]
             story[i].next_event = story[i+1]
         else:
-            # print("DIFERENT ACTORS",  story[i].actor.id, story[i+1].actor.id)
-            # print("Last actions", last_action_for_actor)
+            # DIFFERENT ACTORS FOR CONSECUTIVE ACTIONS
             actor_index = actors.index(story[i].actor)
             if last_action_for_actor[actor_index] != None:
                 last_action_for_actor[actor_index].next_event = story[i]
             last_action_for_actor[actor_index] = story[i]
-        # print("-------")
     
+    timeline = [[] for _ in range(len(actors))]
+    init_found = 0
+    while init_found < len(actors):
+        for event in story:
+            if timeline[int(event.actor.id[len("actor"):])] == []:
+                init_found += 1
+                timeline[int(event.actor.id[len("actor"):])] = [event]
 
-    return story
+    for t in timeline:
+        crt_event = t[0]
+        while True:
+            next_event = crt_event.next_event
+            if next_event == None:
+                break
+            t.append(next_event)
+            crt_event = next_event
+
+    syncs = random.randint(MIN_SYNC_EVENTS, MAX_SYNC_EVENTS)
+    print("SYNCS =", syncs)
+    tid = 0
+    for _ in range(syncs):
+        sync_type = random.choice(["starts_with", "ends_with"])
+        # so far we treated actions with different actors independently
+        # select two random actors
+        r_actors = random.sample(actors, 2)
+        a1i = actors.index(r_actors[0])
+        a2i = actors.index(r_actors[1])
+
+
+        # select a pair of actions to sync
+        tries = 0
+        while True:
+            act1 = random.choice(timeline[a1i])
+            act2 = random.choice(timeline[a2i])
+            if len(act1.sync_events) == 1 or len(act2.sync_events) == 1:
+                tries += 1
+                if tries == 100:
+                    print("Already tried 100 times to select action")
+                    sys.exit()
+                continue
+
+            if act1.room == act2.room or act1.room.name == "" or act2.room.name == "":
+                print("--------------")
+                print(act1)
+                print(act2)
+                print(sync_type)
+                act1.add_sync_event(act2, sync_type, "t{0}".format(tid))
+                act2.add_sync_event(act1, sync_type, "t{0}".format(tid))
+                tid += 1
+                break
+
+    return timeline
 
 
 def get_objects_from_story(story):
@@ -113,12 +161,8 @@ def generate_story():
             possible_actions = Actions.filter_actions_by_rooms(actions, r_room)
             r_act = random.choice(possible_actions)
 
-            # print(r_room, r_act)
             r_new_act = copy.deepcopy(r_act)
 
-            # print(r_act.targets)
-            # if r_act.targets != []:
-            # print(r_act.targets, type(r_act.targets))
             r_new_obj = copy.deepcopy(r_act.targets)
             if r_new_act.name == "TalkAtPhone" or r_new_act.name == "SmokeCigarette":
                 e = Event.Event("event{0}".format(len(events)), r_new_act, r_new_obj, actor, empty_room)
@@ -126,24 +170,6 @@ def generate_story():
                 e = Event.Event("event{0}".format(len(events)), r_new_act, r_new_obj, actor, r_room)
             events.append(e)
             crt_events_per_actor[actor_index] += 1
-
-            # pick an object to interact with 
-            # r_obj = random.choice(r_room.objects)
-            # r_new_obj = copy.deepcopy(r_obj)
-            # if len(r_obj.actions) == 0:
-            #     print("Object \"{0}\" has no actions available".format(r_obj))
-            #     continue
-
-            # r_acts = random.sample(r_obj.actions, random.randint(1, 1))
-            # for r_act in r_acts:
-            #     r_new_act = copy.deepcopy(r_act)
-            #     # TODO: handle this
-            #     if r_new_act.name == "TalkAtPhone" or r_new_act.name == "SmokeCigarette":
-            #         e = Event.Event("event{0}".format(len(events)), r_new_act, r_new_obj, actor, empty_room)
-            #     else:
-            #         e = Event.Event("event{0}".format(len(events)), r_new_act, r_new_obj, actor, r_room)
-            #     events.append(e)
-            #     crt_events_per_actor[actor_index] += 1
  
     return events
 
@@ -223,10 +249,28 @@ def generate_graph(story):
         action_id = "action{0}".format(i)
         event.action.set_id(action_id)
     
-    
-    order_events(story)
+    # apply temporal logic
+    abs_timeline = order_events(story)
+    timeline = [[] for _ in range(len(abs_timeline))]
 
-    # generate nodes for actions
+    for ti, time in enumerate(abs_timeline):
+        aux_time = []
+        for event in time:
+            if event.action.action_type == "complex":
+                a = [("{0}_inner{1}".format(event.action.id, i),x) for i,x in enumerate(event.action.action_components)]
+                aux_time.extend(a)
+            else:
+                aux_time.append((event.action.id, event.action))
+        timeline[ti] = aux_time
+    # for ti, t in enumerate(abs_timeline):
+    #     print(t)
+    #     abs_timeline[ti] = list(map(lambda x: (x.action.id, x.action.name), t))
+    #     print(abs_timeline[ti])
+    #     sys.exit()
+    
+    for ti, t in enumerate(timeline):
+        timeline[ti] = list(map(lambda x: (x[0], x[1].name), t))
+
     for event in story:
         d = event.generate_node()
         if type(d) == list:
@@ -235,10 +279,100 @@ def generate_graph(story):
         else:
             graph_dict[event.action.id] = d
     
-    # print(story)
-    # print(graph_dict)
-    # print(json.dumps(graph_dict, sort_keys = False, indent = 4))
-    # json.dump(graph_dict, open("example_graph", "w"), sort_keys=False, indent = 4)
+    # write timelines
+    auxda = {}
+    auxd = {}
+    for ti, t in enumerate(timeline):
+        auxd["actor{0}".format(ti)] = str(t)
+        at = list(map(lambda x: (x.action.id, x.action.name), abs_timeline[ti]))
+        auxda["actor{0}".format(ti)] = str(at)
+
+    temporal_dict = {}
+    temporal_dict["timeline"] = auxd
+    temporal_dict["starting_actions"] = {}
+    for ti, t in enumerate(timeline):
+        temporal_dict["starting_actions"]["actor{0}".format(ti)] = t[0][0]
+        for ati in range(len(t)):
+            dd = {}
+            dd["relations"] = None
+
+            inner_id = None
+            if "inner" in t[ati][0]:
+                inner_id = int(t[ati][0].split("inner")[1])
+            outer_id = t[ati][0].split("_")[0]
+            last_id = None
+            # search in crt timeline for last with outer id
+            if "inner" in t[ati][0]:
+                for x in t:
+                    if x[0].split("_")[0] == outer_id:
+                        last_id = int(x[0].split("inner")[1])
+            searched_ev = None
+            for ev in abs_timeline[ti]:
+                if ev.action.id == outer_id:
+                    searched_ev = ev
+                    break
+            if searched_ev == None:
+                print("Not found ev")
+                sys.exit()
+            # print(searched_ev)
+            if len(searched_ev.sync_events) > 0:
+                if dd["relations"] == None:
+                    dd["relations"] = []
+        
+                for sync_ev, sync_type, sync_id in searched_ev.sync_events:
+                    print(sync_type, inner_id)
+                    if sync_type == "starts_with" and (inner_id != 0 and inner_id != None):
+                        break
+                    if sync_type == "ends_with" and (inner_id != last_id and inner_id != None):
+                        break
+                    if sync_id in temporal_dict:
+                        print(sync_id, "already in temporal dicta")
+                    else:
+                        x = {}
+                        x["type"] = sync_type
+                        temporal_dict[sync_id] = x
+                    dd["relations"].append(sync_id)
+    
+            # dd["id"] = t[ati][0]
+            dd["next"] = None
+            if ati != len(t) - 1:
+                dd["next"] = t[ati+1][0]
+            temporal_dict[t[ati][0]] = dd
+
+
+    temporal_dicta = {}
+    temporal_dicta["timeline"] = auxda
+
+    temporal_dicta["starting_actions"] = {}
+    for ti, t in enumerate(abs_timeline):
+        at = list(map(lambda x: (x.action.id, x.action.name), t))
+        temporal_dicta["starting_actions"]["actor{0}".format(ti)] = at[0][0]
+        for ati in range(len(at)):
+            dd = {}
+            dd["relations"] = None
+            if len(t[ati].sync_events) > 0:
+                if dd["relations"] == None:
+                    dd["relations"] = []
+                for sync_ev, sync_type, sync_id in t[ati].sync_events:
+                    # create new node if needed
+                    if sync_id in temporal_dicta:
+                        print(sync_id, "already in temporal dicta")
+                    else:
+                        x = {}
+                        x["type"] = sync_type
+                        temporal_dicta[sync_id] = x
+                    dd["relations"].append(sync_id)
+            dd["next"] = None
+            if ati != len(at) - 1:
+                dd["next"] = at[ati+1][0]
+            temporal_dicta[at[ati][0]] = dd
+
+    graph_dict["temporal"] = temporal_dict
+    graph_dict["temporal_abs"] = temporal_dicta
+
+    print()
+    print(abs_timeline)
+    print(timeline)
     return graph_dict
 
 
@@ -392,7 +526,7 @@ if __name__ == "__main__":
     print("#actions:", len(actions))
 
     # generate_files(20, "story_generator/samples")
-    generate_files(1, "story_generator/samples_test")
+    generate_files(5, "story_generator/samples_test")
 
 
     # d = json.load(open("story_generator/samples_test/g0", "r"))

@@ -1,0 +1,465 @@
+{
+    "actor0": {
+        "Actor": {
+            "id": "actor0",
+            "Gender": 1,
+            "Name": "NAME"
+        },
+        "Action": "Exists",
+        "id": "actor0"
+    },
+    "actor2": {
+        "Actor": {
+            "id": "actor2",
+            "Gender": 1,
+            "Name": "NAME"
+        },
+        "Action": "Exists",
+        "id": "actor2"
+    },
+    "actor1": {
+        "Actor": {
+            "id": "actor1",
+            "Gender": 1,
+            "Name": "NAME"
+        },
+        "Action": "Exists",
+        "id": "actor1"
+    },
+    "object0": {
+        "Action": "Exists",
+        "id": "object0",
+        "Target": {
+            "id": "object0",
+            "Name": "Drink"
+        }
+    },
+    "object1": {
+        "Action": "Exists",
+        "id": "object1",
+        "Target": {
+            "id": "object1",
+            "Name": "Sink"
+        }
+    },
+    "object2": {
+        "Action": "Exists",
+        "id": "object2",
+        "Target": {
+            "id": "object2",
+            "Name": "Sink"
+        }
+    },
+    "object3": {
+        "Action": "Exists",
+        "id": "object3",
+        "Target": {
+            "id": "object3",
+            "Name": "Book"
+        }
+    },
+    "object4": {
+        "Action": "Exists",
+        "id": "object4",
+        "Target": {
+            "id": "object4",
+            "Name": "Cigarette"
+        }
+    },
+    "object5": {
+        "Action": "Exists",
+        "id": "object5",
+        "Target": {
+            "id": "object5",
+            "Name": "Cigarette"
+        }
+    },
+    "object6": {
+        "Action": "Exists",
+        "id": "object6",
+        "Target": {
+            "id": "object6",
+            "Name": "Cigarette"
+        }
+    },
+    "object7": {
+        "Action": "Exists",
+        "id": "object7",
+        "Target": {
+            "id": "object7",
+            "Name": "Cigarette"
+        }
+    },
+    "action0_inner0": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "PickUp",
+        "Next": "action0_inner1",
+        "id": "action0_inner0",
+        "Target": {
+            "id": "object0"
+        },
+        "Location": "Kitchen"
+    },
+    "action0_inner1": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "Drink",
+        "Next": "action0_inner2",
+        "id": "action0_inner1",
+        "Target": {
+            "id": "object0"
+        },
+        "Location": "Kitchen"
+    },
+    "action0_inner2": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "PutDown",
+        "Next": "action3",
+        "id": "action0_inner2",
+        "Target": {
+            "id": "object0"
+        },
+        "Location": "Kitchen"
+    },
+    "action1": {
+        "Actor": {
+            "id": "actor1"
+        },
+        "Action": "WashHands",
+        "Next": "action4_inner0",
+        "id": "action1",
+        "Target": {
+            "id": "object1"
+        },
+        "Location": "Kitchen"
+    },
+    "action2": {
+        "Actor": {
+            "id": "actor2"
+        },
+        "Action": "WashHands",
+        "Next": "action5_inner0",
+        "id": "action2",
+        "Target": {
+            "id": "object2"
+        },
+        "Location": "Kitchen"
+    },
+    "action3": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "Read",
+        "Next": "action6_inner0",
+        "id": "action3",
+        "Target": {
+            "id": "object3"
+        },
+        "Location": "Living"
+    },
+    "action4_inner0": {
+        "Actor": {
+            "id": "actor1"
+        },
+        "Action": "SmokeIn",
+        "Next": "action4_inner1",
+        "id": "action4_inner0",
+        "Target": {
+            "id": "object4"
+        },
+        "Location": ""
+    },
+    "action4_inner1": {
+        "Actor": {
+            "id": "actor1"
+        },
+        "Action": "Smoke",
+        "Next": "action4_inner2",
+        "id": "action4_inner1",
+        "Target": {
+            "id": "object4"
+        },
+        "Location": ""
+    },
+    "action4_inner2": {
+        "Actor": {
+            "id": "actor1"
+        },
+        "Action": "SmokeOut",
+        "Next": "action7_inner0",
+        "id": "action4_inner2",
+        "Target": {
+            "id": "object4"
+        },
+        "Location": ""
+    },
+    "action5_inner0": {
+        "Actor": {
+            "id": "actor2"
+        },
+        "Action": "SmokeIn",
+        "Next": "action5_inner1",
+        "id": "action5_inner0",
+        "Target": {
+            "id": "object5"
+        },
+        "Location": ""
+    },
+    "action5_inner1": {
+        "Actor": {
+            "id": "actor2"
+        },
+        "Action": "Smoke",
+        "Next": "action5_inner2",
+        "id": "action5_inner1",
+        "Target": {
+            "id": "object5"
+        },
+        "Location": ""
+    },
+    "action5_inner2": {
+        "Actor": {
+            "id": "actor2"
+        },
+        "Action": "SmokeOut",
+        "Next": "None",
+        "id": "action5_inner2",
+        "Target": {
+            "id": "object5"
+        },
+        "Location": ""
+    },
+    "action6_inner0": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "SmokeIn",
+        "Next": "action6_inner1",
+        "id": "action6_inner0",
+        "Target": {
+            "id": "object6"
+        },
+        "Location": ""
+    },
+    "action6_inner1": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "Smoke",
+        "Next": "action6_inner2",
+        "id": "action6_inner1",
+        "Target": {
+            "id": "object6"
+        },
+        "Location": ""
+    },
+    "action6_inner2": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "SmokeOut",
+        "Next": "None",
+        "id": "action6_inner2",
+        "Target": {
+            "id": "object6"
+        },
+        "Location": ""
+    },
+    "action7_inner0": {
+        "Actor": {
+            "id": "actor1"
+        },
+        "Action": "SmokeIn",
+        "Next": "action7_inner1",
+        "id": "action7_inner0",
+        "Target": {
+            "id": "object7"
+        },
+        "Location": ""
+    },
+    "action7_inner1": {
+        "Actor": {
+            "id": "actor1"
+        },
+        "Action": "Smoke",
+        "Next": "action7_inner2",
+        "id": "action7_inner1",
+        "Target": {
+            "id": "object7"
+        },
+        "Location": ""
+    },
+    "action7_inner2": {
+        "Actor": {
+            "id": "actor1"
+        },
+        "Action": "SmokeOut",
+        "Next": "None",
+        "id": "action7_inner2",
+        "Target": {
+            "id": "object7"
+        },
+        "Location": ""
+    },
+    "temporal": {
+        "timeline": {
+            "actor0": "[('action0_inner0', 'PickUp'), ('action0_inner1', 'Drink'), ('action0_inner2', 'PutDown'), ('action3', 'Read'), ('action6_inner0', 'SmokeIn'), ('action6_inner1', 'Smoke'), ('action6_inner2', 'SmokeOut')]",
+            "actor1": "[('action1', 'WashHands'), ('action4_inner0', 'SmokeIn'), ('action4_inner1', 'Smoke'), ('action4_inner2', 'SmokeOut'), ('action7_inner0', 'SmokeIn'), ('action7_inner1', 'Smoke'), ('action7_inner2', 'SmokeOut')]",
+            "actor2": "[('action2', 'WashHands'), ('action5_inner0', 'SmokeIn'), ('action5_inner1', 'Smoke'), ('action5_inner2', 'SmokeOut')]"
+        },
+        "starting_actions": {
+            "actor0": "action0_inner0",
+            "actor1": "action1",
+            "actor2": "action2"
+        },
+        "t0": {
+            "type": "starts_with"
+        },
+        "action0_inner0": {
+            "relations": [
+                "t0"
+            ],
+            "next": "action0_inner1"
+        },
+        "action0_inner1": {
+            "relations": [],
+            "next": "action0_inner2"
+        },
+        "action0_inner2": {
+            "relations": [],
+            "next": "action3"
+        },
+        "t1": {
+            "type": "ends_with"
+        },
+        "action3": {
+            "relations": [
+                "t1"
+            ],
+            "next": "action6_inner0"
+        },
+        "action6_inner0": {
+            "relations": null,
+            "next": "action6_inner1"
+        },
+        "action6_inner1": {
+            "relations": null,
+            "next": "action6_inner2"
+        },
+        "action6_inner2": {
+            "relations": null,
+            "next": null
+        },
+        "action1": {
+            "relations": null,
+            "next": "action4_inner0"
+        },
+        "action4_inner0": {
+            "relations": [],
+            "next": "action4_inner1"
+        },
+        "action4_inner1": {
+            "relations": [],
+            "next": "action4_inner2"
+        },
+        "action4_inner2": {
+            "relations": [
+                "t1"
+            ],
+            "next": "action7_inner0"
+        },
+        "action7_inner0": {
+            "relations": null,
+            "next": "action7_inner1"
+        },
+        "action7_inner1": {
+            "relations": null,
+            "next": "action7_inner2"
+        },
+        "action7_inner2": {
+            "relations": null,
+            "next": null
+        },
+        "action2": {
+            "relations": [
+                "t0"
+            ],
+            "next": "action5_inner0"
+        },
+        "action5_inner0": {
+            "relations": null,
+            "next": "action5_inner1"
+        },
+        "action5_inner1": {
+            "relations": null,
+            "next": "action5_inner2"
+        },
+        "action5_inner2": {
+            "relations": null,
+            "next": null
+        }
+    },
+    "temporal_abs": {
+        "timeline": {
+            "actor0": "[('action0', 'DrinkBeverage'), ('action3', 'Read'), ('action6', 'SmokeCigarette')]",
+            "actor1": "[('action1', 'WashHands'), ('action4', 'SmokeCigarette'), ('action7', 'SmokeCigarette')]",
+            "actor2": "[('action2', 'WashHands'), ('action5', 'SmokeCigarette')]"
+        },
+        "starting_actions": {
+            "actor0": "action0",
+            "actor1": "action1",
+            "actor2": "action2"
+        },
+        "t0": {
+            "type": "starts_with"
+        },
+        "action0": {
+            "relations": [
+                "t0"
+            ],
+            "next": "action3"
+        },
+        "t1": {
+            "type": "ends_with"
+        },
+        "action3": {
+            "relations": [
+                "t1"
+            ],
+            "next": "action6"
+        },
+        "action6": {
+            "relations": null,
+            "next": null
+        },
+        "action1": {
+            "relations": null,
+            "next": "action4"
+        },
+        "action4": {
+            "relations": [
+                "t1"
+            ],
+            "next": "action7"
+        },
+        "action7": {
+            "relations": null,
+            "next": null
+        },
+        "action2": {
+            "relations": [
+                "t0"
+            ],
+            "next": "action5"
+        },
+        "action5": {
+            "relations": null,
+            "next": null
+        }
+    }
+}

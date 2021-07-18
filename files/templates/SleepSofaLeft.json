@@ -1,0 +1,72 @@
+[
+	{
+		"objects": [
+			{
+				"dynamicString": "return Sofa{description=\"\", noCollisions=true, modelid=nil, isRandomModelId=true, interior=7, position=Vector3(-0.91207885742188,-0.9691162109375,-1.000244140625), rotation=Vector3(0,0,90), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"id": 29
+			}
+		],
+		"poi": {
+			"Description": "sleepsofa ",
+			"Interior": 7,
+			"Y": 1030.3017578125,
+			"X": 225.5451202392578,
+			"Z": 1084.015502929688,
+			"id": 9,
+			"Angle": 91.424072265625,
+			"PossibleActions": [
+				{
+					"id": 1
+				}
+			],
+			"allActions": [
+				{
+					"dynamicString": "return GetOn{how = 1,side = 1}",
+					"isClosingAction": false,
+					"targetItem": {
+						"id": 29,
+						"type": "Object"
+					},
+					"id": 1,
+					"nextAction": {
+						"id": 2
+					},
+					"closingAction": {
+						"id": 3
+					},
+					"nextLocation": {
+						"id": 9
+					}
+				},
+				{
+					"dynamicString": "return Sleep{how = 1}",
+					"isClosingAction": false,
+					"targetItem": {
+						"id": 29,
+						"type": "Object"
+					},
+					"id": 2,
+					"nextAction": {
+						"id": 3
+					},
+					"nextLocation": {
+						"id": 9
+					}
+				},
+				{
+					"dynamicString": "return GetOff{how = 1,side = 1}",
+					"isClosingAction": false,
+					"targetItem": {
+						"id": 29,
+						"type": "Object"
+					},
+					"id": 3,
+					"nextLocation": {
+						"id": 9
+					}
+				}
+			]
+		},
+		"locations": []
+	}
+]

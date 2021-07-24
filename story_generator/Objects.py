@@ -39,12 +39,19 @@ class Object:
 
         return obj_dict
 
+    def get_obj_rooms(self, rooms):
+        rs = []
+        for k, v in rooms.items():
+            if self.name in v:
+                rs.append(k)
+        return list(set(rs))
+
 def get_obj_list():
     OBJECT_CLASSES = ["ArmChair", "Bed", "BenchPress", "BenchPressBar", "Book", "Bookshelf", "Chair", "Cigarette",
                  "CoffeeTable", "Desk", "Drink", "Dumbbell", "FlowerPot", "Food", "Fridge", "Furniture",
                  "GasCooker", "GymBike", "Laptop", "Microwave", "MobilePhone", "MusicPlayer", "OfficeChair",
                  "Painting", "Photos", "PlantPot", "Plate", "PunchingBag", "Remote", "Sink", "Sofa", "Table",
-                 "Televisor", "Toilet", "Treadmill", "TurnTable", "TwoDumbbells", "Wardrobe"]
+                 "Televisor", "Toilet", "Treadmill", "TurnTable", "TwoDumbbells", "Wardrobe", "Watch", "TaiChiObject", "MultiAgentObject"]
 
     # just unknown objects (for the moment)
     OBJECT_CLASSES.remove("Bookshelf")
@@ -54,49 +61,19 @@ def get_obj_list():
     OBJECT_CLASSES.remove("GasCooker")
     OBJECT_CLASSES.remove("Microwave")
     OBJECT_CLASSES.remove("MusicPlayer")
-    OBJECT_CLASSES.remove("OfficeChair")
     OBJECT_CLASSES.remove("Photos")
     OBJECT_CLASSES.remove("Plate")
     OBJECT_CLASSES.remove("Toilet")
-    # OBJECT_CLASSES.remove("TurnTable")
     OBJECT_CLASSES.remove("Wardrobe")
+
+    OBJECT_CLASSES.remove("Painting")
+    OBJECT_CLASSES.remove("Table")
     
 
     objects = []
     for obj in OBJECT_CLASSES:
-        o = Object(obj)
         objects.append(Object(obj))
     return objects
-
-def associate_actions_to_objects(objects, actions):
-
-    DAOP = {
-            "MobilePhone": "TalkAtPhone",
-            "Laptop": "CloseLaptop",  # not found in episode
-            "Treadmill": "TreadmillJog", 
-            "Cigarette": "SmokeCigarette",
-            "Bed": "SleepOnBed",
-            "Sofa": "SitAndStand",
-            "PunchingBag": "Punch", # not found in episode
-            "TurnTable": "DanceTurnTable",
-            "TwoDumbbells": "DumbbellsWorkOut", 
-            "Drink": "DrinkBeverage", 
-            "Food": "EatFood", 
-            "Sink": "WashHands",
-            "PedalGymBike": "PedalOnGymBike", 
-            "ArmChair": "SitAndStand", 
-            "BenchPress": "BenchpressWorkOut"
-            }
-
-    for obj in objects:
-        if obj.name in DAOP:
-            for act in DAOP[obj.name].split(" "):
-                index = Actions.find_action_by_name(act, actions)
-                if index == -1:
-                    print("Action {0} for object {1} not found in the list of actions.".format(act, obj))
-                    sys.exit()
-                # print("Adding action {0} for object {1} ".format(actions[index], obj))
-                obj.add_action(actions[index])
 
 def find_obj_by_name(obj_name, objects):
     for index, obj in enumerate(objects):

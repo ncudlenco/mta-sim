@@ -3,7 +3,7 @@ import Objects
 import Rooms
 import Actor
 import sys
-
+import random
 class Event:
 
     def __init__(self, id, action, object, actor, room, next_event = None):
@@ -13,7 +13,10 @@ class Event:
         self.actor = actor
         self.room = room
         self.next_event = next_event
+        self.sync_events = []
         
+    def add_sync_event(self, event, type, tid):
+        self.sync_events.append((event, type, tid))
 
     def __str__(self):
         return "(Event id: {0}, action {1}, object {2}, actor {3}, room {4})".format(str(self.id), str(self.action), str(self.object), str(self.actor), str(self.room))
@@ -22,21 +25,53 @@ class Event:
         return self.__str__()
 
     def generate_node(self):
-
+        
         if self.action.action_type == "complex":
-            inner_actions_ids = ["{0}_inner{1}".format(self.action.id,i) for i in range(len(self.action.action_components))]
+            r_acts = []
+            r_mandatory = []
+
+            for inner_action in self.action.action_components:
+                if inner_action.rand == True:
+                    r_acts.append(inner_action)
+                    r_mandatory.append("*")
+                else:
+                    r_mandatory.append(inner_action)
+
+            if r_acts != []:
+                r_acts = random.sample(r_acts, random.randint(1, len(r_acts)-1))
+                print(r_acts)
+                aux_acts = []
+                ii = 0
+                for a in r_mandatory:
+                    if a == "*":
+                        if ii < len(r_acts):                   
+                            aux_acts.append(r_acts[ii])
+                            ii += 1
+                    else:
+                        aux_acts.append(a)
+                print(aux_acts)
+                r_acts = aux_acts
+                        
+            else:
+                r_acts = self.action.action_components
+
+            inner_actions_ids = ["{0}_inner{1}".format(self.action.id,i) for i in range(len(r_acts))]
             action_dicts = []
-            for i, inner_action_name in enumerate(self.action.action_components):
+            for i, inner_action_name in enumerate(r_acts):
+                inner_action_name = inner_action_name.name
                 inner_action_dict = {}
                 actor_dict = {}
                 actor_dict["id"] = self.actor.id
                 
-                obj_dict = {}        
-                obj_dict["id"] = self.object.id
+                obj_dict = {}
+                if type(self.object) == list:
+                    obj_dict["id"] = r_acts[i].targets.id
+                else:        
+                    obj_dict["id"] = self.object.id
 
                 inner_action_dict["Actor"] = actor_dict
                 inner_action_dict["Action"] = inner_action_name
-                if i == len(self.action.action_components) - 1:
+                if i == len(r_acts) - 1:
                     if self.next_event == None:
                         inner_action_dict["Next"] = "None"
                     else:
@@ -52,6 +87,7 @@ class Event:
                 inner_action_dict["Location"] = self.room.name
                 action_dicts.append((inner_actions_ids[i], inner_action_dict))
             return action_dicts
+        
         else:
             action_dict = {}
             actor_dict = {}
@@ -74,4 +110,4 @@ class Event:
             action_dict["Target"] = obj_dict
             action_dict["Location"] = self.room.name
 
-        return action_dict
+            return action_dict

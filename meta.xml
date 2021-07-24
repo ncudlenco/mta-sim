@@ -165,6 +165,7 @@
   <script src="story/Objects/Fridge.lua" type="shared" />
   <script src="story/Objects/GasCooker.lua" type="shared" />
   <script src="story/Objects/Microwave.lua" type="shared" />
+  <script src="story/Objects/Basketball.lua" type="shared" />
   <!-- Templates -->
   <script src="client/Template.lua" type="shared"/>
   <script src="client/Supertemplate.lua" type="shared"/>

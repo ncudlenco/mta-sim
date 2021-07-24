@@ -1,0 +1,231 @@
+{
+    "actor0": {
+        "Actor": {
+            "id": "actor0",
+            "Gender": 1,
+            "Name": "NAME"
+        },
+        "Action": "Exists",
+        "id": "actor0"
+    },
+    "object0": {
+        "Action": "Exists",
+        "id": "object0",
+        "Target": {
+            "id": "object0",
+            "Name": "Drink"
+        }
+    },
+    "object1": {
+        "Action": "Exists",
+        "id": "object1",
+        "Target": {
+            "id": "object1",
+            "Name": "Food"
+        }
+    },
+    "object2": {
+        "Action": "Exists",
+        "id": "object2",
+        "Target": {
+            "id": "object2",
+            "Name": "Chair"
+        }
+    },
+    "object3": {
+        "Action": "Exists",
+        "id": "object3",
+        "Target": {
+            "id": "object3",
+            "Name": "Drink"
+        }
+    },
+    "action0_inner0": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "PickUp",
+        "Next": "action0_inner1",
+        "id": "action0_inner0",
+        "Target": {
+            "id": "object0"
+        },
+        "Location": "Kitchen"
+    },
+    "action0_inner1": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "Drink",
+        "Next": "action0_inner2",
+        "id": "action0_inner1",
+        "Target": {
+            "id": "object0"
+        },
+        "Location": "Kitchen"
+    },
+    "action0_inner2": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "PutDown",
+        "Next": "action1_inner0",
+        "id": "action0_inner2",
+        "Target": {
+            "id": "object0"
+        },
+        "Location": "Kitchen"
+    },
+    "action1_inner0": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "SitDown",
+        "Next": "action1_inner1",
+        "id": "action1_inner0",
+        "Target": {
+            "id": "object2"
+        },
+        "Location": "Kitchen"
+    },
+    "action1_inner1": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "PickUp",
+        "Next": "action1_inner2",
+        "id": "action1_inner1",
+        "Target": {
+            "id": "object1"
+        },
+        "Location": "Kitchen"
+    },
+    "action1_inner2": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "Eat",
+        "Next": "action1_inner3",
+        "id": "action1_inner2",
+        "Target": {
+            "id": "object1"
+        },
+        "Location": "Kitchen"
+    },
+    "action1_inner3": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "StandUp",
+        "Next": "action2_inner0",
+        "id": "action1_inner3",
+        "Target": {
+            "id": "object2"
+        },
+        "Location": "Kitchen"
+    },
+    "action2_inner0": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "PickUp",
+        "Next": "action2_inner1",
+        "id": "action2_inner0",
+        "Target": {
+            "id": "object3"
+        },
+        "Location": "Kitchen"
+    },
+    "action2_inner1": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "Drink",
+        "Next": "action2_inner2",
+        "id": "action2_inner1",
+        "Target": {
+            "id": "object3"
+        },
+        "Location": "Kitchen"
+    },
+    "action2_inner2": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "PutDown",
+        "Next": "None",
+        "id": "action2_inner2",
+        "Target": {
+            "id": "object3"
+        },
+        "Location": "Kitchen"
+    },
+    "temporal": {
+        "timeline": {
+            "actor0": "[('action0_inner0', 'PickUp'), ('action0_inner1', 'Drink'), ('action0_inner2', 'PutDown'), ('action1_inner0', 'SitDown'), ('action1_inner1', 'PickUp'), ('action1_inner2', 'Eat'), ('action1_inner3', 'StandUp'), ('action2_inner0', 'PickUp'), ('action2_inner1', 'Drink'), ('action2_inner2', 'PutDown')]"
+        },
+        "starting_actions": {
+            "actor0": "action0_inner0"
+        },
+        "action0_inner0": {
+            "relations": null,
+            "next": "action0_inner1"
+        },
+        "action0_inner1": {
+            "relations": null,
+            "next": "action0_inner2"
+        },
+        "action0_inner2": {
+            "relations": null,
+            "next": "action1_inner0"
+        },
+        "action1_inner0": {
+            "relations": null,
+            "next": "action1_inner1"
+        },
+        "action1_inner1": {
+            "relations": null,
+            "next": "action1_inner2"
+        },
+        "action1_inner2": {
+            "relations": null,
+            "next": "action1_inner3"
+        },
+        "action1_inner3": {
+            "relations": null,
+            "next": "action2_inner0"
+        },
+        "action2_inner0": {
+            "relations": null,
+            "next": "action2_inner1"
+        },
+        "action2_inner1": {
+            "relations": null,
+            "next": "action2_inner2"
+        },
+        "action2_inner2": {
+            "relations": null,
+            "next": null
+        }
+    },
+    "temporal_abs": {
+        "timeline": {
+            "actor0": "[['action0', 'DrinkBeverage'], ['action1', 'EatFood'], ['action2', 'DrinkBeverage']]"
+        },
+        "starting_actions": {
+            "actor0": "action0"
+        },
+        "action0": {
+            "relations": null,
+            "next": "action1"
+        },
+        "action1": {
+            "relations": null,
+            "next": "action2"
+        },
+        "action2": {
+            "relations": null,
+            "next": null
+        }
+    }
+}

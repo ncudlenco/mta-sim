@@ -1,0 +1,87 @@
+[
+    {
+        "objects": [
+            {
+                "dynamicString": "return Bed{description=\"\", noCollisions=true, modelid=1794, isRandomModelId=false, interior=9, position=Vector3(-0.995849609375,2.1152954101562,-0.9923095703125), rotation=Vector3(0,0,180.00047302246), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "id": 1
+            }
+        ],
+        "poi": {
+            "isEmpty": true
+        },
+        "locations": [
+            {
+                "Description": "bed ",
+                "Interior": 9,
+                "Y": 0.00970458984375,
+                "X": -0.243896484375,
+                "Z": 0.0076904296875,
+                "id": 1,
+                "Angle": 90.86312866210938,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "allActions": [
+                    {
+                        "dynamicString": "return GetOn{how = 1,side = 1}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 1,
+                            "type": "Object"
+                        },
+                        "id": 1,
+                        "nextAction": {
+                            "id": 2
+                        },
+                        "closingAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 1
+                        }
+                    },
+                    {
+                        "dynamicString": "return Sleep{how = 1}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 1,
+                            "type": "Object"
+                        },
+                        "id": 2,
+                        "nextAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 1
+                        }
+                    },
+                    {
+                        "dynamicString": "return GetOff{how = 1,side = 1}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 1,
+                            "type": "Object"
+                        },
+                        "id": 3,
+                        "nextLocation": {
+                            "id": 1
+                        }
+                    }
+                ]
+            }
+        ],
+        "position": {
+            "y": -1014.745727539062,
+            "x": 2327.68017578125,
+            "z": 1054.711059570312
+        },
+        "globalCentroid": {
+            "y": -1013.683227539062,
+            "x": 2327.060302734375,
+            "z": 1054.21875
+        },
+        "name": "1794"
+    }
+]

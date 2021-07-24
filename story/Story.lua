@@ -3,33 +3,37 @@ Story = class(StoryBase, function(o, actor, maxActions, logData)
     o.LogData = logData
     o.Logger = Logger('data/'..o.Id..'/'..actor:getData('id'), true, o)
     o.Episodes = {
-        House1(),
-        House3(),
-        House8(),
-        House10(),
-        House12()
+        -- House1(),
+        -- House3(),
+        -- House8(),
+        -- House10(),
+        -- House12()
     }
     o.DynamicEpisodes = {
-      "house1_sweet",
-      "house7",
-    --   "house8",
+    --   "house1_sweet",
+    --   "house7",
+    -- --   "house8",
       "house9",
-    --   "house10",
-    --   "house12",
-      "gym1",
-      "gym2",
-      "gym3"
+    --   "testsupertemplate",
+    -- --   "house10",
+    -- --   "house12",
+    --   "gym1",
+    --   "gym2",
+    --   "gym3"
     }
     o.Disposed = false
     if not o.Actor then
         outputConsole("Error: Actor is null "..o.Id)
     end
     o.Actor:setData('storyId', o.Id)
+    o.supertemplates = {}
+    o.History = {}
 
     if not CURRENT_STORY then
         CURRENT_STORY = o
     end
     if not CURRENT_STORY.History[o.Actor:getData('id')] then
+        print('Initialized history for localPlayer')
         CURRENT_STORY.History[o.Actor:getData('id')] = {}
     end
 end)

@@ -87,6 +87,9 @@ function Logger:DescribeRegion(regionName, actors)
 end
 
 function Logger:DescribeObjects(player, regionName, objects, locationMap, describeAll)
+    if not LOG_DATA then
+        return ''
+    end
     local sentenceStart = {
         -- '. As '..player:getData('genderNominative')..' enters the '..regionName,
         'In the '..regionName,
@@ -165,8 +168,10 @@ function Logger:DescribeObjects(player, regionName, objects, locationMap, descri
                 end
 
                 return {noun = getWordPrefix(k) .. ' ' .. k, isPlural = false}
-            else 
+            elseif v.nr then 
                 return {noun = v.pluralTemplate:gsub('{count}', ''..num2word(v.nr)), isPlural = true}
+            else
+                return {noun = '', isPlural = false}
             end
         end)
 

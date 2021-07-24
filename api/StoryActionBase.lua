@@ -6,6 +6,11 @@ StoryActionBase = class(IStoryItem, function(o, params)
     o.Prerequisites = params.prerequisites or params.Prerequisites or {}
     o.ClosingAction = params.closingAction or params.ClosingAction or nil
     o.NextAction = params.nextAction or params.NextAction or nil
+    math.randomseed(os.time())
+    math.random(); math.random(); math.random()
+    math.randomseed(os.time())
+    math.random(); math.random(); math.random()
+
     o.ActionId = Guid().Id
     o.TopologicalOrder = params.topologicalOrder or params.TopologicalOrder or -1
     o.Penalties = params.penalties or params.Penalties or {}

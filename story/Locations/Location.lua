@@ -44,7 +44,7 @@ function Location:SpawnPlayerHere(player)
     end
 end
 
-function Location:Serialize(episode, relativePosition, _objects, _locations, _mainPOI)
+function Location:Serialize(episode, relativePosition, _objects, _locations, _mainPOI, _saveMainPoiRelative)
     local objects = {}
     if _objects then
         objects = _objects
@@ -55,6 +55,9 @@ function Location:Serialize(episode, relativePosition, _objects, _locations, _ma
     end
     local serializedAllActions = {}
     for _, a in ipairs(self.allActions) do
+        if DEBUG then
+            print("Serialize:action "..a.id)
+        end
         local serializedNextAction = nil
         if a.NextAction then
             if isArray(a.NextAction) then
@@ -88,8 +91,18 @@ function Location:Serialize(episode, relativePosition, _objects, _locations, _ma
             isClosingAction = a.IsClosingAction
         }
 
+        if DEBUG then
+            print("Serialize:serialized action "..serializedAction.dynamicString)
+        end
+
         table.insert(serializedAllActions, serializedAction)
         local function processLocationDependency(location)
+            if not location then
+                return
+            end
+            if DEBUG then
+                print("Serialize:process location relative "..location.id)
+            end
             local locationCopy = {id = location.id or LastIndexOf(episode.POI, location)}
             --If next location is not myself and next location is not already processed in recursivity
             if 
@@ -99,10 +112,10 @@ function Location:Serialize(episode, relativePosition, _objects, _locations, _ma
             then
                 local targetItemRelativePosition = Vector3(location.position.x, location.position.y, location.position.z) - relativePosition
 
-                locationCopy = location:Serialize(episode, relativePosition, objects, locations, _mainPOI or self)
-                locationCopy.X = targetItemRelativePosition.x
-                locationCopy.Y = targetItemRelativePosition.y
-                locationCopy.Z = targetItemRelativePosition.z
+                locationCopy = location:Serialize(episode, relativePosition, objects, locations, _mainPOI or self, true)
+                -- locationCopy.X = targetItemRelativePosition.x
+                -- locationCopy.Y = targetItemRelativePosition.y
+                -- locationCopy.Z = targetItemRelativePosition.z
                 --This is probably handled in recursivity already
                 -- for _,v in ipairs(dependentObjects) do
                 --     if #Where(objects, function (x) return x.id == v.id end) == 0 then
@@ -121,6 +134,10 @@ function Location:Serialize(episode, relativePosition, _objects, _locations, _ma
         end
         if a.TargetItem and a.TargetItem.position and relativePosition then
             if targetItemType == 'Object' then
+                if DEBUG then
+                    outputConsole("Serialize:target object "..targetItemId)
+                end
+
                 local objectCopy = SampStoryObjectBase(a.TargetItem)
                 local targetItemRelativePosition = Vector3(a.TargetItem.position.x, a.TargetItem.position.y, a.TargetItem.position.z) - relativePosition
                 objectCopy.position = targetItemRelativePosition
@@ -134,10 +151,16 @@ function Location:Serialize(episode, relativePosition, _objects, _locations, _ma
                     })
                 end
             elseif targetItemType == 'Location' then
+                if DEBUG then
+                    print("Serialize:target location "..targetItemId)
+                end
                 processLocationDependency(a.TargetItem)
             end
         end
         if relativePosition then
+            if DEBUG then
+                print("Serialize:process location relative")
+            end
             processLocationDependency(a.NextLocation)
         end
     end
@@ -146,7 +169,8 @@ function Location:Serialize(episode, relativePosition, _objects, _locations, _ma
     for _, a in ipairs(self.PossibleActions) do
         table.insert(serializedPossibleActions, {id = a.id})
     end
-    return {
+
+    local serializedMainPoi = {
         X = self.X,
         Y = self.Y,
         Z = self.Z,
@@ -156,7 +180,14 @@ function Location:Serialize(episode, relativePosition, _objects, _locations, _ma
         allActions = serializedAllActions,
         PossibleActions = serializedPossibleActions,
         id = LastIndexOf(episode.POI, self)
-    }, objects, locations
+    }
+    if _saveMainPoiRelative then
+        local targetItemRelativePosition = Vector3(self.X, self.Y, self.Z) - relativePosition
+        serializedMainPoi.X = targetItemRelativePosition.x
+        serializedMainPoi.Y = targetItemRelativePosition.y
+        serializedMainPoi.Z = targetItemRelativePosition.z
+    end
+    return serializedMainPoi, objects, locations
 end
 
 function Location:GetNextRandomValidAction(player)
@@ -241,10 +272,20 @@ function Location:GetNextValidAction(player)
     if DEBUG and story == nil then
         outputConsole("Error Location:GetNextValidAction: story is null")
     end
+    if not self.History then
+        self.History = {}
+    end
     if not self.History[player:getData('id')] then
         self.History[player:getData('id')] = {}
     end
-    if #story.History[player:getData('id')] >= story.MaxActions then
+    if not story.History then
+        story.History = {}
+    end
+    if not story.History[player:getData('id')] then
+        story.History[player:getData('id')] = {}
+    end
+    print('Story actions nr '..#(story.History[player:getData('id')]))
+    if #(story.History[player:getData('id')]) >= story.MaxActions then
         if DEBUG then
             outputConsole("Location:GetNextValidAction - max story actions reached. Ending the current story")
         end
@@ -254,6 +295,7 @@ function Location:GetNextValidAction(player)
 
     local next = nil
     if not LOAD_FROM_GRAPH then
+        print('Get next random valid action')
         next = self:GetNextRandomValidAction(player)
     else
         local q = CURRENT_STORY.actionsQueues[player:getData('id')]

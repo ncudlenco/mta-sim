@@ -39,7 +39,7 @@ GraphStory = class(StoryBase, function(o, actor, logData)
     end
     o.Actor:setData('storyId', o.Id)
     o.graph = nil
-    local file = fileOpen("input_graphs/"..LOAD_FROM_GRAPH)
+    local file = fileOpen(INPUT_FOLDER..LOAD_FROM_GRAPH)
     if file then
         local jsonStr = fileRead(file, fileGetSize(file))
         o.graph = fromJSON(jsonStr)
@@ -230,6 +230,7 @@ function GraphStory:Play()
 
         self.StartTime = os.time()
         if self.LogData then
+            self.Actor:setData('takenShots', 0)
             self.RecorderTimer = Timer(
                 function (playerId, storyId)
                     local story = CURRENT_STORY
@@ -241,7 +242,7 @@ function GraphStory:Play()
                         else
                             player:setData('takenShots', 1)
                         end
-                        player:takeScreenShot(1920, 1080, playerId..';'..player:getData('storyId')..';'..player.name, 50)
+                        player:takeScreenShot(960, 540, playerId..';'..player:getData('storyId')..';'..player.name, 50)
                     else
                         local requestedShots = player:getData('takenShots')
                         local actuallyTaken = SCREENSHOTS[player:getData('id')][story.Id]
@@ -287,6 +288,27 @@ function GraphStory:Play()
     end
 end
 
+function GraphStory:FindLocationAndActionForEvent(event)
+    local inventoryItems = {}
+    if self.Actor:getData('inventory') then
+        local length = tonumber(self.Actor:getData('inventory'))
+        for i = 1,length do
+            table.insert(inventoryItems, self.Actor:getData('inventory_'..i))
+        end
+    end
+    local firstLocation = PickRandom(Where(episode.POI, function(poi) 
+        return
+            (poi.Region and poi.Region.name:lower():find(event.Location:lower()) and true or false) --the location name is the one specified in the first event
+            and 
+            (
+                Any(poi.allActions, function(action) return action.Name:lower() == event.Action:lower() end) --the location contains an action defined in the first event
+                or
+                --the action is with an inventory item => create by hand the action
+                Any(inventoryItems, function(item) return item:lower() == event.Target.Name:lower() end)
+            )
+        end))
+end
+
 function GraphStory:ProcessActions(graphActors)
     print("GraphStory:ProcessActions --------------------------------------------------")
 
@@ -309,8 +331,8 @@ function GraphStory:ProcessActions(graphActors)
             print('First event: '..firstEvent.id..' in location '..firstEvent.Location..' with actor '..firstEvent.Actor.id)
         end
         local firstLocation = FirstOrDefault(episode.POI, function(poi) 
-            return (poi.Region and poi.Region.name:lower():find(firstEvent.Location:lower()) and true or false)
-                and Any(poi.allActions, function(action) return action.Name:lower() == firstEvent.Action:lower() end) 
+            return (poi.Region and poi.Region.name:lower():find(firstEvent.Location:lower()) and true or false) --the location name is the one specified in the first event
+                and Any(poi.allActions, function(action) return action.Name:lower() == firstEvent.Action:lower() end) --the location contains an action defined in the first event
         end)
         if not firstLocation then
             error('Could not find the first location '..firstEvent.Location)
@@ -335,17 +357,29 @@ function GraphStory:ProcessActions(graphActors)
             end
             local actionsChain = {}
             local mandatoryPrevAction = eventAction
-            while(mandatoryPrevAction) do
-                mandatoryPrevAction = FirstOrDefault(location.allActions, function(action) 
-                    return action.NextAction and (isArray(action.NextAction) and Any(action.NextAction, function(na) 
+            local guard = 0
+            while(mandatoryPrevAction and guard < 10) do
+                print('Mandatory action:'.. mandatoryPrevAction.Name)
+
+                mandatoryPrevAction = FirstOrDefault(location.allActions, function(action)
+                    print('Evaluating as prev action '.. action.ActionId .. ': '..action.Name) 
+                    if (action.NextAction and not isArray(action.NextAction)) then
+                        print('Next action '.. action.NextAction.ActionId .. ': '..action.NextAction.Name) 
+                    end
+                    return mandatoryPrevAction ~= action and action.Name ~= 'Move' and
+                        action.NextAction and ((isArray(action.NextAction) and Any(action.NextAction, function(na) 
                         return na == mandatoryPrevAction 
-                    end) 
+                    end)) 
                     or (not isArray(action.NextAction) and action.NextAction == mandatoryPrevAction ))
                 end)
                 if mandatoryPrevAction then
-                    print(mandatoryPrevAction.Name)
+                    print('Mandatory prev action:'.. mandatoryPrevAction.Name)
                     table.insert(actionsChain, 1, mandatoryPrevAction)
                 end
+                guard = guard + 1
+            end
+            if guard >= 10 then
+                error('Infinite loop mandatoryPrevAction')
             end
             print(eventAction.Name)
             table.insert(actionsChain, eventAction)

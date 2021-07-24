@@ -10,7 +10,7 @@ import Event
 import networkx as nx
 import matplotlib.pyplot as plt
 
-ACTORS = 1
+ACTORS = 2
 MIN_OBJECTS = 3
 MAX_OBJECTS = 4
 
@@ -131,8 +131,12 @@ def get_objects_from_story(story):
         for i in range(entry_id+1, len(list)):
             if list[i][0].name == entry[0].name and list[i][1].name == entry[1].name:
                 # if personal object make it different
-                if list[i][0].name in "MobilePhone Cigarette" and list[i][2].id != entry[2].id:
-                    continue
+                if list[i][0].name in "MobilePhone Cigarette":
+                    # different actors
+                    if list[i][2].id != entry[2].id:
+                        continue
+                    else:
+                        indexes.append(i)
                 # make these objects + locations unique so only one exists
                 elif list[i][0].name in "Desk Bed Sink Food Remote Laptop TurnTable":
                     print("Make unique", entry[0].name)

@@ -11,10 +11,11 @@ function initializePlayer(source)
     SCREENSHOTS = {}
     CURRENT_STORY = nil
     GRAPH = {}
-    if #INPUT_GRAPHS > 0 then
+    source:setData('takenShots', 0)
+    if LOAD_FROM_GRAPH and #INPUT_GRAPHS > 0 then
         LOAD_FROM_GRAPH = INPUT_GRAPHS[1]
     end
-    if LOAD_FROM_GRAPH then
+    if not FREE_ROAM and LOAD_FROM_GRAPH then
         CURRENT_STORY = GraphStory(source, LOG_DATA)
     else
         CURRENT_STORY = Story(source, MAX_ACTIONS, LOG_DATA)
@@ -36,15 +37,32 @@ function initializePlayer(source)
     --money --prestige, accomplishment
     --prestige --having low body fat, high body muscle and stamina, lung capacity, having an expensive car, expensive clothes, expensive house
     --self-fulfillment -> achieving one's full potential, including creative activities
-    if DEBUG then
-        outputConsole("Initializing player needs...")
+    -- if DEBUG then
+    --     outputConsole("Initializing player needs...")
+    -- end
+    -- for i, a in pairs(NEEDS) do
+    --     if a then 
+    --         a:setRandomForPlayer(source)
+    --     end
+    -- end
+    math.randomseed(os.time())
+    math.random(); math.random(); math.random()
+    math.randomseed(os.time())
+    math.random(); math.random(); math.random()
+    local chance = math.random(0, 1)
+    if chance < 0.5 then
+        source:setData('inventory_1', 'phone')
+        source:setData('inventory', '1')
     end
-    for i, a in pairs(NEEDS) do
-        if a then 
-            a:setRandomForPlayer(source)
-        end
+    math.randomseed(os.time())
+    math.random(); math.random(); math.random()
+    math.randomseed(os.time())
+    math.random(); math.random(); math.random()
+    chance = math.random(0, 1)
+    if chance < 0.5 then
+        source:setData('inventory_2', 'cigarette')
+        source:setData('inventory', '2')
     end
-
     Timer(function(playerId, storyId)
         CURRENT_STORY:Play()
     end, 2000, 1, source:getData('id'), source:getData('storyId'))
@@ -99,6 +117,9 @@ function terminatePlayer(player, reason)
     SCREENSHOTS = {}
     CURRENT_STORY = nil
     GRAPH = {}
+    player:setData('takenShots', 0)
+    player.interior = 0
+
     Timer(function()
         if #INPUT_GRAPHS > 0 then
             table.remove(INPUT_GRAPHS, 1)

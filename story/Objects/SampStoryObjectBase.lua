@@ -32,6 +32,11 @@ SampStoryObjectBase = class(StoryObjectBase, function(o, params)
         end
 
         if o.isRandomModelId then
+            math.randomseed(os.time())
+            math.random(); math.random(); math.random()
+            math.randomseed(os.time())
+            math.random(); math.random(); math.random()
+        
             o.modelid = loadstring('return '..o.type..'.eModel[PickRandom('..o.type..'.eModel)]')()
         end
     end

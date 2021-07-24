@@ -14,6 +14,7 @@ StoryEpisodeBase = class(function(o, params)
     o.name = params.name or ""
     o.regionsGroup = nil
     o.peds = {}
+    o.supertemplates = params.supertemplates or {}
 end)
 
 function StoryEpisodeBase:Initialize(...)
@@ -51,6 +52,7 @@ function StoryEpisodeBase:Initialize(...)
         --if we have a graph for paths, then link all possible locations with move actions
         if self.graphId then
             for i,p1 in ipairs(self.POI) do
+                --all pois are valid starting locations
                 table.insert(self.ValidStartingLocations, p1)
                 for j, p2 in ipairs(self.POI) do
                     if i ~= j and p1.LocationId ~= p2.LocationId then
@@ -108,6 +110,7 @@ function StoryEpisodeBase:Initialize(...)
             v:Create()
         end
 
+        self:ProcessRegions()
         if not temporaryInitialize then
             addEventHandler( "onColShapeHit", self.regionsGroup, function(player)
                 if DEBUG then
@@ -159,7 +162,7 @@ function StoryEpisodeBase:Initialize(...)
                         print('First event: '..firstEvent.id..' in location '..firstEvent.Location..' with actor '..firstEvent.Actor.id)
                     end
                     validStartingPoi = FirstOrDefault(self.ValidStartingLocations, function(poi) 
-                        return not x.isBusy and poi.Region.name:lower():find(firstEvent.Location:lower()) and true or false 
+                        return not poi.isBusy and poi.Region.name:lower():find(firstEvent.Location:lower()) and true or false 
                             and Any(poi.allActions, function(a) return a.Name:lower() == firstEvent.Action:lower() end) 
                     end)
                 end
@@ -174,6 +177,9 @@ function StoryEpisodeBase:Initialize(...)
                 end
                 validStartingPoi.isBusy = true
                 local ped = Ped(skin.Id, validStartingPoi.X, validStartingPoi.Y, validStartingPoi.Z, validStartingPoi.Angle)
+                if not ped then
+                    error('Error while creating the ped '..i)
+                end
                 ped.interior = validStartingPoi.Interior
                 local g = Guid()
                 ped:setData("id", g.Id)
@@ -298,9 +304,15 @@ function StoryEpisodeBase:Destroy()
         self.regionsGroup = nil
     end
 
-    --for i,p in ipairs(self.peds) do
-      --  p:destroy()
-    --end
+    if self.peds then
+        for i,p in ipairs(self.peds) do
+            if isElement(p) then
+                p.interior = 0
+                p:destroy()
+                p = nil
+            end
+        end
+    end
 
     self.Disposed = true
 end
@@ -339,6 +351,7 @@ function StoryEpisodeBase:Reset()
     self.name = params.name or ""
     self.regionsGroup = nil
     self.peds = {}
+    self.supertemplates = {}
 end
 
 function StoryEpisodeBase:LoadFromFile()
@@ -474,6 +487,31 @@ function StoryEpisodeBase:LoadFromFile()
                 deserialized.Episode = self
                 table.insert(self.Regions, deserialized)
             end
+        end
+
+        if episode.supertemplates then
+            math.randomseed(os.time())
+            math.random(); math.random(); math.random()
+            math.randomseed(os.time())
+            math.random(); math.random(); math.random()
+        
+            for _, s in ipairs(episode.supertemplates) do
+                local idx = math.random(#s.templates)
+                if not s.offsets[idx].skip then
+                    local template = Template.Load(s.name, s.templates[idx])
+                    template:Instantiate(episode.InteriorId, Vector3(s.position.x, s.position.y, s.position.z))
+                    s.instantiatedTemplate = template
+                    local offsets = s.offsets[idx]
+                    template:UpdatePosition(Vector3(offsets.offset.x, offsets.offset.y, offsets.offset.z))
+                    template:UpdatePosition(nil, Vector3(offsets.rotationOffset.x, offsets.rotationOffset.y, offsets.rotationOffset.z), Vector3(s.position.x, s.position.y, s.position.z), true)
+                    if not DEFINING_EPISODES then
+                        template:InsertInEpisode(self, true)
+                    end
+                end
+            end
+        end
+        if DEFINING_EPISODES then
+            self.supertemplates = episode.supertemplates
         end
         return true
     else 

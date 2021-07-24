@@ -1,0 +1,38 @@
+[
+	{
+		"objects": [
+			{
+				"dynamicString": "return Basketball{description=\"\", noCollisions=false, modelid=nil, interior=5, position=Vector3(0,0,0), rotation=Vector3(0,0,90), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,-30)}",
+				"id": 45
+			}
+		],
+		"poi": {
+			"Description": "basketball",
+			"Interior": 5,
+			"Y": 6.90079402923584,
+			"X": 767.9354858398438,
+			"Z": 1000.713928222656,
+			"id": 11,
+			"Angle": 90,
+			"PossibleActions": [
+				{
+					"id": 1
+				}
+			],
+			"allActions": [
+				{
+					"dynamicString": "return PickUp{where = \"floor\", targetObjectExists = false, hand = 11, how = 4}",
+					"targetItem": {
+						"id": 45,
+						"type": "Object"
+					},
+					"id": 1,
+					"nextLocation": {
+						"id": 11
+					}
+				}
+			]
+		},
+		"locations": []
+	}
+]

@@ -51,7 +51,7 @@ def get_obj_list():
                  "CoffeeTable", "Desk", "Drink", "Dumbbell", "FlowerPot", "Food", "Fridge", "Furniture",
                  "GasCooker", "GymBike", "Laptop", "Microwave", "MobilePhone", "MusicPlayer", "OfficeChair",
                  "Painting", "Photos", "PlantPot", "Plate", "PunchingBag", "Remote", "Sink", "Sofa", "Table",
-                 "Televisor", "Toilet", "Treadmill", "TurnTable", "TwoDumbbells", "Wardrobe"]
+                 "Televisor", "Toilet", "Treadmill", "TurnTable", "TwoDumbbells", "Wardrobe", "Watch", "TaiChiObject", "MultiAgentObject"]
 
     # just unknown objects (for the moment)
     OBJECT_CLASSES.remove("Bookshelf")
@@ -72,52 +72,8 @@ def get_obj_list():
 
     objects = []
     for obj in OBJECT_CLASSES:
-        o = Object(obj)
         objects.append(Object(obj))
     return objects
-
-def associate_actions_to_objects(objects, actions):
-
-    # TODO: pickup remote, SitAndStand sofa, putdown remote; watch TV in between? from house3.lua line 134
-    # TODO: handle laptop + desk random order and number of actions; from house8.lua line 145
-    # TODO: handle sitting and eating; from house10.lua line 193
-
-    DAOP = {
-            "MobilePhone": "TalkAtPhone",
-            "Laptop": "CloseLaptop",  # not found in episode
-            "Treadmill": "TreadmillJog", 
-            "Cigarette": "SmokeCigarette",
-            "Bed": "SleepOnBed",
-            "Sofa": "SitAndStand",
-            "PunchingBag": "Punch", # not found in episode
-            "TurnTable": "DanceTurnTable",
-            "TwoDumbbells": "DumbbellsWorkOut", 
-            "Drink": "DrinkBeverage", 
-            "Food": "EatFood", 
-            "Sink": "WashHands",
-            "PedalGymBike": "PedalOnGymBike", 
-            "ArmChair": "SitAndStand", 
-            "BenchPress": "BenchpressWorkOut",
-            "Book": "Read",
-            "Remote": "HandleRemote",
-            "Desk": "SitAndStand",
-            "Laptop": "OpenAndCloseLaptop",
-            "Chair": "SitAndStand",
-            "OfficeChair": "SitAndStand"
-            }
-
-    for obj in objects:
-        if obj.name in DAOP:
-            for act in DAOP[obj.name].split(" "):
-                index = Actions.find_action_by_name(act, actions)
-                if index == -1:
-                    print("Action {0} for object {1} not found in the list of actions.".format(act, obj))
-                    sys.exit()
-                # print("Adding action {0} for object {1} ".format(actions[index], obj))
-                obj.add_action(actions[index])
-
-
-
 
 def find_obj_by_name(obj_name, objects):
     for index, obj in enumerate(objects):

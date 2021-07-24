@@ -4,16 +4,16 @@ import Objects
 
 
 DROP = {"Kitchen": "Chair Drink Food Sink", 
-        "Living": "ArmChair Book Chair TurnTable Sofa Remote",
-        "BedRoom": "Bed",
+        "Living": "ArmChair Book Chair TurnTable Sofa Remote Laptop Desk Watch",
+        "BedRoom": "Bed Laptop",
         "BathRoom": "Sink",
         "BarRoom": "Drink Food",
-        "Gym": "BenchPress Treadmill TwoDumbbells GymBike",
+        "Gym": "BenchPress Treadmill TwoDumbbells GymBike PunchingBag TaiChiObject",
         }
 
 # add certain object to every room
 for k, v in DROP.items():
-    DROP[k] = v + " MobilePhone Cigarette"# Handshake"
+    DROP[k] = v + " MobilePhone Cigarette MultiAgentObject"
 
 
 class Room:
@@ -35,25 +35,15 @@ class Room:
 def get_room_list():
     # R = ["Kitchen", "Living", "BathRoom", "BedRoom", "Gym", ""]
     # R = ["Gym", ""]
-    R = ["Kitchen", "Living", "BathRoom", "BedRoom", ""]
+    # R = ["Kitchen", "Living", "BathRoom", "BedRoom", ""]
+    R = ["Kitchen", ""]
     rooms = []
     for room in R:
         rooms.append(Room(room))
     return rooms
 
 def associate_objects_to_rooms(rooms, objects):
-
-    # TODO: add Painting and Table in rooms
-    # TODO: add TaiChi in Gym
     
-    # add MobielPhone and Cigarette to every room
-    # for r in rooms:
-    #     index = Objects.find_obj_by_name("MobilePhone", objects)
-    #     r.add_object(objects[index])
-    #     index = Objects.find_obj_by_name("Cigarette", objects)
-    #     r.add_object(objects[index])
-        
-
     for room in rooms:
         if room.name in DROP:
             for obj in DROP[room.name].split(" "):

@@ -17,13 +17,19 @@ COMPLEX_ACTIONS = {
                     "PedalOnGymBike": "GetOn PedalGymBike GetOff",
                     "BenchpressWorkOut": "GetOn BenchpressWorkOut GetOff",
                     "HandleRemote": "PickUp SitDown StandUp PutDown",
-                    "OpenAndCloseLaptop": "OpenLaptop CloseLaptop"
+                    "OpenAndCloseLaptop": "OpenLaptop CloseLaptop",
+                    "WorkAtLaptop": "SitDown OpenLaptop WriteOnLaptop* PunchDesk* LayOnElbow* LookAtWatch* CloseLaptop StandUp"
                     }
 
 class Action:
 
-    def __init__(self, name, action_type="simple", action_components=[], id = None):
-        self.name = name
+    def __init__(self, name, action_type="simple", action_components=[], id = None, multiagent = False, rand=False):
+        if name[-1] == "*":
+            self.name = name[:-1]
+            self.rand = True
+        else:
+            self.name = name
+            self.rand = False
         self.targets = []
         
         # small sanity check
@@ -34,6 +40,7 @@ class Action:
         self.action_components = action_components
         self.id = id
         self.possible_locations = []
+        self.multiagent = multiagent
 
     def set_id(self, id):
         if self.id != None:
@@ -55,12 +62,17 @@ class Action:
                 # self.action_components[i].possible_locations = []
                 rs = target[i].get_obj_rooms(Rooms.DROP)
                 rss.append(set(rs))
-            self.possible_locations = list(set.intersection(*rss))
-
+            
+            self.possible_locations.extend(list(set.intersection(*rss)))
+            self.possible_locations = list(set(self.possible_locations))
+            
         else:
             rs = target.get_obj_rooms(Rooms.DROP)
+            
             self.targets = target
-            self.possible_locations = rs
+            # self.possible_locations = rs
+            self.possible_locations.extend(rs)
+            self.possible_locations = list(set(self.possible_locations))
     
     def __str__(self):
         return str(self.name)# + ": " +  str(self.id) + " " + str(self.action_components) + " " + str(self.targets) + " " + str(self.possible_locations)
@@ -71,12 +83,13 @@ class Action:
 
 def get_action_list():
     ACTIONS = ["AnswerPhone", "BarbellWorkOut", "BenchpressWorkOut", "CloseLaptop", "Cook", "Dance", "Drink", "DumbbellsWorkOut",
-                 "Eat", "GetOff", "GetOn", "HandShake", "HangUp", "Hug", "JogTreadmill", "Kiss", "Laugh", "LayOnElbow", "LookAtObject",
+                 "Eat", "GetOff", "GetOn", "HangUp",  "JogTreadmill", "Laugh", "LayOnElbow", "LookAtObject",
                  "LookAtTheWatch", "Move", "OpenDoor", "OpenLaptop", "PedalGymBike", "PickUp", "Punch", "PunchSeated", "PutDown",
-                 "PutIn", "Read", "SitDown", "Sleep", "Smoke", "SmokeIn", "SmokeOut", "StandUp", "TaiChi", "Talk", "TalkPhone",
-                 "TurnOff", "TurnOn", "TypeOnKeyboard", "Wait", "WashHands",
+                 "PutIn", "Read", "SitDown", "Sleep", "Smoke", "SmokeIn", "SmokeOut", "StandUp", "TaiChi", "TalkPhone",
+                 "TurnOff", "TurnOn", "TypeOnKeyboard", "Wait", "WashHands", "WorkAtLaptop",
     #multi-agent
-                 "HandShake"
+                #TODO: ask about these
+                 "Handshake", "Hug", "Talk", "Joke", "Kiss"
                     ]
 
     ACTIONS.remove("AnswerPhone")
@@ -108,7 +121,7 @@ def get_action_list():
     ACTIONS.remove("PedalGymBike")
     ACTIONS.append("PedalOnGymBike")
 
-    ACTIONS.append("OpenAndCloseLaptop")
+    # ACTIONS.append("OpenAndCloseLaptop")
     ACTIONS.append("HandleRemote")
     
 
@@ -123,10 +136,18 @@ def get_action_list():
         else:
             t = "simple"
             ac = []
-        act = Action(action, t, ac)
+        mta = False
+        if action == "Handshake" or action == "Hug" or action == "Talk" or action == "Joke" or action == "Kiss":
+            mta = True
+
+        act = Action(action, t, ac, multiagent=mta)
         actions.append(act)
 
+    # clear complex action *s
+    for k,v in COMPLEX_ACTIONS.items():
+        COMPLEX_ACTIONS[k] = v.replace("*", "")
     return actions
+
 
 def find_action_by_name(act_name, actions):
     for index, act in enumerate(actions):
@@ -134,8 +155,8 @@ def find_action_by_name(act_name, actions):
             return index
     return -1
 
+
 def associate_objects_to_actions(actions, objects):
-    # TODO: handle laptop + desk random order and number of actions; from house8.lua line 145. specifically handle random interplayed actions between open and close laptop
     DAOP = {
             "TalkAtPhone": "MobilePhone",
             "OpenAndCloseLaptop": "Laptop",
@@ -143,7 +164,7 @@ def associate_objects_to_actions(actions, objects):
             "SmokeCigarette": "Cigarette",
             "SleepOnBed": "Bed",
             "SitAndStand": "Sofa ArmChair OfficeChair Chair Desk",
-            "Punch": "PunchingBag", # not found in episode
+            "Punch": "PunchingBag",
             "DanceTurnTable": "TurnTable",
             "DumbbellsWorkOut": "TwoDumbbells",
             "DrinkBeverage": "Drink",
@@ -151,32 +172,36 @@ def associate_objects_to_actions(actions, objects):
             "WashHands": "Sink",
             "PedalOnGymBike":"GymBike", 
             "BenchpressWorkOut": "BenchPress",
-            "Read": "Book",
+            "TaiChi": "TaiChiObject",
             "HandleRemote": "Remote|Sofa|Sofa|Remote",
-            # "Handshake": "Test"
+            "WorkAtLaptop": "Desk|Laptop|Laptop|Laptop|Laptop|Laptop|Laptop|Desk",
+            "Handshake": "MultiAgentObject",
+            "Hug": "MultiAgentObject",
+            "Talk": "MultiAgentObject",
+            "Kiss": "MultiAgentObject",
+            "Joke": "MultiAgentObject"
             }
+    
     actions = list(filter(lambda x: x.name in DAOP, actions))
     for action in actions:
-        if action.name in DAOP:
-            for objn in DAOP[action.name].split(" "):
-                if "|" in objn:
-                    iobjns = objn.split("|")
-                    targets = []
-                    for iobjn in iobjns:
-                        index = Objects.find_obj_by_name(iobjn, objects)
-                        if index == -1:
-                            print("Object {0} for action {1} not found in the list of objects.".format(objn, action.name))
-                            sys.exit()
-                        targets.append(objects[index])
-                    action.add_target(targets)
-                else:
-                    index = Objects.find_obj_by_name(objn, objects)
+        for objn in DAOP[action.name].split(" "):
+            if "|" in objn:
+                iobjns = objn.split("|")
+                targets = []
+                for iobjn in iobjns:
+                    index = Objects.find_obj_by_name(iobjn, objects)
                     if index == -1:
-                        print("Object {0} for action {1} not found in the list of objects.".format(objn, action.name))
+                        print("Object {0} for action {1} not found in the list of objects.".format(iobjn, action.name))
                         sys.exit()
-                    action.add_target(objects[index])
-        else:
-            print("Action {0} not found in DAOP".format(action.name))
+                    targets.append(objects[index])
+                action.add_target(targets)
+            else:                      
+                index = Objects.find_obj_by_name(objn, objects)
+                if index == -1:
+                    print("Object {0} for action {1} not found in the list of objects.".format(objn, action.name))
+                    sys.exit()
+                action.add_target(objects[index])
+        
     actions = list(filter(lambda x: len(x.possible_locations) > 0, actions))
     return actions
 
@@ -187,3 +212,13 @@ def filter_actions_by_rooms(actions, room):
         if room.name in act.possible_locations:
             acts.append(act)
     return acts
+
+def get_nonspecific_actions(actions):
+    nonspecific_objects = "MobilePhone Cigarette MultiAgentObject"
+    nonspecific_actions = []
+    for action in actions:
+        if action.targets != []:
+            if action.targets.name in nonspecific_objects:
+                nonspecific_actions.append(action)
+    return nonspecific_actions
+    

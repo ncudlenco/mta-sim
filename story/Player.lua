@@ -118,7 +118,6 @@ function terminatePlayer(player, reason)
     CURRENT_STORY = nil
     GRAPH = {}
     player:setData('takenShots', 0)
-    player.interior = 0
 
     Timer(function()
         if #INPUT_GRAPHS > 0 then

@@ -8,12 +8,14 @@ DEBUG = true
 DEBUG_LOGGER = false
 DEBUG_OBJECTS = false
 DEBUG_EPISODE = true
+PRIORITIZE_CAMERA = 'barroom'
 DEBUG_ACTIONS = true
 FREE_ROAM = true
 TIME_STAMP = false
 ACTORS_CROWDING_FACTOR = 0
 LOAD_FROM_GRAPH = false
-INPUT_GRAPHS = {'g0', 'g1', 'g2', 'g3', 'g4', 'g5', 'g6', 'g7', 'g8', 'g9', 'g10', 'g11', 'g12', 'g13', 'g14', 'g15', 'g16', 'g17', 'g18', 'g19'}
-INPUT_FOLDER = "story_generator/samples/"
+INPUT_GRAPHS = {'same_drink'}
+INPUT_FOLDER = "story_generator/samples_objects/"
 GRAPH = {
 }
+PED_ZOO = {}

@@ -22,7 +22,7 @@
         "id": "object0",
         "Target": {
             "id": "object0",
-            "Name": "Drink"
+            "Name": "Drinks"
         }
     },
     "object1": {
@@ -46,7 +46,7 @@
         "id": "object3",
         "Target": {
             "id": "object3",
-            "Name": "Desk"
+            "Name": "Sofa"
         }
     },
     "object4": {
@@ -54,7 +54,7 @@
         "id": "object4",
         "Target": {
             "id": "object4",
-            "Name": "Chair"
+            "Name": "ArmChair"
         }
     },
     "action0": {
@@ -79,7 +79,7 @@
         "Target": {
             "id": "object0"
         },
-        "Location": "Kitchen"
+        "Location": "barroom"
     },
     "action1_inner1": {
         "Actor": {
@@ -91,7 +91,7 @@
         "Target": {
             "id": "object0"
         },
-        "Location": "Kitchen"
+        "Location": "barroom"
     },
     "action1_inner2": {
         "Actor": {
@@ -103,7 +103,7 @@
         "Target": {
             "id": "object0"
         },
-        "Location": "Kitchen"
+        "Location": "barroom"
     },
     "action2_inner0": {
         "Actor": {
@@ -115,7 +115,7 @@
         "Target": {
             "id": "object0"
         },
-        "Location": "Kitchen"
+        "Location": "barroom"
     },
     "action2_inner1": {
         "Actor": {
@@ -127,19 +127,19 @@
         "Target": {
             "id": "object0"
         },
-        "Location": "Kitchen"
+        "Location": "barroom"
     },
     "action2_inner2": {
         "Actor": {
             "id": "actor0"
         },
         "Action": "PutDown",
-        "Next": "action4",
+        "Next": "action7_inner0",
         "id": "action2_inner2",
         "Target": {
             "id": "object0"
         },
-        "Location": "Kitchen"
+        "Location": "barroom"
     },
     "action3_inner0": {
         "Actor": {
@@ -151,55 +151,31 @@
         "Target": {
             "id": "object3"
         },
-        "Location": "Kitchen"
+        "Location": "livingroom"
     },
     "action3_inner1": {
         "Actor": {
             "id": "actor1"
         },
         "Action": "StandUp",
-        "Next": "action5",
+        "Next": "action6_inner0",
         "id": "action3_inner1",
         "Target": {
             "id": "object3"
         },
-        "Location": "Kitchen"
-    },
-    "action4": {
-        "Actor": {
-            "id": "actor0"
-        },
-        "Action": "Handshake",
-        "Next": "action7_inner0",
-        "id": "action4",
-        "Target": {
-            "id": "actor1"
-        },
-        "Location": "Kitchen"
-    },
-    "action5": {
-        "Actor": {
-            "id": "actor1"
-        },
-        "Action": "Handshake",
-        "Next": "action6_inner0",
-        "id": "action5",
-        "Target": {
-            "id": "actor0"
-        },
-        "Location": "Kitchen"
+        "Location": "livingroom"
     },
     "action6_inner0": {
         "Actor": {
             "id": "actor1"
         },
         "Action": "SitDown",
-        "Next": "action6_inner1",
+        "Next": "action6_inner3",
         "id": "action6_inner0",
         "Target": {
             "id": "object4"
         },
-        "Location": "Kitchen"
+        "Location": "livingroom"
     },
     "action6_inner1": {
         "Actor": {
@@ -218,7 +194,7 @@
             "id": "actor1"
         },
         "Action": "Eat",
-        "Next": "action6_inner3",
+        "Next": "None",
         "id": "action6_inner2",
         "Target": {
             "id": "object1"
@@ -230,12 +206,12 @@
             "id": "actor1"
         },
         "Action": "StandUp",
-        "Next": "None",
+        "Next": "action6_inner1",
         "id": "action6_inner3",
         "Target": {
             "id": "object4"
         },
-        "Location": "Kitchen"
+        "Location": "livingroom"
     },
     "action7_inner0": {
         "Actor": {
@@ -247,7 +223,7 @@
         "Target": {
             "id": "object3"
         },
-        "Location": "Kitchen"
+        "Location": "livingroom"
     },
     "action7_inner1": {
         "Actor": {
@@ -259,7 +235,7 @@
         "Target": {
             "id": "object3"
         },
-        "Location": "Kitchen"
+        "Location": "livingroom"
     },
     "temporal": {
         "timeline": {

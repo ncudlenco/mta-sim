@@ -1,7 +1,7 @@
 addEvent ( "onElementDoneEditing", true )
 addEvent ( "onActionRetrieved", true )
 
-DEFINING_EPISODES = true
+DEFINING_EPISODES = false
 if DEFINING_EPISODES then
     addEventHandler ( "onClientPlayerSpawn", getLocalPlayer(), function()
         print('onClientPlayerSpawn')
@@ -627,7 +627,7 @@ addCommandHandler("episode",
                 if not param2 then
                     outputChatBox("[info] Write the modelId for the world object to be deleted: Ex: episode delete object 2255", 255, 0, 0, false)
                 end
-                outputChatBox("Select the (position of the) object to be deleted.", 255, 0, 0, false)
+                outputChatBox("Click on the (position of the) object to be deleted.", 255, 0, 0, false)
                 showCursor(true, true)
                 function onClick(button, state, absoluteX, absoluteY, worldX, worldY, worldZ, element)
                     if state ~= "up" then

@@ -39,11 +39,19 @@ GraphStory = class(StoryBase, function(o, actor, logData)
     end
     o.Actor:setData('storyId', o.Id)
     o.graph = nil
+    o.temporal = nil
     local file = fileOpen(INPUT_FOLDER..LOAD_FROM_GRAPH)
     if file then
         local jsonStr = fileRead(file, fileGetSize(file))
         o.graph = fromJSON(jsonStr)
         fileClose(file)
+        if o.graph['temporal'] then
+            o.temporal = o.graph['temporal']
+            o.graph['temporal'] = nil
+        end
+        if o.graph['temporal_abs'] then
+            o.graph['temporal_abs'] = nil
+        end
         
         if DEBUG then
             print("GraphStory: read the file graph.json")
@@ -82,9 +90,9 @@ function GraphStory:GetValidEpisodes()
     end
 --a list of all the objects and their locations (temporary objects i.e. cigarette should not be checked )
     local requiredObjects = Select(Where(self.graph, function(event)
-        return event.Action == 'Exists' and event.Target and event.Target.Location
+        return event.Action == 'Exists' and not event.Actor
     end), function(event)
-        return { location = event.Target.Location, name = event.Target.Name }
+        return { location = event.Target.Location or '', name = event.Target.Name, id = event.id }
     end)
     --a list of all the actions and their locations (a POI is placed in a location, in a POI I have allActions)
     local requiredActions = Select(Where(self.graph, function(event)
@@ -107,9 +115,29 @@ function GraphStory:GetValidEpisodes()
                 print '---------------------------------------------finished processing regions----------------------------------------'
             end
             --now I have for all POI and objects the location set
+            local objectMap = {}
+            local reverseObjectMap = {}
+            print('Required objects nr '..#requiredObjects)
             if All(requiredObjects, function(ro) 
-                local r = Any(episode.Objects, function(o) return o.type:lower() == ro.name:lower() and (o.Region.name:lower():find(ro.location:lower()) and true or false) end)  
+                print(ro.name or 'NULL REQUIRED OBJECT NAME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+                local r = FirstOrDefault(episode.Objects, function(o) return 
+                    not objectMap[o.ObjectId] and o.type:lower() == ro.name:lower() and 
+                    (o and o.Region and o.Region.name and o.Region.name:lower():find(ro.location:lower()) and true or false)
+                end)
+                if r then
+                    objectMap[r.ObjectId] = ro.id
+                    if DEBUG then
+                        print('!!!!!!!!!!!!!!!!!!!!!!Mapped '..r.ObjectId..' to '..ro.id)
+                    end
+                    reverseObjectMap[ro.id] = r.ObjectId
+                else
+                    print('!!!!!!!!!!!!!!!!!!!!!!Not mapped '..ro.id)
+                    
+                end
                 r = r or Any(self.SpawnableObjects, function(o) return o:lower() == ro.name:lower() end)
+                if r then
+                    reverseObjectMap[ro.id] = 'spawnable'
+                end
                 if not r and DEBUG then
                     print('Episode '..episode.name..' was discarded because the object '..ro.name..' does not exist in region '..ro.location..' or at all')
                 end
@@ -128,9 +156,12 @@ function GraphStory:GetValidEpisodes()
                             poi.Region and
                             Any(poi.allActions, function(a) 
                                 if DEBUG then
-                                    print('**********'..a.Name..'')
+                                    print('**********'..a.Name)
+                                    if a.TargetItem and a.TargetItem.ObjectId then
+                                        print('**********->'..a.TargetItem.ObjectId)
+                                    end
                                 end
-                                return a.Name:lower() == ra.name:lower() 
+                                return a.Name:lower() == ra.name:lower() and a.TargetItem.ObjectId and objectMap[a.TargetItem.ObjectId]
                             end) 
                             and (poi.Region.name:lower():find(ra.location:lower()) and true or false )
                         end)  
@@ -270,8 +301,6 @@ function GraphStory:Play()
         math.random(); math.random(); math.random()
         self.CurrentEpisode = PickRandom(self.Episodes)
         print(self.CurrentEpisode.name)
-        --replace pickrandom location for players
-        --replace random action choosing for players
         self.CurrentEpisode:Initialize(self.Actor, false, requiredActors, self.graph)
         
         self.Actor:setData('pickedObjects', {})
@@ -311,28 +340,63 @@ end
 
 function GraphStory:ProcessActions(graphActors)
     print("GraphStory:ProcessActions --------------------------------------------------")
-
     local episode = self.CurrentEpisode
+
+    local requiredObjects = Select(Where(self.graph, function(event)
+        return event.Action == 'Exists' and not event.Actor
+    end), function(event)
+        return { location = event.Target.Location or '', name = event.Target.Name, id = event.id }
+    end)
+    local objectMap = {}
+    local reverseObjectMap = {}
+    All(requiredObjects, function(ro) 
+        local r = FirstOrDefault(episode.Objects, function(o) return not objectMap[o.ObjectId] and o.type:lower() == ro.name:lower() and (o.Region.name:lower():find(ro.location:lower()) and true or false) end)
+        if r then
+            objectMap[r.ObjectId] = ro.id
+            if DEBUG then
+                print('ProcessActions!!!!!!!!!!!!!!!!!!!!!!Mapped '..r.ObjectId..' to '..ro.id)
+            end
+            reverseObjectMap[ro.id] = r.ObjectId
+        else
+            print('ProcessActions!!!!!!!!!!!!!!!!!!!!!!Not mapped '..ro.id)
+            
+        end
+        r = r or Any(self.SpawnableObjects, function(o) return o:lower() == ro.name:lower() end)
+        if r then
+            reverseObjectMap[r] = 'spawnable'
+        end
+        if not r and DEBUG then
+            print('Episode '..episode.name..' was discarded because the object '..ro.name..' does not exist in region '..ro.location..' or at all')
+        end
+        return r
+    end)
+
     for _,a in ipairs(graphActors) do
         print(a.id)
         self.actionsQueues[a.id] = {}
         --find the first event for the current actor
-        local firstEvent = FirstOrDefault(CURRENT_STORY.graph, function(event)
-            return event.Actor and event.Actor.id == a.id and event.Action ~= 'Exists' and All(Where(CURRENT_STORY.graph, 
-                function(evt) 
-                    return evt.id ~= event.id and evt.Actor and event.Action ~= 'Exists' and evt.Actor.id == event.Actor.id
-                end), function(evt)
-                return evt.Next ~= event.id
-            end)
+        local firstEvent = FirstOrDefault(self.graph, function(event)
+            return event.id == self.temporal['starting_actions'][a.id]
+            -- event.Actor and event.Actor.id == a.id and event.Action ~= 'Exists' and All(Where(self.graph, 
+            --     function(evt) 
+            --         return evt.id ~= event.id and evt.Actor and event.Action ~= 'Exists' and evt.Actor.id == event.Actor.id
+            --     end), function(evt)
+            --     return evt.Next ~= event.id
+            -- end)
         end)
         if not firstEvent then
             error('Could not find the first event for actor '..a.id)
         elseif DEBUG then
             print('First event: '..firstEvent.id..' in location '..firstEvent.Location..' with actor '..firstEvent.Actor.id)
         end
+        --TODO: define custom logic for actions which doesn't have as target an object
         local firstLocation = FirstOrDefault(episode.POI, function(poi) 
             return (poi.Region and poi.Region.name:lower():find(firstEvent.Location:lower()) and true or false) --the location name is the one specified in the first event
-                and Any(poi.allActions, function(action) return action.Name:lower() == firstEvent.Action:lower() end) --the location contains an action defined in the first event
+                and Any(poi.allActions, function(action) 
+                    return action.Name:lower() == firstEvent.Action:lower() 
+                    and action.TargetItem.ObjectId and action.TargetItem.type == self.graph[firstEvent.Target.id].Target.Name --action has a target an object of type x
+                    and action.TargetItem.ObjectId == reverseObjectMap[firstEvent.Target.id]
+                end) --the location contains an action defined in the first event
         end)
         if not firstLocation then
             error('Could not find the first location '..firstEvent.Location)
@@ -343,6 +407,13 @@ function GraphStory:ProcessActions(graphActors)
         if a.id == self.Actor:getData('id') then
             episode.StartingLocation = firstLocation
         else
+            firstLocation.isBusy = true
+            local ped = FirstOrDefault(self.CurrentEpisode.peds, function(p) return p:getData('id') == a.id end)
+            ped:setData('startingPoiIdx', LastIndexOf(episode.POI, firstLocation))
+            ped.interior = firstLocation.Interior
+            ped.position = firstLocation.position
+            ped.rotation = Vector3(0,0,firstLocation.Angle)
+        --else
             --this is a ped => it's starting location id is set in StoryEpisodeBase.Initialize()
         end
 
@@ -425,8 +496,15 @@ function GraphStory:ProcessActions(graphActors)
             if nextEvent then
                 nextLocation = FirstOrDefault(episode.POI, function(poi) 
                     return poi.Region and (poi.Region.name:lower():find(nextEvent.Location:lower()) and true or false )
-                    and Any(poi.allActions, function(action) return action.Name:lower() == nextEvent.Action:lower() end) 
+                    and Any(poi.allActions, function(action) 
+                        return action.Name:lower() == nextEvent.Action:lower() 
+                        and action.TargetItem.ObjectId and action.TargetItem.type == self.graph[nextEvent.Target.id].Target.Name --action has a target an object of type x
+                        and action.TargetItem.ObjectId == reverseObjectMap[nextEvent.Target.id]
+                    end) 
                 end)
+                if not nextLocation then
+                    error('Could not find the next location '..nextEvent.id..': '..nextEvent.Location)
+                end
             end
             if nextLocation and nextLocation ~= location then
                 local moveAction = FirstOrDefault(location.allActions, function(action) return action.Name == 'Move' and action.TargetItem == nextLocation end)

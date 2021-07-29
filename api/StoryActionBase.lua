@@ -1,3 +1,4 @@
+globalActionIdCounter = 0
 StoryActionBase = class(IStoryItem, function(o, params)
     IStoryItem.init(o, params.description or params.Description or '', eStoryItemType.Action)
     o.Performer = params.performer or params.Performer or nil
@@ -10,8 +11,8 @@ StoryActionBase = class(IStoryItem, function(o, params)
     math.random(); math.random(); math.random()
     math.randomseed(os.time())
     math.random(); math.random(); math.random()
-
-    o.ActionId = Guid().Id
+    globalActionIdCounter = globalActionIdCounter + 1
+    o.ActionId = globalActionIdCounter..''
     o.TopologicalOrder = params.topologicalOrder or params.TopologicalOrder or -1
     o.Penalties = params.penalties or params.Penalties or {}
     o.Rewards = params.rewards or params.Rewards or {}

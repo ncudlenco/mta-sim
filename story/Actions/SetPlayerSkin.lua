@@ -3327,11 +3327,11 @@ SetPlayerSkin.PlayerSkins = {
     SetPlayerSkin(303, "A middle-aged white man with brown hair in a purple suit", 1),
     SetPlayerSkin(304, "A young black woman with black hair in a black shirt, black pants and with a cream hat", 1),
     -- SetPlayerSkin(305, "Las Venturas Police Officer(Without uniform)", 1),
-    -- SetPlayerSkin(306, "Los Santos Police Officer", 1),
-    -- SetPlayerSkin(307, "San Fierro Police Officer", 1),
-    -- SetPlayerSkin(308, "San Fierro Paramedic(Emergency Medical Technician)", 1),
+    SetPlayerSkin(306, "A young white man in a khaki shirt, black three quarter pants, red had and with glasses", 1),
+    SetPlayerSkin(307, "A middle-aged white man with black hair and a black moustache in a white and blue shirt and gray pants", 1),
+    SetPlayerSkin(308, "A young white man with black hair in a navy blue t-shirt and cream pants", 1),
     -- SetPlayerSkin(309, "Las Venturas Police Officer", 1),
-    -- SetPlayerSkin(310, "Country Sheriff(Without hat)", 1),
+    SetPlayerSkin(310, "A young black man with black hair in a brown shirt and jeans", 1),
     -- SetPlayerSkin(311, "Desert Sheriff(Without hat)", 1)
 }
 

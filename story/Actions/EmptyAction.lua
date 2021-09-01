@@ -7,6 +7,10 @@ function EmptyAction:Apply()
         outputConsole("EmptyAction:Apply")
     end
     setPedAnimation(self.Performer)
+    if prevPosition then
+        self.Performer.position = prevPosition
+        prevPosition = nil
+    end
 end
 
 function EmptyAction:GetDynamicString()

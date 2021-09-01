@@ -19,6 +19,9 @@ if DEFINING_EPISODES then
         if not CLIENT_STORY.History then
             CLIENT_STORY.History = {}
         end
+        if not CLIENT_STORY.History[localPlayer:getData("id")] then
+            CLIENT_STORY.History[localPlayer:getData("id")] = {}
+        end
         return CLIENT_STORY
     end
 end
@@ -576,10 +579,12 @@ addCommandHandler("episode",
                     r.POI = nil
                     r.isExplored = nil
                 end
-                local supertemplateInstances = {}
-                for _,st in ipairs(episode.supertemplates) do
-                    table.insert(supertemplateInstances, st.instantiatedTemplate)
-                    st.instantiatedTemplate = nil
+                if episode.supertemplates then
+                    local supertemplateInstances = {}
+                    for _,st in ipairs(episode.supertemplates) do
+                        table.insert(supertemplateInstances, st.instantiatedTemplate)
+                        st.instantiatedTemplate = nil
+                    end
                 end
                 local fileHandle = fileCreate("files/episodes/"..param1..".json")
                 if fileHandle then
@@ -591,8 +596,10 @@ addCommandHandler("episode",
                 for i,obj in ipairs(episode.Objects) do
                     obj.instance = instances[i]
                 end
-                for i,st in ipairs(episode.supertemplates) do
-                    st.instantiatedTemplate = supertemplateInstances[i]
+                if episode.supertemplates then
+                    for i,st in ipairs(episode.supertemplates) do
+                        st.instantiatedTemplate = supertemplateInstances[i]
+                    end
                 end
                 episode.POI = backupPOI
             else
@@ -626,6 +633,19 @@ addCommandHandler("episode",
             if param1 == "object" then
                 if not param2 then
                     outputChatBox("[info] Write the modelId for the world object to be deleted: Ex: episode delete object 2255", 255, 0, 0, false)
+                    outputChatBox("[info] or the idx of the object to remove. Ex: episode delete object idx 5", 255, 0, 0, false)
+                end
+                if param2 == 'idx' then
+                    local objIdx = tonumber(arg[1])
+                    if not objIdx or #episode.Objects < objIdx then
+                        outputChatBox("Invalid object idx", 255, 0, 0, false)
+                        return
+                    end
+                    local v = episode.Objects[objIdx]
+                    v:Destroy()
+                    table.remove(episode.Objects, objIdx)
+                    outputChatBox("Object found in current episode and deleted", 255, 0, 0, false)
+                    return
                 end
                 outputChatBox("Click on the (position of the) object to be deleted.", 255, 0, 0, false)
                 showCursor(true, true)
@@ -650,6 +670,7 @@ addCommandHandler("episode",
                         end
                         outputChatBox("Object not found in current episode or try again with a worldmodelid if you intend to delete a world model", 255, 0, 0, false)
                         removeEventHandler("onClientClick", getRootElement(), onClick)
+                        showCursor(false)
                         return
                     end
 
@@ -774,6 +795,24 @@ addCommandHandler("episode",
             end
         elseif command == "modify" then
             if param1 == "object" then
+                outputChatBox("episode modify object [idx] [idx_value].", 255, 0, 0, false)
+                local idx = tonumber(arg[1])
+                if param2 == 'idx' and idx and idx <= #episode.Objects then
+                    editedObject = episode.Objects[idx].instance
+                    outputChatBox("Object found in current episode. Modify it and press enter.", 255, 0, 0, false)
+                    outputChatBox("Use w/a/s/d/z/x/q/e/f/g/h/j to place and rotate the object", 255, 0, 0, false)
+                    outputChatBox("Press enter to finish", 255, 0, 0, false)
+                    local function updateObjectData(obj)
+                        showCursor(false)
+                        removeEventHandler("onElementDoneEditing", getRootElement(), addObjectToCreate)
+                        episode.Objects[idx]:UpdateData(true)
+                        outputChatBox("Done. Object modified.", 255, 0, 0, false)
+                        return true
+                    end
+                    addEventHandler("onClientKey", root, playerPressedKey)
+                    addEventHandler ( "onElementDoneEditing", getRootElement(), updateObjectData)
+                    return
+                end
                 outputChatBox("Click on the object to be modified.", 255, 0, 0, false)
                 showCursor(true, true)
                 function onClick(button, state, absoluteX, absoluteY, worldX, worldY, worldZ, element)
@@ -935,6 +974,9 @@ addCommandHandler("episode",
                             type = type,
                             noCollisions = obj.noCollisions
                         }
+                        object = loadstring(object.dynamicString)()
+                        object.ObjectId = #episode.Objects..''
+
                         table.insert(
                             episode.Objects,
                             object
@@ -1229,6 +1271,7 @@ addCommandHandler("episode",
                 local function actionRetrieved(action)
                     removeEventHandler ( "onActionRetrieved", getRootElement(), actionRetrieved)
                     outputChatBox("action retrieved")
+                    prevPosition = localPlayer.position
                     lastAction:Apply()
                 end
                 addEventHandler ( "onActionRetrieved", getRootElement(), actionRetrieved)

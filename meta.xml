@@ -1,7 +1,7 @@
 <meta>
   <oop>true</oop>
   <!-- Debug tool -->
-  <script src="MTATD.bundle.lua" type="shared"/>
+  <!-- <script src="MTATD.bundle.lua" type="shared"/> -->
   <!-- Custom files -->
   <file src="files/data/LaptopSAMP1.txd" type="client" />
   <file src="files/data/LaptopSAMP1.dff" type="client" />

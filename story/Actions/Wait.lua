@@ -4,6 +4,7 @@ Wait = class(StoryActionBase, function(o, params)
 
     StoryActionBase.init(o,params)
     o.Time = params.time
+    o.doNothing = params.doNothing
 end)
 
 function Wait:Apply()
@@ -11,13 +12,21 @@ function Wait:Apply()
     table.insert(story.History[self.Performer:getData('id')], self)
     
     story.Logger:Log(self.Description, self)
-    self.Performer:setAnimation("cop_ambient", "coplook_loop", self.Time, true, false, false, true)
 
+    self.Performer:setAnimation("cop_ambient", "coplook_loop", 5000, true, false, false, true) --TODO: do something smarter
     if DEBUG then
         outputConsole("Wait:Apply")
     end
 
-    OnGlobalActionFinished(self.Time, self.Performer:getData('id'), self.Performer:getData('storyId'))
+    local function wait()
+        if (math.abs((self.Performer.position - self.TargetItem.position).length) > 1) then
+            self.Performer:setAnimation("cop_ambient", "coplook_loop", 5000, true, false, false, true) --TODO: do something smarter
+            Timer(wait, 5000, 1)
+        elseif not self.doNothing then
+            OnGlobalActionFinished(1000, self.Performer:getData('id'), self.Performer:getData('storyId'))
+        end
+    end
+    wait()
 end
 
 function Wait:GetDynamicString()

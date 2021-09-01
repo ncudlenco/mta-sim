@@ -36,7 +36,7 @@ function PickUp:Apply()
         end
     end
 
-    outputChatBox("HEREEEEE")
+    outputChatBox("PickUp:Apply - HEREEEEE")
     
     if sameObject then
         story.Logger:Log(self.Description .. "the same ".. self.TargetItem.Description .. " from " .. self.Where, self)

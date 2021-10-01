@@ -16,7 +16,7 @@
 				"isRandomModelId": false,
 				"pluralTemplate": "",
 				"size": 2.5,
-				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2281, isRandomModelId=false, noRandomId=true, interior=9, position=Vector3(2324.2604980469,-1016.8657226563,1050.9045410156), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2281, isRandomModelId=false, noRandomId=true, interior=9, position=Vector3(2324.2604980469,-1016.8657226562,1050.9045410156), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
 				"type": "SampStoryObjectBase",
 				"RotOffset": {
 					"y": 0,
@@ -24,7 +24,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "d218f568-3445-4a5b-b14e-2a0a20ecd7dd",
+				"ObjectId": "26c1cad4-1e6d-42c5-b129-4ad0a52bfc20",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -35,6 +35,7 @@
 					"x": 2324.260498046875,
 					"z": 1050.904541015625
 				},
+				"Region": [],
 				"modelid": 2281,
 				"StoryItemType": 1
 			},
@@ -58,7 +59,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "6cedc6b3-2170-41a9-b45a-c1fe69affb47",
+				"ObjectId": "26c1cad4-1e6d-42c5-b129-4ad0a52bfc20",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -69,6 +70,7 @@
 					"x": 2326.926513671875,
 					"z": 1049.2177734375
 				},
+				"Region": [],
 				"modelid": 2104,
 				"StoryItemType": 1
 			},
@@ -92,7 +94,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "027333ee-da52-4deb-b335-df222d746728",
+				"ObjectId": "26c1cad4-1e6d-42c5-b129-4ad0a52bfc20",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -103,6 +105,7 @@
 					"x": 2325.25732421875,
 					"z": 1049.2177734375
 				},
+				"Region": [],
 				"modelid": 2229,
 				"StoryItemType": 1
 			},
@@ -126,7 +129,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "8e9a4c60-4386-4e6c-aa25-dfdc24d73e27",
+				"ObjectId": "26c1cad4-1e6d-42c5-b129-4ad0a52bfc20",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -137,6 +140,7 @@
 					"x": 2328.56640625,
 					"z": 1049.2177734375
 				},
+				"Region": [],
 				"modelid": 2229,
 				"StoryItemType": 1
 			},
@@ -160,7 +164,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "9e1c1e8b-052a-42bf-892c-5a6039b1abb7",
+				"ObjectId": "26c1cad4-1e6d-42c5-b129-4ad0a52bfc20",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -169,8 +173,9 @@
 				"position": {
 					"y": -1017.065673828125,
 					"x": 2327.446044921875,
-					"z": 1050.649047851563
+					"z": 1050.649047851562
 				},
+				"Region": [],
 				"modelid": 2280,
 				"StoryItemType": 1
 			},
@@ -194,7 +199,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "a9941c5d-4db5-4170-8c9d-16f487a0534c",
+				"ObjectId": "26c1cad4-1e6d-42c5-b129-4ad0a52bfc20",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -203,8 +208,9 @@
 				"position": {
 					"y": -1021.809753417969,
 					"x": 2327.561279296875,
-					"z": 1049.210083007813
+					"z": 1049.210083007812
 				},
+				"Region": [],
 				"modelid": 1760,
 				"StoryItemType": 1
 			},
@@ -228,7 +234,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "3965f5f7-7e1d-4746-80a2-12bf2f54b1a8",
+				"ObjectId": "26c1cad4-1e6d-42c5-b129-4ad0a52bfc20",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -237,8 +243,9 @@
 				"position": {
 					"y": -1024.559448242188,
 					"x": 2315.419921875,
-					"z": 1050.853149414063
+					"z": 1050.853149414062
 				},
+				"Region": [],
 				"modelid": 2259,
 				"StoryItemType": 1
 			},
@@ -254,7 +261,7 @@
 				"isRandomModelId": false,
 				"pluralTemplate": "",
 				"size": 2.5,
-				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2261, isRandomModelId=false, noRandomId=true, interior=9, position=Vector3(2321.8530273438,-1015.4790039063,1051.1258544922), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2261, isRandomModelId=false, noRandomId=true, interior=9, position=Vector3(2321.8530273438,-1015.4790039062,1051.1258544922), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
 				"type": "SampStoryObjectBase",
 				"RotOffset": {
 					"y": 0,
@@ -262,7 +269,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "5ac5386c-9a4e-44ef-85ec-a7c0f23508de",
+				"ObjectId": "26c1cad4-1e6d-42c5-b129-4ad0a52bfc20",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -273,6 +280,7 @@
 					"x": 2321.85302734375,
 					"z": 1051.125854492188
 				},
+				"Region": [],
 				"modelid": 2261,
 				"StoryItemType": 1
 			},
@@ -296,7 +304,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "355b8159-caee-43b3-bf0a-ff6b29f7d0ef",
+				"ObjectId": "26c1cad4-1e6d-42c5-b129-4ad0a52bfc20",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -305,8 +313,9 @@
 				"position": {
 					"y": -1007.1171875,
 					"x": 2328.958251953125,
-					"z": 1051.018676757813
+					"z": 1051.018676757812
 				},
+				"Region": [],
 				"modelid": 2285,
 				"StoryItemType": 1
 			},
@@ -330,7 +339,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "f6268c19-79f5-409b-aa9d-7cb5c67b903a",
+				"ObjectId": "26c1cad4-1e6d-42c5-b129-4ad0a52bfc20",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -339,8 +348,9 @@
 				"position": {
 					"y": -1006.542236328125,
 					"x": 2320.130126953125,
-					"z": 1055.511352539063
+					"z": 1055.511352539062
 				},
+				"Region": [],
 				"modelid": 2287,
 				"StoryItemType": 1
 			},
@@ -364,7 +374,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "d40a2272-7cf8-44a2-8979-e090f71628a1",
+				"ObjectId": "26c1cad4-1e6d-42c5-b129-4ad0a52bfc20",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -373,8 +383,9 @@
 				"position": {
 					"y": -1025.73046875,
 					"x": 2324.80859375,
-					"z": 1049.009399414063
+					"z": 1049.009399414062
 				},
+				"Region": [],
 				"modelid": 1755,
 				"StoryItemType": 1
 			},
@@ -390,7 +401,7 @@
 				"isRandomModelId": false,
 				"pluralTemplate": "",
 				"size": 4.5,
-				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2298, isRandomModelId=false, noRandomId=true, interior=9, position=Vector3(2326.4565429688,-1008.4879760742,1053.8461914063), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2298, isRandomModelId=false, noRandomId=true, interior=9, position=Vector3(2326.4565429688,-1008.4879760742,1053.8461914062), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
 				"type": "SampStoryObjectBase",
 				"RotOffset": {
 					"y": 0,
@@ -398,7 +409,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "58786749-60cc-4d98-b413-c066dc4188e9",
+				"ObjectId": "26c1cad4-1e6d-42c5-b129-4ad0a52bfc20",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -409,6 +420,7 @@
 					"x": 2326.45654296875,
 					"z": 1053.84619140625
 				},
+				"Region": [],
 				"modelid": 2298,
 				"StoryItemType": 1
 			},
@@ -432,7 +444,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "dc2826a8-fd2b-42e7-9032-047f4c6a5e9a",
+				"ObjectId": "26c1cad4-1e6d-42c5-b129-4ad0a52bfc20",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -443,6 +455,7 @@
 					"x": 2326.2373046875,
 					"z": 1053.71875
 				},
+				"Region": [],
 				"modelid": 2106,
 				"StoryItemType": 1
 			},
@@ -466,7 +479,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "34ad9a14-1ebc-4543-a309-c31eace7e3ea",
+				"ObjectId": "26c1cad4-1e6d-42c5-b129-4ad0a52bfc20",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -477,6 +490,7 @@
 					"x": 2322.86083984375,
 					"z": 1053.71875
 				},
+				"Region": [],
 				"modelid": 2523,
 				"StoryItemType": 1
 			},
@@ -500,7 +514,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "0ceb549a-7172-4a8a-bd98-4d79da63b34e",
+				"ObjectId": "26c1cad4-1e6d-42c5-b129-4ad0a52bfc20",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -511,6 +525,7 @@
 					"x": 2318.571044921875,
 					"z": 1049.133056640625
 				},
+				"Region": [],
 				"modelid": 2078,
 				"StoryItemType": 1
 			},
@@ -534,7 +549,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "8d5dd95e-9a54-456a-a8d4-1f2c30a61db7",
+				"ObjectId": "26c1cad4-1e6d-42c5-b129-4ad0a52bfc20",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -543,8 +558,9 @@
 				"position": {
 					"y": -1008.149719238281,
 					"x": 2318.8974609375,
-					"z": 1049.225219726563
+					"z": 1049.225219726562
 				},
+				"Region": [],
 				"modelid": 1735,
 				"StoryItemType": 1
 			},
@@ -568,7 +584,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "aa3bfd5c-b1b8-4b7a-8346-fda539eccd88",
+				"ObjectId": "26c1cad4-1e6d-42c5-b129-4ad0a52bfc20",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -577,8 +593,9 @@
 				"position": {
 					"y": -1019.743713378906,
 					"x": 2321.697509765625,
-					"z": 1048.900024414063
+					"z": 1048.900024414062
 				},
+				"Region": [],
 				"modelid": 2242,
 				"StoryItemType": 1
 			},
@@ -602,7 +619,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "ddda8b91-02ce-40dd-bb0b-b18205967629",
+				"ObjectId": "26c1cad4-1e6d-42c5-b129-4ad0a52bfc20",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -613,6 +630,7 @@
 					"x": 2329.354736328125,
 					"z": 1049.0009765625
 				},
+				"Region": [],
 				"modelid": 2243,
 				"StoryItemType": 1
 			},
@@ -636,7 +654,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "7e79312f-8b8d-4f13-a682-28096befe9d9",
+				"ObjectId": "26c1cad4-1e6d-42c5-b129-4ad0a52bfc20",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -647,6 +665,7 @@
 					"x": 2322.345458984375,
 					"z": 1048.87451171875
 				},
+				"Region": [],
 				"modelid": 2244,
 				"StoryItemType": 1
 			},
@@ -670,17 +689,18 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "c649d290-ffa6-40fa-87af-c4cc25b0f776",
+				"ObjectId": "26c1cad4-1e6d-42c5-b129-4ad0a52bfc20",
 				"rotation": {
 					"y": 0,
 					"x": 0,
 					"z": 0
 				},
 				"position": {
-					"y": -1018.307250976563,
+					"y": -1018.307250976562,
 					"x": 2323.140869140625,
 					"z": 1049.2109375
 				},
+				"Region": [],
 				"modelid": 2224,
 				"StoryItemType": 1
 			},
@@ -704,7 +724,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "4021715f-e8d2-4785-9b5c-a3513ff7fb9d",
+				"ObjectId": "26c1cad4-1e6d-42c5-b129-4ad0a52bfc20",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -713,8 +733,9 @@
 				"position": {
 					"y": -1023.279052734375,
 					"x": 2329.505126953125,
-					"z": 1049.243774414063
+					"z": 1049.243774414062
 				},
+				"Region": [],
 				"modelid": 1739,
 				"StoryItemType": 1
 			},
@@ -738,7 +759,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "5015984d-fba6-4a83-817c-d8f13d7306b5",
+				"ObjectId": "26c1cad4-1e6d-42c5-b129-4ad0a52bfc20",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -747,8 +768,9 @@
 				"position": {
 					"y": -1023.284912109375,
 					"x": 2329.443359375,
-					"z": 1049.210571289063
+					"z": 1049.210571289062
 				},
+				"Region": [],
 				"modelid": 2868,
 				"StoryItemType": 1
 			},
@@ -772,7 +794,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "b73f7452-5055-4ce8-97ea-2dbae82a4a27",
+				"ObjectId": "26c1cad4-1e6d-42c5-b129-4ad0a52bfc20",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -781,8 +803,9 @@
 				"position": {
 					"y": -1023.086669921875,
 					"x": 2329.513427734375,
-					"z": 1049.255004882813
+					"z": 1049.255004882812
 				},
+				"Region": [],
 				"modelid": 2117,
 				"StoryItemType": 1
 			},
@@ -806,7 +829,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "3a917109-9c80-4a0f-ab2e-3fdc2aa45147",
+				"ObjectId": "26c1cad4-1e6d-42c5-b129-4ad0a52bfc20",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -817,6 +840,7 @@
 					"x": 2329.945068359375,
 					"z": 1049.2109375
 				},
+				"Region": [],
 				"modelid": 2829,
 				"StoryItemType": 1
 			},
@@ -840,7 +864,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "a6924a80-2597-4fb3-81c5-1db864ab3dde",
+				"ObjectId": "26c1cad4-1e6d-42c5-b129-4ad0a52bfc20",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -851,6 +875,7 @@
 					"x": 2325.998291015625,
 					"z": 1048.80810546875
 				},
+				"Region": [],
 				"modelid": 1822,
 				"StoryItemType": 1
 			},
@@ -874,7 +899,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "c38d7471-9188-4bca-8f67-80acbb3d394a",
+				"ObjectId": "26c1cad4-1e6d-42c5-b129-4ad0a52bfc20",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -885,6 +910,7 @@
 					"x": 2326.53662109375,
 					"z": 1049.2109375
 				},
+				"Region": [],
 				"modelid": 2291,
 				"StoryItemType": 1
 			},
@@ -908,7 +934,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "5d2c291e-f69d-4ced-aa62-1a3adf04b113",
+				"ObjectId": "26c1cad4-1e6d-42c5-b129-4ad0a52bfc20",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -919,6 +945,7 @@
 					"x": 2315.041748046875,
 					"z": 1049.02880859375
 				},
+				"Region": [],
 				"modelid": 2115,
 				"StoryItemType": 1
 			},
@@ -942,7 +969,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "b4a9d958-147f-4707-8a69-2c0d55fed3ae",
+				"ObjectId": "26c1cad4-1e6d-42c5-b129-4ad0a52bfc20",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -953,6 +980,7 @@
 					"x": 2314.8896484375,
 					"z": 1049.2109375
 				},
+				"Region": [],
 				"modelid": 2079,
 				"StoryItemType": 1
 			},
@@ -976,7 +1004,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "1269fec5-f0e1-4c23-a93f-03e7fff048d9",
+				"ObjectId": "26c1cad4-1e6d-42c5-b129-4ad0a52bfc20",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -987,6 +1015,7 @@
 					"x": 2314.959228515625,
 					"z": 1049.133544921875
 				},
+				"Region": [],
 				"modelid": 2832,
 				"StoryItemType": 1
 			},
@@ -1010,7 +1039,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "2e342bda-07ee-4ba2-b136-e579066484fa",
+				"ObjectId": "26c1cad4-1e6d-42c5-b129-4ad0a52bfc20",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -1019,8 +1048,9 @@
 				"position": {
 					"y": -1013.719177246094,
 					"x": 2312.3984375,
-					"z": 1049.756469726563
+					"z": 1049.756469726562
 				},
+				"Region": [],
 				"modelid": 2830,
 				"StoryItemType": 1
 			},
@@ -1044,7 +1074,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "0a54538d-88ac-4026-9be2-8aa255a2fc62",
+				"ObjectId": "26c1cad4-1e6d-42c5-b129-4ad0a52bfc20",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -1055,6 +1085,7 @@
 					"x": 2312.521484375,
 					"z": 1049.8564453125
 				},
+				"Region": [],
 				"modelid": 2831,
 				"StoryItemType": 1
 			},
@@ -1078,7 +1109,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "28197fe2-c3de-4ee9-bf18-fd72a4526cf6",
+				"ObjectId": "26c1cad4-1e6d-42c5-b129-4ad0a52bfc20",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -1089,6 +1120,7 @@
 					"x": 2322.58349609375,
 					"z": 1053.71875
 				},
+				"Region": [],
 				"modelid": 2333,
 				"StoryItemType": 1
 			},
@@ -1112,7 +1144,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "290ec47c-80da-4475-99f8-31d96706f052",
+				"ObjectId": "26c1cad4-1e6d-42c5-b129-4ad0a52bfc20",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -1123,6 +1155,7 @@
 					"x": 2323.66943359375,
 					"z": 1054.070556640625
 				},
+				"Region": [],
 				"modelid": 2331,
 				"StoryItemType": 1
 			},
@@ -1146,7 +1179,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "317e48ef-6e8f-497b-af6b-226b355b5078",
+				"ObjectId": "26c1cad4-1e6d-42c5-b129-4ad0a52bfc20",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -1157,6 +1190,7 @@
 					"x": 2322.445068359375,
 					"z": 1053.71875
 				},
+				"Region": [],
 				"modelid": 2194,
 				"StoryItemType": 1
 			},
@@ -1180,7 +1214,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "425fe20d-ad79-4aeb-b89e-1728f511140f",
+				"ObjectId": "26c1cad4-1e6d-42c5-b129-4ad0a52bfc20",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -1189,8 +1223,9 @@
 				"position": {
 					"y": -1015.004089355469,
 					"x": 2323.650634765625,
-					"z": 1053.711059570313
+					"z": 1053.711059570312
 				},
+				"Region": [],
 				"modelid": 1714,
 				"StoryItemType": 1
 			},
@@ -1214,7 +1249,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "05d7d163-755a-433b-8514-ba3fb0dfc5d8",
+				"ObjectId": "26c1cad4-1e6d-42c5-b129-4ad0a52bfc20",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -1223,8 +1258,9 @@
 				"position": {
 					"y": -1015.480529785156,
 					"x": 2323.0029296875,
-					"z": 1053.711059570313
+					"z": 1053.711059570312
 				},
+				"Region": [],
 				"modelid": 2165,
 				"StoryItemType": 1
 			},
@@ -1248,7 +1284,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "3af21427-d418-40e7-b16b-996bef6bb830",
+				"ObjectId": "26c1cad4-1e6d-42c5-b129-4ad0a52bfc20",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -1259,6 +1295,7 @@
 					"x": 2326.229736328125,
 					"z": 1053.675659179688
 				},
+				"Region": [],
 				"modelid": 2088,
 				"StoryItemType": 1
 			},
@@ -1282,7 +1319,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "ad502110-c0ba-416b-af35-856bb3c796af",
+				"ObjectId": "26c1cad4-1e6d-42c5-b129-4ad0a52bfc20",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -1293,6 +1330,7 @@
 					"x": 2321.260986328125,
 					"z": 1053.533569335938
 				},
+				"Region": [],
 				"modelid": 2528,
 				"StoryItemType": 1
 			}
@@ -1318,7 +1356,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "a0dfcf5d-142b-469a-908f-98dd702ae160",
+				"ObjectId": "1",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -1329,6 +1367,7 @@
 					"x": 2325.889404296875,
 					"z": 1049.31787109375
 				},
+				"Region": [],
 				"modelid": 2099,
 				"StoryItemType": 1
 			},
@@ -1344,7 +1383,7 @@
 				"isRandomModelId": true,
 				"pluralTemplate": "{count} sofas",
 				"size": 2.5,
-				"dynamicString": "return Sofa{description=\"sofa\", noCollisions=true, modelid=1768, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2328.2456054688,-1020.8692626953,1049.1943359375), rotation=Vector3(0,0,250.00003051758), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"dynamicString": "return Sofa{description=\"sofa\", noCollisions=true, modelid=2290, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2328.2456054688,-1020.8692626953,1049.1943359375), rotation=Vector3(0,0,250.00003051758), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
 				"type": "Sofa",
 				"RotOffset": {
 					"y": 0,
@@ -1352,18 +1391,19 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "a6980f19-e2b0-4472-aaf9-15504f08a77f",
+				"ObjectId": "2",
 				"rotation": {
 					"y": 0,
 					"x": 0,
 					"z": 250.0000305175781
 				},
 				"position": {
-					"y": -1020.869262695313,
+					"y": -1020.869262695312,
 					"x": 2328.24560546875,
 					"z": 1049.1943359375
 				},
-				"modelid": 1768,
+				"Region": [],
+				"modelid": 2290,
 				"StoryItemType": 1
 			},
 			{
@@ -1378,7 +1418,7 @@
 				"isRandomModelId": true,
 				"pluralTemplate": "{count} paintings",
 				"size": 2.5,
-				"dynamicString": "return Painting{description=\"painting\", noCollisions=false, modelid=2288, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2324.654296875,-1017.8056640625,1051.5107421875), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"dynamicString": "return Painting{description=\"painting\", noCollisions=false, modelid=2280, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2324.654296875,-1017.8056640625,1051.5107421875), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
 				"type": "Painting",
 				"RotOffset": {
 					"y": 0,
@@ -1386,7 +1426,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "af953bbe-eca0-45e8-b7f9-a2a4bb196496",
+				"ObjectId": "3",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -1397,7 +1437,8 @@
 					"x": 2324.654296875,
 					"z": 1051.5107421875
 				},
-				"modelid": 2288,
+				"Region": [],
+				"modelid": 2280,
 				"StoryItemType": 1
 			},
 			{
@@ -1412,7 +1453,7 @@
 				"isRandomModelId": true,
 				"pluralTemplate": "{count} paintings",
 				"size": 2.5,
-				"dynamicString": "return Painting{description=\"painting\", noCollisions=false, modelid=2287, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2327.6010742188,-1017.7856445313,1051.5544433594), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"dynamicString": "return Painting{description=\"painting\", noCollisions=false, modelid=2280, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2327.6010742188,-1017.7856445312,1051.5544433594), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
 				"type": "Painting",
 				"RotOffset": {
 					"y": 0,
@@ -1420,7 +1461,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "db382fd7-5279-4b15-b8da-016679e53fb8",
+				"ObjectId": "4",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -1431,7 +1472,8 @@
 					"x": 2327.60107421875,
 					"z": 1051.554443359375
 				},
-				"modelid": 2287,
+				"Region": [],
+				"modelid": 2280,
 				"StoryItemType": 1
 			},
 			{
@@ -1446,7 +1488,7 @@
 				"isRandomModelId": true,
 				"pluralTemplate": "{count} armchairs",
 				"size": 2.5,
-				"dynamicString": "return ArmChair{description=\"armchair\", noCollisions=true, modelid=1759, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2325.1591796875,-1024.0886230469,1049.2009277344), rotation=Vector3(0,0,155), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"dynamicString": "return ArmChair{description=\"armchair\", noCollisions=true, modelid=1767, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2325.1591796875,-1024.0886230469,1049.2009277344), rotation=Vector3(0,0,155), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
 				"type": "ArmChair",
 				"RotOffset": {
 					"y": 0,
@@ -1454,7 +1496,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "8428a74d-c653-42cf-8a10-25b033c5ff67",
+				"ObjectId": "5",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -1465,7 +1507,8 @@
 					"x": 2325.1591796875,
 					"z": 1049.200927734375
 				},
-				"modelid": 1759,
+				"Region": [],
+				"modelid": 1767,
 				"StoryItemType": 1
 			},
 			{
@@ -1480,7 +1523,7 @@
 				"isRandomModelId": true,
 				"pluralTemplate": "{count} paintings",
 				"size": 2.5,
-				"dynamicString": "return Painting{description=\"painting\", noCollisions=false, modelid=2287, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2318.5476074219,-1015.0101318359,1051.3236083984), rotation=Vector3(0,0,90), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"dynamicString": "return Painting{description=\"painting\", noCollisions=false, modelid=2280, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2318.5476074219,-1015.0101318359,1051.3236083984), rotation=Vector3(0,0,90), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
 				"type": "Painting",
 				"RotOffset": {
 					"y": 0,
@@ -1488,7 +1531,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "8c53a142-ad9d-4b5c-9f26-b127924f1d25",
+				"ObjectId": "6",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -1499,7 +1542,8 @@
 					"x": 2318.547607421875,
 					"z": 1051.323608398438
 				},
-				"modelid": 2287,
+				"Region": [],
+				"modelid": 2280,
 				"StoryItemType": 1
 			},
 			{
@@ -1514,7 +1558,7 @@
 				"isRandomModelId": true,
 				"pluralTemplate": "{count} paintings",
 				"size": 2.5,
-				"dynamicString": "return Painting{description=\"painting\", noCollisions=false, modelid=2261, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2321.2731933594,-1015.9822387695,1051.42578125), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"dynamicString": "return Painting{description=\"painting\", noCollisions=false, modelid=2280, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2321.2731933594,-1015.9822387695,1051.42578125), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
 				"type": "Painting",
 				"RotOffset": {
 					"y": 0,
@@ -1522,7 +1566,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "d0787a51-2b5f-4834-b2bc-31d915ce4b5d",
+				"ObjectId": "7",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -1533,7 +1577,8 @@
 					"x": 2321.273193359375,
 					"z": 1051.42578125
 				},
-				"modelid": 2261,
+				"Region": [],
+				"modelid": 2280,
 				"StoryItemType": 1
 			},
 			{
@@ -1548,7 +1593,7 @@
 				"isRandomModelId": true,
 				"pluralTemplate": "{count} paintings",
 				"size": 2.5,
-				"dynamicString": "return Painting{description=\"painting\", noCollisions=false, modelid=2274, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2321.3107910156,-1020.7081298828,1051.4962158203), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"dynamicString": "return Painting{description=\"painting\", noCollisions=false, modelid=2280, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2321.3107910156,-1020.7081298828,1051.4962158203), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
 				"type": "Painting",
 				"RotOffset": {
 					"y": 0,
@@ -1556,18 +1601,19 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "6d5dcf54-f405-40f7-b6a3-68e36bd3e646",
+				"ObjectId": "8",
 				"rotation": {
 					"y": 0,
 					"x": 0,
 					"z": 270
 				},
 				"position": {
-					"y": -1020.708129882813,
+					"y": -1020.708129882812,
 					"x": 2321.310791015625,
-					"z": 1051.496215820313
+					"z": 1051.496215820312
 				},
-				"modelid": 2274,
+				"Region": [],
+				"modelid": 2280,
 				"StoryItemType": 1
 			},
 			{
@@ -1582,7 +1628,7 @@
 				"isRandomModelId": true,
 				"pluralTemplate": "{count} paintings",
 				"size": 2.5,
-				"dynamicString": "return Painting{description=\"painting\", noCollisions=false, modelid=2281, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2321.3198242188,-1018.4548339844,1051.4357910156), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"dynamicString": "return Painting{description=\"painting\", noCollisions=false, modelid=2280, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2321.3198242188,-1018.4548339844,1051.4357910156), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
 				"type": "Painting",
 				"RotOffset": {
 					"y": 0,
@@ -1590,7 +1636,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "c7ecb96b-841e-4ace-a8a9-18e778d4f964",
+				"ObjectId": "9",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -1601,7 +1647,8 @@
 					"x": 2321.31982421875,
 					"z": 1051.435791015625
 				},
-				"modelid": 2281,
+				"Region": [],
+				"modelid": 2280,
 				"StoryItemType": 1
 			},
 			{
@@ -1616,7 +1663,7 @@
 				"isRandomModelId": true,
 				"pluralTemplate": "{count} paintings",
 				"size": 2.5,
-				"dynamicString": "return Painting{description=\"painting\", noCollisions=false, modelid=2261, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2328.1037597656,-1016.4486083984,1051.6490478516), rotation=Vector3(0,0,180.00001525879), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"dynamicString": "return Painting{description=\"painting\", noCollisions=false, modelid=2280, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2328.1037597656,-1016.4486083984,1051.6490478516), rotation=Vector3(0,0,180.00001525879), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
 				"type": "Painting",
 				"RotOffset": {
 					"y": 0,
@@ -1624,7 +1671,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "2cfc27ed-9f19-475d-b7f0-742866bb41b0",
+				"ObjectId": "10",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -1633,9 +1680,10 @@
 				"position": {
 					"y": -1016.448608398438,
 					"x": 2328.103759765625,
-					"z": 1051.649047851563
+					"z": 1051.649047851562
 				},
-				"modelid": 2261,
+				"Region": [],
+				"modelid": 2280,
 				"StoryItemType": 1
 			},
 			{
@@ -1650,7 +1698,7 @@
 				"isRandomModelId": true,
 				"pluralTemplate": "{count} paintings",
 				"size": 2.5,
-				"dynamicString": "return Painting{description=\"painting\", noCollisions=false, modelid=2276, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2320.3342285156,-1007.2622070313,1056.0206298828), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"dynamicString": "return Painting{description=\"painting\", noCollisions=false, modelid=2280, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2320.3342285156,-1007.2622070312,1056.0206298828), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
 				"type": "Painting",
 				"RotOffset": {
 					"y": 0,
@@ -1658,7 +1706,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "c5bb9002-e04e-4301-8e37-af4be151df49",
+				"ObjectId": "11",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -1667,9 +1715,10 @@
 				"position": {
 					"y": -1007.26220703125,
 					"x": 2320.334228515625,
-					"z": 1056.020629882813
+					"z": 1056.020629882812
 				},
-				"modelid": 2276,
+				"Region": [],
+				"modelid": 2280,
 				"StoryItemType": 1
 			},
 			{
@@ -1684,7 +1733,7 @@
 				"isRandomModelId": true,
 				"pluralTemplate": "{count} paintings",
 				"size": 2.5,
-				"dynamicString": "return Painting{description=\"painting\", noCollisions=false, modelid=2280, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2322.4814453125,-1009.3989257813,1055.9177246094), rotation=Vector3(0,0,90), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"dynamicString": "return Painting{description=\"painting\", noCollisions=false, modelid=2280, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2322.4814453125,-1009.3989257812,1055.9177246094), rotation=Vector3(0,0,90), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
 				"type": "Painting",
 				"RotOffset": {
 					"y": 0,
@@ -1692,7 +1741,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "9a0c3129-5bc4-4a0a-b339-d171421f36f8",
+				"ObjectId": "12",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -1703,6 +1752,7 @@
 					"x": 2322.4814453125,
 					"z": 1055.917724609375
 				},
+				"Region": [],
 				"modelid": 2280,
 				"StoryItemType": 1
 			},
@@ -1712,13 +1762,13 @@
 					"x": 0.02999996580183506,
 					"z": -0.009999999776482582
 				},
-				"Description": "cell phone",
+				"Description": "mobile phone",
 				"noCollisions": false,
 				"scale": 1,
 				"isRandomModelId": false,
 				"pluralTemplate": "{count} mobile phones",
 				"size": 2.5,
-				"dynamicString": "return MobilePhone{description=\"cell phone\", noCollisions=false, modelid=330, isRandomModelId=false, noRandomId=true, interior=9, position=Vector3(2319.9904785156,-1020.4183959961,1048.7109375), rotation=Vector3(0,0,0), posOffset=Vector3(0.029999965801835,0,-0.0099999997764826), rotOffset=Vector3(0,273,0)}",
+				"dynamicString": "return MobilePhone{description=\"mobile phone\", noCollisions=false, modelid=330, isRandomModelId=false, noRandomId=true, interior=9, position=Vector3(2319.9904785156,-1020.4183959961,1048.7109375), rotation=Vector3(0,0,0), posOffset=Vector3(0.029999965801835,0,-0.0099999997764826), rotOffset=Vector3(0,273,0)}",
 				"type": "MobilePhone",
 				"RotOffset": {
 					"y": 273,
@@ -1726,7 +1776,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "d812958f-2ede-49e9-ac2c-d85c43dcb408",
+				"ObjectId": "13",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -1737,6 +1787,7 @@
 					"x": 2319.990478515625,
 					"z": 1048.7109375
 				},
+				"Region": [],
 				"modelid": 330,
 				"StoryItemType": 1
 			},
@@ -1760,7 +1811,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "b6ce6698-4ed7-422a-b197-1b304c81d4ed",
+				"ObjectId": "14",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -1771,6 +1822,7 @@
 					"x": 2320.09716796875,
 					"z": 1048.7109375
 				},
+				"Region": [],
 				"modelid": 330,
 				"StoryItemType": 1
 			},
@@ -1794,7 +1846,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "aa9e35ed-e59d-482a-a475-110632c3a78f",
+				"ObjectId": "15",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -1805,6 +1857,7 @@
 					"x": 2327.9814453125,
 					"z": 1048.858642578125
 				},
+				"Region": [],
 				"modelid": 3027,
 				"StoryItemType": 1
 			},
@@ -1814,13 +1867,13 @@
 					"x": -0.2000000029802322,
 					"z": 0.07999999821186066
 				},
-				"Description": "bottle of cider",
+				"Description": "bottle of wine",
 				"noCollisions": true,
-				"scale": 1,
+				"scale": 0.7,
 				"isRandomModelId": true,
-				"pluralTemplate": "{count} bottlesof cider",
+				"pluralTemplate": "{count} bottlesof wine",
 				"size": 2.5,
-				"dynamicString": "return Drinks{description=\"drink\", noCollisions=true, modelid=1543, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2323.6506347656,-1014.8950195313,1050.2467041016), rotation=Vector3(0,0,175), posOffset=Vector3(-0.20000000298023,0.029999999329448,0.079999998211861), rotOffset=Vector3(0,90,0)}",
+				"dynamicString": "return Drinks{description=\"drink\", noCollisions=true, modelid=1241, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2323.6506347656,-1014.8950195312,1050.1767578125), rotation=Vector3(0,0,175), posOffset=Vector3(-0.20000000298023,0.029999999329448,0.079999998211861), rotOffset=Vector3(0,90,0)}",
 				"type": "Drinks",
 				"RotOffset": {
 					"y": 90,
@@ -1828,7 +1881,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "61f2c342-39ab-431f-8ae4-56a097597a19",
+				"ObjectId": "16",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -1837,9 +1890,10 @@
 				"position": {
 					"y": -1014.89501953125,
 					"x": 2323.650634765625,
-					"z": 1050.276704101562
+					"z": 1050.2167578125
 				},
-				"modelid": 1543,
+				"Region": [],
+				"modelid": 1241,
 				"StoryItemType": 1
 			},
 			{
@@ -1848,13 +1902,13 @@
 					"x": -0.02999999932944775,
 					"z": 0.1099999994039536
 				},
-				"Description": "bottle of cider",
+				"Description": "bottle of wine",
 				"noCollisions": true,
-				"scale": 1,
+				"scale": 0.7,
 				"isRandomModelId": true,
-				"pluralTemplate": "{count} bottlesof cider",
+				"pluralTemplate": "{count} bottlesof wine",
 				"size": 2.5,
-				"dynamicString": "return Drinks{description=\"drink\", noCollisions=true, modelid=1544, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2325.13671875,-1014.9509277344,1050.2464599609), rotation=Vector3(0,0,160), posOffset=Vector3(-0.029999999329448,0.029999999329448,0.10999999940395), rotOffset=Vector3(0,90,0)}",
+				"dynamicString": "return Drinks{description=\"drink\", noCollisions=true, modelid=1241, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2325.13671875,-1014.9509277344,1050.1765136719), rotation=Vector3(0,0,160), posOffset=Vector3(-0.029999999329448,0.029999999329448,0.10999999940395), rotOffset=Vector3(0,90,0)}",
 				"type": "Drinks",
 				"RotOffset": {
 					"y": 90,
@@ -1862,7 +1916,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "094ed2bf-61bb-41ec-aa00-ea41092992e7",
+				"ObjectId": "17",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -1871,16 +1925,17 @@
 				"position": {
 					"y": -1014.950927734375,
 					"x": 2325.13671875,
-					"z": 1050.276459960937
+					"z": 1050.216513671875
 				},
-				"modelid": 1544,
+				"Region": [],
+				"modelid": 1241,
 				"StoryItemType": 1
 			},
 			{
 				"PosOffset": {
-					"y": 0.01999999955296516,
-					"x": -0.07999999821186066,
-					"z": 0.07999999821186066
+					"y": 0.03999999910593033,
+					"x": -0.009999999776482582,
+					"z": 0.05999999865889549
 				},
 				"Description": "green apple",
 				"noCollisions": true,
@@ -1888,15 +1943,15 @@
 				"isRandomModelId": true,
 				"pluralTemplate": "{count} green apples",
 				"size": 2.5,
-				"dynamicString": "return Food{description=\"food\", noCollisions=true, modelid=2036, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2317.2980957031,-1009.6621704102,1050.3162841797), rotation=Vector3(270,0,200), posOffset=Vector3(-0.079999998211861,0.019999999552965,0.079999998211861), rotOffset=Vector3(0,0,210)}",
+				"dynamicString": "return Food{description=\"food\", noCollisions=true, modelid=2036, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2317.2980957031,-1009.6621704102,1050.3762207031), rotation=Vector3(270,0,200), posOffset=Vector3(-0.0099999997764826,0.03999999910593,0.059999998658895), rotOffset=Vector3(0,180,0)}",
 				"type": "Food",
 				"RotOffset": {
-					"y": 0,
+					"y": 180,
 					"x": 0,
-					"z": 210
+					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "744ee682-42ba-4283-b3fc-851b06137036",
+				"ObjectId": "18",
 				"rotation": {
 					"y": 0,
 					"x": 270,
@@ -1905,8 +1960,9 @@
 				"position": {
 					"y": -1009.662170410156,
 					"x": 2317.298095703125,
-					"z": 1050.336284179687
+					"z": 1050.416220703125
 				},
+				"Region": [],
 				"modelid": 2036,
 				"StoryItemType": 1
 			},
@@ -1930,17 +1986,18 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "5df037e3-f668-4c63-9154-33f128624d0c",
+				"ObjectId": "19",
 				"rotation": {
 					"y": 0,
 					"x": 0,
 					"z": 89.99996948242188
 				},
 				"position": {
-					"y": -1010.222778320313,
+					"y": -1010.222778320312,
 					"x": 2312.669677734375,
 					"z": 1049.081909179688
 				},
+				"Region": [],
 				"modelid": 2523,
 				"StoryItemType": 1
 			},
@@ -1964,7 +2021,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "d2f2fdc3-0fc3-4174-abc9-f0753dcda0ed",
+				"ObjectId": "20",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -1975,6 +2032,7 @@
 					"x": 2318.395751953125,
 					"z": 1053.21875
 				},
+				"Region": [],
 				"modelid": 330,
 				"StoryItemType": 1
 			},
@@ -1990,7 +2048,7 @@
 				"isRandomModelId": true,
 				"pluralTemplate": "{count} beds",
 				"size": 2.5,
-				"dynamicString": "return Bed{description=\"bed\", noCollisions=true, modelid=1794, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2325.8337402344,-1010.2610473633,1053.71875), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"dynamicString": "return Bed{description=\"bed\", noCollisions=true, modelid=1700, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2325.8337402344,-1010.2610473633,1053.71875), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
 				"type": "Bed",
 				"RotOffset": {
 					"y": 0,
@@ -1998,7 +2056,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "339fe103-d494-4f07-99b2-ee9022834c6a",
+				"ObjectId": "21",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -2009,7 +2067,8 @@
 					"x": 2325.833740234375,
 					"z": 1053.71875
 				},
-				"modelid": 1794,
+				"Region": [],
+				"modelid": 1700,
 				"StoryItemType": 1
 			},
 			{
@@ -2032,7 +2091,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "a63f58be-1a0a-4557-becb-68439e6f2e30",
+				"ObjectId": "22",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -2043,6 +2102,7 @@
 					"x": 2321.841796875,
 					"z": 1053.7197265625
 				},
+				"Region": [],
 				"modelid": 2523,
 				"StoryItemType": 1
 			},
@@ -2058,7 +2118,7 @@
 				"isRandomModelId": true,
 				"pluralTemplate": "{count} armchairs",
 				"size": 2.5,
-				"dynamicString": "return ArmChair{description=\"armchair\", noCollisions=false, modelid=1758, isRandomModelId=false, noRandomId=true, interior=9, position=Vector3(2318.4995117188,-1008.3601074219,1049.2109375), rotation=Vector3(0,0,35), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"dynamicString": "return ArmChair{description=\"armchair\", noCollisions=false, modelid=1767, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2318.4995117188,-1008.3601074219,1049.2109375), rotation=Vector3(0,0,35), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
 				"type": "ArmChair",
 				"RotOffset": {
 					"y": 0,
@@ -2066,7 +2126,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "a6e495b1-a707-4c83-a1d9-d51d37388338",
+				"ObjectId": "23",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -2077,7 +2137,8 @@
 					"x": 2318.49951171875,
 					"z": 1049.2109375
 				},
-				"modelid": 1758,
+				"Region": [],
+				"modelid": 1767,
 				"StoryItemType": 1
 			},
 			{
@@ -2092,7 +2153,7 @@
 				"isRandomModelId": true,
 				"pluralTemplate": "{count} flowerspot",
 				"size": 2.5,
-				"dynamicString": "return FlowerPot{description=\"flower pot\", noCollisions=false, modelid=949, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2321.1416015625,-1008.0079956055,1049.8308105469), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"dynamicString": "return FlowerPot{description=\"flower pot\", noCollisions=false, modelid=2240, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2321.1416015625,-1008.0079956055,1049.8308105469), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
 				"type": "FlowerPot",
 				"RotOffset": {
 					"y": 0,
@@ -2100,7 +2161,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "77f1c724-7151-487b-bf87-ac2b69c1f9da",
+				"ObjectId": "24",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -2111,7 +2172,8 @@
 					"x": 2321.1416015625,
 					"z": 1049.830810546875
 				},
-				"modelid": 949,
+				"Region": [],
+				"modelid": 2240,
 				"StoryItemType": 1
 			},
 			{
@@ -2134,7 +2196,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "c4d65c68-6028-442f-a3d2-cb849fec5b06",
+				"ObjectId": "25",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -2145,6 +2207,7 @@
 					"x": 2329.207275390625,
 					"z": 1049.833984375
 				},
+				"Region": [],
 				"modelid": 2240,
 				"StoryItemType": 1
 			},
@@ -2168,7 +2231,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "1d604277-5c82-49d4-afdd-b7197a019cbd",
+				"ObjectId": "26",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -2179,6 +2242,7 @@
 					"x": 2322.8818359375,
 					"z": 1049.2109375
 				},
+				"Region": [],
 				"modelid": 2224,
 				"StoryItemType": 1
 			},
@@ -2202,7 +2266,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "41d4aa8a-b4d8-4649-b371-ce896de44ac6",
+				"ObjectId": "27",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -2213,6 +2277,7 @@
 					"x": 2329.586669921875,
 					"z": 1049.61083984375
 				},
+				"Region": [],
 				"modelid": 2109,
 				"StoryItemType": 1
 			},
@@ -2236,7 +2301,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "05c8314e-96de-4b77-b15e-cd846ddc4529",
+				"ObjectId": "28",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -2247,6 +2312,7 @@
 					"x": 2326.91015625,
 					"z": 1049.2109375
 				},
+				"Region": [],
 				"modelid": 1822,
 				"StoryItemType": 1
 			},
@@ -2262,7 +2328,7 @@
 				"isRandomModelId": false,
 				"pluralTemplate": "{count} coffeestable",
 				"size": 2.5,
-				"dynamicString": "return CoffeeTable{description=\"coffee table\", noCollisions=false, modelid=1822, isRandomModelId=false, noRandomId=true, interior=9, position=Vector3(2324.8796386719,-1012.1106567383,1049.2309570313), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"dynamicString": "return CoffeeTable{description=\"coffee table\", noCollisions=false, modelid=1822, isRandomModelId=false, noRandomId=true, interior=9, position=Vector3(2324.8796386719,-1012.1106567383,1049.2309570312), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
 				"type": "CoffeeTable",
 				"RotOffset": {
 					"y": 0,
@@ -2270,7 +2336,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "90dc6e6a-0686-49e5-bfe0-8a79209313e3",
+				"ObjectId": "29",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -2281,6 +2347,7 @@
 					"x": 2324.879638671875,
 					"z": 1049.23095703125
 				},
+				"Region": [],
 				"modelid": 1822,
 				"StoryItemType": 1
 			},
@@ -2290,183 +2357,13 @@
 					"x": 0,
 					"z": 0
 				},
-				"Description": "armchair",
-				"noCollisions": false,
-				"scale": 1,
-				"isRandomModelId": false,
-				"pluralTemplate": "{count} armchairs",
-				"size": 2.5,
-				"dynamicString": "return ArmChair{description=\"armchair\", noCollisions=false, modelid=2291, isRandomModelId=false, noRandomId=true, interior=9, position=Vector3(2324.8227539063,-1009.8501586914,1049.2109375), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
-				"type": "ArmChair",
-				"RotOffset": {
-					"y": 0,
-					"x": 0,
-					"z": 0
-				},
-				"interior": 9,
-				"ObjectId": "af020bcf-2e46-4d45-964d-f0a6e036f56b",
-				"rotation": {
-					"y": 0,
-					"x": 0,
-					"z": 0
-				},
-				"position": {
-					"y": -1009.850158691406,
-					"x": 2324.82275390625,
-					"z": 1049.2109375
-				},
-				"modelid": 2291,
-				"StoryItemType": 1
-			},
-			{
-				"PosOffset": {
-					"y": 0,
-					"x": 0,
-					"z": 0
-				},
-				"Description": "armchair",
-				"noCollisions": false,
-				"scale": 1,
-				"isRandomModelId": false,
-				"pluralTemplate": "{count} armchairs",
-				"size": 2.5,
-				"dynamicString": "return ArmChair{description=\"armchair\", noCollisions=false, modelid=2291, isRandomModelId=false, noRandomId=true, interior=9, position=Vector3(2325.7897949219,-1009.8625488281,1049.2109375), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
-				"type": "ArmChair",
-				"RotOffset": {
-					"y": 0,
-					"x": 0,
-					"z": 0
-				},
-				"interior": 9,
-				"ObjectId": "5bb76176-3f83-4a96-8df2-06f19609b7c5",
-				"rotation": {
-					"y": 0,
-					"x": 0,
-					"z": 0
-				},
-				"position": {
-					"y": -1009.862548828125,
-					"x": 2325.789794921875,
-					"z": 1049.2109375
-				},
-				"modelid": 2291,
-				"StoryItemType": 1
-			},
-			{
-				"PosOffset": {
-					"y": 0,
-					"x": 0,
-					"z": 0
-				},
-				"Description": "armchair",
-				"noCollisions": false,
-				"scale": 1,
-				"isRandomModelId": false,
-				"pluralTemplate": "{count} armchairs",
-				"size": 2.5,
-				"dynamicString": "return ArmChair{description=\"armchair\", noCollisions=false, modelid=2291, isRandomModelId=false, noRandomId=true, interior=9, position=Vector3(2326.7668457031,-1009.8776855469,1049.2109375), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
-				"type": "ArmChair",
-				"RotOffset": {
-					"y": 0,
-					"x": 0,
-					"z": 0
-				},
-				"interior": 9,
-				"ObjectId": "77fc4659-997c-4579-8c57-95d76dba4127",
-				"rotation": {
-					"y": 0,
-					"x": 0,
-					"z": 0
-				},
-				"position": {
-					"y": -1009.877685546875,
-					"x": 2326.766845703125,
-					"z": 1049.2109375
-				},
-				"modelid": 2291,
-				"StoryItemType": 1
-			},
-			{
-				"PosOffset": {
-					"y": 0,
-					"x": 0,
-					"z": 0
-				},
-				"Description": "armchair",
-				"noCollisions": false,
-				"scale": 1,
-				"isRandomModelId": false,
-				"pluralTemplate": "{count} armchairs",
-				"size": 2.5,
-				"dynamicString": "return ArmChair{description=\"armchair\", noCollisions=false, modelid=2291, isRandomModelId=false, noRandomId=true, interior=9, position=Vector3(2329.0847167969,-1010.5317993164,1049.2108154297), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
-				"type": "ArmChair",
-				"RotOffset": {
-					"y": 0,
-					"x": 0,
-					"z": 0
-				},
-				"interior": 9,
-				"ObjectId": "ff1e5678-3157-4c8c-8b7d-2ff4f653f66c",
-				"rotation": {
-					"y": 0,
-					"x": 0,
-					"z": 270
-				},
-				"position": {
-					"y": -1010.531799316406,
-					"x": 2329.084716796875,
-					"z": 1049.210815429688
-				},
-				"modelid": 2291,
-				"StoryItemType": 1
-			},
-			{
-				"PosOffset": {
-					"y": 0,
-					"x": 0,
-					"z": 0
-				},
-				"Description": "armchair",
-				"noCollisions": false,
-				"scale": 1,
-				"isRandomModelId": false,
-				"pluralTemplate": "{count} armchairs",
-				"size": 2.5,
-				"dynamicString": "return ArmChair{description=\"armchair\", noCollisions=false, modelid=2291, isRandomModelId=false, noRandomId=true, interior=9, position=Vector3(2329.0769042969,-1011.4857788086,1049.2109375), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
-				"type": "ArmChair",
-				"RotOffset": {
-					"y": 0,
-					"x": 0,
-					"z": 0
-				},
-				"interior": 9,
-				"ObjectId": "687c0aa1-eca5-41ed-8816-131a2b002c9a",
-				"rotation": {
-					"y": 0,
-					"x": 0,
-					"z": 270
-				},
-				"position": {
-					"y": -1011.485778808594,
-					"x": 2329.076904296875,
-					"z": 1049.2109375
-				},
-				"modelid": 2291,
-				"StoryItemType": 1
-			},
-			{
-				"PosOffset": {
-					"y": 0,
-					"x": 0,
-					"z": 0
-				},
 				"Description": "table",
-				"noCollisions": false,
+				"noCollisions": true,
 				"scale": 1,
 				"isRandomModelId": false,
 				"pluralTemplate": "{count} tables",
 				"size": 2.5,
-				"dynamicString": "return Table{description=\"table\", noCollisions=false, modelid=2117, isRandomModelId=false, noRandomId=true, interior=9, position=Vector3(2315.232421875,-1010.5923461914,1049.2109375), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"dynamicString": "return Table{description=\"table\", noCollisions=true, modelid=2117, isRandomModelId=false, noRandomId=true, interior=9, position=Vector3(2315.232421875,-1010.5923461914,1049.2109375), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
 				"type": "Table",
 				"RotOffset": {
 					"y": 0,
@@ -2474,7 +2371,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "c0442314-acad-4ddc-8f9b-b68c36ad5bd9",
+				"ObjectId": "30",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -2485,6 +2382,7 @@
 					"x": 2315.232421875,
 					"z": 1049.2109375
 				},
+				"Region": [],
 				"modelid": 2117,
 				"StoryItemType": 1
 			},
@@ -2495,12 +2393,12 @@
 					"z": 0
 				},
 				"Description": "chair",
-				"noCollisions": false,
+				"noCollisions": true,
 				"scale": 1,
 				"isRandomModelId": false,
 				"pluralTemplate": "{count} chairs",
 				"size": 2.5,
-				"dynamicString": "return Chair{description=\"chair\", noCollisions=false, modelid=2121, isRandomModelId=false, noRandomId=true, interior=9, position=Vector3(2315.15234375,-1009.5678710938,1049.7108154297), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"dynamicString": "return Chair{description=\"chair\", noCollisions=true, modelid=2121, isRandomModelId=false, noRandomId=true, interior=9, position=Vector3(2315.15234375,-1009.5678710938,1049.7108154297), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
 				"type": "Chair",
 				"RotOffset": {
 					"y": 0,
@@ -2508,7 +2406,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "a916e82f-c97e-48d7-9dbe-f2ff0016a883",
+				"ObjectId": "31",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -2519,6 +2417,7 @@
 					"x": 2315.15234375,
 					"z": 1049.710815429688
 				},
+				"Region": [],
 				"modelid": 2121,
 				"StoryItemType": 1
 			},
@@ -2534,7 +2433,7 @@
 				"isRandomModelId": false,
 				"pluralTemplate": "{count} plates",
 				"size": 2.5,
-				"dynamicString": "return Plate{description=\"plate\", noCollisions=false, modelid=2812, isRandomModelId=false, noRandomId=true, interior=9, position=Vector3(2315.2368164063,-1010.4741821289,1050.0181884766), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"dynamicString": "return Plate{description=\"plate\", noCollisions=false, modelid=2812, isRandomModelId=false, noRandomId=true, interior=9, position=Vector3(2315.2368164062,-1010.4741821289,1050.0181884766), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
 				"type": "Plate",
 				"RotOffset": {
 					"y": 0,
@@ -2542,7 +2441,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "d2ebb841-2fc1-4b77-9d32-2c6f4e2eb8af",
+				"ObjectId": "32",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -2551,8 +2450,9 @@
 				"position": {
 					"y": -1010.474182128906,
 					"x": 2315.23681640625,
-					"z": 1050.018188476563
+					"z": 1050.018188476562
 				},
+				"Region": [],
 				"modelid": 2812,
 				"StoryItemType": 1
 			},
@@ -2576,7 +2476,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "33d23c39-045c-48ba-b45a-6217ad7620c1",
+				"ObjectId": "33",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -2587,6 +2487,7 @@
 					"x": 2323.44677734375,
 					"z": 1053.708740234375
 				},
+				"Region": [],
 				"modelid": 2333,
 				"StoryItemType": 1
 			},
@@ -2610,17 +2511,18 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "e3b8247c-23c4-47de-b0e8-13cc20006b33",
+				"ObjectId": "34",
 				"rotation": {
 					"y": 0,
 					"x": 0,
 					"z": 90
 				},
 				"position": {
-					"y": -1010.150512695313,
+					"y": -1010.150512695312,
 					"x": 2322.560546875,
 					"z": 1054.681640625
 				},
+				"Region": [],
 				"modelid": 7187,
 				"StoryItemType": 1
 			},
@@ -2644,7 +2546,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "9a565678-df76-4029-89d7-20d760943d0f",
+				"ObjectId": "35",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -2655,6 +2557,7 @@
 					"x": 2323.31396484375,
 					"z": 1053.688720703125
 				},
+				"Region": [],
 				"modelid": 1714,
 				"StoryItemType": 1
 			},
@@ -2670,7 +2573,7 @@
 				"isRandomModelId": true,
 				"pluralTemplate": "{count} flowerspot",
 				"size": 2.5,
-				"dynamicString": "return FlowerPot{description=\"flower pot\", noCollisions=false, modelid=949, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2322.55078125,-1007.3494262695,1054.2387695313), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"dynamicString": "return FlowerPot{description=\"flower pot\", noCollisions=false, modelid=2240, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2322.55078125,-1007.3494262695,1054.2387695312), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
 				"type": "FlowerPot",
 				"RotOffset": {
 					"y": 0,
@@ -2678,7 +2581,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "854fa1ad-a8e1-4baa-823e-21629ff0a842",
+				"ObjectId": "36",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -2689,7 +2592,8 @@
 					"x": 2322.55078125,
 					"z": 1054.23876953125
 				},
-				"modelid": 949,
+				"Region": [],
+				"modelid": 2240,
 				"StoryItemType": 1
 			},
 			{
@@ -2704,7 +2608,7 @@
 				"isRandomModelId": false,
 				"pluralTemplate": "{count} wardrobes",
 				"size": 2.5,
-				"dynamicString": "return Wardrobe{description=\"wardrobe\", noCollisions=false, modelid=2088, isRandomModelId=false, noRandomId=true, interior=9, position=Vector3(2323.4477539063,-1015.5396118164,1053.7110595703), rotation=Vector3(0,0,90), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"dynamicString": "return Wardrobe{description=\"wardrobe\", noCollisions=false, modelid=2088, isRandomModelId=false, noRandomId=true, interior=9, position=Vector3(2323.4477539062,-1015.5396118164,1053.7110595703), rotation=Vector3(0,0,90), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
 				"type": "Wardrobe",
 				"RotOffset": {
 					"y": 0,
@@ -2712,7 +2616,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "e9c15a86-c6fb-443a-bed5-b676bb7e73fc",
+				"ObjectId": "37",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -2721,8 +2625,9 @@
 				"position": {
 					"y": -1015.539611816406,
 					"x": 2323.44775390625,
-					"z": 1053.711059570313
+					"z": 1053.711059570312
 				},
+				"Region": [],
 				"modelid": 2088,
 				"StoryItemType": 1
 			},
@@ -2738,7 +2643,7 @@
 				"isRandomModelId": true,
 				"pluralTemplate": "{count} toilets",
 				"size": 2.5,
-				"dynamicString": "return Toilet{description=\"toilet\", noCollisions=false, modelid=2514, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2321.1469726563,-1006.0848999023,1053.71875), rotation=Vector3(0,0,180.00001525879), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"dynamicString": "return Toilet{description=\"toilet\", noCollisions=false, modelid=2525, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2321.1469726562,-1006.0848999023,1053.71875), rotation=Vector3(0,0,180.00001525879), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
 				"type": "Toilet",
 				"RotOffset": {
 					"y": 0,
@@ -2746,7 +2651,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "4dfa5c04-e04f-4175-b899-9f71ac51b671",
+				"ObjectId": "38",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -2757,7 +2662,8 @@
 					"x": 2321.14697265625,
 					"z": 1053.71875
 				},
-				"modelid": 2514,
+				"Region": [],
+				"modelid": 2525,
 				"StoryItemType": 1
 			},
 			{
@@ -2780,7 +2686,7 @@
 					"z": 0
 				},
 				"interior": 9,
-				"ObjectId": "4dba5772-a2ad-4e70-b48b-e2ac8e202f75",
+				"ObjectId": "39",
 				"rotation": {
 					"y": 0,
 					"x": 0,
@@ -2791,12 +2697,48 @@
 					"x": 2313.302978515625,
 					"z": 1049.2109375
 				},
+				"Region": [],
 				"modelid": 2417,
+				"StoryItemType": 1
+			},
+			{
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"Description": "green apple",
+				"noCollisions": true,
+				"scale": 1,
+				"isRandomModelId": true,
+				"pluralTemplate": "{count} green apples",
+				"size": 2.5,
+				"dynamicString": "return Food{description=\"food\", noCollisions=true, modelid=2036, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2315.065185546875,-1010.471740722656,1050.050659179688), rotation=Vector3(270,0,200), posOffset=Vector3(-0.0099999997764826,0.03999999910593,0.059999998658895), rotOffset=Vector3(0,180,0)}",
+				"type": "Food",
+				"RotOffset": {
+					"y": 180,
+					"x": 0,
+					"z": 0
+				},
+				"interior": 9,
+				"ObjectId": "40",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"position": {
+					"y": -1010.471740722656,
+					"x": 2315.065185546875,
+					"z": 1050.050659179688
+				},
+				"Region": [],
+				"modelid": 2036,
 				"StoryItemType": 1
 			}
 		],
+		"graphPath": "files\/paths\/house9.json",
 		"name": "house9",
-		"graphPath": "files/paths/house9.json",
 		"Disposed": false,
 		"Regions": [
 			{
@@ -2807,20 +2749,20 @@
 						"x": 2331.26787109673,
 						"lz": 1049.2109375,
 						"z": 1052.510888673365,
-						"fov": 70,
-						"roll": 0,
+						"lx": 2322.337158203125,
 						"ly": -1018.755615234375,
-						"lx": 2322.337158203125
+						"roll": 0,
+						"fov": 70
 					},
 					{
 						"y": -1027.113623045385,
 						"x": 2324.1796875,
 						"lz": 1049.2177734375,
 						"z": 1051.917724609375,
-						"fov": 88,
-						"roll": 0,
+						"lx": 2329.593505859375,
 						"ly": -1018.435913085938,
-						"lx": 2329.593505859375
+						"roll": 0,
+						"fov": 88
 					}
 				],
 				"Objects": [],
@@ -2877,10 +2819,10 @@
 						"x": 2321.204345703125,
 						"lz": 1049.2109375,
 						"z": 1052.210888683796,
-						"lx": 2318.36083984375,
-						"ly": -1008.608581542969,
+						"fov": 70,
 						"roll": 0,
-						"fov": 70
+						"ly": -1008.608581542969,
+						"lx": 2318.36083984375
 					}
 				],
 				"Objects": [],
@@ -2922,20 +2864,20 @@
 						"x": 2317.130029298365,
 						"lz": 1049.2109375,
 						"z": 1052.310888670385,
-						"lx": 2313.20068359375,
-						"ly": -1008.196838378906,
+						"fov": 70,
 						"roll": 0,
-						"fov": 70
+						"ly": -1008.196838378906,
+						"lx": 2313.20068359375
 					},
 					{
 						"y": -1017.189428709447,
 						"x": 2312.897216796875,
 						"lz": 1049.2109375,
 						"z": 1052.410888686776,
-						"lx": 2316.78125,
-						"ly": -1007.47802734375,
+						"fov": 70,
 						"roll": 0,
-						"fov": 70
+						"ly": -1007.47802734375,
+						"lx": 2316.78125
 					}
 				],
 				"Objects": [],
@@ -2977,20 +2919,20 @@
 						"x": 2331.736767590046,
 						"lz": 1049.2177734375,
 						"z": 1052.517724610865,
-						"lx": 2322.65576171875,
-						"ly": -1014.328552246094,
+						"fov": 70,
 						"roll": 0,
-						"fov": 70
+						"ly": -1014.328552246094,
+						"lx": 2322.65576171875
 					},
 					{
 						"y": -1006.743835449219,
 						"x": 2322.3916015625,
 						"lz": 1049.2177734375,
 						"z": 1052.817724630237,
-						"lx": 2329.604736328125,
-						"ly": -1015.708862304688,
+						"fov": 70,
 						"roll": 0,
-						"fov": 70
+						"ly": -1015.708862304688,
+						"lx": 2329.604736328125
 					}
 				],
 				"Objects": [],
@@ -3032,20 +2974,20 @@
 						"x": 2320.7939453125,
 						"lz": 1053.71875,
 						"z": 1056.618701174855,
-						"lx": 2316.1748046875,
-						"ly": -1007.104064941406,
+						"fov": 70,
 						"roll": 0,
-						"fov": 70
+						"ly": -1007.104064941406,
+						"lx": 2316.1748046875
 					},
 					{
 						"y": -1017.006042480469,
 						"x": 2316.078955069184,
 						"lz": 1053.71875,
 						"z": 1056.918701171875,
-						"lx": 2321.4609375,
-						"ly": -1007.095764160156,
+						"fov": 70,
 						"roll": 0,
-						"fov": 70
+						"ly": -1007.095764160156,
+						"lx": 2321.4609375
 					}
 				],
 				"Objects": [],
@@ -3087,20 +3029,20 @@
 						"x": 2329.99189452827,
 						"lz": 1053.71875,
 						"z": 1057.218701176345,
-						"lx": 2322.31298828125,
-						"ly": -1007.102722167969,
+						"fov": 73.5,
 						"roll": 0,
-						"fov": 73.5
+						"ly": -1007.102722167969,
+						"lx": 2322.31298828125
 					},
 					{
 						"y": -1007.079589821398,
 						"x": 2331.30537109822,
 						"lz": 1053.711059570313,
 						"z": 1057.411010742188,
-						"lx": 2322.311767578125,
-						"ly": -1013.704467773438,
+						"fov": 70,
 						"roll": 0,
-						"fov": 70
+						"ly": -1013.704467773438,
+						"lx": 2322.311767578125
 					}
 				],
 				"Objects": [],
@@ -3157,20 +3099,20 @@
 						"x": 2313.84589843452,
 						"lz": 1053.71875,
 						"z": 1056.618701167405,
-						"fov": 70,
-						"roll": 0,
+						"lx": 2323.459716796875,
 						"ly": -1002.952941894531,
-						"lx": 2323.459716796875
+						"roll": 0,
+						"fov": 70
 					},
 					{
 						"y": -1003.146154776216,
 						"x": 2314.608154311776,
 						"lz": 1053.71875,
 						"z": 1056.418701179326,
-						"fov": 70,
-						"roll": 0,
+						"lx": 2323.47314453125,
 						"ly": -1005.578002929688,
-						"lx": 2323.47314453125
+						"roll": 0,
+						"fov": 70
 					}
 				],
 				"Objects": [],
@@ -3887,6 +3829,82 @@
 						"id": 1,
 						"nextLocation": {
 							"id": 13
+						}
+					}
+				]
+			},
+			{
+				"Description": "kitchen chair",
+				"Interior": 9,
+				"Y": -1008.983581542969,
+				"X": 2315.14990234375,
+				"Z": 1050.2109375,
+				"id": 14,
+				"Angle": 179.269775390625,
+				"PossibleActions": [
+					{
+						"id": 1
+					}
+				],
+				"allActions": [
+					{
+						"dynamicString": "return SitDown{how = 1, rotation = nil}",
+						"isClosingAction": false,
+						"targetItem": {
+							"id": 31,
+							"type": "Object"
+						},
+						"id": 1,
+						"nextAction": {
+							"id": 2
+						},
+						"closingAction": {
+							"id": 4
+						},
+						"nextLocation": {
+							"id": 14
+						}
+					},
+					{
+						"dynamicString": "return PickUp{where = \"the table\", targetObjectExists = true, hand = 12, how = 3}",
+						"isClosingAction": false,
+						"targetItem": {
+							"id": 40,
+							"type": "Object"
+						},
+						"id": 2,
+						"nextAction": {
+							"id": 3
+						},
+						"nextLocation": {
+							"id": 14
+						}
+					},
+					{
+						"dynamicString": "return Eat{how = 1}",
+						"isClosingAction": false,
+						"targetItem": {
+							"id": 40,
+							"type": "Object"
+						},
+						"id": 3,
+						"nextAction": {
+							"id": 4
+						},
+						"nextLocation": {
+							"id": 14
+						}
+					},
+					{
+						"dynamicString": "return StandUp{how = 1}",
+						"isClosingAction": true,
+						"targetItem": {
+							"id": 31,
+							"type": "Object"
+						},
+						"id": 4,
+						"nextLocation": {
+							"id": 14
 						}
 					}
 				]

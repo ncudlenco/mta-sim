@@ -1,6 +1,6 @@
 CURRENT_STORY = nil
 SCREENSHOTS = {}
-MAX_ACTIONS = 10
+MAX_ACTIONS = 10000
 STATIC_CAMERA = true
 LOG_DATA = false
 LOG_FREQUENCY = 1000 / 30 --in milliseconds
@@ -8,11 +8,14 @@ DEBUG = true
 DEBUG_LOGGER = false
 DEBUG_OBJECTS = false
 DEBUG_EPISODE = true
+PRIORITIZE_CAMERA = 'barroom'
 DEBUG_ACTIONS = true
 FREE_ROAM = false
 TIME_STAMP = false
-ACTORS_CROWDING_FACTOR = 0.5
-LOAD_FROM_GRAPH = 'samples/g15'
-INPUT_GRAPHS = {'samples/g19'}
+ACTORS_CROWDING_FACTOR = 0
+LOAD_FROM_GRAPH = true
+INPUT_GRAPHS = {'simple_interaction.json'}
+INPUT_FOLDER = "story_generator/samples_objects/"
 GRAPH = {
 }
+PED_ZOO = {}

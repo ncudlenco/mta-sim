@@ -25,8 +25,10 @@ function SitDown:Apply()
     table.insert(story.History[self.Performer:getData('id')], self)
     
     story.Logger:Log(self.Description .. " on the " .. self.TargetItem.Description, self)
-    self.TargetItem.instance:setCollisionsEnabled(false)
-
+    if self.TargetItem.instance then
+        self.TargetItem.instance:setCollisionsEnabled(false)
+    end
+    
     if not (self.rotation == nil) then
         self.Performer.rotation = self.rotation
     end

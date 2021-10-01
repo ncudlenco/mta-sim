@@ -1,7 +1,8 @@
 function FirstOrDefault(arr, func)
-    local res = Where(arr, func)
-    if res and #res > 0 then
-        return res[1]
+    for _, a in pairs(arr) do --I don't care about the order, this will work on arrays and tables
+        if func(a) then 
+            return a
+        end
     end
     return nil
 end
@@ -44,10 +45,14 @@ function Where(arr, func)
     return res
 end
 
-function LastIndexOf(arr, item)
+function LastIndexOf(arr, item, eqFunc)
     local idx = -1
     for i, a in ipairs(arr) do
-        if a == item then 
+        if eqFunc then
+            if eqFunc(a, item) then
+                idx = i
+            end
+        elseif a == item then 
             idx = i
         end
     end
@@ -143,4 +148,12 @@ function inList(targetValue, arr)
     end
 
     return false
+end
+
+
+function notVeryDeepCopy(obj)
+    if type(obj) ~= 'table' then return obj end
+    local res = {}
+    for k, v in pairs(obj) do res[notVeryDeepCopy(k)] = notVeryDeepCopy(v) end
+    return res
 end

@@ -278,6 +278,7 @@ end
 function Region:OnPlayerHit(player)
     if DEBUG then
         outputConsole('Region:OnPlayerHit - '..self.name)
+        print('Region:OnPlayerHit - '..self.name)
     end
     local previousRegion = player:getData('currentRegion')
     local previousRegionId = player:getData('currentRegionId')
@@ -288,16 +289,19 @@ function Region:OnPlayerHit(player)
     if self.EvaluatingRegion then
         return
     end
+    print('Region: Region is not being evaluated')
     if self.Episode.CurrentRegion == self then
         return
     end
+    print('Region: Region is not duplicated')
     
     self.EvaluatingRegion = true
     --delay so that all the regionHit events are processed
-    Timer(function()        
-        --Set the camera in the region with the maximum number of actors
+    Timer(function()      
+        print('Region: Evaluating region is not duplicated')
         local actorsInRegions = {}
         local maxValue = 0
+        --Set the camera in the region with the maximum number of actors
         local maxRegionId = story.Actor:getData('currentRegionId')
         if maxRegionId then
             maxValue = 1
@@ -306,19 +310,24 @@ function Region:OnPlayerHit(player)
 
         for _,ped in ipairs(self.Episode.peds) do
             local rid = ped:getData('currentRegionId')
+            local region = FirstOrDefault(self.Episode.Regions, function(r) return r.Id == rid end)
             if not actorsInRegions[rid] then
                 actorsInRegions[rid] = {ped}
             else
                 table.insert(actorsInRegions[rid], ped)
             end
-            if #actorsInRegions[rid] > maxValue then
+            if #actorsInRegions[rid] > maxValue or PRIORITIZE_CAMERA and PRIORITIZE_CAMERA == region.name then
                 maxValue = #actorsInRegions[rid]
                 maxRegionId = rid
             end
         end
 
         if maxRegionId ~= self.Id then
+            print('Region: Max region id is not current, returning')
+            self.EvaluatingRegion = false
             return
+        else
+            print('Region: Max region id is current')
         end
         self.Episode.CurrentRegion = self
         --change the current camera
@@ -353,5 +362,5 @@ function Region:OnPlayerHit(player)
             end
         end
         self.EvaluatingRegion = false
-    end, 500, 1)
+    end, 2000, 1)
 end

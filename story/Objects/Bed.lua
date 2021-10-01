@@ -9,8 +9,8 @@ Bed.eModel =
 {
     LowBed = 2302,
     Unknown3 = 1794,
-    Unknown4 = 14866,
-    Unknown5 = 11720,
+    -- Unknown4 = 14866,
+    -- Unknown5 = 11720,
     Unknown6 = 1700,
     Unknown7 = 2300,
     Unknown8 = 2301,

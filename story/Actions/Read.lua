@@ -10,7 +10,7 @@ function Read:Apply()
     table.insert(story.History[self.Performer:getData('id')], self)
     
     local time = random(3000, 18000)
-    story.Logger:Log(self.Description .. self.TargetItem.Description, self, false, true, {"finishes", "finishes drinking"})
+    story.Logger:Log(self.Description .. self.TargetItem.Description, self, false, true, {"finishes", "finishes reading"})
     self.Performer:setAnimation("INT_OFFICE", "OFF_Sit_Read", time, true, true, false, true)
 
     if DEBUG then

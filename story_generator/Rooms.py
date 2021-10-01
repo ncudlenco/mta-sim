@@ -3,11 +3,11 @@ import Actions
 import Objects
 
 
-DROP = {"Kitchen": "Chair Drink Food Sink", 
+DROP = {"Kitchen": "Chair Drinks Food Sink", 
         "Living": "ArmChair Book Chair TurnTable Sofa Remote Laptop Desk Watch",
         "BedRoom": "Bed Laptop",
         "BathRoom": "Sink",
-        "BarRoom": "Drink Food",
+        "BarRoom": "Drinks Food",
         "Gym": "BenchPress Treadmill TwoDumbbells GymBike PunchingBag TaiChiObject",
         }
 

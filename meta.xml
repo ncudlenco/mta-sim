@@ -1,7 +1,7 @@
 <meta>
   <oop>true</oop>
   <!-- Debug tool -->
-  <script src="MTATD.bundle.lua" type="shared"/>
+  <!-- <script src="MTATD.bundle.lua" type="shared"/> -->
   <!-- Custom files -->
   <file src="files/data/LaptopSAMP1.txd" type="client" />
   <file src="files/data/LaptopSAMP1.dff" type="client" />
@@ -166,6 +166,9 @@
   <script src="story/Objects/GasCooker.lua" type="shared" />
   <script src="story/Objects/Microwave.lua" type="shared" />
   <script src="story/Objects/Basketball.lua" type="shared" />
+  <!-- Templates -->
+  <script src="client/Template.lua" type="shared"/>
+  <script src="client/Supertemplate.lua" type="shared"/>
   <!-- Episodes -->
   <script src="story/Episodes/House1.lua" type="server" />
   <script src="story/Episodes/House3.lua" type="server" />
@@ -178,7 +181,6 @@
   <script src="story/Story.lua" type="shared" />
   <script src="story/GraphStory.lua" type="shared" />
   <!-- Client classes -->
-  <script src="client/Template.lua" type="client"/>
   <!-- Commands -->
   <script src="ServerCommands.lua" type="server" />
   <script src="client/EpisodeCommands.lua" type="client" />

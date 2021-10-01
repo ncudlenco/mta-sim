@@ -8,6 +8,11 @@ function createGuid()
 end
 
 Guid = class(function(a)
+    math.randomseed(os.time())
+    math.random(); math.random(); math.random()
+    math.randomseed(os.time())
+    math.random(); math.random(); math.random()
+
     -- math.randomseed(os.time())
     local template ='xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
     a.Id = string.gsub(template, '[xy]', function (c)

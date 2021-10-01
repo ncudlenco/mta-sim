@@ -4,9 +4,24 @@ addEvent ( "onActionRetrieved", true )
 DEFINING_EPISODES = false
 if DEFINING_EPISODES then
     addEventHandler ( "onClientPlayerSpawn", getLocalPlayer(), function()
+        print('onClientPlayerSpawn')
+
+        local g = Guid()
+        localPlayer:setData("id", g.Id)
+        localPlayer:setData("isPed", false)
+    
+        print('Player '..g.Id)
         CLIENT_STORY = Story(localPlayer, 10000, true)
+        CURRENT_STORY = CLIENT_STORY
     end)
     function GetStory(player)
+        print('GetStory called from client')
+        if not CLIENT_STORY.History then
+            CLIENT_STORY.History = {}
+        end
+        if not CLIENT_STORY.History[localPlayer:getData("id")] then
+            CLIENT_STORY.History[localPlayer:getData("id")] = {}
+        end
         return CLIENT_STORY
     end
 end
@@ -132,6 +147,17 @@ local function text_render ( )
             table.insert(markers, marker)
         end
     end
+    if episode.supertemplates then
+        for _,s in ipairs(episode.supertemplates) do
+            if s.position then
+                local sx, sy, _ = getScreenFromWorldPosition ( s.position.x, s.position.y, s.position.z ) 
+                if sx then
+                    local sw, sh = guiGetScreenSize ( )
+                    dxDrawText ( 'supertemplate '..s.name.."\n", sx, sy, sw, sh, tocolor ( 183, 44, 174, 255 ), 1.0, "default-bold" ) 
+                end
+            end
+        end
+    end
 end 
 
 local function unloadEpisode(episode)
@@ -151,12 +177,21 @@ local function unloadEpisode(episode)
         end
         currentRegion = nil
     end
+    if episode.supertemplates then
+        for _,st in ipairs(episode.supertemplates) do
+            if st.instantiatedTemplate then
+                st.instantiatedTemplate:Destroy()
+            end
+        end
+    end 
     markers = {}
     episode:Destroy()
     return true
 end
 
 local editedObject = nil
+local relativePosition = nil
+local nextEditSameThing = false
 local cameraTargetObject = nil
 local isEditedObjectAttached = false
 local altPressed = false
@@ -183,17 +218,20 @@ local function playerPressedKey(button, press)
         local translate = false
         local rotate = false
         local changeSize = false
+        local skip = false
         local function done()
             showCursor(false)
             removeEventHandler("onClientKey", root, playerPressedKey)
             triggerEvent ( "onElementDoneEditing", getRootElement(), editedObject )
-            editedObject = nil
-            setCamera = false
-            isTemplate = false
-            isEditedObjectAttached = false
-            if cameraTargetObject then
-                cameraTargetObject:destroy()
-                cameraTargetObject = nil
+            if not nextEditSameThing then
+                editedObject = nil
+                setCamera = false
+                isTemplate = false
+                isEditedObjectAttached = false
+                if cameraTargetObject then
+                    cameraTargetObject:destroy()
+                    cameraTargetObject = nil
+                end
             end
         end
         if button == "w" then
@@ -263,6 +301,8 @@ local function playerPressedKey(button, press)
                 outputChatBox("Press enter to save the current camera and target setting", 255, 0, 0, false)
                 moveTarget = true
             end
+        elseif isTemplate and button == "backspace" then
+            skip = true
         end
 
         if setCamera then
@@ -306,10 +346,15 @@ local function playerPressedKey(button, press)
             setElementBoneRotationOffset(editedObject.instance, editedObject.RotOffset.x, editedObject.RotOffset.y, editedObject.RotOffset.z)
             setObjectScale(editedObject.instance, editedObject.scale)
         elseif isTemplate then
+            if skip then
+                editedObject.skip = true
+                done()
+                return
+            end
             if translate then
                 editedObject:UpdatePosition(offset)
             elseif rotate then
-                editedObject:UpdatePosition(nil, offset, localPlayer.position)
+                editedObject:UpdatePosition(nil, offset, relativePosition)
             end
         else
             if translate then
@@ -429,6 +474,8 @@ local function getAction(actionName, params)
         getTargetItem()
     end
 end
+local supertemplate = Supertemplate{}
+local template = Template{}
 
 addCommandHandler("episode",
     function (commandName, command, param1, param2, ...)
@@ -453,7 +500,7 @@ addCommandHandler("episode",
             if param1 then
                 episode = DynamicEpisode(param1)
                 if episode:LoadFromFile() then
-                    episode:Initialize(localPlayer)
+                    episode:Initialize(localPlayer) --should not create the supertemplate contents
                     outputChatBox("Loaded files/episodes/"..episode.name..".json", 255, 0, 0, false)
                 else
                     outputChatBox("File not found files/episodes/"..episode.name..".json", 255, 0, 0, false)
@@ -462,6 +509,7 @@ addCommandHandler("episode",
                 outputChatBox("Parameter episode_name not provided. Ex: episode load episode_name", 255, 0, 0, false)
             end
 		    addEventHandler("onClientRender", getRootElement(), text_render)
+            CLIENT_STORY.CurrentEpisode = episode
         elseif command == "save" then
             DEFINING_EPISODES = true
             if param1 then
@@ -531,6 +579,13 @@ addCommandHandler("episode",
                     r.POI = nil
                     r.isExplored = nil
                 end
+                if episode.supertemplates then
+                    local supertemplateInstances = {}
+                    for _,st in ipairs(episode.supertemplates) do
+                        table.insert(supertemplateInstances, st.instantiatedTemplate)
+                        st.instantiatedTemplate = nil
+                    end
+                end
                 local fileHandle = fileCreate("files/episodes/"..param1..".json")
                 if fileHandle then
                     local jsonStr = toJSON(episode)
@@ -540,6 +595,11 @@ addCommandHandler("episode",
                 end
                 for i,obj in ipairs(episode.Objects) do
                     obj.instance = instances[i]
+                end
+                if episode.supertemplates then
+                    for i,st in ipairs(episode.supertemplates) do
+                        st.instantiatedTemplate = supertemplateInstances[i]
+                    end
                 end
                 episode.POI = backupPOI
             else
@@ -573,8 +633,21 @@ addCommandHandler("episode",
             if param1 == "object" then
                 if not param2 then
                     outputChatBox("[info] Write the modelId for the world object to be deleted: Ex: episode delete object 2255", 255, 0, 0, false)
+                    outputChatBox("[info] or the idx of the object to remove. Ex: episode delete object idx 5", 255, 0, 0, false)
                 end
-                outputChatBox("Select the (position of the) object to be deleted.", 255, 0, 0, false)
+                if param2 == 'idx' then
+                    local objIdx = tonumber(arg[1])
+                    if not objIdx or #episode.Objects < objIdx then
+                        outputChatBox("Invalid object idx", 255, 0, 0, false)
+                        return
+                    end
+                    local v = episode.Objects[objIdx]
+                    v:Destroy()
+                    table.remove(episode.Objects, objIdx)
+                    outputChatBox("Object found in current episode and deleted", 255, 0, 0, false)
+                    return
+                end
+                outputChatBox("Click on the (position of the) object to be deleted.", 255, 0, 0, false)
                 showCursor(true, true)
                 function onClick(button, state, absoluteX, absoluteY, worldX, worldY, worldZ, element)
                     if state ~= "up" then
@@ -597,6 +670,7 @@ addCommandHandler("episode",
                         end
                         outputChatBox("Object not found in current episode or try again with a worldmodelid if you intend to delete a world model", 255, 0, 0, false)
                         removeEventHandler("onClientClick", getRootElement(), onClick)
+                        showCursor(false)
                         return
                     end
 
@@ -721,6 +795,24 @@ addCommandHandler("episode",
             end
         elseif command == "modify" then
             if param1 == "object" then
+                outputChatBox("episode modify object [idx] [idx_value].", 255, 0, 0, false)
+                local idx = tonumber(arg[1])
+                if param2 == 'idx' and idx and idx <= #episode.Objects then
+                    editedObject = episode.Objects[idx].instance
+                    outputChatBox("Object found in current episode. Modify it and press enter.", 255, 0, 0, false)
+                    outputChatBox("Use w/a/s/d/z/x/q/e/f/g/h/j to place and rotate the object", 255, 0, 0, false)
+                    outputChatBox("Press enter to finish", 255, 0, 0, false)
+                    local function updateObjectData(obj)
+                        showCursor(false)
+                        removeEventHandler("onElementDoneEditing", getRootElement(), addObjectToCreate)
+                        episode.Objects[idx]:UpdateData(true)
+                        outputChatBox("Done. Object modified.", 255, 0, 0, false)
+                        return true
+                    end
+                    addEventHandler("onClientKey", root, playerPressedKey)
+                    addEventHandler ( "onElementDoneEditing", getRootElement(), updateObjectData)
+                    return
+                end
                 outputChatBox("Click on the object to be modified.", 255, 0, 0, false)
                 showCursor(true, true)
                 function onClick(button, state, absoluteX, absoluteY, worldX, worldY, worldZ, element)
@@ -882,6 +974,9 @@ addCommandHandler("episode",
                             type = type,
                             noCollisions = obj.noCollisions
                         }
+                        object = loadstring(object.dynamicString)()
+                        object.ObjectId = #episode.Objects..''
+
                         table.insert(
                             episode.Objects,
                             object
@@ -1176,6 +1271,7 @@ addCommandHandler("episode",
                 local function actionRetrieved(action)
                     removeEventHandler ( "onActionRetrieved", getRootElement(), actionRetrieved)
                     outputChatBox("action retrieved")
+                    prevPosition = localPlayer.position
                     lastAction:Apply()
                 end
                 addEventHandler ( "onActionRetrieved", getRootElement(), actionRetrieved)
@@ -1190,10 +1286,13 @@ addCommandHandler("episode",
                         poi = v
                     end
                 end
-
-                localPlayer.position = poi.position
-                localPlayer.rotation = poi.rotation
-                poi:GetNextValidAction(localPlayer):Apply()
+                if poi then
+                    localPlayer.position = poi.position
+                    localPlayer.rotation = poi.rotation
+                    poi:GetNextValidAction(localPlayer):Apply()
+                else
+                    outputChatBox('Couldn\'t find any pois')
+                end
             elseif param1 == "camera" then
                 local regionsInRange = Region.FilterWithinRange(localPlayer.position, episode.Regions, 1.5)
                 local closestRegion = Region.GetClosest(localPlayer, regionsInRange, true)
@@ -1281,182 +1380,319 @@ addCommandHandler("episode",
 	end
 )
 
+--when defining a supertemplate, all coordinates will be relative to the localPlayer.position
+--when defining an episode and you insert a supertemplate, it will be inserted first relative to localPlayer.position, then the relative point is edited and saved
+--saved inside the episode along with the supertemplate name, offsets (and rotations) for each template individually, and a boolean (include template or not in the current episode)
+--initially the offsets are 0, when defined the admin will have the option to save these offsets by default for templates
+
+addCommandHandler("supertemplate",
+    function (commandName, command, param1, param2, ...)
+        if command == "new" then
+            if not param1 then
+                outputChatBox("name was expected but got empty. supertemplate new name", 255, 0, 0, false)
+                return
+            end
+            --delete the current supertemplate
+            supertemplate = Supertemplate{position = localPlayer.position, name = param1}
+            outputChatBox("Supertemplate "..supertemplate.name.." initialized at player position", 255, 0, 0, false)
+        elseif command == 'load' then
+            if not param1 then
+                outputChatBox("name was expected but got empty. supertemplate load name", 255, 0, 0, false)
+                return
+            end
+            supertemplate = Supertemplate.Load(param1)
+            outputChatBox("Supertemplate loaded", 255, 0, 0, false)
+        elseif command == "save" then
+            if param2 ~= "o" and fileExists("files/supertemplates/"..param1.."/"..param1..".json") then
+                outputChatBox("files/supertemplates/"..param1.."/"..param1..".json already exists. To overwrite it type supertemplate save template_name o", 255, 0, 0, false)
+                return
+            end
+
+            local fileHandle = fileCreate("files/supertemplates/"..param1.."/"..param1..".json")
+            if fileHandle then
+                local jsonStr = toJSON(supertemplate:Serialize())
+                fileWrite(fileHandle, jsonStr)
+                fileClose(fileHandle)
+                outputChatBox("Saved files/supertemplates/"..param1.."/"..param1..".json", 255, 0, 0, false)
+            end
+        elseif command == 'showtemplates' then
+            outputChatBox('supertemplate templates nr: '..#supertemplate.templates)
+            for _,t in ipairs(supertemplate.templates) do
+                outputChatBox(t)
+            end
+        elseif command == 'who' then
+            outputChatBox('supertemplate ' .. supertemplate.name)
+        elseif command == 'add' then
+            --add the current template to the supertemplate
+            if param1 == 'current' or param1 == nil or param1 == '' then
+                if #supertemplate.templates == 0 then
+                    supertemplate.position = template.position
+                else
+                    local firstTemplate = Template.Load(supertemplate.name, supertemplate.templates[1])
+                    template:ComputeGlobalCentroid()
+                    template:Rebase(supertemplate.position, 
+                        Vector3(
+                            firstTemplate.globalCentroid.x,
+                            firstTemplate.globalCentroid.y,
+                            firstTemplate.globalCentroid.z
+                        ) - template.globalCentroid
+                    )
+                end 
+                template:Serialize("files/supertemplates/"..supertemplate.name)
+                table.insert(supertemplate.templates, template.name)
+            else
+                local template = Template.Load(supertemplate.name, param1)
+                if #supertemplate.templates == 0 then
+                    supertemplate.position = template.position
+                else
+                    local firstTemplate = Template.Load(supertemplate.name, supertemplate.templates[1])
+                    template:ComputeGlobalCentroid()
+                    template:Rebase(
+                        supertemplate.position, 
+                        Vector3(
+                            firstTemplate.globalCentroid.x,
+                            firstTemplate.globalCentroid.y,
+                            firstTemplate.globalCentroid.z
+                        ) - template.globalCentroid
+                    )
+                end 
+                template:Serialize("files/supertemplates/"..supertemplate.name)
+                table.insert(supertemplate.templates, template.name)
+            end
+            outputChatBox('supertemplate templates nr: '..#supertemplate.templates)
+        elseif command == 'insert' then
+            if param1 then
+                supertemplate = Supertemplate.Load(param1)
+            end
+            --the relative point is the current player location, insert in turn all templates from the supertemplate, obtaining the offsets
+            supertemplate.templateIdx = 1
+            template = Template.Load(supertemplate.name, supertemplate.templates[supertemplate.templateIdx])
+            if not template then
+                outputChatBox("Something went wrong while deserializing the template")
+                return
+            end
+            supertemplate.position = localPlayer.position
+            supertemplate.offsets = {}
+            template:Instantiate(localPlayer.interior, supertemplate.position)
+            showCursor(true, true)
+            outputChatBox("Use w/a/s/d/z/x/q/e/f/g/h/j to place and rotate the object", 255, 0, 0, false)
+            outputChatBox("Press backspace to mark the template to be skipped", 255, 0, 0, false)
+            outputChatBox("Press enter to finish", 255, 0, 0, false)
+            editedObject = template
+            isTemplate = true   
+            relativePosition = supertemplate.position
+            addEventHandler("onClientKey", root, playerPressedKey)
+
+            local function finishedOffsettingTemplate(edited_template)
+                showCursor(false)
+                removeEventHandler("onElementDoneEditing", getRootElement(), finishedOffsettingTemplate)
+
+                if #supertemplate.offsets < supertemplate.templateIdx then
+                    table.insert(supertemplate.offsets, template:GetSerializedOffsets())
+                else
+                    local offsets = supertemplate.offsets[supertemplate.templateIdx]
+                    template.offset = template.offset + Vector3(offsets.offset.x, offsets.offset.y, offsets.offset.z)
+                    template.rotationOffset = template.rotationOffset + Vector3(offsets.rotationOffset.x, offsets.rotationOffset.y, offsets.rotationOffset.z)
+                    supertemplate.offsets[supertemplate.templateIdx] = template:GetSerializedOffsets()
+                end
+                supertemplate.templateIdx = supertemplate.templateIdx + 1
+                if supertemplate.templateIdx <= #supertemplate.templates then
+                    template:Destroy()
+                    template = Template.Load(supertemplate.name, supertemplate.templates[supertemplate.templateIdx])
+                    if not template then
+                        outputChatBox("Something went wrong while deserializing the template")
+                        return
+                    end
+                    --insert the next template (with offsets from supertemplate)
+                    template:Instantiate(localPlayer.interior, supertemplate.position)
+                    showCursor(true, true)
+                    outputChatBox("Use w/a/s/d/z/x/q/e/f/g/h/j to place and rotate the object", 255, 0, 0, false)
+                    outputChatBox("Press backspace to mark the template to be skipped", 255, 0, 0, false)
+                    outputChatBox("Press enter to finish", 255, 0, 0, false)
+                    nextEditSameThing = true
+                    editedObject = template
+                    isTemplate = true
+                    addEventHandler("onClientKey", root, playerPressedKey)
+                    addEventHandler ( "onElementDoneEditing", getRootElement(), finishedOffsettingTemplate)
+                else
+                    supertemplate.instantiatedTemplate = template
+                    --insert serialized supertemplate in episode
+                    supertemplate.position = supertemplate.position:unpack()
+                    table.insert(episode.supertemplates, supertemplate)
+                end
+            end  
+            addEventHandler ( "onElementDoneEditing", getRootElement(), finishedOffsettingTemplate)
+        end
+    end
+)
+--the coordinates of the mainpoi is not relative
 addCommandHandler("template",
     function (commandName, command, param1, param2, ...)
         if command == "save" then
-            if param2 ~= "o" and fileExists("files/templates/"..param1..".json") then
-                outputChatBox("files/templates/"..param1..".json already exists. To overwrite it type template save template_name o", 255, 0, 0, false)
+            outputChatBox('Notice that this command only serializes the template now (it doesn\'t serialize the closest poi)\nAnd only as part of a supertemplate')
+            local name = param2
+            if not name or name == 'o' then
+                name = template.name
+            end
+            template.name = name
+            if not name then
+                outputChatBox('The template does not have a name, write template save name')
+                return
+            end
+            local param3 = arg[1]
+            --the user can save a template but only directly in a supertemplate folder
+            --save template, load supertemplate, add template name to supertemplate.templates list, overwrite supertemplate json file
+            if param2 ~= "o" and param3 ~= 'o' and fileExists("files/supertemplates/"..param1.."/"..name..".json") then
+                outputChatBox("files/supertemplates/"..param1.."/"..name..".json already exists. To overwrite it type template save supertemplate_name [optional - template_name] o", 255, 0, 0, false)
+                return
+            end
+            --idea: if the supertemplate doesn't have any templates yet => the supertemplate relative point = template.relativePoint; compute the template globalCentroid
+            --else offset the current template with the vector firstTemplate.centroid - curTemplate.centroid in global coordinates, then recompute the coordinates relative to the supertemplate's relative point
+            local supertemplate = Supertemplate.Load(param1)
+            if not supertemplate then
+                outputChatBox('The supertemplate '..param1..' doesn\'t exist. Make sure it is saved first (the full path mods/deathmatch/resources/sv2l/files/supertemplates/'..param1..'/'..param1..'.json exists)')
                 return
             end
 
-            local poi = nil
-            local minDist = 1000
-            for i,v in ipairs (episode.POI) do
-                local dist = math.abs((localPlayer.position - Vector3(v.X, v.Y, v.Z)).length)
-                if dist < minDist then
-                    minDist = dist
-                    poi = v
-                end
-            end
-
-            if not poi then
-                outputChatBox("Could not find a POI nearby!")
+            if #supertemplate.templates == 0 then
+                supertemplate.position = template.position
+            else
+                local firstTemplate = Template.Load(param1, supertemplate.templates[1])
+                template:ComputeGlobalCentroid()
+                template:Rebase(
+                    supertemplate.position, 
+                    Vector3(
+                        firstTemplate.globalCentroid.x, 
+                        firstTemplate.globalCentroid.y, 
+                        firstTemplate.globalCentroid.z
+                    ) - template.globalCentroid
+                )
+            end 
+            template:Serialize("files/supertemplates/"..param1)
+            table.insert(supertemplate.templates, template.name)
+            supertemplate:Serialize(param1)
+        elseif command == 'load' then
+            if not param1 or param1 == '' then
+                outputChatBox('supertemplate name expected. template load supertemplate_name template_name')
                 return
             end
-
-            local mainPoi, objects, locations = poi:Serialize(episode, Vector3(poi.position.x, poi.position.y, poi.position.z))
-            local instances = {}
-            for _,obj in ipairs(objects) do
-                table.insert(instances, obj.instance)
-                if obj.position and obj.position.unpack then
-                    obj.position = obj.position:unpack()
-                end
-                if obj.rotation and obj.rotation.unpack then
-                    obj.rotation = obj.rotation:unpack()
-                end
-                if obj.PosOffset and obj.PosOffset.unpack then
-                    obj.PosOffset = obj.PosOffset:unpack()
-                end
-                if obj.RotOffset and obj.RotOffset.unpack then
-                    obj.RotOffset = obj.RotOffset:unpack()
-                end
-                obj.instance = nil
+            if not param2 or param2 == '' then
+                outputChatBox('template name expected. template load supertemplate_name template_name')
+                return
             end
-
-            local template = {
-                poi = mainPoi,
-                objects = objects,
-                locations = locations
-            }
-            local fileHandle = fileCreate("files/templates/"..param1..".json")
-            if fileHandle then
-                local jsonStr = toJSON(template)
-                fileWrite(fileHandle, jsonStr)
-                fileClose(fileHandle)
-                outputChatBox("Saved files/templates/"..param1..".json", 255, 0, 0, false)
+            template = Template.Load(param1, param2)
+            outputChatBox('template '..param2..' from supertemplate '..param1..'successfully loaded')
+        elseif command == 'new' then
+            if not param1 then
+                outputChatBox("name was expected but got empty. template new name", 255, 0, 0, false)
+                return
             end
-            for i,obj in ipairs(objects) do
-                obj.instance = instances[i]
-            end
-        elseif command == "insert" then
-            local file = fileOpen("files/templates/"..param1..".json") 
-            if file then
-                local jsonStr = fileRead(file, fileGetSize(file))
-                local rawTemplate = fromJSON(jsonStr)
-                fileClose(file)
+            template = Template({name = param1})
+            outputChatBox("template "..template.name..' initialized', 255, 0, 0, false)
+        elseif command == "add" then
+            if param1 == "poi" then
+                local poi = nil
+                local minDist = 1000
+                for i,v in ipairs (episode.POI) do
+                    local dist = math.abs((localPlayer.position - Vector3(v.X, v.Y, v.Z)).length)
+                    if dist < minDist then
+                        minDist = dist
+                        poi = v
+                    end
+                end
+    
+                if not poi then
+                    outputChatBox("Could not find a POI nearby!")
+                    return
+                else
+                    outputChatBox("Found a POI nearby")
+                end
 
-                if not rawTemplate then
-                    outputChatBox("Something went wrong while loading the template from file")
+                local relativePoint = localPlayer.position
+                if template.position then 
+                    relativePoint = template.position
+                else
+                    template.position = localPlayer.position
+                end
+    
+                local mainPoi, objects, locations = poi:Serialize(episode, relativePoint, template.objects, template.locations, template.poi, true)
+                outputChatBox("poi serialized: "..#objects..' objects ; '..#locations..' locations and the main poi')
+
+                template:AddItems(mainPoi, objects, locations)
+
+                outputChatBox("poi successfully added ")
+            elseif param1 == 'object' then
+                if param2 == nil or param2 == '' or not tonumber(param2) then
+                    outputChatBox('Object id expected. template add object objectid')
                     return
                 end
-                local template = Template(rawTemplate)
+
+                if not template.position then 
+                    template.position = localPlayer.position
+                end
+                
+                local id = tonumber(param2)
+                if #Where(template.objects, function (x) return x.id == id end) == 0 then
+                    local sourceObject = episode.Objects[id]
+                    local objectCopy = SampStoryObjectBase(sourceObject)
+                    local targetItemRelativePosition = Vector3(sourceObject.position.x, sourceObject.position.y, sourceObject.position.z) - template.position
+                    objectCopy.position = targetItemRelativePosition
+                    objectCopy.instance = nil
+                    objectCopy:UpdateData(true)
+                    objectCopy.id = id
+
+                    table.insert(template.objects, {
+                        id = objectCopy.id, 
+                        dynamicString = objectCopy.dynamicString
+                    })
+                end
+
+                outputChatBox("object successfully added "..param2)
+            else
+                outputChatBox("template add poi or template add object id")
+            end
+        elseif command == "insert" then
+            if param1 and param2 then
+                template = Template.Load(param1, param2)
                 if not template then
                     outputChatBox("Something went wrong while deserializing the template")
                     return
                 end
-                --Create the marker for the POI, the objects as dependencies and the markers for the other dependent locations
-                template:Instantiate(localPlayer.interior, localPlayer.position)
-                --First: ask the player to position the main poi
-                local function includeTemplateInEpisode(template)
-                    showCursor(false)
-                    removeEventHandler("onElementDoneEditing", getRootElement(), includeTemplateInEpisode)
-
-                    local objectsMap = {}
-                    local poiMap = {}
-                    --add the dependent objects in the episode objects list
-                    for _,o in ipairs(template.objects) do
-                        local obj = loadstring(o.dynamicString)()
-                        obj.instance = o.instance
-                        obj:UpdateData(true)
-                        table.insert(
-                            episode.Objects,
-                            obj
-                        )
-                        objectsMap[o.id] = #episode.Objects
-                    end
-                    outputChatBox("Template: ".. #template.objects .." dependent objects inserted...", 255, 255, 255, false)
-                    local function addSerializedPoiToTmpList(v, idx)
-                        v.X = v.instance.position.x
-                        v.Y = v.instance.position.y
-                        v.Z = v.instance.position.z + 1
-                        v.Interior = v.instance.interior
-                        v.instance:destroy()
-                        local obj = Location(v.X, v.Y, v.Z, v.Angle, v.Interior, v.Description)
-                        table.insert(episode.POI, obj)
-                        poiMap[v.id] = #episode.POI
-                    end
-                    local allPoi = {template.poi}
-                    --add the current poi in a temporary POI list
-                    addSerializedPoiToTmpList(template.poi)
-                    --add the dependent POI in the temporary POI list
-                    for _,v in ipairs(template.locations) do
-                        addSerializedPoiToTmpList(v)
-                        table.insert(allPoi, v)
-                    end
-                    --remap the action target ids in all POI from the temporary list
-                    for _,rawpoi in ipairs(allPoi) do
-                        local poi = episode.POI[poiMap[rawpoi.id]]
-                        --order is important here!
-                        local deserializedAllActions = {}
-                        for _,a in ipairs(rawpoi.allActions) do
-                            local action = loadstring(a.dynamicString)()
-                            action.id = a.id
-                            action.TargetItem = nil
-                            if a.targetItem then
-                                if a.targetItem.type == "Object" then
-                                    action.TargetItem = episode.Objects[objectsMap[a.targetItem.id] or a.targetItem.id]
-                                elseif a.targetItem.type == "Location" then
-                                    if poiMap[a.targetItem.id] > episode.POI then
-                                        action.TargetItem = episode.POI[poiMap[a.targetItem.id] or a.targetItem.id]
-                                    else
-
-                                    end
-                                end
-                            end
-                            if a.nextLocation then
-                                action.NextLocation = episode.POI[poiMap[a.targetItem.id] or a.targetItem.id]
-                            end
-                            table.insert(deserializedAllActions, action)
-                        end
-                        for i,a in ipairs(rawpoi.allActions) do
-                            local action = deserializedAllActions[i]
-                            if a.nextAction then
-                                if isArray(a.nextAction) then
-                                    action.NextAction = {}
-                                    for _, na in ipairs(a.nextAction) do
-                                        table.insert(action.NextAction, deserializedAllActions[na.id])
-                                    end
-                                else                    
-                                    action.NextAction = deserializedAllActions[a.nextAction.id]
-                                end
-                            end
-                            if a.closingAction then
-                                action.ClosingAction = deserializedAllActions[a.closingAction.id]
-                            end
-                        end
-                        poi.allActions = deserializedAllActions
-                        local deserializedPossibleActions = {}
-                        for _,a in ipairs(rawpoi.PossibleActions) do
-                            table.insert(deserializedPossibleActions, deserializedAllActions[a.id])
-                        end
-                        poi.PossibleActions = deserializedPossibleActions
-                    end
-                    outputChatBox("Template: ".. #template.locations .." dependent poi inserted...", 255, 255, 255, false)
-                    outputChatBox("Done. Template with all dependencies inserted.", 255, 0, 0, false)
-                    return true
-                end
-                showCursor(true, true)
-                outputChatBox("Use w/a/s/d/z/x/q/e/f/g/h/j to place and rotate the object", 255, 0, 0, false)
-                outputChatBox("Press enter to finish", 255, 0, 0, false)
-                editedObject = template
-                isTemplate = true
-                addEventHandler("onClientKey", root, playerPressedKey)
-                addEventHandler ( "onElementDoneEditing", getRootElement(), includeTemplateInEpisode)
-
             else
-                outputChatBox("Could not open the file files/templates/"..param1..".json")
+                outputChatBox("trying to instantiate the current template")
             end
+            --Create the marker for the POI, the objects as dependencies and the markers for the other dependent locations
+            template:Instantiate(localPlayer.interior, localPlayer.position)
+            --First: ask the player to position the main poi
+            local function includeTemplateInEpisode(edited_template)
+                showCursor(false)
+                removeEventHandler("onElementDoneEditing", getRootElement(), includeTemplateInEpisode)
+                if template.skip then
+                    outputChatBox("The template is marked to be skipped")
+                    return
+                end
+                outputChatBox("Episode objects before: "..#episode.Objects, 255, 255, 255, false)
+                outputChatBox("Episode poi before: "..#episode.POI, 255, 255, 255, false)
+
+                if template:InsertInEpisode(episode) then
+                    outputChatBox("Episode objects after: "..#episode.Objects, 255, 255, 255, false)
+                    outputChatBox("Episode poi after: "..#episode.POI, 255, 255, 255, false)
+    
+                    outputChatBox("Template: ".. #template.objects .." dependent objects inserted...", 255, 255, 255, false)
+                    outputChatBox("Template: ".. #template.locations .." dependent poi inserted...", 255, 255, 255, false)
+                    outputChatBox("Done. Template with all dependencies inserted.", 255, 0, 0, false)                    
+                end
+            end                
+            showCursor(true, true)
+            outputChatBox("Use w/a/s/d/z/x/q/e/f/g/h/j to place and rotate the object", 255, 0, 0, false)
+            outputChatBox("Press enter to finish", 255, 0, 0, false)
+            editedObject = template
+            isTemplate = true
+            relativePosition = localPlayer.position
+            addEventHandler("onClientKey", root, playerPressedKey)
+            addEventHandler ( "onElementDoneEditing", getRootElement(), includeTemplateInEpisode)
         else
+            outputChatBox("Command not found. Try the following: template save; template create; template insert; template add poi; template add object")
             outputChatBox("A template is a POI, with actions and their dependencies. The actions dependencies are their target items and next locations.")
             outputChatBox("Target items can be objects, locations or nothing.")
         end

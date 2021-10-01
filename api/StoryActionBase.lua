@@ -1,3 +1,4 @@
+globalActionIdCounter = 0
 StoryActionBase = class(IStoryItem, function(o, params)
     IStoryItem.init(o, params.description or params.Description or '', eStoryItemType.Action)
     o.Performer = params.performer or params.Performer or nil
@@ -6,7 +7,12 @@ StoryActionBase = class(IStoryItem, function(o, params)
     o.Prerequisites = params.prerequisites or params.Prerequisites or {}
     o.ClosingAction = params.closingAction or params.ClosingAction or nil
     o.NextAction = params.nextAction or params.NextAction or nil
-    o.ActionId = Guid().Id
+    math.randomseed(os.time())
+    math.random(); math.random(); math.random()
+    math.randomseed(os.time())
+    math.random(); math.random(); math.random()
+    globalActionIdCounter = globalActionIdCounter + 1
+    o.ActionId = globalActionIdCounter..''
     o.TopologicalOrder = params.topologicalOrder or params.TopologicalOrder or -1
     o.Penalties = params.penalties or params.Penalties or {}
     o.Rewards = params.rewards or params.Rewards or {}

@@ -13,7 +13,7 @@
         "id": "object0",
         "Target": {
             "id": "object0",
-            "Name": "Drink"
+            "Name": "Drinks"
         }
     },
     "object1": {
@@ -42,7 +42,7 @@
         "Target": {
             "id": "object0"
         },
-        "Location": "Kitchen"
+        "Location": "barroom"
     },
     "action0_inner1": {
         "Actor": {
@@ -54,31 +54,19 @@
         "Target": {
             "id": "object0"
         },
-        "Location": "Kitchen"
+        "Location": "barroom"
     },
     "action0_inner2": {
         "Actor": {
             "id": "actor0"
         },
         "Action": "PutDown",
-        "Next": "action1_inner0",
+        "Next": "action1_inner1",
         "id": "action0_inner2",
         "Target": {
             "id": "object0"
         },
-        "Location": "Kitchen"
-    },
-    "action1_inner0": {
-        "Actor": {
-            "id": "actor0"
-        },
-        "Action": "SitDown",
-        "Next": "action1_inner1",
-        "id": "action1_inner0",
-        "Target": {
-            "id": "object2"
-        },
-        "Location": "Kitchen"
+        "Location": "barroom"
     },
     "action1_inner1": {
         "Actor": {
@@ -97,22 +85,10 @@
             "id": "actor0"
         },
         "Action": "Eat",
-        "Next": "action1_inner3",
+        "Next": "action2_inner0",
         "id": "action1_inner2",
         "Target": {
             "id": "object1"
-        },
-        "Location": "Kitchen"
-    },
-    "action1_inner3": {
-        "Actor": {
-            "id": "actor0"
-        },
-        "Action": "StandUp",
-        "Next": "action2_inner0",
-        "id": "action1_inner3",
-        "Target": {
-            "id": "object2"
         },
         "Location": "Kitchen"
     },
@@ -126,7 +102,7 @@
         "Target": {
             "id": "object0"
         },
-        "Location": "Kitchen"
+        "Location": "barroom"
     },
     "action2_inner1": {
         "Actor": {
@@ -138,7 +114,7 @@
         "Target": {
             "id": "object0"
         },
-        "Location": "Kitchen"
+        "Location": "barroom"
     },
     "action2_inner2": {
         "Actor": {
@@ -150,7 +126,7 @@
         "Target": {
             "id": "object0"
         },
-        "Location": "Kitchen"
+        "Location": "barroom"
     },
     "temporal": {
         "timeline": {

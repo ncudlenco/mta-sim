@@ -24,7 +24,9 @@ function StandUp:Apply()
     table.insert(story.History[self.Performer:getData('id')], self)
     
     story.Logger:Log(self.Description .. "from the " .. self.TargetItem.Description, self)
-    self.TargetItem.instance:setCollisionsEnabled(false)
+    if self.TargetItem.instance then
+        self.TargetItem.instance:setCollisionsEnabled(false)
+    end
     local animationLib = "INT_OFFICE"
     local animationId = "OFF_Sit_2Idle_180"
     local duration = 5000

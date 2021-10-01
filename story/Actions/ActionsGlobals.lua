@@ -20,101 +20,101 @@ function OnGlobalActionFinished(delay, playerId, storyId, callback, destroyedIte
     Timer(function(playerId, storyId)
         local story = CURRENT_STORY
         local lastAction = story.History[playerId][#story.History[playerId]]
-        local actionEvent = nil
-        if lastAction then
-            --TODO: log graph events here
-            if lastAction.Name ~= '' then
-                local Target = nil
-                if lastAction.TargetItem ~= nil then
-                    if lastAction.TargetItem.ofActor == nil then
-                        Target = 
-                        {
-                            id = 
-                            --object, location or another actor
-                                lastAction.TargetItem.ObjectId or lastAction.TargetItem.LocationId or lastAction.TargetItem:getData('id'),
-                        --     type = lastAction.TargetItem.StoryItemType,
-                        --     relativePosition = lastAction.TargetItem:getData('relativePosition')
-                        }    
-                    else
-                        Target = 
-                        {
-                            id = lastAction.TargetItem.ofActor.id,
-                        }    
-                    end
-                end
-                actionEvent = {
-                    id = Guid().Id,
-                    Actor = 
-                   { 
-                       id = 
-                        lastAction.Performer:getData('id'), 
-    --                    relativePosition = lastAction.Performer:getData('relativePosition') 
-                   }
-                    ,
-                    Action = lastAction.Name,
-                    Location = lastAction.Performer:getData('currentRegion'), --but this is a move action then the location should be the region of the target location
-    --                Start = actionStartTime,
-    --                End = CURRENT_STORY.Logger:GetElapsedTime(),
-                    Target = Target,
-                    Next = nil
-                }
-                if (GRAPH[actionEvent.Actor.id] == nil) then
-                    local existsNode = getActorData(lastAction.Performer)
-                    GRAPH[actionEvent.Actor.id] = {
-                        id = existsNode.id,
-                        Actor = existsNode,
-                        Action = 'Exists',
-                        Location = nil,
-                        Target = nil,
-                        Next = nil
-                    }
-                end
-                if (Target ~= nil and GRAPH[Target.id] == nil) then
-                    local existsNode = {id = Target.id}
-                    local Actor = nil
-                    local Location = nil
-                    local obj = nil
-                    if (lastAction.TargetItem.StoryItemType == eStoryItemType.Object) then
-                        existsNode.Name = lastAction.TargetItem.Description
-                        if (lastAction.TargetItem.Region ~= nil) then
-                            existsNode.Location = lastAction.TargetItem.Region.name
-                        end
-                        obj = existsNode
-                    elseif(lastAction.TargetItem.StoryItemType == eStoryItemType.Location) then
-                        if lastAction.TargetItem.ofActor == nil then
-                            existsNode.Name = lastAction.TargetItem.Description
-                            if (lastAction.TargetItem.Region ~= nil) then
-                                existsNode.Location = lastAction.TargetItem.Region.name
-                            end
-                            Location = existsNode    
-                        else
-                            existsNode = lastAction.TargetItem.ofActor
-                            Actor = existsNode
-                        end
-                    else
-                        existsNode.Name = lastAction.TargetItem:getData('name')
-                        existsNode.Description = lastAction.TargetItem:getData('skinDescription')
-                        existsNode.Gender = lastAction.TargetItem:getData('genderNominative')
-                        Actor = existsNode
-                    end
-                    if Location == nil then
-                        GRAPH[existsNode.id] = {
-                            id = existsNode.id,
-                            Actor = Actor,
-                            Action = 'Exists',
-                            Location = Location,
-                            Target = obj,
-                            Next = nil
-                        }
-                    end --Skip locations for now...
-                end
-                GRAPH[actionEvent.id] = actionEvent
-                if lastAction.previousEvent ~= nil then
-                    GRAPH[lastAction.previousEvent.id].Next = actionEvent.id
-                    lastAction.previousEvent = nil
-                end
-            end
-        end
+    --     local actionEvent = nil
+    --     if lastAction then
+    --         --TODO: log graph events here
+    --         if lastAction.Name ~= '' then
+    --             local Target = nil
+    --             if lastAction.TargetItem ~= nil then
+    --                 if lastAction.TargetItem.ofActor == nil then
+    --                     Target = 
+    --                     {
+    --                         id = 
+    --                         --object, location or another actor
+    --                             lastAction.TargetItem.ObjectId or lastAction.TargetItem.LocationId or lastAction.TargetItem:getData('id'),
+    --                     --     type = lastAction.TargetItem.StoryItemType,
+    --                     --     relativePosition = lastAction.TargetItem:getData('relativePosition')
+    --                     }    
+    --                 else
+    --                     Target = 
+    --                     {
+    --                         id = lastAction.TargetItem.ofActor.id,
+    --                     }    
+    --                 end
+    --             end
+    --             actionEvent = {
+    --                 id = Guid().Id,
+    --                 Actor = 
+    --                { 
+    --                    id = 
+    --                     lastAction.Performer:getData('id'), 
+    -- --                    relativePosition = lastAction.Performer:getData('relativePosition') 
+    --                }
+    --                 ,
+    --                 Action = lastAction.Name,
+    --                 Location = lastAction.Performer:getData('currentRegion'), --but this is a move action then the location should be the region of the target location
+    -- --                Start = actionStartTime,
+    -- --                End = CURRENT_STORY.Logger:GetElapsedTime(),
+    --                 Target = Target,
+    --                 Next = nil
+    --             }
+    --             if (GRAPH and GRAPH[actionEvent.Actor.id] == nil) then
+    --                 local existsNode = getActorData(lastAction.Performer)
+    --                 GRAPH[actionEvent.Actor.id] = {
+    --                     id = existsNode.id,
+    --                     Actor = existsNode,
+    --                     Action = 'Exists',
+    --                     Location = nil,
+    --                     Target = nil,
+    --                     Next = nil
+    --                 }
+    --             end
+    --             if (Target ~= nil and GRAPH and GRAPH[Target.id] == nil) then
+    --                 local existsNode = {id = Target.id}
+    --                 local Actor = nil
+    --                 local Location = nil
+    --                 local obj = nil
+    --                 if (lastAction.TargetItem.StoryItemType == eStoryItemType.Object) then
+    --                     existsNode.Name = lastAction.TargetItem.Description
+    --                     if (lastAction.TargetItem.Region ~= nil) then
+    --                         existsNode.Location = lastAction.TargetItem.Region.name
+    --                     end
+    --                     obj = existsNode
+    --                 elseif(lastAction.TargetItem.StoryItemType == eStoryItemType.Location) then
+    --                     if lastAction.TargetItem.ofActor == nil then
+    --                         existsNode.Name = lastAction.TargetItem.Description
+    --                         if (lastAction.TargetItem.Region ~= nil) then
+    --                             existsNode.Location = lastAction.TargetItem.Region.name
+    --                         end
+    --                         Location = existsNode    
+    --                     else
+    --                         existsNode = lastAction.TargetItem.ofActor
+    --                         Actor = existsNode
+    --                     end
+    --                 else
+    --                     existsNode.Name = lastAction.TargetItem:getData('name')
+    --                     existsNode.Description = lastAction.TargetItem:getData('skinDescription')
+    --                     existsNode.Gender = lastAction.TargetItem:getData('genderNominative')
+    --                     Actor = existsNode
+    --                 end
+    --                 if Location == nil then
+    --                     GRAPH[existsNode.id] = {
+    --                         id = existsNode.id,
+    --                         Actor = Actor,
+    --                         Action = 'Exists',
+    --                         Location = Location,
+    --                         Target = obj,
+    --                         Next = nil
+    --                     }
+    --                 end --Skip locations for now...
+    --             end
+    --             GRAPH[actionEvent.id] = actionEvent
+    --             if lastAction.previousEvent ~= nil then
+    --                 GRAPH[lastAction.previousEvent.id].Next = actionEvent.id
+    --                 lastAction.previousEvent = nil
+    --             end
+    --         end
+    --     end
         if DEBUG then
             outputConsole("GlobalAction:Apply - getting next valid action")
             print("GlobalAction:Apply - getting next valid action")
@@ -159,7 +159,7 @@ function OnGlobalActionFinished(delay, playerId, storyId, callback, destroyedIte
                 -- make the current actor wait for the second actor to come. This action doesn't end
                 local waitPed1 = Wait { performer = ped1, nextLocation = ped1Location, targetItem = ped1Location, graphId = story.CurrentEpisode.graphId, time=10000000 }
                 table.insert(ped1Location.PossibleActions, waitPed1)
-                waitPed1.previousEvent = actionEvent
+                -- waitPed1.previousEvent = actionEvent
                 waitPed1:Apply()
 
                 -- TODO: perform the multi-agent action, reset the variables (SECOND_ACTOR and FIRST_ACTOR_LOCATION), select a better node
@@ -178,7 +178,7 @@ function OnGlobalActionFinished(delay, playerId, storyId, callback, destroyedIte
 
                 local movePed2 = Move { performer = SECOND_ACTOR, nextLocation = ped2Location, targetItem = ped2Location, graphId = story.CurrentEpisode.graphId }
                 table.insert(ped2Location.PossibleActions, movePed2)
-                movePed2.previousEvent = actionEvent
+                -- movePed2.previousEvent = actionEvent
                 movePed2:Apply()
 
                 PERFORM_MULTI_ACTION = true
@@ -244,7 +244,7 @@ function OnGlobalActionFinished(delay, playerId, storyId, callback, destroyedIte
                 multiActionPed2.NextAction = movePed2
                 multiActionPed2.ClosingAction = movePed2
 
-                multiActionPed2.previousEvent = actionEvent
+                -- multiActionPed2.previousEvent = actionEvent
 --The graph will be broken for multi agent actions
                 --multiActionPed1.previousEvent = actionEvent
                 multiActionPed1:Apply()
@@ -272,12 +272,14 @@ function OnGlobalActionFinished(delay, playerId, storyId, callback, destroyedIte
                 else
                     nextAction = lastAction.NextAction
                 end
+            elseif DEFINING_EPISODES then
+                nextAction = EmptyAction({Performer = player})
             elseif lastAction.NextLocation then
                 nextAction = lastAction.NextLocation:GetNextValidAction(lastAction.Performer)
             end
 
             nextAction.Performer = lastAction.Performer
-            nextAction.previousEvent = actionEvent
+            -- nextAction.previousEvent = actionEvent
             nextAction:Apply()
         end
 

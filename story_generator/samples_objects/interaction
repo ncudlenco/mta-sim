@@ -1,13 +1,4 @@
 {
-    "actor1": {
-        "Actor": {
-            "id": "actor1",
-            "Gender": 2,
-            "Name": "NAME"
-        },
-        "Action": "Exists",
-        "id": "actor1"
-    },
     "actor0": {
         "Actor": {
             "id": "actor0",
@@ -16,6 +7,15 @@
         },
         "Action": "Exists",
         "id": "actor0"
+    },
+    "actor1": {
+        "Actor": {
+            "id": "actor1",
+            "Gender": 2,
+            "Name": "NAME"
+        },
+        "Action": "Exists",
+        "id": "actor1"
     },
     "object0": {
         "Action": "Exists",
@@ -46,7 +46,7 @@
         "id": "object3",
         "Target": {
             "id": "object3",
-            "Name": "Sofa"
+            "Name": "Chair"
         }
     },
     "object4": {
@@ -54,7 +54,7 @@
         "id": "object4",
         "Target": {
             "id": "object4",
-            "Name": "ArmChair"
+            "Name": "Desk"
         }
     },
     "object5": {
@@ -142,7 +142,7 @@
             "id": "actor0"
         },
         "Action": "PutDown",
-        "Next": "action7_inner0",
+        "Next": "action4",
         "id": "action2_inner2",
         "Target": {
             "id": "object5"
@@ -159,43 +159,55 @@
         "Target": {
             "id": "object3"
         },
-        "Location": "livingroom"
+        "Location": "Kitchen"
     },
     "action3_inner1": {
         "Actor": {
             "id": "actor1"
         },
         "Action": "StandUp",
-        "Next": "action6_inner0",
+        "Next": "action5",
         "id": "action3_inner1",
         "Target": {
             "id": "object3"
         },
-        "Location": "livingroom"
+        "Location": "Kitchen"
+    },
+    "action4": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "HandShake",
+        "Next": "action7_inner0",
+        "id": "action4",
+        "Target": {
+            "id": "actor1"
+        },
+        "Location": "Kitchen"
+    },
+    "action5": {
+        "Actor": {
+            "id": "actor1"
+        },
+        "Action": "HandShake",
+        "Next": "action6_inner0",
+        "id": "action5",
+        "Target": {
+            "id": "actor0"
+        },
+        "Location": "Kitchen"
     },
     "action6_inner0": {
         "Actor": {
             "id": "actor1"
         },
         "Action": "SitDown",
-        "Next": "action6_inner3",
+        "Next": "action6_inner1",
         "id": "action6_inner0",
         "Target": {
-            "id": "object4"
+            "id": "object3"
         },
-        "Location": "livingroom"
-    },
-    "action6_inner3": {
-        "Actor": {
-            "id": "actor1"
-        },
-        "Action": "StandUp",
-        "Next": "action6_inner1",
-        "id": "action6_inner3",
-        "Target": {
-            "id": "object4"
-        },
-        "Location": "livingroom"
+        "Location": "Kitchen"
     },
     "action6_inner1": {
         "Actor": {
@@ -214,10 +226,22 @@
             "id": "actor1"
         },
         "Action": "Eat",
-        "Next": "None",
+        "Next": "action6_inner3",
         "id": "action6_inner2",
         "Target": {
             "id": "object1"
+        },
+        "Location": "Kitchen"
+    },
+    "action6_inner3": {
+        "Actor": {
+            "id": "actor1"
+        },
+        "Action": "StandUp",
+        "Next": "None",
+        "id": "action6_inner3",
+        "Target": {
+            "id": "object3"
         },
         "Location": "Kitchen"
     },
@@ -231,7 +255,7 @@
         "Target": {
             "id": "object3"
         },
-        "Location": "livingroom"
+        "Location": "Kitchen"
     },
     "action7_inner1": {
         "Actor": {
@@ -243,12 +267,12 @@
         "Target": {
             "id": "object3"
         },
-        "Location": "livingroom"
+        "Location": "Kitchen"
     },
     "temporal": {
         "timeline": {
-            "actor0": "[('action0', 'WashHands'), ('action2_inner0', 'PickUp'), ('action2_inner1', 'Drink'), ('action2_inner2', 'PutDown'), ('action4', 'Handshake'), ('action7_inner0', 'SitDown'), ('action7_inner1', 'StandUp')]",
-            "actor1": "[('action1_inner0', 'PickUp'), ('action1_inner1', 'Drink'), ('action1_inner2', 'PutDown'), ('action3_inner0', 'SitDown'), ('action3_inner1', 'StandUp'), ('action5', 'Handshake'), ('action6_inner0', 'SitDown'), ('action6_inner1', 'PickUp'), ('action6_inner2', 'Eat'), ('action6_inner3', 'StandUp')]"
+            "actor0": "[('action0', 'WashHands'), ('action2_inner0', 'PickUp'), ('action2_inner1', 'Drink'), ('action2_inner2', 'PutDown'), ('action4', 'HandShake'), ('action7_inner0', 'SitDown'), ('action7_inner1', 'StandUp')]",
+            "actor1": "[('action1_inner0', 'PickUp'), ('action1_inner1', 'Drink'), ('action1_inner2', 'PutDown'), ('action3_inner0', 'SitDown'), ('action3_inner1', 'StandUp'), ('action5', 'HandShake'), ('action6_inner0', 'SitDown'), ('action6_inner1', 'PickUp'), ('action6_inner2', 'Eat'), ('action6_inner3', 'StandUp')]"
         },
         "starting_actions": {
             "actor0": "action0",
@@ -332,8 +356,8 @@
     },
     "temporal_abs": {
         "timeline": {
-            "actor0": "[['action0', 'WashHands'], ['action2', 'DrinkBeverage'], ['action4', 'Handshake'], ['action7', 'SitAndStand']]",
-            "actor1": "[['action1', 'DrinkBeverage'], ['action3', 'SitAndStand'], ['action5', 'Handshake'], ['action6', 'EatFood']]"
+            "actor0": "[['action0', 'WashHands'], ['action2', 'DrinkBeverage'], ['action4', 'HandShake'], ['action7', 'SitAndStand']]",
+            "actor1": "[['action1', 'DrinkBeverage'], ['action3', 'SitAndStand'], ['action5', 'HandShake'], ['action6', 'EatFood']]"
         },
         "starting_actions": {
             "actor0": "action0",

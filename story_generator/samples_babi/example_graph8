@@ -1,13 +1,4 @@
 {
-    "actor1": {
-        "Actor": {
-            "id": "actor1",
-            "Gender": 1,
-            "Name": "John"
-        },
-        "Action": "Exists",
-        "id": "actor1"
-    },
     "actor3": {
         "Actor": {
             "id": "actor3",
@@ -17,14 +8,14 @@
         "Action": "Exists",
         "id": "actor3"
     },
-    "actor2": {
+    "actor1": {
         "Actor": {
-            "id": "actor2",
+            "id": "actor1",
             "Gender": 1,
-            "Name": "Daniel"
+            "Name": "John"
         },
         "Action": "Exists",
-        "id": "actor2"
+        "id": "actor1"
     },
     "actor0": {
         "Actor": {
@@ -35,12 +26,21 @@
         "Action": "Exists",
         "id": "actor0"
     },
+    "actor2": {
+        "Actor": {
+            "id": "actor2",
+            "Gender": 1,
+            "Name": "Daniel"
+        },
+        "Action": "Exists",
+        "id": "actor2"
+    },
     "object0": {
         "Action": "Exists",
         "id": "object0",
         "Target": {
             "id": "object0",
-            "Name": "football"
+            "Name": "Drinks"
         }
     },
     "object1": {
@@ -48,7 +48,7 @@
         "id": "object1",
         "Target": {
             "id": "object1",
-            "Name": "milk"
+            "Name": "Food"
         }
     },
     "object2": {
@@ -56,18 +56,18 @@
         "id": "object2",
         "Target": {
             "id": "object2",
-            "Name": "apple"
+            "Name": "Food"
         }
     },
     "action0": {
         "Actor": {
             "id": "actor0"
         },
-        "Action": "got there",
+        "Action": "PickUp",
         "Next": "action7",
         "id": "action0",
         "Target": {
-            "id": "object1"
+            "id": "object0"
         },
         "Location": ""
     },
@@ -75,7 +75,7 @@
         "Actor": {
             "id": "actor1"
         },
-        "Action": "moved",
+        "Action": "Move",
         "Next": "action2",
         "id": "action1",
         "Target": {
@@ -87,11 +87,11 @@
         "Actor": {
             "id": "actor1"
         },
-        "Action": "picked there",
+        "Action": "PickUp",
         "Next": "action3",
         "id": "action2",
         "Target": {
-            "id": "object0"
+            "id": "object1"
         },
         "Location": "bedroom"
     },
@@ -99,7 +99,7 @@
         "Actor": {
             "id": "actor1"
         },
-        "Action": "journeyed",
+        "Action": "Move",
         "Next": "action4",
         "id": "action3",
         "Target": {
@@ -111,7 +111,7 @@
         "Actor": {
             "id": "actor1"
         },
-        "Action": "went",
+        "Action": "Move",
         "Next": "action6",
         "id": "action4",
         "Target": {
@@ -123,7 +123,7 @@
         "Actor": {
             "id": "actor2"
         },
-        "Action": "went back",
+        "Action": "Move",
         "Next": "None",
         "id": "action5",
         "Target": {
@@ -135,7 +135,7 @@
         "Actor": {
             "id": "actor1"
         },
-        "Action": "went back",
+        "Action": "Move",
         "Next": "action10",
         "id": "action6",
         "Target": {
@@ -147,7 +147,7 @@
         "Actor": {
             "id": "actor0"
         },
-        "Action": "went",
+        "Action": "Move",
         "Next": "action9",
         "id": "action7",
         "Target": {
@@ -159,7 +159,7 @@
         "Actor": {
             "id": "actor3"
         },
-        "Action": "went back",
+        "Action": "Move",
         "Next": "action12",
         "id": "action8",
         "Target": {
@@ -171,7 +171,7 @@
         "Actor": {
             "id": "actor0"
         },
-        "Action": "travelled",
+        "Action": "Move",
         "Next": "None",
         "id": "action9",
         "Target": {
@@ -183,7 +183,7 @@
         "Actor": {
             "id": "actor1"
         },
-        "Action": "travelled",
+        "Action": "Move",
         "Next": "action11",
         "id": "action10",
         "Target": {
@@ -195,7 +195,7 @@
         "Actor": {
             "id": "actor1"
         },
-        "Action": "picked up",
+        "Action": "PickUp",
         "Next": "None",
         "id": "action11",
         "Target": {
@@ -207,7 +207,7 @@
         "Actor": {
             "id": "actor3"
         },
-        "Action": "travelled",
+        "Action": "Move",
         "Next": "action13",
         "id": "action12",
         "Target": {
@@ -219,7 +219,7 @@
         "Actor": {
             "id": "actor3"
         },
-        "Action": "journeyed",
+        "Action": "Move",
         "Next": "None",
         "id": "action13",
         "Target": {
@@ -229,10 +229,10 @@
     },
     "temporal": {
         "timeline": {
-            "actor0": "[('action0', 'got there'), ('action7', 'went'), ('action9', 'travelled')]",
-            "actor1": "[('action1', 'moved'), ('action2', 'picked there'), ('action3', 'journeyed'), ('action4', 'went'), ('action6', 'went back'), ('action10', 'travelled'), ('action11', 'picked up')]",
-            "actor2": "[('action5', 'went back')]",
-            "actor3": "[('action8', 'went back'), ('action12', 'travelled'), ('action13', 'journeyed')]"
+            "actor0": "[('action0', 'PickUp'), ('action7', 'Move'), ('action9', 'Move')]",
+            "actor1": "[('action1', 'Move'), ('action2', 'PickUp'), ('action3', 'Move'), ('action4', 'Move'), ('action6', 'Move'), ('action10', 'Move'), ('action11', 'PickUp')]",
+            "actor2": "[('action5', 'Move')]",
+            "actor3": "[('action8', 'Move'), ('action12', 'Move'), ('action13', 'Move')]"
         },
         "starting_actions": {
             "actor0": "action0",
@@ -299,10 +299,10 @@
     },
     "temporal_abs": {
         "timeline": {
-            "actor0": "[['action0', 'got there'], ['action7', 'went'], ['action9', 'travelled']]",
-            "actor1": "[['action1', 'moved'], ['action2', 'picked there'], ['action3', 'journeyed'], ['action4', 'went'], ['action6', 'went back'], ['action10', 'travelled'], ['action11', 'picked up']]",
-            "actor2": "[['action5', 'went back']]",
-            "actor3": "[['action8', 'went back'], ['action12', 'travelled'], ['action13', 'journeyed']]"
+            "actor0": "[['action0', 'PickUp'], ['action7', 'Move'], ['action9', 'Move']]",
+            "actor1": "[['action1', 'Move'], ['action2', 'PickUp'], ['action3', 'Move'], ['action4', 'Move'], ['action6', 'Move'], ['action10', 'Move'], ['action11', 'PickUp']]",
+            "actor2": "[['action5', 'Move']]",
+            "actor3": "[['action8', 'Move'], ['action12', 'Move'], ['action13', 'Move']]"
         },
         "starting_actions": {
             "actor0": "action0",

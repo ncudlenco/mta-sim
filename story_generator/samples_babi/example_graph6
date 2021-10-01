@@ -1,22 +1,4 @@
 {
-    "actor2": {
-        "Actor": {
-            "id": "actor2",
-            "Gender": 1,
-            "Name": "Daniel"
-        },
-        "Action": "Exists",
-        "id": "actor2"
-    },
-    "actor3": {
-        "Actor": {
-            "id": "actor3",
-            "Gender": 2,
-            "Name": "Sandra"
-        },
-        "Action": "Exists",
-        "id": "actor3"
-    },
     "actor0": {
         "Actor": {
             "id": "actor0",
@@ -25,6 +7,15 @@
         },
         "Action": "Exists",
         "id": "actor0"
+    },
+    "actor2": {
+        "Actor": {
+            "id": "actor2",
+            "Gender": 1,
+            "Name": "Daniel"
+        },
+        "Action": "Exists",
+        "id": "actor2"
     },
     "actor1": {
         "Actor": {
@@ -35,12 +26,21 @@
         "Action": "Exists",
         "id": "actor1"
     },
+    "actor3": {
+        "Actor": {
+            "id": "actor3",
+            "Gender": 2,
+            "Name": "Sandra"
+        },
+        "Action": "Exists",
+        "id": "actor3"
+    },
     "object0": {
         "Action": "Exists",
         "id": "object0",
         "Target": {
             "id": "object0",
-            "Name": "milk"
+            "Name": "Food"
         }
     },
     "object1": {
@@ -48,18 +48,18 @@
         "id": "object1",
         "Target": {
             "id": "object1",
-            "Name": "football"
+            "Name": "Drinks"
         }
     },
     "action0": {
         "Actor": {
             "id": "actor0"
         },
-        "Action": "got there",
+        "Action": "PickUp",
         "Next": "action2",
         "id": "action0",
         "Target": {
-            "id": "object0"
+            "id": "object1"
         },
         "Location": ""
     },
@@ -67,7 +67,7 @@
         "Actor": {
             "id": "actor1"
         },
-        "Action": "moved",
+        "Action": "Move",
         "Next": "action3",
         "id": "action1",
         "Target": {
@@ -79,11 +79,11 @@
         "Actor": {
             "id": "actor0"
         },
-        "Action": "discarded",
+        "Action": "PutDown",
         "Next": "action8",
         "id": "action2",
         "Target": {
-            "id": "object0"
+            "id": "object1"
         },
         "Location": ""
     },
@@ -91,7 +91,7 @@
         "Actor": {
             "id": "actor1"
         },
-        "Action": "went",
+        "Action": "Move",
         "Next": "None",
         "id": "action3",
         "Target": {
@@ -103,7 +103,7 @@
         "Actor": {
             "id": "actor2"
         },
-        "Action": "moved",
+        "Action": "Move",
         "Next": "action5",
         "id": "action4",
         "Target": {
@@ -115,7 +115,7 @@
         "Actor": {
             "id": "actor2"
         },
-        "Action": "went",
+        "Action": "Move",
         "Next": "action6",
         "id": "action5",
         "Target": {
@@ -127,7 +127,7 @@
         "Actor": {
             "id": "actor2"
         },
-        "Action": "travelled",
+        "Action": "Move",
         "Next": "None",
         "id": "action6",
         "Target": {
@@ -139,7 +139,7 @@
         "Actor": {
             "id": "actor3"
         },
-        "Action": "travelled",
+        "Action": "Move",
         "Next": "action9",
         "id": "action7",
         "Target": {
@@ -151,11 +151,11 @@
         "Actor": {
             "id": "actor0"
         },
-        "Action": "took there",
+        "Action": "PickUp",
         "Next": "None",
         "id": "action8",
         "Target": {
-            "id": "object1"
+            "id": "object0"
         },
         "Location": ""
     },
@@ -163,20 +163,20 @@
         "Actor": {
             "id": "actor3"
         },
-        "Action": "grabbed there",
+        "Action": "PickUp",
         "Next": "None",
         "id": "action9",
         "Target": {
-            "id": "object0"
+            "id": "object1"
         },
         "Location": "bedroom"
     },
     "temporal": {
         "timeline": {
-            "actor0": "[('action0', 'got there'), ('action2', 'discarded'), ('action8', 'took there')]",
-            "actor1": "[('action1', 'moved'), ('action3', 'went')]",
-            "actor2": "[('action4', 'moved'), ('action5', 'went'), ('action6', 'travelled')]",
-            "actor3": "[('action7', 'travelled'), ('action9', 'grabbed there')]"
+            "actor0": "[('action0', 'PickUp'), ('action2', 'PutDown'), ('action8', 'PickUp')]",
+            "actor1": "[('action1', 'Move'), ('action3', 'Move')]",
+            "actor2": "[('action4', 'Move'), ('action5', 'Move'), ('action6', 'Move')]",
+            "actor3": "[('action7', 'Move'), ('action9', 'PickUp')]"
         },
         "starting_actions": {
             "actor0": "action0",
@@ -227,10 +227,10 @@
     },
     "temporal_abs": {
         "timeline": {
-            "actor0": "[['action0', 'got there'], ['action2', 'discarded'], ['action8', 'took there']]",
-            "actor1": "[['action1', 'moved'], ['action3', 'went']]",
-            "actor2": "[['action4', 'moved'], ['action5', 'went'], ['action6', 'travelled']]",
-            "actor3": "[['action7', 'travelled'], ['action9', 'grabbed there']]"
+            "actor0": "[['action0', 'PickUp'], ['action2', 'PutDown'], ['action8', 'PickUp']]",
+            "actor1": "[['action1', 'Move'], ['action3', 'Move']]",
+            "actor2": "[['action4', 'Move'], ['action5', 'Move'], ['action6', 'Move']]",
+            "actor3": "[['action7', 'Move'], ['action9', 'PickUp']]"
         },
         "starting_actions": {
             "actor0": "action0",

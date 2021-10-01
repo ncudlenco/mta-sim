@@ -24,3 +24,9 @@ class Actor:
         outer_dict["Action"] = "Exists"
         outer_dict["id"] = self.id
         return outer_dict
+
+def find_actor_by_name(actor_name, actors):
+    for index, actor in enumerate(actors):
+        if actor_name == actor.name:
+            return index
+    return -1

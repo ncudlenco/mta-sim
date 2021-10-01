@@ -20,20 +20,20 @@ MAX_SYNC_EVENTS = 0
 MIN_ACTIONS_ROOM = 2
 MAX_ACTIONS_ROOM = 3
 
-SPECIFIC_PROB = 0.5
-NEW_OBJECT_PROB = 0.5
+SPECIFIC_ACTIONS_PROB = 0.5 # total probability of specific actions
+NEW_OBJECT_PROB = 0.5 # probability of generating a new object when a similar object already exists
+HOUSE_PROB = 0.5 # probability of picking actions in house vs gym
+
 
 objects = Objects.get_obj_list()
 actions = Actions.get_action_list()
-rooms   = Rooms.get_room_list()[:-1]
+all_rooms   = Rooms.get_room_list()[:-1]
 empty_room = Rooms.get_room_list()[-1]
 
-Rooms.associate_objects_to_rooms(rooms, objects)
+Rooms.associate_objects_to_rooms(all_rooms, objects)
 # Objects.associate_actions_to_objects(objects, actions)
 actions = Actions.associate_objects_to_actions(actions, objects)
-
 nonspecific_actions = Actions.get_nonspecific_actions(actions)
-
 
 def order_events(story):
     actors = get_actors_from_story(story)
@@ -121,6 +121,8 @@ def get_objects_from_story(story):
                 objs.append((act.targets, event.room, event.actor, event_id))
             objs = list(set(objs))
             objects_locations.extend(objs)
+        elif event.object.name == "TaiChiObject" or event.object.name == "EmptyObject":
+            continue
         else:
             if type(event.object) == Actor.Actor:
                 continue
@@ -144,16 +146,18 @@ def get_objects_from_story(story):
                   
                 # make it a bit random here
                 elif random.random() < NEW_OBJECT_PROB:
-                    print("NEW OBJECT", entry[0].name)
                     # make new object
+                    # print("NEW OBJECT", entry[0].name)
+                    pass
+                    
                 else:
-                    print("SAME OBJECT", entry[0].name)
+                    # print("SAME OBJECT", entry[0].name)
                     # here it basically mean if the same object in the same room make it be the exact same object
                     indexes.append(i)
 
         return indexes
     
-    print(objects_locations)
+    # print(objects_locations)
     set_positions = []
     for entry_id, entry in enumerate(objects_locations):
         ids = search_entry(entry, objects_locations, entry_id)
@@ -178,15 +182,18 @@ def get_objects_from_story(story):
                 objs.append(act.targets)
             objs = list(set(objs))
             objects.extend(objs)
+        elif event.object.name == "TaiChiObject" or event.object.name == "EmptyObject":
+            continue
+
         else:
             if type(event.object) == Actor.Actor:
                 continue
             objects.append(event.object)
 
-    print(objects, len(objects))
+    # print(objects, len(objects))
     objects = list(set(objects))
-    print(objects, len(objects))
-    print()
+    # print(objects, len(objects))
+    # print()
     # print(story)
     # sys.exit()
     return objects
@@ -209,7 +216,21 @@ def get_syncs_from_story(story):
     return int(syncs/2)
 
 
+def get_last_actor_location(story, actor):
+    last_location = None
+    for event in story:
+        if event.actor.name == actor:
+            last_location = event.room
+    return last_location
+
+
+
 def generate_story():
+    if random.random() < HOUSE_PROB:
+        rooms = all_rooms[:-1]
+    else:
+        rooms = [all_rooms[-1]]
+    print(rooms)
     # rooms = [Kitchen, Living, BathRoom, BedRoom, Gym]
     events = []
     actors = []
@@ -245,7 +266,6 @@ def generate_story():
                     
             # pick number of actions
             left_actions_for_room = random.randint(MIN_ACTIONS_ROOM, MAX_ACTIONS_ROOM)
-
             # print("Picked", r_room, left_actions_for_room)
 
 
@@ -256,14 +276,14 @@ def generate_story():
             
             # pick an action in the givem room
             possible_actions = Actions.filter_actions_by_rooms(actions, r_room)
-            specific_prob = 1.0 * SPECIFIC_PROB / ((len(possible_actions) - len(nonspecific_actions)))
-            nonspecific_prob = 1.0 * (1 - SPECIFIC_PROB) / len(nonspecific_actions)
+            specific_actions_prob = 1.0 * SPECIFIC_ACTIONS_PROB / ((len(possible_actions) - len(nonspecific_actions)))
+            nonspecific_actions_prob = 1.0 * (1 - SPECIFIC_ACTIONS_PROB) / len(nonspecific_actions)
             weights = []
             for aa in possible_actions:
                 if aa in nonspecific_actions:
-                    weights.append(nonspecific_prob)
+                    weights.append(nonspecific_actions_prob)
                 else:
-                    weights.append(specific_prob)
+                    weights.append(specific_actions_prob)
 
             # print(possible_actions)
             # print(weights)
@@ -377,12 +397,11 @@ def generate_graph(story):
         if type(object) == Actor.Actor:
             continue
         object_id = "object{0}".format(i)
-        # TODO: what to to with different/same objects
         object.set_id(object_id)
         d = object.generate_node()
         graph_dict[object.id] = d
 
-    print(story)
+    # print(story)
     # sys.exit()
 
     for i, event in enumerate(story):

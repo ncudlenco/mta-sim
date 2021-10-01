@@ -1,0 +1,282 @@
+{
+    "actor2": {
+        "Actor": {
+            "id": "actor2",
+            "Gender": 1,
+            "Name": "Daniel"
+        },
+        "Action": "Exists",
+        "id": "actor2"
+    },
+    "actor3": {
+        "Actor": {
+            "id": "actor3",
+            "Gender": 2,
+            "Name": "Sandra"
+        },
+        "Action": "Exists",
+        "id": "actor3"
+    },
+    "actor0": {
+        "Actor": {
+            "id": "actor0",
+            "Gender": 2,
+            "Name": "Mary"
+        },
+        "Action": "Exists",
+        "id": "actor0"
+    },
+    "actor1": {
+        "Actor": {
+            "id": "actor1",
+            "Gender": 1,
+            "Name": "John"
+        },
+        "Action": "Exists",
+        "id": "actor1"
+    },
+    "object0": {
+        "Action": "Exists",
+        "id": "object0",
+        "Target": {
+            "id": "object0",
+            "Name": "milk"
+        }
+    },
+    "object1": {
+        "Action": "Exists",
+        "id": "object1",
+        "Target": {
+            "id": "object1",
+            "Name": "football"
+        }
+    },
+    "action0": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "got there",
+        "Next": "action2",
+        "id": "action0",
+        "Target": {
+            "id": "object0"
+        },
+        "Location": ""
+    },
+    "action1": {
+        "Actor": {
+            "id": "actor1"
+        },
+        "Action": "moved",
+        "Next": "action3",
+        "id": "action1",
+        "Target": {
+            "id": null
+        },
+        "Location": "bedroom"
+    },
+    "action2": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "discarded",
+        "Next": "action8",
+        "id": "action2",
+        "Target": {
+            "id": "object0"
+        },
+        "Location": ""
+    },
+    "action3": {
+        "Actor": {
+            "id": "actor1"
+        },
+        "Action": "went",
+        "Next": "None",
+        "id": "action3",
+        "Target": {
+            "id": null
+        },
+        "Location": "garden"
+    },
+    "action4": {
+        "Actor": {
+            "id": "actor2"
+        },
+        "Action": "moved",
+        "Next": "action5",
+        "id": "action4",
+        "Target": {
+            "id": null
+        },
+        "Location": "bedroom"
+    },
+    "action5": {
+        "Actor": {
+            "id": "actor2"
+        },
+        "Action": "went",
+        "Next": "action6",
+        "id": "action5",
+        "Target": {
+            "id": null
+        },
+        "Location": "garden"
+    },
+    "action6": {
+        "Actor": {
+            "id": "actor2"
+        },
+        "Action": "travelled",
+        "Next": "None",
+        "id": "action6",
+        "Target": {
+            "id": null
+        },
+        "Location": "bathroom"
+    },
+    "action7": {
+        "Actor": {
+            "id": "actor3"
+        },
+        "Action": "travelled",
+        "Next": "action9",
+        "id": "action7",
+        "Target": {
+            "id": null
+        },
+        "Location": "bedroom"
+    },
+    "action8": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "took there",
+        "Next": "None",
+        "id": "action8",
+        "Target": {
+            "id": "object1"
+        },
+        "Location": ""
+    },
+    "action9": {
+        "Actor": {
+            "id": "actor3"
+        },
+        "Action": "grabbed there",
+        "Next": "None",
+        "id": "action9",
+        "Target": {
+            "id": "object0"
+        },
+        "Location": "bedroom"
+    },
+    "temporal": {
+        "timeline": {
+            "actor0": "[('action0', 'got there'), ('action2', 'discarded'), ('action8', 'took there')]",
+            "actor1": "[('action1', 'moved'), ('action3', 'went')]",
+            "actor2": "[('action4', 'moved'), ('action5', 'went'), ('action6', 'travelled')]",
+            "actor3": "[('action7', 'travelled'), ('action9', 'grabbed there')]"
+        },
+        "starting_actions": {
+            "actor0": "action0",
+            "actor1": "action1",
+            "actor2": "action4",
+            "actor3": "action7"
+        },
+        "action0": {
+            "relations": null,
+            "next": "action2"
+        },
+        "action2": {
+            "relations": null,
+            "next": "action8"
+        },
+        "action8": {
+            "relations": null,
+            "next": null
+        },
+        "action1": {
+            "relations": null,
+            "next": "action3"
+        },
+        "action3": {
+            "relations": null,
+            "next": null
+        },
+        "action4": {
+            "relations": null,
+            "next": "action5"
+        },
+        "action5": {
+            "relations": null,
+            "next": "action6"
+        },
+        "action6": {
+            "relations": null,
+            "next": null
+        },
+        "action7": {
+            "relations": null,
+            "next": "action9"
+        },
+        "action9": {
+            "relations": null,
+            "next": null
+        }
+    },
+    "temporal_abs": {
+        "timeline": {
+            "actor0": "[['action0', 'got there'], ['action2', 'discarded'], ['action8', 'took there']]",
+            "actor1": "[['action1', 'moved'], ['action3', 'went']]",
+            "actor2": "[['action4', 'moved'], ['action5', 'went'], ['action6', 'travelled']]",
+            "actor3": "[['action7', 'travelled'], ['action9', 'grabbed there']]"
+        },
+        "starting_actions": {
+            "actor0": "action0",
+            "actor1": "action1",
+            "actor2": "action4",
+            "actor3": "action7"
+        },
+        "action0": {
+            "relations": null,
+            "next": "action2"
+        },
+        "action2": {
+            "relations": null,
+            "next": "action8"
+        },
+        "action8": {
+            "relations": null,
+            "next": null
+        },
+        "action1": {
+            "relations": null,
+            "next": "action3"
+        },
+        "action3": {
+            "relations": null,
+            "next": null
+        },
+        "action4": {
+            "relations": null,
+            "next": "action5"
+        },
+        "action5": {
+            "relations": null,
+            "next": "action6"
+        },
+        "action6": {
+            "relations": null,
+            "next": null
+        },
+        "action7": {
+            "relations": null,
+            "next": "action9"
+        },
+        "action9": {
+            "relations": null,
+            "next": null
+        }
+    }
+}

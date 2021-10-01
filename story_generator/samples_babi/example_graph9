@@ -1,0 +1,253 @@
+{
+    "actor2": {
+        "Actor": {
+            "id": "actor2",
+            "Gender": 2,
+            "Name": "Mary"
+        },
+        "Action": "Exists",
+        "id": "actor2"
+    },
+    "actor0": {
+        "Actor": {
+            "id": "actor0",
+            "Gender": 1,
+            "Name": "John"
+        },
+        "Action": "Exists",
+        "id": "actor0"
+    },
+    "actor1": {
+        "Actor": {
+            "id": "actor1",
+            "Gender": 2,
+            "Name": "Sandra"
+        },
+        "Action": "Exists",
+        "id": "actor1"
+    },
+    "action0": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "is",
+        "Next": "action6",
+        "id": "action0",
+        "Target": {
+            "id": null
+        },
+        "Location": "hallway"
+    },
+    "action1": {
+        "Actor": {
+            "id": "actor1"
+        },
+        "Action": "is",
+        "Next": "action2",
+        "id": "action1",
+        "Target": {
+            "id": null
+        },
+        "Location": "kitchen"
+    },
+    "action2": {
+        "Actor": {
+            "id": "actor1"
+        },
+        "Action": "journeyed",
+        "Next": "action5",
+        "id": "action2",
+        "Target": {
+            "id": null
+        },
+        "Location": "bedroom"
+    },
+    "action3": {
+        "Actor": {
+            "id": "actor2"
+        },
+        "Action": "travelled",
+        "Next": "action4",
+        "id": "action3",
+        "Target": {
+            "id": null
+        },
+        "Location": "garden"
+    },
+    "action4": {
+        "Actor": {
+            "id": "actor2"
+        },
+        "Action": "went back",
+        "Next": "action7",
+        "id": "action4",
+        "Target": {
+            "id": null
+        },
+        "Location": "bathroom"
+    },
+    "action5": {
+        "Actor": {
+            "id": "actor1"
+        },
+        "Action": "NOT is longer",
+        "Next": "None",
+        "id": "action5",
+        "Target": {
+            "id": null
+        },
+        "Location": "bedroom"
+    },
+    "action6": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "is",
+        "Next": "action8",
+        "id": "action6",
+        "Target": {
+            "id": null
+        },
+        "Location": "office"
+    },
+    "action7": {
+        "Actor": {
+            "id": "actor2"
+        },
+        "Action": "NOT is",
+        "Next": "action9",
+        "id": "action7",
+        "Target": {
+            "id": null
+        },
+        "Location": "bathroom"
+    },
+    "action8": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "is",
+        "Next": "None",
+        "id": "action8",
+        "Target": {
+            "id": null
+        },
+        "Location": "hallway"
+    },
+    "action9": {
+        "Actor": {
+            "id": "actor2"
+        },
+        "Action": "journeyed",
+        "Next": "None",
+        "id": "action9",
+        "Target": {
+            "id": null
+        },
+        "Location": "garden"
+    },
+    "temporal": {
+        "timeline": {
+            "actor0": "[('action0', 'is'), ('action6', 'is'), ('action8', 'is')]",
+            "actor1": "[('action1', 'is'), ('action2', 'journeyed'), ('action5', 'NOT is longer')]",
+            "actor2": "[('action3', 'travelled'), ('action4', 'went back'), ('action7', 'NOT is'), ('action9', 'journeyed')]"
+        },
+        "starting_actions": {
+            "actor0": "action0",
+            "actor1": "action1",
+            "actor2": "action3"
+        },
+        "action0": {
+            "relations": null,
+            "next": "action6"
+        },
+        "action6": {
+            "relations": null,
+            "next": "action8"
+        },
+        "action8": {
+            "relations": null,
+            "next": null
+        },
+        "action1": {
+            "relations": null,
+            "next": "action2"
+        },
+        "action2": {
+            "relations": null,
+            "next": "action5"
+        },
+        "action5": {
+            "relations": null,
+            "next": null
+        },
+        "action3": {
+            "relations": null,
+            "next": "action4"
+        },
+        "action4": {
+            "relations": null,
+            "next": "action7"
+        },
+        "action7": {
+            "relations": null,
+            "next": "action9"
+        },
+        "action9": {
+            "relations": null,
+            "next": null
+        }
+    },
+    "temporal_abs": {
+        "timeline": {
+            "actor0": "[['action0', 'is'], ['action6', 'is'], ['action8', 'is']]",
+            "actor1": "[['action1', 'is'], ['action2', 'journeyed'], ['action5', 'NOT is longer']]",
+            "actor2": "[['action3', 'travelled'], ['action4', 'went back'], ['action7', 'NOT is'], ['action9', 'journeyed']]"
+        },
+        "starting_actions": {
+            "actor0": "action0",
+            "actor1": "action1",
+            "actor2": "action3"
+        },
+        "action0": {
+            "relations": null,
+            "next": "action6"
+        },
+        "action6": {
+            "relations": null,
+            "next": "action8"
+        },
+        "action8": {
+            "relations": null,
+            "next": null
+        },
+        "action1": {
+            "relations": null,
+            "next": "action2"
+        },
+        "action2": {
+            "relations": null,
+            "next": "action5"
+        },
+        "action5": {
+            "relations": null,
+            "next": null
+        },
+        "action3": {
+            "relations": null,
+            "next": "action4"
+        },
+        "action4": {
+            "relations": null,
+            "next": "action7"
+        },
+        "action7": {
+            "relations": null,
+            "next": "action9"
+        },
+        "action9": {
+            "relations": null,
+            "next": null
+        }
+    }
+}

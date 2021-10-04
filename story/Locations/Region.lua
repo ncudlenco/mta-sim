@@ -276,6 +276,9 @@ function Region.GetClosest(element, regions, isInstance)
 end
 
 function Region:OnPlayerHit(player)
+    if player:getData('storyEnded') then
+        return
+    end
     if DEBUG then
         outputConsole('Region:OnPlayerHit - '..self.name)
         print('Region:OnPlayerHit - '..self.name)

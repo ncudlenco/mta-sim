@@ -195,11 +195,10 @@ function StoryEpisodeBase:Initialize(...)
                     error('A valid skin could not be found for ped '..i)
                 end
                 validStartingPoi.isBusy = true
-                local ped = Ped(skin.Id, validStartingPoi.X, validStartingPoi.Y, validStartingPoi.Z, validStartingPoi.Angle)
+                local ped = PedHandler:GetOrCreatePed(skin.Id, validStartingPoi.X, validStartingPoi.Y, validStartingPoi.Z, validStartingPoi.Angle)
                 if not ped then
                     error('Error while creating the ped '..i)
                 end
-                table.insert(PED_ZOO, ped)
                 ped.interior = validStartingPoi.Interior
                 local g = Guid()
                 ped:setData("id", i..'')
@@ -337,6 +336,8 @@ function StoryEpisodeBase:Destroy()
                 p.position = Vector3(0,0,0)
             end
         end
+        print('reinitializing peds')
+        PedHandler:ReInitialize()
     end
 
     self.Disposed = true

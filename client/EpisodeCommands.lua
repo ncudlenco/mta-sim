@@ -1,7 +1,7 @@
 addEvent ( "onElementDoneEditing", true )
 addEvent ( "onActionRetrieved", true )
 
-DEFINING_EPISODES = false
+DEFINING_EPISODES = true
 if DEFINING_EPISODES then
     addEventHandler ( "onClientPlayerSpawn", getLocalPlayer(), function()
         print('onClientPlayerSpawn')
@@ -831,7 +831,7 @@ addCommandHandler("episode",
                             outputChatBox("Press enter to finish", 255, 0, 0, false)
                             local function updateObjectData(obj)
                                 showCursor(false)
-                                removeEventHandler("onElementDoneEditing", getRootElement(), addObjectToCreate)
+                                removeEventHandler("onElementDoneEditing", getRootElement(), updateObjectData)
                                 v:UpdateData(true)
                                 outputChatBox("Done. Object modified.", 255, 0, 0, false)
                                 return true
@@ -846,7 +846,20 @@ addCommandHandler("episode",
                     removeEventHandler("onClientClick", getRootElement(), onClick)
                 end
                 addEventHandler ( "onClientClick", getRootElement(), onClick)
-            
+            elseif param1 == "poi" then
+                local idx = tonumber(arg[1])
+                if idx and idx <= #episode.POI then
+                    episode.POI[idx].X = localPlayer.position.x;
+                    episode.POI[idx].Y = localPlayer.position.y;
+                    episode.POI[idx].Z = localPlayer.position.z;
+                    episode.POI[idx].Angle = localPlayer.rotation.z;
+                    episode.POI[idx].position = localPlayer.position
+                    episode.POI[idx].rotation = Vector3(0,0,localPlayer.rotation.z)
+
+                    if idx <= #markers then
+                        markers[i].position = localPlayer.position
+                    end
+                end
             elseif param1 == "vertex" then
                 if episode.Regions then
                     local regionsInRange = Region.FilterWithinRange(localPlayer.position, episode.Regions, 1.5)

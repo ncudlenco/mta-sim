@@ -301,6 +301,49 @@ function Location:GetNextValidAction(player)
         local q = CURRENT_STORY.actionsQueues[player:getData('id')]
         if #q > 0 then
             next = q[1]
+            local sssss = '?????'
+            if next.Name then
+                sssss = next.Name
+            end
+            print('Next action is '..sssss)
+            if next and next.Name == 'Move' then
+                print('Next action is to move')
+                if next.NextLocation and next.NextLocation.isBusy and player:getData('locationId') ~= next.NextLocation.LocationId then
+                    local occupyingActor = FirstOrDefault(CURRENT_STORY.CurrentEpisode.peds, function(act) return act:getData('locationId') == next.NextLocation.LocationId end)
+                    if not occupyingActor and CURRENT_STORY.Actor:getData('locationId') == next.NextLocation.LocationId then
+                        occupyingActor = CURRENT_STORY.Actor
+                    end
+                    if occupyingActor and occupyingActor:getData('storyEnded') then
+                        --the actor occupying the location finished his mandatory tasks. move him around randomly to clear the location
+                        local randomMove = PickRandom(Where(next.NextLocation.PossibleActions, function(a) return a.Name == 'Move' and not a.NextLocation.isBusy end))
+                        randomMove.NextLocation.isBusy = true
+                        occupyingActor:setData('locationId', randomMove.NextLocation.LocationId)
+                        randomMove.Performer = occupyingActor
+                        randomMove:Apply()
+                    else
+                        local function wait()
+                            local occupyingActor = FirstOrDefault(CURRENT_STORY.CurrentEpisode.peds, function(act) return act:getData('locationId') == next.NextLocation.LocationId end)
+                            if not occupyingActor and CURRENT_STORY.Actor:getData('locationId') == next.NextLocation.LocationId then
+                                occupyingActor = CURRENT_STORY.Actor
+                            end
+                            if (not occupyingActor) then
+                                print('Occupying actor not found for location '..next.NextLocation.LocationId)
+                            end
+                            if next.NextLocation.isBusy and (not occupyingActor or not occupyingActor:getData('storyEnded')) then
+                                player:setAnimation("cop_ambient", "coplook_loop", 5000, true, false, false, true)
+                                Timer(wait, 5000, 1)
+                            elseif not self.doNothing then
+                                OnGlobalActionFinished(1000, player:getData('id'), player:getData('storyId'))
+                            end
+                        end
+                        wait()
+                        print('NextLocation is busy. Waiting')
+                        lock = false
+                        return nil
+                    end
+                end
+            end
+            --if the current action is move and move.nextLocation is Busy then wait
             table.remove(q, 1)
         end
     end
@@ -311,6 +354,16 @@ function Location:GetNextValidAction(player)
             print("Location:GetNextValidAction - next action was null. Ending the current story")
         end
         lock = false
+        if LOAD_FROM_GRAPH then
+            for k, v in pairs(CURRENT_STORY.actionsQueues) do
+                if #CURRENT_STORY.actionsQueues[k] > 0 then
+                    --the episode is ended for the current actor, wait for all the other actors to finish
+                    player:setAnimation("cop_ambient", "coplook_loop", 0, true, false, false, true)
+                    player:setData('storyEnded', true)
+                    return nil
+                end
+            end
+        end
         return EndStory(player)
     else
         if DEBUG then

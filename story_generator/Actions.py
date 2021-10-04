@@ -88,7 +88,6 @@ def get_action_list():
                  "PutIn", "Read", "SitDown", "Sleep", "Smoke", "SmokeIn", "SmokeOut", "StandUp", "TaiChi", "TalkPhone",
                  "TurnOff", "TurnOn", "TypeOnKeyboard", "Wait", "WashHands", "WorkAtLaptop",
     #multi-agent
-                #TODO: ask about these
                  "Handshake", "Hug", "Talk", "Joke", "Kiss"
                     ]
 
@@ -167,7 +166,7 @@ def associate_objects_to_actions(actions, objects):
             "Punch": "PunchingBag",
             "DanceTurnTable": "TurnTable",
             "DumbbellsWorkOut": "TwoDumbbells",
-            "DrinkBeverage": "Drink",
+            "DrinkBeverage": "Drinks",
             "EatFood": "Chair|Food|Food|Chair",
             "WashHands": "Sink",
             "PedalOnGymBike":"GymBike", 

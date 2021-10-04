@@ -25,7 +25,7 @@ class Object:
         return self.__str__()
 
     def generate_node(self):
-        
+
         obj_dict = {}
         target_dict = {}
 
@@ -48,7 +48,7 @@ class Object:
 
 def get_obj_list():
     OBJECT_CLASSES = ["ArmChair", "Bed", "BenchPress", "BenchPressBar", "Book", "Bookshelf", "Chair", "Cigarette",
-                 "CoffeeTable", "Desk", "Drink", "Dumbbell", "FlowerPot", "Food", "Fridge", "Furniture",
+                 "CoffeeTable", "Desk", "Drinks", "Dumbbell", "FlowerPot", "Food", "Fridge", "Furniture",
                  "GasCooker", "GymBike", "Laptop", "Microwave", "MobilePhone", "MusicPlayer", "OfficeChair",
                  "Painting", "Photos", "PlantPot", "Plate", "PunchingBag", "Remote", "Sink", "Sofa", "Table",
                  "Televisor", "Toilet", "Treadmill", "TurnTable", "TwoDumbbells", "Wardrobe", "Watch", "TaiChiObject", "MultiAgentObject"]

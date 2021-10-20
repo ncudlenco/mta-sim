@@ -76,7 +76,7 @@ function Move.destinationReached(player, matchingDimension)
 			outputConsole("Destination reached")
 		end
 
-        player:setAnimation()
+        player:setAnimation() --stop the animation - the player will stop moving 
         player.position = lastAction.NextLocation.position
         player.rotation = lastAction.NextLocation.rotation
         lastAction.path = nil

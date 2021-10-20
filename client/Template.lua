@@ -37,6 +37,11 @@ function Template:Instantiate(interior, position)
     self.poi.instance = Marker(position.x, position.y, position.z - 1, "cylinder", 1, 255, 0, 255, 128)
     self.poi.instance.interior = interior
 
+    self.X = position.x
+    self.Y = position.y
+    self.Z = position.z
+    self.position = Vector3(self.X, self.Y, self.Z)
+
     for _,o in pairs(self.objects) do
         local obj = loadstring(o.dynamicString)()
         obj.interior = interior
@@ -72,7 +77,7 @@ end
 function Template:Rebase(newRelativePosition, offsetVector)
     local oldRelativePosition = self.position
     self.position = newRelativePosition
-    if self.poi.instance then
+    if self.poi.instance and isElement(self.poi.instance) then
         self.poi.instance.position = self.position
     end
     for _,o in pairs(self.objects) do
@@ -203,7 +208,13 @@ function Template:Serialize(directory)
         end
         obj.instance = nil
     end
-
+    local poiInstance = self.poi.instance
+    self.poi.instance = nil
+    local locationInstances = {}
+    for _, loc in ipairs(self.locations) do
+        table.insert(locationInstances, loc.instance)
+        loc.instance = nil
+    end
     local template = {
         poi = self.poi, --serialized beforehand
         objects = self.objects,
@@ -223,6 +234,10 @@ function Template:Serialize(directory)
         for i,obj in ipairs(self.objects) do
             obj.instance = instances[i]
         end
+    end
+    self.poi.instance = poiInstance
+    for _, loc in ipairs(self.locations) do
+        loc.instance = locationInstances[i]
     end
 end
 

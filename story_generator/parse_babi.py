@@ -1,4 +1,5 @@
 from re import sub
+from Objects import find_obj_by_name
 import sys
 from spacy import displacy
 import spacy
@@ -15,6 +16,7 @@ from main import get_actors_from_story, get_objects_from_story, generate_graph, 
 import json
 
 empty_room = Rooms.get_room_list()[-1]
+OBJECTS = Objects.get_obj_list()
 
 convert_entities_for_video = True
 
@@ -26,10 +28,7 @@ picking_actions = ["PickUp", "grabbed there", "got there", "took", "took there",
 discarding_actions = ["PutDown", "discarded", "put down", "dropped", "dropped there", "put there", "left there", "discarded there", "left"]
 
 # change objects
-objects_converted = {}#{"milk": "Drinks", "football": "Food"}#, "apple": "Food"}
-
-
-
+objects_converted = {"milk": "Drinks", "football": "Food", "apple": "Remote"}
 
 read_from = "babi"
 babi_folder = "en-valid"
@@ -39,6 +38,13 @@ considered_indexes = [1,2,3,6,8,9]
 considered_indexes = [9]
 
 # 5 and 7 have multiple actors
+
+def get_last_actor_location_parsed(story, actor_name):
+    loc = get_last_actor_location(story, actor_name)
+
+    if loc != None and "-" in loc.name:
+            return Room(loc.name.split("-")[-1])
+    return loc
 
 def extract_stories(lines):
 
@@ -173,16 +179,15 @@ def add_storyline(story, line):
     # print("OBJECTS =", objects, line)
 
     action, entities, location = line
-    # TODO: handle multiple actors/objects
-    # TODO: handle objects with uppercase
+    # TODO: handle multiple actors/objects in one line!
     # find actors in entities
     for entity in entities:
-        if entity[0].isupper() and entity != "Drinks" and entity != "Food":
+        if find_obj_by_name(entity, OBJECTS) == -1:
+        # if entity[0].isupper():# and entity != "Drinks" and entity != "Food":
             index = Actor.find_actor_by_name(entity, actors)
             if index != -1:
                 actor = actors[index]
             else:
-                # TODO: handle sex here
                 if entity == "John" or entity == "Daniel":
                     actor_sex = 1
                 elif entity == "Sandra" or entity == "Mary":
@@ -195,7 +200,7 @@ def add_storyline(story, line):
     # find objects in entities
     obj = Object("EmptyObject")
     for entity in entities:
-        if entity[0].islower() or entity == "Drinks" or entity == "Food":
+        if find_obj_by_name(entity, OBJECTS) != -1:
             index = Objects.find_obj_by_name(entity, objects)
             if index != -1:
                 obj = objects[index]
@@ -206,14 +211,20 @@ def add_storyline(story, line):
     # print(obj)
     act = Action(action)
     if location == None:
-        loc = get_last_actor_location(story, actor.name)
+        loc = get_last_actor_location_parsed(story, actor.name)
         if loc == None:
             loc = empty_room
     else:
-        loc = Room(location)
+        loc = get_last_actor_location_parsed(story, actor.name)
+        if loc != None and loc != empty_room and act.name == "Move":
+            print(act, actor.name, loc, location)
+            loc = Room(loc.name+"-"+location)
+        else:
+            loc = Room(location)
 
     e = Event.Event("event{0}".format(len(story)), act, obj, actor, loc)
     # print(e)
+    # print()
     story.append(e)
     # print() 
     return story, location
@@ -245,7 +256,7 @@ if __name__ == "__main__":
 
         lines = list(map(lambda x: " ".join(x.split(" ")[1:]), lines))
         lines = list(map(lambda x: x.strip(), lines))
-        lines = lines[:27]
+        lines = lines[:8]
 
         # filter out questions for the moment
         lines = list(filter(lambda x: "?" not in x, lines))
@@ -284,7 +295,7 @@ if __name__ == "__main__":
         
         # print()
         # print(graph_story)
-        # # print(story)
+        print(story)
         graph_dict = generate_graph(graph_story)
         json.dump(graph_dict, open("samples_babi/example_graph{0}".format(considered_indexes[0]), "w"), sort_keys=False, indent = 4)
 

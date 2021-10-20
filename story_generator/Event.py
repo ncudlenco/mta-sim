@@ -69,8 +69,13 @@ class Event:
                 else:        
                     obj_dict["id"] = self.object.id
 
-                inner_action_dict["Actor"] = actor_dict
+                # inner_action_dict["Actor"] = actor_dict
                 inner_action_dict["Action"] = inner_action_name
+                inner_action_dict["Entities"] = [self.actor.id]
+                if obj_dict["id"] != None:
+                    inner_action_dict["Entities"].append(obj_dict["id"])
+
+
                 if i == len(r_acts) - 1:
                     if self.next_event == None:
                         inner_action_dict["Next"] = "None"
@@ -82,9 +87,11 @@ class Event:
 
                 else:
                     inner_action_dict["Next"] = inner_actions_ids[i+1]
-                inner_action_dict["id"] = inner_actions_ids[i]
-                inner_action_dict["Target"] = obj_dict
+                # inner_action_dict["id"] = inner_actions_ids[i]
+                # inner_action_dict["Target"] = obj_dict
                 inner_action_dict["Location"] = self.room.name
+                inner_action_dict["Timeframe"] = None
+                inner_action_dict["Properties"] = {}
                 action_dicts.append((inner_actions_ids[i], inner_action_dict))
             return action_dicts
         
@@ -96,8 +103,13 @@ class Event:
             obj_dict = {}        
             obj_dict["id"] = self.object.id
 
-            action_dict["Actor"] = actor_dict
+            # action_dict["Actor"] = actor_dict
             action_dict["Action"] = self.action.name
+
+            action_dict["Entities"] = [self.actor.id]
+            if self.object.id != None:
+                action_dict["Entities"].append(self.object.id)
+
             if self.next_event == None:
                 action_dict["Next"] = "None"
             else:
@@ -106,8 +118,10 @@ class Event:
                 else:
                     action_dict["Next"] = self.next_event.action.id
             
-            action_dict["id"] = self.action.id
-            action_dict["Target"] = obj_dict
+            # action_dict["id"] = self.action.id
+            # action_dict["Target"] = obj_dict
             action_dict["Location"] = self.room.name
+            action_dict["Timeframe"] = None
+            action_dict["Properties"] = {}
 
             return action_dict

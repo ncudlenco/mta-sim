@@ -30,12 +30,15 @@ class Object:
         target_dict = {}
 
         obj_dict["Action"] = "Exists"
-        obj_dict["id"] = self.id
+        # obj_dict["id"] = self.id
+        obj_dict["Entities"] = self.name
+        obj_dict["Location"] = None
+        obj_dict["Timeframe"] = None
+        obj_dict["Properties"] = {}
+        # target_dict["id"] = self.id
+        # target_dict["Name"] = self.name
 
-        target_dict["id"] = self.id
-        target_dict["Name"] = self.name
-
-        obj_dict["Target"] = target_dict
+        # obj_dict["Target"] = target_dict
 
         return obj_dict
 

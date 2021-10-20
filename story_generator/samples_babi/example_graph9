@@ -1,150 +1,130 @@
 {
-    "actor0": {
-        "Actor": {
-            "id": "actor0",
-            "Gender": 1,
-            "Name": "John"
-        },
-        "Action": "Exists",
-        "id": "actor0"
-    },
     "actor1": {
-        "Actor": {
-            "id": "actor1",
-            "Gender": 2,
-            "Name": "Sandra"
-        },
         "Action": "Exists",
-        "id": "actor1"
+        "Entities": "Sandra",
+        "Location": null,
+        "Timeframe": null,
+        "Properties": {
+            "Gender": 2
+        }
     },
     "actor2": {
-        "Actor": {
-            "id": "actor2",
-            "Gender": 2,
-            "Name": "Mary"
-        },
         "Action": "Exists",
-        "id": "actor2"
+        "Entities": "Mary",
+        "Location": null,
+        "Timeframe": null,
+        "Properties": {
+            "Gender": 2
+        }
+    },
+    "actor0": {
+        "Action": "Exists",
+        "Entities": "John",
+        "Location": null,
+        "Timeframe": null,
+        "Properties": {
+            "Gender": 1
+        }
     },
     "action0": {
-        "Actor": {
-            "id": "actor0"
-        },
         "Action": "is",
+        "Entities": [
+            "actor0"
+        ],
         "Next": "action6",
-        "id": "action0",
-        "Target": {
-            "id": null
-        },
-        "Location": "hallway"
+        "Location": "hallway",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action1": {
-        "Actor": {
-            "id": "actor1"
-        },
         "Action": "is",
+        "Entities": [
+            "actor1"
+        ],
         "Next": "action2",
-        "id": "action1",
-        "Target": {
-            "id": null
-        },
-        "Location": "kitchen"
+        "Location": "kitchen",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action2": {
-        "Actor": {
-            "id": "actor1"
-        },
         "Action": "Move",
+        "Entities": [
+            "actor1"
+        ],
         "Next": "action5",
-        "id": "action2",
-        "Target": {
-            "id": null
-        },
-        "Location": "bedroom"
+        "Location": "kitchen-bedroom",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action3": {
-        "Actor": {
-            "id": "actor2"
-        },
         "Action": "Move",
+        "Entities": [
+            "actor2"
+        ],
         "Next": "action4",
-        "id": "action3",
-        "Target": {
-            "id": null
-        },
-        "Location": "garden"
+        "Location": "garden",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action4": {
-        "Actor": {
-            "id": "actor2"
-        },
         "Action": "Move",
+        "Entities": [
+            "actor2"
+        ],
         "Next": "action7",
-        "id": "action4",
-        "Target": {
-            "id": null
-        },
-        "Location": "bathroom"
+        "Location": "garden-bathroom",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action5": {
-        "Actor": {
-            "id": "actor1"
-        },
         "Action": "NOT is longer",
+        "Entities": [
+            "actor1"
+        ],
         "Next": "None",
-        "id": "action5",
-        "Target": {
-            "id": null
-        },
-        "Location": "bedroom"
+        "Location": "bedroom",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action6": {
-        "Actor": {
-            "id": "actor0"
-        },
         "Action": "is",
+        "Entities": [
+            "actor0"
+        ],
         "Next": "action8",
-        "id": "action6",
-        "Target": {
-            "id": null
-        },
-        "Location": "office"
+        "Location": "office",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action7": {
-        "Actor": {
-            "id": "actor2"
-        },
         "Action": "NOT is",
+        "Entities": [
+            "actor2"
+        ],
         "Next": "action9",
-        "id": "action7",
-        "Target": {
-            "id": null
-        },
-        "Location": "bathroom"
+        "Location": "bathroom",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action8": {
-        "Actor": {
-            "id": "actor0"
-        },
         "Action": "is",
+        "Entities": [
+            "actor0"
+        ],
         "Next": "None",
-        "id": "action8",
-        "Target": {
-            "id": null
-        },
-        "Location": "hallway"
+        "Location": "hallway",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action9": {
-        "Actor": {
-            "id": "actor2"
-        },
         "Action": "Move",
+        "Entities": [
+            "actor2"
+        ],
         "Next": "None",
-        "id": "action9",
-        "Target": {
-            "id": null
-        },
-        "Location": "garden"
+        "Location": "bathroom-garden",
+        "Timeframe": null,
+        "Properties": {}
     },
     "temporal": {
         "timeline": {

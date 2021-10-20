@@ -15,14 +15,21 @@ class Actor:
 
         outer_dict = {}
         actor_dict = {}
-        actor_dict["id"] = self.id
+        # actor_dict["id"] = self.id
         actor_dict["Gender"] = self.gender
-        actor_dict["Name"] = self.name
+        # actor_dict["Name"] = self.name
         
 
-        outer_dict["Actor"] = actor_dict
+
+        
+        # outer_dict["Actor"] = actor_dict
         outer_dict["Action"] = "Exists"
-        outer_dict["id"] = self.id
+        outer_dict ["Entities"] = self.name
+        # outer_dict["id"] = self.id
+
+        outer_dict["Location"] = None
+        outer_dict["Timeframe"] = None
+        outer_dict["Properties"] = actor_dict
         return outer_dict
 
 def find_actor_by_name(actor_name, actors):

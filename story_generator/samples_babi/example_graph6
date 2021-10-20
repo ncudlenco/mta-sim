@@ -1,175 +1,157 @@
 {
-    "actor0": {
-        "Actor": {
-            "id": "actor0",
-            "Gender": 2,
-            "Name": "Mary"
-        },
-        "Action": "Exists",
-        "id": "actor0"
-    },
-    "actor2": {
-        "Actor": {
-            "id": "actor2",
-            "Gender": 1,
-            "Name": "Daniel"
-        },
-        "Action": "Exists",
-        "id": "actor2"
-    },
     "actor1": {
-        "Actor": {
-            "id": "actor1",
-            "Gender": 1,
-            "Name": "John"
-        },
         "Action": "Exists",
-        "id": "actor1"
+        "Entities": "John",
+        "Location": null,
+        "Timeframe": null,
+        "Properties": {
+            "Gender": 1
+        }
     },
     "actor3": {
-        "Actor": {
-            "id": "actor3",
-            "Gender": 2,
-            "Name": "Sandra"
-        },
         "Action": "Exists",
-        "id": "actor3"
+        "Entities": "Sandra",
+        "Location": null,
+        "Timeframe": null,
+        "Properties": {
+            "Gender": 2
+        }
+    },
+    "actor0": {
+        "Action": "Exists",
+        "Entities": "Mary",
+        "Location": null,
+        "Timeframe": null,
+        "Properties": {
+            "Gender": 2
+        }
+    },
+    "actor2": {
+        "Action": "Exists",
+        "Entities": "Daniel",
+        "Location": null,
+        "Timeframe": null,
+        "Properties": {
+            "Gender": 1
+        }
     },
     "object0": {
         "Action": "Exists",
-        "id": "object0",
-        "Target": {
-            "id": "object0",
-            "Name": "Food"
-        }
+        "Entities": "Food",
+        "Location": null,
+        "Timeframe": null,
+        "Properties": {}
     },
     "object1": {
         "Action": "Exists",
-        "id": "object1",
-        "Target": {
-            "id": "object1",
-            "Name": "Drinks"
-        }
+        "Entities": "Drinks",
+        "Location": null,
+        "Timeframe": null,
+        "Properties": {}
     },
     "action0": {
-        "Actor": {
-            "id": "actor0"
-        },
         "Action": "PickUp",
+        "Entities": [
+            "actor0",
+            "object1"
+        ],
         "Next": "action2",
-        "id": "action0",
-        "Target": {
-            "id": "object1"
-        },
-        "Location": ""
+        "Location": "",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action1": {
-        "Actor": {
-            "id": "actor1"
-        },
         "Action": "Move",
+        "Entities": [
+            "actor1"
+        ],
         "Next": "action3",
-        "id": "action1",
-        "Target": {
-            "id": null
-        },
-        "Location": "bedroom"
+        "Location": "bedroom",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action2": {
-        "Actor": {
-            "id": "actor0"
-        },
         "Action": "PutDown",
+        "Entities": [
+            "actor0",
+            "object1"
+        ],
         "Next": "action8",
-        "id": "action2",
-        "Target": {
-            "id": "object1"
-        },
-        "Location": ""
+        "Location": "",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action3": {
-        "Actor": {
-            "id": "actor1"
-        },
         "Action": "Move",
+        "Entities": [
+            "actor1"
+        ],
         "Next": "None",
-        "id": "action3",
-        "Target": {
-            "id": null
-        },
-        "Location": "garden"
+        "Location": "bedroom-garden",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action4": {
-        "Actor": {
-            "id": "actor2"
-        },
         "Action": "Move",
+        "Entities": [
+            "actor2"
+        ],
         "Next": "action5",
-        "id": "action4",
-        "Target": {
-            "id": null
-        },
-        "Location": "bedroom"
+        "Location": "bedroom",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action5": {
-        "Actor": {
-            "id": "actor2"
-        },
         "Action": "Move",
+        "Entities": [
+            "actor2"
+        ],
         "Next": "action6",
-        "id": "action5",
-        "Target": {
-            "id": null
-        },
-        "Location": "garden"
+        "Location": "bedroom-garden",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action6": {
-        "Actor": {
-            "id": "actor2"
-        },
         "Action": "Move",
+        "Entities": [
+            "actor2"
+        ],
         "Next": "None",
-        "id": "action6",
-        "Target": {
-            "id": null
-        },
-        "Location": "bathroom"
+        "Location": "garden-bathroom",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action7": {
-        "Actor": {
-            "id": "actor3"
-        },
         "Action": "Move",
+        "Entities": [
+            "actor3"
+        ],
         "Next": "action9",
-        "id": "action7",
-        "Target": {
-            "id": null
-        },
-        "Location": "bedroom"
+        "Location": "bedroom",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action8": {
-        "Actor": {
-            "id": "actor0"
-        },
         "Action": "PickUp",
+        "Entities": [
+            "actor0",
+            "object0"
+        ],
         "Next": "None",
-        "id": "action8",
-        "Target": {
-            "id": "object0"
-        },
-        "Location": ""
+        "Location": "",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action9": {
-        "Actor": {
-            "id": "actor3"
-        },
         "Action": "PickUp",
+        "Entities": [
+            "actor3",
+            "object1"
+        ],
         "Next": "None",
-        "id": "action9",
-        "Target": {
-            "id": "object1"
-        },
-        "Location": "bedroom"
+        "Location": "bedroom",
+        "Timeframe": null,
+        "Properties": {}
     },
     "temporal": {
         "timeline": {

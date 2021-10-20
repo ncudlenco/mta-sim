@@ -1,711 +1,624 @@
 {
     "actor1": {
-        "Actor": {
-            "id": "actor1",
-            "Gender": 1,
-            "Name": "John"
-        },
         "Action": "Exists",
-        "id": "actor1"
-    },
-    "actor2": {
-        "Actor": {
-            "id": "actor2",
-            "Gender": 1,
-            "Name": "Daniel"
-        },
-        "Action": "Exists",
-        "id": "actor2"
-    },
-    "actor0": {
-        "Actor": {
-            "id": "actor0",
-            "Gender": 2,
-            "Name": "Mary"
-        },
-        "Action": "Exists",
-        "id": "actor0"
+        "Entities": "John",
+        "Location": null,
+        "Timeframe": null,
+        "Properties": {
+            "Gender": 1
+        }
     },
     "actor3": {
-        "Actor": {
-            "id": "actor3",
-            "Gender": 2,
-            "Name": "Sandra"
-        },
         "Action": "Exists",
-        "id": "actor3"
+        "Entities": "Sandra",
+        "Location": null,
+        "Timeframe": null,
+        "Properties": {
+            "Gender": 2
+        }
+    },
+    "actor0": {
+        "Action": "Exists",
+        "Entities": "Mary",
+        "Location": null,
+        "Timeframe": null,
+        "Properties": {
+            "Gender": 2
+        }
+    },
+    "actor2": {
+        "Action": "Exists",
+        "Entities": "Daniel",
+        "Location": null,
+        "Timeframe": null,
+        "Properties": {
+            "Gender": 1
+        }
     },
     "object0": {
         "Action": "Exists",
-        "id": "object0",
-        "Target": {
-            "id": "object0",
-            "Name": "Drinks"
-        }
+        "Entities": "Drinks",
+        "Location": null,
+        "Timeframe": null,
+        "Properties": {}
     },
     "object1": {
         "Action": "Exists",
-        "id": "object1",
-        "Target": {
-            "id": "object1",
-            "Name": "Food"
-        }
+        "Entities": "Remote",
+        "Location": null,
+        "Timeframe": null,
+        "Properties": {}
     },
     "object2": {
         "Action": "Exists",
-        "id": "object2",
-        "Target": {
-            "id": "object2",
-            "Name": "Food"
-        }
+        "Entities": "Food",
+        "Location": null,
+        "Timeframe": null,
+        "Properties": {}
     },
     "action0": {
-        "Actor": {
-            "id": "actor0"
-        },
         "Action": "PickUp",
+        "Entities": [
+            "actor0",
+            "object0"
+        ],
         "Next": "action6",
-        "id": "action0",
-        "Target": {
-            "id": "object0"
-        },
-        "Location": ""
+        "Location": "",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action1": {
-        "Actor": {
-            "id": "actor1"
-        },
         "Action": "Move",
+        "Entities": [
+            "actor1"
+        ],
         "Next": "action3",
-        "id": "action1",
-        "Target": {
-            "id": null
-        },
-        "Location": "bedroom"
+        "Location": "bedroom",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action2": {
-        "Actor": {
-            "id": "actor2"
-        },
         "Action": "Move",
+        "Entities": [
+            "actor2"
+        ],
         "Next": "action8",
-        "id": "action2",
-        "Target": {
-            "id": null
-        },
-        "Location": "office"
+        "Location": "office",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action3": {
-        "Actor": {
-            "id": "actor1"
-        },
         "Action": "PickUp",
+        "Entities": [
+            "actor1",
+            "object1"
+        ],
         "Next": "action4",
-        "id": "action3",
-        "Target": {
-            "id": "object1"
-        },
-        "Location": "bedroom"
+        "Location": "bedroom",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action4": {
-        "Actor": {
-            "id": "actor1"
-        },
         "Action": "PickUp",
+        "Entities": [
+            "actor1",
+            "object2"
+        ],
         "Next": "action5",
-        "id": "action4",
-        "Target": {
-            "id": "object2"
-        },
-        "Location": "bedroom"
+        "Location": "bedroom",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action5": {
-        "Actor": {
-            "id": "actor1"
-        },
         "Action": "Move",
+        "Entities": [
+            "actor1"
+        ],
         "Next": "action7",
-        "id": "action5",
-        "Target": {
-            "id": null
-        },
-        "Location": "garden"
+        "Location": "bedroom-garden",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action6": {
-        "Actor": {
-            "id": "actor0"
-        },
         "Action": "PutDown",
+        "Entities": [
+            "actor0",
+            "object0"
+        ],
         "Next": "action10",
-        "id": "action6",
-        "Target": {
-            "id": "object0"
-        },
-        "Location": ""
+        "Location": "",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action7": {
-        "Actor": {
-            "id": "actor1"
-        },
         "Action": "PutDown",
+        "Entities": [
+            "actor1",
+            "object2"
+        ],
         "Next": "action12",
-        "id": "action7",
-        "Target": {
-            "id": "object2"
-        },
-        "Location": "garden"
+        "Location": "garden",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action8": {
-        "Actor": {
-            "id": "actor2"
-        },
         "Action": "Move",
+        "Entities": [
+            "actor2"
+        ],
         "Next": "action9",
-        "id": "action8",
-        "Target": {
-            "id": null
-        },
-        "Location": "garden"
+        "Location": "office-garden",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action9": {
-        "Actor": {
-            "id": "actor2"
-        },
         "Action": "PickUp",
+        "Entities": [
+            "actor2",
+            "object2"
+        ],
         "Next": "action15",
-        "id": "action9",
-        "Target": {
-            "id": "object2"
-        },
-        "Location": "garden"
+        "Location": "garden",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action10": {
-        "Actor": {
-            "id": "actor0"
-        },
         "Action": "Move",
+        "Entities": [
+            "actor0"
+        ],
         "Next": "action11",
-        "id": "action10",
-        "Target": {
-            "id": null
-        },
-        "Location": "hallway"
+        "Location": "hallway",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action11": {
-        "Actor": {
-            "id": "actor0"
-        },
         "Action": "Move",
+        "Entities": [
+            "actor0"
+        ],
         "Next": "action27",
-        "id": "action11",
-        "Target": {
-            "id": null
-        },
-        "Location": "kitchen"
+        "Location": "hallway-kitchen",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action12": {
-        "Actor": {
-            "id": "actor1"
-        },
         "Action": "PutDown",
+        "Entities": [
+            "actor1",
+            "object1"
+        ],
         "Next": "action13",
-        "id": "action12",
-        "Target": {
-            "id": "object1"
-        },
-        "Location": "garden"
+        "Location": "garden",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action13": {
-        "Actor": {
-            "id": "actor1"
-        },
         "Action": "PickUp",
+        "Entities": [
+            "actor1",
+            "object1"
+        ],
         "Next": "action17",
-        "id": "action13",
-        "Target": {
-            "id": "object1"
-        },
-        "Location": "garden"
+        "Location": "garden",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action14": {
-        "Actor": {
-            "id": "actor3"
-        },
         "Action": "Move",
+        "Entities": [
+            "actor3"
+        ],
         "Next": "action22",
-        "id": "action14",
-        "Target": {
-            "id": null
-        },
-        "Location": "hallway"
+        "Location": "hallway",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action15": {
-        "Actor": {
-            "id": "actor2"
-        },
         "Action": "PutDown",
+        "Entities": [
+            "actor2",
+            "object2"
+        ],
         "Next": "action16",
-        "id": "action15",
-        "Target": {
-            "id": "object2"
-        },
-        "Location": "garden"
+        "Location": "garden",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action16": {
-        "Actor": {
-            "id": "actor2"
-        },
         "Action": "PickUp",
+        "Entities": [
+            "actor2",
+            "object2"
+        ],
         "Next": "action18",
-        "id": "action16",
-        "Target": {
-            "id": "object2"
-        },
-        "Location": "garden"
+        "Location": "garden",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action17": {
-        "Actor": {
-            "id": "actor1"
-        },
         "Action": "Move",
+        "Entities": [
+            "actor1"
+        ],
         "Next": "action19",
-        "id": "action17",
-        "Target": {
-            "id": null
-        },
-        "Location": "kitchen"
+        "Location": "garden-kitchen",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action18": {
-        "Actor": {
-            "id": "actor2"
-        },
         "Action": "PutDown",
+        "Entities": [
+            "actor2",
+            "object2"
+        ],
         "Next": "action32",
-        "id": "action18",
-        "Target": {
-            "id": "object2"
-        },
-        "Location": "garden"
+        "Location": "garden",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action19": {
-        "Actor": {
-            "id": "actor1"
-        },
         "Action": "PutDown",
+        "Entities": [
+            "actor1",
+            "object1"
+        ],
         "Next": "action20",
-        "id": "action19",
-        "Target": {
-            "id": "object1"
-        },
-        "Location": "kitchen"
+        "Location": "kitchen",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action20": {
-        "Actor": {
-            "id": "actor1"
-        },
         "Action": "PickUp",
+        "Entities": [
+            "actor1",
+            "object1"
+        ],
         "Next": "action21",
-        "id": "action20",
-        "Target": {
-            "id": "object1"
-        },
-        "Location": "kitchen"
+        "Location": "kitchen",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action21": {
-        "Actor": {
-            "id": "actor1"
-        },
         "Action": "Move",
+        "Entities": [
+            "actor1"
+        ],
         "Next": "action24",
-        "id": "action21",
-        "Target": {
-            "id": null
-        },
-        "Location": "office"
+        "Location": "kitchen-office",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action22": {
-        "Actor": {
-            "id": "actor3"
-        },
         "Action": "Move",
+        "Entities": [
+            "actor3"
+        ],
         "Next": "action23",
-        "id": "action22",
-        "Target": {
-            "id": null
-        },
-        "Location": "bedroom"
+        "Location": "hallway-bedroom",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action23": {
-        "Actor": {
-            "id": "actor3"
-        },
         "Action": "PickUp",
+        "Entities": [
+            "actor3",
+            "object0"
+        ],
         "Next": "action26",
-        "id": "action23",
-        "Target": {
-            "id": "object0"
-        },
-        "Location": "bedroom"
+        "Location": "bedroom",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action24": {
-        "Actor": {
-            "id": "actor1"
-        },
         "Action": "Move",
+        "Entities": [
+            "actor1"
+        ],
         "Next": "action25",
-        "id": "action24",
-        "Target": {
-            "id": null
-        },
-        "Location": "bathroom"
+        "Location": "office-bathroom",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action25": {
-        "Actor": {
-            "id": "actor1"
-        },
         "Action": "Move",
+        "Entities": [
+            "actor1"
+        ],
         "Next": "action29",
-        "id": "action25",
-        "Target": {
-            "id": null
-        },
-        "Location": "office"
+        "Location": "bathroom-office",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action26": {
-        "Actor": {
-            "id": "actor3"
-        },
         "Action": "PutDown",
+        "Entities": [
+            "actor3",
+            "object0"
+        ],
         "Next": "action30",
-        "id": "action26",
-        "Target": {
-            "id": "object0"
-        },
-        "Location": "bedroom"
+        "Location": "bedroom",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action27": {
-        "Actor": {
-            "id": "actor0"
-        },
         "Action": "Move",
+        "Entities": [
+            "actor0"
+        ],
         "Next": "action28",
-        "id": "action27",
-        "Target": {
-            "id": null
-        },
-        "Location": "bedroom"
+        "Location": "kitchen-bedroom",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action28": {
-        "Actor": {
-            "id": "actor0"
-        },
         "Action": "Move",
+        "Entities": [
+            "actor0"
+        ],
         "Next": "action31",
-        "id": "action28",
-        "Target": {
-            "id": null
-        },
-        "Location": "office"
+        "Location": "bedroom-office",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action29": {
-        "Actor": {
-            "id": "actor1"
-        },
         "Action": "Move",
+        "Entities": [
+            "actor1"
+        ],
         "Next": "action36",
-        "id": "action29",
-        "Target": {
-            "id": null
-        },
-        "Location": "hallway"
+        "Location": "office-hallway",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action30": {
-        "Actor": {
-            "id": "actor3"
-        },
         "Action": "Move",
+        "Entities": [
+            "actor3"
+        ],
         "Next": "action38",
-        "id": "action30",
-        "Target": {
-            "id": null
-        },
-        "Location": "garden"
+        "Location": "bedroom-garden",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action31": {
-        "Actor": {
-            "id": "actor0"
-        },
         "Action": "Move",
+        "Entities": [
+            "actor0"
+        ],
         "Next": "action33",
-        "id": "action31",
-        "Target": {
-            "id": null
-        },
-        "Location": "kitchen"
+        "Location": "office-kitchen",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action32": {
-        "Actor": {
-            "id": "actor2"
-        },
         "Action": "PickUp",
+        "Entities": [
+            "actor2",
+            "object2"
+        ],
         "Next": "action39",
-        "id": "action32",
-        "Target": {
-            "id": "object2"
-        },
-        "Location": "garden"
+        "Location": "garden",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action33": {
-        "Actor": {
-            "id": "actor0"
-        },
         "Action": "Move",
+        "Entities": [
+            "actor0"
+        ],
         "Next": "action34",
-        "id": "action33",
-        "Target": {
-            "id": null
-        },
-        "Location": "bedroom"
+        "Location": "kitchen-bedroom",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action34": {
-        "Actor": {
-            "id": "actor0"
-        },
         "Action": "PickUp",
+        "Entities": [
+            "actor0",
+            "object0"
+        ],
         "Next": "action35",
-        "id": "action34",
-        "Target": {
-            "id": "object0"
-        },
-        "Location": "bedroom"
+        "Location": "bedroom",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action35": {
-        "Actor": {
-            "id": "actor0"
-        },
         "Action": "PutDown",
+        "Entities": [
+            "actor0",
+            "object0"
+        ],
         "Next": "action44",
-        "id": "action35",
-        "Target": {
-            "id": "object0"
-        },
-        "Location": "bedroom"
+        "Location": "bedroom",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action36": {
-        "Actor": {
-            "id": "actor1"
-        },
         "Action": "Move",
+        "Entities": [
+            "actor1"
+        ],
         "Next": "action37",
-        "id": "action36",
-        "Target": {
-            "id": null
-        },
-        "Location": "garden"
+        "Location": "hallway-garden",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action37": {
-        "Actor": {
-            "id": "actor1"
-        },
         "Action": "PutDown",
+        "Entities": [
+            "actor1",
+            "object1"
+        ],
         "Next": "None",
-        "id": "action37",
-        "Target": {
-            "id": "object1"
-        },
-        "Location": "garden"
+        "Location": "garden",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action38": {
-        "Actor": {
-            "id": "actor3"
-        },
         "Action": "Move",
+        "Entities": [
+            "actor3"
+        ],
         "Next": "action40",
-        "id": "action38",
-        "Target": {
-            "id": null
-        },
-        "Location": "bedroom"
+        "Location": "garden-bedroom",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action39": {
-        "Actor": {
-            "id": "actor2"
-        },
         "Action": "Move",
+        "Entities": [
+            "actor2"
+        ],
         "Next": "action41",
-        "id": "action39",
-        "Target": {
-            "id": null
-        },
-        "Location": "bathroom"
+        "Location": "garden-bathroom",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action40": {
-        "Actor": {
-            "id": "actor3"
-        },
         "Action": "PickUp",
+        "Entities": [
+            "actor3",
+            "object0"
+        ],
         "Next": "action42",
-        "id": "action40",
-        "Target": {
-            "id": "object0"
-        },
-        "Location": "bedroom"
+        "Location": "bedroom",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action41": {
-        "Actor": {
-            "id": "actor2"
-        },
         "Action": "Move",
+        "Entities": [
+            "actor2"
+        ],
         "Next": "action43",
-        "id": "action41",
-        "Target": {
-            "id": null
-        },
-        "Location": "garden"
+        "Location": "bathroom-garden",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action42": {
-        "Actor": {
-            "id": "actor3"
-        },
         "Action": "Move",
+        "Entities": [
+            "actor3"
+        ],
         "Next": "action46",
-        "id": "action42",
-        "Target": {
-            "id": null
-        },
-        "Location": "bathroom"
+        "Location": "bedroom-bathroom",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action43": {
-        "Actor": {
-            "id": "actor2"
-        },
         "Action": "PickUp",
+        "Entities": [
+            "actor2",
+            "object1"
+        ],
         "Next": "action45",
-        "id": "action43",
-        "Target": {
-            "id": "object1"
-        },
-        "Location": "garden"
+        "Location": "garden",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action44": {
-        "Actor": {
-            "id": "actor0"
-        },
         "Action": "Move",
+        "Entities": [
+            "actor0"
+        ],
         "Next": "action47",
-        "id": "action44",
-        "Target": {
-            "id": null
-        },
-        "Location": "hallway"
+        "Location": "bedroom-hallway",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action45": {
-        "Actor": {
-            "id": "actor2"
-        },
         "Action": "Move",
+        "Entities": [
+            "actor2"
+        ],
         "Next": "action49",
-        "id": "action45",
-        "Target": {
-            "id": null
-        },
-        "Location": "hallway"
+        "Location": "garden-hallway",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action46": {
-        "Actor": {
-            "id": "actor3"
-        },
         "Action": "Move",
+        "Entities": [
+            "actor3"
+        ],
         "Next": "action48",
-        "id": "action46",
-        "Target": {
-            "id": null
-        },
-        "Location": "kitchen"
+        "Location": "bathroom-kitchen",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action47": {
-        "Actor": {
-            "id": "actor0"
-        },
         "Action": "Move",
+        "Entities": [
+            "actor0"
+        ],
         "Next": "action52",
-        "id": "action47",
-        "Target": {
-            "id": null
-        },
-        "Location": "bedroom"
+        "Location": "hallway-bedroom",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action48": {
-        "Actor": {
-            "id": "actor3"
-        },
         "Action": "Move",
+        "Entities": [
+            "actor3"
+        ],
         "Next": "action51",
-        "id": "action48",
-        "Target": {
-            "id": null
-        },
-        "Location": "hallway"
+        "Location": "kitchen-hallway",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action49": {
-        "Actor": {
-            "id": "actor2"
-        },
         "Action": "PutDown",
+        "Entities": [
+            "actor2",
+            "object1"
+        ],
         "Next": "action50",
-        "id": "action49",
-        "Target": {
-            "id": "object1"
-        },
-        "Location": "hallway"
+        "Location": "hallway",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action50": {
-        "Actor": {
-            "id": "actor2"
-        },
         "Action": "PutDown",
+        "Entities": [
+            "actor2",
+            "object2"
+        ],
         "Next": "None",
-        "id": "action50",
-        "Target": {
-            "id": "object2"
-        },
-        "Location": "hallway"
+        "Location": "hallway",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action51": {
-        "Actor": {
-            "id": "actor3"
-        },
         "Action": "Move",
+        "Entities": [
+            "actor3"
+        ],
         "Next": "action53",
-        "id": "action51",
-        "Target": {
-            "id": null
-        },
-        "Location": "garden"
+        "Location": "hallway-garden",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action52": {
-        "Actor": {
-            "id": "actor0"
-        },
         "Action": "Move",
+        "Entities": [
+            "actor0"
+        ],
         "Next": "None",
-        "id": "action52",
-        "Target": {
-            "id": null
-        },
-        "Location": "office"
+        "Location": "bedroom-office",
+        "Timeframe": null,
+        "Properties": {}
     },
     "action53": {
-        "Actor": {
-            "id": "actor3"
-        },
         "Action": "PutDown",
+        "Entities": [
+            "actor3",
+            "object0"
+        ],
         "Next": "None",
-        "id": "action53",
-        "Target": {
-            "id": "object0"
-        },
-        "Location": "garden"
+        "Location": "garden",
+        "Timeframe": null,
+        "Properties": {}
     },
     "temporal": {
         "timeline": {

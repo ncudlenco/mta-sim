@@ -31,10 +31,10 @@ class Object:
 
         obj_dict["Action"] = "Exists"
         # obj_dict["id"] = self.id
-        obj_dict["Entities"] = self.name
+        obj_dict["Entities"] = [self.id]
         obj_dict["Location"] = None
         obj_dict["Timeframe"] = None
-        obj_dict["Properties"] = {}
+        obj_dict["Properties"] = {"Type": self.name}
         # target_dict["id"] = self.id
         # target_dict["Name"] = self.name
 

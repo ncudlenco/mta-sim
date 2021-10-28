@@ -1,62 +1,83 @@
 {
-    "actor1": {
-        "Action": "Exists",
-        "Entities": "John",
-        "Location": null,
-        "Timeframe": null,
-        "Properties": {
-            "Gender": 1
-        }
-    },
     "actor2": {
         "Action": "Exists",
-        "Entities": "Sandra",
+        "Entities": [
+            "actor2"
+        ],
         "Location": null,
         "Timeframe": null,
         "Properties": {
-            "Gender": 2
+            "Gender": 2,
+            "Name": "Sandra"
         }
     },
-    "actor3": {
+    "actor1": {
         "Action": "Exists",
-        "Entities": "Daniel",
+        "Entities": [
+            "actor1"
+        ],
         "Location": null,
         "Timeframe": null,
         "Properties": {
-            "Gender": 1
+            "Gender": 1,
+            "Name": "John"
         }
     },
     "actor0": {
         "Action": "Exists",
-        "Entities": "Mary",
+        "Entities": [
+            "actor0"
+        ],
         "Location": null,
         "Timeframe": null,
         "Properties": {
-            "Gender": 2
+            "Gender": 2,
+            "Name": "Mary"
+        }
+    },
+    "actor3": {
+        "Action": "Exists",
+        "Entities": [
+            "actor3"
+        ],
+        "Location": null,
+        "Timeframe": null,
+        "Properties": {
+            "Gender": 1,
+            "Name": "Daniel"
         }
     },
     "object0": {
         "Action": "Exists",
-        "Entities": "Food",
+        "Entities": [
+            "object0"
+        ],
         "Location": null,
         "Timeframe": null,
-        "Properties": {}
+        "Properties": {
+            "Type": "Drinks"
+        }
     },
     "object1": {
         "Action": "Exists",
-        "Entities": "Drinks",
+        "Entities": [
+            "object1"
+        ],
         "Location": null,
         "Timeframe": null,
-        "Properties": {}
+        "Properties": {
+            "Type": "Food"
+        }
     },
     "action0": {
         "Action": "PickUp",
         "Entities": [
             "actor0",
-            "object1"
+            "object0"
         ],
-        "Next": "action3",
-        "Location": "",
+        "Location": [
+            ""
+        ],
         "Timeframe": null,
         "Properties": {}
     },
@@ -65,8 +86,9 @@
         "Entities": [
             "actor1"
         ],
-        "Next": "action4",
-        "Location": "bedroom",
+        "Location": [
+            "bedroom"
+        ],
         "Timeframe": null,
         "Properties": {}
     },
@@ -75,8 +97,9 @@
         "Entities": [
             "actor2"
         ],
-        "Next": "action9",
-        "Location": "kitchen",
+        "Location": [
+            "kitchen"
+        ],
         "Timeframe": null,
         "Properties": {}
     },
@@ -85,8 +108,9 @@
         "Entities": [
             "actor0"
         ],
-        "Next": "action7",
-        "Location": "hallway",
+        "Location": [
+            "hallway"
+        ],
         "Timeframe": null,
         "Properties": {}
     },
@@ -94,10 +118,11 @@
         "Action": "PickUp",
         "Entities": [
             "actor1",
-            "object0"
+            "object1"
         ],
-        "Next": "action5",
-        "Location": "bedroom",
+        "Location": [
+            "bedroom"
+        ],
         "Timeframe": null,
         "Properties": {}
     },
@@ -106,8 +131,10 @@
         "Entities": [
             "actor1"
         ],
-        "Next": "action6",
-        "Location": "bedroom-hallway",
+        "Location": [
+            "bedroom",
+            "hallway"
+        ],
         "Timeframe": null,
         "Properties": {}
     },
@@ -115,10 +142,11 @@
         "Action": "PutDown",
         "Entities": [
             "actor1",
-            "object0"
+            "object1"
         ],
-        "Next": "action8",
-        "Location": "hallway",
+        "Location": [
+            "hallway"
+        ],
         "Timeframe": null,
         "Properties": {}
     },
@@ -127,8 +155,10 @@
         "Entities": [
             "actor0"
         ],
-        "Next": "action11",
-        "Location": "hallway-garden",
+        "Location": [
+            "hallway",
+            "garden"
+        ],
         "Timeframe": null,
         "Properties": {}
     },
@@ -137,8 +167,10 @@
         "Entities": [
             "actor1"
         ],
-        "Next": "None",
-        "Location": "hallway-kitchen",
+        "Location": [
+            "hallway",
+            "kitchen"
+        ],
         "Timeframe": null,
         "Properties": {}
     },
@@ -147,8 +179,10 @@
         "Entities": [
             "actor2"
         ],
-        "Next": "None",
-        "Location": "kitchen-hallway",
+        "Location": [
+            "kitchen",
+            "hallway"
+        ],
         "Timeframe": null,
         "Properties": {}
     },
@@ -157,8 +191,9 @@
         "Entities": [
             "actor3"
         ],
-        "Next": "None",
-        "Location": "hallway",
+        "Location": [
+            "hallway"
+        ],
         "Timeframe": null,
         "Properties": {}
     },
@@ -166,10 +201,11 @@
         "Action": "PutDown",
         "Entities": [
             "actor0",
-            "object1"
+            "object0"
         ],
-        "Next": "None",
-        "Location": "garden",
+        "Location": [
+            "garden"
+        ],
         "Timeframe": null,
         "Properties": {}
     },

@@ -35,15 +35,17 @@ babi_folder = "en-valid"
 
 considered_indexes = [1,2,3,5,6,7,8,9]
 considered_indexes = [1,2,3,6,8,9]
-considered_indexes = [9]
+considered_indexes = [1]
 
 # 5 and 7 have multiple actors
 
 def get_last_actor_location_parsed(story, actor_name):
     loc = get_last_actor_location(story, actor_name)
-
-    if loc != None and "-" in loc.name:
-            return Room(loc.name.split("-")[-1])
+    # print(loc, "from get_last")
+    # if loc != None:# and "-" in loc.name:
+    #     # print("get_last_parsed", loc)
+    #     return loc[-1]
+    #     # return Room(loc.name.split("-")[-1])
     return loc
 
 def extract_stories(lines):
@@ -193,7 +195,7 @@ def add_storyline(story, line):
                 elif entity == "Sandra" or entity == "Mary":
                     actor_sex = 2
                 else:
-                    print("{0} neither male of female on current rules", entity)
+                    print("{0} neither male or female on current rules", entity)
                     sys.exit()
                 actor = Actor.Actor("actor{0}".format(len(actors)), actor_sex, entity)
     
@@ -216,12 +218,18 @@ def add_storyline(story, line):
             loc = empty_room
     else:
         loc = get_last_actor_location_parsed(story, actor.name)
-        if loc != None and loc != empty_room and act.name == "Move":
+        if loc != None and loc != empty_room and (act.name == "Move"):
             print(act, actor.name, loc, location)
-            loc = Room(loc.name+"-"+location)
+            # loc = Room(loc.name+"-"+location)
+            loc = [Room(loc.name), Room(location)]
         else:
             loc = Room(location)
 
+    if not (isinstance(loc, list)):
+        loc = [loc]
+
+
+    # print(loc)
     e = Event.Event("event{0}".format(len(story)), act, obj, actor, loc)
     # print(e)
     # print()
@@ -306,3 +314,5 @@ if __name__ == "__main__":
     print(Counter(all_events))
     print(Counter(all_actors))
     print(Counter(all_locations))
+
+

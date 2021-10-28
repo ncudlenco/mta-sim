@@ -110,17 +110,17 @@ class Event:
             if self.object.id != None:
                 action_dict["Entities"].append(self.object.id)
 
-            if self.next_event == None:
-                action_dict["Next"] = "None"
-            else:
-                if self.next_event.action.action_type == "complex":
-                    action_dict["Next"] = self.next_event.action.id+"_inner0"
-                else:
-                    action_dict["Next"] = self.next_event.action.id
+            # if self.next_event == None:
+            #     action_dict["Next"] = "None"
+            # else:
+            #     if self.next_event.action.action_type == "complex":
+            #         action_dict["Next"] = self.next_event.action.id+"_inner0"
+            #     else:
+            #         action_dict["Next"] = self.next_event.action.id
             
             # action_dict["id"] = self.action.id
             # action_dict["Target"] = obj_dict
-            action_dict["Location"] = self.room.name
+            action_dict["Location"] = [x.name for x in self.room]
             action_dict["Timeframe"] = None
             action_dict["Properties"] = {}
 

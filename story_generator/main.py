@@ -131,7 +131,7 @@ def get_objects_from_story(story):
     def search_entry(entry, list, entry_id):
         indexes = []
         for i in range(entry_id+1, len(list)):
-            if list[i][0].name == entry[0].name and list[i][1].name == entry[1].name:
+            if list[i][0].name == entry[0].name and list[i][1][-1].name == entry[1][-1].name:
                 # if personal object make it different
                 if list[i][0].name in "MobilePhone Cigarette":
                     # different actors
@@ -141,7 +141,11 @@ def get_objects_from_story(story):
                         indexes.append(i)
                 # make these objects + locations unique so only one exists
                 elif list[i][0].name in "Desk Bed Sink Food Remote Laptop TurnTable":
-                    print("Make unique", entry[0].name)
+                    # print(list[i])
+                    # print(entry, entry_id)
+                    # print("Make unique", entry[0].name)
+                    # print(list)
+                    # sys.exit()
                     indexes.append(i)
                   
                 # make it a bit random here
@@ -220,7 +224,7 @@ def get_last_actor_location(story, actor):
     last_location = None
     for event in story:
         if event.actor.name == actor:
-            last_location = event.room
+            last_location = event.room[-1]
     return last_location
 
 

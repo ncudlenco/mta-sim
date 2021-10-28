@@ -1,29 +1,38 @@
 {
-    "actor1": {
+    "actor0": {
         "Action": "Exists",
-        "Entities": "Sandra",
+        "Entities": [
+            "actor0"
+        ],
         "Location": null,
         "Timeframe": null,
         "Properties": {
-            "Gender": 2
+            "Gender": 1,
+            "Name": "John"
         }
     },
     "actor2": {
         "Action": "Exists",
-        "Entities": "Mary",
+        "Entities": [
+            "actor2"
+        ],
         "Location": null,
         "Timeframe": null,
         "Properties": {
-            "Gender": 2
+            "Gender": 2,
+            "Name": "Mary"
         }
     },
-    "actor0": {
+    "actor1": {
         "Action": "Exists",
-        "Entities": "John",
+        "Entities": [
+            "actor1"
+        ],
         "Location": null,
         "Timeframe": null,
         "Properties": {
-            "Gender": 1
+            "Gender": 2,
+            "Name": "Sandra"
         }
     },
     "action0": {
@@ -31,8 +40,9 @@
         "Entities": [
             "actor0"
         ],
-        "Next": "action6",
-        "Location": "hallway",
+        "Location": [
+            "hallway"
+        ],
         "Timeframe": null,
         "Properties": {}
     },
@@ -41,8 +51,9 @@
         "Entities": [
             "actor1"
         ],
-        "Next": "action2",
-        "Location": "kitchen",
+        "Location": [
+            "kitchen"
+        ],
         "Timeframe": null,
         "Properties": {}
     },
@@ -51,8 +62,10 @@
         "Entities": [
             "actor1"
         ],
-        "Next": "action5",
-        "Location": "kitchen-bedroom",
+        "Location": [
+            "kitchen",
+            "bedroom"
+        ],
         "Timeframe": null,
         "Properties": {}
     },
@@ -61,8 +74,9 @@
         "Entities": [
             "actor2"
         ],
-        "Next": "action4",
-        "Location": "garden",
+        "Location": [
+            "garden"
+        ],
         "Timeframe": null,
         "Properties": {}
     },
@@ -71,8 +85,10 @@
         "Entities": [
             "actor2"
         ],
-        "Next": "action7",
-        "Location": "garden-bathroom",
+        "Location": [
+            "garden",
+            "bathroom"
+        ],
         "Timeframe": null,
         "Properties": {}
     },
@@ -81,8 +97,9 @@
         "Entities": [
             "actor1"
         ],
-        "Next": "None",
-        "Location": "bedroom",
+        "Location": [
+            "bedroom"
+        ],
         "Timeframe": null,
         "Properties": {}
     },
@@ -91,8 +108,9 @@
         "Entities": [
             "actor0"
         ],
-        "Next": "action8",
-        "Location": "office",
+        "Location": [
+            "office"
+        ],
         "Timeframe": null,
         "Properties": {}
     },
@@ -101,8 +119,9 @@
         "Entities": [
             "actor2"
         ],
-        "Next": "action9",
-        "Location": "bathroom",
+        "Location": [
+            "bathroom"
+        ],
         "Timeframe": null,
         "Properties": {}
     },
@@ -111,8 +130,9 @@
         "Entities": [
             "actor0"
         ],
-        "Next": "None",
-        "Location": "hallway",
+        "Location": [
+            "hallway"
+        ],
         "Timeframe": null,
         "Properties": {}
     },
@@ -121,8 +141,10 @@
         "Entities": [
             "actor2"
         ],
-        "Next": "None",
-        "Location": "bathroom-garden",
+        "Location": [
+            "bathroom",
+            "garden"
+        ],
         "Timeframe": null,
         "Properties": {}
     },

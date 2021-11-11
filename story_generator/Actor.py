@@ -17,14 +17,14 @@ class Actor:
         actor_dict = {}
         # actor_dict["id"] = self.id
         actor_dict["Gender"] = self.gender
-        # actor_dict["Name"] = self.name
+        actor_dict["Name"] = self.name
         
 
 
         
         # outer_dict["Actor"] = actor_dict
         outer_dict["Action"] = "Exists"
-        outer_dict ["Entities"] = self.name
+        outer_dict ["Entities"] = [self.id]
         # outer_dict["id"] = self.id
 
         outer_dict["Location"] = None

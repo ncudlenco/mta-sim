@@ -1,53 +1,73 @@
 {
     "actor1": {
         "Action": "Exists",
-        "Entities": "John",
+        "Entities": [
+            "actor1"
+        ],
         "Location": null,
         "Timeframe": null,
         "Properties": {
-            "Gender": 1
+            "Gender": 1,
+            "Name": "John"
         }
     },
     "actor3": {
         "Action": "Exists",
-        "Entities": "Sandra",
+        "Entities": [
+            "actor3"
+        ],
         "Location": null,
         "Timeframe": null,
         "Properties": {
-            "Gender": 2
+            "Gender": 2,
+            "Name": "Sandra"
         }
     },
     "actor0": {
         "Action": "Exists",
-        "Entities": "Mary",
+        "Entities": [
+            "actor0"
+        ],
         "Location": null,
         "Timeframe": null,
         "Properties": {
-            "Gender": 2
+            "Gender": 2,
+            "Name": "Mary"
         }
     },
     "actor2": {
         "Action": "Exists",
-        "Entities": "Daniel",
+        "Entities": [
+            "actor2"
+        ],
         "Location": null,
         "Timeframe": null,
         "Properties": {
-            "Gender": 1
+            "Gender": 1,
+            "Name": "Daniel"
         }
     },
     "object0": {
         "Action": "Exists",
-        "Entities": "Food",
+        "Entities": [
+            "object0"
+        ],
         "Location": null,
         "Timeframe": null,
-        "Properties": {}
+        "Properties": {
+            "Type": "Food"
+        }
     },
     "object1": {
         "Action": "Exists",
-        "Entities": "Drinks",
+        "Entities": [
+            "object1"
+        ],
         "Location": null,
         "Timeframe": null,
-        "Properties": {}
+        "Properties": {
+            "Type": "Drinks"
+        }
     },
     "action0": {
         "Action": "PickUp",
@@ -55,8 +75,9 @@
             "actor0",
             "object1"
         ],
-        "Next": "action2",
-        "Location": "",
+        "Location": [
+            ""
+        ],
         "Timeframe": null,
         "Properties": {}
     },
@@ -65,8 +86,9 @@
         "Entities": [
             "actor1"
         ],
-        "Next": "action3",
-        "Location": "bedroom",
+        "Location": [
+            "bedroom"
+        ],
         "Timeframe": null,
         "Properties": {}
     },
@@ -76,8 +98,9 @@
             "actor0",
             "object1"
         ],
-        "Next": "action8",
-        "Location": "",
+        "Location": [
+            ""
+        ],
         "Timeframe": null,
         "Properties": {}
     },
@@ -86,8 +109,10 @@
         "Entities": [
             "actor1"
         ],
-        "Next": "None",
-        "Location": "bedroom-garden",
+        "Location": [
+            "bedroom",
+            "garden"
+        ],
         "Timeframe": null,
         "Properties": {}
     },
@@ -96,8 +121,9 @@
         "Entities": [
             "actor2"
         ],
-        "Next": "action5",
-        "Location": "bedroom",
+        "Location": [
+            "bedroom"
+        ],
         "Timeframe": null,
         "Properties": {}
     },
@@ -106,8 +132,10 @@
         "Entities": [
             "actor2"
         ],
-        "Next": "action6",
-        "Location": "bedroom-garden",
+        "Location": [
+            "bedroom",
+            "garden"
+        ],
         "Timeframe": null,
         "Properties": {}
     },
@@ -116,8 +144,10 @@
         "Entities": [
             "actor2"
         ],
-        "Next": "None",
-        "Location": "garden-bathroom",
+        "Location": [
+            "garden",
+            "bathroom"
+        ],
         "Timeframe": null,
         "Properties": {}
     },
@@ -126,8 +156,9 @@
         "Entities": [
             "actor3"
         ],
-        "Next": "action9",
-        "Location": "bedroom",
+        "Location": [
+            "bedroom"
+        ],
         "Timeframe": null,
         "Properties": {}
     },
@@ -137,8 +168,9 @@
             "actor0",
             "object0"
         ],
-        "Next": "None",
-        "Location": "",
+        "Location": [
+            ""
+        ],
         "Timeframe": null,
         "Properties": {}
     },
@@ -148,8 +180,9 @@
             "actor3",
             "object1"
         ],
-        "Next": "None",
-        "Location": "bedroom",
+        "Location": [
+            "bedroom"
+        ],
         "Timeframe": null,
         "Properties": {}
     },

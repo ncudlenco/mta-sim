@@ -3,8 +3,8 @@ PedHandler = {
 }
 
 function PedHandler:ReInitialize()
-    for i,p in ipairs(self.PED_ZOO) do
-        p:setData('assigned', false)
+    for i,ped in ipairs(self.PED_ZOO) do
+        ped:setData('assigned', false)
         ped.interior = 0
         ped.position = Vector3(0,0,0)
     end

@@ -1,28 +1,4 @@
 {
-    "actor1": {
-        "Action": "Exists",
-        "Entities": [
-            "actor1"
-        ],
-        "Location": null,
-        "Timeframe": null,
-        "Properties": {
-            "Gender": 1,
-            "Name": "John"
-        }
-    },
-    "actor3": {
-        "Action": "Exists",
-        "Entities": [
-            "actor3"
-        ],
-        "Location": null,
-        "Timeframe": null,
-        "Properties": {
-            "Gender": 2,
-            "Name": "Sandra"
-        }
-    },
     "actor0": {
         "Action": "Exists",
         "Entities": [
@@ -47,6 +23,30 @@
             "Name": "Daniel"
         }
     },
+    "actor1": {
+        "Action": "Exists",
+        "Entities": [
+            "actor1"
+        ],
+        "Location": null,
+        "Timeframe": null,
+        "Properties": {
+            "Gender": 1,
+            "Name": "John"
+        }
+    },
+    "actor3": {
+        "Action": "Exists",
+        "Entities": [
+            "actor3"
+        ],
+        "Location": null,
+        "Timeframe": null,
+        "Properties": {
+            "Gender": 2,
+            "Name": "Sandra"
+        }
+    },
     "object0": {
         "Action": "Exists",
         "Entities": [
@@ -55,7 +55,7 @@
         "Location": null,
         "Timeframe": null,
         "Properties": {
-            "Type": "Food"
+            "Type": "Drinks"
         }
     },
     "object1": {
@@ -66,14 +66,14 @@
         "Location": null,
         "Timeframe": null,
         "Properties": {
-            "Type": "Drinks"
+            "Type": "Food"
         }
     },
     "action0": {
         "Action": "PickUp",
         "Entities": [
             "actor0",
-            "object1"
+            "object0"
         ],
         "Location": [
             ""
@@ -87,6 +87,7 @@
             "actor1"
         ],
         "Location": [
+            "",
             "bedroom"
         ],
         "Timeframe": null,
@@ -96,7 +97,7 @@
         "Action": "PutDown",
         "Entities": [
             "actor0",
-            "object1"
+            "object0"
         ],
         "Location": [
             ""
@@ -122,6 +123,7 @@
             "actor2"
         ],
         "Location": [
+            "",
             "bedroom"
         ],
         "Timeframe": null,
@@ -157,6 +159,7 @@
             "actor3"
         ],
         "Location": [
+            "",
             "bedroom"
         ],
         "Timeframe": null,
@@ -166,7 +169,7 @@
         "Action": "PickUp",
         "Entities": [
             "actor0",
-            "object0"
+            "object1"
         ],
         "Location": [
             ""
@@ -178,7 +181,7 @@
         "Action": "PickUp",
         "Entities": [
             "actor3",
-            "object1"
+            "object0"
         ],
         "Location": [
             "bedroom"

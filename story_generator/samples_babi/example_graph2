@@ -1,28 +1,4 @@
 {
-    "actor2": {
-        "Action": "Exists",
-        "Entities": [
-            "actor2"
-        ],
-        "Location": null,
-        "Timeframe": null,
-        "Properties": {
-            "Gender": 2,
-            "Name": "Sandra"
-        }
-    },
-    "actor1": {
-        "Action": "Exists",
-        "Entities": [
-            "actor1"
-        ],
-        "Location": null,
-        "Timeframe": null,
-        "Properties": {
-            "Gender": 1,
-            "Name": "John"
-        }
-    },
     "actor0": {
         "Action": "Exists",
         "Entities": [
@@ -45,6 +21,30 @@
         "Properties": {
             "Gender": 1,
             "Name": "Daniel"
+        }
+    },
+    "actor2": {
+        "Action": "Exists",
+        "Entities": [
+            "actor2"
+        ],
+        "Location": null,
+        "Timeframe": null,
+        "Properties": {
+            "Gender": 2,
+            "Name": "Sandra"
+        }
+    },
+    "actor1": {
+        "Action": "Exists",
+        "Entities": [
+            "actor1"
+        ],
+        "Location": null,
+        "Timeframe": null,
+        "Properties": {
+            "Gender": 1,
+            "Name": "John"
         }
     },
     "object0": {
@@ -87,6 +87,7 @@
             "actor1"
         ],
         "Location": [
+            "",
             "bedroom"
         ],
         "Timeframe": null,
@@ -98,6 +99,7 @@
             "actor2"
         ],
         "Location": [
+            "",
             "kitchen"
         ],
         "Timeframe": null,
@@ -109,6 +111,7 @@
             "actor0"
         ],
         "Location": [
+            "",
             "hallway"
         ],
         "Timeframe": null,
@@ -192,6 +195,7 @@
             "actor3"
         ],
         "Location": [
+            "",
             "hallway"
         ],
         "Timeframe": null,

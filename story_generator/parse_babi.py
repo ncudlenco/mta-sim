@@ -219,11 +219,12 @@ def add_storyline(story, line):
     else:
         loc = get_last_actor_location_parsed(story, actor.name)
         if loc != None and loc != empty_room and (act.name == "Move"):
-            print(act, actor.name, loc, location)
+            # print(act, actor.name, loc, location)
             # loc = Room(loc.name+"-"+location)
             loc = [Room(loc.name), Room(location)]
         else:
-            loc = Room(location)
+            loc = [empty_room, Room(location)]
+            
 
     if not (isinstance(loc, list)):
         loc = [loc]
@@ -249,7 +250,7 @@ if __name__ == "__main__":
         files = [os.path.join(folder, x) for x in os.listdir(folder)]
         searched = ["qa{0}_".format(x) for x in considered_indexes]
         files = [f for f in files if any(xs in f for xs in searched)]
-    
+
         for file in files:
             with open(file, "r") as f:
                 crt_lines = f.readlines()

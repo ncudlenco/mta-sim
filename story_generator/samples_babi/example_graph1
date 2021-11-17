@@ -11,18 +11,6 @@
             "Name": "John"
         }
     },
-    "actor1": {
-        "Action": "Exists",
-        "Entities": [
-            "actor1"
-        ],
-        "Location": null,
-        "Timeframe": null,
-        "Properties": {
-            "Gender": 2,
-            "Name": "Mary"
-        }
-    },
     "actor2": {
         "Action": "Exists",
         "Entities": [
@@ -47,12 +35,25 @@
             "Name": "Sandra"
         }
     },
+    "actor1": {
+        "Action": "Exists",
+        "Entities": [
+            "actor1"
+        ],
+        "Location": null,
+        "Timeframe": null,
+        "Properties": {
+            "Gender": 2,
+            "Name": "Mary"
+        }
+    },
     "action0": {
         "Action": "Move",
         "Entities": [
             "actor0"
         ],
         "Location": [
+            "",
             "hallway"
         ],
         "Timeframe": null,
@@ -64,6 +65,7 @@
             "actor1"
         ],
         "Location": [
+            "",
             "bathroom"
         ],
         "Timeframe": null,
@@ -75,6 +77,7 @@
             "actor2"
         ],
         "Location": [
+            "",
             "bathroom"
         ],
         "Timeframe": null,
@@ -110,6 +113,7 @@
             "actor3"
         ],
         "Location": [
+            "",
             "kitchen"
         ],
         "Timeframe": null,

@@ -1,171 +1,209 @@
 {
-    "actor0": {
-        "Actor": {
-            "id": "actor0",
-            "Gender": 2,
-            "Name": "NAME"
-        },
-        "Action": "Exists",
-        "id": "actor0"
-    },
     "actor1": {
         "Actor": {
             "id": "actor1",
-            "Gender": 2,
+            "Gender": 1,
             "Name": "NAME"
         },
         "Action": "Exists",
         "id": "actor1"
+    },
+    "actor0": {
+        "Actor": {
+            "id": "actor0",
+            "Gender": 1,
+            "Name": "NAME"
+        },
+        "Action": "Exists",
+        "id": "actor0"
     },
     "object0": {
         "Action": "Exists",
         "id": "object0",
         "Target": {
             "id": "object0",
-            "Name": "Sink"
+            "Name": "GymBike"
         }
     },
-    "object1": {
-        "Action": "Exists",
-        "id": "object1",
-        "Target": {
-            "id": "object1",
-            "Name": "Sink"
-        }
-    },
-    "action0": {
+    "action0_inner0": {
         "Actor": {
             "id": "actor0"
         },
-        "Action": "WashHands",
-        "Next": "action2",
-        "id": "action0",
+        "Action": "GetOn",
+        "Next": "action0_inner1",
+        "id": "action0_inner0",
         "Target": {
             "id": "object0"
         },
-        "Location": "BathRoom"
+        "Location": "Gym"
+    },
+    "action0_inner1": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "PedalGymBike",
+        "Next": "action0_inner2",
+        "id": "action0_inner1",
+        "Target": {
+            "id": "object0"
+        },
+        "Location": "Gym"
+    },
+    "action0_inner2": {
+        "Actor": {
+            "id": "actor0"
+        },
+        "Action": "GetOff",
+        "Next": "action2",
+        "id": "action0_inner2",
+        "Target": {
+            "id": "object0"
+        },
+        "Location": "Gym"
     },
     "action1": {
         "Actor": {
             "id": "actor1"
         },
-        "Action": "WashHands",
-        "Next": "action3",
+        "Action": "Handshake",
+        "Next": "action4",
         "id": "action1",
         "Target": {
-            "id": "object0"
+            "id": "actor0"
         },
-        "Location": "BathRoom"
+        "Location": "Gym"
     },
     "action2": {
         "Actor": {
             "id": "actor0"
         },
-        "Action": "WashHands",
-        "Next": "action4",
+        "Action": "Handshake",
+        "Next": "action3",
         "id": "action2",
         "Target": {
-            "id": "object0"
+            "id": "actor1"
         },
-        "Location": "BathRoom"
+        "Location": "Gym"
     },
     "action3": {
         "Actor": {
-            "id": "actor1"
-        },
-        "Action": "Handshake",
-        "Next": "action5",
-        "id": "action3",
-        "Target": {
             "id": "actor0"
         },
-        "Location": "BathRoom"
+        "Action": "Kiss",
+        "Next": "action6",
+        "id": "action3",
+        "Target": {
+            "id": "actor1"
+        },
+        "Location": "Gym"
     },
     "action4": {
         "Actor": {
-            "id": "actor0"
-        },
-        "Action": "Handshake",
-        "Next": "None",
-        "id": "action4",
-        "Target": {
             "id": "actor1"
         },
-        "Location": "BathRoom"
+        "Action": "Kiss",
+        "Next": "action5",
+        "id": "action4",
+        "Target": {
+            "id": "actor0"
+        },
+        "Location": "Gym"
     },
     "action5": {
         "Actor": {
             "id": "actor1"
         },
-        "Action": "WashHands",
-        "Next": "action6",
+        "Action": "Hug",
+        "Next": "None",
         "id": "action5",
         "Target": {
-            "id": "object0"
+            "id": "actor0"
         },
-        "Location": "BathRoom"
+        "Location": "Gym"
     },
     "action6": {
         "Actor": {
-            "id": "actor1"
+            "id": "actor0"
         },
-        "Action": "WashHands",
+        "Action": "Hug",
         "Next": "None",
         "id": "action6",
         "Target": {
-            "id": "object1"
+            "id": "actor1"
         },
-        "Location": "Kitchen"
+        "Location": "Gym"
     },
     "temporal": {
         "timeline": {
-            "actor0": "[('action0', 'WashHands'), ('action2', 'WashHands'), ('action4', 'Handshake')]",
-            "actor1": "[('action1', 'WashHands'), ('action3', 'Handshake'), ('action5', 'WashHands'), ('action6', 'WashHands')]"
+            "actor0": "[('action0_inner0', 'GetOn'), ('action0_inner1', 'PedalGymBike'), ('action0_inner2', 'GetOff'), ('action2', 'Handshake'), ('action3', 'Kiss'), ('action6', 'Hug')]",
+            "actor1": "[('action1', 'Handshake'), ('action4', 'Kiss'), ('action5', 'Hug')]"
         },
         "starting_actions": {
-            "actor0": "action0",
+            "actor0": "action0_inner0",
             "actor1": "action1"
         },
-        "action0": {
+        "action0_inner0": {
+            "relations": null,
+            "next": "action0_inner1"
+        },
+        "action0_inner1": {
+            "relations": null,
+            "next": "action0_inner2"
+        },
+        "action0_inner2": {
             "relations": null,
             "next": "action2"
-        },
-        "action2": {
-            "relations": null,
-            "next": "action4"
         },
         "tm0": {
             "type": "starts_with"
         },
-        "action4": {
+        "action2": {
             "relations": [
                 "tm0"
+            ],
+            "next": "action3"
+        },
+        "tm1": {
+            "type": "starts_with"
+        },
+        "action3": {
+            "relations": [
+                "tm1"
+            ],
+            "next": "action6"
+        },
+        "tm2": {
+            "type": "starts_with"
+        },
+        "action6": {
+            "relations": [
+                "tm2"
             ],
             "next": null
         },
         "action1": {
-            "relations": null,
-            "next": "action3"
-        },
-        "action3": {
             "relations": [
                 "tm0"
+            ],
+            "next": "action4"
+        },
+        "action4": {
+            "relations": [
+                "tm1"
             ],
             "next": "action5"
         },
         "action5": {
-            "relations": null,
-            "next": "action6"
-        },
-        "action6": {
-            "relations": null,
+            "relations": [
+                "tm2"
+            ],
             "next": null
         }
     },
     "temporal_abs": {
         "timeline": {
-            "actor0": "[['action0', 'WashHands'], ['action2', 'WashHands'], ['action4', 'Handshake']]",
-            "actor1": "[['action1', 'WashHands'], ['action3', 'Handshake'], ['action5', 'WashHands'], ['action6', 'WashHands']]"
+            "actor0": "[['action0', 'PedalOnGymBike'], ['action2', 'Handshake'], ['action3', 'Kiss'], ['action6', 'Hug']]",
+            "actor1": "[['action1', 'Handshake'], ['action4', 'Kiss'], ['action5', 'Hug']]"
         },
         "starting_actions": {
             "actor0": "action0",
@@ -175,35 +213,49 @@
             "relations": null,
             "next": "action2"
         },
-        "action2": {
-            "relations": null,
-            "next": "action4"
-        },
         "tm0": {
             "type": "starts_with"
         },
-        "action4": {
+        "action2": {
             "relations": [
                 "tm0"
+            ],
+            "next": "action3"
+        },
+        "tm1": {
+            "type": "starts_with"
+        },
+        "action3": {
+            "relations": [
+                "tm1"
+            ],
+            "next": "action6"
+        },
+        "tm2": {
+            "type": "starts_with"
+        },
+        "action6": {
+            "relations": [
+                "tm2"
             ],
             "next": null
         },
         "action1": {
-            "relations": null,
-            "next": "action3"
-        },
-        "action3": {
             "relations": [
                 "tm0"
+            ],
+            "next": "action4"
+        },
+        "action4": {
+            "relations": [
+                "tm1"
             ],
             "next": "action5"
         },
         "action5": {
-            "relations": null,
-            "next": "action6"
-        },
-        "action6": {
-            "relations": null,
+            "relations": [
+                "tm2"
+            ],
             "next": null
         }
     }

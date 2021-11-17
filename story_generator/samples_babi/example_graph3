@@ -55,7 +55,7 @@
         "Location": null,
         "Timeframe": null,
         "Properties": {
-            "Type": "Drinks"
+            "Type": "Food"
         }
     },
     "object1": {
@@ -66,7 +66,7 @@
         "Location": null,
         "Timeframe": null,
         "Properties": {
-            "Type": "Food"
+            "Type": "Remote"
         }
     },
     "object2": {
@@ -77,14 +77,14 @@
         "Location": null,
         "Timeframe": null,
         "Properties": {
-            "Type": "Remote"
+            "Type": "Drinks"
         }
     },
     "action0": {
         "Action": "PickUp",
         "Entities": [
             "actor0",
-            "object0"
+            "object2"
         ],
         "Location": [
             ""
@@ -98,6 +98,7 @@
             "actor1"
         ],
         "Location": [
+            "",
             "bedroom"
         ],
         "Timeframe": null,
@@ -109,6 +110,7 @@
             "actor2"
         ],
         "Location": [
+            "",
             "office"
         ],
         "Timeframe": null,
@@ -118,7 +120,7 @@
         "Action": "PickUp",
         "Entities": [
             "actor1",
-            "object2"
+            "object1"
         ],
         "Location": [
             "bedroom"
@@ -130,7 +132,7 @@
         "Action": "PickUp",
         "Entities": [
             "actor1",
-            "object1"
+            "object0"
         ],
         "Location": [
             "bedroom"
@@ -154,7 +156,7 @@
         "Action": "PutDown",
         "Entities": [
             "actor0",
-            "object0"
+            "object2"
         ],
         "Location": [
             ""
@@ -166,7 +168,7 @@
         "Action": "PutDown",
         "Entities": [
             "actor1",
-            "object1"
+            "object0"
         ],
         "Location": [
             "garden"
@@ -190,7 +192,7 @@
         "Action": "PickUp",
         "Entities": [
             "actor2",
-            "object1"
+            "object0"
         ],
         "Location": [
             "garden"
@@ -204,6 +206,7 @@
             "actor0"
         ],
         "Location": [
+            "",
             "hallway"
         ],
         "Timeframe": null,
@@ -225,7 +228,7 @@
         "Action": "PutDown",
         "Entities": [
             "actor1",
-            "object2"
+            "object1"
         ],
         "Location": [
             "garden"
@@ -237,7 +240,7 @@
         "Action": "PickUp",
         "Entities": [
             "actor1",
-            "object2"
+            "object1"
         ],
         "Location": [
             "garden"
@@ -251,6 +254,7 @@
             "actor3"
         ],
         "Location": [
+            "",
             "hallway"
         ],
         "Timeframe": null,
@@ -260,7 +264,7 @@
         "Action": "PutDown",
         "Entities": [
             "actor2",
-            "object1"
+            "object0"
         ],
         "Location": [
             "garden"
@@ -272,7 +276,7 @@
         "Action": "PickUp",
         "Entities": [
             "actor2",
-            "object1"
+            "object0"
         ],
         "Location": [
             "garden"
@@ -296,7 +300,7 @@
         "Action": "PutDown",
         "Entities": [
             "actor2",
-            "object1"
+            "object0"
         ],
         "Location": [
             "garden"
@@ -308,7 +312,7 @@
         "Action": "PutDown",
         "Entities": [
             "actor1",
-            "object2"
+            "object1"
         ],
         "Location": [
             "kitchen"
@@ -320,7 +324,7 @@
         "Action": "PickUp",
         "Entities": [
             "actor1",
-            "object2"
+            "object1"
         ],
         "Location": [
             "kitchen"
@@ -356,7 +360,7 @@
         "Action": "PickUp",
         "Entities": [
             "actor3",
-            "object0"
+            "object2"
         ],
         "Location": [
             "bedroom"
@@ -392,7 +396,7 @@
         "Action": "PutDown",
         "Entities": [
             "actor3",
-            "object0"
+            "object2"
         ],
         "Location": [
             "bedroom"
@@ -464,7 +468,7 @@
         "Action": "PickUp",
         "Entities": [
             "actor2",
-            "object1"
+            "object0"
         ],
         "Location": [
             "garden"
@@ -488,7 +492,7 @@
         "Action": "PickUp",
         "Entities": [
             "actor0",
-            "object0"
+            "object2"
         ],
         "Location": [
             "bedroom"
@@ -500,7 +504,7 @@
         "Action": "PutDown",
         "Entities": [
             "actor0",
-            "object0"
+            "object2"
         ],
         "Location": [
             "bedroom"
@@ -524,7 +528,7 @@
         "Action": "PutDown",
         "Entities": [
             "actor1",
-            "object2"
+            "object1"
         ],
         "Location": [
             "garden"
@@ -560,7 +564,7 @@
         "Action": "PickUp",
         "Entities": [
             "actor3",
-            "object0"
+            "object2"
         ],
         "Location": [
             "bedroom"
@@ -596,7 +600,7 @@
         "Action": "PickUp",
         "Entities": [
             "actor2",
-            "object2"
+            "object1"
         ],
         "Location": [
             "garden"
@@ -668,7 +672,7 @@
         "Action": "PutDown",
         "Entities": [
             "actor2",
-            "object2"
+            "object1"
         ],
         "Location": [
             "hallway"
@@ -680,7 +684,7 @@
         "Action": "PutDown",
         "Entities": [
             "actor2",
-            "object1"
+            "object0"
         ],
         "Location": [
             "hallway"
@@ -716,7 +720,7 @@
         "Action": "PutDown",
         "Entities": [
             "actor3",
-            "object0"
+            "object2"
         ],
         "Location": [
             "garden"

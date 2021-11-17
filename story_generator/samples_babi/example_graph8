@@ -55,7 +55,7 @@
         "Location": null,
         "Timeframe": null,
         "Properties": {
-            "Type": "Drinks"
+            "Type": "Food"
         }
     },
     "object1": {
@@ -77,14 +77,14 @@
         "Location": null,
         "Timeframe": null,
         "Properties": {
-            "Type": "Food"
+            "Type": "Drinks"
         }
     },
     "action0": {
         "Action": "PickUp",
         "Entities": [
             "actor0",
-            "object0"
+            "object2"
         ],
         "Location": [
             ""
@@ -98,6 +98,7 @@
             "actor1"
         ],
         "Location": [
+            "",
             "bedroom"
         ],
         "Timeframe": null,
@@ -107,7 +108,7 @@
         "Action": "PickUp",
         "Entities": [
             "actor1",
-            "object2"
+            "object0"
         ],
         "Location": [
             "bedroom"
@@ -145,6 +146,7 @@
             "actor2"
         ],
         "Location": [
+            "",
             "hallway"
         ],
         "Timeframe": null,
@@ -168,6 +170,7 @@
             "actor0"
         ],
         "Location": [
+            "",
             "office"
         ],
         "Timeframe": null,
@@ -179,6 +182,7 @@
             "actor3"
         ],
         "Location": [
+            "",
             "kitchen"
         ],
         "Timeframe": null,

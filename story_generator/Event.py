@@ -113,7 +113,7 @@ class Event:
 
             if self.object.id != None:
                 # TODO: handle this from verbet somehow
-                if "gave" in self.action.name or "handed" in self.action.name:
+                if "gave" in self.action.name or "handed" in self.action.name or "passed" in self.action.name:
                     action_dict["Entities"].insert(1, self.object.id)
                 else:
                     action_dict["Entities"].append(self.object.id)

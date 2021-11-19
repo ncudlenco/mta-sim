@@ -97,8 +97,8 @@ class Event:
         
         else:
             action_dict = {}
-            actor_dict = {}
-            actor_dict["id"] = self.actor.id
+            # actor_dict = {}
+            # actor_dict["id"] = self.actor.id
             
             obj_dict = {}        
             obj_dict["id"] = self.object.id
@@ -106,9 +106,17 @@ class Event:
             # action_dict["Actor"] = actor_dict
             action_dict["Action"] = self.action.name
 
-            action_dict["Entities"] = [self.actor.id]
+            # print("!!!!!!!!!!!!!!!!!!!!", self.actor)
+            # action_dict["Entities"] = [self.actor.id]
+            actors_ids = list(map(lambda x: x.id, self.actor))
+            action_dict["Entities"] = actors_ids
+
             if self.object.id != None:
-                action_dict["Entities"].append(self.object.id)
+                # TODO: handle this from verbet somehow
+                if "gave" in self.action.name or "handed" in self.action.name:
+                    action_dict["Entities"].insert(1, self.object.id)
+                else:
+                    action_dict["Entities"].append(self.object.id)
 
             # if self.next_event == None:
             #     action_dict["Next"] = "None"

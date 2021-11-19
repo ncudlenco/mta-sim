@@ -11,18 +11,6 @@
             "Name": "Mary"
         }
     },
-    "actor1": {
-        "Action": "Exists",
-        "Entities": [
-            "actor1"
-        ],
-        "Location": null,
-        "Timeframe": null,
-        "Properties": {
-            "Gender": 1,
-            "Name": "John"
-        }
-    },
     "actor2": {
         "Action": "Exists",
         "Entities": [
@@ -33,6 +21,18 @@
         "Properties": {
             "Gender": 2,
             "Name": "Sandra"
+        }
+    },
+    "actor1": {
+        "Action": "Exists",
+        "Entities": [
+            "actor1"
+        ],
+        "Location": null,
+        "Timeframe": null,
+        "Properties": {
+            "Gender": 1,
+            "Name": "John"
         }
     },
     "object0": {

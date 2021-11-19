@@ -1,14 +1,14 @@
 {
-    "actor1": {
+    "actor0": {
         "Action": "Exists",
         "Entities": [
-            "actor1"
+            "actor0"
         ],
         "Location": null,
         "Timeframe": null,
         "Properties": {
-            "Gender": 1,
-            "Name": "John"
+            "Gender": 2,
+            "Name": "Mary"
         }
     },
     "actor2": {
@@ -23,6 +23,18 @@
             "Name": "Daniel"
         }
     },
+    "actor1": {
+        "Action": "Exists",
+        "Entities": [
+            "actor1"
+        ],
+        "Location": null,
+        "Timeframe": null,
+        "Properties": {
+            "Gender": 1,
+            "Name": "John"
+        }
+    },
     "actor3": {
         "Action": "Exists",
         "Entities": [
@@ -35,18 +47,6 @@
             "Name": "Sandra"
         }
     },
-    "actor0": {
-        "Action": "Exists",
-        "Entities": [
-            "actor0"
-        ],
-        "Location": null,
-        "Timeframe": null,
-        "Properties": {
-            "Gender": 2,
-            "Name": "Mary"
-        }
-    },
     "object0": {
         "Action": "Exists",
         "Entities": [
@@ -55,7 +55,7 @@
         "Location": null,
         "Timeframe": null,
         "Properties": {
-            "Type": "Food"
+            "Type": "Drinks"
         }
     },
     "object1": {
@@ -66,7 +66,7 @@
         "Location": null,
         "Timeframe": null,
         "Properties": {
-            "Type": "Remote"
+            "Type": "Food"
         }
     },
     "object2": {
@@ -77,14 +77,14 @@
         "Location": null,
         "Timeframe": null,
         "Properties": {
-            "Type": "Drinks"
+            "Type": "Remote"
         }
     },
     "action0": {
         "Action": "PickUp",
         "Entities": [
             "actor0",
-            "object2"
+            "object0"
         ],
         "Location": [
             ""
@@ -108,7 +108,7 @@
         "Action": "PickUp",
         "Entities": [
             "actor1",
-            "object0"
+            "object1"
         ],
         "Location": [
             "bedroom"
@@ -216,7 +216,7 @@
         "Action": "PickUp",
         "Entities": [
             "actor1",
-            "object1"
+            "object2"
         ],
         "Location": [
             "bedroom"
@@ -254,76 +254,6 @@
             "actor1": "[('action1', 'Move'), ('action2', 'PickUp'), ('action3', 'Move'), ('action4', 'Move'), ('action6', 'Move'), ('action10', 'Move'), ('action11', 'PickUp')]",
             "actor2": "[('action5', 'Move')]",
             "actor3": "[('action8', 'Move'), ('action12', 'Move'), ('action13', 'Move')]"
-        },
-        "starting_actions": {
-            "actor0": "action0",
-            "actor1": "action1",
-            "actor2": "action5",
-            "actor3": "action8"
-        },
-        "action0": {
-            "relations": null,
-            "next": "action7"
-        },
-        "action7": {
-            "relations": null,
-            "next": "action9"
-        },
-        "action9": {
-            "relations": null,
-            "next": null
-        },
-        "action1": {
-            "relations": null,
-            "next": "action2"
-        },
-        "action2": {
-            "relations": null,
-            "next": "action3"
-        },
-        "action3": {
-            "relations": null,
-            "next": "action4"
-        },
-        "action4": {
-            "relations": null,
-            "next": "action6"
-        },
-        "action6": {
-            "relations": null,
-            "next": "action10"
-        },
-        "action10": {
-            "relations": null,
-            "next": "action11"
-        },
-        "action11": {
-            "relations": null,
-            "next": null
-        },
-        "action5": {
-            "relations": null,
-            "next": null
-        },
-        "action8": {
-            "relations": null,
-            "next": "action12"
-        },
-        "action12": {
-            "relations": null,
-            "next": "action13"
-        },
-        "action13": {
-            "relations": null,
-            "next": null
-        }
-    },
-    "temporal_abs": {
-        "timeline": {
-            "actor0": "[['action0', 'PickUp'], ['action7', 'Move'], ['action9', 'Move']]",
-            "actor1": "[['action1', 'Move'], ['action2', 'PickUp'], ['action3', 'Move'], ['action4', 'Move'], ['action6', 'Move'], ['action10', 'Move'], ['action11', 'PickUp']]",
-            "actor2": "[['action5', 'Move']]",
-            "actor3": "[['action8', 'Move'], ['action12', 'Move'], ['action13', 'Move']]"
         },
         "starting_actions": {
             "actor0": "action0",

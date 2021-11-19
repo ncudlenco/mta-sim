@@ -1,4 +1,16 @@
 {
+    "actor0": {
+        "Action": "Exists",
+        "Entities": [
+            "actor0"
+        ],
+        "Location": null,
+        "Timeframe": null,
+        "Properties": {
+            "Gender": 1,
+            "Name": "Fred"
+        }
+    },
     "actor1": {
         "Action": "Exists",
         "Entities": [
@@ -23,18 +35,6 @@
             "Name": "Bill"
         }
     },
-    "actor0": {
-        "Action": "Exists",
-        "Entities": [
-            "actor0"
-        ],
-        "Location": null,
-        "Timeframe": null,
-        "Properties": {
-            "Gender": 1,
-            "Name": "Fred"
-        }
-    },
     "object0": {
         "Action": "Exists",
         "Entities": [
@@ -43,7 +43,7 @@
         "Location": null,
         "Timeframe": null,
         "Properties": {
-            "Type": "Drinks"
+            "Type": "Food"
         }
     },
     "object1": {
@@ -54,14 +54,14 @@
         "Location": null,
         "Timeframe": null,
         "Properties": {
-            "Type": "Food"
+            "Type": "Drinks"
         }
     },
     "action0": {
         "Action": "PickUp",
         "Entities": [
             "actor0",
-            "object1"
+            "object0"
         ],
         "Location": [
             ""
@@ -73,7 +73,7 @@
         "Action": "gave",
         "Entities": [
             "actor0",
-            "object1",
+            "object0",
             "actor1"
         ],
         "Location": [
@@ -86,7 +86,7 @@
         "Action": "INV-gave",
         "Entities": [
             "actor1",
-            "object1",
+            "object0",
             "actor0"
         ],
         "Location": [
@@ -111,7 +111,7 @@
         "Action": "PickUp",
         "Entities": [
             "actor1",
-            "object0"
+            "object1"
         ],
         "Location": [
             ""
@@ -123,7 +123,7 @@
         "Action": "gave",
         "Entities": [
             "actor1",
-            "object1",
+            "object0",
             "actor0"
         ],
         "Location": [
@@ -136,7 +136,7 @@
         "Action": "INV-gave",
         "Entities": [
             "actor0",
-            "object1",
+            "object0",
             "actor1"
         ],
         "Location": [
@@ -149,7 +149,7 @@
         "Action": "handed",
         "Entities": [
             "actor0",
-            "object1",
+            "object0",
             "actor1"
         ],
         "Location": [
@@ -162,7 +162,7 @@
         "Action": "INV-handed",
         "Entities": [
             "actor1",
-            "object1",
+            "object0",
             "actor0"
         ],
         "Location": [
@@ -175,7 +175,7 @@
         "Action": "handed",
         "Entities": [
             "actor1",
-            "object1",
+            "object0",
             "actor0"
         ],
         "Location": [
@@ -188,7 +188,7 @@
         "Action": "INV-handed",
         "Entities": [
             "actor0",
-            "object1",
+            "object0",
             "actor1"
         ],
         "Location": [
@@ -201,7 +201,7 @@
         "Action": "gave",
         "Entities": [
             "actor0",
-            "object1",
+            "object0",
             "actor1"
         ],
         "Location": [
@@ -214,7 +214,7 @@
         "Action": "INV-gave",
         "Entities": [
             "actor1",
-            "object1",
+            "object0",
             "actor0"
         ],
         "Location": [
@@ -227,7 +227,7 @@
         "Action": "gave",
         "Entities": [
             "actor1",
-            "object1",
+            "object0",
             "actor0"
         ],
         "Location": [
@@ -240,7 +240,7 @@
         "Action": "INV-gave",
         "Entities": [
             "actor0",
-            "object1",
+            "object0",
             "actor1"
         ],
         "Location": [
@@ -253,7 +253,7 @@
         "Action": "PutDown",
         "Entities": [
             "actor1",
-            "object0"
+            "object1"
         ],
         "Location": [
             ""

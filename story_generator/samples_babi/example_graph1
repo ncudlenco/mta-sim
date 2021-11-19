@@ -11,18 +11,6 @@
             "Name": "John"
         }
     },
-    "actor2": {
-        "Action": "Exists",
-        "Entities": [
-            "actor2"
-        ],
-        "Location": null,
-        "Timeframe": null,
-        "Properties": {
-            "Gender": 1,
-            "Name": "Daniel"
-        }
-    },
     "actor3": {
         "Action": "Exists",
         "Entities": [
@@ -45,6 +33,18 @@
         "Properties": {
             "Gender": 2,
             "Name": "Mary"
+        }
+    },
+    "actor2": {
+        "Action": "Exists",
+        "Entities": [
+            "actor2"
+        ],
+        "Location": null,
+        "Timeframe": null,
+        "Properties": {
+            "Gender": 1,
+            "Name": "Daniel"
         }
     },
     "action0": {
@@ -173,60 +173,6 @@
             "actor1": "[('action1', 'Move')]",
             "actor2": "[('action2', 'Move')]",
             "actor3": "[('action5', 'Move'), ('action6', 'Move'), ('action8', 'Move'), ('action9', 'Move')]"
-        },
-        "starting_actions": {
-            "actor0": "action0",
-            "actor1": "action1",
-            "actor2": "action2",
-            "actor3": "action5"
-        },
-        "action0": {
-            "relations": null,
-            "next": "action3"
-        },
-        "action3": {
-            "relations": null,
-            "next": "action4"
-        },
-        "action4": {
-            "relations": null,
-            "next": "action7"
-        },
-        "action7": {
-            "relations": null,
-            "next": null
-        },
-        "action1": {
-            "relations": null,
-            "next": null
-        },
-        "action2": {
-            "relations": null,
-            "next": null
-        },
-        "action5": {
-            "relations": null,
-            "next": "action6"
-        },
-        "action6": {
-            "relations": null,
-            "next": "action8"
-        },
-        "action8": {
-            "relations": null,
-            "next": "action9"
-        },
-        "action9": {
-            "relations": null,
-            "next": null
-        }
-    },
-    "temporal_abs": {
-        "timeline": {
-            "actor0": "[['action0', 'Move'], ['action3', 'Move'], ['action4', 'Move'], ['action7', 'Move']]",
-            "actor1": "[['action1', 'Move']]",
-            "actor2": "[['action2', 'Move']]",
-            "actor3": "[['action5', 'Move'], ['action6', 'Move'], ['action8', 'Move'], ['action9', 'Move']]"
         },
         "starting_actions": {
             "actor0": "action0",

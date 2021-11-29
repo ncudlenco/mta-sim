@@ -35,6 +35,20 @@ function UniqueStr(arr, func)
     return res
 end
 
+function Flatten(arr)
+    local res = {}
+    for _, arr2 in pairs(arr) do
+        if isArray(arr2) then
+            for _, item in pairs(arr2) do
+                table.insert(res, item)
+            end
+        else
+            table.insert(res, arr2)
+        end
+    end
+    return res
+end
+
 function Where(arr, func)
     local res = {}
     for _, a in pairs(arr) do --I don't care about the order, this will work on arrays and tables

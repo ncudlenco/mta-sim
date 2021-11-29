@@ -86,11 +86,28 @@ function (prevA, curA)
         end
         if story and not FREE_ROAM then
             Timer(function()
-                story.CurrentEpisode.StartingLocation:GetNextValidAction(story.Actor):Apply()
+                local firstAction = story.CurrentEpisode.StartingLocation:GetNextValidAction(story.Actor)
+                if firstAction then
+                    firstAction:Apply()
+                else
+                    if DEBUG then
+                        print("No valid action found, the player is waiting "..story.Actor:getData('id'))
+                    end
+                end
                 for _,ped in ipairs(story.CurrentEpisode.peds) do
                     local idx = ped:getData('startingPoiIdx')
+                    if DEBUG then
+                        print("Starting poi idx for ped "..idx)
+                    end
                     if idx > 0 then
-                        story.CurrentEpisode.POI[idx]:GetNextValidAction(ped):Apply()
+                        local firstAction = story.CurrentEpisode.POI[idx]:GetNextValidAction(ped)
+                        if firstAction then
+                            firstAction:Apply()
+                        else
+                            if DEBUG then
+                                print("No valid action found, the ped is waiting "..ped:getData('id'))
+                            end
+                        end
                     end
                 end
             end, 5000, 1)

@@ -258,6 +258,8 @@ function Location:ProcessNextAction(player)
 
     if event == null then return end
 
+    local isMoveEvent = event.Action:lower() == 'move'
+
     print(event.id)
     --if the event action has prerequisites then add them first if they are not already in the queue
     local eventAction = nil
@@ -267,7 +269,7 @@ function Location:ProcessNextAction(player)
         --set the actors one in front of the other in the same location...
         --create the interaction actions / locations
         local ped1 = FirstOrDefault(CURRENT_STORY.CurrentEpisode.peds, function(p) return p:getData('id') == player:getData('id') end) or CURRENT_STORY.Actor
-        local ped2 = FirstOrDefault(CURRENT_STORY.CurrentEpisode.peds, function(p) return p:getData('id') == event.interactionEvent.Actor.id end) or CURRENT_STORY.Actor
+        local ped2 = FirstOrDefault(CURRENT_STORY.CurrentEpisode.peds, function(p) return p:getData('id') == event.interactionEvent.Entities[1] end) or CURRENT_STORY.Actor
 
         --The interaction action will be executed only from the first actor
         if interactionProcessedMap[event.interactionRelation] then
@@ -297,7 +299,7 @@ function Location:ProcessNextAction(player)
             wait.NextAction = eventAction
         end
         interactionProcessedMap[event.interactionRelation] = true
-    else
+    elseif not isMoveEvent then
         eventAction = FirstOrDefault(location.allActions, function(action) return action.Name:lower() == event.Action:lower() end)
         if not eventAction then
             error('Event action could not be found '..event.Action)
@@ -328,42 +330,46 @@ function Location:ProcessNextAction(player)
             error('Infinite loop mandatoryPrevAction')
         end
     end
-    print(eventAction.Name)
-    table.insert(actionsChain, eventAction)
+    if not isMoveEvent then
+        print(eventAction.Name)
+        table.insert(actionsChain, eventAction)
+    end
 --looking backward in the graph's chain of events to see if any actions were already processed is not necessary because
 --in the steps below, we make sure that when we reach the first action from an enforced chain, then we process all their previous and following mandatory actions
-    local nextEvent = FirstOrDefault(CURRENT_STORY.graph, function(evt) return evt.id == event.Next end)
-    local nextMandatoryAction = eventAction.NextAction
-    while (nextMandatoryAction) do
-        --if the action has mandatory closing actions then add them if they are not already in the graph next actions
-        if  nextEvent 
-            and (isArray(nextMandatoryAction)
-            and Any(nextMandatoryAction, function(action) 
-                return action.Name:lower() == nextEvent.Action:lower()--action.location is the same as the event.next.location (technically, in a chain the location doesn't change, except when it does (Dance)...)
-            end)
-            or (not isArray(nextMandatoryAction) and nextMandatoryAction.Name:lower() == nextEvent.Action:lower())
-            )
-            and
-            (eventAction.NextLocation.Region.name:lower():find(nextEvent.Location:lower()) and true or false)
-        then
-            if isArray(nextMandatoryAction) then
-                nextMandatoryAction = FirstOrDefault(nextMandatoryAction, function(action) return action.Name:lower() == nextEvent.Action:lower() end)
+    local nextEvent = FirstOrDefault(CURRENT_STORY.graph, function(evt) return evt.id == CURRENT_STORY.temporal[event.id].next end)
+    if not isMoveEvent then
+        local nextMandatoryAction = eventAction.NextAction
+        while (nextMandatoryAction) do
+            --if the action has mandatory closing actions then add them if they are not already in the graph next actions
+            if  nextEvent 
+                and (isArray(nextMandatoryAction)
+                and Any(nextMandatoryAction, function(action) 
+                    return action.Name:lower() == nextEvent.Action:lower()--action.location is the same as the event.next.location (technically, in a chain the location doesn't change, except when it does (Dance)...)
+                end)
+                or (not isArray(nextMandatoryAction) and nextMandatoryAction.Name:lower() == nextEvent.Action:lower())
+                )
+                and
+                (eventAction.NextLocation.Region.name:lower():find(nextEvent.Location[1]:lower()) and true or false)
+            then
+                if isArray(nextMandatoryAction) then
+                    nextMandatoryAction = FirstOrDefault(nextMandatoryAction, function(action) return action.Name:lower() == nextEvent.Action:lower() end)
+                end
+                --if the action is set in the next future event in the same location, skip the processing of the next future event
+                nextEvent = FirstOrDefault(CURRENT_STORY.graph, function(evt) return evt.id == CURRENT_STORY.temporal[nextEvent.id].next end)
             end
-            --if the action is set in the next future event in the same location, skip the processing of the next future event
-            nextEvent = FirstOrDefault(CURRENT_STORY.graph, function(evt) return evt.id == nextEvent.Next end)
-        end
 
-        if isArray(nextMandatoryAction) then
-            nextMandatoryAction = PickRandom(nextMandatoryAction)
+            if isArray(nextMandatoryAction) then
+                nextMandatoryAction = PickRandom(nextMandatoryAction)
+            end
+            print(nextMandatoryAction.Name)
+            table.insert(actionsChain, nextMandatoryAction)
+            nextMandatoryAction = nextMandatoryAction.NextAction
         end
-        print(nextMandatoryAction.Name)
-        table.insert(actionsChain, nextMandatoryAction)
-        nextMandatoryAction = nextMandatoryAction.NextAction
-    end
-    --add the required actions
+        --add the required actions
 
-    for _, action in ipairs(actionsChain) do
-        table.insert(CURRENT_STORY.actionsQueues[player:getData('id')], action)
+        for _, action in ipairs(actionsChain) do
+            table.insert(CURRENT_STORY.actionsQueues[player:getData('id')], action)
+        end
     end
     
     --if this is the first event the player will be spawned in the required location
@@ -383,7 +389,7 @@ function Location:ProcessNextAction(player)
         end
         print('Next event: '..nextEvent.id..' isInteraction '..strIsInteraction)
 
-        nextLocation = FirstOrDefault(CURRENT_STORY.CurrentEpisode.POI, function(poi) 
+        local candidates = Where(CURRENT_STORY.CurrentEpisode.POI, function(poi) 
             return 
             (nextEvent.isInteraction and 
                 (
@@ -391,23 +397,35 @@ function Location:ProcessNextAction(player)
                     or 
                     poi.LocationId == interactionPoiMap[nextEvent.interactionRelation]
                 )
-                or not nextEvent.isInteraction and not poi.isBusy
+                or not nextEvent.isInteraction --and not poi.isBusy
             )
             and
-            poi.Region and (poi.Region.name:lower():find(nextEvent.Location:lower()) and true or false )
+            poi.Region and nextEvent.Location and (poi.Region.name:lower():find(nextEvent.Location[1]:lower()) and true or false )
             and 
             (
                 nextEvent.isInteraction 
                 or 
                 Any(poi.allActions, function(action) 
                     return action.Name:lower() == nextEvent.Action:lower() --the location contains the required action for the next event
-                    and action.TargetItem.ObjectId and action.TargetItem.type == CURRENT_STORY.graph[nextEvent.Target.id].Target.Name --action has a target an object of type x
-                    and action.TargetItem.ObjectId == CURRENT_STORY.reverseObjectMap[nextEvent.Target.id]
+                    and (#nextEvent.Entities < 2 or
+                    (action.TargetItem.ObjectId and #nextEvent.Entities > 1 and action.TargetItem.type == CURRENT_STORY.graph[nextEvent.Entities[2]].Properties.Name --action has a target an object of type x
+                    and action.TargetItem.ObjectId == CURRENT_STORY.reverseObjectMap[nextEvent.Entities[2]]))
                 end) 
             )
         end)
+        if DEBUG then
+            for _,poi in ipairs(candidates) do
+                local isBusyStr = 'false' if poi.isBusy then isBusy = 'true' end
+                print('Candidate location '..poi.Description..' is busy '..isBusyStr)
+            end
+        end
+        if All(candidates, function(poi) return poi.isBusy end) then
+            nextLocation = PickRandom(candidates)
+        else
+            nextLocation = PickRandom(Where(candidates, function(poi) return not poi.isBusy end))
+        end
         if not nextLocation then
-            error('Could not find the next location '..nextEvent.id..': '..nextEvent.Location)
+            error('Could not find the next location '..nextEvent.id..': '..nextEvent.Location[1])
         elseif nextEvent.isInteraction then
             if interactionPoiMap[nextEvent.interactionRelation] == nextLocation.LocationId then
                 --only subsequent actors reach this section (i.e. after a location was chosen for the interaction)
@@ -421,6 +439,22 @@ function Location:ProcessNextAction(player)
         end
 
         print('Next location '..nextLocation.Description)
+    elseif #event.Location > 1 then
+        local candidates = Where(CURRENT_STORY.CurrentEpisode.POI, function(poi) 
+            return
+            poi.Region and event.Location[2] and (poi.Region.name:lower():find(event.Location[2]:lower()) and true or false )
+        end)
+        if DEBUG then
+            for _,poi in ipairs(candidates) do
+                local isBusyStr = 'false' if poi.isBusy then isBusy = 'true' end
+                print('Candidate location '..poi.Description..' is busy '..isBusyStr)
+            end
+        end
+        if All(candidates, function(poi) return poi.isBusy end) then
+            nextLocation = PickRandom(candidates)
+        else
+            nextLocation = PickRandom(Where(candidates, function(poi) return not poi.isBusy end))
+        end
     end
     if nextLocation and nextLocation ~= location then
         --if this is an interaction then create a move action with target the other player. handle internally inside the move action the positioning of the two players
@@ -538,18 +572,21 @@ function Location:GetNextValidAction(player)
 
     if not next then
         if DEBUG then
-            outputConsole("Location:GetNextValidAction - next action was null. Ending the current story")
-            print("Location:GetNextValidAction - next action was null. Ending the current story")
+            outputConsole("Location:GetNextValidAction - next action was null. Ending the current player's story")
+            print("Location:GetNextValidAction - next action was null. Ending the current player's story")
         end
         lock = false
         if LOAD_FROM_GRAPH then
-            for k, v in pairs(CURRENT_STORY.actionsQueues) do
-                if #CURRENT_STORY.actionsQueues[k] > 0 then
-                    --the episode is ended for the current actor, wait for all the other actors to finish
-                    player:setAnimation("cop_ambient", "coplook_loop", 0, true, false, false, true)
-                    player:setData('storyEnded', true)
-                    return nil
+            if player:getData('id') ~= CURRENT_STORY.Actor:getData('id') and not CURRENT_STORY.Actor:getData('storyEnded') or 
+                Any(CURRENT_STORY.CurrentEpisode.peds, function(ped) return player:getData('id') ~= ped:getData('id') and not ped:getData('storyEnded') end) then
+                if DEBUG then
+                    outputConsole("Location:GetNextValidAction - waiting for the others to finish")
+                    print("Location:GetNextValidAction - waiting for the others to finish")
                 end
+                    --the episode is ended for the current actor, wait for all the other actors to finish
+                player:setAnimation("cop_ambient", "coplook_loop", 0, true, false, false, true)
+                player:setData('storyEnded', true)
+                return nil
             end
         end
         return EndStory(player)
@@ -565,7 +602,9 @@ function Location:GetNextValidAction(player)
             next.NextLocation.History[player:getData('id')] = {next}
             --the actor will change the location
             self.isBusy = false
+            print("Location "..self.Description..' is not busy')
             next.NextLocation.isBusy = true
+            print("Location "..next.Description..' is busy')
             player:setData('locationId', next.NextLocation.LocationId)
         
         end

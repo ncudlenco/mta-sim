@@ -48,6 +48,12 @@ Move.eHow = {
 }
 
 function Move.destinationReached(player, matchingDimension)
+    if not source then
+        if DEBUG then
+            print('WARNING! Move.destinationReached had the source null. Discarding the callback...')
+        end
+        return
+    end
     local playerId = source:getData("id")
     if player:getData('id') ~= playerId then
         return

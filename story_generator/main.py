@@ -41,31 +41,34 @@ def order_events(story):
     for i in range(len(story)):
         if i == len(story) - 1:
             # LAST ACTION
-            actor_index = actors.index(story[i].actor)
+            actor_index = actors.index(story[i].actor[0])
             if last_action_for_actor[actor_index] != None:
                 last_action_for_actor[actor_index].next_event = story[i]
             break
-        if story[i].actor.id == story[i+1].actor.id:
+        if story[i].actor[0].id == story[i+1].actor[0].id:
             # SAME ACTOR FOR CONSECUTIVE ACTIONS
-            actor_index = actors.index(story[i].actor)
+            actor_index = actors.index(story[i].actor[0])
             if last_action_for_actor[actor_index] != None:
                 last_action_for_actor[actor_index].next_event = story[i]
             last_action_for_actor[actor_index]= story[i]
             story[i].next_event = story[i+1]
         else:
             # DIFFERENT ACTORS FOR CONSECUTIVE ACTIONS
-            actor_index = actors.index(story[i].actor)
+            actor_index = actors.index(story[i].actor[0])
             if last_action_for_actor[actor_index] != None:
                 last_action_for_actor[actor_index].next_event = story[i]
             last_action_for_actor[actor_index] = story[i]
     
     timeline = [[] for _ in range(len(actors))]
+    
     init_found = 0
+    # initial actions
     while init_found < len(actors):
         for event in story:
-            if timeline[int(event.actor.id[len("actor"):])] == []:
+            # for a in event.actor: # only [0], so no for, because we also build the "inverse" for 2-way multiagent actions
+            if timeline[int(event.actor[0].id[len("actor"):])] == []:
                 init_found += 1
-                timeline[int(event.actor.id[len("actor"):])] = [event]
+                timeline[int(event.actor[0].id[len("actor"):])] = [event]
 
     for t in timeline:
         crt_event = t[0]
@@ -77,10 +80,13 @@ def order_events(story):
             crt_event = next_event
 
     crt_syncs = get_syncs_from_story(story)
+    # print(crt_syncs)
+    # sys.exit()
     syncs = random.randint(MIN_SYNC_EVENTS, MAX_SYNC_EVENTS)
     if syncs - crt_syncs < 0:
         syncs = 0
     print("SYNCS =", syncs)
+
     tid = 0
     for _ in range(syncs):
         sync_type = random.choice(["starts_with", "ends_with"])
@@ -206,8 +212,9 @@ def get_objects_from_story(story):
 def get_actors_from_story(story):
     actors = []
     for event in story:
-        actors.append(event.actor)
-    
+        # actors.append(event.actor)
+        actors.extend(event.actor)
+
     actors = list(set(actors))
     return actors
 
@@ -223,8 +230,10 @@ def get_syncs_from_story(story):
 def get_last_actor_location(story, actor):
     last_location = None
     for event in story:
-        if event.actor.name == actor:
-            last_location = event.room[-1]
+        # print(event, actor)
+        for act in event.actor:
+            if act.name == actor:
+                last_location = event.room[-1]
     return last_location
 
 
@@ -532,7 +541,7 @@ def generate_graph(story):
             temporal_dicta[at[ati][0]] = dd
 
     graph_dict["temporal"] = temporal_dict
-    graph_dict["temporal_abs"] = temporal_dicta
+    # graph_dict["temporal_abs"] = temporal_dicta
 
     # print()
     # print(abs_timeline)

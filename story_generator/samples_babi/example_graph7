@@ -7,14 +7,14 @@
         "Location": null,
         "Timeframe": null,
         "Properties": {
-            "Gender": 1,
-            "Name": "John"
+            "Gender": 2,
+            "Name": "Mary"
         }
     },
-    "actor3": {
+    "actor2": {
         "Action": "Exists",
         "Entities": [
-            "actor3"
+            "actor2"
         ],
         "Location": null,
         "Timeframe": null,
@@ -31,30 +31,40 @@
         "Location": null,
         "Timeframe": null,
         "Properties": {
-            "Gender": 2,
-            "Name": "Mary"
+            "Gender": 1,
+            "Name": "John"
         }
     },
-    "actor2": {
+    "object0": {
         "Action": "Exists",
         "Entities": [
-            "actor2"
+            "object0"
         ],
         "Location": null,
         "Timeframe": null,
         "Properties": {
-            "Gender": 1,
-            "Name": "Daniel"
+            "Type": "Food"
+        }
+    },
+    "object1": {
+        "Action": "Exists",
+        "Entities": [
+            "object1"
+        ],
+        "Location": null,
+        "Timeframe": null,
+        "Properties": {
+            "Type": "Drinks"
         }
     },
     "action0": {
-        "Action": "Move",
+        "Action": "PickUp",
         "Entities": [
-            "actor0"
+            "actor0",
+            "object1"
         ],
         "Location": [
-            "",
-            "hallway"
+            ""
         ],
         "Timeframe": null,
         "Properties": {}
@@ -66,7 +76,7 @@
         ],
         "Location": [
             "",
-            "bathroom"
+            "bedroom"
         ],
         "Timeframe": null,
         "Properties": {}
@@ -84,12 +94,12 @@
         "Properties": {}
     },
     "action3": {
-        "Action": "Move",
+        "Action": "PickUp",
         "Entities": [
-            "actor0"
+            "actor1",
+            "object0"
         ],
         "Location": [
-            "hallway",
             "bedroom"
         ],
         "Timeframe": null,
@@ -101,32 +111,34 @@
             "actor0"
         ],
         "Location": [
-            "bedroom",
-            "hallway"
+            "",
+            "bathroom"
         ],
         "Timeframe": null,
         "Properties": {}
     },
     "action5": {
-        "Action": "Move",
+        "Action": "gave",
         "Entities": [
-            "actor3"
+            "actor0",
+            "object1",
+            "actor2"
         ],
         "Location": [
-            "",
-            "kitchen"
+            "bathroom"
         ],
         "Timeframe": null,
         "Properties": {}
     },
     "action6": {
-        "Action": "Move",
+        "Action": "INV-gave",
         "Entities": [
-            "actor3"
+            "actor2",
+            "object1",
+            "actor0"
         ],
         "Location": [
-            "kitchen",
-            "hallway"
+            "bathroom"
         ],
         "Timeframe": null,
         "Properties": {}
@@ -134,90 +146,136 @@
     "action7": {
         "Action": "Move",
         "Entities": [
-            "actor0"
+            "actor1"
         ],
         "Location": [
-            "hallway",
-            "garden"
+            "bedroom",
+            "bathroom"
         ],
         "Timeframe": null,
         "Properties": {}
     },
     "action8": {
-        "Action": "Move",
+        "Action": "PutDown",
         "Entities": [
-            "actor3"
+            "actor1",
+            "object0"
         ],
         "Location": [
-            "hallway",
             "bathroom"
         ],
         "Timeframe": null,
         "Properties": {}
     },
     "action9": {
+        "Action": "gave",
+        "Entities": [
+            "actor2",
+            "object1",
+            "actor1"
+        ],
+        "Location": [
+            "bathroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "action10": {
+        "Action": "INV-gave",
+        "Entities": [
+            "actor1",
+            "object1",
+            "actor2"
+        ],
+        "Location": [
+            "bathroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "action11": {
         "Action": "Move",
         "Entities": [
-            "actor3"
+            "actor1"
         ],
         "Location": [
             "bathroom",
-            "kitchen"
+            "garden"
         ],
         "Timeframe": null,
         "Properties": {}
     },
     "temporal": {
         "timeline": {
-            "actor0": "[('action0', 'Move'), ('action3', 'Move'), ('action4', 'Move'), ('action7', 'Move')]",
-            "actor1": "[('action1', 'Move')]",
-            "actor2": "[('action2', 'Move')]",
-            "actor3": "[('action5', 'Move'), ('action6', 'Move'), ('action8', 'Move'), ('action9', 'Move')]"
+            "actor0": "[('action0', 'PickUp'), ('action4', 'Move'), ('action5', 'gave')]",
+            "actor1": "[('action1', 'Move'), ('action3', 'PickUp'), ('action7', 'Move'), ('action8', 'PutDown'), ('action10', 'INV-gave'), ('action11', 'Move')]",
+            "actor2": "[('action2', 'Move'), ('action6', 'INV-gave'), ('action9', 'gave')]"
         },
         "starting_actions": {
             "actor0": "action0",
             "actor1": "action1",
-            "actor2": "action2",
-            "actor3": "action5"
+            "actor2": "action2"
         },
         "action0": {
-            "relations": null,
-            "next": "action3"
-        },
-        "action3": {
             "relations": null,
             "next": "action4"
         },
         "action4": {
             "relations": null,
-            "next": "action7"
+            "next": "action5"
         },
-        "action7": {
-            "relations": null,
+        "tm0": {
+            "type": "starts_with"
+        },
+        "action5": {
+            "relations": [
+                "tm0"
+            ],
             "next": null
         },
         "action1": {
             "relations": null,
-            "next": null
+            "next": "action3"
         },
-        "action2": {
+        "action3": {
             "relations": null,
-            "next": null
+            "next": "action7"
         },
-        "action5": {
-            "relations": null,
-            "next": "action6"
-        },
-        "action6": {
+        "action7": {
             "relations": null,
             "next": "action8"
         },
         "action8": {
             "relations": null,
+            "next": "action10"
+        },
+        "tm1": {
+            "type": "starts_with"
+        },
+        "action10": {
+            "relations": [
+                "tm1"
+            ],
+            "next": "action11"
+        },
+        "action11": {
+            "relations": null,
+            "next": null
+        },
+        "action2": {
+            "relations": null,
+            "next": "action6"
+        },
+        "action6": {
+            "relations": [
+                "tm0"
+            ],
             "next": "action9"
         },
         "action9": {
-            "relations": null,
+            "relations": [
+                "tm1"
+            ],
             "next": null
         }
     }

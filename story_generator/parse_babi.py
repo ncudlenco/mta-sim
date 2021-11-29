@@ -12,8 +12,10 @@ import Objects
 from Actions import Action
 import Rooms
 from Rooms import Room
-from main import get_actors_from_story, get_objects_from_story, generate_graph, get_last_actor_location
+from main import get_actors_from_story, get_objects_from_story, generate_graph, get_last_actor_location, get_syncs_from_story
 import json
+import copy
+
 
 empty_room = Rooms.get_room_list()[-1]
 OBJECTS = Objects.get_obj_list()
@@ -35,9 +37,13 @@ babi_folder = "en-valid"
 
 considered_indexes = [1,2,3,5,6,7,8,9]
 considered_indexes = [1,2,3,6,8,9]
-considered_indexes = [1]
+considered_indexes = [7]
 
-# 5 and 7 have multiple actors
+# 11 coreference
+# 12 is parsed (and/or); no graph yet
+# 13 (and/or) + coreference
+# 14 this morning, this afternoon, yesterday, yesterday
+
 
 def get_last_actor_location_parsed(story, actor_name):
     loc = get_last_actor_location(story, actor_name)
@@ -47,6 +53,7 @@ def get_last_actor_location_parsed(story, actor_name):
     #     return loc[-1]
     #     # return Room(loc.name.split("-")[-1])
     return loc
+
 
 def extract_stories(lines):
 
@@ -123,7 +130,22 @@ def parse_line(line, nlp):
             if child.dep_ == "prep" and (child.text == "to" or child.text == "in"):
                 loc = list(child.children)[0].text
 
-    actor = subj.text            
+    # check if multiple
+    multiple_actors = False
+    for child in subj.children:
+        if child.dep_ == "cc" and (child.text == "and" or child.text == "or"):
+            for searched in subj.children:
+                if searched.dep_ == "conj":
+                    multiple_actors = True
+                    actor = [subj.text, searched.text]
+
+    if multiple_actors == False:            
+        actor = subj.text            
+    
+    # TODO: how to handle ACTOR1 and/or ACTOR2 do something; multiple events linked by and/or?
+    # print(multiple_actors, actor)
+    # sys.exit()
+    actor = subj.text
     action = root_token.text
     object = None
     location = None
@@ -154,6 +176,7 @@ def parse_line(line, nlp):
     # print(action, entities, location)
     # print()
     # displacy.serve(doc, style='dep')
+    # sys.exit()
     if convert_entities_for_video == True:
         if action in moving_actions:
             action = moving_actions[0]
@@ -169,7 +192,7 @@ def parse_line(line, nlp):
         # print(entities)
         # sys.exit()
 
-        
+    # print(line, action, entities, location)   
     return action, entities, location
 
 
@@ -180,37 +203,56 @@ def add_storyline(story, line):
     objects = get_objects_from_story(story)
     # print("OBJECTS =", objects, line)
 
+    crt_syncs = get_syncs_from_story(story)
+    # print("crt_parse", crt_syncs)
+
     action, entities, location = line
     # TODO: handle multiple actors/objects in one line!
     # find actors in entities
+    aux_actors = []
+    k = 0
     for entity in entities:
         if find_obj_by_name(entity, OBJECTS) == -1:
         # if entity[0].isupper():# and entity != "Drinks" and entity != "Food":
             index = Actor.find_actor_by_name(entity, actors)
+            # print("-------------",actors, entity, index, aux_actors, entities)
             if index != -1:
                 actor = actors[index]
+                aux_actors.append(actor)
+                k += 1
             else:
-                if entity == "John" or entity == "Daniel":
+                if entity == "John" or entity == "Daniel" or entity == "Fred" or entity == "Jeff" or entity == "Bill":
                     actor_sex = 1
                 elif entity == "Sandra" or entity == "Mary":
                     actor_sex = 2
                 else:
                     print("{0} neither male or female on current rules", entity)
                     sys.exit()
-                actor = Actor.Actor("actor{0}".format(len(actors)), actor_sex, entity)
-    
+                actor = Actor.Actor("actor{0}".format(len(actors)+len(aux_actors)-k), actor_sex, entity)
+                aux_actors.append(actor)
+
+    # print("HERE WE MUST HAVE MORE", aux_actors)
+
     # find objects in entities
     obj = Object("EmptyObject")
+    aux_objs = []
+
     for entity in entities:
         if find_obj_by_name(entity, OBJECTS) != -1:
             index = Objects.find_obj_by_name(entity, objects)
             if index != -1:
                 obj = objects[index]
+                aux_objs.append(obj)
             else:
                 obj = Object(entity)
+                aux_objs.append(obj)
+
+    # print("---", entities, actor, aux_actors, aux_objs)
 
     # print(actor)
     # print(obj)
+    # take first actor; diateza activa?
+    actor = aux_actors[0]
     act = Action(action)
     if location == None:
         loc = get_last_actor_location_parsed(story, actor.name)
@@ -219,7 +261,6 @@ def add_storyline(story, line):
     else:
         loc = get_last_actor_location_parsed(story, actor.name)
         if loc != None and loc != empty_room and (act.name == "Move"):
-            # print(act, actor.name, loc, location)
             # loc = Room(loc.name+"-"+location)
             loc = [Room(loc.name), Room(location)]
         else:
@@ -230,12 +271,32 @@ def add_storyline(story, line):
         loc = [loc]
 
 
-    # print(loc)
-    e = Event.Event("event{0}".format(len(story)), act, obj, actor, loc)
-    # print(e)
-    # print()
-    story.append(e)
-    # print() 
+    # print("AUX ACTORS = ", aux_actors)
+    if len(aux_actors) > 1:
+        if len(aux_actors) != 2:
+            print("ACTION WITH MORE THAN 2 ACTORS!", act, obj, aux_actors, loc)
+            sys.exit()
+        # we have multiagent action
+        act = Action(action, multiagent=True)
+
+        act1 = copy.deepcopy(act)
+        act2 = copy.deepcopy(act)
+        act2.name = "INV-{0}".format(act2.name)
+    
+        e1 = Event.Event("event{0}".format(len(story)), act1, obj, aux_actors, loc)
+        story.append(e1)
+        e2 = Event.Event("event{0}".format(len(story)), act2, obj, aux_actors[::-1], loc)
+        story.append(e2)
+
+        e1.add_sync_event(e2, "starts_with", "tm{0}".format(crt_syncs))
+        e2.add_sync_event(e1, "starts_with", "tm{0}".format(crt_syncs))
+
+
+    else:
+        e = Event.Event("event{0}".format(len(story)), act, obj, aux_actors, loc)
+        story.append(e)
+
+
     return story, location
     
 
@@ -265,9 +326,9 @@ if __name__ == "__main__":
 
         lines = list(map(lambda x: " ".join(x.split(" ")[1:]), lines))
         lines = list(map(lambda x: x.strip(), lines))
-        lines = lines[:8]
+        lines = lines[:3]
 
-        # filter out questions for the moment
+        # filter out questiosns for the moment
         lines = list(filter(lambda x: "?" not in x, lines))
         stories = [[lines]]
     
@@ -280,7 +341,6 @@ if __name__ == "__main__":
 
     
     graph_stories = []
-    
     for story in stories:
         graph_story = []
         for line in story[0]:
@@ -294,9 +354,10 @@ if __name__ == "__main__":
             
             all_events.append(action)
             all_actors.extend(entities)
-            if len(entities) > 2:
-                print(line, action, entities, location)
-                sys.exit()
+            # if len(entities) > 2:
+            #     # print(line, action, entities, location)
+            #     print("STOP HERE")
+            #     # sys.exit()
             if location != None:
                 all_locations.append(location)
             else:
@@ -304,9 +365,14 @@ if __name__ == "__main__":
         
         # print()
         # print(graph_story)
-        print(story)
+        # print(story)
         graph_dict = generate_graph(graph_story)
-        json.dump(graph_dict, open("samples_babi/example_graph{0}".format(considered_indexes[0]), "w"), sort_keys=False, indent = 4)
+        # print(graph_dict)
+        if read_from == "babi":
+            json.dump(graph_dict, open("samples_babi/example_graph{0}".format(considered_indexes[0]), "w"), sort_keys=False, indent = 4)
+        elif read_from == "test":
+            json.dump(graph_dict, open("samples_babi/0", "w"), sort_keys=False, indent = 4)
+
 
         sys.exit()
 

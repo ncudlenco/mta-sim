@@ -32,7 +32,7 @@ function PedHandler:GetOrCreatePed(modelId, x, y, z, angle)
         outputConsole('Creating a new ped')
         ped = Ped(modelId, x, y, z, angle)
         if not ped then
-            error('Error while creating the ped '..i)
+            error('Error while creating the ped '..modelId)
         end
         ped:setData('assigned', true)
         table.insert(self.PED_ZOO, ped)

@@ -63,6 +63,9 @@ function StoryEpisodeBase:Initialize(...)
                         local moveAction = Move{performer = player, targetItem = p2, nextLocation = p2, prerequisites = prerequisites, graphId = self.graphId}
                         table.insert(p1.PossibleActions, moveAction)
                         table.insert(p1.allActions, moveAction)
+                        if DEBUG_ACTIONS then
+                            print('Move action from '..p1.Description..'to '..p2.Description)
+                        end
                     end
                 end
                 if DEBUG_EPISODE then
@@ -189,7 +192,7 @@ function StoryEpisodeBase:Initialize(...)
                     print('Valid starting ped point '..validStartingPoi.LocationId..': '..validStartingPoi.Description)
                 end
                 local skin = PickRandom(Where(SetPlayerSkin.PlayerSkins, function(s)
-                    return not s.isTaken and(not requiredActors or requiredActors[i+1].Gender == s.Gender )
+                    return not s.isTaken and(not requiredActors or requiredActors[i+1].Properties.Gender == s.Gender )
                 end))
                 if not skin then
                     error('A valid skin could not be found for ped '..i)
@@ -207,7 +210,7 @@ function StoryEpisodeBase:Initialize(...)
                 skin.TargetItem = ped
                 skin.Performer = ped
                 if requiredActors then
-                    skin:Apply(requiredActors[i+1]) --changes the actor id, name, gender
+                    skin:Apply(requiredActors[i+1].Properties) --changes the actor id, name, gender
                 else
                     skin:Apply()
                 end

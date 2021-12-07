@@ -37,6 +37,9 @@ nonspecific_actions = Actions.get_nonspecific_actions(actions)
 
 def order_events(story):
     actors = get_actors_from_story(story)
+
+    print(story)
+    # sys.exit()
     last_action_for_actor = [None for x in range(len(actors))]
     for i in range(len(story)):
         if i == len(story) - 1:
@@ -108,7 +111,7 @@ def order_events(story):
                     sys.exit()
                 continue
 
-            if act1.room == act2.room or act1.room.name == "" or act2.room.name == "":
+            if act1.location == act2.location or act1.location.name == "" or act2.location.name == "":
                 act1.add_sync_event(act2, sync_type, "t{0}".format(tid))
                 act2.add_sync_event(act1, sync_type, "t{0}".format(tid))
                 tid += 1
@@ -124,7 +127,7 @@ def get_objects_from_story(story):
             # complex object
             objs = []
             for act in event.action.action_components:
-                objs.append((act.targets, event.room, event.actor, event_id))
+                objs.append((act.targets, event.location, event.actor, event_id))
             objs = list(set(objs))
             objects_locations.extend(objs)
         elif event.object.name == "TaiChiObject" or event.object.name == "EmptyObject":
@@ -132,7 +135,7 @@ def get_objects_from_story(story):
         else:
             if type(event.object) == Actor.Actor:
                 continue
-            objects_locations.append((event.object, event.room, event.actor, event_id))
+            objects_locations.append((event.object, event.location, event.actor, event_id))
     
     def search_entry(entry, list, entry_id):
         indexes = []
@@ -210,8 +213,11 @@ def get_objects_from_story(story):
 
 
 def get_actors_from_story(story):
+    # print("GET ACTORS FROM STORY")
+    # print(story)
     actors = []
     for event in story:
+        # print(event.actor)
         # actors.append(event.actor)
         actors.extend(event.actor)
 
@@ -233,7 +239,7 @@ def get_last_actor_location(story, actor):
         # print(event, actor)
         for act in event.actor:
             if act.name == actor:
-                last_location = event.room[-1]
+                last_location = event.location[-1]
     return last_location
 
 
@@ -320,10 +326,10 @@ def generate_story():
                         break
                 r_other_actor = actors[other_actor_index]
                 # print(actor_index, other_actor_index)
-                e1 = Event.Event("event{0}".format(len(events)), r_new_act, r_other_actor, actor, r_room)
+                e1 = Event.Event("event{0}".format(len(events)), r_new_act, r_other_actor, actor, r_room, None)
                 events.append(e1)
                 crt_events_per_actor[actor_index] += 1
-                e2 = Event.Event("event{0}".format(len(events)), r_new_act2, actor, r_other_actor, r_room)
+                e2 = Event.Event("event{0}".format(len(events)), r_new_act2, actor, r_other_actor, r_room, None)
                 events.append(e2)
                 e1.add_sync_event(e2, "starts_with", "tm{0}".format(tmid))
                 e2.add_sync_event(e1, "starts_with", "tm{0}".format(tmid))
@@ -331,11 +337,11 @@ def generate_story():
                 crt_events_per_actor[other_actor_index] += 1
 
             elif r_new_act.name == "TalkAtPhone" or r_new_act.name == "SmokeCigarette":
-                e = Event.Event("event{0}".format(len(events)), r_new_act, r_new_obj, actor, empty_room)
+                e = Event.Event("event{0}".format(len(events)), r_new_act, r_new_obj, actor, empty_room, None)
                 events.append(e)
                 crt_events_per_actor[actor_index] += 1
             else:
-                e = Event.Event("event{0}".format(len(events)), r_new_act, r_new_obj, actor, r_room)
+                e = Event.Event("event{0}".format(len(events)), r_new_act, r_new_obj, actor, r_room, None)
                 events.append(e)
                 crt_events_per_actor[actor_index] += 1
 

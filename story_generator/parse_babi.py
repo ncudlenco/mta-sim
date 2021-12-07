@@ -32,26 +32,19 @@ discarding_actions = ["PutDown", "discarded", "put down", "dropped", "dropped th
 # change objects
 objects_converted = {"milk": "Drinks", "football": "Food", "apple": "Remote"}
 
-read_from = "babi"
+read_from = "babi_corpus-test"
 babi_folder = "en-valid"
 
 considered_indexes = [1,2,3,5,6,7,8,9]
-considered_indexes = [1,2,3,6,8,9]
-considered_indexes = [7]
+considered_indexes = [2]
 
 # 11 coreference
-# 12 is parsed (and/or); no graph yet
 # 13 (and/or) + coreference
-# 14 this morning, this afternoon, yesterday, yesterday
+# 14 is not done! temporal ordering!
 
 
 def get_last_actor_location_parsed(story, actor_name):
     loc = get_last_actor_location(story, actor_name)
-    # print(loc, "from get_last")
-    # if loc != None:# and "-" in loc.name:
-    #     # print("get_last_parsed", loc)
-    #     return loc[-1]
-    #     # return Room(loc.name.split("-")[-1])
     return loc
 
 
@@ -84,6 +77,7 @@ def parse_line(line, nlp):
     aobj = None
     loc = None
     advmod = None
+    time = None
 
     root_token = list(doc.sents)[0].root
 
@@ -130,6 +124,13 @@ def parse_line(line, nlp):
             if child.dep_ == "prep" and (child.text == "to" or child.text == "in"):
                 loc = list(child.children)[0].text
 
+    # search for timeframe
+    for child in root_token.children:
+        if child.dep_ == "npadvmod":
+            time = child.text
+            if len(list(child.children)) > 0 and list(child.children)[0].dep_ == "det":
+                time = list(child.children)[0].text + " " + time
+
     # check if multiple
     multiple_actors = False
     for child in subj.children:
@@ -137,23 +138,27 @@ def parse_line(line, nlp):
             for searched in subj.children:
                 if searched.dep_ == "conj":
                     multiple_actors = True
-                    actor = [subj.text, searched.text]
+                    actor = [subj.text+"-"+child.text.upper(), searched.text+"-"+child.text.upper()]
 
     if multiple_actors == False:            
-        actor = subj.text            
-    
+        actor = [subj.text]
+
     # TODO: how to handle ACTOR1 and/or ACTOR2 do something; multiple events linked by and/or?
-    # print(multiple_actors, actor)
-    # sys.exit()
-    actor = subj.text
+    # print(subj, subj.pos_)
+    # actor = subj.text
     action = root_token.text
     object = None
     location = None
+    timeframe = None
+
     if obj != None:
         object = obj.text
     
     if loc != None:
-        location = loc
+        location = loc.lower()
+
+    if time != None:
+        timeframe = time.lower()
     
     for child in new_root_token.children:
         # print(new_root_token, child, child.dep_)
@@ -166,14 +171,15 @@ def parse_line(line, nlp):
     if advmod != None:
         action += " " + advmod.text
     
-    entities = [actor]
+    entities = actor
     if object != None:
         entities.append(object)
     if aobj != None and aobj.text != loc:
         entities.append(aobj.text)
     
     # print(line)
-    # print(action, entities, location)
+    # print(action, entities, location, "|", timeframe)
+    # print(root_token, new_root_token)
     # print()
     # displacy.serve(doc, style='dep')
     # sys.exit()
@@ -193,7 +199,7 @@ def parse_line(line, nlp):
         # sys.exit()
 
     # print(line, action, entities, location)   
-    return action, entities, location
+    return action, entities, location, timeframe
 
 
 def add_storyline(story, line):
@@ -206,16 +212,20 @@ def add_storyline(story, line):
     crt_syncs = get_syncs_from_story(story)
     # print("crt_parse", crt_syncs)
 
-    action, entities, location = line
+    action, entities, location, timeframe = line
     # TODO: handle multiple actors/objects in one line!
     # find actors in entities
     aux_actors = []
     k = 0
+
+    multiple_actors_logical = False
+
     for entity in entities:
+        if "-AND" in entity:
+            multiple_actors_logical = True
+            entity = entity[:-len("-AND")]
         if find_obj_by_name(entity, OBJECTS) == -1:
-        # if entity[0].isupper():# and entity != "Drinks" and entity != "Food":
             index = Actor.find_actor_by_name(entity, actors)
-            # print("-------------",actors, entity, index, aux_actors, entities)
             if index != -1:
                 actor = actors[index]
                 aux_actors.append(actor)
@@ -223,16 +233,14 @@ def add_storyline(story, line):
             else:
                 if entity == "John" or entity == "Daniel" or entity == "Fred" or entity == "Jeff" or entity == "Bill":
                     actor_sex = 1
-                elif entity == "Sandra" or entity == "Mary":
+                elif entity == "Sandra" or entity == "Mary" or entity == "Julie":
                     actor_sex = 2
                 else:
                     print("{0} neither male or female on current rules", entity)
                     sys.exit()
                 actor = Actor.Actor("actor{0}".format(len(actors)+len(aux_actors)-k), actor_sex, entity)
                 aux_actors.append(actor)
-
-    # print("HERE WE MUST HAVE MORE", aux_actors)
-
+    
     # find objects in entities
     obj = Object("EmptyObject")
     aux_objs = []
@@ -247,11 +255,6 @@ def add_storyline(story, line):
                 obj = Object(entity)
                 aux_objs.append(obj)
 
-    # print("---", entities, actor, aux_actors, aux_objs)
-
-    # print(actor)
-    # print(obj)
-    # take first actor; diateza activa?
     actor = aux_actors[0]
     act = Action(action)
     if location == None:
@@ -261,7 +264,6 @@ def add_storyline(story, line):
     else:
         loc = get_last_actor_location_parsed(story, actor.name)
         if loc != None and loc != empty_room and (act.name == "Move"):
-            # loc = Room(loc.name+"-"+location)
             loc = [Room(loc.name), Room(location)]
         else:
             loc = [empty_room, Room(location)]
@@ -270,9 +272,7 @@ def add_storyline(story, line):
     if not (isinstance(loc, list)):
         loc = [loc]
 
-
-    # print("AUX ACTORS = ", aux_actors)
-    if len(aux_actors) > 1:
+    if len(aux_actors) > 1 and multiple_actors_logical == False:
         if len(aux_actors) != 2:
             print("ACTION WITH MORE THAN 2 ACTORS!", act, obj, aux_actors, loc)
             sys.exit()
@@ -283,9 +283,24 @@ def add_storyline(story, line):
         act2 = copy.deepcopy(act)
         act2.name = "INV-{0}".format(act2.name)
     
-        e1 = Event.Event("event{0}".format(len(story)), act1, obj, aux_actors, loc)
+        e1 = Event.Event("event{0}".format(len(story)), act1, obj, aux_actors, loc, timeframe)
         story.append(e1)
-        e2 = Event.Event("event{0}".format(len(story)), act2, obj, aux_actors[::-1], loc)
+        e2 = Event.Event("event{0}".format(len(story)), act2, obj, aux_actors[::-1], loc, timeframe)
+        story.append(e2)
+
+        e1.add_sync_event(e2, "starts_with", "tm{0}".format(crt_syncs))
+        e2.add_sync_event(e1, "starts_with", "tm{0}".format(crt_syncs))
+
+    if len(aux_actors) > 1 and multiple_actors_logical == True:
+
+        act = Action(action, multiagent=True)
+
+        act1 = copy.deepcopy(act)
+        act2 = copy.deepcopy(act)
+
+        e1 = Event.Event("event{0}".format(len(story)), act1, obj, [aux_actors[0]], loc, timeframe)
+        story.append(e1)
+        e2 = Event.Event("event{0}".format(len(story)), act2, obj, [aux_actors[1]], loc, timeframe)
         story.append(e2)
 
         e1.add_sync_event(e2, "starts_with", "tm{0}".format(crt_syncs))
@@ -293,7 +308,7 @@ def add_storyline(story, line):
 
 
     else:
-        e = Event.Event("event{0}".format(len(story)), act, obj, aux_actors, loc)
+        e = Event.Event("event{0}".format(len(story)), act, obj, aux_actors, loc, timeframe)
         story.append(e)
 
 
@@ -311,12 +326,10 @@ if __name__ == "__main__":
         files = [os.path.join(folder, x) for x in os.listdir(folder)]
         searched = ["qa{0}_".format(x) for x in considered_indexes]
         files = [f for f in files if any(xs in f for xs in searched)]
-
         for file in files:
             with open(file, "r") as f:
                 crt_lines = f.readlines()
             lines.extend(crt_lines)
-    
         lines = list(map(lambda x: x.strip(), lines))
         stories = extract_stories(lines)
 
@@ -326,56 +339,70 @@ if __name__ == "__main__":
 
         lines = list(map(lambda x: " ".join(x.split(" ")[1:]), lines))
         lines = list(map(lambda x: x.strip(), lines))
-        lines = lines[:3]
+        lines = lines[:6]
 
         # filter out questiosns for the moment
         lines = list(filter(lambda x: "?" not in x, lines))
         stories = [[lines]]
+
+    elif "babi_corpus" in read_from:
+        lines = []
+        folder = "babi/tasks_1-20_v1-2/{0}/".format(babi_folder)
+        files = [os.path.join(folder, x) for x in os.listdir(folder)]
+        searched = ["qa{0}_".format(considered_indexes[0])]
+        files = [f for f in files if any(xs in f for xs in searched)]
+        if "train" in read_from:
+            index = 1
+        elif "valid" in read_from:
+            index = 2
+        elif "test" in read_from:
+            index = 0
+        
+        file = files[index]
+        with open(file, "r") as f:
+            crt_lines = f.readlines()
+            lines.extend(crt_lines)
     
+        lines = list(map(lambda x: x.strip(), lines))
+        stories = extract_stories(lines)
 
     print(len(stories))
     all_locations = []
     all_actors = []
     all_events = []
     all_lines = 0
-
-    
+        
     graph_stories = []
-    for story in stories:
+    for story_index, story in enumerate(stories):
         graph_story = []
         for line in story[0]:
             all_lines += 1
-            # print(line)
-            action, entities, location = parse_line(line, nlp)
-            # print("Event: {0}. Involved entities: {1}. Location: {2}".format(action, entities, location))
-            graph_story, location = add_storyline(graph_story, [action, entities, location])
-
-            
+            action, entities, location, timeframe = parse_line(line, nlp)
+            graph_story, location = add_storyline(graph_story, [action, entities, location, timeframe])
             
             all_events.append(action)
             all_actors.extend(entities)
-            # if len(entities) > 2:
-            #     # print(line, action, entities, location)
-            #     print("STOP HERE")
-            #     # sys.exit()
+
             if location != None:
                 all_locations.append(location)
             else:
                 all_locations.append("None")
         
-        # print()
-        # print(graph_story)
-        # print(story)
         graph_dict = generate_graph(graph_story)
-        # print(graph_dict)
         if read_from == "babi":
             json.dump(graph_dict, open("samples_babi/example_graph{0}".format(considered_indexes[0]), "w"), sort_keys=False, indent = 4)
+            sys.exit()
+
         elif read_from == "test":
             json.dump(graph_dict, open("samples_babi/0", "w"), sort_keys=False, indent = 4)
+            sys.exit()
+
+        elif "babi_corpus" in read_from:
+            json.dump(graph_dict, open("samples_babi/task{0}/{1}/{2}".format(considered_indexes[0], read_from[len("babi_corpus-"):], story_index), "w"), sort_keys=False, indent=4)
+            # sys.exit()
 
 
-        sys.exit()
-
+        
 
     print(len(all_events), len(all_actors), len(all_locations), all_lines)
     print(Counter(all_events))

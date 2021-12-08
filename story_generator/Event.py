@@ -6,12 +6,13 @@ import sys
 import random
 class Event:
 
-    def __init__(self, id, action, object, actor, room, next_event = None):
+    def __init__(self, id, action, object, actor, location, timeframe, next_event = None):
         self.id = id
         self.action = action
         self.object = object
         self.actor = actor
-        self.room = room
+        self.location = location
+        self.timeframe = timeframe
         self.next_event = next_event
         self.sync_events = []
         
@@ -19,7 +20,7 @@ class Event:
         self.sync_events.append((event, type, tid))
 
     def __str__(self):
-        return "(Event id: {0}, action {1}, object {2}, actor {3}, room {4})".format(str(self.id), str(self.action), str(self.object), str(self.actor), str(self.room))
+        return "(Event id: {0}, action {1}, object {2}, actor {3}, location {4}, timeframe [{5}])".format(str(self.id), str(self.action), str(self.object), str(self.actor), str(self.location), str(self.timeframe))
 
     def __repr__(self):
         return self.__str__()
@@ -89,8 +90,8 @@ class Event:
                     inner_action_dict["Next"] = inner_actions_ids[i+1]
                 # inner_action_dict["id"] = inner_actions_ids[i]
                 # inner_action_dict["Target"] = obj_dict
-                inner_action_dict["Location"] = self.room.name
-                inner_action_dict["Timeframe"] = None
+                inner_action_dict["Location"] = self.location.name
+                inner_action_dict["Timeframe"] = self.timeframe
                 inner_action_dict["Properties"] = {}
                 action_dicts.append((inner_actions_ids[i], inner_action_dict))
             return action_dicts
@@ -128,8 +129,8 @@ class Event:
             
             # action_dict["id"] = self.action.id
             # action_dict["Target"] = obj_dict
-            action_dict["Location"] = [x.name for x in self.room]
-            action_dict["Timeframe"] = None
+            action_dict["Location"] = [x.name for x in self.location]
+            action_dict["Timeframe"] = self.timeframe
             action_dict["Properties"] = {}
 
             return action_dict

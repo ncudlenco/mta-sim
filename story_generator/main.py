@@ -38,7 +38,7 @@ nonspecific_actions = Actions.get_nonspecific_actions(actions)
 def order_events(story):
     actors = get_actors_from_story(story)
 
-    print(story)
+    # print(story)
     # sys.exit()
     last_action_for_actor = [None for x in range(len(actors))]
     for i in range(len(story)):

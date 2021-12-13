@@ -32,23 +32,67 @@ discarding_actions = ["PutDown", "discarded", "put down", "dropped", "dropped th
 # change objects
 objects_converted = {"milk": "Drinks", "football": "Food", "apple": "Remote"}
 
-read_from = "babi" # "babi_corpus-train/valid/test"
+read_from = "test" # "babi_corpus-train/valid/test"
 babi_folder = "en-valid"
 
 considered_indexes = [1,2,3,5,6,7,8,9]
-considered_indexes = [12]
+considered_indexes = [14]
 
 # 11 coreference
 # 13 (and/or) + coreference
 # 14 is not done! temporal ordering!
 
-# intermediate function
+time_order = ["yesterday", "this morning", "this afternoon", "this evening"]
+
 def get_last_actor_location_parsed(story, actor_name):
     loc = get_last_actor_location(story, actor_name)
     return loc
 
-# use this function to determine location of actor
-# def compute_location_for_actor(story, actor_name):
+
+# just added last event, figure its place if needed
+def check_order_for_last_event(story):
+    
+    actors = get_actors_from_story(story)
+    events_for_actor = [[] for i in range(len(actors))]
+    time_frames = False
+    
+    for event in story:
+        for actor in event.actor:
+            events_for_actor[int(actor.id[len("actor"):])].append(event)
+        if event.timeframe != None:
+            time_frames = True
+    if time_frames == False:
+        return story
+
+
+    for evs in events_for_actor:
+        evs.sort(key=lambda x: time_order.index(x.timeframe))
+
+    last_location_for_actor = [empty_room for i in range(len(actors))]
+    for events in events_for_actor:
+        for event in events:
+            if event.action.name == "Move":
+                act = int(event.actor[0].id[len("actor"):])
+                if last_location_for_actor[act] == empty_room:
+                    event.location = [empty_room, event.location[1]]
+                else:
+                    event.location = [last_location_for_actor[act], event.location[1]]                
+                last_location_for_actor[act] = event.location[1]
+
+            else:
+                print("We got timeframe sort but not Move action")
+                sys.exit()
+
+
+    indexes = [0 for i in range(len(actors))]
+
+    new_story = []
+    for event in story:
+        act = int(event.actor[0].id[len("actor"):])
+        new_story.append(events_for_actor[act][indexes[act]])
+        indexes[act] += 1
+
+    return new_story
 
 
 def extract_stories(lines):
@@ -323,9 +367,11 @@ def add_storyline(story, line):
         e2.add_sync_event(e1, "starts_with", "tm{0}".format(crt_syncs))
 
 
-    else:
+    else:      
         e = Event.Event("event{0}".format(len(story)), act, obj, aux_actors, loc, timeframe)
         story.append(e)
+
+    # order events if needed
 
 
     return story, location
@@ -355,7 +401,7 @@ if __name__ == "__main__":
 
         lines = list(map(lambda x: " ".join(x.split(" ")[1:]), lines))
         lines = list(map(lambda x: x.strip(), lines))
-        lines = lines[:3]
+        lines = lines[:2]
 
         # filter out questiosns for the moment
         lines = list(filter(lambda x: "?" not in x, lines))
@@ -386,6 +432,7 @@ if __name__ == "__main__":
     all_locations = []
     all_actors = []
     all_events = []
+    all_timeframes = []
     all_lines = 0
         
     graph_stories = []
@@ -398,12 +445,14 @@ if __name__ == "__main__":
             
             all_events.append(action)
             all_actors.extend(entities)
+            all_timeframes.append(timeframe)
 
             if location != None:
                 all_locations.append(location)
             else:
                 all_locations.append("None")
-        
+        graph_story = check_order_for_last_event(graph_story)
+
         graph_dict = generate_graph(graph_story)
         if read_from == "babi":
             json.dump(graph_dict, open("samples_babi/example_graph{0}".format(considered_indexes[0]), "w"), sort_keys=False, indent = 4)
@@ -424,5 +473,6 @@ if __name__ == "__main__":
     print(Counter(all_events))
     print(Counter(all_actors))
     print(Counter(all_locations))
+    print(Counter(all_timeframes))
 
 

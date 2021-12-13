@@ -32,15 +32,11 @@ discarding_actions = ["PutDown", "discarded", "put down", "dropped", "dropped th
 # change objects
 objects_converted = {"milk": "Drinks", "football": "Food", "apple": "Remote"}
 
-read_from = "test" # "babi_corpus-train/valid/test"
+read_from = "babi" # "babi_corpus-train/valid/test"
 babi_folder = "en-valid"
 
-considered_indexes = [1,2,3,5,6,7,8,9]
-considered_indexes = [14]
+considered_indexes = [1,2,3,5,6,7,8,9,11,12,13,14]
 
-# 11 coreference
-# 13 (and/or) + coreference
-# 14 is not done! temporal ordering!
 
 time_order = ["yesterday", "this morning", "this afternoon", "this evening"]
 
@@ -127,6 +123,11 @@ def parse_line(line, nlp):
     time = None
 
     root_token = list(doc.sents)[0].root
+    # hack for task 13
+    if root_token.text == "Following" and (list(root_token.children)[0].dep_ == "ccomp" or list(root_token.children)[0].dep_ == "pcomp"):
+        root_token = list(root_token.children)[0]
+    
+
 
     for child in root_token.children:
         if child.dep_ == 'nsubj':
@@ -150,18 +151,19 @@ def parse_line(line, nlp):
             advmod = child
 
         # for giving to
-        if (child.dep_ == "dative" or child.dep_ == "prep") and child.text != "in":
+        # hack for "after that they ..." task 13
+        if (child.dep_ == "dative" or child.dep_ == "prep") and child.text != "in" and child.text != "After":
             for p in child.children:
                 if p.dep_ == "pobj":
                     aobj = p
 
-
     if advmod != None:
-        # hack for longer
-        # if advmod.text == "longer":
-        #     new_root_token = advmod#root_token
-        # else:
-        new_root_token = advmod
+        # hack for tasks 11 and 13 coreference
+        if advmod.text == "Afterwards" or advmod.text == "Then" or advmod.text == "Following":
+            new_root_token = root_token
+        else:
+            new_root_token = advmod
+        # new_root_token = advmod
     else:
         new_root_token = root_token
 
@@ -170,7 +172,7 @@ def parse_line(line, nlp):
         for child in new_root_token.children:
             if child.dep_ == "prep" and (child.text == "to" or child.text == "in"):
                 loc = list(child.children)[0].text
-
+        
     # search for timeframe
     for child in root_token.children:
         if child.dep_ == "npadvmod":
@@ -180,12 +182,13 @@ def parse_line(line, nlp):
 
     # check if multiple
     multiple_actors = False
-    for child in subj.children:
-        if child.dep_ == "cc" and (child.text == "and" or child.text == "or"):
-            for searched in subj.children:
-                if searched.dep_ == "conj":
-                    multiple_actors = True
-                    actor = [subj.text+"-"+child.text.upper(), searched.text+"-"+child.text.upper()]
+    if subj != None:
+        for child in subj.children:
+            if child.dep_ == "cc" and (child.text == "and" or child.text == "or"):
+                for searched in subj.children:
+                    if searched.dep_ == "conj":
+                        multiple_actors = True
+                        actor = [subj.text+"-"+child.text.upper(), searched.text+"-"+child.text.upper()]
 
     if multiple_actors == False:            
         actor = [subj.text]
@@ -207,16 +210,19 @@ def parse_line(line, nlp):
     if time != None:
         timeframe = time.lower()
     
+
     for child in new_root_token.children:
         # print(new_root_token, child, child.dep_)
         if child.dep_ == "prt":
             action += " " + child.text
         if child.dep_ == "neg":
             action = "NOT " + action
-    
+
+
     # how about advmod?
     if advmod != None:
-        action += " " + advmod.text
+        if advmod.text != "Afterwards" and advmod.text != "Then" and advmod.text != "Following":
+            action += " " + advmod.text
     
     entities = actor
     if object != None:
@@ -228,6 +234,7 @@ def parse_line(line, nlp):
     # print(action, entities, location, "|", timeframe)
     # print(root_token, new_root_token)
     # print()
+    # print(location)
     # displacy.serve(doc, style='dep')
     # sys.exit()
     if convert_entities_for_video == True:
@@ -268,11 +275,34 @@ def add_storyline(story, line):
     multiple_actors_logical = False
 
     for entity in entities:
+        if entity == "he" or entity == "she" or entity == "they":
+            if len(story) == 0:
+                print("GOT PRONOUN {0} with no previous event".format(entity))
+                sys.exit()
+            index = Actor.find_actor_by_name(story[-1].actor[0].name, actors)
+            if index == -1:
+                print("Did not find actor {0} from coreference")
+                sys.exit()
+           
+            if entity == "they":
+                entities.append(actors[index].name+"-AND")
+                index = Actor.find_actor_by_name(story[-2].actor[0].name, actors)
+                if index == -1:
+                    print("Did not find actor {0} from coreference")
+                    sys.exit()
+                entities.append(actors[index].name+"-AND")
+            else:
+                entities.append(actors[index].name)
+            
+            entities.remove(entity)
+
+    for entity in entities:
         if "-AND" in entity:
             multiple_actors_logical = True
             entity = entity[:-len("-AND")]
         if find_obj_by_name(entity, OBJECTS) == -1:
             index = Actor.find_actor_by_name(entity, actors)
+            
             if index != -1:
                 actor = actors[index]
                 aux_actors.append(actor)
@@ -401,7 +431,7 @@ if __name__ == "__main__":
 
         lines = list(map(lambda x: " ".join(x.split(" ")[1:]), lines))
         lines = list(map(lambda x: x.strip(), lines))
-        lines = lines[:2]
+        lines = lines[:1]
 
         # filter out questiosns for the moment
         lines = list(filter(lambda x: "?" not in x, lines))
@@ -469,7 +499,7 @@ if __name__ == "__main__":
 
         
 
-    print(len(all_events), len(all_actors), len(all_locations), all_lines)
+    print(len(all_events), len(all_actors), len(all_locations), len(all_timeframes), all_lines)
     print(Counter(all_events))
     print(Counter(all_actors))
     print(Counter(all_locations))

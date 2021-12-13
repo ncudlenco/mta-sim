@@ -88,7 +88,7 @@ def order_events(story):
     syncs = random.randint(MIN_SYNC_EVENTS, MAX_SYNC_EVENTS)
     if syncs - crt_syncs < 0:
         syncs = 0
-    print("SYNCS =", syncs)
+    # print("SYNCS =", syncs)
 
     tid = 0
     for _ in range(syncs):

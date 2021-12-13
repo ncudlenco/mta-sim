@@ -1,28 +1,4 @@
 {
-    "actor1": {
-        "Action": "Exists",
-        "Entities": [
-            "actor1"
-        ],
-        "Location": null,
-        "Timeframe": null,
-        "Properties": {
-            "Gender": 2,
-            "Name": "Mary"
-        }
-    },
-    "actor3": {
-        "Action": "Exists",
-        "Entities": [
-            "actor3"
-        ],
-        "Location": null,
-        "Timeframe": null,
-        "Properties": {
-            "Gender": 1,
-            "Name": "Daniel"
-        }
-    },
     "actor0": {
         "Action": "Exists",
         "Entities": [
@@ -45,6 +21,30 @@
         "Properties": {
             "Gender": 2,
             "Name": "Sandra"
+        }
+    },
+    "actor1": {
+        "Action": "Exists",
+        "Entities": [
+            "actor1"
+        ],
+        "Location": null,
+        "Timeframe": null,
+        "Properties": {
+            "Gender": 2,
+            "Name": "Mary"
+        }
+    },
+    "actor3": {
+        "Action": "Exists",
+        "Entities": [
+            "actor3"
+        ],
+        "Location": null,
+        "Timeframe": null,
+        "Properties": {
+            "Gender": 1,
+            "Name": "Daniel"
         }
     },
     "action0": {
@@ -89,7 +89,7 @@
             "actor1"
         ],
         "Location": [
-            "",
+            "hallway",
             "bedroom"
         ],
         "Timeframe": null,
@@ -113,7 +113,7 @@
             "actor3"
         ],
         "Location": [
-            "bedroom",
+            "",
             "bathroom"
         ],
         "Timeframe": null,
@@ -137,7 +137,7 @@
             "actor2"
         ],
         "Location": [
-            "bathroom",
+            "bedroom",
             "office"
         ],
         "Timeframe": null,
@@ -161,7 +161,7 @@
             "actor1"
         ],
         "Location": [
-            "office",
+            "bathroom",
             "bedroom"
         ],
         "Timeframe": null,
@@ -185,7 +185,7 @@
             "actor2"
         ],
         "Location": [
-            "bedroom",
+            "office",
             "hallway"
         ],
         "Timeframe": null,
@@ -209,7 +209,7 @@
             "actor2"
         ],
         "Location": [
-            "bedroom",
+            "hallway",
             "garden"
         ],
         "Timeframe": null,
@@ -281,7 +281,7 @@
             "actor1"
         ],
         "Location": [
-            "bathroom",
+            "hallway",
             "office"
         ],
         "Timeframe": null,

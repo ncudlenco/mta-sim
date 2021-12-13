@@ -32,20 +32,23 @@ discarding_actions = ["PutDown", "discarded", "put down", "dropped", "dropped th
 # change objects
 objects_converted = {"milk": "Drinks", "football": "Food", "apple": "Remote"}
 
-read_from = "babi_corpus-test"
+read_from = "babi" # "babi_corpus-train/valid/test"
 babi_folder = "en-valid"
 
 considered_indexes = [1,2,3,5,6,7,8,9]
-considered_indexes = [2]
+considered_indexes = [12]
 
 # 11 coreference
 # 13 (and/or) + coreference
 # 14 is not done! temporal ordering!
 
-
+# intermediate function
 def get_last_actor_location_parsed(story, actor_name):
     loc = get_last_actor_location(story, actor_name)
     return loc
+
+# use this function to determine location of actor
+# def compute_location_for_actor(story, actor_name):
 
 
 def extract_stories(lines):
@@ -298,9 +301,22 @@ def add_storyline(story, line):
         act1 = copy.deepcopy(act)
         act2 = copy.deepcopy(act)
 
+
+
+        if location == None:
+            loc2 = get_last_actor_location_parsed(story, aux_actors[1].name)
+            if loc2 == None:
+                loc2 = empty_room
+        else:
+            loc2 = get_last_actor_location_parsed(story, aux_actors[1].name)
+            if loc2 != None and loc2 != empty_room and (act.name == "Move"):
+                loc2 = [Room(loc2.name), Room(location)]
+            else:
+                loc2 = [empty_room, Room(location)]
+
         e1 = Event.Event("event{0}".format(len(story)), act1, obj, [aux_actors[0]], loc, timeframe)
         story.append(e1)
-        e2 = Event.Event("event{0}".format(len(story)), act2, obj, [aux_actors[1]], loc, timeframe)
+        e2 = Event.Event("event{0}".format(len(story)), act2, obj, [aux_actors[1]], loc2, timeframe)
         story.append(e2)
 
         e1.add_sync_event(e2, "starts_with", "tm{0}".format(crt_syncs))
@@ -339,7 +355,7 @@ if __name__ == "__main__":
 
         lines = list(map(lambda x: " ".join(x.split(" ")[1:]), lines))
         lines = list(map(lambda x: x.strip(), lines))
-        lines = lines[:6]
+        lines = lines[:3]
 
         # filter out questiosns for the moment
         lines = list(filter(lambda x: "?" not in x, lines))

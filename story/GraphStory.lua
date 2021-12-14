@@ -42,15 +42,18 @@ GraphStory = class(StoryBase, function(o, actor, logData)
     o.MaxActions = 9999
     o.actionsQueues = {}
     if not o.Actor then
-        outputConsole("Error: Actor is null "..o.Id)
+        outputConsole("Error: Actor is null "..o.Id..'/'..actor:getData('id'))
     end
     o.Actor:setData('storyId', o.Id)
     o.graph = nil
     o.temporal = nil
     o.lastEvents = {}
     o.lastLocations = {}
-    local file = fileOpen(INPUT_FOLDER..LOAD_FROM_GRAPH)
+    local file = fileOpen(LOAD_FROM_GRAPH)
     if file then
+        local outputFolder = LOAD_FROM_GRAPH..'_out/'..o.Id
+        o.Logger = Logger(outputFolder, true, o)
+        
         local jsonStr = fileRead(file, fileGetSize(file))
         o.graph = fromJSON(jsonStr)
         fileClose(file)
@@ -223,9 +226,9 @@ function GraphStory:Play()
     end
 
 --choose a random valid episode
-    math.randomseed(os.time())
+    math.randomseed(os.clock()*100000000000)
     math.random(); math.random(); math.random()
-    math.randomseed(os.time())
+    math.randomseed(os.clock()*100000000000)
     math.random(); math.random(); math.random()
     self.Episodes = self:GetValidEpisodes()
     if (not self.Episodes or #self.Episodes == 0) then
@@ -317,9 +320,9 @@ function GraphStory:Play()
         end
 
         if DEBUG then
-            print("GraphStory: Loading a random valid episode...")
+            print("GraphStory: Loading a random valid episode from "..#self.Episodes.."...")
         end
-        math.randomseed(os.time())
+        math.randomseed(os.clock()*100000000000)
         math.random(); math.random(); math.random()
         self.CurrentEpisode = PickRandom(self.Episodes)
         print(self.CurrentEpisode.name)

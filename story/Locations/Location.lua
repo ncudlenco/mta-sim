@@ -34,7 +34,7 @@ function Location:SpawnPlayerHere(player)
     self.isBusy = true
     player:setData('locationId', self.LocationId)
     player:spawn(self.X, self.Y, self.Z, self.Angle, player.model, self.Interior)
-    player:fadeCamera (true)
+    -- player:fadeCamera (true)
     local story = GetStory(player)
     if not STATIC_CAMERA then
         player:setCameraTarget (player)

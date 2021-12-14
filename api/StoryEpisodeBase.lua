@@ -522,9 +522,9 @@ function StoryEpisodeBase:LoadFromFile()
         end
 
         if episode.supertemplates then
-            math.randomseed(os.time())
+            math.randomseed(os.clock()*100000000000)
             math.random(); math.random(); math.random()
-            math.randomseed(os.time())
+            math.randomseed(os.clock()*100000000000)
             math.random(); math.random(); math.random()
         
             for _, s in ipairs(episode.supertemplates) do

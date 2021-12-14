@@ -93,7 +93,7 @@ function Any(arr, func)
 end
 
 function PickRandom(arr)
-    math.randomseed(os.time())
+    math.randomseed(os.clock()*100000000000)
     math.random(); math.random(); math.random()
     if #arr == 0 then
         -- then this is a dictionary
@@ -113,7 +113,7 @@ function PickRandom(arr)
 end
 
 function Shuffle(arr)
-    math.randomseed(os.time())
+    math.randomseed(os.clock()*100000000000)
 
 	for i = #arr, 2, -1 do
 		local j = math.random(i)

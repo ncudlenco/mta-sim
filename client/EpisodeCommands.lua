@@ -125,7 +125,14 @@ local function text_render ( )
                     end
                     allActionsText = allActionsText.."\n["..a.id..": "..a.Description..closingActionText.."]"
                 end
-                dxDrawText ( i..":"..poi.Description.."\n"..actionsText..allActionsText, sx, sy, sw, sh, tocolor ( 255, 200, 0, 255 ), 1.0, "default-bold" ) 
+                local allLinkedEpisodesText = ""
+                for k, e in ipairs(poi.episodeLinks) do
+                    if allLinkedEpisodesText == "" then
+                        allLinkedEpisodesText = "\n"..allLinkedEpisodesText
+                    end
+                    allLinkedEpisodesText = allLinkedEpisodesText.."-> "..e..";"
+                end
+                dxDrawText ( i..":"..poi.Description..allLinkedEpisodesText.."\n"..actionsText..allActionsText, sx, sy, sw, sh, tocolor ( 255, 200, 0, 255 ), 1.0, "default-bold" ) 
             end 
         end
 
@@ -490,6 +497,8 @@ addCommandHandler("episode",
             
             outputChatBox("New episode initialized", 255, 0, 0, false)
             addEventHandler("onClientRender", getRootElement(), text_render)
+        elseif command == "stoprender" then
+            removeEventHandler("onClientRender", getRootElement(), text_render)
         elseif command == "run" then
             episode:Destroy()
             episode:Initialize(localPlayer)
@@ -905,6 +914,28 @@ addCommandHandler("episode",
                 else
                     outputChatBox("No region defined yet")
                 end            
+            end
+        elseif command == "linkepisode" then
+            if param1 ~= "" then
+                if param1 == episode.name then
+                    outputChatBox("Warning: the episode to link has the same name as the current episode")
+                end
+                local poi = nil
+                local minDist = 1000
+                for i,v in ipairs (episode.POI) do
+                    local dist = math.abs((localPlayer.position - Vector3(v.X, v.Y, v.Z)).length)
+                    if dist < minDist then
+                        minDist = dist
+                        poi = v
+                    end
+                end
+                if poi == nil then
+                    outputChatBox('Could not find any POI nearby. Place the player in the desired POI')
+                return 
+                end
+                table.insert(poi.episodeLinks, param1)
+            else
+                outputChatBox('Expected the name of the episode to link with. episode linkepisode name')
             end
         elseif command == "reset" then
             if param1 == "camera" then

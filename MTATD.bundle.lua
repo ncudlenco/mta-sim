@@ -83,7 +83,6 @@ end
 -----------------------------------------------------------
 function MTATD.Backend:connect(host, port)
     -- Make initial request to check if the backend is running
-    -- TODO
 end
 
 -----------------------------------------------------------
@@ -135,7 +134,6 @@ function MTATD.Backend:reportTestResults(testResults)
     --[[local data = {}
     for testSuite, results in pairs(testResults) do
         -- Reformat data
-        -- TODO
     end]]
 
     self:request("MTAUnit/report_test_results", testResults)

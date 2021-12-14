@@ -44,6 +44,7 @@ addCommandHandler("graph",
             end
             markers = {}
             outputChatBox("New graph initialized", 255, 0, 0, false)
+		    addEventHandler("onClientRender", getRootElement(), text_render)
         elseif command == "load" then
             if param1 then
                 file = fileOpen("files/paths/"..param1..".json") 
@@ -73,7 +74,6 @@ addCommandHandler("graph",
                 outputChatBox("Parameter graph_name not provided. Ex: graph load graph_name", 255, 0, 0, false)
             end
         end
-		addEventHandler("onClientRender", getRootElement(), text_render)
 	end
 )
 

@@ -144,13 +144,9 @@ function SampStoryObjectBase:Create(...)
     self.instance:setInterior(self.interior)
 
     setObjectScale(self.instance, self.scale)
-    --TODO: log atomic event here
-    -- local event = {id = self.ObjectId, Name = self.Description}
-    -- GRAPH.AtomicEvents[event.id] = event
 end
 
 function SampStoryObjectBase:Destroy(...)
-    --TODO: if needed -> here we could set the end time for the atomic event Object exists
     if self.instance then
         self.instance:destroy()
     end

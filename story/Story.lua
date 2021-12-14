@@ -14,6 +14,7 @@ Story = class(StoryBase, function(o, actor, maxActions, logData)
     --   "house7",
     -- --   "house8",
       "house9",
+    --   "garden",
     --   "testsupertemplate",
     -- --   "house10",
     -- --   "house12",

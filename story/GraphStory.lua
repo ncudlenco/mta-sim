@@ -19,10 +19,8 @@ GraphStory = class(StoryBase, function(o, actor, logData)
     o.DynamicEpisodes = {
       "house1_sweet",
       "house7",
-    --   "house8",
       "house9",
-    --   "house10",
-    --   "house12",
+      "garden",
       "gym1",
       "gym2",
       "gym3"
@@ -49,6 +47,7 @@ GraphStory = class(StoryBase, function(o, actor, logData)
     o.temporal = nil
     o.lastEvents = {}
     o.lastLocations = {}
+    o.validMemo = {}
     local file = fileOpen(LOAD_FROM_GRAPH)
     if file then
         local outputFolder = LOAD_FROM_GRAPH..'_out/'..o.Id
@@ -78,9 +77,233 @@ GraphStory = class(StoryBase, function(o, actor, logData)
     CURRENT_STORY = o
 end)
 
+-- function GraphStory:GetLinkedEpisodes(currentEpisode, currentSubset)
+--     if Any(currentSubset, function(e) return e.name == currentEpisode.name end) then
+--         return {}
+--     end
+
+--     local unprocessedPoiWithLinks = Where(currentEpisode.POI, function(poi) #poi.episodeLinks > 0 &&
+--         All(currentSubset, function(e) return ~Any(function(l) return l == e.name end)) 
+--     end)
+--     local localCombinations = {}
+--     for _,poi in ipairs(unprocessedPoiWithLinks) do
+--         local linkEpisodes = Select(poi.episodeLinks, function(eLink) return FirstOrDefault(self.Episodes, function(e) return e.name == eLink end) end)
+--         if #localCombinations = 0 then
+--             localCombinations = Select(linkEpisodes, function(e) return {e} end)
+--         else
+--             for _,c in ipairs(localCombinations) do
+--                 for _,e in ipairs(linkEpisodes) do
+--                     if ~Any(c, function(e) return c.name == e.name end) then
+--                         table.insert(localCombinations, concat(c, {e}))
+--                     end
+--                 end
+--             end
+--         end
+--     end
+--     local mergedCombinations = {}
+--     for _,combination in ipairs(localCombinations) do
+--         for _, e in ipairs(combination) do
+--             local res = self:GetLinkedEpisodes(e, combination, localCombinations)
+--             for _,r in ipairs(res) do
+--                 table.insert(mergedCombinations, concat(combination, r))
+--             end
+--         end
+--     end
+--     return mergedCombinations
+-- end
+function GraphStory:ExploreValidEpisodeLinks(
+    episode,
+    requiredLocations,
+    requiredObjects,
+    requiredActions,
+    currentSubset
+)
+    --assume current episode is already valid
+    local unprocessedPoiWithLinks = Where(currentEpisode.POI, function(poi) return #poi.episodeLinks > 0 and
+        All(currentSubset, function(e) return not Any(poi.episodeLinks, function(l) return l == e.name end) end)
+    end)
+    local linkedEpisodes = reduce(Select(unprocessedPoiWithLinks, 
+        function(poi) return 
+            Select(poi.episodeLinks, function(eLink) return FirstOrDefault(self.Episodes, function(e) return e.name == eLink 
+        end)
+    end) end), {}, concat)
+    return self:ExploreValidEpisodesSubset(linkedEpisodes, requiredLocations, requiredObjects, requiredActions, currentSubset)
+end
+
+function GraphStory:ExploreValidEpisodesSubset(
+    episodes,
+    requiredLocations,
+    requiredObjects,
+    requiredActions,
+    currentSubset
+)
+    if #requiredLocations + #requiredObjects + #requiredActions == 0 then
+        return concat(currentSubset, {episode})
+    elseif #episodes == 0 then
+        return nil
+    else
+        local maxCoverData = self:GetMaxCoveringEpisode(episodes, requiredLocations, requiredObjects, requiredActions, currentSubset)
+        if maxCoverData and maxCoverData.maxScore and maxCoverData.episode then
+            return self:ExploreValidEpisodeLinks(
+                maxCoverData.episode,
+                maxCoverData.requiredLocations,
+                maxCoverData.requiredObjects,
+                maxCoverData.requiredActions,
+                concat(currentSubset, {episode})
+            )
+        else
+            return nil
+        end
+    end
+end
+
+function GraphStory:GetMaxCoveringEpisode(
+    episodes,
+    requiredLocations,
+    requiredObjects,
+    requiredActions,
+    currentSubset
+)
+    --Greedy select the episode covering the max nr of requirements
+    local maxScore = nil
+    local maxScoreEpisodes = {}
+    for i,episode in ipairs(episodes) do
+        local score = self:ValidateEpisode(episode, requiredLocations, requiredObjects, requiredActions)
+        if maxScore == nil or score.setCoverScore >= maxScore.setCoverScore then
+            if maxScore ~= score then
+                maxScoreEpisodes = {episode}
+            else
+                table.insert(maxScoreEpisodes, episode)
+            end
+            maxScore = score
+        end
+    end
+
+    return {maxScore = maxScore, episode = PickRandom(maxScoreEpisodes)}
+end
+
+function GraphStory:ValidateEpisode(
+    episode,
+    requiredLocations,
+    requiredObjects,
+    requiredActions
+)
+    if self.validMemo[episode.name] then
+        return self.validMemo[episode.name]
+    end
+
+    local validLocations = Select(requiredLocations, function(rl)
+        return Any(episode.Regions, function(region) return region.name:lower():find(rl:lower()) and true or false end)
+    end)
+    local validObjects = {}
+    local validActions = {}
+    local setCoverScore = 0
+    local res = nil
+
+    if Any(validLocations) then
+        if not episode.initialized and true or false then
+            episode:Initialize(self.Actor, true)
+        end
+        if DEBUG then
+            print '---------------------------------------------started processing regions----------------------------------------'
+        end
+        if not episode.processedRegions and true or false then
+            episode:ProcessRegions()
+        end
+        if DEBUG then
+            print '---------------------------------------------finished processing regions----------------------------------------'
+        end
+        --now I have for all POI and objects the location set
+        local objectMap = {}
+        local reverseObjectMap = {}
+        print('Required objects nr '..#requiredObjects)
+        validObjects = Select(requiredObjects, function(ro) 
+            print(ro.name or 'NULL REQUIRED OBJECT NAME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+            local r = FirstOrDefault(episode.Objects, function(o) 
+                print(o.type:lower()..' vs '..ro.name:lower())
+                return 
+                not objectMap[o.ObjectId] and o.type:lower() == ro.name:lower() and 
+                (o and o.Region and o.Region.name and o.Region.name:lower():find(ro.location:lower()) and true or false)
+            end)
+            if r then
+                objectMap[r.ObjectId] = ro.id
+                if DEBUG then
+                    print('!!!!!!!!!!!!!!!!!!!!!!Mapped '..r.ObjectId..' to '..ro.id)
+                end
+                reverseObjectMap[ro.id] = r.ObjectId
+            else
+                print('!!!!!!!!!!!!!!!!!!!!!!Not mapped '..ro.id)
+            end
+            r = r or Any(self.SpawnableObjects, function(o) return o:lower() == ro.name:lower() end)
+            if r then
+                reverseObjectMap[ro.id] = 'spawnable'
+            end
+            if not r and DEBUG then
+                print('Episode '..episode.name..' was discarded because the object '..ro.name..' does not exist in region '..ro.location..' or at all')
+            end
+            return r
+        end)
+        if Any(validObjects) then
+            validActions = Select(requiredActions, function(ra) 
+                local res = Any(self.Interactions, function(a) return a:lower() == ra.name:lower() end) or Any(episode.POI, function(poi) 
+                    if DEBUG then
+                        if poi.Region then
+                            print('***'..poi.Region.name..'')
+                        else
+                            print('***!!'..poi.Description..' does not have a region')
+                        end
+                    end
+                    return 
+                        poi.Region and
+                        Any(poi.allActions, function(a) 
+                            if DEBUG then
+                                print('**********'..a.Name)
+                                if a.TargetItem and a.TargetItem.ObjectId then
+                                    print('**********->'..a.TargetItem.ObjectId)
+                                end
+                            end
+                            return a.Name:lower() == ra.name:lower() and (ra.name == 'Move' or a.TargetItem.ObjectId and objectMap[a.TargetItem.ObjectId])
+                        end) 
+                        and (poi.Region.name:lower():find(ra.location:lower()) and true or false )
+                    end)  
+
+                if not res and DEBUG then
+                    print('Episode '..episode.name..' was discarded because the action '..ra.name..' with target '..(ra.target or '')..' does not exist in region '..ra.location..' or at all')
+                end
+
+                return res
+            end)
+            if Any(validActions) then
+                if DEBUG then
+                    setCoverScore = #validLocations + #validObjects + #validActions
+                    print('Episode '..episode.name..' is valid with a score of '..setCoverScore)
+                end
+                --episode is valid
+                --remove from current list of constraints the satisfied constraints for the next recursive level
+                res = {
+                    setCoverScore = setCoverScore,
+                    requiredLocations = Where(requiredLocations, function(rl) return not Any(validLocations, function(vl) return vl == rl end) end),
+                    requiredObjects = Where(requiredObjects, function(ro) return not Any(validObjects, function(vo) return vo.id == ro.id end) end),
+                    requiredActions = Where(requiredActions, function(ra) return not Any(validActions, function(va) return va.name == ra.name and va.location == ra.location end) end)
+                }
+            end
+        end
+    end
+    if not res then
+        res = {
+            setCoverScore = setCoverScore,
+            requiredLocations = requiredLocations,
+            requiredObjects = requiredObjects,
+            requiredActions = requiredActions
+        }
+    end
+    self.validMemo[episode.name] = res
+    return res
+end
+
 function GraphStory:GetValidEpisodes()
     if DEBUG then
-        print("GraphStory:GetValidEpisodes: loading all available episodes in memory")
+        print("GraphStory:GetValidEpisodes: loading all available episodes in memory")--!!!!!!!!!!!!!!!
     end
     for i,episode_name in ipairs(self.DynamicEpisodes) do
         print(episode_name)
@@ -124,88 +347,7 @@ function GraphStory:GetValidEpisodes()
         return { location = location, name = event.Action, target = target }
     end)
 
-    local validEpisodes = {}
-
-    for i,episode in ipairs(self.Episodes) do
-        --first: see if the episode contains all the required locations (can be done before processing)
-        if All(requiredLocations, function(rl) return Any(episode.Regions, function(region) return region.name:lower():find(rl:lower()) and true or false end)  end) then
-            episode:Initialize(self.Actor, true)
-            if DEBUG then
-                print '---------------------------------------------started processing regions----------------------------------------'
-            end
-            episode:ProcessRegions()
-            if DEBUG then
-                print '---------------------------------------------finished processing regions----------------------------------------'
-            end
-            --now I have for all POI and objects the location set
-            local objectMap = {}
-            local reverseObjectMap = {}
-            print('Required objects nr '..#requiredObjects)
-            if All(requiredObjects, function(ro) 
-                print(ro.name or 'NULL REQUIRED OBJECT NAME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-                local r = FirstOrDefault(episode.Objects, function(o) 
-                    print(o.type:lower()..' vs '..ro.name:lower())
-                    return 
-                    not objectMap[o.ObjectId] and o.type:lower() == ro.name:lower() and 
-                    (o and o.Region and o.Region.name and o.Region.name:lower():find(ro.location:lower()) and true or false)
-                end)
-                if r then
-                    objectMap[r.ObjectId] = ro.id
-                    if DEBUG then
-                        print('!!!!!!!!!!!!!!!!!!!!!!Mapped '..r.ObjectId..' to '..ro.id)
-                    end
-                    reverseObjectMap[ro.id] = r.ObjectId
-                else
-                    print('!!!!!!!!!!!!!!!!!!!!!!Not mapped '..ro.id)
-                end
-                r = r or Any(self.SpawnableObjects, function(o) return o:lower() == ro.name:lower() end)
-                if r then
-                    reverseObjectMap[ro.id] = 'spawnable'
-                end
-                if not r and DEBUG then
-                    print('Episode '..episode.name..' was discarded because the object '..ro.name..' does not exist in region '..ro.location..' or at all')
-                end
-                return r
-            end) then
-                if All(requiredActions, function(ra) 
-                    local res = Any(self.Interactions, function(a) return a:lower() == ra.name:lower() end) or Any(episode.POI, function(poi) 
-                        if DEBUG then
-                            if poi.Region then
-                                print('***'..poi.Region.name..'')
-                            else
-                                print('***!!'..poi.Description..' does not have a region')
-                            end
-                        end
-                        return 
-                            poi.Region and
-                            Any(poi.allActions, function(a) 
-                                if DEBUG then
-                                    print('**********'..a.Name)
-                                    if a.TargetItem and a.TargetItem.ObjectId then
-                                        print('**********->'..a.TargetItem.ObjectId)
-                                    end
-                                end
-                                return a.Name:lower() == ra.name:lower() and (ra.name == 'Move' or a.TargetItem.ObjectId and objectMap[a.TargetItem.ObjectId])
-                            end) 
-                            and (poi.Region.name:lower():find(ra.location:lower()) and true or false )
-                        end)  
-
-                    if not res and DEBUG then
-                        print('Episode '..episode.name..' was discarded because the action '..ra.name..' with target '..(ra.target or '')..' does not exist in region '..ra.location..' or at all')
-                    end
-
-                    return res
-                end) then
-                    if DEBUG then
-                        print('Episode '..episode.name..' is valid')
-                    end
-                    --episode is valid
-                    table.insert(validEpisodes, episode)      
-                end        
-            end
-        end
-        episode:Destroy()
-    end
+    local validEpisodesSubset = self:ExploreValidEpisodesSubset(self.Episodes, requiredLocations, requiredObjects, requiredActions, {})
 
     for i,episode_name in ipairs(self.DynamicEpisodes) do
         print(episode_name)
@@ -217,7 +359,7 @@ function GraphStory:GetValidEpisodes()
     print('---------------------------------------------finished GetValidEpisodes: '..#validEpisodes..' found----------------------------------------')
 --find all episodes which contain all the required locations
 --and all the required actions
-    return Where(self.AllEpisodes, function(e) return Any(validEpisodes, function(ve) return ve.name == e.name end) end)
+    return Where(self.AllEpisodes, function(e) return Any(validEpisodesSubset, function(ve) return ve.name == e.name end) end)
 end
 
 function GraphStory:Play()
@@ -237,7 +379,6 @@ function GraphStory:Play()
         terminatePlayer(self.Actor, "We could not find any valid episodes")
         return
     end
-
 
     local worldObjects = Element.getAllByType('object')
     for i, o in ipairs(worldObjects) do
@@ -324,8 +465,9 @@ function GraphStory:Play()
         end
         math.randomseed(os.clock()*100000000000)
         math.random(); math.random(); math.random()
-        self.CurrentEpisode = PickRandom(self.Episodes)
+        self.CurrentEpisode = PickRandom(self.Episodes) --Incorrect
         print(self.CurrentEpisode.name)
+        --TODO: initialization for a subset of episodes or merge the subset of episodes into a meta episode
         self.CurrentEpisode:Initialize(self.Actor, false, requiredActors, self.graph)
         
         self.Actor:setData('pickedObjects', {})
@@ -336,6 +478,7 @@ function GraphStory:Play()
         self.CurrentEpisode:ProcessRegions()
         self:ProcessActions(requiredActors)
 
+        --TODO: play only episodes which have a starting location
         self.CurrentEpisode:Play(self.Actor, self.graph)
     else
         error("GraphStory:Play could not find a valid skin for the main player with gender "..requiredActors[1].Properties.Gender)
@@ -364,6 +507,9 @@ function GraphStory:FindLocationAndActionForEvent(event)
         end))
 end
 
+--TODO: find starting locations for all episodes in the valid episodes subset
+--update all references to CurrentEpisode
+--move peds in story
 function GraphStory:ProcessActions(graphActors)
     print("GraphStory:ProcessActions --------------------------------------------------")
     local episode = self.CurrentEpisode
@@ -421,7 +567,6 @@ function GraphStory:ProcessActions(graphActors)
                 return a.id and self.temporal[a.id] and self.temporal[a.id].relations
                     and Any(self.temporal[a.id].relations, function(rel) return rel == firstEvent.interactionRelation end) end)
         end
-        --TODO: define custom logic for actions which doesn't have as target an object
         --if it is an interaction -> the poi has to be the same for both actors...
         local firstLocation = PickRandom(Where(episode.POI, function(poi) 
             return 

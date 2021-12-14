@@ -84,6 +84,9 @@ function All(arr, func)
 end
 
 function Any(arr, func)
+    if func == nil then
+        return #arr > 0
+    end
     for _, a in ipairs(arr) do
         if func(a) then 
             return true
@@ -155,6 +158,14 @@ function trim(s)
     return s:match'^%s*(.*%S)' or ''
  end
 
+function reduce(arr, initial, op)
+    local res = initial
+    for i, value in ipairs(arr) do
+        res = op(res, value)
+    end
+    return res
+end
+
 function inList(targetValue, arr)
     for i, value in ipairs(arr) do
         if targetValue == value then
@@ -165,6 +176,16 @@ function inList(targetValue, arr)
     return false
 end
 
+function concat(arr1, arr2)
+    local res = {}
+    for i,v in ipairs(arr1) do
+        table.insert(res, v)
+    end
+    for i,v in ipairs(arr2) do
+        table.insert(res, v)
+    end
+    return res
+end
 
 function notVeryDeepCopy(obj)
     if type(obj) ~= 'table' then return obj end

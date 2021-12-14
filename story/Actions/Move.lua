@@ -119,6 +119,13 @@ function Move:Apply()
 
     StoryActionBase.Apply(self) --TODO: make this call for each action
 
+    --TODO: set on POI a property: episode_id (ex. garden)
+    --set on each actor a property: episode
+    --if the current actor's episode is not the same as the targetItem episode then
+    --find pois in the current episode which link to the target episode DFS through context-switching POIs in the subset of currentEpisode linked episodes
+    --add a context switch action: teleports actor to the given coordinates and sets it's interior id
+    --plan an array of array of in-episode move operations with context switches in between
+    --change camera when any action is about to be performed. special case move action. (remove prefered location)
     self.path = {}
     findShortestPathBetween(
         self.graphId, 

@@ -23,7 +23,7 @@ function initializePlayer(source)
     if DEBUG then
         outputConsole("New player joined the server. Id ".. source:getData('id') .. " story id " .. source:getData('storyId'))
     end
---TODO: add parameters for actionbase:
+--OLD IDEA: add parameters for actionbase:
 -- TopologicalOrder; stats consumed; stats rewarded; 
 --implement server side episode json with points of interest and in each point of interest define possible action
     --Set the player's needs

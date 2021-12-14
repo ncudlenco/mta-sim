@@ -3363,9 +3363,6 @@ function SetPlayerSkin:Apply(requiredAttributes)
         else
             error('The graph does not contain a name for the actor with gender' .. self.Gender)
         end
-        -- player:setData('first_name', requiredAttributes.Name)
-        -- player:setData('surname', requiredAttributes.Surname)
-        -- player:setData('id', requiredAttributes.Id)
     else
         if self.Gender == 2 then
             player:setData('first_name', PickRandom(SetPlayerSkin.FemaleNames))
@@ -3379,9 +3376,7 @@ function SetPlayerSkin:Apply(requiredAttributes)
     player:setData('genderGenitive', self.Genitive)
     player:setData('gender', self.Gender)
 
-    --TODO: log atomic event here
     local event = {id = player:getData('id'), Name = player:getData('name'), Description = player:getData('skinDescription'), Gender = player:getData('genderNominative')}
-    --GRAPH.AtomicEvents[event.id] = event
 end
 
 function SetPlayerSkin:GetDynamicString()

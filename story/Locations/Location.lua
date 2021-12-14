@@ -1,4 +1,4 @@
-Location = class(StoryLocationBase, function(o, x, y, z, angle, interior, description, region, compact, log)
+Location = class(StoryLocationBase, function(o, x, y, z, angle, interior, description, region, compact, log, episodeLinks)
     StoryLocationBase.init(o, description, {})
     o.X = x
     o.Y = y
@@ -17,9 +17,7 @@ Location = class(StoryLocationBase, function(o, x, y, z, angle, interior, descri
     end
     o.allActions = {}
     o.metatable = {}
-    --TODO: log atomic action here (location exists)
-    --local event = {id = o.LocationId, Name = o.Description}
-    --GRAPH.AtomicEvents[event.id] = event
+    o.episodeLinks = episodeLinks or {}
 end)
 
 function Location:getData(key)
@@ -179,7 +177,8 @@ function Location:Serialize(episode, relativePosition, _objects, _locations, _ma
         Description = self.Description,
         allActions = serializedAllActions,
         PossibleActions = serializedPossibleActions,
-        id = LastIndexOf(episode.POI, self)
+        id = LastIndexOf(episode.POI, self),
+        episodeLinks = self.episodeLinks
     }
     if _saveMainPoiRelative then
         local targetItemRelativePosition = Vector3(self.X, self.Y, self.Z) - relativePosition

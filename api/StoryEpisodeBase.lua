@@ -163,28 +163,6 @@ function StoryEpisodeBase:Initialize(...)
                         Interior = 0,
                         dummy = -1
                     }
-                    -- local firstEvent = FirstOrDefault(CURRENT_STORY.graph, function(event)
-                    --     return event.id == CURRENT_STORY.temporal['starting_actions'][requiredActors[i+1].id]
-                    --     -- return event.Actor and event.Actor.id == requiredActors[i+1].id and event.Action ~= 'Exists' and All(Where(CURRENT_STORY.graph, 
-                    --     --     function(evt) 
-                    --     --         return evt.id ~= event.id and evt.Actor and event.Action ~= 'Exists' and evt.Actor.id == event.Actor.id
-                    --     --     end), function(evt)
-                    --     --     return evt.Next ~= event.id
-                    --     -- end)
-                    -- end)
-                    -- if not firstEvent then
-                    --     error('Could not find the first ped event for actor '..requiredActors[i+1].id)
-                    -- elseif DEBUG then
-                    --     print('First pred event: '..firstEvent.id..' in location '..firstEvent.Location..' with actor '..firstEvent.Actor.id)
-                    -- end
-                    -- validStartingPoi = FirstOrDefault(self.POI, function(poi) 
-                    --     return not poi.isBusy and poi.Region.name:lower():find(firstEvent.Location:lower()) and true or false 
-                    --         and Any(poi.allActions, function(a) 
-                    --             return a.Name:lower() == firstEvent.Action:lower()
-                    --             and a.TargetItem.ObjectId and a.TargetItem.type == CURRENT_STORY.graph[firstEvent.Target.id].Target.Name --action has a target an object of type x
-                    --             and a.TargetItem.ObjectId == reverseObjectMap[firstEvent.Target.id]            
-                    --         end) 
-                    -- end)
                 end
                 if not validStartingPoi then
                     error('A valid starting point could not be found for ped '..i)
@@ -221,6 +199,7 @@ function StoryEpisodeBase:Initialize(...)
             end
         end
     end
+    self.initialized = true
 end
 
 function StoryEpisodeBase:ProcessRegions()
@@ -262,6 +241,7 @@ function StoryEpisodeBase:ProcessRegions()
             end
         end
     end
+    self.processedRegions = true
 end
 
 function StoryEpisodeBase:Play(...)
@@ -283,28 +263,6 @@ function StoryEpisodeBase:Play(...)
                 return not x.isBusy
             end))
         else
-            -- --find the first event for the current actor
-            -- local firstEvent = FirstOrDefault(CURRENT_STORY.graph, function(event)
-            --     return event.id == CURRENT_STORY.temporal['starting_actions'][player:getData('id')]
-            --     -- event.Actor and event.Actor.id == player:getData('id') and event.Action ~= 'Exists' and All(Where(CURRENT_STORY.graph, 
-            --     --     function(evt) 
-            --     --         return evt.id ~= event.id and evt.Actor and event.Action ~= 'Exists' and evt.Actor.id == event.Actor.id
-            --     --     end), function(evt)
-            --     --     return evt.Next ~= event.id
-            --     -- end)
-            -- end)
-            -- if not firstEvent then
-            --     error('Could not find the first event for actor '..player:getData('id'))
-            -- elseif DEBUG then
-            --     print('First event: '..firstEvent.id..' in location '..firstEvent.Location..' with actor '..firstEvent.Actor.id)
-            -- end
-            -- self.StartingLocation = FirstOrDefault(self.POI, function(poi) 
-            --     return poi.Region.name:lower():find(firstEvent.Location:lower()) and true or false 
-            --         and Any(poi.allActions, function(a) return a.Name:lower() == firstEvent.Action:lower()
-            --         and a.TargetItem.ObjectId and a.TargetItem.type == CURRENT_STORY.graph[firstEvent.Target.id].Target.Name --action has a target an object of type x
-            --         and a.TargetItem.ObjectId == reverseObjectMap[firstEvent.Target.id]    
-            --         end) 
-            -- end)
             if not self.StartingLocation then
                 error('StoryEpisodeBase:Play Could not find a starting location in region '..firstEvent.Location)
             elseif DEBUG then
@@ -427,7 +385,7 @@ function StoryEpisodeBase:LoadFromFile()
             for k,v in ipairs(episode.Objects) do
                 local obj = SampStoryObjectBase(v)
                 obj = loadstring(obj.dynamicString)()
-                obj.ObjectId = k..''
+                obj.ObjectId = k..'_'..self.name
                 table.insert(objects, obj)
             end
         end
@@ -456,7 +414,8 @@ function StoryEpisodeBase:LoadFromFile()
             if v.PossibleActions then
                 obj.PossibleActions = v.PossibleActions
             end
-            obj.LocationId = k..''
+            obj.LocationId = k..'_'..self.name
+            obj.episodeLinks = v.episodeLinks or {}
             table.insert(deserializedPOI, obj)
         end
         self.POI = deserializedPOI

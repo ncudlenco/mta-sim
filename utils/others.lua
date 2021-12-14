@@ -46,7 +46,7 @@ function random(a, b)
     local random_number = PREV_RANDOM_NUMBER
 
     while random_number == PREV_RANDOM_NUMBER do
-        math.randomseed(os.time())
+        math.randomseed(os.clock()*100000000000)
         math.random(a, b); math.random(a, b); math.random(a, b);
         random_number = math.random(a, b)
     end

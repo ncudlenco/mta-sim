@@ -5,7 +5,7 @@ function initializePlayer(source)
     local g = Guid()
     source:setData("id", g.Id)
     source:setData("isPed", false)
-    math.randomseed(os.time())
+    math.randomseed(os.clock()*100000000000)
     math.random(); math.random(); math.random()
     
     SCREENSHOTS = {}
@@ -45,18 +45,18 @@ function initializePlayer(source)
     --         a:setRandomForPlayer(source)
     --     end
     -- end
-    math.randomseed(os.time())
+    math.randomseed(os.clock()*100000000000)
     math.random(); math.random(); math.random()
-    math.randomseed(os.time())
+    math.randomseed(os.clock()*100000000000)
     math.random(); math.random(); math.random()
     local chance = math.random(0, 1)
     if chance < 0.5 then
         source:setData('inventory_1', 'phone')
         source:setData('inventory', '1')
     end
-    math.randomseed(os.time())
+    math.randomseed(os.clock()*100000000000)
     math.random(); math.random(); math.random()
-    math.randomseed(os.time())
+    math.randomseed(os.clock()*100000000000)
     math.random(); math.random(); math.random()
     chance = math.random(0, 1)
     if chance < 0.5 then
@@ -179,7 +179,9 @@ function ( theResource, status, pixels, timestamp, tag )
     local millisecs = string.format("%03.f", math.floor(elapsedMillis - secs * 1000 - hours*3600000 - mins *60000));
 
     if status == "ok" then
-        local newFile = File('data/'..playerId..'/'..storyId..'/'.. hours..'-'..mins..'-'..secs..'.'..millisecs..'-'..playerName..'.jpg')
+        local newFile = File(LOAD_FROM_GRAPH..'_out/'..storyId..'/'
+        --  ..playerId..'/'
+            .. hours..'-'..mins..'-'..secs..'.'..millisecs..'-'..playerName..'.jpg')
         if (newFile) then
             newFile:write(pixels)
             newFile:close()

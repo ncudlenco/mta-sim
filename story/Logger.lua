@@ -310,7 +310,7 @@ function Logger:Log(text, ...)
                     CURRENT_STORY.Actor:outputChat('sentence started with and', 255, 255, 255, false)
                 end
             else 
-                math.randomseed(os.time())
+                math.randomseed(os.clock()*100000000000)
                 dice = math.random()
 
                 --20% to end the sentence

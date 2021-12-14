@@ -275,6 +275,14 @@ function Region.GetClosest(element, regions, isInstance)
     return closestRegion
 end
 
+function Region:SetRandomStaticCamera(player)
+    if STATIC_CAMERA and self.cameras and #self.cameras > 0 then
+        local cameraPos = PickRandom(self.cameras)
+        local story = GetStory(player)
+        story.Actor:setCameraMatrix(cameraPos.x, cameraPos.y, cameraPos.z, cameraPos.lx, cameraPos.ly, cameraPos.lz, cameraPos.roll, cameraPos.fov)
+    end
+end
+
 function Region:OnPlayerHit(player)
     if player:getData('storyEnded') then
         return
@@ -334,11 +342,12 @@ function Region:OnPlayerHit(player)
         end
         self.Episode.CurrentRegion = self
         --change the current camera
-        if STATIC_CAMERA and self.cameras and #self.cameras > 0 then
-            local cameraPos = PickRandom(self.cameras)
-            story.Actor:setCameraMatrix(cameraPos.x, cameraPos.y, cameraPos.z, cameraPos.lx, cameraPos.ly, cameraPos.lz, cameraPos.roll, cameraPos.fov)
+        if not self.Episode.firstRegionHit then
+            self:SetRandomStaticCamera(player)
+            player:fadeCamera (true)
+            self.Episode.firstRegionHit = true
         end
-    
+
         --If the region is not explored then describe the objects in it
         --if there are some players that weren't introduced before, then describe them
         local actorsDescription = story.Logger:DescribeRegion(self.name, actorsInRegions[self.Id])

@@ -7,9 +7,9 @@ StoryActionBase = class(IStoryItem, function(o, params)
     o.Prerequisites = params.prerequisites or params.Prerequisites or {}
     o.ClosingAction = params.closingAction or params.ClosingAction or nil
     o.NextAction = params.nextAction or params.NextAction or nil
-    math.randomseed(os.time())
+    math.randomseed(os.clock()*100000000000)
     math.random(); math.random(); math.random()
-    math.randomseed(os.time())
+    math.randomseed(os.clock()*100000000000)
     math.random(); math.random(); math.random()
     globalActionIdCounter = globalActionIdCounter + 1
     o.ActionId = globalActionIdCounter..''
@@ -30,4 +30,10 @@ function StoryActionBase:__eq(other)
 end
 
 function StoryActionBase:Apply(...)
+    local story = GetStory(self.Performer)
+    local regionId = self.Performer:getData('currentRegionId')
+    local region = FirstOrDefault(story.CurrentEpisode.Regions, function(r) return r.Id == regionId end)
+    if region then
+        region:SetRandomStaticCamera(self.Performer)
+    end
 end

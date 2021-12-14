@@ -93,6 +93,12 @@ function Move.destinationReached(player, matchingDimension)
 	end
 	removeEventHandler("onMarkerHit", source, destinationReached)
 	source:destroy()
+
+    local regionId = player:getData('currentRegionId')
+    local region = FirstOrDefault(story.CurrentEpisode.Regions, function(r) return r.Id == regionId end)
+    if region then
+        region:SetRandomStaticCamera(player)
+    end
 end
 
 function Move:Apply()
@@ -110,6 +116,8 @@ function Move:Apply()
     if DEBUG then
         outputConsole("Move:Apply")
     end
+
+    StoryActionBase.Apply(self) --TODO: make this call for each action
 
     self.path = {}
     findShortestPathBetween(

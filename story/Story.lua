@@ -43,7 +43,7 @@ function Story:Play()
         print("Story: Loading dynamic episodes..")
     end
 
-    math.randomseed(os.time())
+    math.randomseed(os.clock()*100000000000)
     math.random(); math.random(); math.random()
 
     for i,episode_name in ipairs(self.DynamicEpisodes) do

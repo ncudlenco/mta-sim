@@ -272,10 +272,10 @@ function Location:ProcessNextAction(player)
 
         --The interaction action will be executed only from the first actor
         if interactionProcessedMap[event.interactionRelation] then
-            local wait = Wait { performer = ped1, nextLocation = location, targetItem = ped2, graphId = CURRENT_STORY.CurrentEpisode.graphId, doNothing=true, time=10000000 }
+            local wait = Wait { performer = ped1, nextLocation = location, targetItem = ped2, doNothing=true, time=10000000 }
             eventAction = wait
         else
-            local wait = Wait { performer = ped1, nextLocation = location, targetItem = ped2, graphId = CURRENT_STORY.CurrentEpisode.graphId, doNothing=false, time=10000000 }
+            local wait = Wait { performer = ped1, nextLocation = location, targetItem = ped2, doNothing=false, time=10000000 }
             table.insert(actionsChain, wait)
             if event.Action == 'HandShake' then
                 eventAction = HandShake {performer = ped1, nextLocation = location, targetPlayer = ped2, targetItem = ped2, time = random(6000, 15000)}

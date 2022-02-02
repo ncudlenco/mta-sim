@@ -27,7 +27,7 @@ function UniqueStr(arr, func)
         if func then
             val = func(v, k)
         end
-        set[v] = true
+        set[val] = true
     end
     for k, v in pairs(set) do
         table.insert(res, k)
@@ -192,4 +192,15 @@ function notVeryDeepCopy(obj)
     local res = {}
     for k, v in pairs(obj) do res[notVeryDeepCopy(k)] = notVeryDeepCopy(v) end
     return res
+end
+
+function join(separator, arr)
+    local str = ''
+    for i,v in ipairs(arr) do
+        if str ~= '' then
+            str = str..separator
+        end
+        str = str..v
+    end
+    return str
 end

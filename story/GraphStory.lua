@@ -77,40 +77,6 @@ GraphStory = class(StoryBase, function(o, actor, logData)
     CURRENT_STORY = o
 end)
 
--- function GraphStory:GetLinkedEpisodes(currentEpisode, currentSubset)
---     if Any(currentSubset, function(e) return e.name == currentEpisode.name end) then
---         return {}
---     end
-
---     local unprocessedPoiWithLinks = Where(currentEpisode.POI, function(poi) #poi.episodeLinks > 0 &&
---         All(currentSubset, function(e) return ~Any(function(l) return l == e.name end)) 
---     end)
---     local localCombinations = {}
---     for _,poi in ipairs(unprocessedPoiWithLinks) do
---         local linkEpisodes = Select(poi.episodeLinks, function(eLink) return FirstOrDefault(self.Episodes, function(e) return e.name == eLink end) end)
---         if #localCombinations = 0 then
---             localCombinations = Select(linkEpisodes, function(e) return {e} end)
---         else
---             for _,c in ipairs(localCombinations) do
---                 for _,e in ipairs(linkEpisodes) do
---                     if ~Any(c, function(e) return c.name == e.name end) then
---                         table.insert(localCombinations, concat(c, {e}))
---                     end
---                 end
---             end
---         end
---     end
---     local mergedCombinations = {}
---     for _,combination in ipairs(localCombinations) do
---         for _, e in ipairs(combination) do
---             local res = self:GetLinkedEpisodes(e, combination, localCombinations)
---             for _,r in ipairs(res) do
---                 table.insert(mergedCombinations, concat(combination, r))
---             end
---         end
---     end
---     return mergedCombinations
--- end
 function GraphStory:ExploreValidEpisodeLinks(
     episode,
     requiredLocations,
@@ -118,15 +84,19 @@ function GraphStory:ExploreValidEpisodeLinks(
     requiredActions,
     currentSubset
 )
-    --assume current episode is already valid
-    local unprocessedPoiWithLinks = Where(currentEpisode.POI, function(poi) return #poi.episodeLinks > 0 and
+    --assume current episode is already valid (i.e it won't choose a location from which it can go back into a different house defined for randomness)
+    local unprocessedPoiWithLinks = Where(episode.POI, function(poi) return #poi.episodeLinks > 0 and
         All(currentSubset, function(e) return not Any(poi.episodeLinks, function(l) return l == e.name end) end)
     end)
     local linkedEpisodes = reduce(Select(unprocessedPoiWithLinks, 
         function(poi) return 
-            Select(poi.episodeLinks, function(eLink) return FirstOrDefault(self.Episodes, function(e) return e.name == eLink 
-        end)
-    end) end), {}, concat)
+            Select(poi.episodeLinks,
+                function(eLink) return
+                    FirstOrDefault(self.Episodes, function(e) return e.name == eLink end)
+                end
+            )
+        end
+    ), {}, concat)
     return self:ExploreValidEpisodesSubset(linkedEpisodes, requiredLocations, requiredObjects, requiredActions, currentSubset)
 end
 
@@ -137,24 +107,42 @@ function GraphStory:ExploreValidEpisodesSubset(
     requiredActions,
     currentSubset
 )
-    if #requiredLocations + #requiredObjects + #requiredActions == 0 then
-        return concat(currentSubset, {episode})
+    if DEBUG_VALIDATION then
+        print('Exploring '..join(';', Select(episodes, function(e) return e.name end)))
+        print('Required locations '..join(';', requiredLocations))
+        print('Required objects '..join(';', Select(requiredObjects, function(e) return e.name end)))
+        print('Required actions '..join(';', Select(requiredActions, function(e) return e.name..' - '..e.location..' -> '..(e.target or '') end)))
+    end
+    if (#requiredLocations + #requiredObjects + #requiredActions) == 0 then
+        return currentSubset
     elseif #episodes == 0 then
-        return nil
+        return {} --If I still have requirements by I don't have episodes left to evaluate then there's no valid episode subset
     else
-        local maxCoverData = self:GetMaxCoveringEpisode(episodes, requiredLocations, requiredObjects, requiredActions, currentSubset)
-        if maxCoverData and maxCoverData.maxScore and maxCoverData.episode then
-            return self:ExploreValidEpisodeLinks(
-                maxCoverData.episode,
-                maxCoverData.requiredLocations,
-                maxCoverData.requiredObjects,
-                maxCoverData.requiredActions,
-                concat(currentSubset, {episode})
-            )
-        else
-            return nil
+        local unexploredBucket = concat(episodes, {})
+        while (#unexploredBucket > 0) do
+            local maxCoverData = self:GetMaxCoveringEpisode(unexploredBucket, requiredLocations, requiredObjects, requiredActions, currentSubset)
+            if maxCoverData and maxCoverData.maxScore and maxCoverData.episode then
+                if DEBUG_VALIDATION then
+                    print('Max covering episode is '..maxCoverData.episode.name..' with a score of '..maxCoverData.maxScore.setCoverScore)
+                end
+                local validSubset = self:ExploreValidEpisodeLinks(
+                    maxCoverData.episode,
+                    maxCoverData.maxScore.requiredLocations,
+                    maxCoverData.maxScore.requiredObjects,
+                    maxCoverData.maxScore.requiredActions,
+                    concat(currentSubset, {maxCoverData.episode})
+                )
+                if #validSubset > 0 then
+                    return validSubset
+                else
+                    unexploredBucket = Where(unexploredBucket, function(e) return e ~= maxCoverData.episode end)
+                end
+            else
+                return {}  --If I still have requirements and episodes but there's no further valid episode => there's no valid episode subset
+            end
         end
     end
+    return {} --Couldn't find anything
 end
 
 function GraphStory:GetMaxCoveringEpisode(
@@ -164,13 +152,19 @@ function GraphStory:GetMaxCoveringEpisode(
     requiredActions,
     currentSubset
 )
+if DEBUG_VALIDATION then
+    print('GetMaxCoveringEpisode from '..join(';', Select(episodes, function(e) return e.name end)))
+    print('Required locations '..join(';', requiredLocations))
+    print('Required objects '..join(';', Select(requiredObjects, function(e) return e.name end)))
+    print('Required actions '..join(';', Select(requiredActions, function(e) return e.name..' - '..e.location..' -> '..(e.target or '') end)))
+end
     --Greedy select the episode covering the max nr of requirements
     local maxScore = nil
     local maxScoreEpisodes = {}
     for i,episode in ipairs(episodes) do
         local score = self:ValidateEpisode(episode, requiredLocations, requiredObjects, requiredActions)
         if maxScore == nil or score.setCoverScore >= maxScore.setCoverScore then
-            if maxScore ~= score then
+            if maxScore == nil or maxScore.setCoverScore ~= score.setCoverScore then
                 maxScoreEpisodes = {episode}
             else
                 table.insert(maxScoreEpisodes, episode)
@@ -179,7 +173,11 @@ function GraphStory:GetMaxCoveringEpisode(
         end
     end
 
-    return {maxScore = maxScore, episode = PickRandom(maxScoreEpisodes)}
+    if maxScore.setCoverScore > 0 then
+        return {maxScore = maxScore, episode = PickRandom(maxScoreEpisodes)}
+    else
+        return nil
+    end
 end
 
 function GraphStory:ValidateEpisode(
@@ -188,93 +186,110 @@ function GraphStory:ValidateEpisode(
     requiredObjects,
     requiredActions
 )
-    if self.validMemo[episode.name] then
-        return self.validMemo[episode.name]
+    -- if self.validMemo[episode.name] then --The memo id is not correct because the requirements list changes over time
+    --     return self.validMemo[episode.name]
+    -- end
+
+    if DEBUG_VALIDATION then
+        print('ValidateEpisode '..episode.name)
+        print('Required locations '..join(';', requiredLocations))
+        print('Required objects '..join(';', Select(requiredObjects, function(e) return e.name end)))
+        print('Required actions '..join(';', Select(requiredActions, function(e) return e.name..' - '..e.location..' -> '..(e.target or '') end)))
     end
 
-    local validLocations = Select(requiredLocations, function(rl)
+    local validLocations = Where(requiredLocations, function(rl)
         return Any(episode.Regions, function(region) return region.name:lower():find(rl:lower()) and true or false end)
     end)
+    print('validLocations locations '..join(';', validLocations))
+
     local validObjects = {}
     local validActions = {}
     local setCoverScore = 0
     local res = nil
 
-    if Any(validLocations) then
+    if Any(validLocations) or #requiredLocations == 0 then
         if not episode.initialized and true or false then
             episode:Initialize(self.Actor, true)
         end
-        if DEBUG then
+        if DEBUG_VALIDATION then
             print '---------------------------------------------started processing regions----------------------------------------'
         end
         if not episode.processedRegions and true or false then
             episode:ProcessRegions()
         end
-        if DEBUG then
+        if DEBUG_VALIDATION then
             print '---------------------------------------------finished processing regions----------------------------------------'
         end
         --now I have for all POI and objects the location set
         local objectMap = {}
         local reverseObjectMap = {}
-        print('Required objects nr '..#requiredObjects)
-        validObjects = Select(requiredObjects, function(ro) 
-            print(ro.name or 'NULL REQUIRED OBJECT NAME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+        if DEBUG_VALIDATION then
+            print('Required objects nr '..#requiredObjects)
+        end
+        validObjects = Where(requiredObjects, function(ro) 
+            print(ro.name or 'WARNING: OBJECT NAME WAS NULL BUT IT IS REQUIRED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
             local r = FirstOrDefault(episode.Objects, function(o) 
-                print(o.type:lower()..' vs '..ro.name:lower())
-                return 
-                not objectMap[o.ObjectId] and o.type:lower() == ro.name:lower() and 
+                if DEBUG_VALIDATION then
+                    print(o.type:lower()..' vs '..ro.name:lower())
+                end
+                return not objectMap[o.ObjectId] and o.type:lower() == ro.name:lower() and 
                 (o and o.Region and o.Region.name and o.Region.name:lower():find(ro.location:lower()) and true or false)
             end)
             if r then
                 objectMap[r.ObjectId] = ro.id
-                if DEBUG then
+                if DEBUG_VALIDATION then
                     print('!!!!!!!!!!!!!!!!!!!!!!Mapped '..r.ObjectId..' to '..ro.id)
                 end
                 reverseObjectMap[ro.id] = r.ObjectId
             else
-                print('!!!!!!!!!!!!!!!!!!!!!!Not mapped '..ro.id)
+                if DEBUG_VALIDATION then
+                    print('!!!!!!!!!!!!!!!!!!!!!!Not mapped '..ro.id)
+                end
             end
             r = r or Any(self.SpawnableObjects, function(o) return o:lower() == ro.name:lower() end)
             if r then
                 reverseObjectMap[ro.id] = 'spawnable'
             end
-            if not r and DEBUG then
+            if not r and DEBUG_VALIDATION then
                 print('Episode '..episode.name..' was discarded because the object '..ro.name..' does not exist in region '..ro.location..' or at all')
             end
-            return r
+            return r and true or false
         end)
-        if Any(validObjects) then
-            validActions = Select(requiredActions, function(ra) 
-                local res = Any(self.Interactions, function(a) return a:lower() == ra.name:lower() end) or Any(episode.POI, function(poi) 
-                    if DEBUG then
-                        if poi.Region then
-                            print('***'..poi.Region.name..'')
-                        else
-                            print('***!!'..poi.Description..' does not have a region')
-                        end
-                    end
+        if Any(validObjects) or #requiredObjects == 0 then
+            validActions = Where(requiredActions, function(ra) 
+                local res = Any(self.Interactions, function(a) return a:lower() == ra.name:lower() end) or Any(episode.POI,
+                    function(poi)
+                        -- if DEBUG_VALIDATION then
+                        --     if poi.Region then
+                        --         print('***'..poi.Region.name..'')
+                        --     else
+                        --         print('***!!'..poi.Description..' does not have a region')
+                        --     end
+                        -- end
                     return 
                         poi.Region and
                         Any(poi.allActions, function(a) 
-                            if DEBUG then
-                                print('**********'..a.Name)
-                                if a.TargetItem and a.TargetItem.ObjectId then
-                                    print('**********->'..a.TargetItem.ObjectId)
-                                end
-                            end
+                            -- if DEBUG_VALIDATION then
+                            --     print('**********'..a.Name)
+                            --     if a.TargetItem and a.TargetItem.ObjectId then
+                            --         print('**********->'..a.TargetItem.ObjectId)
+                            --     elseif a.TargetItem and a.TargetItem.Region then
+                            --         print('**********->'..a.TargetItem.Region.name)
+                            --     end
+                            -- end
                             return a.Name:lower() == ra.name:lower() and (ra.name == 'Move' or a.TargetItem.ObjectId and objectMap[a.TargetItem.ObjectId])
                         end) 
                         and (poi.Region.name:lower():find(ra.location:lower()) and true or false )
                     end)  
 
-                if not res and DEBUG then
-                    print('Episode '..episode.name..' was discarded because the action '..ra.name..' with target '..(ra.target or '')..' does not exist in region '..ra.location..' or at all')
+                if not res and DEBUG_VALIDATION then
+                    print('Episode '..episode.name..' - the action '..ra.name..' with target '..(ra.target or '')..' does not exist in region '..ra.location..' or at all')
                 end
 
                 return res
             end)
-            if Any(validActions) then
-                if DEBUG then
+            if Any(validActions) or #requiredActions == 0 then
+                if DEBUG_VALIDATION then
                     setCoverScore = #validLocations + #validObjects + #validActions
                     print('Episode '..episode.name..' is valid with a score of '..setCoverScore)
                 end
@@ -318,11 +333,25 @@ function GraphStory:GetValidEpisodes()
     if DEBUG then
         print("GraphStory:GetValidEpisodes: retrieving a list of all the locations in the input graph")
     end
-    local requiredLocations = Where(UniqueStr(Flatten(Select(Where(self.graph, function(event)
-        return event.Location and true or false --converts to bool 
-    end), function(event)
-        return event.Location
-    end))), function(item) return item and item ~= "" end)
+    local requiredLocations = Where(
+        UniqueStr(
+            Flatten(
+                Select(
+                    Where(self.graph,
+                        function(event)
+                            return event.Location ~= nil --converts to bool 
+                        end
+                    ),
+                    function(event)
+                        return event.Location
+                    end
+                )
+            )
+        ),
+        function(item)
+            return item and item ~= ""
+        end
+    )
     if DEBUG then
         for _,v in pairs(requiredLocations) do
             print(v)
@@ -356,7 +385,7 @@ function GraphStory:GetValidEpisodes()
 
         table.insert(self.AllEpisodes, episode)
     end
-    print('---------------------------------------------finished GetValidEpisodes: '..#validEpisodes..' found----------------------------------------')
+    print('---------------------------------------------finished GetValidEpisodes: {'..join(';', Select(validEpisodesSubset, function(e) return e.name end))..'} found----------------------------------------')
 --find all episodes which contain all the required locations
 --and all the required actions
     return Where(self.AllEpisodes, function(e) return Any(validEpisodesSubset, function(ve) return ve.name == e.name end) end)
@@ -374,7 +403,6 @@ function GraphStory:Play()
     math.random(); math.random(); math.random()
     self.Episodes = self:GetValidEpisodes()
     if (not self.Episodes or #self.Episodes == 0) then
-        -- error("We could not find any valid episodes")
         outputConsole("We could not find any valid episodes")
         terminatePlayer(self.Actor, "We could not find any valid episodes")
         return
@@ -465,9 +493,8 @@ function GraphStory:Play()
         end
         math.randomseed(os.clock()*100000000000)
         math.random(); math.random(); math.random()
-        self.CurrentEpisode = PickRandom(self.Episodes) --Incorrect
+        self.CurrentEpisode = MetaEpisode(self.Episodes) 
         print(self.CurrentEpisode.name)
-        --TODO: initialization for a subset of episodes or merge the subset of episodes into a meta episode
         self.CurrentEpisode:Initialize(self.Actor, false, requiredActors, self.graph)
         
         self.Actor:setData('pickedObjects', {})
@@ -475,7 +502,6 @@ function GraphStory:Play()
         if DEBUG then
             print("GraphStory:Play - chosen valid skin and episode. Playing episode")
         end
-        self.CurrentEpisode:ProcessRegions()
         self:ProcessActions(requiredActors)
 
         --TODO: play only episodes which have a starting location

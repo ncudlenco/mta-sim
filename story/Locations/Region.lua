@@ -130,7 +130,7 @@ function Region:MapObjectsAndPedsLocations(pointOfView, forward, up)
     for _,o in ipairs(self.Objects) do
         mapElement(o)
     end
-    for _,ped in ipairs(self.Episode.peds) do
+    for _,ped in ipairs(CURRENT_STORY.CurrentEpisode.peds) do
         if ped:getData('currentRegionId') == self.Id then
             mapElement(ped, true)
         end
@@ -278,8 +278,9 @@ end
 function Region:SetRandomStaticCamera(player)
     if STATIC_CAMERA and self.cameras and #self.cameras > 0 then
         local cameraPos = PickRandom(self.cameras)
-        local story = GetStory(player)
+        local story = CURRENT_STORY
         story.Actor:setCameraMatrix(cameraPos.x, cameraPos.y, cameraPos.z, cameraPos.lx, cameraPos.ly, cameraPos.lz, cameraPos.roll, cameraPos.fov)
+        story.Actor.interior = self.Episode.InteriorId
     end
 end
 
@@ -295,13 +296,14 @@ function Region:OnPlayerHit(player)
     local previousRegionId = player:getData('currentRegionId')
     player:setData('currentRegion', self.name)
     player:setData('currentRegionId', self.Id)
-    local story = GetStory(player)
+    player:setData('currentEpisode', self.Episode.name)
+    local story = CURRENT_STORY
 
     if self.EvaluatingRegion then
         return
     end
     print('Region: Region is not being evaluated')
-    if self.Episode.CurrentRegion == self then
+    if CURRENT_STORY.CurrentEpisode.CurrentRegion == self then
         return
     end
     print('Region: Region is not duplicated')
@@ -319,9 +321,9 @@ function Region:OnPlayerHit(player)
             actorsInRegions[maxRegionId] = {story.Actor}
         end
 
-        for _,ped in ipairs(self.Episode.peds) do
+        for _,ped in ipairs(CURRENT_STORY.CurrentEpisode.peds) do
             local rid = ped:getData('currentRegionId')
-            local region = FirstOrDefault(self.Episode.Regions, function(r) return r.Id == rid end)
+            local region = FirstOrDefault(CURRENT_STORY.CurrentEpisode.Regions, function(r) return r.Id == rid end)
             if not actorsInRegions[rid] then
                 actorsInRegions[rid] = {ped}
             else
@@ -340,12 +342,12 @@ function Region:OnPlayerHit(player)
         else
             print('Region: Max region id is current')
         end
-        self.Episode.CurrentRegion = self
+        CURRENT_STORY.CurrentEpisode.CurrentRegion = self
         --change the current camera
-        if not self.Episode.firstRegionHit then
+        if not CURRENT_STORY.CurrentEpisode.firstRegionHit then
             self:SetRandomStaticCamera(player)
-            player:fadeCamera (true)
-            self.Episode.firstRegionHit = true
+            CURRENT_STORY.Actor:fadeCamera (true)
+            CURRENT_STORY.CurrentEpisode.firstRegionHit = true
         end
 
         --If the region is not explored then describe the objects in it

@@ -17,6 +17,10 @@ StoryEpisodeBase = class(function(o, params)
     o.supertemplates = params.supertemplates or {}
 end)
 
+function StoryEpisodeBase:__eq(other)
+    return other and other:is_a(StoryEpisodeBase) and self.name == other.name and self.InteriorId == other.InteriorId
+end
+
 function StoryEpisodeBase:Initialize(...)
     if not DEFINING_EPISODES then
         local player = nil
@@ -277,14 +281,6 @@ function StoryEpisodeBase:Play(...)
 end
 
 function StoryEpisodeBase:Destroy()
-   -- outputChatBox(self)
-   -- outputChatBox(CURRENT_STORY)
-    --for _, ped in ipairs(self.peds) do
-     --   outputChatBox(CURRENT_STORY)
-      --  CURRENT_STORY.Logger:FlushBuffer(ped, true)
-    --end
-   -- CURRENT_STORY.Logger:FlushBuffer(CURRENT_STORY.Actor, true)
-
     if self.regionsGroup then
         self.regionsGroup:destroy() --should also handle the events defined for this element
         self.regionsGroup = nil

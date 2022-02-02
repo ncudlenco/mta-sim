@@ -119,6 +119,13 @@ function Move:Apply()
 
     StoryActionBase.Apply(self) --TODO: make this call for each action
 
+    if self.TargetItem.Region and self.TargetItem.Region.Episode.name ~= self.Performer:getData('currentEpisode') then
+        --teleport the player
+        self.Performer.position = self.TargetItem.position
+        self.Performer.interior = self.TargetItem.Region.Episode.InteriorId
+        self.TargetItem.Region:SetRandomStaticCamera(player)
+    end
+
     --TODO: set on POI a property: episode_id (ex. garden)
     --set on each actor a property: episode
     --if the current actor's episode is not the same as the targetItem episode then

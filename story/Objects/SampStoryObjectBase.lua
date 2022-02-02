@@ -139,7 +139,6 @@ function SampStoryObjectBase:getData(key)
 end
 
 function SampStoryObjectBase:Create(...)
-    print(self.modelid)
     self.instance = Object(self.modelid, self.position, self.rotation, self.noCollisions)
     self.instance:setInterior(self.interior)
 

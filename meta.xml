@@ -177,6 +177,7 @@
   <script src="story/Episodes/House10.lua" type="server" />
   <script src="story/Episodes/House12.lua" type="server" />
   <script src="story/Episodes/DynamicEpisode.lua" type="shared" />
+  <script src="story/Episodes/MetaEpisode.lua" type="shared" />
   <!-- Story main items -->
   <script src="story/Player.lua" type="server" />
   <script src="story/Story.lua" type="shared" />

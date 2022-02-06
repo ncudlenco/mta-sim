@@ -12,7 +12,7 @@ function TalkPhone:Apply()
     time = random(5000, 15000)
 
     -- I didn't see how you can iteract with other phones, only mobile ones, so I assume there is no need for an object specific description.
-    story.Logger:Log(self.Description, self, false, true, {"finishes", "finishes talking"})
+    StoryActionBase.GetLogger(self, story):Log(self.Description, self, false, true, {"finishes", "finishes talking"})
     self.Performer:setAnimation("PED", "PHONE_TALK", time, true, true, false, true)
 
     if DEBUG then

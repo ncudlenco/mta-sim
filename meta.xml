@@ -30,6 +30,7 @@
   <file src="files/data/CocktailGlass1.dff" type="client" />
   <!-- Client -->
   <script src="client/Handlers.lua" type="shared"/>
+  <script src="client/Debug.lua" type="client"/>
   <script src="client/EngineLoader.lua" type="client" />
   <!-- Generic utils -->
   <script src="utils/class.lua" type="shared"/>

@@ -5,14 +5,6 @@ House12 = class(StoryEpisodeBase, function(o)
 end)
 
 function House12:Initialize(...)
-    local player = nil
-    for i,v in ipairs(arg) do
-        player = v
-        break
-    end
-    if player == nil then
-        return false
-    end
 
     local livingroomSofa1 = Sofa {
         modelid = Sofa.eModel.Couch02,
@@ -145,100 +137,100 @@ function House12:Initialize(...)
     
     self.POI = {livingRoomSofa1Location, livingRoomSofa2Location, livingRoomChairLocation, kitchenSinkLocation, kitchenTableLocation1, kitchenTableLocation2, bedroom1BedLocation, bedroom2BedLocation, livingRoomEntranceLocation}  
     -- sit on sofa1
-    local sitOnSofa1Action = SitDown {how = SitDown.eHow.onSofa, performer = player, nextLocation = livingRoomSofa1Location, targetItem = livingroomSofa1, rotation = Vector3(0,0,90), graphId = self.graphId}
+    local sitOnSofa1Action = SitDown {how = SitDown.eHow.onSofa, nextLocation = livingRoomSofa1Location, targetItem = livingroomSofa1, rotation = Vector3(0,0,90), graphId = self.graphId}
     table.insert(livingRoomSofa1Location.PossibleActions, sitOnSofa1Action)
-    local standUpSofa1Action = StandUp {how = StandUp.eHow.fromSofa, performer = player, nextLocation = livingRoomSofa1Location, targetItem = livingroomSofa1, graphId = self.graphId}
+    local standUpSofa1Action = StandUp {how = StandUp.eHow.fromSofa, nextLocation = livingRoomSofa1Location, targetItem = livingroomSofa1, graphId = self.graphId}
     sitOnSofa1Action.NextAction = standUpSofa1Action
     sitOnSofa1Action.ClosingAction = standUpSofa1Action
 
     livingRoomSofa1Location.allActions = {sitOnSofa1Action, standUpSofa1Action}
     -- sit on sofa2
-    local sitOnSofa2Action = SitDown {how = SitDown.eHow.onSofa, performer = player, nextLocation = livingRoomSofa2Location, targetItem = livingroomSofa2, rotation = Vector3(0,0,270), graphId = self.graphId}
+    local sitOnSofa2Action = SitDown {how = SitDown.eHow.onSofa, nextLocation = livingRoomSofa2Location, targetItem = livingroomSofa2, rotation = Vector3(0,0,270), graphId = self.graphId}
     table.insert(livingRoomSofa2Location.PossibleActions, sitOnSofa2Action)
-    local standUpSofa2Action = StandUp {how = StandUp.eHow.fromSofa, performer = player, nextLocation = livingRoomSofa2Location, targetItem = livingroomSofa2, graphId = self.graphId}
+    local standUpSofa2Action = StandUp {how = StandUp.eHow.fromSofa, nextLocation = livingRoomSofa2Location, targetItem = livingroomSofa2, graphId = self.graphId}
     sitOnSofa2Action.NextAction = standUpSofa2Action
     sitOnSofa2Action.ClosingAction = standUpSofa2Action
 
     livingRoomSofa2Location.allActions = {sitOnSofa2Action, standUpSofa2Action}
 
     -- sit on chair
-    local sitDownLivingRoomChairAction = SitDown {how = SitDown.eHow.atDesk, performer = player, nextLocation = livingRoomChairLocation, targetItem = livingroomChair, rotation = Vector3(0,0,0), graphId = self.graphId}
+    local sitDownLivingRoomChairAction = SitDown {how = SitDown.eHow.atDesk, nextLocation = livingRoomChairLocation, targetItem = livingroomChair, rotation = Vector3(0,0,0), graphId = self.graphId}
     table.insert(livingRoomChairLocation.PossibleActions, sitDownLivingRoomChairAction)
-    local openLaptopAction = OpenLaptop{performer = player, nextLocation = livingRoomChairLocation, targetItem = laptop }
+    local openLaptopAction = OpenLaptop{nextLocation = livingRoomChairLocation, targetItem = laptop }
     sitDownLivingRoomChairAction.NextAction = openLaptopAction
-    local writeOnLaptop = TypeOnKeyboard{performer = player, nextLocation = livingRoomChairLocation, targetItem = laptop }
+    local writeOnLaptop = TypeOnKeyboard{nextLocation = livingRoomChairLocation, targetItem = laptop }
     openLaptopAction.NextAction = writeOnLaptop
-    local layOnElbow = LayOnElbow{performer = player, nextLocation = livingRoomChairLocation, targetItem = laptop }
+    local layOnElbow = LayOnElbow{nextLocation = livingRoomChairLocation, targetItem = laptop }
     writeOnLaptop.NextAction = layOnElbow
-    local writeOnLaptop2 = TypeOnKeyboard{performer = player, nextLocation = livingRoomChairLocation, targetItem = laptop }
+    local writeOnLaptop2 = TypeOnKeyboard{nextLocation = livingRoomChairLocation, targetItem = laptop }
     layOnElbow.NextAction = writeOnLaptop2
-    local closeLaptopAction = CloseLaptop{performer = player, nextLocation = livingRoomChairLocation, targetItem = laptop }
+    local closeLaptopAction = CloseLaptop{nextLocation = livingRoomChairLocation, targetItem = laptop }
     writeOnLaptop2.NextAction = closeLaptopAction
-    local standUpLivingRoomChairAction = StandUp {how = StandUp.eHow.fromDesk, performer = player, nextLocation = livingRoomChairLocation, targetItem = livingroomChair, graphId = self.graphId}
+    local standUpLivingRoomChairAction = StandUp {how = StandUp.eHow.fromDesk, nextLocation = livingRoomChairLocation, targetItem = livingroomChair, graphId = self.graphId}
     closeLaptopAction.NextAction = standUpLivingRoomChairAction
     sitDownLivingRoomChairAction.ClosingAction = standUpLivingRoomChairAction
 
     livingRoomChairLocation.allActions = {sitDownLivingRoomChairAction, openLaptopAction, writeOnLaptop, layOnElbow, writeOnLaptop2, closeLaptopAction, standUpLivingRoomChairAction}
     -- kitchen actions
-    local pickUpDrinkAction = PickUp {performer = player, nextLocation = kitchenTableLocation1, targetItem = drink1, where = "the kitchen counter", targetObjectExists = true, how = PickUp.eHow.Normal, hand = PickUp.eHand.Left, graphId = self.graphId}
+    local pickUpDrinkAction = PickUp {nextLocation = kitchenTableLocation1, targetItem = drink1, where = "the kitchen counter", targetObjectExists = true, how = PickUp.eHow.Normal, hand = PickUp.eHand.Left, graphId = self.graphId}
     table.insert(kitchenTableLocation1.PossibleActions, pickUpDrinkAction)
-    local drinkAction = Drink {performer = player, nextLocation = kitchenTableLocation1, targetItem = drink1, graphId = self.graphId}
+    local drinkAction = Drink {nextLocation = kitchenTableLocation1, targetItem = drink1, graphId = self.graphId}
     pickUpDrinkAction.NextAction = drinkAction
-    local putDownDrinkAction = PutDown {performer = player, nextLocation = kitchenTableLocation1, targetItem = drink1, where = "the kitchen counter", targetObjectPosition = Vector3(2331.306640625, -1140.846923828125, 1050.775),
+    local putDownDrinkAction = PutDown {nextLocation = kitchenTableLocation1, targetItem = drink1, where = "the kitchen counter", targetObjectPosition = Vector3(2331.306640625, -1140.846923828125, 1050.775),
                                        targetObjectRotation = Vector3(0, 0, 0), graphId = self.graphId}
     drinkAction.NextAction = putDownDrinkAction
     pickUpDrinkAction.ClosingAction = putDownDrinkAction
 
     kitchenTableLocation1.allActions = {pickUpDrinkAction, drinkAction, putDownDrinkAction}
-    local washhandsKitchenSinkAction = WashHands {performer = player, nextLocation = kitchenSinkLocation, targetItem = kitchenSinkLocation, graphId = self.graphId}
+    local washhandsKitchenSinkAction = WashHands {nextLocation = kitchenSinkLocation, targetItem = kitchenSinkLocation, graphId = self.graphId}
     table.insert(kitchenSinkLocation.PossibleActions, washhandsKitchenSinkAction)
     
     kitchenSinkLocation.allActions = {washhandsKitchenSinkAction}
 
-    local pickUpDrinkAction2 = PickUp {performer = player, nextLocation = kitchenTableLocation2, targetItem = drink2, where = "the kitchen counter", targetObjectExists = true, how = PickUp.eHow.Normal, hand = PickUp.eHand.Left, graphId = self.graphId}
+    local pickUpDrinkAction2 = PickUp {nextLocation = kitchenTableLocation2, targetItem = drink2, where = "the kitchen counter", targetObjectExists = true, how = PickUp.eHow.Normal, hand = PickUp.eHand.Left, graphId = self.graphId}
     table.insert(kitchenTableLocation2.PossibleActions, pickUpDrinkAction2)
-    local drinkAction2 = Drink {performer = player, nextLocation = kitchenTableLocation2, targetItem = drink2, graphId = self.graphId}
+    local drinkAction2 = Drink {nextLocation = kitchenTableLocation2, targetItem = drink2, graphId = self.graphId}
     pickUpDrinkAction2.NextAction = drinkAction2
-    local putDownDrinkAction2 = PutDown {performer = player, nextLocation = kitchenTableLocation2, targetItem = drink2, where = "the kitchen counter", targetObjectPosition = Vector3(2331.306640625, -1140.846923828125, 1050.775),
+    local putDownDrinkAction2 = PutDown {nextLocation = kitchenTableLocation2, targetItem = drink2, where = "the kitchen counter", targetObjectPosition = Vector3(2331.306640625, -1140.846923828125, 1050.775),
                                        targetObjectRotation = Vector3(0, 0, 0), graphId = self.graphId}
     drinkAction2.NextAction = putDownDrinkAction2
     pickUpDrinkAction2.ClosingAction = putDownDrinkAction2
 
     kitchenTableLocation2.allActions = {pickUpDrinkAction2, drinkAction2, putDownDrinkAction2}
     -- bedroom 1 actions
-    -- local opendoorBedRoom1Location = OpenDoor { performer = player, nextLocation = bedroom1BedLocation, targetItem = bedroom1BedLocation, how = OpenDoor.eHow.Enter, graphId = self.graphId }
+    -- local opendoorBedRoom1Location = OpenDoor { nextLocation = bedroom1BedLocation, targetItem = bedroom1BedLocation, how = OpenDoor.eHow.Enter, graphId = self.graphId }
     -- table.insert(bedroom1EntranceLocation.PossibleActions, opendoorBedRoom1Location)
 
-    local getInBed1Action = GetOn{performer = player, targetItem = bedroom1Bed, nextLocation = bedroom1BedLocation, how = GetOn.eHow.Bed, side = GetOn.eSide.Left, graphId = self.graphId}
+    local getInBed1Action = GetOn{targetItem = bedroom1Bed, nextLocation = bedroom1BedLocation, how = GetOn.eHow.Bed, side = GetOn.eSide.Left, graphId = self.graphId}
     table.insert(bedroom1BedLocation.PossibleActions, getInBed1Action)
-    local slee1pAction = Sleep { nextLocation = bedroom1BedLocation, performer = player, targetItem = bedroom1Bed, how = Sleep.eHow.Left, graphId = self.graphId}
+    local slee1pAction = Sleep { nextLocation = bedroom1BedLocation, targetItem = bedroom1Bed, how = Sleep.eHow.Left, graphId = self.graphId}
     getInBed1Action.NextAction = slee1pAction
-    local getOffBed1Action = GetOff{performer = player, targetItem = bedroom1Bed, nextLocation = bedroom1BedLocation,  how = GetOff.eHow.Bed, side = GetOff.eSide.Left, graphId = self.graphId}
+    local getOffBed1Action = GetOff{targetItem = bedroom1Bed, nextLocation = bedroom1BedLocation,  how = GetOff.eHow.Bed, side = GetOff.eSide.Left, graphId = self.graphId}
     slee1pAction.NextAction = getOffBed1Action
     getInBed1Action.ClosingAction = getOffBed1Action
 
     bedroom1BedLocation.allActions = {getInBed1Action, slee1pAction, getOffBed1Action}
-    -- local moveToBedroom1ExitAction = Move { performer = player, nextLocation = bedroom1ExitLocation, targetItem = bedroom1ExitLocation, graphId = self.graphId}
+    -- local moveToBedroom1ExitAction = Move { nextLocation = bedroom1ExitLocation, targetItem = bedroom1ExitLocation, graphId = self.graphId}
     -- getOffBed1Action.NextAction = moveToBedroom1ExitAction
 
-    -- local openBedroom1DoorAction2 = OpenDoor {performer = player, nextLocation = bedroom1EntranceLocation2, targetItem = bedroom1EntranceLocation2, how = OpenDoor.eHow.Exit, graphId = self.graphId}
+    -- local openBedroom1DoorAction2 = OpenDoor {nextLocation = bedroom1EntranceLocation2, targetItem = bedroom1EntranceLocation2, how = OpenDoor.eHow.Exit, graphId = self.graphId}
     -- table.insert(bedroom1ExitLocation.PossibleActions, openBedroom1DoorAction2)
 
     -- bedroom 2 actions
-    -- local opendoorBedRoom2Location = OpenDoor { performer = player, nextLocation = bedroom2BedLocation, targetItem = bedroom2BedLocation, how = OpenDoor.eHow.Enter, graphId = self.graphId }
+    -- local opendoorBedRoom2Location = OpenDoor { nextLocation = bedroom2BedLocation, targetItem = bedroom2BedLocation, how = OpenDoor.eHow.Enter, graphId = self.graphId }
     -- table.insert(bedroom2EntranceLocation.PossibleActions, opendoorBedRoom2Location)
 
-    local getInBed2Action =  GetOn{performer = player, targetItem = bedroom2Bed, nextLocation = bedroom2BedLocation, how = GetOn.eHow.Bed, side = GetOn.eSide.Left, graphId = self.graphId}
+    local getInBed2Action =  GetOn{targetItem = bedroom2Bed, nextLocation = bedroom2BedLocation, how = GetOn.eHow.Bed, side = GetOn.eSide.Left, graphId = self.graphId}
     table.insert(bedroom2BedLocation.PossibleActions, getInBed2Action)
-    local slee2pAction = Sleep { nextLocation = bedroom2BedLocation, performer = player, targetItem = bedroom2Bed, how = Sleep.eHow.Left, graphId = self.graphId}
+    local slee2pAction = Sleep { nextLocation = bedroom2BedLocation, targetItem = bedroom2Bed, how = Sleep.eHow.Left, graphId = self.graphId}
     getInBed2Action.NextAction = slee2pAction
-    local getOffBed2Action = GetOff{performer = player, targetItem = bedroom2Bed, nextLocation = bedroom2BedLocation,  how = GetOff.eHow.Bed, side = GetOff.eSide.Left, graphId = self.graphId}
+    local getOffBed2Action = GetOff{targetItem = bedroom2Bed, nextLocation = bedroom2BedLocation,  how = GetOff.eHow.Bed, side = GetOff.eSide.Left, graphId = self.graphId}
     slee2pAction.NextAction = getOffBed2Action
     getInBed2Action.ClosingAction = getOffBed2Action
 
     bedroom2BedLocation.allActions = {getInBed2Action, slee2pAction, getOffBed2Action}
 
-    -- local openBedroom2DoorAction2 = OpenDoor {performer = player, nextLocation = bedroom2EntranceLocation2, targetItem = bedroom2EntranceLocation2, how = OpenDoor.eHow.Exit, graphId = self.graphId}
+    -- local openBedroom2DoorAction2 = OpenDoor {nextLocation = bedroom2EntranceLocation2, targetItem = bedroom2EntranceLocation2, how = OpenDoor.eHow.Exit, graphId = self.graphId}
     -- table.insert(bedroom2ExitLocation.PossibleActions, openBedroom2DoorAction2)
 
     StoryEpisodeBase.Initialize(self, unpack(arg))

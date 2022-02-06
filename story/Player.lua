@@ -1,100 +1,62 @@
-function initializePlayer(source)
+
+function startSimulation()
+    SCREENSHOTS = {}
+    CURRENT_STORY = nil
+    if LOAD_FROM_GRAPH and #INPUT_GRAPHS > 0 then
+        LOAD_FROM_GRAPH = INPUT_GRAPHS[1]
+    end
+    if not FREE_ROAM and LOAD_FROM_GRAPH then
+        CURRENT_STORY = GraphStory(SPECTATORS, LOG_DATA)
+    else
+        CURRENT_STORY = Story(source, MAX_ACTIONS, LOG_DATA)
+    end
+
+    Timer(function()
+        CURRENT_STORY:Play()
+    end, 2000, 1)
+end
+
+function initializeSpectator(source)
     source:fadeCamera (false)
     source:setHudComponentVisible("all", false)
+
     --Set a player specific id to be able to differentiate between players the logged data
     local g = Guid()
     source:setData("id", g.Id)
     source:setData("isPed", false)
     math.randomseed(os.clock()*100000000000)
     math.random(); math.random(); math.random()
-    
-    SCREENSHOTS = {}
-    CURRENT_STORY = nil
-    GRAPH = {}
     source:setData('takenShots', 0)
-    if LOAD_FROM_GRAPH and #INPUT_GRAPHS > 0 then
-        LOAD_FROM_GRAPH = INPUT_GRAPHS[1]
-    end
-    if not FREE_ROAM and LOAD_FROM_GRAPH then
-        CURRENT_STORY = GraphStory(source, LOG_DATA)
-    else
-        CURRENT_STORY = Story(source, MAX_ACTIONS, LOG_DATA)
-    end
+    source:setData('spawned', false)
+
     if DEBUG then
         outputConsole("New player joined the server. Id ".. source:getData('id') .. " story id " .. source:getData('storyId'))
     end
---OLD IDEA: add parameters for actionbase:
--- TopologicalOrder; stats consumed; stats rewarded; 
---implement server side episode json with points of interest and in each point of interest define possible action
-    --Set the player's needs
-    --basic needs -> physiological needs
-    --health, hunger, thirst, rest
-    --psychological needs -> belongingness and love needs
-    --socializing --talking with friends, going to a restaurant with them
-    --love --going to a date, kissing, giving gifts, hugging, walking while holding hands
-    --fun --watching TV, going 
-    --psychological needs -> esteem needs
-    --money --prestige, accomplishment
-    --prestige --having low body fat, high body muscle and stamina, lung capacity, having an expensive car, expensive clothes, expensive house
-    --self-fulfillment -> achieving one's full potential, including creative activities
-    -- if DEBUG then
-    --     outputConsole("Initializing player needs...")
-    -- end
-    -- for i, a in pairs(NEEDS) do
-    --     if a then 
-    --         a:setRandomForPlayer(source)
-    --     end
-    -- end
-    math.randomseed(os.clock()*100000000000)
-    math.random(); math.random(); math.random()
-    math.randomseed(os.clock()*100000000000)
-    math.random(); math.random(); math.random()
-    local chance = math.random(0, 1)
-    if chance < 0.5 then
-        source:setData('inventory_1', 'phone')
-        source:setData('inventory', '1')
+
+    table.insert(SPECTATORS, source)
+    source:setData("id", "spectator"..#SPECTATORS)
+
+    if #SPECTATORS == EXPECTED_SPECTATORS then
+        startSimulation()
     end
-    math.randomseed(os.clock()*100000000000)
-    math.random(); math.random(); math.random()
-    math.randomseed(os.clock()*100000000000)
-    math.random(); math.random(); math.random()
-    chance = math.random(0, 1)
-    if chance < 0.5 then
-        source:setData('inventory_2', 'cigarette')
-        source:setData('inventory', '2')
-    end
-    Timer(function(playerId, storyId)
-        CURRENT_STORY:Play()
-    end, 2000, 1, source:getData('id'), source:getData('storyId'))
 end
 
-addEventHandler("onPlayerJoin", getRootElement(),
-function (prevA, curA)
-    initializePlayer(source)
-end
-)
+addEventHandler("onPlayerJoin", getRootElement(), function (prevA, curA) initializeSpectator(source) end)
 
 addEventHandler("onPlayerSpawn", getRootElement(),
 function (prevA, curA)
     if DEBUG then
-        outputConsole("Player spawned ")
+        outputConsole("Player "..source:getData('id').."spawned ")
     end
-    if CURRENT_STORY  then
+    source:setData('spawned', true)
+    if CURRENT_STORY and All(SPECTATORS, function(spectator) return spectator:getData('spawned') end) then
         local story = CURRENT_STORY
         if DEBUG then
             outputConsole("Found story for the spawned player. Picking a random action ")
         end
         if story and not FREE_ROAM then
             Timer(function()
-                local firstAction = story.CurrentEpisode.StartingLocation:GetNextValidAction(story.Actor)
-                if firstAction then
-                    firstAction:Apply()
-                else
-                    if DEBUG then
-                        print("No valid action found, the player is waiting "..story.Actor:getData('id'))
-                    end
-                end
-                for _,ped in ipairs(story.CurrentEpisode.peds) do
+                for i,ped in ipairs(story.CurrentEpisode.peds) do
                     local idx = ped:getData('startingPoiIdx')
                     if DEBUG then
                         print("Starting poi idx for ped "..idx)
@@ -131,23 +93,27 @@ function terminatePlayer(player, reason)
             end, 5000, 1)
         end
     end
-    SCREENSHOTS = {}
-    CURRENT_STORY = nil
-    GRAPH = {}
+    SCREENSHOTS[player:getData('id')] = {}
     player:setData('takenShots', 0)
+    local playerIdx = LastIndexOf(SPECTATORS, player, function(item, player) return item:getData('id') == player:getData('id') end)
+    table.remove(SPECTATORS, playerIdx)
 
-    Timer(function()
-        if #INPUT_GRAPHS > 0 then
-            table.remove(INPUT_GRAPHS, 1)
-            if #INPUT_GRAPHS > 0 then
-                initializePlayer(player)
-            else
-                player:kick(reason)
+    if #SPECTATORS == 0 then
+        Timer(function()
+            for i,spectator in ipairs(getElementsByType("player")) do
+                if #INPUT_GRAPHS > 0 then
+                    table.remove(INPUT_GRAPHS, 1)
+                    if #INPUT_GRAPHS > 0 then
+                        initializeSpectator(player)
+                    else
+                        player:kick(reason)
+                    end
+                else
+                    player:kick(reason)
+                end
             end
-        else
-            player:kick(reason)
-        end
-    end, 10000,1)
+        end, 10000,1)
+    end
 end
 
 addEventHandler ( "onPlayerQuit", root, 
@@ -180,7 +146,7 @@ function ( theResource, status, pixels, timestamp, tag )
 
     if status == "ok" then
         local newFile = File(LOAD_FROM_GRAPH..'_out/'..storyId..'/'
-        --  ..playerId..'/'
+         ..playerId..'/'
             .. hours..'-'..mins..'-'..secs..'.'..millisecs..'-'..playerName..'.jpg')
         if (newFile) then
             newFile:write(pixels)

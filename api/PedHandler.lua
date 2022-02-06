@@ -10,6 +10,33 @@ function PedHandler:ReInitialize()
     end
 end
 
+function PedHandler:InitializePed(ped)
+    local g = Guid()
+    ped:setData("id", g.Id)
+    ped:setData("isPed", true)
+    ped:setData('pickedObjects', {})
+
+    math.randomseed(os.clock()*100000000000)
+    math.random(); math.random(); math.random()
+    math.randomseed(os.clock()*100000000000)
+    math.random(); math.random(); math.random()
+    local chance = math.random(0, 1)
+    if chance < 0.5 then
+        ped:setData('inventory_1', 'phone')
+        ped:setData('inventory', '1')
+    end
+    math.randomseed(os.clock()*100000000000)
+    math.random(); math.random(); math.random()
+    math.randomseed(os.clock()*100000000000)
+    math.random(); math.random(); math.random()
+    chance = math.random(0, 1)
+    if chance < 0.5 then
+        ped:setData('inventory_2', 'cigarette')
+        ped:setData('inventory', '2')
+    end
+
+end
+
 function PedHandler:GetOrCreatePed(modelId, x, y, z, angle)
     print('Get or create ped '..modelId)
     outputConsole('Get or create ped '..modelId)
@@ -37,6 +64,7 @@ function PedHandler:GetOrCreatePed(modelId, x, y, z, angle)
         ped:setData('assigned', true)
         table.insert(self.PED_ZOO, ped)
     end
+    self:InitializePed(ped)
     return ped
 end
 

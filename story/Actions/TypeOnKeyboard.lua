@@ -9,7 +9,7 @@ function TypeOnKeyboard:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
     
-    story.Logger:Log(self.Description .. " on the " .. self.TargetItem.Description, self)
+    StoryActionBase.GetLogger(self, story):Log(self.Description .. " on the " .. self.TargetItem.Description, self)
 
     time = random(4000, 12000)
     self.Performer:setAnimation("INT_OFFICE", "OFF_Sit_Type_Loop", time, true, true, false, true)

@@ -22,7 +22,7 @@ function PedalGymBike:Apply()
         self.Description = PickRandom({" starts pedalling very fast ", " pedals very fast "})
     end
         
-    story.Logger:Log(self.Description, self)
+    StoryActionBase.GetLogger(self, story):Log(self.Description, self)
 
     local time = random(8000, 21000)
     self.Performer:setAnimation("GYMNASIUM", self.how, time, true, false, false, true)

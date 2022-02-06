@@ -9,7 +9,7 @@ function HangUp:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
     
-    story.Logger:Log(self.Description, self)
+    StoryActionBase.GetLogger(self, story):Log(self.Description, self)
     self.Performer:setAnimation("PED", "PHONE_OUT", 2000, true, true, false, true)
 
     if DEBUG then

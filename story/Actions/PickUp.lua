@@ -39,11 +39,11 @@ function PickUp:Apply()
     outputChatBox("PickUp:Apply - HEREEEEE")
     
     if sameObject then
-        story.Logger:Log(self.Description .. "the same ".. self.TargetItem.Description .. " from " .. self.Where, self)
+        StoryActionBase.GetLogger(self, story):Log(self.Description .. "the same ".. self.TargetItem.Description .. " from " .. self.Where, self)
     elseif sameDescription then
-        story.Logger:Log(self.Description .. "another " .. self.TargetItem.Description .. " from " .. self.Where, self)
+        StoryActionBase.GetLogger(self, story):Log(self.Description .. "another " .. self.TargetItem.Description .. " from " .. self.Where, self)
     else
-        story.Logger:Log(self.Description .. getWordPrefix(self.TargetItem.Description) .. " " .. self.TargetItem.Description .. " from " .. self.Where, self)
+        StoryActionBase.GetLogger(self, story):Log(self.Description .. getWordPrefix(self.TargetItem.Description) .. " " .. self.TargetItem.Description .. " from " .. self.Where, self)
     end
 
     local time = 500

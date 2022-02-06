@@ -74,9 +74,9 @@ function OpenDoor:Apply()
     table.insert(story.History[self.Performer:getData('id')], self)
     
     if self.how == OpenDoor.eHow.Exit then
-        story.Logger:Log(self.Description, self)
+        StoryActionBase.GetLogger(self, story):Log(self.Description, self)
     else
-        story.Logger:Log(self.Description, self, 'skipNominative')
+        StoryActionBase.GetLogger(self, story):Log(self.Description, self, 'skipNominative')
     end
     if DEBUG then
         outputConsole("OpenDoor:Apply")

@@ -23,7 +23,7 @@ function Hug:Apply()
     faceP1ToP2(self.TargetPlayer, self.Performer)
 
     local time = 2400
-    story.Logger:Log(" and " .. self.TargetPlayer:getData('name') .. self.Description, self)
+    StoryActionBase.GetLogger(self, story):Log(" and " .. self.TargetPlayer:getData('name') .. self.Description, self)
 
     self.Performer:setAnimation("gangs", "hndshkfa_swt", time, true, false, false, false)
     self.TargetPlayer:setAnimation("gangs", "hndshkfa_swt", time, true, false, false, false)

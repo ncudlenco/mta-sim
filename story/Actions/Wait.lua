@@ -11,7 +11,7 @@ function Wait:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
     
-    story.Logger:Log(self.Description, self)
+    StoryActionBase.GetLogger(self, story):Log(self.Description, self)
 
     self.Performer:setAnimation("cop_ambient", "coplook_loop", 5000, true, false, false, true) --TODO: do something smarter
     if DEBUG then

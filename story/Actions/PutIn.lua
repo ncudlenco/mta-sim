@@ -10,7 +10,7 @@ function PutIn:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
     
-    story.Logger:Log(self.Description .. self.TargetItem.Description .. " in " .. self.Where, self)
+    StoryActionBase.GetLogger(self, story):Log(self.Description .. self.TargetItem.Description .. " in " .. self.Where, self)
     -- self.TargetItem.instance:setCollisionsEnabled(false)
 
     self.Performer:setAnimation("INT_SHOP", "shop_loop", 500, true, true, false, true)

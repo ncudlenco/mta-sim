@@ -44,7 +44,7 @@ function GetOff:Apply()
         updatePedPosition = false
     end
 
-    story.Logger:Log(self.Description .. self.TargetItem.Description, self)
+    StoryActionBase.GetLogger(self, story):Log(self.Description .. self.TargetItem.Description, self)
     self.Performer:setAnimation(block, animation, time, false, updatePedPosition, false, true)
     
     if DEBUG then

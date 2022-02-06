@@ -13,7 +13,7 @@ function PutDown:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
     
-    story.Logger:Log(self.Description .. self.TargetItem.Description .. " on " .. self.Where, self)
+    StoryActionBase.GetLogger(self, story):Log(self.Description .. self.TargetItem.Description .. " on " .. self.Where, self)
     -- self.TargetItem.instance:setCollisionsEnabled(false)
 
     local time = 500

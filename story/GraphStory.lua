@@ -1,7 +1,6 @@
-GraphStory = class(StoryBase, function(o, actor, logData)
-    StoryBase.init(o, actor, maxActions)
+GraphStory = class(StoryBase, function(o, spectators, logData)
+    StoryBase.init(o, spectators, maxActions)
     o.LogData = logData
-    o.Logger = Logger('data/'..o.Id..'/'..actor:getData('id'), true, o)
     o.AllEpisodes = {
         House1(),
         House3(),
@@ -39,10 +38,12 @@ GraphStory = class(StoryBase, function(o, actor, logData)
     }
     o.MaxActions = 9999
     o.actionsQueues = {}
-    if not o.Actor then
-        outputConsole("Error: Actor is null "..o.Id..'/'..actor:getData('id'))
+    for _,spectator in ipairs(o.Spectators) do
+        if #o.Spectators < 1 or not spectator then
+            outputConsole("Error: Not enough spectators registered for story "..o.Id)
+        end
+        spectator:setData('storyId', o.Id)
     end
-    o.Actor:setData('storyId', o.Id)
     o.graph = nil
     o.temporal = nil
     o.lastEvents = {}
@@ -50,8 +51,7 @@ GraphStory = class(StoryBase, function(o, actor, logData)
     o.validMemo = {}
     local file = fileOpen(LOAD_FROM_GRAPH)
     if file then
-        local outputFolder = LOAD_FROM_GRAPH..'_out/'..o.Id
-        o.Logger = Logger(outputFolder, true, o)
+        o.Loggers = Select(spectators, function(spectator) return Logger(LOAD_FROM_GRAPH..'_out/'..o.Id..'/'..spectator:getData('id'), true, o, spectator) end)
         
         local jsonStr = fileRead(file, fileGetSize(file))
         o.graph = fromJSON(jsonStr)
@@ -209,7 +209,7 @@ function GraphStory:ValidateEpisode(
 
     if Any(validLocations) or #requiredLocations == 0 then
         if not episode.initialized and true or false then
-            episode:Initialize(self.Actor, true)
+            episode:Initialize(true)
         end
         if DEBUG_VALIDATION then
             print '---------------------------------------------started processing regions----------------------------------------'
@@ -289,8 +289,8 @@ function GraphStory:ValidateEpisode(
                 return res
             end)
             if Any(validActions) or #requiredActions == 0 then
+                setCoverScore = #validLocations + #validObjects + #validActions
                 if DEBUG_VALIDATION then
-                    setCoverScore = #validLocations + #validObjects + #validActions
                     print('Episode '..episode.name..' is valid with a score of '..setCoverScore)
                 end
                 --episode is valid
@@ -404,7 +404,9 @@ function GraphStory:Play()
     self.Episodes = self:GetValidEpisodes()
     if (not self.Episodes or #self.Episodes == 0) then
         outputConsole("We could not find any valid episodes")
-        terminatePlayer(self.Actor, "We could not find any valid episodes")
+        for i,spectator in ipairs(self.Spectators) do
+            terminatePlayer(spectator, "We could not find any valid episodes")
+        end
         return
     end
 
@@ -434,81 +436,65 @@ function GraphStory:Play()
         print("GraphStory: Picking a valid skin for the first actor...")
     end 
 
-    local skin = PickRandom(Where(SetPlayerSkin.PlayerSkins, function(s)
-        return not s.isTaken and requiredActors[1].Properties.Gender == s.Gender 
-    end))
-    if skin then
-        skin.TargetItem = self.Actor
-        skin.Performer = self.Actor
-        skin:Apply(requiredActors[1].Properties)
-
-        if not CURRENT_STORY.History[self.Actor:getData('id')] then
-            CURRENT_STORY.History[self.Actor:getData('id')] = {}
+    for _, spectator in ipairs(self.Spectators) do
+        if not SCREENSHOTS[spectator:getData('id')] then
+            SCREENSHOTS[spectator:getData('id')] = {}
         end
-
-        if not SCREENSHOTS[self.Actor:getData('id')] then
-            SCREENSHOTS[self.Actor:getData('id')] = {}
+        if not SCREENSHOTS[spectator:getData('id')][self.Id] then
+            SCREENSHOTS[spectator:getData('id')][self.Id] = 0
         end
-        if not SCREENSHOTS[self.Actor:getData('id')][self.Id] then
-            SCREENSHOTS[self.Actor:getData('id')][self.Id] = 0
-        end
+    end
 
-        self.StartTime = os.time()
-        if self.LogData then
-            self.Actor:setData('takenShots', 0)
-            self.RecorderTimer = Timer(
-                function (playerId, storyId)
-                    local story = CURRENT_STORY
-                    local player = story.Actor
-    
+    self.StartTime = os.time()
+    if self.LogData then
+        self.RecorderTimer = Timer(
+            function ()
+                local story = CURRENT_STORY
+                
+                for _,spectator in story.Spectators do
                     if not story.Disposed then
-                        if player:getData('takenShots') then
-                            player:setData('takenShots', 1 + player:getData('takenShots'))
+                        if spectator:getData('takenShots') then
+                            spectator:setData('takenShots', 1 + spectator:getData('takenShots'))
                         else
-                            player:setData('takenShots', 1)
+                            spectator:setData('takenShots', 1)
                         end
-                        player:takeScreenShot(960, 540, playerId..';'..player:getData('storyId')..';'..player.name, 50)
+                        spectator:takeScreenShot(960, 540, spectator:getData('id')..';'..spectator:getData('storyId')..';'..spectator.name, 50)
                     else
-                        local requestedShots = player:getData('takenShots')
-                        local actuallyTaken = SCREENSHOTS[player:getData('id')][story.Id]
-    
+                        local requestedShots = spectator:getData('takenShots')
+                        local actuallyTaken = SCREENSHOTS[spectator:getData('id')][story.Id]
+
                         if DEBUG then
                             outputConsole("RecorderTimer - waiting to download all the screenshots: " .. actuallyTaken .. " / " .. requestedShots)
                         end
-    
+
                         if actuallyTaken >= requestedShots then
                             if DEBUG then
                                 outputConsole("RecorderTimer - DONE")
                             end
                             story.RecorderTimer:destroy()
-                            terminatePlayer(player, "story ended")
+                            terminatePlayer(spectator, "story ended")
                         end
                     end
                 end
-            , LOG_FREQUENCY, 0, self.Actor:getData('id'), self.Id)
-        end
-
-        if DEBUG then
-            print("GraphStory: Loading a random valid episode from "..#self.Episodes.."...")
-        end
-        math.randomseed(os.clock()*100000000000)
-        math.random(); math.random(); math.random()
-        self.CurrentEpisode = MetaEpisode(self.Episodes) 
-        print(self.CurrentEpisode.name)
-        self.CurrentEpisode:Initialize(self.Actor, false, requiredActors, self.graph)
-        
-        self.Actor:setData('pickedObjects', {})
-
-        if DEBUG then
-            print("GraphStory:Play - chosen valid skin and episode. Playing episode")
-        end
-        self:ProcessActions(requiredActors)
-
-        --TODO: play only episodes which have a starting location
-        self.CurrentEpisode:Play(self.Actor, self.graph)
-    else
-        error("GraphStory:Play could not find a valid skin for the main player with gender "..requiredActors[1].Properties.Gender)
+            end
+        , LOG_FREQUENCY, 0)
     end
+
+    if DEBUG then
+        print("GraphStory: Loading a random valid episode from "..#self.Episodes.."...")
+    end
+    math.randomseed(os.clock()*100000000000)
+    math.random(); math.random(); math.random()
+    self.CurrentEpisode = MetaEpisode(self.Episodes) 
+    print(self.CurrentEpisode.name)
+    self.CurrentEpisode:Initialize(false, requiredActors, self.graph)
+    
+    if DEBUG then
+        print("GraphStory:Play - chosen valid skin and episode. Playing episode")
+    end
+    self:ProcessActions(requiredActors)
+
+    self.CurrentEpisode:Play(self.graph)
 end
 
 --Not used
@@ -626,35 +612,25 @@ function GraphStory:ProcessActions(graphActors)
         print('Actor '..a.id..' will be spawned in the location '..firstLocation.Description)
 
         --this is the first location -> the place where the actor or ped is first spawned
-        if a.id == self.Actor:getData('id') then
-            episode.StartingLocation = firstLocation
-            firstLocation.isBusy = true
-            --set the interaction to take place in the location found for the first player
-            if firstEvent.isInteraction then
-                interactionPoiMap[firstEvent.interactionRelation] = firstLocation.LocationId
-            end
-        else
-            --this is ped logic (not the main player)
-            firstLocation.isBusy = true
-            local ped = FirstOrDefault(self.CurrentEpisode.peds, function(p) return p:getData('id') == a.id end)
-            ped:setData('startingPoiIdx', LastIndexOf(episode.POI, firstLocation))
-            ped.interior = firstLocation.Interior
-            if firstEvent.isInteraction then
-                if interactionPoiMap[firstEvent.interactionRelation] == firstLocation.LocationId then
-                    --only the second player reaches this code
-                    ped.position = firstLocation.position + Vector3(-0.7,-0.7,0)
-                else
-                    --only the first player reaches this code
-                    ped.position =  firstLocation.position
-                end
-                interactionPoiMap[firstEvent.interactionRelation] = firstLocation.LocationId
+        firstLocation.isBusy = true
+        local ped = FirstOrDefault(self.CurrentEpisode.peds, function(p) return p:getData('id') == a.id end)
+        ped:setData('startingPoiIdx', LastIndexOf(episode.POI, firstLocation))
+        ped.interior = firstLocation.Interior
+        if firstEvent.isInteraction then
+            if interactionPoiMap[firstEvent.interactionRelation] == firstLocation.LocationId then
+                --only the second player reaches this code
+                ped.position = firstLocation.position + Vector3(-0.7,-0.7,0)
             else
-                ped.position = firstLocation.position
-                ped.rotation = Vector3(0,0,firstLocation.Angle)    
+                --only the first player reaches this code
+                ped.position =  firstLocation.position
             end
+            interactionPoiMap[firstEvent.interactionRelation] = firstLocation.LocationId
+        else
+            ped.position = firstLocation.position
+            ped.rotation = Vector3(0,0,firstLocation.Angle)    
+        end
         --else
             --this is a ped => it's starting location id is set in StoryEpisodeBase.Initialize()
-        end
         self.interactionPoiMap = interactionPoiMap
         self.interactionProcessedMap = interactionProcessedMap
         self.lastEvents[a.id] = firstEvent

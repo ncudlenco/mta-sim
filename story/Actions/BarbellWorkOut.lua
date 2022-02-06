@@ -9,7 +9,7 @@ function BarbellWorkOut:Apply()
     table.insert(story.History[self.Performer:getData('id')], self)
     
     local time = random(7000, 19000)
-    story.Logger:Log(self.Description .. self.TargetItem.Description, self, false, true, {"finishes", "finishes working out"})
+    StoryActionBase.GetLogger(self, story):Log(self.Description .. self.TargetItem.Description, self, false, true, {"finishes", "finishes working out"})
     
     self.Performer:setAnimation("Freeweights", "gym_free_A", time, true, false, false, true)
 

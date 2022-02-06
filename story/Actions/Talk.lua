@@ -25,7 +25,7 @@ function Talk:Apply()
     faceP1ToP2(self.TargetPlayer, self.Performer)
     local time = math.random(2, 4) * 1000
 
-    story.Logger:Log(self.Description .. self.TargetPlayer:getData('name'), self)
+    StoryActionBase.GetLogger(self, story):Log(self.Description .. self.TargetPlayer:getData('name'), self)
     local talkType = PickRandom({"prtial_gngtlka", "prtial_gngtlkb", "prtial_gngtlkc", 
                                  "prtial_gngtlkd", "prtial_gngtlke", "prtial_gngtlkf", 
                                  "prtial_gngtlkg", "prtial_gngtlkh"})

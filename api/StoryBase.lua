@@ -1,10 +1,10 @@
-StoryBase = class(function(o, actor, maxActions)
-    o.Actor = actor
+StoryBase = class(function(o, spectators, maxActions)
+    o.Spectators = spectators
     o.MaxActions = maxActions
     o.Id = Guid().Id
     o.Episodes = {}
     o.StartTime = 0
-    o.Logger = nil
+    o.Loggers = {}
     o.History = {}
 end)
 

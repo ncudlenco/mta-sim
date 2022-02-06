@@ -25,7 +25,7 @@ function Kiss:Apply()
 
     
     local time = 4000
-    story.Logger:Log(" and " .. self.TargetPlayer:getData('name') .. self.Description, self)
+    StoryActionBase.GetLogger(self, story):Log(" and " .. self.TargetPlayer:getData('name') .. self.Description, self)
 
     local performerKissType = nil
     local targetKissType = nil

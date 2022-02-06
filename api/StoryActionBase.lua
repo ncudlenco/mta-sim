@@ -37,3 +37,8 @@ function StoryActionBase:Apply(...)
         region:SetRandomStaticCamera(self.Performer)
     end
 end
+
+function StoryActionBase:GetLogger(story)
+    --TODO when implementing perspectives define logger strategy
+    return FirstOrDefault(story.Loggers, function(logger) return true end)
+end

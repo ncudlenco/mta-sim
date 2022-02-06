@@ -74,7 +74,7 @@ function GetOn:Apply()
     else
         selfDescription = self.Description:gsub('{temp}', ' ')
     end
-    story.Logger:Log(selfDescription .. self.TargetItem.Description, self)
+    StoryActionBase.GetLogger(self, story):Log(selfDescription .. self.TargetItem.Description, self)
     self.Performer:setAnimation(block, animation, time, false, updatePedPosition, false, true)
 
     self.Buffer[id] = self.TargetItem

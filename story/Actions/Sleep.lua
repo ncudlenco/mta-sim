@@ -10,7 +10,7 @@ function Sleep:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
     
-    story.Logger:Log(self.Description, self, false, true, {" wakes up ", " finishes sleeping "})
+    StoryActionBase.GetLogger(self, story):Log(self.Description, self, false, true, {" wakes up ", " finishes sleeping "})
     -- self.TargetItem.instance:setCollisionsEnabled(false)
     self.Performer.rotation = self.Performer.rotation + Vector3(0,0,180)
 

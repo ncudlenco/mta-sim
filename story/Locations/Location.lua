@@ -267,8 +267,8 @@ function Location:ProcessNextAction(player)
     if event.isInteraction then
         --set the actors one in front of the other in the same location...
         --create the interaction actions / locations
-        local ped1 = FirstOrDefault(CURRENT_STORY.CurrentEpisode.peds, function(p) return p:getData('id') == player:getData('id') end) or CURRENT_STORY.Actor
-        local ped2 = FirstOrDefault(CURRENT_STORY.CurrentEpisode.peds, function(p) return p:getData('id') == event.interactionEvent.Entities[1] end) or CURRENT_STORY.Actor
+        local ped1 = FirstOrDefault(CURRENT_STORY.CurrentEpisode.peds, function(p) return p:getData('id') == player:getData('id') end)
+        local ped2 = FirstOrDefault(CURRENT_STORY.CurrentEpisode.peds, function(p) return p:getData('id') == event.interactionEvent.Entities[1] end)
 
         --The interaction action will be executed only from the first actor
         if interactionProcessedMap[event.interactionRelation] then
@@ -531,9 +531,6 @@ function Location:GetNextValidAction(player)
                 print('Next action is to move')
                 if next.NextLocation and next.NextLocation.isBusy and player:getData('locationId') ~= next.NextLocation.LocationId then
                     local occupyingActor = FirstOrDefault(CURRENT_STORY.CurrentEpisode.peds, function(act) return act:getData('locationId') == next.NextLocation.LocationId end)
-                    if not occupyingActor and CURRENT_STORY.Actor:getData('locationId') == next.NextLocation.LocationId then
-                        occupyingActor = CURRENT_STORY.Actor
-                    end
                     if occupyingActor and occupyingActor:getData('storyEnded') then
                         --the actor occupying the location finished his mandatory tasks. move him around randomly to clear the location
                         local randomMove = PickRandom(Where(next.NextLocation.PossibleActions, function(a) return a.Name == 'Move' and not a.NextLocation.isBusy end))
@@ -544,9 +541,6 @@ function Location:GetNextValidAction(player)
                     else
                         local function wait()
                             local occupyingActor = FirstOrDefault(CURRENT_STORY.CurrentEpisode.peds, function(act) return act:getData('locationId') == next.NextLocation.LocationId end)
-                            if not occupyingActor and CURRENT_STORY.Actor:getData('locationId') == next.NextLocation.LocationId then
-                                occupyingActor = CURRENT_STORY.Actor
-                            end
                             if (not occupyingActor) then
                                 print('Occupying actor not found for location '..next.NextLocation.LocationId)
                             end
@@ -576,13 +570,12 @@ function Location:GetNextValidAction(player)
         end
         lock = false
         if LOAD_FROM_GRAPH then
-            if player:getData('id') ~= CURRENT_STORY.Actor:getData('id') and not CURRENT_STORY.Actor:getData('storyEnded') or 
-                Any(CURRENT_STORY.CurrentEpisode.peds, function(ped) return player:getData('id') ~= ped:getData('id') and not ped:getData('storyEnded') end) then
+            if Any(CURRENT_STORY.CurrentEpisode.peds, function(ped) return player:getData('id') ~= ped:getData('id') and not ped:getData('storyEnded') end) then
                 if DEBUG then
                     outputConsole("Location:GetNextValidAction - waiting for the others to finish")
                     print("Location:GetNextValidAction - waiting for the others to finish")
                 end
-                    --the episode is ended for the current actor, wait for all the other actors to finish
+                --the episode is ended for the current actor, wait for all the other actors to finish
                 player:setAnimation("cop_ambient", "coplook_loop", 0, true, false, false, true)
                 player:setData('storyEnded', true)
                 return nil

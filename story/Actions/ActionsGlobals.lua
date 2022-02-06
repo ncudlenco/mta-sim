@@ -14,7 +14,6 @@ function OnGlobalActionFinished(delay, playerId, storyId, callback, destroyedIte
     }
     end
 
-    local actionStartTime = CURRENT_STORY.Logger:GetElapsedTime()
     Timer(function(playerId, storyId)
         local story = CURRENT_STORY
         local lastAction = story.History[playerId][#story.History[playerId]]
@@ -32,31 +31,18 @@ function OnGlobalActionFinished(delay, playerId, storyId, callback, destroyedIte
                 print("GlobalAction:Apply - the last action was null, initiating the first action protocol")
             end
             --The case where the first action didn't start because the location was busy
-            local actor = nil
-            if CURRENT_STORY.Actor:getData('id') ~= playerId then
-                actor = FirstOrDefault(CURRENT_STORY.CurrentEpisode.peds, function(ped) return ped:getData('id') == playerId end)
-                local idx = actor:getData('startingPoiIdx')
-                if DEBUG then
-                    print("Starting poi idx for ped "..idx)
-                end
-                if idx > 0 then
-                    local firstAction = CURRENT_STORY.CurrentEpisode.POI[idx]:GetNextValidAction(actor)
-                    if firstAction then
-                        firstAction:Apply()
-                    else
-                        if DEBUG then
-                            print("No valid action found, the ped is waiting "..actor:getData('id'))
-                        end
-                    end
-                end
-            else
-                actor = CURRENT_STORY.Actor
-                local firstAction = CURRENT_STORY.CurrentEpisode.StartingLocation:GetNextValidAction(actor)
+            local actor = FirstOrDefault(CURRENT_STORY.CurrentEpisode.peds, function(ped) return ped:getData('id') == playerId end)
+            local idx = actor:getData('startingPoiIdx')
+            if DEBUG then
+                print("Starting poi idx for ped "..idx)
+            end
+            if idx > 0 then
+                local firstAction = CURRENT_STORY.CurrentEpisode.POI[idx]:GetNextValidAction(actor)
                 if firstAction then
                     firstAction:Apply()
                 else
                     if DEBUG then
-                        print("No valid action found, the player is waiting "..actor:getData('id'))
+                        print("No valid action found, the ped is waiting "..actor:getData('id'))
                     end
                 end
             end

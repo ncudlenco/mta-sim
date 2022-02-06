@@ -1,7 +1,6 @@
 StoryEpisodeBase = class(function(o, params)
     o.StoryTimeOfDay = params.storyTimeOfDay or nil
     o.StoryWeather = params.storyWeather or nil
-    o.StartingLocation = startingLocation or nil
     o.ValidStartingLocations = {}
     o.Objects = {}
     o.Regions = {}
@@ -23,24 +22,18 @@ end
 
 function StoryEpisodeBase:Initialize(...)
     if not DEFINING_EPISODES then
-        local player = nil
         local temporaryInitialize = false
         local requiredActors = nil
         local graphOfEvents = nil
         
         for i,v in ipairs(arg) do
             if i == 1 then
-                player = v
-            elseif i == 2 then
                 temporaryInitialize = v
-            elseif i == 3 then
+            elseif i == 2 then
                 requiredActors = v
-            elseif i == 4 then
+            elseif i == 3 then
                 graphOfEvents = v
             end
-        end
-        if player == nil then
-            return false
         end
 
         if DEBUG then
@@ -64,7 +57,7 @@ function StoryEpisodeBase:Initialize(...)
                         if #p1.PossibleActions > 0 then
                             prerequisites = {p1.PossibleActions[1]}
                         end
-                        local moveAction = Move{performer = player, targetItem = p2, nextLocation = p2, prerequisites = prerequisites, graphId = self.graphId}
+                        local moveAction = Move{targetItem = p2, nextLocation = p2, prerequisites = prerequisites, graphId = self.graphId}
                         table.insert(p1.PossibleActions, moveAction)
                         table.insert(p1.allActions, moveAction)
                         if DEBUG_ACTIONS then
@@ -78,14 +71,6 @@ function StoryEpisodeBase:Initialize(...)
                     for k,action in ipairs(p1.PossibleActions) do
                         str_PA = str_PA .. string.sub(action.NextLocation.LocationId, 1, 8) .. ", "
                     end
-                end
-            end
-        end
-
-        for _,poi in ipairs(self.POI) do
-            if poi.allActions then
-                for _,a in ipairs(poi.allActions) do
-                    a.Performer = player
                 end
             end
         end
@@ -130,7 +115,7 @@ function StoryEpisodeBase:Initialize(...)
                 end
             end)
 
-            local pedsNr = math.max(math.floor(#self.ValidStartingLocations * ACTORS_CROWDING_FACTOR) - 1, 0)
+            local pedsNr = math.max(math.floor(#self.ValidStartingLocations * ACTORS_CROWDING_FACTOR), 0)
             if DEBUG then
                 local nr = 0
                 if requiredActors then
@@ -139,12 +124,12 @@ function StoryEpisodeBase:Initialize(...)
                 print('RequiredActors '..nr)
             end
             if requiredActors then
-                pedsNr = #requiredActors - 1
+                pedsNr = #requiredActors
             end
             print('Peds nr '..pedsNr)
-            if (pedsNr + 1) > #self.ValidStartingLocations then
+            if pedsNr > #self.ValidStartingLocations then
                 if DEBUG then
-                    outputConsole('[Warning] StoryEpisodeBase:Initialize: number of peds and player is greater than the available starting locations. A max of '..(#self.ValidStartingLocations-1)..' peds will be spawned')
+                    outputConsole('[Warning] StoryEpisodeBase:Initialize: number of peds is greater than the available starting locations. A max of '..(#self.ValidStartingLocations-1)..' peds will be spawned')
                 end
             end
 
@@ -174,7 +159,7 @@ function StoryEpisodeBase:Initialize(...)
                     print('Valid starting ped point '..validStartingPoi.LocationId..': '..validStartingPoi.Description)
                 end
                 local skin = PickRandom(Where(SetPlayerSkin.PlayerSkins, function(s)
-                    return not s.isTaken and(not requiredActors or requiredActors[i+1].Properties.Gender == s.Gender )
+                    return s and not s.isTaken and(not requiredActors or requiredActors[i].Properties.Gender == s.Gender )
                 end))
                 if not skin then
                     error('A valid skin could not be found for ped '..i)
@@ -192,7 +177,7 @@ function StoryEpisodeBase:Initialize(...)
                 skin.TargetItem = ped
                 skin.Performer = ped
                 if requiredActors then
-                    skin:Apply(requiredActors[i+1].Properties) --changes the actor id, name, gender
+                    skin:Apply(requiredActors[i].Properties) --changes the actor id, name, gender
                 else
                     skin:Apply()
                 end
@@ -252,31 +237,14 @@ function StoryEpisodeBase:Play(...)
     if not LOAD_FROM_GRAPH then
         StoryEpisodeBase.ProcessRegions(self)
     end
-    local player = nil
-    for i,v in ipairs(arg) do
-        player = v
-        break
-    end
-    if player == nil then
-        return false
+
+    for i,spectator in ipairs(getElementsByType('player')) do
+        spectator:setAlpha(0)
+        self.POI[1]:SpawnPlayerHere(spectator)
     end
 
-    if self.StartingLocation == nil then
-        if not LOAD_FROM_GRAPH then
-            self.StartingLocation = PickRandom(Where(self.ValidStartingLocations, function(x)
-                return not x.isBusy
-            end))
-        else
-            if not self.StartingLocation then
-                error('StoryEpisodeBase:Play Could not find a starting location in region '..firstEvent.Location)
-            elseif DEBUG then
-                print('First location: '..self.StartingLocation.LocationId..self.StartingLocation.Description)
-            end
-        end
-    end
-    self.StartingLocation:SpawnPlayerHere(player)
     if DEBUG then
-        outputConsole(self.name..":Play - picked random location "..self.StartingLocation.Description.." Spawn scheduled")
+        outputConsole(self.name..":Play. Spawn scheduled for all spectators.")
     end
 end
 
@@ -321,7 +289,6 @@ end
 function StoryEpisodeBase:Reset()
     self.StoryTimeOfDay = nil
     self.StoryWeather = nil
-    self.StartingLocation = nil
     self.ValidStartingLocations = {}
     self.Objects = {}
     self.Regions = {}

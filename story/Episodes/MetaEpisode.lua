@@ -58,7 +58,9 @@ function MetaEpisode:Initialize(actor, isTemporaryInitialize, actors, graphOfEve
                 local moveAction = Move{performer = actor, targetItem = l2, nextLocation = l2, prerequisites = prerequisites, graphId = l1.Episode.graphId}
                 table.insert(l1.PossibleActions, moveAction)
                 table.insert(l1.allActions, moveAction)
-                print('Move action from '..l1.Description..' to '..l2.Description)
+                if DEBUG_CHAIN_LINKED_ACTIONS then
+                    print('Move action from '..l1.Description..' to '..l2.Description)
+                end
             end
         end
     end

@@ -1,4 +1,4 @@
-Logger = class(StoryTextLoggerBase, function(o, path, showOnScreen, story)
+Logger = class(StoryTextLoggerBase, function(o, path, showOnScreen, story, spectator)
     StoryTextLoggerBase.init(o, path)
     o.ShowOnScreen = showOnScreen
     o.Story = story
@@ -9,6 +9,7 @@ Logger = class(StoryTextLoggerBase, function(o, path, showOnScreen, story)
     o.TempDependency = false
     o.Buffer = {}
     o.PreviousPlayerCommitId = ''
+    o.Spectator = spectator
 end)
 
 function Logger:GetElapsedTime()
@@ -222,17 +223,6 @@ function Logger:DescribeObjects(player, regionName, objects, locationMap, descri
     return objectsDescription
 end
 
-function Logger:LogGraph()
-    local fileHandle = fileCreate(self.Path .. '/graph.json')
-    if fileHandle then
-        local jsonStr = toJSON(GRAPH)
-        fileWrite(fileHandle, jsonStr)
-        fileClose(fileHandle)
-    else
-        outputConsole("Unable to open "..self.Path .. '/graph.json')
-    end
-end
-
 function Logger:Log(text, ...)
     local isImpersonal = false
     local commit = false
@@ -290,7 +280,7 @@ function Logger:Log(text, ...)
             logText = ''
             self.FirstPhrase = false
             if DEBUG_LOGGER then
-                CURRENT_STORY.Actor:outputChat('First phrase or without link', 255, 255, 255, false)
+                self.Spectator:outputChat('First phrase or without link', 255, 255, 255, false)
             end
         else
             if self.Buffer[player:getData('id')].TempDependency then
@@ -300,14 +290,14 @@ function Logger:Log(text, ...)
                 commit = true
                 self.PreviousAnd = false
                 if DEBUG_LOGGER then
-                    CURRENT_STORY.Actor:outputChat('Temporal dependency', 255, 255, 255, false)
+                    self.Spectator:outputChat('Temporal dependency', 255, 255, 255, false)
                 end
             --this only happens for the open door action, when the actor opens the door to enter the room
             elseif string.sub(text, 1, 4) == " and" then
                 logText = text
                 self.PreviousAnd = true
                 if DEBUG_LOGGER then
-                    CURRENT_STORY.Actor:outputChat('sentence started with and', 255, 255, 255, false)
+                    self.Spectator:outputChat('sentence started with and', 255, 255, 255, false)
                 end
             else 
                 math.randomseed(os.clock()*100000000000)
@@ -331,14 +321,14 @@ function Logger:Log(text, ...)
                         if commit then
                             strc = 'true'
                         end
-                        CURRENT_STORY.Actor:outputChat('first action or rolled dice to end sentence. commit: '..strc, 255, 255, 255, false)
+                        self.Spectator:outputChat('first action or rolled dice to end sentence. commit: '..strc, 255, 255, 255, false)
                     end
                 --30% to link the sentence with an and
                 elseif dice < 0.3 and self.PreviousAnd == false then -- chance of getting a link between phrases with "and"
                     logText = " and " .. text
                     self.PreviousAnd = true
                     if DEBUG_LOGGER then
-                        CURRENT_STORY.Actor:outputChat('rolled dice to link with and', 255, 255, 255, false)
+                        self.Spectator:outputChat('rolled dice to link with and', 255, 255, 255, false)
                     end
                 --50% here
                 else
@@ -346,7 +336,7 @@ function Logger:Log(text, ...)
                     logText = phraseLink .. " " .. player:getData('genderNominative') .. ' '..text
                     self.PreviousAnd = false
                     if DEBUG_LOGGER then
-                        CURRENT_STORY.Actor:outputChat('rolled dice to link with '..phraseLink, 255, 255, 255, false)
+                        self.Spectator:outputChat('rolled dice to link with '..phraseLink, 255, 255, 255, false)
                     end
                 end
             end
@@ -384,12 +374,11 @@ function Logger:FlushBuffer(player, endSentence)
         else
             outputConsole("Unable to open "..self.Path .. '/labels.txt')
         end
-        self:LogGraph()
     end
     if self.ShowOnScreen then
-        if CURRENT_STORY.Actor then
-            if CURRENT_STORY.Actor.outputChat then
-                CURRENT_STORY.Actor:outputChat(self.Buffer[player:getData('id')].text, 255, 0, 0, false)
+        if self.Spectator then
+            if self.Spectator.outputChat then
+                self.Spectator:outputChat(self.Buffer[player:getData('id')].text, 255, 0, 0, false)
             else
                 outputChatBox(self.Buffer[player:getData('id')].text, 255, 0, 0, false)
             end

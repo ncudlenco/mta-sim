@@ -23,7 +23,7 @@ function StandUp:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
     
-    story.Logger:Log(self.Description .. "from the " .. self.TargetItem.Description, self)
+    StoryActionBase.GetLogger(self, story):Log(self.Description .. "from the " .. self.TargetItem.Description, self)
     if self.TargetItem.instance then
         self.TargetItem.instance:setCollisionsEnabled(false)
     end

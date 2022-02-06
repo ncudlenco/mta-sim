@@ -23,7 +23,7 @@ function Laugh:Apply()
     faceP1ToP2(self.TargetPlayer, self.Performer)
 
     local time = random(5000, 16000)
-    story.Logger:Log(self.Description .. self.TargetItem:getData('name') .. " joke", self)
+    StoryActionBase.GetLogger(self, story):Log(self.Description .. self.TargetItem:getData('name') .. " joke", self)
     self.Performer:setAnimation("rapping", "laugh_01", time, true, false, false, false)
     self.TargetPlayer:setAnimation("rapping", "laugh_01", time, true, false, false, false)
 

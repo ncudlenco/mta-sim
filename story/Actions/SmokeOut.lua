@@ -9,7 +9,7 @@ function SmokeOut:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
     
-    story.Logger:Log(self.Description .. self.TargetItem.Description .. " from  " .. self.Performer:getData('genderGenitive') 
+    StoryActionBase.GetLogger(self, story):Log(self.Description .. self.TargetItem.Description .. " from  " .. self.Performer:getData('genderGenitive') 
                      ..  " hand when " .. self.Performer:getData('genderNominative') .. " finishes it", self.Performer)
     self.Performer:setAnimation("SMOKING", "M_smk_out", 3000, true, true, false, true)
 

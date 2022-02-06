@@ -23,7 +23,7 @@ function HandShake:Apply()
     faceP1ToP2(self.TargetPlayer, self.Performer)
 
     local time = 2000
-    story.Logger:Log(" and " .. self.TargetPlayer:getData('name') .. self.Description, self)
+    StoryActionBase.GetLogger(self, story):Log(" and " .. self.TargetPlayer:getData('name') .. self.Description, self)
 
     local shakeType = PickRandom({"hndshkaa", "hndshkda", "hndshkfa", "prtial_hndshk_biz_01"})
     self.Performer:setAnimation("gangs", shakeType, time, true, false, false, false)

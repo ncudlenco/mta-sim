@@ -38,5 +38,7 @@ function TimeOfDay:Apply(...)
     if not story then
         outputConsole("Error: the story is null "..id.." ---> "..scenarioId)
     end
-    story.Logger.Log(" " .. self.Description, player)
+    for _, logger in ipairs(story.Loggers) do
+        logger:Log(" " .. self.Description, player)
+    end
 end

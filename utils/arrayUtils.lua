@@ -60,6 +60,10 @@ function Where(arr, func)
     return res
 end
 
+function DropNull(arr)
+    return Where(arr, function(el) return el ~= nil end)
+end
+
 function LastIndexOf(arr, item, eqFunc)
     local idx = -1
     for i, a in ipairs(arr) do

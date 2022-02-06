@@ -10,7 +10,7 @@ function Smoke:Apply()
     table.insert(story.History[self.Performer:getData('id')], self)
     
     time = random(5000, 16000)
-    story.Logger:Log(self.Description .. self.TargetItem.Description, self)
+    StoryActionBase.GetLogger(self, story):Log(self.Description .. self.TargetItem.Description, self)
     self.Performer:setAnimation("SMOKING", "M_smk_drag", time, true, true, false, true)
 
     if DEBUG then

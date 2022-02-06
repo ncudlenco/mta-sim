@@ -5,15 +5,6 @@ House1 = class(StoryEpisodeBase, function(o)
 end)
 
 function House1:Initialize(...)
-    local player = nil
-    for i,v in ipairs(arg) do
-        player = v
-        break
-    end
-    if player == nil then
-        return false
-    end
-
     local livingroomSofa = Furniture {
         modelid = Furniture.eModel.House1LivingRoom1,
         position =     Vector3(-2163.6563, 644.9063, 1058.6250),
@@ -89,45 +80,45 @@ function House1:Initialize(...)
     self.POI = {livingRoomSofaLocation, livingRoomMusicPlayerLocation, kitchenChairLocation, kitchenTableLocation, livingRoomSmokeLocation}
 
     -- sit on sofa
-    local sitOnSofaAction = SitDown {how = SitDown.eHow.onSofa, performer = player, nextLocation = livingRoomSofaLocation, targetItem = livingroomSofa, rotation = Vector3(0,0,270), graphId = self.graphId}
+    local sitOnSofaAction = SitDown {how = SitDown.eHow.onSofa, nextLocation = livingRoomSofaLocation, targetItem = livingroomSofa, rotation = Vector3(0,0,270), graphId = self.graphId}
     table.insert(livingRoomSofaLocation.PossibleActions, sitOnSofaAction)
-    local standUpSofaAction = StandUp {how = StandUp.eHow.fromSofa, performer = player, nextLocation = livingRoomSofaLocation, targetItem = livingroomSofa, graphId = self.graphId}
+    local standUpSofaAction = StandUp {how = StandUp.eHow.fromSofa, nextLocation = livingRoomSofaLocation, targetItem = livingroomSofa, graphId = self.graphId}
     sitOnSofaAction.NextAction = standUpSofaAction
     sitOnSofaAction.ClosingAction = standUpSofaAction
 
     livingRoomSofaLocation.allActions = {sitOnSofaAction, standUpSofaAction}
     -- dance at the music player
-    local turnOnTurnTableAction = TurnOn { performer = player, nextLocation = livingRoomMusicPlayerLocation, targetItem = musicPlayer, graphId = self.graphId }
+    local turnOnTurnTableAction = TurnOn { nextLocation = livingRoomMusicPlayerLocation, targetItem = musicPlayer, graphId = self.graphId }
     table.insert(livingRoomMusicPlayerLocation.PossibleActions, turnOnTurnTableAction)
-    local moveToTurnTable2Action = Move { performer = player, nextLocation = livingRoomMusicPlayerLocation2, targetItem = livingRoomMusicPlayerLocation2, graphId = self.graphId }
+    local moveToTurnTable2Action = Move { nextLocation = livingRoomMusicPlayerLocation2, targetItem = livingRoomMusicPlayerLocation2, graphId = self.graphId }
     turnOnTurnTableAction.NextAction = moveToTurnTable2Action
-    local danceTurnTableAction = Dance { performer = player, nextLocation = livingRoomMusicPlayerLocation2, targetItem = livingRoomMusicPlayerLocation2, graphId = self.graphId }
+    local danceTurnTableAction = Dance { nextLocation = livingRoomMusicPlayerLocation2, targetItem = livingRoomMusicPlayerLocation2, graphId = self.graphId }
     table.insert(livingRoomMusicPlayerLocation2.PossibleActions, danceTurnTableAction)
-    local moveToTurnTable3Action = Move { performer = player, nextLocation = livingRoomMusicPlayerLocation, targetItem = livingRoomMusicPlayerLocation, graphId = self.graphId }
+    local moveToTurnTable3Action = Move { nextLocation = livingRoomMusicPlayerLocation, targetItem = livingRoomMusicPlayerLocation, graphId = self.graphId }
     danceTurnTableAction.NextAction = moveToTurnTable3Action
-    local turnOffTurnTableAction = TurnOff { performer = player, nextLocation = livingRoomMusicPlayerLocation, targetItem = musicPlayer, graphId = self.graphId }
+    local turnOffTurnTableAction = TurnOff { nextLocation = livingRoomMusicPlayerLocation, targetItem = musicPlayer, graphId = self.graphId }
     moveToTurnTable3Action.NextAction = turnOffTurnTableAction
     turnOffTurnTableAction.ClosingAction = turnOffTurnTableAction
 
     livingRoomMusicPlayerLocation = {turnOnTurnTableAction, moveToTurnTable2Action, danceTurnTableAction, moveToTurnTable3Action, turnOffTurnTableAction}
 
     -- sit in the chair
-    local sitDownKitchenChairAction = SitDown {how = SitDown.eHow.atDesk, performer = player, nextLocation = kitchenChairLocation, targetItem = kitchenChair, rotation = Vector3(0,0,0), graphId = self.graphId}
+    local sitDownKitchenChairAction = SitDown {how = SitDown.eHow.atDesk, nextLocation = kitchenChairLocation, targetItem = kitchenChair, rotation = Vector3(0,0,0), graphId = self.graphId}
     table.insert(kitchenChairLocation.PossibleActions, sitDownKitchenChairAction)
-    local readKitchenChairAction = Read { performer = player, nextLocation = kitchenChairLocation, targetItem = kitchenBook, graphId = self.graphId }
+    local readKitchenChairAction = Read { nextLocation = kitchenChairLocation, targetItem = kitchenBook, graphId = self.graphId }
     sitDownKitchenChairAction.NextAction = readKitchenChairAction
-    local standUpKitchenChairAction = StandUp {how = StandUp.eHow.fromDesk, performer = player, nextLocation = kitchenChairLocation, targetItem = kitchenChair, graphId = self.graphId}
+    local standUpKitchenChairAction = StandUp {how = StandUp.eHow.fromDesk, nextLocation = kitchenChairLocation, targetItem = kitchenChair, graphId = self.graphId}
     readKitchenChairAction.NextAction = standUpKitchenChairAction
     sitDownKitchenChairAction.ClosingAction = standUpKitchenChairAction
 
     kitchenChairLocation = {sitDownKitchenChairAction, readKitchenChairAction, standUpKitchenChairAction}
 
     -- drink at table
-    local pickUpDrinkAction = PickUp {performer = player, nextLocation = kitchenTableLocation, targetItem = drink, where = "the kitchen counter", targetObjectExists = true, how = PickUp.eHow.Normal, hand = PickUp.eHand.Left, graphId = self.graphId}
+    local pickUpDrinkAction = PickUp {nextLocation = kitchenTableLocation, targetItem = drink, where = "the kitchen counter", targetObjectExists = true, how = PickUp.eHow.Normal, hand = PickUp.eHand.Left, graphId = self.graphId}
     table.insert(kitchenTableLocation.PossibleActions, pickUpDrinkAction)
-    local drinkAction = Drink {performer = player, nextLocation = kitchenTableLocation, targetItem = drink, graphId = self.graphId}
+    local drinkAction = Drink {nextLocation = kitchenTableLocation, targetItem = drink, graphId = self.graphId}
     pickUpDrinkAction.NextAction = drinkAction
-    local putDownDrinkAction = PutDown {performer = player, nextLocation = kitchenTableLocation, targetItem = drink, where = "the kitchen counter", targetObjectPosition = Vector3(-2162.421044921875, 639.2874145507813, 1057.5271),
+    local putDownDrinkAction = PutDown {nextLocation = kitchenTableLocation, targetItem = drink, where = "the kitchen counter", targetObjectPosition = Vector3(-2162.421044921875, 639.2874145507813, 1057.5271),
                                         targetObjectRotation = Vector3(0, 0, 0), graphId = self.graphId}
     drinkAction.NextAction = putDownDrinkAction
     pickUpDrinkAction.ClosingAction = putDownDrinkAction
@@ -135,11 +126,11 @@ function House1:Initialize(...)
     kitchenTableLocation.allActions = {pickUpDrinkAction, drinkAction, putDownDrinkAction}
 
     -- smoke at painting
-    local livingroomSmokeInAction = SmokeIn { performer = player, nextLocation = livingRoomSmokeLocation, targetItem = cigarette, graphId = self.graphId }
+    local livingroomSmokeInAction = SmokeIn { nextLocation = livingRoomSmokeLocation, targetItem = cigarette, graphId = self.graphId }
     table.insert(livingRoomSmokeLocation.PossibleActions, livingroomSmokeInAction)
-    local livingroomSmokeAction = Smoke { performer = player, nextLocation = livingRoomSmokeLocation, targetItem = cigarette, graphId = self.graphId }
+    local livingroomSmokeAction = Smoke { nextLocation = livingRoomSmokeLocation, targetItem = cigarette, graphId = self.graphId }
     livingroomSmokeInAction.NextAction = livingroomSmokeAction
-    local livingroomSmokeOutAction = SmokeOut { performer = player, nextLocation = livingRoomSmokeLocation, targetItem = cigarette, graphId = self.graphId }
+    local livingroomSmokeOutAction = SmokeOut { nextLocation = livingRoomSmokeLocation, targetItem = cigarette, graphId = self.graphId }
     livingroomSmokeAction.NextAction = livingroomSmokeOutAction
     livingroomSmokeInAction.ClosingAction = livingroomSmokeOutAction
 

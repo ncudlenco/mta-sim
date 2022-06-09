@@ -1,6 +1,6 @@
 DynamicEpisode = class(StoryEpisodeBase, function(o, name)
     StoryEpisodeBase.init(o, {name = name})
-    
+
     o.InteriorId = nil
     o.graphPath = nil
     o.ObjectsToDelete = {}

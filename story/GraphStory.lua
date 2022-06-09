@@ -9,20 +9,20 @@ GraphStory = class(StoryBase, function(o, spectators, logData)
         House12()
     }
     o.Episodes = {
-        House1(),
-        House3(),
-        House8(),
-        House10(),
-        House12()
+        -- House1(),
+        -- House3(),
+        -- House8(),
+        -- House10(),
+        -- House12()
     }
     o.DynamicEpisodes = {
       "house1_sweet",
       "house7",
       "house9",
-      "garden",
-      "gym1",
-      "gym2",
-      "gym3"
+      "garden"
+    --   "gym1",
+    --   "gym2",
+    --   "gym3"
     }
     o.Disposed = false
     o.SpawnableObjects = {
@@ -34,7 +34,10 @@ GraphStory = class(StoryBase, function(o, spectators, logData)
         "Talk",
         "Kiss",
         "Hug",
-        "Laugh"
+        "Laugh",
+        "Give",
+        "INV-Give",
+        "Receive"
     }
     o.MaxActions = 9999
     o.actionsQueues = {}
@@ -49,10 +52,11 @@ GraphStory = class(StoryBase, function(o, spectators, logData)
     o.lastEvents = {}
     o.lastLocations = {}
     o.validMemo = {}
+    print(LOAD_FROM_GRAPH)
     local file = fileOpen(LOAD_FROM_GRAPH)
     if file then
         o.Loggers = Select(spectators, function(spectator) return Logger(LOAD_FROM_GRAPH..'_out/'..o.Id..'/'..spectator:getData('id'), true, o, spectator) end)
-        
+
         local jsonStr = fileRead(file, fileGetSize(file))
         o.graph = fromJSON(jsonStr)
         fileClose(file)
@@ -68,10 +72,12 @@ GraphStory = class(StoryBase, function(o, spectators, logData)
                 v.id = k
             end
         end
-        
+
         if DEBUG then
             print("GraphStory: read the file graph.json")
         end
+    else
+        print("WARNING: The file "..LOAD_FROM_GRAPH.." could not be opened!")
     end
 
     CURRENT_STORY = o
@@ -88,8 +94,8 @@ function GraphStory:ExploreValidEpisodeLinks(
     local unprocessedPoiWithLinks = Where(episode.POI, function(poi) return #poi.episodeLinks > 0 and
         All(currentSubset, function(e) return not Any(poi.episodeLinks, function(l) return l == e.name end) end)
     end)
-    local linkedEpisodes = reduce(Select(unprocessedPoiWithLinks, 
-        function(poi) return 
+    local linkedEpisodes = reduce(Select(unprocessedPoiWithLinks,
+        function(poi) return
             Select(poi.episodeLinks,
                 function(eLink) return
                     FirstOrDefault(self.Episodes, function(e) return e.name == eLink end)
@@ -226,13 +232,13 @@ function GraphStory:ValidateEpisode(
         if DEBUG_VALIDATION then
             print('Required objects nr '..#requiredObjects)
         end
-        validObjects = Where(requiredObjects, function(ro) 
+        validObjects = Where(requiredObjects, function(ro)
             print(ro.name or 'WARNING: OBJECT NAME WAS NULL BUT IT IS REQUIRED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-            local r = FirstOrDefault(episode.Objects, function(o) 
+            local r = FirstOrDefault(episode.Objects, function(o)
                 if DEBUG_VALIDATION then
                     print(o.type:lower()..' vs '..ro.name:lower())
                 end
-                return not objectMap[o.ObjectId] and o.type:lower() == ro.name:lower() and 
+                return not objectMap[o.ObjectId] and o.type:lower() == ro.name:lower() and
                 (o and o.Region and o.Region.name and o.Region.name:lower():find(ro.location:lower()) and true or false)
             end)
             if r then
@@ -256,31 +262,31 @@ function GraphStory:ValidateEpisode(
             return r and true or false
         end)
         if Any(validObjects) or #requiredObjects == 0 then
-            validActions = Where(requiredActions, function(ra) 
-                local res = Any(self.Interactions, function(a) return a:lower() == ra.name:lower() end) or Any(episode.POI,
+            validActions = Where(requiredActions, function(ra)
+                local res = Any(self.Interactions, function(a) return a:lower() ~= 'give' and a:lower() == ra.name:lower() end) or Any(episode.POI,
                     function(poi)
-                        -- if DEBUG_VALIDATION then
-                        --     if poi.Region then
-                        --         print('***'..poi.Region.name..'')
-                        --     else
-                        --         print('***!!'..poi.Description..' does not have a region')
-                        --     end
-                        -- end
-                    return 
+                        if DEBUG_VALIDATION then
+                            if poi.Region then
+                                print('***'..poi.Region.name..'')
+                            else
+                                print('***!!'..poi.Description..' does not have a region')
+                            end
+                        end
+                    return
                         poi.Region and
-                        Any(poi.allActions, function(a) 
-                            -- if DEBUG_VALIDATION then
-                            --     print('**********'..a.Name)
-                            --     if a.TargetItem and a.TargetItem.ObjectId then
-                            --         print('**********->'..a.TargetItem.ObjectId)
-                            --     elseif a.TargetItem and a.TargetItem.Region then
-                            --         print('**********->'..a.TargetItem.Region.name)
-                            --     end
-                            -- end
+                        Any(poi.allActions, function(a)
+                            if DEBUG_VALIDATION then
+                                print('**********'..a.Name)
+                                if a.TargetItem and a.TargetItem.ObjectId then
+                                    print('**********->'..a.TargetItem.ObjectId)
+                                elseif a.TargetItem and a.TargetItem.Region then
+                                    print('**********->'..a.TargetItem.Region.name)
+                                end
+                            end
                             return a.Name:lower() == ra.name:lower() and (ra.name == 'Move' or a.TargetItem.ObjectId and objectMap[a.TargetItem.ObjectId])
-                        end) 
+                        end)
                         and (poi.Region.name:lower():find(ra.location:lower()) and true or false )
-                    end)  
+                    end)
 
                 if not res and DEBUG_VALIDATION then
                     print('Episode '..episode.name..' - the action '..ra.name..' with target '..(ra.target or '')..' does not exist in region '..ra.location..' or at all')
@@ -339,7 +345,7 @@ function GraphStory:GetValidEpisodes()
                 Select(
                     Where(self.graph,
                         function(event)
-                            return event.Location ~= nil --converts to bool 
+                            return event.Location ~= nil --converts to bool
                         end
                     ),
                     function(event)
@@ -353,6 +359,7 @@ function GraphStory:GetValidEpisodes()
         end
     )
     if DEBUG then
+        print("GraphStory:GetValidEpisodes: required locations:")
         for _,v in pairs(requiredLocations) do
             print(v)
         end
@@ -363,7 +370,7 @@ function GraphStory:GetValidEpisodes()
     end), function(event)
         local location = ''
         if event.Location and #event.Location > 0 then location = event.Location[1] end
-        return { location = location, name = event.Properties.Name, id = event.id }
+        return { location = location, name = event.Properties.Type, id = event.id }
     end)
     --a list of all the actions and their locations (a POI is placed in a location, in a POI I have allActions)
     local requiredActions = Select(Where(self.graph, function(event)
@@ -403,9 +410,9 @@ function GraphStory:Play()
     math.random(); math.random(); math.random()
     self.Episodes = self:GetValidEpisodes()
     if (not self.Episodes or #self.Episodes == 0) then
-        outputConsole("We could not find any valid episodes")
+        outputConsole("We could not find any valid episodes for the file "..LOAD_FROM_GRAPH)
         for i,spectator in ipairs(self.Spectators) do
-            terminatePlayer(spectator, "We could not find any valid episodes")
+            terminatePlayer(spectator, "We could not find any valid episodes for the file "..LOAD_FROM_GRAPH)
         end
         return
     end
@@ -414,10 +421,11 @@ function GraphStory:Play()
     for i, o in ipairs(worldObjects) do
         o.collisions = false
     end
+    triggerClientEvent ( "onDisablePedCollisions", getRootElement(), true )
 
     if DEBUG then
         print("GraphStory:Play Required actors:")
-    end 
+    end
     --Get the required actors attributes
     local requiredActors = Select(Where(self.graph, function(event)
         return event.Action == 'Exists' and (event.Properties.Gender or event.Properties.Type and event.Properties.Type == 'Actor')
@@ -434,7 +442,7 @@ function GraphStory:Play()
 
     if DEBUG then
         print("GraphStory: Picking a valid skin for the first actor...")
-    end 
+    end
 
     for _, spectator in ipairs(self.Spectators) do
         if not SCREENSHOTS[spectator:getData('id')] then
@@ -450,8 +458,15 @@ function GraphStory:Play()
         self.RecorderTimer = Timer(
             function ()
                 local story = CURRENT_STORY
-                
-                for _,spectator in story.Spectators do
+                local elapsedTime = os.time() - self.StartTime
+                print('Elapsed time '..elapsedTime)
+                if elapsedTime > MAX_STORY_TIME then
+                    for _,spectator in ipairs(story.Spectators) do
+                        EndStory(spectator):Apply()
+                    end
+                end
+
+                for _,spectator in ipairs(story.Spectators) do
                     if not story.Disposed then
                         if spectator:getData('takenShots') then
                             spectator:setData('takenShots', 1 + spectator:getData('takenShots'))
@@ -485,10 +500,10 @@ function GraphStory:Play()
     end
     math.randomseed(os.clock()*100000000000)
     math.random(); math.random(); math.random()
-    self.CurrentEpisode = MetaEpisode(self.Episodes) 
+    self.CurrentEpisode = MetaEpisode(self.Episodes)
     print(self.CurrentEpisode.name)
     self.CurrentEpisode:Initialize(false, requiredActors, self.graph)
-    
+
     if DEBUG then
         print("GraphStory:Play - chosen valid skin and episode. Playing episode")
     end
@@ -506,10 +521,10 @@ function GraphStory:FindLocationAndActionForEvent(event)
             table.insert(inventoryItems, self.Actor:getData('inventory_'..i))
         end
     end
-    local firstLocation = PickRandom(Where(episode.POI, function(poi) 
+    local firstLocation = PickRandom(Where(episode.POI, function(poi)
         return
             (poi.Region and not event.Location or poi.Region.name:lower():find(event.Location[1]:lower()) and true or false) --the location name is the one specified in the first event
-            and 
+            and
             (
                 Any(poi.allActions, function(action) return action.Name:lower() == event.Action:lower() end) --the location contains an action defined in the first event
                 or
@@ -531,13 +546,13 @@ function GraphStory:ProcessActions(graphActors)
     end), function(event)
         local location = ''
         if event.Location and #event.Location > 0 then location = event.Location[1] end
-        return { location = location, name = event.Properties.Name, id = event.id }
+        return { location = location, name = event.Properties.Type, id = event.id }
     end)
     local objectMap = {}
     local reverseObjectMap = {}
     local interactionPoiMap = {}
     local interactionProcessedMap = {}
-    All(requiredObjects, function(ro) 
+    All(requiredObjects, function(ro)
         local r = FirstOrDefault(episode.Objects, function(o) return not objectMap[o.ObjectId] and o.type:lower() == ro.name:lower() and (o.Region.name:lower():find(ro.location:lower()) and true or false) end)
         if r then
             objectMap[r.ObjectId] = ro.id
@@ -547,12 +562,12 @@ function GraphStory:ProcessActions(graphActors)
             reverseObjectMap[ro.id] = r.ObjectId
         else
             print('ProcessActions!!!!!!!!!!!!!!!!!!!!!!Not mapped '..ro.id)
-            
+
         end
-        r = r or Any(self.SpawnableObjects, function(o) return o:lower() == ro.name:lower() end)
-        if r then
-            reverseObjectMap[r] = 'spawnable'
-        end
+        -- r = r or Any(self.SpawnableObjects, function(o) return o:lower() == ro.name:lower() end)
+        -- if r then
+        --     reverseObjectMap[r] = 'spawnable'
+        -- end
         if not r and DEBUG then
             print('Episode '..episode.name..' was discarded because the object '..ro.name..' does not exist in region '..ro.location..' or at all')
         end
@@ -575,38 +590,43 @@ function GraphStory:ProcessActions(graphActors)
         firstEvent.isInteraction = Any(self.Interactions, function(a) return a:lower() == firstEvent.Action:lower() end)
         if firstEvent.isInteraction then
             firstEvent.interactionRelation = FirstOrDefault(self.temporal[firstEvent.id].relations, function(rel) return self.temporal[rel].type == 'starts_with' end)
-            firstEvent.interactionEvent = FirstOrDefault(self.graph, function(a) 
+            firstEvent.interactionEvent = FirstOrDefault(self.graph, function(a)
                 return a.id and self.temporal[a.id] and self.temporal[a.id].relations
                     and Any(self.temporal[a.id].relations, function(rel) return rel == firstEvent.interactionRelation end) end)
         end
         --if it is an interaction -> the poi has to be the same for both actors...
-        local firstLocation = PickRandom(Where(episode.POI, function(poi) 
-            return 
-                (firstEvent.isInteraction and 
+        local firstLocation = PickRandom(Where(episode.POI, function(poi)
+            return
+                (firstEvent.isInteraction and
                     (
                         not interactionPoiMap[firstEvent.interactionRelation]
-                        or 
+                        or
                         poi.LocationId == interactionPoiMap[firstEvent.interactionRelation]
-                    ) 
+                    )
                     or not firstEvent.isInteraction and not poi.isBusy
                 )
                 and
                 (poi.Region and poi.Region.name:lower():find(firstEvent.Location[1]:lower()) and true or false) --the location name is the one specified in the first event
                 and
                 (
-                    firstEvent.isInteraction 
-                    or 
-                    Any(poi.allActions, function(action) 
+                    firstEvent.isInteraction
+                    or
+                    Any(poi.allActions, function(action)
                         return action.Name:lower() == firstEvent.Action:lower()
                         and (#firstEvent.Entities < 2 or
-                        (action.TargetItem.ObjectId and action.TargetItem.type == self.graph[firstEvent.Entities[2]].Properties.Name --action has as target an object of type x
+                        (action.TargetItem.ObjectId and action.TargetItem.type == self.graph[firstEvent.Entities[2]].Properties.Type --action has as target an object of type x
                         and action.TargetItem.ObjectId == reverseObjectMap[firstEvent.Entities[2]])) --the instance of the object is the one required
                     end)
                 )
                 --the location contains an action defined in the first event
         end))
         if not firstLocation then
-            error('Could not find the first location '..firstEvent.Location[1])
+            local isInteraction = "false"
+            if firstEvent.isInteraction then
+                isInteraction = "true"
+            end
+            local locationId = interactionPoiMap[firstEvent.interactionRelation] or ''
+            error('Could not find the first location \''..firstEvent.Location[1]..'\', isInteraction: '..isInteraction..' interactionLocationId: \''..locationId..'\'')
         end
 
         print('Actor '..a.id..' will be spawned in the location '..firstLocation.Description)
@@ -627,7 +647,7 @@ function GraphStory:ProcessActions(graphActors)
             interactionPoiMap[firstEvent.interactionRelation] = firstLocation.LocationId
         else
             ped.position = firstLocation.position
-            ped.rotation = Vector3(0,0,firstLocation.Angle)    
+            ped.rotation = Vector3(0,0,firstLocation.Angle)
         end
         --else
             --this is a ped => it's starting location id is set in StoryEpisodeBase.Initialize()
@@ -643,7 +663,8 @@ function GraphStory:End()
     if DEBUG then
         outputConsole("GraphStory:End")
     end
-
-    self.CurrentEpisode:Destroy()
-    self.Disposed = true
+    if not self.Disposed then
+        self.CurrentEpisode:Destroy()
+        self.Disposed = true
+    end
 end

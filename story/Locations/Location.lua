@@ -28,10 +28,14 @@ function Location:setData(key, value)
     self.metatable[key] = value
 end
 
-function Location:SpawnPlayerHere(player)
+function Location:SpawnPlayerHere(player, spectate)
     self.isBusy = true
     player:setData('locationId', self.LocationId)
-    player:spawn(self.X, self.Y, self.Z, self.Angle, player.model, self.Interior)
+    local z = self.Z
+    if spectate then
+        z = self.Z + 3
+    end
+    player:spawn(self.X, self.Y, z, self.Angle, player.model, self.Interior)
     -- player:fadeCamera (true)
     local story = GetStory(player)
     if not STATIC_CAMERA then
@@ -259,7 +263,11 @@ function Location:ProcessNextAction(player)
 
     local isMoveEvent = event.Action:lower() == 'move'
 
-    print(event.id)
+    local isInteractionStr = "false"
+    if event.isInteraction then
+        isInteractionStr = "true"
+    end
+    print(event.id..' isInteraction '..isInteractionStr)
     --if the event action has prerequisites then add them first if they are not already in the queue
     local eventAction = nil
     local actionsChain = {}
@@ -267,8 +275,8 @@ function Location:ProcessNextAction(player)
     if event.isInteraction then
         --set the actors one in front of the other in the same location...
         --create the interaction actions / locations
-        local ped1 = FirstOrDefault(CURRENT_STORY.CurrentEpisode.peds, function(p) return p:getData('id') == player:getData('id') end)
-        local ped2 = FirstOrDefault(CURRENT_STORY.CurrentEpisode.peds, function(p) return p:getData('id') == event.interactionEvent.Entities[1] end)
+        local ped1 = FirstOrDefault(CURRENT_STORY.CurrentEpisode.peds, function(p) return p:getData('id') == event.Entities[1] end)
+        local ped2 = FirstOrDefault(CURRENT_STORY.CurrentEpisode.peds, function(p) return p:getData('id') == event.Entities[2] end)
 
         --The interaction action will be executed only from the first actor
         if interactionProcessedMap[event.interactionRelation] then
@@ -283,6 +291,20 @@ function Location:ProcessNextAction(player)
                 eventAction = Kiss { performer = ped1, nextLocation = location, targetPlayer = ped2, TargetItem = ped2 }
             elseif event.Action == 'Hug' then
                 eventAction = Hug { performer = ped1, nextLocation = location, targetPlayer = ped2, TargetItem = ped2 }
+            elseif event.Action == 'Give' then
+                local object = FirstOrDefault(CURRENT_STORY.CurrentEpisode.Objects, function(o) return o.ObjectId == CURRENT_STORY.reverseObjectMap[event.interactionEvent.Entities[3]] end)
+                if not object then
+                    error('Could not find object to give from '..ped1:getData('id')..' to '..ped2:getData('id'))
+                end
+                print('PROCESSING INTERACTION Give from '..ped1:getData('id')..' to '..ped2:getData('id')..' object '..object:__tostring())
+                eventAction = Give { performer = ped1, nextLocation = location, targetPlayer = ped2, TargetItem = object }
+            elseif event.Action == 'INV-Give' or event.Action == 'Receive' then
+                local object = FirstOrDefault(CURRENT_STORY.CurrentEpisode.Objects, function(o) return o.ObjectId == CURRENT_STORY.reverseObjectMap[event.interactionEvent.Entities[3]] end)
+                if not object then
+                    error('Could not find object to give from '..ped1:getData('id')..' to '..ped2:getData('id'))
+                end
+                print('PROCESSING INTERACTION INV-Give from '..ped1:getData('id')..' to '..ped2:getData('id')..' object '..object.ObjectId..': '..object:__tostring())
+                eventAction = Receive { performer = ped1, nextLocation = location, targetPlayer = ped2, TargetItem = object }
             elseif event.Action == 'Laugh' then
                 local jokeTarget = PickRandom({ped1, ped2})
                 eventAction = Laugh { performer = ped1, nextLocation = location, targetPlayer = ped2, TargetItem = jokeTarget }
@@ -303,31 +325,31 @@ function Location:ProcessNextAction(player)
         if not eventAction then
             error('Event action could not be found '..event.Action)
         end
-        local mandatoryPrevAction = eventAction
-        local guard = 0
-        while(mandatoryPrevAction and guard < 10) do
-            print('Mandatory action:'.. mandatoryPrevAction.Name)
+        -- local mandatoryPrevAction = eventAction
+        -- local guard = 0
+        -- while(mandatoryPrevAction and guard < 10) do
+        --     print('Mandatory action:'.. mandatoryPrevAction.Name)
 
-            mandatoryPrevAction = FirstOrDefault(location.allActions, function(action)
-                print('Evaluating as prev action '.. action.ActionId .. ': '..action.Name) 
-                if (action.NextAction and not isArray(action.NextAction)) then
-                    print('Next action '.. action.NextAction.ActionId .. ': '..action.NextAction.Name) 
-                end
-                return mandatoryPrevAction ~= action and action.Name ~= 'Move' and
-                    action.NextAction and ((isArray(action.NextAction) and Any(action.NextAction, function(na) 
-                    return na == mandatoryPrevAction 
-                end)) 
-                or (not isArray(action.NextAction) and action.NextAction == mandatoryPrevAction ))
-            end)
-            if mandatoryPrevAction then
-                print('Mandatory prev action:'.. mandatoryPrevAction.Name)
-                table.insert(actionsChain, 1, mandatoryPrevAction)
-            end
-            guard = guard + 1
-        end
-        if guard >= 10 then
-            error('Infinite loop mandatoryPrevAction')
-        end
+        --     mandatoryPrevAction = FirstOrDefault(location.allActions, function(action)
+        --         print('Evaluating as prev action '.. action.ActionId .. ': '..action.Name) 
+        --         if (action.NextAction and not isArray(action.NextAction)) then
+        --             print('Next action '.. action.NextAction.ActionId .. ': '..action.NextAction.Name) 
+        --         end
+        --         return mandatoryPrevAction ~= action and action.Name ~= 'Move' and
+        --             action.NextAction and ((isArray(action.NextAction) and Any(action.NextAction, function(na) 
+        --             return na == mandatoryPrevAction 
+        --         end)) 
+        --         or (not isArray(action.NextAction) and action.NextAction == mandatoryPrevAction ))
+        --     end)
+        --     if mandatoryPrevAction then
+        --         print('Mandatory prev action:'.. mandatoryPrevAction.Name)
+        --         table.insert(actionsChain, 1, mandatoryPrevAction)
+        --     end
+        --     guard = guard + 1
+        -- end
+        -- if guard >= 10 then
+        --     error('Infinite loop mandatoryPrevAction')
+        -- end
     end
     if not isMoveEvent then
         print(eventAction.Name)
@@ -337,33 +359,33 @@ function Location:ProcessNextAction(player)
 --in the steps below, we make sure that when we reach the first action from an enforced chain, then we process all their previous and following mandatory actions
     local nextEvent = FirstOrDefault(CURRENT_STORY.graph, function(evt) return evt.id == CURRENT_STORY.temporal[event.id].next end)
     if not isMoveEvent then
-        local nextMandatoryAction = eventAction.NextAction
-        while (nextMandatoryAction) do
-            --if the action has mandatory closing actions then add them if they are not already in the graph next actions
-            if  nextEvent 
-                and (isArray(nextMandatoryAction)
-                and Any(nextMandatoryAction, function(action) 
-                    return action.Name:lower() == nextEvent.Action:lower()--action.location is the same as the event.next.location (technically, in a chain the location doesn't change, except when it does (Dance)...)
-                end)
-                or (not isArray(nextMandatoryAction) and nextMandatoryAction.Name:lower() == nextEvent.Action:lower())
-                )
-                and
-                (eventAction.NextLocation.Region.name:lower():find(nextEvent.Location[1]:lower()) and true or false)
-            then
-                if isArray(nextMandatoryAction) then
-                    nextMandatoryAction = FirstOrDefault(nextMandatoryAction, function(action) return action.Name:lower() == nextEvent.Action:lower() end)
-                end
-                --if the action is set in the next future event in the same location, skip the processing of the next future event
-                nextEvent = FirstOrDefault(CURRENT_STORY.graph, function(evt) return evt.id == CURRENT_STORY.temporal[nextEvent.id].next end)
-            end
+        -- local nextMandatoryAction = eventAction.NextAction
+        -- while (nextMandatoryAction) do
+        --     --if the action has mandatory closing actions then add them if they are not already in the graph next actions
+        --     if  nextEvent 
+        --         and (isArray(nextMandatoryAction)
+        --         and Any(nextMandatoryAction, function(action) 
+        --             return action.Name:lower() == nextEvent.Action:lower()--action.location is the same as the event.next.location (technically, in a chain the location doesn't change, except when it does (Dance)...)
+        --         end)
+        --         or (not isArray(nextMandatoryAction) and nextMandatoryAction.Name:lower() == nextEvent.Action:lower())
+        --         )
+        --         and
+        --         (eventAction.NextLocation.Region.name:lower():find(nextEvent.Location[1]:lower()) and true or false)
+        --     then
+        --         if isArray(nextMandatoryAction) then
+        --             nextMandatoryAction = FirstOrDefault(nextMandatoryAction, function(action) return action.Name:lower() == nextEvent.Action:lower() end)
+        --         end
+        --         --if the action is set in the next future event in the same location, skip the processing of the next future event
+        --         nextEvent = FirstOrDefault(CURRENT_STORY.graph, function(evt) return evt.id == CURRENT_STORY.temporal[nextEvent.id].next end)
+        --     end
 
-            if isArray(nextMandatoryAction) then
-                nextMandatoryAction = PickRandom(nextMandatoryAction)
-            end
-            print(nextMandatoryAction.Name)
-            table.insert(actionsChain, nextMandatoryAction)
-            nextMandatoryAction = nextMandatoryAction.NextAction
-        end
+        --     if isArray(nextMandatoryAction) then
+        --         nextMandatoryAction = PickRandom(nextMandatoryAction)
+        --     end
+        --     print(nextMandatoryAction.Name)
+        --     table.insert(actionsChain, nextMandatoryAction)
+        --     nextMandatoryAction = nextMandatoryAction.NextAction
+        -- end
         --add the required actions
 
         for _, action in ipairs(actionsChain) do
@@ -379,8 +401,8 @@ function Location:ProcessNextAction(player)
         if nextEvent.isInteraction then
             nextEvent.interactionRelation = FirstOrDefault(CURRENT_STORY.temporal[nextEvent.id].relations, function(rel) return CURRENT_STORY.temporal[rel].type == 'starts_with' end)
             nextEvent.interactionEvent = FirstOrDefault(CURRENT_STORY.graph, function(a) 
-                return player:getData('id') and CURRENT_STORY.temporal[player:getData('id')] and CURRENT_STORY.temporal[player:getData('id')].relations
-                    and Any(CURRENT_STORY.temporal[player:getData('id')].relations, function(rel) return rel == nextEvent.interactionRelation end) end)
+                return a.id and CURRENT_STORY.temporal[a.id] and CURRENT_STORY.temporal[a.id].relations
+                    and Any(CURRENT_STORY.temporal[a.id].relations, function(rel) return rel == nextEvent.interactionRelation end) end)
         end
         local strIsInteraction = 'false'
         if nextEvent.isInteraction then
@@ -407,7 +429,7 @@ function Location:ProcessNextAction(player)
                 Any(poi.allActions, function(action) 
                     return action.Name:lower() == nextEvent.Action:lower() --the location contains the required action for the next event
                     and (#nextEvent.Entities < 2 or
-                    (action.TargetItem.ObjectId and #nextEvent.Entities > 1 and action.TargetItem.type == CURRENT_STORY.graph[nextEvent.Entities[2]].Properties.Name --action has a target an object of type x
+                    (action.TargetItem.ObjectId and #nextEvent.Entities > 1 and action.TargetItem.type == CURRENT_STORY.graph[nextEvent.Entities[2]].Properties.Type --action has a target an object of type x
                     and action.TargetItem.ObjectId == CURRENT_STORY.reverseObjectMap[nextEvent.Entities[2]]))
                 end) 
             )
@@ -432,6 +454,7 @@ function Location:ProcessNextAction(player)
                     --Î(this is an upward arrow) TODO: is it good, is it bad?
                 clone.LocationId = nextLocation.LocationId
                 clone.allActions = nextLocation.allActions --should include move actions here...
+                clone.Episode = nextLocation.Episode
                 nextLocation = clone
             end
             interactionPoiMap[nextEvent.interactionRelation] = nextLocation.LocationId
@@ -458,7 +481,7 @@ function Location:ProcessNextAction(player)
     if nextLocation and nextLocation ~= location then
         --if this is an interaction then create a move action with target the other player. handle internally inside the move action the positioning of the two players
         --
-        print('Next action is in another location. Inserting a Move action from '..location.Description..' to '..nextLocation.Description)
+        print('Next action is in another location. Inserting a Move action from '..location.Description..' to '..nextLocation.Description..' in episode '..nextLocation.Episode.name)
         local moveAction = FirstOrDefault(location.allActions, function(action) return action.Name == 'Move' and action.TargetItem == nextLocation end)
         --actually I need to clone the move action to point to different coordinates inside the next location
         local clone = Move{performer = moveAction.Performer, targetItem = nextLocation, nextLocation = nextLocation, prerequisites = moveAction.Prerequisites, graphId = moveAction.graphId}
@@ -468,6 +491,11 @@ function Location:ProcessNextAction(player)
 
     CURRENT_STORY.lastEvents[player:getData('id')] = nextEvent
     CURRENT_STORY.lastLocations[player:getData('id')] = nextLocation
+
+    print('Actions queue for actor '..player:getData('id'))
+    for _, action in ipairs(CURRENT_STORY.actionsQueues[player:getData('id')]) do
+        print(action.Name..' '..action:GetDynamicString())
+    end
 end
 
 lock = false
@@ -573,11 +601,15 @@ function Location:GetNextValidAction(player)
             if Any(CURRENT_STORY.CurrentEpisode.peds, function(ped) return player:getData('id') ~= ped:getData('id') and not ped:getData('storyEnded') end) then
                 if DEBUG then
                     outputConsole("Location:GetNextValidAction - waiting for the others to finish")
-                    print("Location:GetNextValidAction - waiting for the others to finish")
+                end
+                print("Location:GetNextValidAction - actor "..player:getData('id').." finished and is waiting for the others to finish")
+                local unfinishedActors = Where(CURRENT_STORY.CurrentEpisode.peds, function(ped) return player:getData('id') ~= ped:getData('id') and not ped:getData('storyEnded') end)
+                for i,p in ipairs(unfinishedActors) do
+                    print(p:getData('id'))
                 end
                 --the episode is ended for the current actor, wait for all the other actors to finish
-                player:setAnimation("cop_ambient", "coplook_loop", 0, true, false, false, true)
                 player:setData('storyEnded', true)
+                player:setAnimation("cop_ambient", "coplook_loop", 0, true, false, false, true)
                 return nil
             end
         end
@@ -585,7 +617,7 @@ function Location:GetNextValidAction(player)
     else
         if DEBUG then
             outputConsole("Next action chosen: "..next.Description)
-            print("Next action chosen: "..next.Description)
+            print("Next action for actor "..player:getData('id').." chosen: "..next.Description)
         end
         if next.NextLocation == self then
             table.insert(self.History[player:getData('id')], next)

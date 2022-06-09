@@ -17,12 +17,14 @@ function PickUp:Apply()
         self.TargetItem:Create()
     end
 
-    pickedObjects = self.Performer:getData('pickedObjects')
+    StoryActionBase.Apply(self)
+
+    local pickedObjects = self.Performer:getData('pickedObjects')
 
     if type(pickedObjects) == 'boolean' then
         pickedObjects = {}
     end
-    
+
     sameDescription = false
     sameObject = false
 
@@ -37,7 +39,7 @@ function PickUp:Apply()
     end
 
     outputChatBox("PickUp:Apply - HEREEEEE")
-    
+
     if sameObject then
         StoryActionBase.GetLogger(self, story):Log(self.Description .. "the same ".. self.TargetItem.Description .. " from " .. self.Where, self)
     elseif sameDescription then
@@ -63,14 +65,15 @@ function PickUp:Apply()
         self.Performer:setAnimation("freeweights", "gym_free_pickup", time, true, false, false, true)
     end
 
+    table.insert(pickedObjects, {self.TargetItem.ObjectId, self.TargetItem.Description})
+    self.Performer:setData('pickedObjects', pickedObjects)
+
     OnGlobalActionFinished(time, self.Performer:getData('id'), self.Performer:getData('storyId'), function()
-        attachElementToBone(self.TargetItem.instance, self.Performer, self.hand, 
+        attachElementToBone(self.TargetItem.instance, self.Performer, self.hand,
                         self.TargetItem.PosOffset.x, self.TargetItem.PosOffset.y, self.TargetItem.PosOffset.z,
                         self.TargetItem.RotOffset.x, self.TargetItem.RotOffset.y, self.TargetItem.RotOffset.z)
     end)
 
-    table.insert(pickedObjects, {self.TargetItem.ObjectId, self.TargetItem.Description})
-    self.Performer:setData('pickedObjects', pickedObjects)
 end
 
 function PickUp:GetDynamicString()

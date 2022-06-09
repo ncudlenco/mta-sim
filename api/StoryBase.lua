@@ -6,6 +6,7 @@ StoryBase = class(function(o, spectators, maxActions)
     o.StartTime = 0
     o.Loggers = {}
     o.History = {}
+    o.CameraHandler = CameraHandler()
 end)
 
 function StoryBase:Play()

@@ -46,7 +46,7 @@ addCommandHandler("eat",
 addCommandHandler("interior",
 	function (thePlayer, commandName, param1)
 		thePlayer.interior = tonumber(param1)
-		fadeCamera(thePlayer, true) 
+		fadeCamera(thePlayer, true)
 	end
 )
 
@@ -65,7 +65,7 @@ addCommandHandler("getInBed",
 
 addCommandHandler("getCar",
 	function (thePlayer)
-		local RaceVehicle = Vehicle ( 411, 0, 0, 0 ) 
+		local RaceVehicle = Vehicle ( 411, 0, 0, 0 )
 		RaceVehicle:spawn(thePlayer.position.x+3, thePlayer.position.y+3, thePlayer.position.z)
 	end
 )
@@ -207,9 +207,9 @@ function destinationReached(player, matchingDimension)
 		-- 	if math.abs(distance) <= 1.3 then
 		-- 		timer:destroy()
 				player:setAnimation()
-				path = nil		
+				path = nil
 		-- 	end
-		-- end, 100, 0)	
+		-- end, 100, 0)
 	end
 	removeEventHandler("onMarkerHit", source, destinationReached)
 	source:destroy()
@@ -239,16 +239,16 @@ addCommandHandler("pathfinding",
 				outputDebugString("Pathfinding module not loaded. Exiting...", 2)
 				return
 			end
-	
+
 			-- Load path graph
 			local graphId = loadPathGraph("files/paths/house8.json")
 			if not findShortestPathBetween then
 				return false
 			end
 			findShortestPathBetween(
-				graphId, 
-				player.position.x, player.position.y, player.position.z, 
-				pathFindingTarget.x, pathFindingTarget.y, pathFindingTarget.z, 
+				graphId,
+				player.position.x, player.position.y, player.position.z,
+				pathFindingTarget.x, pathFindingTarget.y, pathFindingTarget.z,
 				function(result)
 					if (result) then
 						path = result
@@ -258,10 +258,10 @@ addCommandHandler("pathfinding",
 						marker.interior = player.interior
 						marker:setData("idx", 1)
 						addEventHandler("onMarkerHit", marker, destinationReached)
-	
+
 						player:setRotation(0,0,findRotation(player.position.x, player.position.y, nextPos[1], nextPos[2]))
 						player:setAnimation("ped", "WALK_civi", -1, true, true, true, true)
-	
+
 						if DEBUG then
 							for _, nextPos in ipairs(result) do
 								local debugMarker = Marker(nextPos[1], nextPos[2], nextPos[3], "cylinder", 1.5, 255, 0, 0, 128)

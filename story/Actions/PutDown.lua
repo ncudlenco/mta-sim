@@ -6,7 +6,7 @@ PutDown = class(StoryActionBase, function(o, params)
     o.Where = params.where
     o.TargetObjectPosition = params.targetObjectPosition
     o.TargetObjectRotation = params.targetObjectRotation
-    o.how = params.how or PickUp.eHow.Normal
+    o.how = params.how or PutDown.eHow.Normal
 end)
 
 function PutDown:Apply()
@@ -15,6 +15,7 @@ function PutDown:Apply()
     
     StoryActionBase.GetLogger(self, story):Log(self.Description .. self.TargetItem.Description .. " on " .. self.Where, self)
     -- self.TargetItem.instance:setCollisionsEnabled(false)
+    StoryActionBase.Apply(self)
 
     local time = 500
     if self.how == PutDown.eHow.Normal then

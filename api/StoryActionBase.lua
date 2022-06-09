@@ -31,11 +31,8 @@ end
 
 function StoryActionBase:Apply(...)
     local story = GetStory(self.Performer)
-    local regionId = self.Performer:getData('currentRegionId')
-    local region = FirstOrDefault(story.CurrentEpisode.Regions, function(r) return r.Id == regionId end)
-    if region then
-        region:SetRandomStaticCamera(self.Performer)
-    end
+    local playerId = self.Performer:getData('id')
+    story.CameraHandler:requestFocus(playerId)
 end
 
 function StoryActionBase:GetLogger(story)

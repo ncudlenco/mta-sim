@@ -1,5 +1,5 @@
 
-function startSimulation()
+function startSimulation(source)
     SCREENSHOTS = {}
     CURRENT_STORY = nil
     if LOAD_FROM_GRAPH and #INPUT_GRAPHS > 0 then
@@ -30,14 +30,14 @@ function initializeSpectator(source)
     source:setData('spawned', false)
 
     if DEBUG then
-        outputConsole("New player joined the server. Id ".. source:getData('id') .. " story id " .. source:getData('storyId'))
+        outputConsole("New player joined the server. Id ".. source:getData('id'))
     end
 
     table.insert(SPECTATORS, source)
     source:setData("id", "spectator"..#SPECTATORS)
 
     if #SPECTATORS == EXPECTED_SPECTATORS then
-        startSimulation()
+        startSimulation(source)
     end
 end
 
@@ -45,7 +45,7 @@ addEventHandler("onPlayerJoin", getRootElement(), function (prevA, curA) initial
 
 addEventHandler("onPlayerSpawn", getRootElement(),
 function (prevA, curA)
-    if DEBUG then
+    if DEBUG and source:getData('id') then
         outputConsole("Player "..source:getData('id').."spawned ")
     end
     source:setData('spawned', true)
@@ -116,7 +116,7 @@ function terminatePlayer(player, reason)
     end
 end
 
-addEventHandler ( "onPlayerQuit", root, 
+addEventHandler ( "onPlayerQuit", root,
 function ( quitType )
     if DEBUG then
         outputConsole(getPlayerName(source).. " has left the server (" .. quitType .. ")")
@@ -152,7 +152,8 @@ function ( theResource, status, pixels, timestamp, tag )
             newFile:write(pixels)
             newFile:close()
         end
-    end    
+        --TODO: add status error and create a new file which signals a forced quit
+    end
 end
 )
 

@@ -15,6 +15,8 @@ function PedHandler:InitializePed(ped)
     ped:setData("id", g.Id)
     ped:setData("isPed", true)
     ped:setData('pickedObjects', {})
+    ped:setData('hasFocus', false)
+    ped:setData('paused', false)
 
     math.randomseed(os.clock()*100000000000)
     math.random(); math.random(); math.random()
@@ -42,11 +44,11 @@ function PedHandler:GetOrCreatePed(modelId, x, y, z, angle)
     outputConsole('Get or create ped '..modelId)
     local ped = nil
     for i,p in ipairs(self.PED_ZOO) do
-        if not p:getData('assigned') then
+        if p and not p:getData('assigned') then
             p.model = modelId
             p.position = Vector3(x,y,z)
             p.rotation = Vector3(0,0,angle)
-            p.setData('assigned', true)
+            p:setData('assigned', true)
             ped = p
             print('Found non-assigned ped')
             outputConsole('Found non-assigned ped')

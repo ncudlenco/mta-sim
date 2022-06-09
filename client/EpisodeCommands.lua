@@ -9,7 +9,7 @@ if DEFINING_EPISODES then
         local g = Guid()
         localPlayer:setData("id", g.Id)
         localPlayer:setData("isPed", false)
-    
+
         print('Player '..g.Id)
         CLIENT_STORY = Story(localPlayer, 10000, true)
         CURRENT_STORY = CLIENT_STORY
@@ -32,7 +32,7 @@ local currentRegion = nil
 local function text_render ( )
     local closestRegion = nil
     if currentRegion then
-        closestRegion = currentRegion 
+        closestRegion = currentRegion
     elseif episode.Regions then
         local regionsInRange = Region.FilterWithinRange(localPlayer.position, episode.Regions, 1.5)
         closestRegion = Region.GetClosest(localPlayer, regionsInRange, false)
@@ -41,17 +41,17 @@ local function text_render ( )
         if closestRegion.cameras then
             for i,c in ipairs(closestRegion.cameras) do
                 local sx, sy, _ = getScreenFromWorldPosition(c.x, c.y, c.z)
-                if sx then 
+                if sx then
                     local sw, sh = guiGetScreenSize ( )
-                    dxDrawText ("cam"..i, sx, sy, sw, sh, tocolor ( 255, 255, 0, 255 ), 2.0, "default-bold" ) 
+                    dxDrawText ("cam"..i, sx, sy, sw, sh, tocolor ( 255, 255, 0, 255 ), 2.0, "default-bold" )
                 end
             end
         end
         for i,v in ipairs(closestRegion.vertexes) do
             local sx, sy, _ = getScreenFromWorldPosition(v.x, v.y, v.z)
-            if sx then 
+            if sx then
                 local sw, sh = guiGetScreenSize ( )
-                dxDrawText ('v'..i..': '..closestRegion.name, sx, sy, sw, sh, tocolor ( 0, 0, 0, 255 ), 2.0, "default-bold" ) 
+                dxDrawText ('v'..i..': '..closestRegion.name, sx, sy, sw, sh, tocolor ( 0, 0, 0, 255 ), 2.0, "default-bold" )
             end
         end
         if not currentRegion then
@@ -60,25 +60,25 @@ local function text_render ( )
                 centerText = centerText..': '..table.concat( closestRegion.Objects, ", ")
             end
             local sx, sy, _ = getScreenFromWorldPosition(closestRegion.center.x, closestRegion.center.y, closestRegion.center.z)
-            if sx then 
+            if sx then
                 local sw, sh = guiGetScreenSize ( )
-                dxDrawText (centerText, sx, sy, sw, sh, tocolor ( 0, 0, 0, 255 ), 2.0, "default-bold" ) 
+                dxDrawText (centerText, sx, sy, sw, sh, tocolor ( 0, 0, 0, 255 ), 2.0, "default-bold" )
             end
         end
     end
     for i, obj in ipairs(episode.ObjectsToDelete) do
         local sx, sy, _ = getScreenFromWorldPosition(obj.position.x, obj.position.y, obj.position.z)
-        if sx then 
+        if sx then
             local sw, sh = guiGetScreenSize ( )
-            dxDrawText ("deleted", sx, sy, sw, sh, tocolor ( 255, 0, 0, 255 ), 2.0, "default-bold" ) 
-        end 
+            dxDrawText ("deleted", sx, sy, sw, sh, tocolor ( 255, 0, 0, 255 ), 2.0, "default-bold" )
+        end
     end
     for i, obj in ipairs(episode.Objects) do
         local sx, sy, _ = getScreenFromWorldPosition(obj.position.x, obj.position.y, obj.position.z)
-        if sx then 
+        if sx then
             local sw, sh = guiGetScreenSize ( )
-            dxDrawText (i..': '..(obj.Description or '')..' '..(obj.modelid or 'random eModel'), sx, sy, sw, sh, tocolor ( 0, 255, 0, 255 ), 1.0, "default-bold" ) 
-        end 
+            dxDrawText (i..': '..(obj.Description or '')..' '..(obj.modelid or 'random eModel'), sx, sy, sw, sh, tocolor ( 0, 255, 0, 255 ), 1.0, "default-bold" )
+        end
     end
     for i, poi in ipairs ( episode.POI ) do
         if #markers == #(episode.POI) and i > 100 then
@@ -87,29 +87,25 @@ local function text_render ( )
         local x = poi.X
         local y = poi.Y
         local z = poi.Z
-        local sx, sy, _ = getScreenFromWorldPosition ( x, y, z ) 
-        
+        local sx, sy, _ = getScreenFromWorldPosition ( x, y, z )
+
         local playerZ = localPlayer.position.z
         if (localPlayer.position - Vector3(x,y,z)).length < 10 then
-            if sx then 
+            if sx then
                 local sw, sh = guiGetScreenSize ( )
                 local actionsText = ""
                 if #poi.PossibleActions > 0 then
                     local a = poi.PossibleActions[1]
                     actionsText = a.id..": "..a.Description
                     while (a) do
-                        if a.NextAction and #a.NextAction > 0 then
-                            a = a.NextAction[1]
-                        else
-                            a = a.NextAction
-                        end
+                        a = a.NextAction
                         if not a then
                             break
                         end
                         if isArray(a) then
                             actionsText = actionsText.." -random- ["
                             for k, ra in ipairs(a) do
-                                actionsText = actionsText..ra.id..": "..ra.Description
+                                actionsText = actionsText..ra.id..": "..ra.Description.."; "
                             end
                             actionsText = actionsText..']'
                         else
@@ -132,8 +128,8 @@ local function text_render ( )
                     end
                     allLinkedEpisodesText = allLinkedEpisodesText.."-> "..e..";"
                 end
-                dxDrawText ( i..":"..poi.Description..allLinkedEpisodesText.."\n"..actionsText..allActionsText, sx, sy, sw, sh, tocolor ( 255, 200, 0, 255 ), 1.0, "default-bold" ) 
-            end 
+                dxDrawText ( i..":"..poi.Description..allLinkedEpisodesText.."\n"..actionsText..allActionsText, sx, sy, sw, sh, tocolor ( 255, 200, 0, 255 ), 1.0, "default-bold" )
+            end
         end
 
         if #markers < #(episode.POI) then
@@ -157,15 +153,15 @@ local function text_render ( )
     if episode.supertemplates then
         for _,s in ipairs(episode.supertemplates) do
             if s.position then
-                local sx, sy, _ = getScreenFromWorldPosition ( s.position.x, s.position.y, s.position.z ) 
+                local sx, sy, _ = getScreenFromWorldPosition ( s.position.x, s.position.y, s.position.z )
                 if sx then
                     local sw, sh = guiGetScreenSize ( )
-                    dxDrawText ( 'supertemplate '..s.name.."\n", sx, sy, sw, sh, tocolor ( 183, 44, 174, 255 ), 1.0, "default-bold" ) 
+                    dxDrawText ( 'supertemplate '..s.name.."\n", sx, sy, sw, sh, tocolor ( 183, 44, 174, 255 ), 1.0, "default-bold" )
                 end
             end
         end
     end
-end 
+end
 
 local function unloadEpisode(episode)
     if not episode then
@@ -175,7 +171,7 @@ local function unloadEpisode(episode)
     for _,obj in ipairs(episode.ObjectsToDelete) do
         restoreWorldModel(obj.modelid, obj.size, obj.position.x, obj.position.y, obj.position.z)
     end
-    for _, marker in pairs ( markers ) do 
+    for _, marker in pairs ( markers ) do
         marker:destroy()
     end
     if currentRegion and currentRegion.markers then
@@ -190,7 +186,7 @@ local function unloadEpisode(episode)
                 st.instantiatedTemplate:Destroy()
             end
         end
-    end 
+    end
     markers = {}
     episode:Destroy()
     return true
@@ -253,7 +249,7 @@ local function playerPressedKey(button, press)
         elseif button == "d" then
             translate = true
             offset =  Vector3(0,translationIncrement,0)
-        elseif button == "z" then 
+        elseif button == "z" then
             translate = true
             offset =  Vector3(0,0,translationIncrement)
         elseif button == "x" then
@@ -327,7 +323,7 @@ local function playerPressedKey(button, press)
                     editedObject.roll = editedObject.roll + offset.z
                 elseif changeSize then
                     editedObject.fov = editedObject.fov + sizeIncrement
-                end    
+                end
             end
 
             Camera.setMatrix(
@@ -494,7 +490,7 @@ addCommandHandler("episode",
             if param1 then
                 episode.name = param1
             end
-            
+
             outputChatBox("New episode initialized", 255, 0, 0, false)
             addEventHandler("onClientRender", getRootElement(), text_render)
         elseif command == "stoprender" then
@@ -550,7 +546,7 @@ addCommandHandler("episode",
                         obj.RotOffset = obj.RotOffset:unpack()
                     end
                     obj.instance = nil
-                    
+
                     -- outputChatBox(tostring(obj["removeZOffset"] ~= nil))
 
                     if obj["removeZOffset"] ~= nil then
@@ -661,7 +657,7 @@ addCommandHandler("episode",
                 function onClick(button, state, absoluteX, absoluteY, worldX, worldY, worldZ, element)
                     if state ~= "up" then
                         return
-                    end 
+                    end
                     outputChatBox("Clicked at "..worldX..", "..worldY..", "..worldZ, 255, 0, 0, false)
                     removeEventHandler("onClientClick", getRootElement(), onClick)
                     if not param2 then
@@ -721,7 +717,7 @@ addCommandHandler("episode",
                     element = editedObject
                     element:setData('deleteMarker', true)
                     element:setData('modelId', modelId)
-                    
+
                     addEventHandler("onClientKey", root, playerPressedKey)
                     addEventHandler ( "onElementDoneEditing", getRootElement(), addObjectToDelete)
                     removeEventHandler("onClientClick", getRootElement(), onClick)
@@ -741,7 +737,7 @@ addCommandHandler("episode",
                 end
                 if poi == nil then
                     outputChatBox('Could not find any POI nearby. Place the player in the desired POI')
-                   return 
+                   return
                 end
 
                 table.remove(episode.POI, id)
@@ -768,12 +764,12 @@ addCommandHandler("episode",
                         removeEventHandler("onElementDoneEditing", getRootElement(), addObjectToRestore)
                         if restoreWorldModel (modelid, obj.size, obj.position.x, obj.position.y, obj.position.z) then
                             for i,v in ipairs(episode.ObjectsToDelete) do
-                                if 
+                                if
                                     v.modelid == modelid
-                                    and math.abs(v.position.y - obj.position.y) < obj.size 
-                                    and math.abs(v.position.z - obj.position.z) < obj.size 
-                                    and math.abs(v.position.x - obj.position.x) < obj.size 
-                                    and v.interior == obj.interior 
+                                    and math.abs(v.position.y - obj.position.y) < obj.size
+                                    and math.abs(v.position.z - obj.position.z) < obj.size
+                                    and math.abs(v.position.x - obj.position.x) < obj.size
+                                    and v.interior == obj.interior
                                 then
                                     table.remove(episode.ObjectsToDelete, i)
                                     outputChatBox("Done. Restored.", 255, 0, 0, false)
@@ -795,7 +791,7 @@ addCommandHandler("episode",
                     element = editedObject
                     element:setData('restoreMarker', true)
                     element:setData('modelId', modelId)
-                    
+
                     addEventHandler("onClientKey", root, playerPressedKey)
                     addEventHandler ( "onElementDoneEditing", getRootElement(), addObjectToRestore)
                     removeEventHandler("onClientClick", getRootElement(), onClick)
@@ -827,7 +823,7 @@ addCommandHandler("episode",
                 function onClick(button, state, absoluteX, absoluteY, worldX, worldY, worldZ, element)
                     if state ~= "up" then
                         return
-                    end 
+                    end
                     outputChatBox("Clicked at "..worldX..", "..worldY..", "..worldZ, 255, 0, 0, false)
                     for i,v in ipairs (episode.Objects) do
                         if
@@ -913,7 +909,7 @@ addCommandHandler("episode",
                     end
                 else
                     outputChatBox("No region defined yet")
-                end            
+                end
             end
         elseif command == "linkepisode" then
             if param1 ~= "" then
@@ -931,7 +927,7 @@ addCommandHandler("episode",
                 end
                 if poi == nil then
                     outputChatBox('Could not find any POI nearby. Place the player in the desired POI')
-                return 
+                return
                 end
                 table.insert(poi.episodeLinks, param1)
             else
@@ -954,7 +950,7 @@ addCommandHandler("episode",
                 end
 
                 table.insert(
-                    episode.POI, 
+                    episode.POI,
                     Location(
                         localPlayer.position.x,
                         localPlayer.position.y,
@@ -1033,7 +1029,7 @@ addCommandHandler("episode",
                     outputChatBox("Press enter to finish", 255, 0, 0, false)
                     editedObject = Object(modelId, Vector3(worldX, worldY, worldZ), Vector3(0,0,0), true)
                     editedObject.interior = localPlayer.interior
-                    
+
                     addEventHandler("onClientKey", root, playerPressedKey)
                     addEventHandler ( "onElementDoneEditing", getRootElement(), addObjectToCreate)
                     removeEventHandler("onClientClick", getRootElement(), onClick)
@@ -1076,7 +1072,7 @@ addCommandHandler("episode",
                     outputChatBox('A region for the current player location could not be found. Make sure you create a region for it first.')
                     return
                 end
-        
+
                 outputChatBox('Set the camera as you desire and press enter')
                 setCamera = true
                 moveTarget = false
@@ -1089,7 +1085,7 @@ addCommandHandler("episode",
                 if not groundZ or groundZ == 0 then
                     groundZ = localPlayer.position.z - 1
                 end
-    
+
                 cameraTargetObject = Marker(localPlayer.position.x, localPlayer.position.y, groundZ, "cylinder", 1, 255, 255, 0, 128)
                 cameraTargetObject.interior = localPlayer.interior
                 local startingCameraPos = localPlayer.position + localPlayer.matrix.up * 1.2 - localPlayer.matrix.forward * 1.2
@@ -1169,7 +1165,7 @@ addCommandHandler("episode",
                     outputChatBox("Ex: episode add region bedroom [optional description]")
                     return
                 end
-                
+
                 local function doneAddingVertexes()
                     currentRegion.center = currentRegion.center / #currentRegion.vertexes
                     currentRegion.center = currentRegion.center:unpack()
@@ -1246,7 +1242,7 @@ addCommandHandler("episode",
             end
             if poi == nil then
                 outputChatBox('Could not find any POI nearby. Place the player in the desired POI')
-               return 
+               return
             end
             local toActionId = tonumber(param2)
             local fromActionId = tonumber(param1)
@@ -1374,7 +1370,7 @@ addCommandHandler("episode",
                     cam.roll,
                     cam.fov
                 )
-                localPlayer.cameraInterior = localPlayer.interior    
+                localPlayer.cameraInterior = localPlayer.interior
             else
                 outputChatBox("Possible commands: \ntest action \ntest poi"..text,255,255,0)
             end
@@ -1474,14 +1470,14 @@ addCommandHandler("supertemplate",
                 else
                     local firstTemplate = Template.Load(supertemplate.name, supertemplate.templates[1])
                     template:ComputeGlobalCentroid()
-                    template:Rebase(supertemplate.position, 
+                    template:Rebase(supertemplate.position,
                         Vector3(
                             firstTemplate.globalCentroid.x,
                             firstTemplate.globalCentroid.y,
                             firstTemplate.globalCentroid.z
                         ) - template.globalCentroid
                     )
-                end 
+                end
                 template:Serialize("files/supertemplates/"..supertemplate.name)
                 table.insert(supertemplate.templates, template.name)
             else
@@ -1492,14 +1488,14 @@ addCommandHandler("supertemplate",
                     local firstTemplate = Template.Load(supertemplate.name, supertemplate.templates[1])
                     template:ComputeGlobalCentroid()
                     template:Rebase(
-                        supertemplate.position, 
+                        supertemplate.position,
                         Vector3(
                             firstTemplate.globalCentroid.x,
                             firstTemplate.globalCentroid.y,
                             firstTemplate.globalCentroid.z
                         ) - template.globalCentroid
                     )
-                end 
+                end
                 template:Serialize("files/supertemplates/"..supertemplate.name)
                 table.insert(supertemplate.templates, template.name)
             end
@@ -1523,7 +1519,7 @@ addCommandHandler("supertemplate",
             outputChatBox("Press backspace to mark the template to be skipped", 255, 0, 0, false)
             outputChatBox("Press enter to finish", 255, 0, 0, false)
             editedObject = template
-            isTemplate = true   
+            isTemplate = true
             relativePosition = supertemplate.position
             addEventHandler("onClientKey", root, playerPressedKey)
 
@@ -1564,7 +1560,7 @@ addCommandHandler("supertemplate",
                     supertemplate.position = supertemplate.position:unpack()
                     table.insert(episode.supertemplates, supertemplate)
                 end
-            end  
+            end
             addEventHandler ( "onElementDoneEditing", getRootElement(), finishedOffsettingTemplate)
         end
     end
@@ -1604,14 +1600,14 @@ addCommandHandler("template",
                 local firstTemplate = Template.Load(param1, supertemplate.templates[1])
                 template:ComputeGlobalCentroid()
                 template:Rebase(
-                    supertemplate.position, 
+                    supertemplate.position,
                     Vector3(
-                        firstTemplate.globalCentroid.x, 
-                        firstTemplate.globalCentroid.y, 
+                        firstTemplate.globalCentroid.x,
+                        firstTemplate.globalCentroid.y,
                         firstTemplate.globalCentroid.z
                     ) - template.globalCentroid
                 )
-            end 
+            end
             template:Serialize("files/supertemplates/"..param1)
             table.insert(supertemplate.templates, template.name)
             supertemplate:Serialize(param1)
@@ -1644,7 +1640,7 @@ addCommandHandler("template",
                         poi = v
                     end
                 end
-    
+
                 if not poi then
                     outputChatBox("Could not find a POI nearby!")
                     return
@@ -1653,12 +1649,12 @@ addCommandHandler("template",
                 end
 
                 local relativePoint = localPlayer.position
-                if template.position then 
+                if template.position then
                     relativePoint = template.position
                 else
                     template.position = localPlayer.position
                 end
-    
+
                 local mainPoi, objects, locations = poi:Serialize(episode, relativePoint, template.objects, template.locations, template.poi, true)
                 outputChatBox("poi serialized: "..#objects..' objects ; '..#locations..' locations and the main poi')
 
@@ -1671,10 +1667,10 @@ addCommandHandler("template",
                     return
                 end
 
-                if not template.position then 
+                if not template.position then
                     template.position = localPlayer.position
                 end
-                
+
                 local id = tonumber(param2)
                 if #Where(template.objects, function (x) return x.id == id end) == 0 then
                     local sourceObject = episode.Objects[id]
@@ -1686,7 +1682,7 @@ addCommandHandler("template",
                     objectCopy.id = id
 
                     table.insert(template.objects, {
-                        id = objectCopy.id, 
+                        id = objectCopy.id,
                         dynamicString = objectCopy.dynamicString
                     })
                 end
@@ -1721,12 +1717,12 @@ addCommandHandler("template",
                 if template:InsertInEpisode(episode) then
                     outputChatBox("Episode objects after: "..#episode.Objects, 255, 255, 255, false)
                     outputChatBox("Episode poi after: "..#episode.POI, 255, 255, 255, false)
-    
+
                     outputChatBox("Template: ".. #template.objects .." dependent objects inserted...", 255, 255, 255, false)
                     outputChatBox("Template: ".. #template.locations .." dependent poi inserted...", 255, 255, 255, false)
-                    outputChatBox("Done. Template with all dependencies inserted.", 255, 0, 0, false)                    
+                    outputChatBox("Done. Template with all dependencies inserted.", 255, 0, 0, false)
                 end
-            end                
+            end
             showCursor(true, true)
             outputChatBox("Use w/a/s/d/z/x/q/e/f/g/h/j to place and rotate the object", 255, 0, 0, false)
             outputChatBox("Press enter to finish", 255, 0, 0, false)

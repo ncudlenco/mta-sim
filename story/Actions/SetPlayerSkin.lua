@@ -3086,7 +3086,7 @@ SetPlayerSkin.PlayerSkins = {
     SetPlayerSkin(62, "A old white man in a ligh blue with white stripes pajamas", 1),
     -- SetPlayerSkin(63, "A young black woman in a pink bra and black skirt", 2),  --> too vulgar...
     -- SetPlayerSkin(64, "A young white woman in a black t-shirt and pink skirt", 2),  --> too vulgar...
-    SetPlayerSkin(65, "Kendl Johnson", 1),                                  ---> not working
+    -- SetPlayerSkin(65, "Kendl Johnson", 1),                                  ---> not working
     SetPlayerSkin(66, "A middle-aged black man in a navy blue and white jacket and black jeans", 1),
     -- SetPlayerSkin(67, "Pool Player", 1),                                    ---> same as 66
     SetPlayerSkin(68, "An old white man in a black suit", 1),
@@ -3229,7 +3229,7 @@ SetPlayerSkin.PlayerSkins = {
     -- SetPlayerSkin(205, "Burger Shot Cashier", 1),       ---> too weird
     SetPlayerSkin(206, "A middle-aged white bald man with a khaki t-shirt and black jeans", 1),
     ---- SetPlayerSkin(207, "Prostitute", 1),              ---> too vulgar
-    SetPlayerSkin(208, "An old white bald man with a red t-shirt, white apron and brown pants", 1),
+    -- SetPlayerSkin(208, "An old white bald man with a red t-shirt, white apron and brown pants", 1),
     SetPlayerSkin(209, "A middle-aged asian man with black hair in a light gray shirt and black pants", 1),
     SetPlayerSkin(210, "A young white woman with brown hair in a black shirt and black jeans", 1),
     -- SetPlayerSkin(211, "Clothes shop staff", 1),            ---> too weird

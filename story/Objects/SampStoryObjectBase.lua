@@ -24,7 +24,7 @@ SampStoryObjectBase = class(StoryObjectBase, function(o, params)
     end
 
     o.isRandomModelId = params.isRandomModelId or false
-    
+
     if params.noRandomId ~= true then
 
         if o.modelid == nil or o.modelid < 0 then
@@ -36,7 +36,7 @@ SampStoryObjectBase = class(StoryObjectBase, function(o, params)
             math.random(); math.random(); math.random()
             math.randomseed(os.clock()*100000000000)
             math.random(); math.random(); math.random()
-        
+
             o.modelid = loadstring('return '..o.type..'.eModel[PickRandom('..o.type..'.eModel)]')()
         end
     end
@@ -93,7 +93,7 @@ function SampStoryObjectBase:UpdateData(unpack)
         self.rotation = self.instance.rotation
         self.interior = self.instance.interior
     end
-    if unpack then        
+    if unpack then
         if self.position and self.position.unpack then
             self.position = self.position:unpack()
         end

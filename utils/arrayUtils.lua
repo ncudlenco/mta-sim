@@ -19,6 +19,15 @@ function Select(arr, func)
     return res
 end
 
+function ForEach(arr, func)
+    if not func then
+        error('[ForEach]: func expected -> got nil')
+    end
+    for k, a in pairs(arr) do --this will work on arrays and tables
+        func(a, k)
+    end
+end
+
 function UniqueStr(arr, func)
     local res = {}
     local set = {}
@@ -166,6 +175,23 @@ function reduce(arr, initial, op)
     local res = initial
     for i, value in ipairs(arr) do
         res = op(res, value)
+    end
+    return res
+end
+
+function getPlayer(id)
+    FirstOrDefault(getElementsByType('ped'), function(spectator) return spectator:getData('id') == id end)
+end
+
+function reduceLeft(arr, default, op)
+    local res = default
+    if #arr > 0 then
+        res = arr[1]
+        for i, value in ipairs(arr) do
+            if i > 1 then
+                res = op(res, value)
+            end
+        end
     end
     return res
 end

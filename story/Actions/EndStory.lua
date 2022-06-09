@@ -12,7 +12,7 @@ function EndStory:Apply()
     local story = GetStory(self.Performer)
     story:End()
     if not story.LogData and not story.RecorderTimer then
-        for _,spectator in story.Spectators do
+        for _,spectator in ipairs(story.Spectators) do
             terminatePlayer(spectator, "story ended - end story call")
         end
     end

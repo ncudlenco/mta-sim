@@ -3516,9 +3516,12 @@
                             "type": "Object"
                         },
                         "id": 1,
-                        "nextAction": {
+                        "nextAction": [{
                             "id": 2
-                        },
+                        }, {
+                            "id": 4
+                        }
+                        ],
                         "closingAction": {
                             "id": 3
                         },
@@ -3549,6 +3552,18 @@
                             "type": "Object"
                         },
                         "id": 3,
+                        "nextLocation": {
+                            "id": 7
+                        }
+                    },
+                    {
+                        "dynamicString": "return Give{hand = 11, how = 1}",
+                        "isClosingAction": true,
+                        "targetItem": {
+                            "id": 16,
+                            "type": "Object"
+                        },
+                        "id": 4,
                         "nextLocation": {
                             "id": 7
                         }
@@ -3578,9 +3593,12 @@
                             "type": "Object"
                         },
                         "id": 1,
-                        "nextAction": {
+                        "nextAction": [{
                             "id": 2
-                        },
+                        }, {
+                            "id": 4
+                        }
+                        ],
                         "closingAction": {
                             "id": 3
                         },
@@ -3614,6 +3632,18 @@
                         "nextLocation": {
                             "id": 8
                         }
+                    },
+                    {
+                        "dynamicString": "return Give{hand = 11, how = 1}",
+                        "isClosingAction": true,
+                        "targetItem": {
+                            "id": 17,
+                            "type": "Object"
+                        },
+                        "id": 4,
+                        "nextLocation": {
+                            "id": 8
+                        }
                     }
                 ]
             },
@@ -3640,9 +3670,12 @@
                             "type": "Object"
                         },
                         "id": 1,
-                        "nextAction": {
+                        "nextAction": [{
                             "id": 2
-                        },
+                        }, {
+                            "id": 3
+                        }
+                        ],
                         "closingAction": {
                             "id": 2
                         },
@@ -3658,6 +3691,18 @@
                             "type": "Object"
                         },
                         "id": 2,
+                        "nextLocation": {
+                            "id": 9
+                        }
+                    },
+                    {
+                        "dynamicString": "return Give{hand = 11, how = 1}",
+                        "isClosingAction": true,
+                        "targetItem": {
+                            "id": 18,
+                            "type": "Object"
+                        },
+                        "id": 3,
                         "nextLocation": {
                             "id": 9
                         }

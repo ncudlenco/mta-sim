@@ -25,7 +25,7 @@ function StoryEpisodeBase:Initialize(...)
         local temporaryInitialize = false
         local requiredActors = nil
         local graphOfEvents = nil
-        
+
         for i,v in ipairs(arg) do
             if i == 1 then
                 temporaryInitialize = v
@@ -193,6 +193,7 @@ end
 
 function StoryEpisodeBase:ProcessRegions()
     if DEBUG then
+        print('StoryEpisodeBase:ProcessRegions - '..self.name..' started to identify which objects are inside which region')
         outputConsole('StoryEpisodeBase:ProcessRegions - '..self.name..' started to identify which objects are inside which region')
     end
     for i,o in ipairs(self.Objects) do
@@ -239,8 +240,18 @@ function StoryEpisodeBase:Play(...)
     end
 
     for i,spectator in ipairs(getElementsByType('player')) do
-        spectator:setAlpha(0)
-        self.POI[1]:SpawnPlayerHere(spectator)
+        if not FREE_ROAM then
+            spectator:setAlpha(0)
+            -- spectator:setCollisionsEnabled(false) -- doesn't work
+            spectator:setGravity(0)
+        end
+        if self:is_a(MetaEpisode) then
+            if i <= #self.Episodes then
+                self.Episodes[i].POI[#self.Episodes[i].POI]:SpawnPlayerHere(spectator, true) --assign real players to each episode. TODO: replace with the save snapshot logic
+            end
+        else
+            self.POI[#self.POI]:SpawnPlayerHere(spectator)
+        end
     end
 
     if DEBUG then
@@ -309,12 +320,12 @@ function StoryEpisodeBase:LoadFromFile()
         print("Episode: Loading episode from "..self.name.. ".json")
     end
 
-    local file = fileOpen("files/episodes/"..self.name..".json") 
+    local file = fileOpen("files/episodes/"..self.name..".json")
     if file then
         local jsonStr = fileRead(file, fileGetSize(file))
         local episode = fromJSON(jsonStr)
         fileClose(file)
-        
+
         if DEBUG then
             print("Episode: Setting the graph path to ".. episode.graphPath)
         end
@@ -353,7 +364,7 @@ function StoryEpisodeBase:LoadFromFile()
             end
         end
         self.Objects = objects
-        
+
         if DEBUG then
             print("Episode: Deleting the removed objects from the environemnt")
         end
@@ -363,7 +374,7 @@ function StoryEpisodeBase:LoadFromFile()
                 table.insert(self.ObjectsToDelete, obj)
             end
         end
-        
+
         if DEBUG then
             print("Episode: Setting the points of interest and their actions")
         end
@@ -379,6 +390,7 @@ function StoryEpisodeBase:LoadFromFile()
             end
             obj.LocationId = k..'_'..self.name
             obj.episodeLinks = v.episodeLinks or {}
+            obj.Episode = self
             table.insert(deserializedPOI, obj)
         end
         self.POI = deserializedPOI
@@ -438,7 +450,7 @@ function StoryEpisodeBase:LoadFromFile()
             for i, region in ipairs(episode.Regions) do
                 local deserialized = Region(region)
                 deserialized.Episode = self
-                deserialized.Id = i..''
+                deserialized.Id = i..'_'..self.name
                 table.insert(self.Regions, deserialized)
             end
         end
@@ -448,7 +460,7 @@ function StoryEpisodeBase:LoadFromFile()
             math.random(); math.random(); math.random()
             math.randomseed(os.clock()*100000000000)
             math.random(); math.random(); math.random()
-        
+
             for _, s in ipairs(episode.supertemplates) do
                 local idx = math.random(#s.templates)
                 if not s.offsets[idx].skip then
@@ -468,7 +480,7 @@ function StoryEpisodeBase:LoadFromFile()
             self.supertemplates = episode.supertemplates
         end
         return true
-    else 
+    else
         return false
     end
 end

@@ -265,24 +265,32 @@ function Region.GetClosest(element, regions, isInstance)
     return closestRegion
 end
 
-function Region:SetRandomStaticCamera(player)
+function Region:SetRandomStaticCamera()
     if STATIC_CAMERA and self.cameras and #self.cameras > 0 then
         local cameraPos = PickRandom(self.cameras)
         local story = CURRENT_STORY
         for _, spectator in ipairs(story.Spectators) do
             spectator:setCameraMatrix(cameraPos.x, cameraPos.y, cameraPos.z, cameraPos.lx, cameraPos.ly, cameraPos.lz, cameraPos.roll, cameraPos.fov)
+            -- print('CHANGING SPECTATORS INTERIORS AND POSITION to '..self.Episode.name)
+            spectator.position = self.Episode.POI[1].position + Vector3(0,0,3)
             spectator.interior = self.Episode.InteriorId
         end
     end
 end
 
+function Region:AssignFocus()
+    CURRENT_STORY.CurrentEpisode.CurrentRegion = self
+    CURRENT_STORY.CurrentFocusedEpisode = self.Episode
+    self:SetRandomStaticCamera()
+end
+
 function Region:OnPlayerHit(player)
-    if player:getData('storyEnded') then
+    if player:getData('storyEnded') or not player:getData('isPed') then
         return
     end
     if DEBUG then
-        outputConsole('Region:OnPlayerHit - '..self.name)
-        print('Region:OnPlayerHit - '..self.name)
+        outputConsole('[Region]:OnPlayerHit - '..self.name)
+        print('[Region]:OnPlayerHit - '..self.name)
     end
     local previousRegion = player:getData('currentRegion')
     local previousRegionId = player:getData('currentRegionId')
@@ -294,19 +302,16 @@ function Region:OnPlayerHit(player)
     if self.EvaluatingRegion then
         return
     end
-    print('Region: Region is not being evaluated')
     if CURRENT_STORY.CurrentEpisode.CurrentRegion == self then
         return
     end
-    print('Region: Region is not duplicated')
     
     self.EvaluatingRegion = true
     --delay so that all the regionHit events are processed
     Timer(function()      
-        print('Region: Evaluating region is not duplicated')
         local actorsInRegions = {}
         local maxValue = 0
-        --Set the camera in the region with the maximum number of actors
+        
         local maxRegionId = self.Id
 
         for _,ped in ipairs(CURRENT_STORY.CurrentEpisode.peds) do
@@ -325,22 +330,16 @@ function Region:OnPlayerHit(player)
             end
         end
 
-        if maxRegionId ~= self.Id then
-            print('Region: Max region id is not current, returning')
+        if CURRENT_STORY.CurrentEpisode.CurrentRegion ~= self then
+            if DEBUG then
+                print("[Region]: Current region doesn't have focus "..self.name)
+            end
             self.EvaluatingRegion = false
             return
         else
-            print('Region: Max region id is current')
-        end
-        CURRENT_STORY.CurrentEpisode.CurrentRegion = self
-        --change the current camera
-        if not CURRENT_STORY.CurrentEpisode.firstRegionHit then
-            self:SetRandomStaticCamera(player)
-            --TODO for different perspectives: decide to follow only one player maybe
-            for _, spectator in ipairs(CURRENT_STORY.Spectators) do
-                spectator:fadeCamera (true)
+            if DEBUG then
+                print("[Region]: Region has focus "..self.name)
             end
-            CURRENT_STORY.CurrentEpisode.firstRegionHit = true
         end
 
         for _,logger in ipairs(story.Loggers) do

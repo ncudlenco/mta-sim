@@ -315,7 +315,7 @@ function Template:InsertInEpisode(episode, deserialize)
                     for _, na in ipairs(a.nextAction) do
                         table.insert(action.NextAction, deserializedAllActions[na.id])
                     end
-                else                    
+                else
                     action.NextAction = deserializedAllActions[a.nextAction.id]
                 end
             end
@@ -346,7 +346,7 @@ function Template:AddItems(mainPoi, objects, locations)
 end
 
 function Template.Load(supertemplate, name)
-    local file = fileOpen("files/supertemplates/"..supertemplate.."/"..name..".json") 
+    local file = fileOpen("files/supertemplates/"..supertemplate.."/"..name..".json")
     if file then
         local jsonStr = fileRead(file, fileGetSize(file))
         local raw = fromJSON(jsonStr)

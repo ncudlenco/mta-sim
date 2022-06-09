@@ -5,5 +5,23 @@ function callClientFunction(funcname, ...)
     end
     loadstring("return "..funcname)()(unpack(arg))
 end
-addEvent("onServerCallsClientFunction", true)
-addEventHandler("onServerCallsClientFunction", resourceRoot, callClientFunction)
+
+function onDisablePedCollisions(var)
+    print("onDisablePedCollisions")
+    outputConsole("onDisablePedCollisions")
+    for i,v in pairs(getElementsByType("ped")) do --LOOP through all peds
+        setElementCollidableWith(v, localPlayer, false) -- Set the collison off with the other peds.
+    end
+    -- for i,v in pairs(getElementsByType("player")) do --LOOP through all players
+    --     setElementCollidableWith(v, localPlayer, false) -- Set the collison off with the other players.
+    -- end
+end
+
+function initHandlers()
+    addEvent("onServerCallsClientFunction", true)
+    addEventHandler("onServerCallsClientFunction", resourceRoot, callClientFunction)
+end
+addEvent("onDisablePedCollisions", true)
+addEventHandler("onDisablePedCollisions", root, onDisablePedCollisions)
+addEventHandler("onClientResourceStart",resourceRoot,initHandlers)
+--todo: disable collisions for spectators with peds https://forum.mtasa.com/topic/123001-new-help-how-to-disable-players-collision/

@@ -25,6 +25,8 @@ function OnGlobalActionFinished(delay, playerId, storyId, callback, destroyedIte
             callback(playerId, storyId)
         end
 
+        -- story.CameraHandler:freeFocus(playerId)
+
         if not lastAction then
             if DEBUG then
                 outputConsole("GlobalAction:Apply - the last action was null, initiating the first action protocol")

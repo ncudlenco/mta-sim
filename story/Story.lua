@@ -1,5 +1,5 @@
 Story = class(StoryBase, function(o, actor, maxActions, logData)
-    StoryBase.init(o, actor, maxActions)
+    StoryBase.init(o, {actor}, maxActions)
     o.LogData = logData
     o.Logger = Logger('data/'..o.Id..'/'..actor:getData('id'), true, o)
     o.Episodes = {
@@ -23,6 +23,7 @@ Story = class(StoryBase, function(o, actor, maxActions, logData)
     --   "gym3"
     }
     o.Disposed = false
+    o.Actor = actor
     if not o.Actor then
         outputConsole("Error: Actor is null "..o.Id)
     end
@@ -96,7 +97,7 @@ function Story:Play()
 
     if DEBUG then
         print("Story: Picking a random skin...")
-    end 
+    end
 
     local skin = PickRandom(Where(SetPlayerSkin.PlayerSkins, function(s)
         return not s.isTaken
@@ -111,17 +112,19 @@ function Story:Play()
     self.CurrentEpisode = PickRandom(self.Episodes)
     print(self.CurrentEpisode.name)
     self.CurrentEpisode:Initialize(self.Actor)
-    
+
     self.Actor:setData('pickedObjects', {})
 
     if DEBUG then
         print("Story: Playing the picked episode...")
     end
     self.CurrentEpisode:Play(self.Actor)
+    self.Actor:fadeCamera (true)
 
     if DEBUG then
         print("Story: Play - chosen random skin and episode. Playing episode")
     end
+    self:End()
 end
 
 function Story:End()
@@ -130,5 +133,6 @@ function Story:End()
     end
 
     self.CurrentEpisode:Destroy()
+    self.CameraHandler:Reset()
     self.Disposed = true
 end

@@ -22,7 +22,7 @@ function Supertemplate:Serialize()
 end
 
 function Supertemplate.Load(name)
-    local file = fileOpen("files/supertemplates/"..name.."/"..name..".json") 
+    local file = fileOpen("files/supertemplates/"..name.."/"..name..".json")
     if file then
         local jsonStr = fileRead(file, fileGetSize(file))
         local raw = fromJSON(jsonStr)
@@ -47,7 +47,7 @@ end
 
 --Things to do:
 --1. Create super template: creates a folder named $supertemplatename
---2. Add template: insert existing template into a supertemplate 
+--2. Add template: insert existing template into a supertemplate
 --2.0 Use existing functionality to implement the possibility to create a template. It should actually be like when creating an episode
 --2.1 Set properties to templates (i.e. double bed)
 --3. Save

@@ -1,7 +1,7 @@
 MetaEpisode = class(StoryEpisodeBase, function(o, episodes)
     local name = join(';', Select(episodes, function(e) return e.name end))
     StoryEpisodeBase.init(o, {name = name})
-    
+
     o.InteriorId = nil
     o.graphPath = nil
     for _,e in ipairs(episodes) do
@@ -16,12 +16,13 @@ MetaEpisode = class(StoryEpisodeBase, function(o, episodes)
         o.supertemplates = concat(o.supertemplates, e.supertemplates)
     end
     o.Episodes = episodes
+    o.episodeLinks = {}
 end)
 
 
 function MetaEpisode:Initialize(actor, isTemporaryInitialize, actors, graphOfEvents)
     if(#self.Episodes == 0) then return end
-    
+
     self.POI = {}
     self.Objects = {}
     self.Regions = {}
@@ -33,33 +34,46 @@ function MetaEpisode:Initialize(actor, isTemporaryInitialize, actors, graphOfEve
             e:Initialize(actor, isTemporaryInitialize, {}, graphOfEvents)
         end
     end
+    local allPeds = {}
     for _,e in ipairs(self.Episodes) do
         for _,poi in ipairs(e.POI) do
             poi.Episode = e
+            print('Assigning episode '..e.name..' to poi '..poi.Description)
         end
         self.POI = concat(self.POI, e.POI)
         self.Objects = concat(self.Objects, e.Objects)
         self.Regions = concat(self.Regions, e.Regions)
-        self.peds = concat(self.peds, e.peds)
+        for _,p in ipairs(e.peds) do
+            if All(self.peds, function(ped) return ped:getData('id') ~= p:getData('id') end) then
+                table.insert(self.peds, p)
+            end
+        end
     end
+
     -- Link with move actions the episodes
-    local episodeLinks = Where(Select(self.POI, function(poi) if #poi.episodeLinks > 0 then
+    self.episodeLinks = DropNull(Select(self.POI, function(poi) if #poi.episodeLinks > 0 then
         local le = FirstOrDefault(self.Episodes, function(e) return Any(poi.episodeLinks, function(l) return l == e.name end) end)
-        if le then return {e1 = poi.Episode, e2 = le} else return nil end
+        if le then return {sourcePoi = poi, targetEpisode = le} else return nil end
         else return nil end
-    end), function(poi) return poi ~= nil end)
-    for _,tuple in ipairs(episodeLinks) do
-        for _,l1 in ipairs(tuple.e1.POI) do
-            for _,l2 in ipairs(tuple.e2.POI) do
-                local prerequisites = {}
-                if #l1.PossibleActions > 0 then
-                    prerequisites = {l1.PossibleActions[1]}
-                end
-                local moveAction = Move{performer = actor, targetItem = l2, nextLocation = l2, prerequisites = prerequisites, graphId = l1.Episode.graphId}
-                table.insert(l1.PossibleActions, moveAction)
-                table.insert(l1.allActions, moveAction)
-                if DEBUG_CHAIN_LINKED_ACTIONS then
-                    print('Move action from '..l1.Description..' to '..l2.Description)
+    end))
+
+    --just make move actions between all poi of different episodes
+    for _,e1 in ipairs(self.Episodes) do
+        for _,e2 in ipairs(self.Episodes) do
+            if e1 ~= e2 then
+                for _,l1 in ipairs(e1.POI) do
+                    for _,l2 in ipairs(e2.POI) do
+                        local prerequisites = {}
+                        if #l1.PossibleActions > 0 then
+                            prerequisites = {l1.PossibleActions[1]}
+                        end
+                        local moveAction = Move{performer = actor, targetItem = l2, nextLocation = l2, prerequisites = prerequisites, graphId = l1.Episode.graphId}
+                        table.insert(l1.PossibleActions, moveAction)
+                        table.insert(l1.allActions, moveAction)
+                        if DEBUG_CHAIN_LINKED_ACTIONS then
+                            print('Move action from '..l1.Description..' to '..l2.Description)
+                        end
+                    end
                 end
             end
         end

@@ -4,9 +4,10 @@ PedHandler = {
 
 function PedHandler:ReInitialize()
     for i,ped in ipairs(self.PED_ZOO) do
-        ped:setData('assigned', false)
-        ped.interior = 0
-        ped.position = Vector3(0,0,0)
+        self:Dispose(ped)
+    end
+    for i,skin in ipairs(SetPlayerSkin.PlayerSkins) do
+        skin.isTaken = false
     end
 end
 
@@ -14,6 +15,7 @@ function PedHandler:InitializePed(ped)
     local g = Guid()
     ped:setData("id", g.Id)
     ped:setData("isPed", true)
+    ped:setData("isSpawned", false)
     ped:setData('pickedObjects', {})
     ped:setData('hasFocus', false)
     ped:setData('paused', false)
@@ -43,18 +45,19 @@ function PedHandler:GetOrCreatePed(modelId, x, y, z, angle)
     print('Get or create ped '..modelId)
     outputConsole('Get or create ped '..modelId)
     local ped = nil
-    for i,p in ipairs(self.PED_ZOO) do
-        if p and not p:getData('assigned') then
-            p.model = modelId
-            p.position = Vector3(x,y,z)
-            p.rotation = Vector3(0,0,angle)
-            p:setData('assigned', true)
-            ped = p
-            print('Found non-assigned ped')
-            outputConsole('Found non-assigned ped')
-    break
-        end
-    end
+    -- for i,p in ipairs(self.PED_ZOO) do
+    --     if p and not p:getData('assigned') then
+    --         self:Reset(p)
+    --         p.model = modelId
+    --         p.position = Vector3(x,y,z)
+    --         p.rotation = Vector3(0,0,angle)
+    --         p:setData('assigned', true)
+    --         ped = p
+    --         print('Found non-assigned ped')
+    --         outputConsole('Found non-assigned ped')
+    --         break
+    --     end
+    -- end
 
     if not ped then
         print('Creating a new ped')
@@ -73,5 +76,13 @@ end
 function PedHandler:Reset(ped)
     ped.interior = 0
     ped.position = Vector3(0,0,0)
-    ped:setData('assigned', false)
+    for sData, _ in pairs( getAllElementData( ped ) ) do
+        removeElementData( ped, sData )
+    end
+end
+
+function PedHandler:Dispose(ped)
+    ped.interior = 0
+    ped.position = Vector3(0,0,0)
+    ped:kill()
 end

@@ -12,15 +12,15 @@ end)
 function Give:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
-    
+
     StoryActionBase.Apply(self)
-    
+
     local function faceP1ToP2(p1, p2)
         local targetFront = p2.position - p1.position
         local angle = p1.matrix.forward:angleAboutAxis(targetFront, p1.matrix.up)
         p1.rotation = Vector3(0,0,p1.rotation.z + math.deg(angle))
     end
-    
+
     self.TargetPlayer.position = self.Performer.position + Vector3(-0.5,-0.5,0)
 
     outputConsole("Facing players one to the other...")
@@ -57,7 +57,7 @@ function Give:Apply()
             self.TargetItem:updatePositionOffsetSitDown()
             self.TargetItem:updateRotOffsetSitDown()
         end
-        attachElementToBone(self.TargetItem.instance, self.TargetPlayer, self.hand, 
+        attachElementToBone(self.TargetItem.instance, self.TargetPlayer, self.hand,
             self.TargetItem.PosOffset.x, self.TargetItem.PosOffset.y, self.TargetItem.PosOffset.z,
             self.TargetItem.RotOffset.x, self.TargetItem.RotOffset.y, self.TargetItem.RotOffset.z
         )

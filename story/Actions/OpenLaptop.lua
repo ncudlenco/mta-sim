@@ -8,7 +8,8 @@ end)
 function OpenLaptop:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
-    
+    StoryActionBase.Apply(self)
+
     StoryActionBase.GetLogger(self, story):Log(self.Description, self)
     self.TargetItem:ChangeModel(Laptop.eModel.Open)
 

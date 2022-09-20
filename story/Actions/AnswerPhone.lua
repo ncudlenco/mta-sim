@@ -7,6 +7,7 @@ end)
 function AnswerPhone:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
+    StoryActionBase.Apply(self)
     
     attachElementToBone(self.TargetItem.instance, self.Performer, 12, 
                         self.TargetItem.PosOffset.x, self.TargetItem.PosOffset.y, self.TargetItem.PosOffset.z,

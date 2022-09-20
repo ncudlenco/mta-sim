@@ -493,6 +493,25 @@ addCommandHandler("episode",
 
             outputChatBox("New episode initialized", 255, 0, 0, false)
             addEventHandler("onClientRender", getRootElement(), text_render)
+        elseif command == "copyinstance" then
+            DEFINING_EPISODES = true
+            unloadEpisode(episode)
+            episode = House12()
+            if episode:LoadFromFile() then
+                episode.graphId = -1
+                outputChatBox("Loaded files/episodes/"..episode.name..".json", 255, 0, 0, false)
+                episode:Initialize(localPlayer) --should not create the supertemplate contents
+                for pidx,poi in ipairs(episode.POI) do
+                    poi.id = pidx
+                    for idx,a in ipairs(poi.allActions) do
+                        a.id = idx
+                    end
+                end
+            else
+                outputChatBox("File not found files/episodes/"..episode.name..".json", 255, 0, 0, false)
+            end
+		    addEventHandler("onClientRender", getRootElement(), text_render)
+            CLIENT_STORY.CurrentEpisode = episode
         elseif command == "stoprender" then
             removeEventHandler("onClientRender", getRootElement(), text_render)
         elseif command == "run" then

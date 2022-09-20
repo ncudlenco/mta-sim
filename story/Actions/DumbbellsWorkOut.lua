@@ -8,6 +8,7 @@ end)
 function DumbbellsWorkOut:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
+    StoryActionBase.Apply(self)
     
     StoryActionBase.GetLogger(self, story):Log(self.Performer:getData('skinDescription') .. self.Description .. self.TargetItem.Description, self.Performer)
     

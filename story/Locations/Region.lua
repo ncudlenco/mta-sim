@@ -292,11 +292,13 @@ function Region:OnPlayerHit(player)
         outputConsole('[Region]:OnPlayerHit - '..self.name)
         print('[Region]:OnPlayerHit - '..self.name)
     end
-    local previousRegion = player:getData('currentRegion')
-    local previousRegionId = player:getData('currentRegionId')
     player:setData('currentRegion', self.name)
     player:setData('currentRegionId', self.Id)
     player:setData('currentEpisode', self.Episode.name)
+
+    if DEBUG then
+        print("["..player:getData('id').."] Set 'currentRegion' to "..(player:getData('currentRegion') or 'null').." 'currentRegionId' to "..(player:getData('currentRegionId') or 'null').." 'currentEpisode' to "..(player:getData('currentEpisode') or 'null'))
+    end
     local story = CURRENT_STORY
 
     if self.EvaluatingRegion then

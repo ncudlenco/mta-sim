@@ -8,9 +8,10 @@ end)
 function LookAtObject:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
-    
+    StoryActionBase.Apply(self)
+
     StoryActionBase.GetLogger(self, story):Log(self.Description .. " the " .. self.TargetItem.Description, self)
-    
+
     local playerEyesPosition = self.Performer.position + self.Performer.matrix.up * 1.2
     self.Performer:setCameraMatrix(playerEyesPosition, self.TargetItem.position)
 

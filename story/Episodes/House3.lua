@@ -71,7 +71,7 @@ function House3:Initialize(...)
 
     -- get food from the fridge
     local food = Food {
-        modelid = Food.eModel[PickRandom(Food.eModel)],
+        modelid = Food.eModel.Shawarma,
         noCollisions = true,
         position =     Vector3(2493.8033, -1708.3198, 1014.7022),
         rotation =     Vector3(0, 0, 0),

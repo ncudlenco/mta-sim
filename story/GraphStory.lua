@@ -2,11 +2,11 @@ GraphStory = class(StoryBase, function(o, spectators, logData)
     StoryBase.init(o, spectators, maxActions)
     o.LogData = logData
     o.AllEpisodes = {
-        House1(),
-        House3(),
-        House8(),
-        House10(),
-        House12()
+        -- House1(),
+        -- House3(),
+        -- House8(),
+        -- House10(),
+        -- House12()
     }
     o.Episodes = {
         -- House1(),
@@ -17,8 +17,13 @@ GraphStory = class(StoryBase, function(o, spectators, logData)
     }
     o.DynamicEpisodes = {
       "house1_sweet",
+      "house1_preloaded",
+      "house3_preloaded",
       "house7",
+      "house8_preloaded",
       "house9",
+      "house10_preloaded",
+      "house12_preloaded",
       "garden"
     --   "gym1",
     --   "gym2",
@@ -27,7 +32,8 @@ GraphStory = class(StoryBase, function(o, spectators, logData)
     o.Disposed = false
     o.SpawnableObjects = {
         "Cigarette",
-        "MobilePhone"
+        "MobilePhone",
+        "Drinks"
     }
     o.Interactions = {
         "Handshake",
@@ -263,7 +269,9 @@ function GraphStory:ValidateEpisode(
         end)
         if Any(validObjects) or #requiredObjects == 0 then
             validActions = Where(requiredActions, function(ra)
-                local res = Any(self.Interactions, function(a) return a:lower() ~= 'give' and a:lower() == ra.name:lower() end) or Any(episode.POI,
+                local res = Any(self.Interactions, function(a) return
+                    -- a:lower() ~= 'give' and
+                    a:lower() == ra.name:lower() end) or Any(episode.POI,
                     function(poi)
                         if DEBUG_VALIDATION then
                             if poi.Region then
@@ -283,7 +291,7 @@ function GraphStory:ValidateEpisode(
                                     print('**********->'..a.TargetItem.Region.name)
                                 end
                             end
-                            return a.Name:lower() == ra.name:lower() and (ra.name == 'Move' or a.TargetItem.ObjectId and objectMap[a.TargetItem.ObjectId])
+                            return a.Name:lower() == ra.name:lower() and (ra.name == 'Move' or not a.TargetItem or a.TargetItem and a.TargetItem.ObjectId and objectMap[a.TargetItem.ObjectId])
                         end)
                         and (poi.Region.name:lower():find(ra.location:lower()) and true or false )
                     end)
@@ -332,6 +340,7 @@ function GraphStory:GetValidEpisodes()
         local success = episode:LoadFromFile()
 
         table.insert(self.Episodes, episode)
+        table.insert(self.AllEpisodes, episode)
     end
 
     --first preprocess the graph and extract the requirements:
@@ -385,17 +394,16 @@ function GraphStory:GetValidEpisodes()
 
     local validEpisodesSubset = self:ExploreValidEpisodesSubset(self.Episodes, requiredLocations, requiredObjects, requiredActions, {})
 
-    for i,episode_name in ipairs(self.DynamicEpisodes) do
-        print(episode_name)
-        local episode = DynamicEpisode(episode_name)
-        local success = episode:LoadFromFile()
-
-        table.insert(self.AllEpisodes, episode)
-    end
     print('---------------------------------------------finished GetValidEpisodes: {'..join(';', Select(validEpisodesSubset, function(e) return e.name end))..'} found----------------------------------------')
 --find all episodes which contain all the required locations
 --and all the required actions
-    return Where(self.AllEpisodes, function(e) return Any(validEpisodesSubset, function(ve) return ve.name == e.name end) end)
+    return Where(self.AllEpisodes, function(e)
+        local isValid = Any(validEpisodesSubset, function(ve) return ve.name == e.name end)
+        if not isValid then
+            e:Destroy()
+        end
+        return isValid
+    end)
 end
 
 function GraphStory:Play()

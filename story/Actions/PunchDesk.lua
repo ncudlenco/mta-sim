@@ -8,7 +8,8 @@ end)
 function PunchDesk:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
-    
+    StoryActionBase.Apply(self)
+
     StoryActionBase.GetLogger(self, story):Log(self.Description, self)
     self.Performer:setAnimation("INT_OFFICE", "OFF_Sit_Crash", -1, false, true, false, true)
 

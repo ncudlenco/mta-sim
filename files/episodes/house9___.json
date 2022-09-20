@@ -1,10 +1,8 @@
 [
     {
-        "initialized": false,
-        "graphPath": "files\/paths\/house9.json",
+        "InteriorId": 9,
         "peds": [],
         "ValidStartingLocations": [],
-        "InteriorId": 9,
         "ObjectsToDelete": [
             {
                 "PosOffset": {
@@ -26,7 +24,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "99a5f486-41b3-421e-a630-d4f364b38e4b",
+                "ObjectId": "d94e5050-5a15-416e-92df-4acd528441c0",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -61,7 +59,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "99a5f486-41b3-421e-a630-d4f364b38e4b",
+                "ObjectId": "d94e5050-5a15-416e-92df-4acd528441c0",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -96,7 +94,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "99a5f486-41b3-421e-a630-d4f364b38e4b",
+                "ObjectId": "d94e5050-5a15-416e-92df-4acd528441c0",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -131,7 +129,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "99a5f486-41b3-421e-a630-d4f364b38e4b",
+                "ObjectId": "d94e5050-5a15-416e-92df-4acd528441c0",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -166,7 +164,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "99a5f486-41b3-421e-a630-d4f364b38e4b",
+                "ObjectId": "d94e5050-5a15-416e-92df-4acd528441c0",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -201,7 +199,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "99a5f486-41b3-421e-a630-d4f364b38e4b",
+                "ObjectId": "d94e5050-5a15-416e-92df-4acd528441c0",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -236,7 +234,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "99a5f486-41b3-421e-a630-d4f364b38e4b",
+                "ObjectId": "d94e5050-5a15-416e-92df-4acd528441c0",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -271,7 +269,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "99a5f486-41b3-421e-a630-d4f364b38e4b",
+                "ObjectId": "d94e5050-5a15-416e-92df-4acd528441c0",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -306,7 +304,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "99a5f486-41b3-421e-a630-d4f364b38e4b",
+                "ObjectId": "d94e5050-5a15-416e-92df-4acd528441c0",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -341,7 +339,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "99a5f486-41b3-421e-a630-d4f364b38e4b",
+                "ObjectId": "d94e5050-5a15-416e-92df-4acd528441c0",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -376,7 +374,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "99a5f486-41b3-421e-a630-d4f364b38e4b",
+                "ObjectId": "d94e5050-5a15-416e-92df-4acd528441c0",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -411,7 +409,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "99a5f486-41b3-421e-a630-d4f364b38e4b",
+                "ObjectId": "d94e5050-5a15-416e-92df-4acd528441c0",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -446,7 +444,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "24af3633-22d3-4b0e-98cc-05991904c677",
+                "ObjectId": "d94e5050-5a15-416e-92df-4acd528441c0",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -481,7 +479,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "24af3633-22d3-4b0e-98cc-05991904c677",
+                "ObjectId": "d94e5050-5a15-416e-92df-4acd528441c0",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -516,7 +514,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "24af3633-22d3-4b0e-98cc-05991904c677",
+                "ObjectId": "d94e5050-5a15-416e-92df-4acd528441c0",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -551,7 +549,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "24af3633-22d3-4b0e-98cc-05991904c677",
+                "ObjectId": "d94e5050-5a15-416e-92df-4acd528441c0",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -586,7 +584,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "24af3633-22d3-4b0e-98cc-05991904c677",
+                "ObjectId": "d94e5050-5a15-416e-92df-4acd528441c0",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -621,7 +619,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "24af3633-22d3-4b0e-98cc-05991904c677",
+                "ObjectId": "d94e5050-5a15-416e-92df-4acd528441c0",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -656,7 +654,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "24af3633-22d3-4b0e-98cc-05991904c677",
+                "ObjectId": "d94e5050-5a15-416e-92df-4acd528441c0",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -691,7 +689,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "24af3633-22d3-4b0e-98cc-05991904c677",
+                "ObjectId": "d94e5050-5a15-416e-92df-4acd528441c0",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -726,7 +724,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "24af3633-22d3-4b0e-98cc-05991904c677",
+                "ObjectId": "d94e5050-5a15-416e-92df-4acd528441c0",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -761,7 +759,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "24af3633-22d3-4b0e-98cc-05991904c677",
+                "ObjectId": "d94e5050-5a15-416e-92df-4acd528441c0",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -796,7 +794,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "24af3633-22d3-4b0e-98cc-05991904c677",
+                "ObjectId": "d94e5050-5a15-416e-92df-4acd528441c0",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -831,7 +829,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "24af3633-22d3-4b0e-98cc-05991904c677",
+                "ObjectId": "d94e5050-5a15-416e-92df-4acd528441c0",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -866,7 +864,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "24af3633-22d3-4b0e-98cc-05991904c677",
+                "ObjectId": "d94e5050-5a15-416e-92df-4acd528441c0",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -901,7 +899,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "24af3633-22d3-4b0e-98cc-05991904c677",
+                "ObjectId": "d94e5050-5a15-416e-92df-4acd528441c0",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -936,7 +934,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "24af3633-22d3-4b0e-98cc-05991904c677",
+                "ObjectId": "d94e5050-5a15-416e-92df-4acd528441c0",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -971,7 +969,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "24af3633-22d3-4b0e-98cc-05991904c677",
+                "ObjectId": "d94e5050-5a15-416e-92df-4acd528441c0",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -1006,7 +1004,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "24af3633-22d3-4b0e-98cc-05991904c677",
+                "ObjectId": "d94e5050-5a15-416e-92df-4acd528441c0",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -1041,7 +1039,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "24af3633-22d3-4b0e-98cc-05991904c677",
+                "ObjectId": "d94e5050-5a15-416e-92df-4acd528441c0",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -1076,7 +1074,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "24af3633-22d3-4b0e-98cc-05991904c677",
+                "ObjectId": "d94e5050-5a15-416e-92df-4acd528441c0",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -1111,7 +1109,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "24af3633-22d3-4b0e-98cc-05991904c677",
+                "ObjectId": "d94e5050-5a15-416e-92df-4acd528441c0",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -1146,7 +1144,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "24af3633-22d3-4b0e-98cc-05991904c677",
+                "ObjectId": "d94e5050-5a15-416e-92df-4acd528441c0",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -1181,7 +1179,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "24af3633-22d3-4b0e-98cc-05991904c677",
+                "ObjectId": "d94e5050-5a15-416e-92df-4acd528441c0",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -1216,7 +1214,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "bea979e0-f304-440e-8a58-4530cf561e93",
+                "ObjectId": "d94e5050-5a15-416e-92df-4acd528441c0",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -1251,7 +1249,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "bea979e0-f304-440e-8a58-4530cf561e93",
+                "ObjectId": "d94e5050-5a15-416e-92df-4acd528441c0",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -1286,7 +1284,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "bea979e0-f304-440e-8a58-4530cf561e93",
+                "ObjectId": "d94e5050-5a15-416e-92df-4acd528441c0",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -1321,7 +1319,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "bea979e0-f304-440e-8a58-4530cf561e93",
+                "ObjectId": "d94e5050-5a15-416e-92df-4acd528441c0",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -1358,7 +1356,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "1_house9",
+                "ObjectId": "1",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -1385,7 +1383,7 @@
                 "isRandomModelId": true,
                 "pluralTemplate": "{count} couchs",
                 "size": 2.5,
-                "dynamicString": "return Sofa{description=\"couch\", noCollisions=true, modelid=1763, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2328.2456054688,-1020.8692626953,1049.1943359375), rotation=Vector3(0,0,250.00003051758), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "dynamicString": "return Sofa{description=\"couch\", noCollisions=true, modelid=1713, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2328.2456054688,-1020.8692626953,1049.1943359375), rotation=Vector3(0,0,250.00003051758), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
                 "type": "Sofa",
                 "RotOffset": {
                     "y": 0,
@@ -1393,7 +1391,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "2_house9",
+                "ObjectId": "2",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -1405,7 +1403,7 @@
                     "z": 1049.1943359375
                 },
                 "Region": [],
-                "modelid": 1763,
+                "modelid": 1713,
                 "StoryItemType": 1
             },
             {
@@ -1420,7 +1418,7 @@
                 "isRandomModelId": true,
                 "pluralTemplate": "{count} paintings",
                 "size": 2.5,
-                "dynamicString": "return Painting{description=\"painting\", noCollisions=false, modelid=2285, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2324.654296875,-1017.8056640625,1051.5107421875), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "dynamicString": "return Painting{description=\"painting\", noCollisions=false, modelid=2259, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2324.654296875,-1017.8056640625,1051.5107421875), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
                 "type": "Painting",
                 "RotOffset": {
                     "y": 0,
@@ -1428,7 +1426,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "3_house9",
+                "ObjectId": "3",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -1440,7 +1438,7 @@
                     "z": 1051.5107421875
                 },
                 "Region": [],
-                "modelid": 2285,
+                "modelid": 2259,
                 "StoryItemType": 1
             },
             {
@@ -1455,7 +1453,7 @@
                 "isRandomModelId": true,
                 "pluralTemplate": "{count} paintings",
                 "size": 2.5,
-                "dynamicString": "return Painting{description=\"painting\", noCollisions=false, modelid=2263, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2327.6010742188,-1017.7856445312,1051.5544433594), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "dynamicString": "return Painting{description=\"painting\", noCollisions=false, modelid=2259, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2327.6010742188,-1017.7856445312,1051.5544433594), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
                 "type": "Painting",
                 "RotOffset": {
                     "y": 0,
@@ -1463,7 +1461,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "4_house9",
+                "ObjectId": "4",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -1475,7 +1473,7 @@
                     "z": 1051.554443359375
                 },
                 "Region": [],
-                "modelid": 2263,
+                "modelid": 2259,
                 "StoryItemType": 1
             },
             {
@@ -1490,7 +1488,7 @@
                 "isRandomModelId": true,
                 "pluralTemplate": "{count} armchairs",
                 "size": 2.5,
-                "dynamicString": "return ArmChair{description=\"armchair\", noCollisions=true, modelid=1767, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2325.1591796875,-1024.0886230469,1049.2009277344), rotation=Vector3(0,0,155), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "dynamicString": "return ArmChair{description=\"armchair\", noCollisions=true, modelid=1759, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2325.1591796875,-1024.0886230469,1049.2009277344), rotation=Vector3(0,0,155), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
                 "type": "ArmChair",
                 "RotOffset": {
                     "y": 0,
@@ -1498,7 +1496,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "5_house9",
+                "ObjectId": "5",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -1510,7 +1508,7 @@
                     "z": 1049.200927734375
                 },
                 "Region": [],
-                "modelid": 1767,
+                "modelid": 1759,
                 "StoryItemType": 1
             },
             {
@@ -1525,7 +1523,7 @@
                 "isRandomModelId": true,
                 "pluralTemplate": "{count} paintings",
                 "size": 2.5,
-                "dynamicString": "return Painting{description=\"painting\", noCollisions=false, modelid=2263, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2318.5476074219,-1015.0101318359,1051.3236083984), rotation=Vector3(0,0,90), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "dynamicString": "return Painting{description=\"painting\", noCollisions=false, modelid=2259, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2318.5476074219,-1015.0101318359,1051.3236083984), rotation=Vector3(0,0,90), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
                 "type": "Painting",
                 "RotOffset": {
                     "y": 0,
@@ -1533,7 +1531,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "6_house9",
+                "ObjectId": "6",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -1545,7 +1543,7 @@
                     "z": 1051.323608398438
                 },
                 "Region": [],
-                "modelid": 2263,
+                "modelid": 2259,
                 "StoryItemType": 1
             },
             {
@@ -1560,7 +1558,7 @@
                 "isRandomModelId": true,
                 "pluralTemplate": "{count} paintings",
                 "size": 2.5,
-                "dynamicString": "return Painting{description=\"painting\", noCollisions=false, modelid=2263, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2321.2731933594,-1015.9822387695,1051.42578125), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "dynamicString": "return Painting{description=\"painting\", noCollisions=false, modelid=2259, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2321.2731933594,-1015.9822387695,1051.42578125), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
                 "type": "Painting",
                 "RotOffset": {
                     "y": 0,
@@ -1568,7 +1566,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "7_house9",
+                "ObjectId": "7",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -1580,7 +1578,7 @@
                     "z": 1051.42578125
                 },
                 "Region": [],
-                "modelid": 2263,
+                "modelid": 2259,
                 "StoryItemType": 1
             },
             {
@@ -1595,7 +1593,7 @@
                 "isRandomModelId": true,
                 "pluralTemplate": "{count} paintings",
                 "size": 2.5,
-                "dynamicString": "return Painting{description=\"painting\", noCollisions=false, modelid=2263, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2321.3107910156,-1020.7081298828,1051.4962158203), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "dynamicString": "return Painting{description=\"painting\", noCollisions=false, modelid=2259, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2321.3107910156,-1020.7081298828,1051.4962158203), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
                 "type": "Painting",
                 "RotOffset": {
                     "y": 0,
@@ -1603,7 +1601,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "8_house9",
+                "ObjectId": "8",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -1615,7 +1613,7 @@
                     "z": 1051.496215820312
                 },
                 "Region": [],
-                "modelid": 2263,
+                "modelid": 2259,
                 "StoryItemType": 1
             },
             {
@@ -1630,7 +1628,7 @@
                 "isRandomModelId": true,
                 "pluralTemplate": "{count} paintings",
                 "size": 2.5,
-                "dynamicString": "return Painting{description=\"painting\", noCollisions=false, modelid=2263, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2321.3198242188,-1018.4548339844,1051.4357910156), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "dynamicString": "return Painting{description=\"painting\", noCollisions=false, modelid=2259, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2321.3198242188,-1018.4548339844,1051.4357910156), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
                 "type": "Painting",
                 "RotOffset": {
                     "y": 0,
@@ -1638,7 +1636,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "9_house9",
+                "ObjectId": "9",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -1650,7 +1648,7 @@
                     "z": 1051.435791015625
                 },
                 "Region": [],
-                "modelid": 2263,
+                "modelid": 2259,
                 "StoryItemType": 1
             },
             {
@@ -1665,7 +1663,7 @@
                 "isRandomModelId": true,
                 "pluralTemplate": "{count} paintings",
                 "size": 2.5,
-                "dynamicString": "return Painting{description=\"painting\", noCollisions=false, modelid=2276, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2328.1037597656,-1016.4486083984,1051.6490478516), rotation=Vector3(0,0,180.00001525879), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "dynamicString": "return Painting{description=\"painting\", noCollisions=false, modelid=2259, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2328.1037597656,-1016.4486083984,1051.6490478516), rotation=Vector3(0,0,180.00001525879), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
                 "type": "Painting",
                 "RotOffset": {
                     "y": 0,
@@ -1673,7 +1671,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "10_house9",
+                "ObjectId": "10",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -1685,7 +1683,7 @@
                     "z": 1051.649047851562
                 },
                 "Region": [],
-                "modelid": 2276,
+                "modelid": 2259,
                 "StoryItemType": 1
             },
             {
@@ -1700,7 +1698,7 @@
                 "isRandomModelId": true,
                 "pluralTemplate": "{count} paintings",
                 "size": 2.5,
-                "dynamicString": "return Painting{description=\"painting\", noCollisions=false, modelid=2276, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2320.3342285156,-1007.2622070312,1056.0206298828), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "dynamicString": "return Painting{description=\"painting\", noCollisions=false, modelid=2259, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2320.3342285156,-1007.2622070312,1056.0206298828), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
                 "type": "Painting",
                 "RotOffset": {
                     "y": 0,
@@ -1708,7 +1706,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "11_house9",
+                "ObjectId": "11",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -1720,7 +1718,7 @@
                     "z": 1056.020629882812
                 },
                 "Region": [],
-                "modelid": 2276,
+                "modelid": 2259,
                 "StoryItemType": 1
             },
             {
@@ -1735,7 +1733,7 @@
                 "isRandomModelId": true,
                 "pluralTemplate": "{count} paintings",
                 "size": 2.5,
-                "dynamicString": "return Painting{description=\"painting\", noCollisions=false, modelid=2276, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2322.4814453125,-1009.3989257812,1055.9177246094), rotation=Vector3(0,0,90), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "dynamicString": "return Painting{description=\"painting\", noCollisions=false, modelid=2259, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2322.4814453125,-1009.3989257812,1055.9177246094), rotation=Vector3(0,0,90), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
                 "type": "Painting",
                 "RotOffset": {
                     "y": 0,
@@ -1743,7 +1741,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "12_house9",
+                "ObjectId": "12",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -1755,7 +1753,7 @@
                     "z": 1055.917724609375
                 },
                 "Region": [],
-                "modelid": 2276,
+                "modelid": 2259,
                 "StoryItemType": 1
             },
             {
@@ -1778,7 +1776,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "13_house9",
+                "ObjectId": "13",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -1813,7 +1811,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "14_house9",
+                "ObjectId": "14",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -1848,7 +1846,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "15_house9",
+                "ObjectId": "15",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -1869,13 +1867,13 @@
                     "x": -0.2000000029802322,
                     "z": 0.07999999821186066
                 },
-                "Description": "bottle of vodka",
+                "Description": "bottle of alcohol",
                 "noCollisions": true,
-                "scale": 0.7,
+                "scale": 1,
                 "isRandomModelId": true,
-                "pluralTemplate": "{count} bottlesof vodka",
+                "pluralTemplate": "{count} bottlesof alcohol",
                 "size": 2.5,
-                "dynamicString": "return Drinks{description=\"drink\", noCollisions=true, modelid=1240, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2323.6506347656,-1014.8950195312,1050.1967773438), rotation=Vector3(0,0,175), posOffset=Vector3(-0.20000000298023,0.029999999329448,0.079999998211861), rotOffset=Vector3(0,90,0)}",
+                "dynamicString": "return Drinks{description=\"drink\", noCollisions=true, modelid=1486, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2323.6506347656,-1014.8950195312,1050.3167724609), rotation=Vector3(0,0,175), posOffset=Vector3(-0.20000000298023,0.029999999329448,0.079999998211861), rotOffset=Vector3(0,90,0)}",
                 "type": "Drinks",
                 "RotOffset": {
                     "y": 90,
@@ -1883,7 +1881,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "16_house9",
+                "ObjectId": "16",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -1892,10 +1890,10 @@
                 "position": {
                     "y": -1014.89501953125,
                     "x": 2323.650634765625,
-                    "z": 1050.21677734375
+                    "z": 1050.216772460938
                 },
                 "Region": [],
-                "modelid": 1240,
+                "modelid": 1486,
                 "StoryItemType": 1
             },
             {
@@ -1904,13 +1902,13 @@
                     "x": -0.02999999932944775,
                     "z": 0.1099999994039536
                 },
-                "Description": "bottle of vodka",
+                "Description": "bottle of alcohol",
                 "noCollisions": true,
-                "scale": 0.7,
+                "scale": 1,
                 "isRandomModelId": true,
-                "pluralTemplate": "{count} bottlesof vodka",
+                "pluralTemplate": "{count} bottlesof alcohol",
                 "size": 2.5,
-                "dynamicString": "return Drinks{description=\"drink\", noCollisions=true, modelid=1240, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2325.13671875,-1014.9509277344,1050.1965332031), rotation=Vector3(0,0,160), posOffset=Vector3(-0.029999999329448,0.029999999329448,0.10999999940395), rotOffset=Vector3(0,90,0)}",
+                "dynamicString": "return Drinks{description=\"drink\", noCollisions=true, modelid=1486, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2325.13671875,-1014.9509277344,1050.3165283203), rotation=Vector3(0,0,160), posOffset=Vector3(-0.029999999329448,0.029999999329448,0.10999999940395), rotOffset=Vector3(0,90,0)}",
                 "type": "Drinks",
                 "RotOffset": {
                     "y": 90,
@@ -1918,7 +1916,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "17_house9",
+                "ObjectId": "17",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -1927,10 +1925,10 @@
                 "position": {
                     "y": -1014.950927734375,
                     "x": 2325.13671875,
-                    "z": 1050.216533203125
+                    "z": 1050.216528320313
                 },
                 "Region": [],
-                "modelid": 1240,
+                "modelid": 1486,
                 "StoryItemType": 1
             },
             {
@@ -1939,13 +1937,13 @@
                     "x": -0.009999999776482582,
                     "z": 0.05999999865889549
                 },
-                "Description": "slice of cake",
+                "Description": "banana",
                 "noCollisions": true,
                 "scale": 1,
                 "isRandomModelId": true,
-                "pluralTemplate": "{count} slicesof cake",
+                "pluralTemplate": "{count} bananas",
                 "size": 2.5,
-                "dynamicString": "return Food{description=\"food\", noCollisions=true, modelid=2040, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2317.2980957031,-1009.6621704102,1050.3662109375), rotation=Vector3(270,0,200), posOffset=Vector3(-0.0099999997764826,0.03999999910593,0.059999998658895), rotOffset=Vector3(0,180,0)}",
+                "dynamicString": "return Food{description=\"food\", noCollisions=true, modelid=3082, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2317.2980957031,-1009.6621704102,1050.3862304688), rotation=Vector3(270,0,200), posOffset=Vector3(-0.0099999997764826,0.03999999910593,0.059999998658895), rotOffset=Vector3(0,180,0)}",
                 "type": "Food",
                 "RotOffset": {
                     "y": 180,
@@ -1953,7 +1951,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "18_house9",
+                "ObjectId": "18",
                 "rotation": {
                     "y": 0,
                     "x": 270,
@@ -1962,10 +1960,10 @@
                 "position": {
                     "y": -1009.662170410156,
                     "x": 2317.298095703125,
-                    "z": 1050.4162109375
+                    "z": 1050.41623046875
                 },
                 "Region": [],
-                "modelid": 2040,
+                "modelid": 3082,
                 "StoryItemType": 1
             },
             {
@@ -1988,7 +1986,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "19_house9",
+                "ObjectId": "19",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -2009,13 +2007,13 @@
                     "x": 0.02999996580183506,
                     "z": -0.009999999776482582
                 },
-                "Description": "mobile phone",
+                "Description": "cell phone",
                 "noCollisions": false,
                 "scale": 1,
                 "isRandomModelId": false,
                 "pluralTemplate": "{count} mobile phones",
                 "size": 2.5,
-                "dynamicString": "return MobilePhone{description=\"mobile phone\", noCollisions=false, modelid=330, isRandomModelId=false, noRandomId=true, interior=9, position=Vector3(2318.3957519531,-1012.700378418,1053.21875), rotation=Vector3(0,0,0), posOffset=Vector3(0.029999965801835,0,-0.0099999997764826), rotOffset=Vector3(0,273,0)}",
+                "dynamicString": "return MobilePhone{description=\"cell phone\", noCollisions=false, modelid=330, isRandomModelId=false, noRandomId=true, interior=9, position=Vector3(2318.3957519531,-1012.700378418,1053.21875), rotation=Vector3(0,0,0), posOffset=Vector3(0.029999965801835,0,-0.0099999997764826), rotOffset=Vector3(0,273,0)}",
                 "type": "MobilePhone",
                 "RotOffset": {
                     "y": 273,
@@ -2023,7 +2021,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "20_house9",
+                "ObjectId": "20",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -2058,7 +2056,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "21_house9",
+                "ObjectId": "21",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -2093,7 +2091,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "22_house9",
+                "ObjectId": "22",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -2128,7 +2126,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "23_house9",
+                "ObjectId": "23",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -2163,7 +2161,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "24_house9",
+                "ObjectId": "24",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -2198,7 +2196,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "25_house9",
+                "ObjectId": "25",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -2219,13 +2217,13 @@
                     "x": 0,
                     "z": 0
                 },
-                "Description": "televisor",
+                "Description": "TV",
                 "noCollisions": false,
                 "scale": 1,
                 "isRandomModelId": false,
-                "pluralTemplate": "{count} televisors",
+                "pluralTemplate": "{count} TVs",
                 "size": 2.5,
-                "dynamicString": "return Televisor{description=\"televisor\", noCollisions=false, modelid=2224, isRandomModelId=false, noRandomId=true, interior=9, position=Vector3(2322.8818359375,-1019.2345581055,1049.2109375), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "dynamicString": "return Televisor{description=\"TV\", noCollisions=false, modelid=2224, isRandomModelId=false, noRandomId=true, interior=9, position=Vector3(2322.8818359375,-1019.2345581055,1049.2109375), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
                 "type": "Televisor",
                 "RotOffset": {
                     "y": 0,
@@ -2233,7 +2231,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "26_house9",
+                "ObjectId": "26",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -2268,7 +2266,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "27_house9",
+                "ObjectId": "27",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -2303,7 +2301,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "28_house9",
+                "ObjectId": "28",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -2338,7 +2336,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "29_house9",
+                "ObjectId": "29",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -2373,7 +2371,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "30_house9",
+                "ObjectId": "30",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -2408,7 +2406,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "31_house9",
+                "ObjectId": "31",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -2443,7 +2441,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "32_house9",
+                "ObjectId": "32",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -2478,7 +2476,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "33_house9",
+                "ObjectId": "33",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -2499,13 +2497,13 @@
                     "x": 0,
                     "z": 0
                 },
-                "Description": "open lid laptop",
+                "Description": "closed lid laptop",
                 "noCollisions": false,
                 "scale": 1,
                 "isRandomModelId": true,
                 "pluralTemplate": "{count} laptops",
                 "size": 2.5,
-                "dynamicString": "return Laptop{description=\"laptop\", noCollisions=false, modelid=7187, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2322.560546875,-1010.1505126953,1054.681640625), rotation=Vector3(0,0,90), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "dynamicString": "return Laptop{description=\"laptop\", noCollisions=false, modelid=7188, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2322.560546875,-1010.1505126953,1054.681640625), rotation=Vector3(0,0,90), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
                 "type": "Laptop",
                 "RotOffset": {
                     "y": 0,
@@ -2513,7 +2511,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "34_house9",
+                "ObjectId": "34",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -2525,7 +2523,7 @@
                     "z": 1054.681640625
                 },
                 "Region": [],
-                "modelid": 7187,
+                "modelid": 7188,
                 "StoryItemType": 1
             },
             {
@@ -2548,7 +2546,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "35_house9",
+                "ObjectId": "35",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -2575,7 +2573,7 @@
                 "isRandomModelId": true,
                 "pluralTemplate": "{count} flowerspot",
                 "size": 2.5,
-                "dynamicString": "return FlowerPot{description=\"flower pot\", noCollisions=false, modelid=2240, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2322.55078125,-1007.3494262695,1054.2387695312), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "dynamicString": "return FlowerPot{description=\"flower pot\", noCollisions=false, modelid=949, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2322.55078125,-1007.3494262695,1054.2387695312), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
                 "type": "FlowerPot",
                 "RotOffset": {
                     "y": 0,
@@ -2583,7 +2581,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "36_house9",
+                "ObjectId": "36",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -2595,7 +2593,7 @@
                     "z": 1054.23876953125
                 },
                 "Region": [],
-                "modelid": 2240,
+                "modelid": 949,
                 "StoryItemType": 1
             },
             {
@@ -2618,7 +2616,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "37_house9",
+                "ObjectId": "37",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -2639,13 +2637,13 @@
                     "x": 0,
                     "z": 0
                 },
-                "Description": "water closet",
+                "Description": "toilet bowl",
                 "noCollisions": false,
                 "scale": 1,
                 "isRandomModelId": true,
-                "pluralTemplate": "{count} waterscloset",
+                "pluralTemplate": "{count} toiletsbowl",
                 "size": 2.5,
-                "dynamicString": "return Toilet{description=\"water closet\", noCollisions=false, modelid=2521, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2321.1469726562,-1006.0848999023,1053.71875), rotation=Vector3(0,0,180.00001525879), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "dynamicString": "return Toilet{description=\"toilet bowl\", noCollisions=false, modelid=2514, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2321.1469726562,-1006.0848999023,1053.71875), rotation=Vector3(0,0,180.00001525879), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
                 "type": "Toilet",
                 "RotOffset": {
                     "y": 0,
@@ -2653,7 +2651,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "38_house9",
+                "ObjectId": "38",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -2665,7 +2663,7 @@
                     "z": 1053.71875
                 },
                 "Region": [],
-                "modelid": 2521,
+                "modelid": 2514,
                 "StoryItemType": 1
             },
             {
@@ -2688,7 +2686,7 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "39_house9",
+                "ObjectId": "39",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -2709,13 +2707,13 @@
                     "x": 0,
                     "z": 0
                 },
-                "Description": "burger",
+                "Description": "banana",
                 "noCollisions": true,
                 "scale": 1,
                 "isRandomModelId": true,
-                "pluralTemplate": "{count} burgers",
+                "pluralTemplate": "{count} bananas",
                 "size": 2.5,
-                "dynamicString": "return Food{description=\"food\", noCollisions=true, modelid=2703, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2315.0651855469,-1010.4717407227,1050.0506591797), rotation=Vector3(270,0,200), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,180,0)}",
+                "dynamicString": "return Food{description=\"food\", noCollisions=true, modelid=3082, isRandomModelId=true, noRandomId=true, interior=9, position=Vector3(2315.0651855469,-1010.4717407227,1050.0206298828), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,180,0)}",
                 "type": "Food",
                 "RotOffset": {
                     "y": 180,
@@ -2723,11 +2721,24 @@
                     "z": 0
                 },
                 "interior": 9,
-                "ObjectId": "40_house9"
+                "ObjectId": "40",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "position": {
+                    "y": -1010.471740722656,
+                    "x": 2315.065185546875,
+                    "z": 1050.050629882812
+                },
+                "Region": [],
+                "modelid": 3082,
+                "StoryItemType": 1
             }
         ],
-        "temporaryInitialized": false,
         "name": "house9",
+        "graphPath": "files\/paths\/house9.json",
         "Disposed": false,
         "Regions": [
             {
@@ -3505,13 +3516,11 @@
                             "type": "Object"
                         },
                         "id": 1,
-                        "nextAction": [
-                            {
-                                "id": 2
-                            },
-                            {
-                                "id": 4
-                            }
+                        "nextAction": [{
+                            "id": 2
+                        }, {
+                            "id": 4
+                        }
                         ],
                         "closingAction": {
                             "id": 3
@@ -3549,7 +3558,7 @@
                     },
                     {
                         "dynamicString": "return Give{hand = 11, how = 1}",
-                        "isClosingAction": false,
+                        "isClosingAction": true,
                         "targetItem": {
                             "id": 16,
                             "type": "Object"
@@ -3584,13 +3593,11 @@
                             "type": "Object"
                         },
                         "id": 1,
-                        "nextAction": [
-                            {
-                                "id": 2
-                            },
-                            {
-                                "id": 4
-                            }
+                        "nextAction": [{
+                            "id": 2
+                        }, {
+                            "id": 4
+                        }
                         ],
                         "closingAction": {
                             "id": 3
@@ -3628,7 +3635,7 @@
                     },
                     {
                         "dynamicString": "return Give{hand = 11, how = 1}",
-                        "isClosingAction": false,
+                        "isClosingAction": true,
                         "targetItem": {
                             "id": 17,
                             "type": "Object"
@@ -3663,13 +3670,11 @@
                             "type": "Object"
                         },
                         "id": 1,
-                        "nextAction": [
-                            {
-                                "id": 2
-                            },
-                            {
-                                "id": 3
-                            }
+                        "nextAction": [{
+                            "id": 2
+                        }, {
+                            "id": 3
+                        }
                         ],
                         "closingAction": {
                             "id": 2
@@ -3692,7 +3697,7 @@
                     },
                     {
                         "dynamicString": "return Give{hand = 11, how = 1}",
-                        "isClosingAction": false,
+                        "isClosingAction": true,
                         "targetItem": {
                             "id": 18,
                             "type": "Object"
@@ -3901,11 +3906,23 @@
             {
                 "Description": "bathroom ",
                 "Interior": 9,
+                "Y": -1004.705810546875,
+                "X": 2317.86279296875,
+                "episodeLinks": [],
+                "Z": 1054.71875,
+                "id": 15,
+                "Angle": 76.00048828125,
+                "PossibleActions": [],
+                "allActions": []
+            },
+            {
+                "Description": "bathroom ",
+                "Interior": 9,
                 "Y": -1005.639709472656,
                 "X": 2319.242919921875,
                 "episodeLinks": [],
                 "Z": 1054.71875,
-                "id": 15,
+                "id": 16,
                 "Angle": 256.00048828125,
                 "PossibleActions": [],
                 "allActions": []
@@ -3917,7 +3934,7 @@
                 "X": 2319.85693359375,
                 "episodeLinks": [],
                 "Z": 1054.71875,
-                "id": 16,
+                "id": 17,
                 "Angle": 344.5296936035156,
                 "PossibleActions": [],
                 "allActions": []
@@ -3929,7 +3946,7 @@
                 "X": 2315.14990234375,
                 "episodeLinks": [],
                 "Z": 1050.2109375,
-                "id": 17,
+                "id": 18,
                 "Angle": 179.269775390625,
                 "PossibleActions": [
                     {
@@ -4002,11 +4019,23 @@
             {
                 "Description": "hallway second floor",
                 "Interior": 9,
+                "Y": -1015.94091796875,
+                "X": 2320.406494140625,
+                "episodeLinks": [],
+                "Z": 1054.716186523438,
+                "id": 19,
+                "Angle": 179.7381591796875,
+                "PossibleActions": [],
+                "allActions": []
+            },
+            {
+                "Description": "hallway second floor",
+                "Interior": 9,
                 "Y": -1007.916687011719,
                 "X": 2317.81396484375,
                 "episodeLinks": [],
                 "Z": 1054.71875,
-                "id": 18,
+                "id": 20,
                 "Angle": 173.7847900390625,
                 "PossibleActions": [],
                 "allActions": []
@@ -4018,7 +4047,7 @@
                 "X": 2327.298583984375,
                 "episodeLinks": [],
                 "Z": 1054.711059570312,
-                "id": 19,
+                "id": 21,
                 "Angle": 19.64678955078125,
                 "PossibleActions": [],
                 "allActions": []
@@ -4030,7 +4059,7 @@
                 "X": 2329.66650390625,
                 "episodeLinks": [],
                 "Z": 1054.71875,
-                "id": 20,
+                "id": 22,
                 "Angle": 108.9476318359375,
                 "PossibleActions": [],
                 "allActions": []
@@ -4042,7 +4071,7 @@
                 "X": 2325.797119140625,
                 "episodeLinks": [],
                 "Z": 1054.71875,
-                "id": 21,
+                "id": 23,
                 "Angle": 83.5673828125,
                 "PossibleActions": [],
                 "allActions": []
@@ -4054,7 +4083,7 @@
                 "X": 2329.48193359375,
                 "episodeLinks": [],
                 "Z": 1054.71875,
-                "id": 22,
+                "id": 24,
                 "Angle": 332.3329772949219,
                 "PossibleActions": [],
                 "allActions": []
@@ -4066,7 +4095,7 @@
                 "X": 2314.101806640625,
                 "episodeLinks": [],
                 "Z": 1050.2109375,
-                "id": 23,
+                "id": 25,
                 "Angle": 347.6864013671875,
                 "PossibleActions": [],
                 "allActions": []
@@ -4078,8 +4107,32 @@
                 "X": 2315.92138671875,
                 "episodeLinks": [],
                 "Z": 1050.2109375,
-                "id": 24,
+                "id": 26,
                 "Angle": 16.20001220703125,
+                "PossibleActions": [],
+                "allActions": []
+            },
+            {
+                "Description": "barroom ",
+                "Interior": 9,
+                "Y": -1009.18701171875,
+                "X": 2327.651611328125,
+                "episodeLinks": [],
+                "Z": 1050.2109375,
+                "id": 27,
+                "Angle": 264.4114379882812,
+                "PossibleActions": [],
+                "allActions": []
+            },
+            {
+                "Description": "barroom ",
+                "Interior": 9,
+                "Y": -1009.406860351562,
+                "X": 2324.345947265625,
+                "episodeLinks": [],
+                "Z": 1050.2109375,
+                "id": 28,
+                "Angle": 72.50457763671875,
                 "PossibleActions": [],
                 "allActions": []
             },
@@ -4090,7 +4143,7 @@
                 "X": 2319.88818359375,
                 "episodeLinks": [],
                 "Z": 1050.2109375,
-                "id": 25,
+                "id": 29,
                 "Angle": 202.9015502929688,
                 "PossibleActions": [],
                 "allActions": []
@@ -4102,7 +4155,7 @@
                 "X": 2320.4072265625,
                 "episodeLinks": [],
                 "Z": 1050.2109375,
-                "id": 26,
+                "id": 30,
                 "Angle": 349.2062072753906,
                 "PossibleActions": [],
                 "allActions": []
@@ -4114,8 +4167,32 @@
                 "X": 2318.8564453125,
                 "episodeLinks": [],
                 "Z": 1050.2109375,
-                "id": 27,
+                "id": 31,
                 "Angle": 37.33956909179688,
+                "PossibleActions": [],
+                "allActions": []
+            },
+            {
+                "Description": "hallway ",
+                "Interior": 9,
+                "Y": -1010.694763183594,
+                "X": 2319.00634765625,
+                "episodeLinks": [],
+                "Z": 1050.2109375,
+                "id": 32,
+                "Angle": 352.3395690917969,
+                "PossibleActions": [],
+                "allActions": []
+            },
+            {
+                "Description": "hallway ",
+                "Interior": 9,
+                "Y": -1009.2578125,
+                "X": 2321.468505859375,
+                "episodeLinks": [],
+                "Z": 1050.2109375,
+                "id": 33,
+                "Angle": 262.3395080566406,
                 "PossibleActions": [],
                 "allActions": []
             },
@@ -4126,8 +4203,20 @@
                 "X": 2316.9775390625,
                 "episodeLinks": [],
                 "Z": 1050.2177734375,
-                "id": 28,
+                "id": 34,
                 "Angle": 121.0973510742188,
+                "PossibleActions": [],
+                "allActions": []
+            },
+            {
+                "Description": "living ",
+                "Interior": 9,
+                "Y": -1020.600036621094,
+                "X": 2324.2109375,
+                "episodeLinks": [],
+                "Z": 1050.2109375,
+                "id": 35,
+                "Angle": 84.67791748046875,
                 "PossibleActions": [],
                 "allActions": []
             },
@@ -4138,7 +4227,7 @@
                 "X": 2327.55810546875,
                 "episodeLinks": [],
                 "Z": 1050.2109375,
-                "id": 29,
+                "id": 36,
                 "Angle": 174.677978515625,
                 "PossibleActions": [],
                 "allActions": []
@@ -4150,7 +4239,7 @@
                 "X": 2325.5673828125,
                 "episodeLinks": [],
                 "Z": 1050.2109375,
-                "id": 30,
+                "id": 37,
                 "Angle": 84.67791748046875,
                 "PossibleActions": [],
                 "allActions": []
@@ -4162,7 +4251,7 @@
                 "X": 2325.334228515625,
                 "episodeLinks": [],
                 "Z": 1050.2109375,
-                "id": 31,
+                "id": 38,
                 "Angle": 28.66329956054688,
                 "PossibleActions": [],
                 "allActions": []
@@ -4174,8 +4263,20 @@
                 "X": 2323.847412109375,
                 "episodeLinks": [],
                 "Z": 1050.2109375,
-                "id": 32,
+                "id": 39,
                 "Angle": 130.4975891113281,
+                "PossibleActions": [],
+                "allActions": []
+            },
+            {
+                "Description": "living ",
+                "Interior": 9,
+                "Y": -1020.331420898438,
+                "X": 2325.4453125,
+                "episodeLinks": [],
+                "Z": 1050.2109375,
+                "id": 40,
+                "Angle": 302.4957885742188,
                 "PossibleActions": [],
                 "allActions": []
             },
@@ -4188,68 +4289,8 @@
                     "garden"
                 ],
                 "Z": 1050.2177734375,
-                "id": 33,
+                "id": 41,
                 "Angle": 178.2880249023438,
-                "PossibleActions": [],
-                "allActions": []
-            },
-            {
-                "Description": "barroom ",
-                "Interior": 9,
-                "Y": -1013.831848144531,
-                "X": 2326.889892578125,
-                "episodeLinks": [],
-                "Z": 1050.2109375,
-                "id": 34,
-                "Angle": 85.2037353515625,
-                "PossibleActions": [],
-                "allActions": []
-            },
-            {
-                "Description": "living ",
-                "Interior": 9,
-                "Y": -1023.296569824219,
-                "X": 2327.44091796875,
-                "episodeLinks": [],
-                "Z": 1050.2109375,
-                "id": 35,
-                "Angle": 85.51705932617188,
-                "PossibleActions": [],
-                "allActions": []
-            },
-            {
-                "Description": "hallway second floor",
-                "Interior": 9,
-                "Y": -1011.167297363281,
-                "X": 2318.2177734375,
-                "episodeLinks": [],
-                "Z": 1054.71875,
-                "id": 36,
-                "Angle": 180.0978393554688,
-                "PossibleActions": [],
-                "allActions": []
-            },
-            {
-                "Description": "hallway second floor",
-                "Interior": 9,
-                "Y": -1012.440185546875,
-                "X": 2319.747314453125,
-                "episodeLinks": [],
-                "Z": 1054.71875,
-                "id": 37,
-                "Angle": 232.7383422851562,
-                "PossibleActions": [],
-                "allActions": []
-            },
-            {
-                "Description": "bathroom ",
-                "Interior": 9,
-                "Y": -1004.418212890625,
-                "X": 2320.923095703125,
-                "episodeLinks": [],
-                "Z": 1054.71875,
-                "id": 38,
-                "Angle": 120.5407409667969,
                 "PossibleActions": [],
                 "allActions": []
             }

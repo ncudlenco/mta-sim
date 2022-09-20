@@ -1,12 +1,12 @@
 Move = class(StoryActionBase, function(o, params)
     -- check mandatory options
-    if not params.targetItem then
-        error("Move: targetItem not given in the constructor")
-    elseif not params.nextLocation then
-        error("Move: nextLocation not given in the constructor")
-    elseif type(params.graphId) ~= "number" then
-        error("Move: graphId not given in the constructor")
-    end
+    -- if not params.targetItem then
+    --     error("Move: targetItem not given in the constructor")
+    -- elseif not params.nextLocation then
+    --     error("Move: nextLocation not given in the constructor")
+    -- elseif type(params.graphId) ~= "number" then
+    --     error("Move: graphId not given in the constructor")
+    -- end
     local description = " goes to the "
     o.lib = Move.eLib.Ped
 
@@ -182,7 +182,7 @@ function Move:Apply()
 
         local contextSwitchingPath = self:getLinks(self.Performer:getData('currentEpisode'), {})
         if not contextSwitchingPath then
-            print('Warning! Actor '..self.Performer:getData('id')..' wanted to go to a different context '..self.NextLocation.Episode.name..' but we could not find a path')
+            print('Warning! Actor '..self.Performer:getData('id')..' wanted to go to a different context '..self.NextLocation.Episode.name..' from '..(self.Performer:getData('currentEpisode') or 'null')..'but we could not find a path')
         end
         contextSegments = concat(contextSwitchingPath, contextSegments)
     end
@@ -205,7 +205,7 @@ function Move:FindNextShortestPath(player)
     if #contextSegments == 0 then
         error("Move:FindNextShortestPath - The number of context segments was 0!")
     end
-    print("Find shortest path between "..player:getData('currentRegion')..' and '..contextSegments[1].Region.name)
+    print("Find shortest path between "..(player:getData('currentRegion') or 'null')..' and '..(contextSegments[1].Region.name or 'null'))
     findShortestPathBetween(
         contextSegments[1].Episode.graphId,
         player.position.x, player.position.y, player.position.z,
@@ -249,13 +249,12 @@ function Move:FindNextShortestPath(player)
                     local playerId = player:getData('id')
                     local story = CURRENT_STORY
                     local lastAction = story.History[playerId][#story.History[playerId]]
-                    local path = lastAction.planningData[playerId].path
                     if
                         not lastAction
                         or not lastAction.planningData
                         or not lastAction.planningData[playerId]
                         or not lastAction.planningData[playerId].timeout
-                        or #path == 0
+                        or #lastAction.planningData[playerId].path == 0
                         or lastAction.planningData[playerId] == {}
                     then
                         outputConsole("Move:wait - Timeout is null for player "..playerId)
@@ -294,7 +293,7 @@ function Move:FindNextShortestPath(player)
 end
 
 function Move:GetDynamicString()
-    return 'return Move{graphId = '..self.graphId..', how = '..self.how..'}'
+    return 'return Move{graphId = -1, how = '..self.how..'}'
 end
 function Move:isFinished(player)
     if self.planningData[player:getData('id')] and self.planningData[player:getData('id')].how then return false else return true end

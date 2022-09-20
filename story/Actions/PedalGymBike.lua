@@ -9,6 +9,7 @@ end)
 function PedalGymBike:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
+    StoryActionBase.Apply(self)
 
     if self.how == PedalGymBike.eHow.Still then
         self.Description = " stands still "
@@ -21,7 +22,7 @@ function PedalGymBike:Apply()
     elseif self.how == PedalGymBike.eHow.Faster then
         self.Description = PickRandom({" starts pedalling very fast ", " pedals very fast "})
     end
-        
+
     StoryActionBase.GetLogger(self, story):Log(self.Description, self)
 
     local time = random(8000, 21000)

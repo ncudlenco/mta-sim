@@ -135,7 +135,14 @@
             {
                 "Description": "house entrance",
                 "episodeLinks": [
-                    "house9"
+                    "house1_sweet",
+                    "house1_preloaded",
+                    "house3_preloaded",
+                    "house7",
+                    "house8_preloaded",
+                    "house9",
+                    "house10_preloaded",
+                    "house12_preloaded"
                 ],
                 "Interior": 0,
                 "Y": -506.4792175292969,

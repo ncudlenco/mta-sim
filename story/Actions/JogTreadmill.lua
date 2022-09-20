@@ -9,6 +9,7 @@ end)
 function JogTreadmill:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
+    StoryActionBase.Apply(self)
 
     if self.how == JogTreadmill.eHow.Slow then
         self.Description = PickRandom({" starts walking ", " walks "})
@@ -17,7 +18,7 @@ function JogTreadmill:Apply()
     elseif self.how == JogTreadmill.eHow.Fast then
         self.Description = PickRandom({" starts sprinting ", " sprints "})
     end
-    
+
     StoryActionBase.GetLogger(self, story):Log(self.Description, self)
 
     local time = random(6000, 18000)
@@ -28,7 +29,7 @@ function JogTreadmill:Apply()
     end
 
     OnGlobalActionFinished(time, self.Performer:getData('id'), self.Performer:getData('storyId'), function()
-        
+
     end)
 end
 
@@ -36,7 +37,7 @@ function JogTreadmill:GetDynamicString()
     return 'return JogTreadmill{how = '..self.how..'}'
 end
 
-JogTreadmill.eHow = 
+JogTreadmill.eHow =
 {
     Slow = "gym_tread_walk",
     Normal = "gym_tread_jog",

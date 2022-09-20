@@ -8,6 +8,7 @@ end)
 function BenchpressWorkOut:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
+    StoryActionBase.Apply(self)
 
     local time = random(7000, 18000)
 

@@ -9,7 +9,8 @@ end)
 function Sleep:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
-    
+    StoryActionBase.Apply(self)
+
     StoryActionBase.GetLogger(self, story):Log(self.Description, self, false, true, {" wakes up ", " finishes sleeping "})
     -- self.TargetItem.instance:setCollisionsEnabled(false)
     self.Performer.rotation = self.Performer.rotation + Vector3(0,0,180)
@@ -20,7 +21,7 @@ function Sleep:Apply()
     elseif self.how == Sleep.eHow.Right then
         self.Performer:setAnimation("INT_HOUSE", "BED_Loop_R", time, true, true, false, true)
     end
-    
+
     if DEBUG then
         outputConsole("Sleep:Apply")
     end

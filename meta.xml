@@ -175,11 +175,11 @@
   <script src="client/Template.lua" type="shared"/>
   <script src="client/Supertemplate.lua" type="shared"/>
   <!-- Episodes -->
-  <script src="story/Episodes/House1.lua" type="server" />
-  <script src="story/Episodes/House3.lua" type="server" />
-  <script src="story/Episodes/House8.lua" type="server" />
-  <script src="story/Episodes/House10.lua" type="server" />
-  <script src="story/Episodes/House12.lua" type="server" />
+  <script src="story/Episodes/House1.lua" type="shared" />
+  <script src="story/Episodes/House3.lua" type="shared" />
+  <script src="story/Episodes/House8.lua" type="shared" />
+  <script src="story/Episodes/House10.lua" type="shared" />
+  <script src="story/Episodes/House12.lua" type="shared" />
   <script src="story/Episodes/DynamicEpisode.lua" type="shared" />
   <script src="story/Episodes/MetaEpisode.lua" type="shared" />
   <!-- Story main items -->

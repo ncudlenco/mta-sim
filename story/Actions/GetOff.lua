@@ -11,6 +11,7 @@ end)
 function GetOff:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
+    StoryActionBase.Apply(self)
 
     -- self.TargetItem.instance:setCollisionsEnabled(false)
 

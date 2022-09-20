@@ -59,7 +59,7 @@ function (prevA, curA)
                 for i,ped in ipairs(story.CurrentEpisode.peds) do
                     local idx = ped:getData('startingPoiIdx')
                     if DEBUG then
-                        print("Starting poi idx for ped "..idx)
+                        print("Starting poi idx for ped "..ped:getData('id')..' in POI with index '..idx)
                     end
                     if idx > 0 then
                         local firstAction = story.CurrentEpisode.POI[idx]:GetNextValidAction(ped)

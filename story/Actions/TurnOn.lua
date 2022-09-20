@@ -8,7 +8,8 @@ end)
 function TurnOn:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
-    
+    StoryActionBase.Apply(self)
+
     StoryActionBase.GetLogger(self, story):Log(self.Description .. self.TargetItem.Description, self)
     -- self.TargetItem.instance:setCollisionsEnabled(false)
 

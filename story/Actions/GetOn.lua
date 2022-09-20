@@ -11,6 +11,7 @@ function GetOn:Apply()
     local id = self.Performer:getData('id')
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
+    StoryActionBase.Apply(self)
     
     ----Bounding box is a function for client side only. eventually develop a mechanism to trigger a client side call then send back to 
     ----the server the result and continue with other processes

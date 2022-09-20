@@ -14,6 +14,8 @@ StoryEpisodeBase = class(function(o, params)
     o.regionsGroup = nil
     o.peds = {}
     o.supertemplates = params.supertemplates or {}
+    o.temporaryInitialized = false
+    o.initialized = false
 end)
 
 function StoryEpisodeBase:__eq(other)
@@ -46,72 +48,101 @@ function StoryEpisodeBase:Initialize(...)
             print("Episode: RequiredActors "..str)
         end
 
-        --if we have a graph for paths, then link all possible locations with move actions
-        if self.graphId then
-            for i,p1 in ipairs(self.POI) do
-                --all pois are valid starting locations
-                table.insert(self.ValidStartingLocations, p1)
-                for j, p2 in ipairs(self.POI) do
-                    if i ~= j and p1.LocationId ~= p2.LocationId then
-                        local prerequisites = {}
-                        if #p1.PossibleActions > 0 then
-                            prerequisites = {p1.PossibleActions[1]}
+        if not self.temporaryInitialized and true or false then
+            --create collision instances for all regions
+            self.regionsGroup = createElement("regions")
+            for i,region in ipairs(self.Regions) do
+                local coords = {region.center.x, region.center.y}
+                for j,v in ipairs(region.vertexes) do
+                    table.insert(coords, v.x)
+                    table.insert(coords, v.y)
+                end
+                local regionCollisionInstance = createColPolygon(unpack(coords))
+                if DEBUG and not regionCollisionInstance then
+                    outputConsole("StoryEpisodeBase:Initialize - [ERROR] Could not create a collision instance "..i)
+                end
+                if regionCollisionInstance then
+                    region.instance = regionCollisionInstance
+                    setElementParent(regionCollisionInstance, self.regionsGroup)
+                end
+            end
+
+            --Delete objects
+            for i,v in ipairs(self.ObjectsToDelete) do
+                removeWorldModel(v.modelid, v.size, v.position.x, v.position.y, v.position.z)
+            end
+            --Create objects
+            for i,v in ipairs(self.Objects) do
+                v:Create()
+            end
+
+            self:ProcessRegions()
+
+            --if we have a graph for paths, then link all possible locations with move actions
+            if self.graphId then
+                for i,p1 in ipairs(self.POI) do
+                    --all pois are valid starting locations
+                    table.insert(self.ValidStartingLocations, p1)
+                    for j, p2 in ipairs(self.POI) do
+                        if i ~= j and p1.LocationId ~= p2.LocationId then
+                            local prerequisites = {}
+                            if #p1.PossibleActions > 0 then
+                                prerequisites = {p1.PossibleActions[1]}
+                            end
+                            local moveAction = Move{targetItem = p2, nextLocation = p2, prerequisites = prerequisites, graphId = self.graphId}
+                            table.insert(p1.PossibleActions, moveAction)
+                            table.insert(p1.allActions, moveAction)
+                            if DEBUG_ACTIONS then
+                                print('Move action from '..p1.Description..'to '..p2.Description)
+                            end
                         end
-                        local moveAction = Move{targetItem = p2, nextLocation = p2, prerequisites = prerequisites, graphId = self.graphId}
-                        table.insert(p1.PossibleActions, moveAction)
-                        table.insert(p1.allActions, moveAction)
-                        if DEBUG_ACTIONS then
-                            print('Move action from '..p1.Description..'to '..p2.Description)
+                    end
+                    if DEBUG_EPISODE then
+                        str_PA = "Episode: Possible move actions for " .. string.sub(p1.LocationId, 1, 8) .. ": "
+
+                        for k,action in ipairs(p1.PossibleActions) do
+                            str_PA = str_PA .. string.sub(action.NextLocation.LocationId, 1, 8) .. ", "
                         end
                     end
                 end
-                if DEBUG_EPISODE then
-                    str_PA = "Episode: Possible move actions for " .. string.sub(p1.LocationId, 1, 8) .. ": "
-
-                    for k,action in ipairs(p1.PossibleActions) do
-                        str_PA = str_PA .. string.sub(action.NextLocation.LocationId, 1, 8) .. ", "
-                    end
-                end
             end
+            self.temporaryInitialized = true
+        else
+            print("SKIPPING EPISODE "..self.name..' temporary initialization because its already initialized')
         end
-
-        --create collision instances for all regions
-        self.regionsGroup = createElement("regions")
-        for i,region in ipairs(self.Regions) do
-            local coords = {region.center.x, region.center.y}
-            for j,v in ipairs(region.vertexes) do
-                table.insert(coords, v.x)
-                table.insert(coords, v.y)
-            end
-            local regionCollisionInstance = createColPolygon(unpack(coords))
-            if DEBUG and not regionCollisionInstance then
-                outputConsole("StoryEpisodeBase:Initialize - [ERROR] Could not create a collision instance "..i)
-            end
-            if regionCollisionInstance then
-                region.instance = regionCollisionInstance
-                setElementParent(regionCollisionInstance, self.regionsGroup)
-            end
-        end
-
-        --Delete objects
-        for i,v in ipairs(self.ObjectsToDelete) do
-            removeWorldModel(v.modelid, v.size, v.position.x, v.position.y, v.position.z)
-        end
-        --Create objects
-        for i,v in ipairs(self.Objects) do
-            v:Create()
-        end
-
-        self:ProcessRegions()
-        if not temporaryInitialize then
+        if not temporaryInitialize and (not self.initialized and true or false) then
             addEventHandler( "onColShapeHit", self.regionsGroup, function(player)
-                if DEBUG then
-                    outputConsole('StoryEpisodeBase:Initialize - Region hit')
+                if not player:getData('isPed') then
+                    return
                 end
-                local regionsInRange = Region.FilterWithinRange(player.position, self.Regions, 1.5)
+                if DEBUG then
+                    outputConsole('[StoryEpisodeBase:Initialize] Regions group hit')
+                end
+                local regionsInRange = Region.FilterWithinRange(player.position, self.Regions, 2)
                 local closestRegion = Region.GetClosest(player, regionsInRange, true)
+                if DEBUG and closestRegion then
+                    print("Warning: Closest reagion for the player "..player:getData('id')..' is '..(closestRegion.name or 'null'))
+                end
+                local startingPoiIdx = player:getData('startingPoiIdx')
+                if not closestRegion then
+                    if not player:setData('spawned') and startingPoiIdx and startingPoiIdx < #CURRENT_STORY.CurrentEpisode.POI then
+                        closestRegion = CURRENT_STORY.CurrentEpisode.POI[startingPoiIdx].Region
+                        if DEBUG then
+                            print("Warning: No region was found in range for the player "..player:getData('id')..' but took one from the starting POI '..(closestRegion.name or 'null'))
+                        end
+                    end
+                end
+                player:setData('spawned', true)
+                if not closestRegion then
+                    closestRegion = PickRandom(self.Regions)
+                    if DEBUG and closestRegion then
+                        print("Warning: No region was found in range for the player "..player:getData('id')..'. Randomly picked '..(closestRegion.name or 'null'))
+                    end
+                end
                 if closestRegion then
                     closestRegion:OnPlayerHit(player)
+                elseif DEBUG then
+                    print("FATAL ERROR: No region was found in range, in starting location or random for the player "..player:getData('id'))
                 end
             end)
 
@@ -174,6 +205,17 @@ function StoryEpisodeBase:Initialize(...)
                 ped:setData("id", i..'')
                 ped:setData("isPed", true)
                 ped:setData('startingPoiIdx', validStartingPoi.dummy or LastIndexOf(self.POI, validStartingPoi))
+                if validStartingPoi.Region then
+                    if DEBUG then
+                        print('[StoryEpisodeBase - actor inintialization]: currentRegion: '..(validStartingPoi.Region.name or 'null')..
+                            ' currentRegionId: '..(validStartingPoi.Region.Id or 'null')..
+                            ' currentEpisode: '..(validStartingPoi.Region.Episode.name or 'null')
+                        )
+                    end
+                    ped:setData('currentRegion', validStartingPoi.Region.name)
+                    ped:setData('currentRegionId', validStartingPoi.Region.Id)
+                    ped:setData('currentEpisode', validStartingPoi.Region.Episode.name)
+                end
                 skin.TargetItem = ped
                 skin.Performer = ped
                 if requiredActors then
@@ -186,9 +228,11 @@ function StoryEpisodeBase:Initialize(...)
                 end
                 table.insert(self.peds, ped)
             end
+            self.initialized = true
+        else
+            print("SKIPPING EPISODE "..self.name..' initialization because its already initialized')
         end
     end
-    self.initialized = true
 end
 
 function StoryEpisodeBase:ProcessRegions()
@@ -215,22 +259,25 @@ function StoryEpisodeBase:ProcessRegions()
     if DEBUG then
         print('StoryEpisodeBase:ProcessRegions - '..self.name..' started to identify which POI are inside which region')
     end
+    local poisWithRegions = {}
     for i,o in ipairs(self.POI) do
         if o.position then
             local r = Region.GetClosest(o, self.Regions, false)
             if r then
                 table.insert(r.POI, o)
+                table.insert(poisWithRegions, o)
                 o.Region = r
                 if DEBUG then
                     print(o.Description..' is inside '..r.name)
                 end
             else
-                if DEBUG then
-                    print('WARNING! '..o.Description..' is not inside a region')
+                if #o.allActions > 0 then
+                    print('WARNING! '..o.Description..' is not inside a region for episode '..self.name)
                 end
             end
         end
     end
+    self.POI = poisWithRegions
     self.processedRegions = true
 end
 
@@ -246,7 +293,7 @@ function StoryEpisodeBase:Play(...)
             spectator:setGravity(0)
         end
         if self:is_a(MetaEpisode) then
-            if i <= #self.Episodes then
+            if i <= #self.Episodes then --Try to assign a spectator to each episode.
                 self.Episodes[i].POI[#self.Episodes[i].POI]:SpawnPlayerHere(spectator, true) --assign real players to each episode. TODO: replace with the save snapshot logic
             end
         else
@@ -357,8 +404,7 @@ function StoryEpisodeBase:LoadFromFile()
         local objects = {}
         if episode.Objects then
             for k,v in ipairs(episode.Objects) do
-                local obj = SampStoryObjectBase(v)
-                obj = loadstring(obj.dynamicString)()
+                local obj = loadstring(v.dynamicString)()
                 obj.ObjectId = k..'_'..self.name
                 table.insert(objects, obj)
             end
@@ -411,6 +457,9 @@ function StoryEpisodeBase:LoadFromFile()
                     end
                     actionInstance.TargetItem = targetItem
                     actionInstance.NextLocation = self.POI[a.nextLocation.id]
+                    if actionInstance.name == 'Move' then
+                        actionInstance.graphId = self.graphId
+                    end
                     table.insert(deserializedAllActions, actionInstance)
                 end
                 for idx,a in ipairs(poi.allActions) do

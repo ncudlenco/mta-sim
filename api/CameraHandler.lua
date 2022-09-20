@@ -77,7 +77,7 @@ function CameraHandler:autoFocus()
     local focusedActorEpisode = actor:getData('currentEpisode')
 
     if DEBUG_CAMERA then
-        print("[CameraHandler] target region "..regionId..':'..regionName..' targetEpisode '..focusedActorEpisode)
+        print("[CameraHandler] target region "..(regionId or 'null')..':'..(regionName or 'null')..' targetEpisode '..(focusedActorEpisode or 'null'))
     end
 
     --context1
@@ -172,7 +172,7 @@ function CameraHandler:autoFocus()
             end
         end
     else
-        error('[CameraHandler] could not find a region with id '..regionId..':'..regionName..' in episode '..focusedActorEpisode)
+        print('Warning! [CameraHandler] could not find a region with id '..(regionId or 'null')..':'..(regionName or 'null')..' in episode '..(focusedActorEpisode or 'null')..' for actor '..(actor:getData('id') or 'null'))
     end
 
 end

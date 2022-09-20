@@ -8,6 +8,7 @@ end)
 function TalkPhone:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
+    StoryActionBase.Apply(self)
 
     time = random(5000, 15000)
 

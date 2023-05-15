@@ -47,8 +47,8 @@ addCommandHandler("graph",
 		    addEventHandler("onClientRender", getRootElement(), text_render)
         elseif command == "load" then
             if param1 then
-                file = fileOpen("files/paths/"..param1..".json") 
-                if file then 
+                file = fileOpen("files/paths/"..param1..".json")
+                if file then
                     local jsonStr = fileRead(file, fileGetSize(file))
                     jsonStr = jsonStr:gsub("%[%s*{", "%[ %[ {"):gsub("}%s*]", "} ] ]")
                     json = fromJSON(jsonStr)

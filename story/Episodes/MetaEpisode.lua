@@ -51,13 +51,23 @@ function MetaEpisode:Initialize(actor, isTemporaryInitialize, actors, graphOfEve
     end
 
     -- Link with move actions the episodes
-    self.episodeLinks = DropNull(Select(self.POI, function(poi) if #poi.episodeLinks > 0 then
-        local le = FirstOrDefault(self.Episodes, function(e) return Any(poi.episodeLinks, function(l) return l == e.name end) end)
-        if le then return {sourcePoi = poi, targetEpisode = le} else return nil end
-        else return nil end
+    self.episodeLinks = DropNull(Select(self.POI, function(poi)
+        print("PreEvaluating "..poi.Episode.name..": "..poi.Description)
+        if #poi.episodeLinks > 0 then
+            print("Evaluating "..poi.Episode.name..": "..poi.Description)
+            local linkedEpisode = FirstOrDefault(self.Episodes, function(e) return Any(poi.episodeLinks, function(l) return l == e.name end) end)
+            if linkedEpisode then
+                print("[Episode link] source POI: "..poi.Episode.name..": "..poi.Description..' --> '..linkedEpisode.name)
+                return {sourcePoi = poi, targetEpisode = linkedEpisode}
+            else
+                return nil
+            end
+        else
+            return nil
+        end
     end))
 
-    --just make move actions between all poi of different episodes
+    --just create move actions between all poi of different episodes
     for _,e1 in ipairs(self.Episodes) do
         for _,e2 in ipairs(self.Episodes) do
             if e1 ~= e2 then

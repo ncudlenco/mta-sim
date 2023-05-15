@@ -51,7 +51,7 @@ local function text_render ( )
             local sx, sy, _ = getScreenFromWorldPosition(v.x, v.y, v.z)
             if sx then
                 local sw, sh = guiGetScreenSize ( )
-                dxDrawText ('v'..i..': '..closestRegion.name, sx, sy, sw, sh, tocolor ( 0, 0, 0, 255 ), 2.0, "default-bold" )
+                dxDrawText ('v'..i..': '..closestRegion.name, sx, sy, sw, sh, tocolor ( 255, 0, 0, 255 ), 2.0, "default-bold" )
             end
         end
         if not currentRegion then

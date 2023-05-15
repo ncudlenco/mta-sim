@@ -1,10 +1,9 @@
 [
     {
         "initialized": false,
-        "graphPath": "files\/paths\/house_1_sweet.json",
         "peds": [],
         "ValidStartingLocations": [],
-        "InteriorId": 1,
+        "graphPath": "files\/paths\/house_1_sweet.json",
         "ObjectsToDelete": [
             {
                 "PosOffset": {
@@ -26,7 +25,7 @@
                     "z": 0
                 },
                 "interior": 1,
-                "ObjectId": "89077906-d8dc-4451-9d1f-2a109d84e37b",
+                "ObjectId": "d000addd-5358-440c-962b-72b4a22de665",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -61,7 +60,7 @@
                     "z": 0
                 },
                 "interior": 1,
-                "ObjectId": "89077906-d8dc-4451-9d1f-2a109d84e37b",
+                "ObjectId": "6a0af08b-2488-4dfc-88a7-a25a577f3e82",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -96,7 +95,7 @@
                     "z": 0
                 },
                 "interior": 1,
-                "ObjectId": "89077906-d8dc-4451-9d1f-2a109d84e37b",
+                "ObjectId": "6a0af08b-2488-4dfc-88a7-a25a577f3e82",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -131,7 +130,7 @@
                     "z": 0
                 },
                 "interior": 1,
-                "ObjectId": "89077906-d8dc-4451-9d1f-2a109d84e37b",
+                "ObjectId": "6a0af08b-2488-4dfc-88a7-a25a577f3e82",
                 "rotation": {
                     "y": 0,
                     "x": 0,
@@ -154,13 +153,13 @@
                     "x": 0,
                     "z": 0
                 },
-                "Description": "sofa",
+                "Description": "couch",
                 "noCollisions": true,
                 "scale": 1,
                 "isRandomModelId": false,
-                "pluralTemplate": "{count} sofas",
+                "pluralTemplate": "{count} couchs",
                 "size": 2.5,
-                "dynamicString": "return Sofa{description=\"sofa\", noCollisions=true, modelid=14493, isRandomModelId=false, noRandomId=true, interior=1, position=Vector3(2535.8564453125,-1671.5731201172,1016.7922363281), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "dynamicString": "return Sofa{description=\"couch\", noCollisions=true, modelid=14493, isRandomModelId=false, noRandomId=true, interior=1, position=Vector3(2535.8564453125,-1671.5731201172,1016.7922363281), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
                 "type": "Sofa",
                 "RotOffset": {
                     "y": 0,
@@ -265,7 +264,7 @@
                 "isRandomModelId": true,
                 "pluralTemplate": "{count} cupsof soda",
                 "size": 2.5,
-                "dynamicString": "return Drinks{description=\"drink\", noCollisions=true, modelid=1546, isRandomModelId=true, noRandomId=true, interior=1, position=Vector3(2525.7531738281,-1672.3140869141,1015.4971923828), rotation=Vector3(0,0,0), posOffset=Vector3(-0.029999999329448,0.029999999329448,0.079999998211861), rotOffset=Vector3(0,90,0)}",
+                "dynamicString": "return Drinks{description=\"drink\", noCollisions=true, modelid=1546, isRandomModelId=true, noRandomId=true, interior=1, position=Vector3(2525.7531738281,-1672.3140869141,1015.5371704102), rotation=Vector3(0,0,0), posOffset=Vector3(-0.029999999329448,0.029999999329448,0.079999998211861), rotOffset=Vector3(0,90,0)}",
                 "type": "Drinks",
                 "RotOffset": {
                     "y": 90,
@@ -282,7 +281,7 @@
                 "position": {
                     "y": -1672.314086914062,
                     "x": 2525.753173828125,
-                    "z": 1015.457192382813
+                    "z": 1015.497170410156
                 },
                 "Region": [],
                 "modelid": 1546,
@@ -300,7 +299,7 @@
                 "isRandomModelId": true,
                 "pluralTemplate": "{count} bananas",
                 "size": 2.5,
-                "dynamicString": "return Food{description=\"food\", noCollisions=true, modelid=3082, isRandomModelId=true, noRandomId=true, interior=1, position=Vector3(2524.53515625,-1676.1000976562,1015.4766845703), rotation=Vector3(0,0,200), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "dynamicString": "return Food{description=\"food\", noCollisions=true, modelid=3082, isRandomModelId=true, noRandomId=true, interior=1, position=Vector3(2524.53515625,-1676.1000976562,1015.4466552734), rotation=Vector3(0,0,200), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
                 "type": "Food",
                 "RotOffset": {
                     "y": 0,
@@ -317,7 +316,7 @@
                 "position": {
                     "y": -1676.10009765625,
                     "x": 2524.53515625,
-                    "z": 1015.506684570312
+                    "z": 1015.476655273437
                 },
                 "Region": [],
                 "modelid": 3082,
@@ -434,13 +433,13 @@
                     "x": 0.02999996580183506,
                     "z": -0.009999999776482582
                 },
-                "Description": "cell phone",
+                "Description": "phone",
                 "noCollisions": false,
                 "scale": 1,
                 "isRandomModelId": false,
                 "pluralTemplate": "{count} mobile phones",
                 "size": 2.5,
-                "dynamicString": "return MobilePhone{description=\"cell phone\", noCollisions=false, modelid=330, isRandomModelId=false, noRandomId=true, interior=1, position=Vector3(2525.4931640625,-1679.7817382812,1013.9985961914), rotation=Vector3(0,0,0), posOffset=Vector3(0.029999965801835,0,-0.0099999997764826), rotOffset=Vector3(0,273,0)}",
+                "dynamicString": "return MobilePhone{description=\"phone\", noCollisions=false, modelid=330, isRandomModelId=false, noRandomId=true, interior=1, position=Vector3(2525.4931640625,-1679.7817382812,1013.9985961914), rotation=Vector3(0,0,0), posOffset=Vector3(0.029999965801835,0,-0.0099999997764826), rotOffset=Vector3(0,273,0)}",
                 "type": "MobilePhone",
                 "RotOffset": {
                     "y": 273,
@@ -539,13 +538,13 @@
                     "x": 0,
                     "z": 0
                 },
-                "Description": "couch",
+                "Description": "sofa",
                 "noCollisions": false,
                 "scale": 1,
                 "isRandomModelId": true,
-                "pluralTemplate": "{count} couchs",
+                "pluralTemplate": "{count} sofas",
                 "size": 2.5,
-                "dynamicString": "return Sofa{description=\"couch\", noCollisions=false, modelid=1768, isRandomModelId=true, noRandomId=true, interior=1, position=Vector3(2532.5446777344,-1675.5705566406,1013.1989135742), rotation=Vector3(0,0,90), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "dynamicString": "return Sofa{description=\"sofa\", noCollisions=false, modelid=1768, isRandomModelId=true, noRandomId=true, interior=1, position=Vector3(2532.5446777344,-1675.5705566406,1013.1989135742), rotation=Vector3(0,0,90), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
                 "type": "Sofa",
                 "RotOffset": {
                     "y": 0,
@@ -606,6 +605,7 @@
         ],
         "temporaryInitialized": false,
         "name": "house1_sweet",
+        "InteriorId": 1,
         "Disposed": false,
         "Regions": [
             {
@@ -616,10 +616,10 @@
                         "x": 2534.45556640625,
                         "lz": 1014.498596191406,
                         "z": 1017.198608398438,
-                        "lx": 2524.756103515625,
-                        "ly": -1679.269165039063,
+                        "fov": 70,
                         "roll": 0,
-                        "fov": 70
+                        "ly": -1679.269165039063,
+                        "lx": 2524.756103515625
                     }
                 ],
                 "Objects": [],
@@ -661,20 +661,20 @@
                         "x": 2532.98681640625,
                         "lz": 1014.498596191406,
                         "z": 1017.298608399928,
-                        "lx": 2537.528076171875,
-                        "ly": -1680.169921875,
+                        "fov": 79,
                         "roll": 0,
-                        "fov": 79
+                        "ly": -1680.169921875,
+                        "lx": 2537.528076171875
                     },
                     {
                         "y": -1681.47021484375,
                         "x": 2538.640624992549,
                         "lz": 1014.498596191406,
                         "z": 1017.898608408868,
-                        "lx": 2533.78271484375,
-                        "ly": -1678.631103515625,
+                        "fov": 100,
                         "roll": 0,
-                        "fov": 100
+                        "ly": -1678.631103515625,
+                        "lx": 2533.78271484375
                     }
                 ],
                 "Objects": [],
@@ -716,30 +716,30 @@
                         "x": 2541.03173828125,
                         "lz": 1014.498596191406,
                         "z": 1017.198608398438,
-                        "fov": 70,
-                        "roll": 0,
+                        "lx": 2529.72119140625,
                         "ly": -1676.770141601563,
-                        "lx": 2529.72119140625
+                        "roll": 0,
+                        "fov": 70
                     },
                     {
                         "y": -1677.5849609375,
                         "x": 2528.853515625,
                         "lz": 1014.498596191406,
                         "z": 1017.698608398438,
-                        "fov": 70,
-                        "roll": 0,
+                        "lx": 2537.81591796875,
                         "ly": -1672.368041992188,
-                        "lx": 2537.81591796875
+                        "roll": 0,
+                        "fov": 70
                     },
                     {
                         "y": -1672.40673828125,
                         "x": 2528.44482421875,
                         "lz": 1014.498596191406,
                         "z": 1017.698608398438,
-                        "fov": 70,
-                        "roll": 0,
+                        "lx": 2537.502685546875,
                         "ly": -1676.473388671875,
-                        "lx": 2537.502685546875
+                        "roll": 0,
+                        "fov": 70
                     }
                 ],
                 "Objects": [],
@@ -781,20 +781,20 @@
                         "x": 2525.225927732885,
                         "lz": 1014.498596191406,
                         "z": 1017.498608395457,
-                        "lx": 2525.236328125,
-                        "ly": -1673.239013671875,
+                        "fov": 76.5,
                         "roll": 0,
-                        "fov": 76.5
+                        "ly": -1673.239013671875,
+                        "lx": 2525.236328125
                     },
                     {
                         "y": -1678.056518554688,
                         "x": 2527.801513671875,
                         "lz": 1014.498596191406,
                         "z": 1017.698608398438,
-                        "lx": 2525.101318359375,
-                        "ly": -1673.08203125,
+                        "fov": 70,
                         "roll": 0,
-                        "fov": 70
+                        "ly": -1673.08203125,
+                        "lx": 2525.101318359375
                     }
                 ],
                 "Objects": [],
@@ -1435,6 +1435,20 @@
                 "Z": 1015.498596191406,
                 "id": 22,
                 "Angle": 85.447265625,
+                "PossibleActions": [],
+                "allActions": []
+            },
+            {
+                "Description": "narnia ",
+                "Interior": 1,
+                "Y": -1680.4091796875,
+                "X": 2525.9755859375,
+                "episodeLinks": [
+                    "common"
+                ],
+                "Z": 1015.498596191406,
+                "id": 23,
+                "Angle": 93.86044311523438,
                 "PossibleActions": [],
                 "allActions": []
             }

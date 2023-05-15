@@ -31,7 +31,7 @@ function Region.ProcessVertexesPlane(region)
         local a = Region.VertexToVector3(region.vertexes[i])
         local b = Region.VertexToVector3(region.vertexes[j])
         local c = Region.VertexToVector3(region.vertexes[k])
-    
+
         local n = (a - b):cross(c - b)
         n:normalize()
         local plane = Plane3(b, n)
@@ -131,15 +131,15 @@ function Region:MapObjectsAndPedsLocations(pointOfView, forward, up)
     end
     return locationMap
 end
-   
+
 --     The function will return true if the point is inside the polygon, or
 --     false if it is not.  If the point is exactly on the edge of the polygon,
 --     then the function may return true or false.
 --     Note that this only works in 2D, so the point should be coplanar to the polygon
---     
+--
 --     Note that division by zero is avoided because the division is protected
 --     by the "if" clause which surrounds it.
-    
+
 function Region:IsPointInside(_testPoint, transformToPolygonCoordinates)
     local testPoint = _testPoint
     local vertexes = self.vertexes
@@ -184,6 +184,33 @@ function Region:IsPointInside(_testPoint, transformToPolygonCoordinates)
     end
 
     return oddNodes
+end
+
+--https://rosettacode.org/wiki/Ray-casting_algorithm#Lua
+function Region:IsPointInside2(testPoint)
+    local plane = Plane3(self.center, self:GetNormal())
+
+    testPoint = plane:project(testPoint)
+    local points = {}
+    for _,v in ipairs(self.vertexes) do
+        table.insert(points, plane:project(Region.VertexToVector3(v)))
+    end
+
+    local odd, eps = false, 1e-9
+    local function rayseg(p, a, b)
+        if a.y > b.y then a, b = b, a end
+        if p.y == a.y or p.y == b.y then p.y = p.y + eps end
+        if p.y < a.y or p.y > b.y or p.x > math.max(a.x, b.x) then return false end
+        if p.x < math.min(a.x, b.x) then return true end
+        local red = a.x == b.x and math.huge or (b.y-a.y)/(b.x-a.x)
+        local blu = a.x == p.x and math.huge or (p.y-a.y)/(p.x-a.x)
+        return blu >= red
+    end
+    for i, a in ipairs(points) do
+        local b = points[i%#points+1]
+        if rayseg(testPoint, a, b) then odd = not odd end
+    end
+    return odd
 end
 
 function Region:IsPointInsideConvex(testPoint)
@@ -250,16 +277,36 @@ function Region.FilterWithinRange(point, regions, range)
     return filtered
 end
 
+MALFUNCTIONS = 0
+OUT_OF = 0
 function Region.GetClosest(element, regions, isInstance)
     local minDistance = 9999999;
     local closestRegion = nil
     for k,r in ipairs(regions) do
-        if (isInstance and element and isElementWithinColShape(element, r.instance)) or r:IsPointInside(element.position) then
+        if (isInstance and element and isElementWithinColShape(element, r.instance)) or r:IsPointInside2(element.position) then
             local distance = math.abs(r:GetDistanceByNormal(element.position))
             if distance < minDistance then
                 minDistance = distance
                 closestRegion = r
             end
+        end
+    end
+    OUT_OF = OUT_OF + 1
+    if closestRegion == nil then
+        MALFUNCTIONS = MALFUNCTIONS + 1
+        print("[WARNING!] IsPointInside malfunctioned "..MALFUNCTIONS..' times out of '..OUT_OF)
+    end
+    return closestRegion
+end
+
+function Region.GetClosestByVertex(element, regions)
+    local minDistance = 9999999;
+    local closestRegion = nil
+    for k,r in ipairs(regions) do
+        local distance = math.abs(r:GetDistanceByNormal(element.position))
+        if distance < minDistance then
+            minDistance = distance
+            closestRegion = r
         end
     end
     return closestRegion
@@ -307,13 +354,13 @@ function Region:OnPlayerHit(player)
     if CURRENT_STORY.CurrentEpisode.CurrentRegion == self then
         return
     end
-    
+
     self.EvaluatingRegion = true
     --delay so that all the regionHit events are processed
-    Timer(function()      
+    Timer(function()
         local actorsInRegions = {}
         local maxValue = 0
-        
+
         local maxRegionId = self.Id
 
         for _,ped in ipairs(CURRENT_STORY.CurrentEpisode.peds) do
@@ -344,33 +391,33 @@ function Region:OnPlayerHit(player)
             end
         end
 
-        for _,logger in ipairs(story.Loggers) do
-            --If the region is not explored then describe the objects in it
-            --if there are some players that weren't introduced before, then describe them
-            local actorsDescription = logger:DescribeRegion(self.name, actorsInRegions[self.Id])
-            if actorsDescription then
-                logger:Log(actorsDescription, player, true)
-            end
-            if not self.isExplored then
-                local pointOfView = player.position
-                local pointOfViewForward = player.matrix.forward
-                if STATIC_CAMERA and self.cameras and #self.cameras > 0 then
-                    local x, y, z, lx, ly, lz = logger.Spectator:getCameraMatrix()
-                    pointOfView = Vector3(x,y,z)
-                    pointOfViewForward = Vector3(lx,ly,lz) - pointOfView
-                end
-                local locationMap = self:MapObjectsAndPedsLocations(pointOfView, pointOfViewForward, player.matrix.up)
-        
-                self.isExplored = true
-                --describe it here
-                -- if self.Description and self.Description ~= '' then
-                --     logger:Log(self.Description, player, true)
-                if self.Objects and #self.Objects > 0 then
-                    local objectsDescription = logger:DescribeObjects(player, self.name, self.Objects, locationMap, true)
-                    logger:Log(objectsDescription, player, true)
-                end
-            end
-        end
+        -- for _,logger in ipairs(story.Loggers) do
+        --     --If the region is not explored then describe the objects in it
+        --     --if there are some players that weren't introduced before, then describe them
+        --     local actorsDescription = logger:DescribeRegion(self.name, actorsInRegions[self.Id])
+        --     if actorsDescription then
+        --         logger:Log(actorsDescription, player, true)
+        --     end
+        --     if not self.isExplored then
+        --         local pointOfView = player.position
+        --         local pointOfViewForward = player.matrix.forward
+        --         if STATIC_CAMERA and self.cameras and #self.cameras > 0 then
+        --             local x, y, z, lx, ly, lz = logger.Spectator:getCameraMatrix()
+        --             pointOfView = Vector3(x,y,z)
+        --             pointOfViewForward = Vector3(lx,ly,lz) - pointOfView
+        --         end
+        --         local locationMap = self:MapObjectsAndPedsLocations(pointOfView, pointOfViewForward, player.matrix.up)
+
+        --         self.isExplored = true
+        --         --describe it here
+        --         -- if self.Description and self.Description ~= '' then
+        --         --     logger:Log(self.Description, player, true)
+        --         if self.Objects and #self.Objects > 0 then
+        --             local objectsDescription = logger:DescribeObjects(player, self.name, self.Objects, locationMap, true)
+        --             logger:Log(objectsDescription, player, true)
+        --         end
+        --     end
+        -- end
         self.EvaluatingRegion = false
     end, 2000, 1)
 end

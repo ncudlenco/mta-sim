@@ -9,13 +9,15 @@ function EndStory:Apply()
     end
     self.Performer:setAnimation()
 
-    local story = GetStory(self.Performer)
-    story:End()
-    if not story.LogData and not story.RecorderTimer then
-        for _,spectator in ipairs(story.Spectators) do
-            terminatePlayer(spectator, "story ended - end story call")
+    Timer(function(self)
+        local story = GetStory(self.Performer)
+        story:End()
+        if not story.LogData and not story.RecorderTimer then
+            for _,spectator in ipairs(story.Spectators) do
+                terminatePlayer(spectator, "story ended - end story call")
+            end
         end
-    end
+    end, 5000, 1, self)
 end
 
 function EndStory:GetDynamicString()

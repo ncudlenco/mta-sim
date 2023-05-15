@@ -1,0 +1,427 @@
+[
+    {
+        "initialized": false,
+        "peds": [],
+        "ValidStartingLocations": [],
+        "graphPath": "files\/paths\/common.json",
+        "ObjectsToDelete": [
+            {
+                "PosOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "Description": "",
+                "noCollisions": false,
+                "scale": 1,
+                "isRandomModelId": false,
+                "pluralTemplate": "",
+                "size": 2.5,
+                "dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=14509, isRandomModelId=false, noRandomId=true, interior=15, position=Vector3(2233.5078125,-1157.9375,1030.53125), rotation=Vector3(3.1415998935699,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "type": "SampStoryObjectBase",
+                "RotOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "interior": 15,
+                "ObjectId": "66bfc7f3-294d-4fc9-bdea-a9b98575b2bf",
+                "rotation": {
+                    "y": 0,
+                    "x": 3.141599893569946,
+                    "z": 0
+                },
+                "position": {
+                    "y": -1157.9375,
+                    "x": 2233.5078125,
+                    "z": 1030.53125
+                },
+                "Region": [],
+                "modelid": 14509,
+                "StoryItemType": 1
+            }
+        ],
+        "Objects": [
+            {
+                "PosOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "Description": "object",
+                "noCollisions": false,
+                "scale": 1,
+                "isRandomModelId": false,
+                "pluralTemplate": "{count} objects",
+                "size": 2.5,
+                "dynamicString": "return CommonInterior{description=\"object\", noCollisions=false, modelid=14509, isRandomModelId=nil, noRandomId=true, interior=15, position=Vector3(2233.5078125,-1157.9141845703,1030.7525634766), rotation=Vector3(0,0,180.00001525879), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "type": "CommonInterior",
+                "RotOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "interior": 15,
+                "ObjectId": "1",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 180.0000152587891
+                },
+                "position": {
+                    "y": -1157.9375,
+                    "x": 2233.5078125,
+                    "z": 1030.53125
+                },
+                "Region": [],
+                "modelid": 14509,
+                "StoryItemType": 1
+            }
+        ],
+        "temporaryInitialized": false,
+        "name": "common",
+        "InteriorId": 15,
+        "supertemplates": [],
+        "Disposed": false,
+        "Regions": [
+            {
+                "Description": "",
+                "cameras": [
+                    {
+                        "y": -1152.59912109375,
+                        "x": 2238.16015625,
+                        "lz": 1028.796875,
+                        "z": 1032.396826192737,
+                        "fov": 70,
+                        "roll": 0,
+                        "ly": -1159.380737304688,
+                        "lx": 2234.54638671875
+                    },
+                    {
+                        "y": -1163.71367187798,
+                        "x": 2238.802392579615,
+                        "lz": 1028.896850585938,
+                        "z": 1031.796826183796,
+                        "fov": 70,
+                        "roll": 0,
+                        "ly": -1156.771728515625,
+                        "lx": 2233.83349609375
+                    }
+                ],
+                "Objects": [],
+                "center": {
+                    "y": -1158.011352539062,
+                    "x": 2235.9169921875,
+                    "z": 1028.796875
+                },
+                "EvaluatingRegion": false,
+                "name": "livingroom",
+                "vertexes": [
+                    {
+                        "y": -1162.848999023438,
+                        "x": 2232.623046875,
+                        "z": 1028.796875
+                    },
+                    {
+                        "y": -1162.773559570312,
+                        "x": 2239.145263671875,
+                        "z": 1028.796875
+                    },
+                    {
+                        "y": -1153.301147460938,
+                        "x": 2239.03466796875,
+                        "z": 1028.796875
+                    },
+                    {
+                        "y": -1153.12158203125,
+                        "x": 2232.864990234375,
+                        "z": 1028.796875
+                    }
+                ]
+            },
+            {
+                "Description": "",
+                "cameras": [
+                    {
+                        "y": -1158.340722680092,
+                        "x": 2228.302978530526,
+                        "lz": 1028.796875,
+                        "z": 1032.196826189756,
+                        "fov": 70,
+                        "roll": 0,
+                        "ly": -1161.438354492188,
+                        "lx": 2231.531494140625
+                    },
+                    {
+                        "y": -1162.556567363441,
+                        "x": 2227.881591819227,
+                        "lz": 1028.796875,
+                        "z": 1032.296826191247,
+                        "fov": 70,
+                        "roll": 0,
+                        "ly": -1159.880737304688,
+                        "lx": 2231.256103515625
+                    }
+                ],
+                "Objects": [],
+                "center": {
+                    "y": -1160.514404296875,
+                    "x": 2229.94921875,
+                    "z": 1028.796875
+                },
+                "EvaluatingRegion": false,
+                "name": "bedroom",
+                "vertexes": [
+                    {
+                        "y": -1162.824584960938,
+                        "x": 2227.726806640625,
+                        "z": 1028.796875
+                    },
+                    {
+                        "y": -1162.824462890625,
+                        "x": 2232.127685546875,
+                        "z": 1028.796875
+                    },
+                    {
+                        "y": -1158.212280273438,
+                        "x": 2232.10205078125,
+                        "z": 1028.796875
+                    },
+                    {
+                        "y": -1158.1962890625,
+                        "x": 2227.8408203125,
+                        "z": 1028.796875
+                    }
+                ]
+            },
+            {
+                "Description": "",
+                "cameras": [
+                    {
+                        "y": -1152.487304680049,
+                        "x": 2230.104736328125,
+                        "lz": 1028.796875,
+                        "z": 1033.096826203167,
+                        "fov": 70,
+                        "roll": 0,
+                        "ly": -1155.716430664062,
+                        "lx": 2230.9267578125
+                    },
+                    {
+                        "y": -1157.687304653227,
+                        "x": 2231.804736301303,
+                        "lz": 1028.796875,
+                        "z": 1032.396826192737,
+                        "fov": 70,
+                        "roll": 0,
+                        "ly": -1154.216430664062,
+                        "lx": 2229.52685546875
+                    }
+                ],
+                "Objects": [],
+                "center": {
+                    "y": -1156.131103515625,
+                    "x": 2231.129638671875,
+                    "z": 1028.796875
+                },
+                "EvaluatingRegion": false,
+                "name": "bathroom",
+                "vertexes": [
+                    {
+                        "y": -1153.004150390625,
+                        "x": 2232.109619140625,
+                        "z": 1028.796875
+                    },
+                    {
+                        "y": -1157.699340820312,
+                        "x": 2232.163818359375,
+                        "z": 1028.796875
+                    },
+                    {
+                        "y": -1157.689697265625,
+                        "x": 2229.115478515625,
+                        "z": 1028.796875
+                    }
+                ]
+            }
+        ],
+        "POI": [
+            {
+                "Description": "living 1",
+                "Interior": 15,
+                "Y": -1160.14111328125,
+                "X": 2233.9521484375,
+                "episodeLinks": [],
+                "Z": 1029.796875,
+                "id": 1,
+                "Angle": 46.1270751953125,
+                "PossibleActions": [],
+                "allActions": []
+            },
+            {
+                "Description": "living2 ",
+                "Interior": 15,
+                "Y": -1159.442993164062,
+                "X": 2236.86572265625,
+                "episodeLinks": [],
+                "Z": 1029.796875,
+                "id": 2,
+                "Angle": 272.6458740234375,
+                "PossibleActions": [],
+                "allActions": []
+            },
+            {
+                "Description": "living3 ",
+                "Interior": 15,
+                "Y": -1156.3916015625,
+                "X": 2237.048828125,
+                "episodeLinks": [],
+                "Z": 1029.796875,
+                "id": 3,
+                "Angle": 0.35662841796875,
+                "PossibleActions": [],
+                "allActions": []
+            },
+            {
+                "Description": "living4 ",
+                "Interior": 15,
+                "Y": -1155.9794921875,
+                "X": 2234.525146484375,
+                "episodeLinks": [],
+                "Z": 1029.796875,
+                "id": 4,
+                "Angle": 79.94406127929688,
+                "PossibleActions": [],
+                "allActions": []
+            },
+            {
+                "Description": "bathroom1 ",
+                "Interior": 15,
+                "Y": -1155.962768554688,
+                "X": 2230.212890625,
+                "episodeLinks": [],
+                "Z": 1029.796875,
+                "id": 5,
+                "Angle": 100.9375915527344,
+                "PossibleActions": [],
+                "allActions": []
+            },
+            {
+                "Description": "bathroom2 ",
+                "Interior": 15,
+                "Y": -1156.863159179688,
+                "X": 2231.0703125,
+                "episodeLinks": [],
+                "Z": 1029.796875,
+                "id": 6,
+                "Angle": 211.8586273193359,
+                "PossibleActions": [],
+                "allActions": []
+            },
+            {
+                "Description": "bathroom3 ",
+                "Interior": 15,
+                "Y": -1153.841918945312,
+                "X": 2230.668701171875,
+                "episodeLinks": [],
+                "Z": 1029.796875,
+                "id": 7,
+                "Angle": 151.6255187988281,
+                "PossibleActions": [],
+                "allActions": []
+            },
+            {
+                "Description": "bathroom4 ",
+                "Interior": 15,
+                "Y": -1154.294189453125,
+                "X": 2231.859619140625,
+                "episodeLinks": [],
+                "Z": 1029.796875,
+                "id": 8,
+                "Angle": 191.1784210205078,
+                "PossibleActions": [],
+                "allActions": []
+            },
+            {
+                "Description": "bedroom1 ",
+                "Interior": 15,
+                "Y": -1159.341796875,
+                "X": 2229.516845703125,
+                "episodeLinks": [],
+                "Z": 1029.796875,
+                "id": 9,
+                "Angle": 87.77743530273438,
+                "PossibleActions": [],
+                "allActions": []
+            },
+            {
+                "Description": "bedroom2 ",
+                "Interior": 15,
+                "Y": -1158.77587890625,
+                "X": 2230.938720703125,
+                "episodeLinks": [],
+                "Z": 1029.796875,
+                "id": 10,
+                "Angle": 267.6324157714844,
+                "PossibleActions": [],
+                "allActions": []
+            },
+            {
+                "Description": "bedroom3 ",
+                "Interior": 15,
+                "Y": -1160.270751953125,
+                "X": 2231.192626953125,
+                "episodeLinks": [],
+                "Z": 1029.796875,
+                "id": 11,
+                "Angle": 178.9581909179688,
+                "PossibleActions": [],
+                "allActions": []
+            },
+            {
+                "Description": "bedroom4 ",
+                "Interior": 15,
+                "Y": -1158.524291992188,
+                "X": 2229.495849609375,
+                "episodeLinks": [],
+                "Z": 1029.796875,
+                "id": 12,
+                "Angle": 291.7359008789062,
+                "PossibleActions": [],
+                "allActions": []
+            },
+            {
+                "Description": "entrance ",
+                "Interior": 15,
+                "Y": -1162.571533203125,
+                "X": 2235.2919921875,
+                "episodeLinks": [
+                    "house1_sweet",
+                    "house1_preloaded",
+                    "house3_preloaded",
+                    "house8_preloaded",
+                    "house12_preloaded"
+                ],
+                "Z": 1029.796875,
+                "id": 13,
+                "Angle": 168.9314575195312,
+                "PossibleActions": [],
+                "allActions": []
+            },
+            {
+                "Description": "office ",
+                "Interior": 15,
+                "Y": -1159.739379882812,
+                "X": 2238.7431640625,
+                "episodeLinks": [
+                    "office"
+                ],
+                "Z": 1029.796875,
+                "id": 14,
+                "Angle": 269.5124206542969,
+                "PossibleActions": [],
+                "allActions": []
+            }
+        ]
+    }
+]

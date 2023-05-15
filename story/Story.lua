@@ -1,7 +1,6 @@
-Story = class(StoryBase, function(o, actor, maxActions, logData)
-    StoryBase.init(o, {actor}, maxActions)
+Story = class(StoryBase, function(o, spectators, maxActions, logData)
+    StoryBase.init(o, spectators, maxActions)
     o.LogData = logData
-    o.Logger = Logger('data/'..o.Id..'/'..actor:getData('id'), true, o)
     o.Episodes = {
         -- House1(),
         -- House3(),
@@ -10,37 +9,54 @@ Story = class(StoryBase, function(o, actor, maxActions, logData)
         -- House12()
     }
     o.DynamicEpisodes = {
-    --   "house1_sweet",
-    --   "house7",
-    --   "house1_preloaded",
-    --   "house3_preloaded",
-    --   "house8_preloaded",
-    --    "house10_preloaded",
-        -- "house12_preloaded",
+        -- "house1_sweet",
+        -- "house1_preloaded",
+        -- "house3_preloaded",
+        -- "house7",
+        -- "house8_preloaded",
         -- "house9",
-      "garden",
-    --   "testsupertemplate",
-    -- --   "house10",
-    -- --   "house12",
-    --   "gym1",
-    --   "gym2",
-    --   "gym3"
+        -- "house10_preloaded",
+        "house12_preloaded",
+        -- "garden",
+        -- "office",
+        -- "office2",
+        -- "common"
+        --   "gym1",
+        --   "gym2",
+        --   "gym3"
     }
-    o.Disposed = false
-    o.Actor = actor
-    if not o.Actor then
-        outputConsole("Error: Actor is null "..o.Id)
+    o.SpawnableObjects = {
+        "Cigarette",
+        "MobilePhone",
+        "Drinks",
+        "Food"
+    }
+    o.Interactions = {
+        "Handshake",
+        "Talk",
+        "Kiss",
+        "Hug",
+        "Laugh",
+        "Give",
+        "INV-Give",
+        "Receive"
+    }
+    o.actionsQueues = {}
+    for _,spectator in ipairs(o.Spectators) do
+        if #o.Spectators < 1 or not spectator then
+            outputConsole("Error: Not enough spectators registered for story "..o.Id)
+        end
+        spectator:setData('storyId', o.Id)
     end
-    o.Actor:setData('storyId', o.Id)
-    o.supertemplates = {}
-    o.History = {}
+    o.Loggers = Select(spectators, function(spectator) return Logger('data/'..o.Id..'/'..spectator:getData('id'), true, o, spectator) end)
+    o.lastEvents = {}
+    o.lastLocations = {}
+    o.validMemo = {}
+
+    o.Disposed = false
 
     if not CURRENT_STORY then
         CURRENT_STORY = o
-    end
-    if not CURRENT_STORY.History[o.Actor:getData('id')] then
-        print('Initialized history for localPlayer')
-        CURRENT_STORY.History[o.Actor:getData('id')] = {}
     end
 end)
 
@@ -100,39 +116,30 @@ function Story:Play()
     end
 
     if DEBUG then
-        print("Story: Picking a random skin...")
-    end
-
-    local skin = PickRandom(Where(SetPlayerSkin.PlayerSkins, function(s)
-        return not s.isTaken
-    end))
-    skin.TargetItem = self.Actor
-    skin.Performer = self.Actor
-    skin:Apply()
-
-    if DEBUG then
         print("Story: Loading a random episode...")
     end
+    math.randomseed(os.clock()*100000000000)
+    math.random(); math.random(); math.random()
+    math.randomseed(os.clock()*100000000000)
+    math.random(); math.random(); math.random()
     self.CurrentEpisode = PickRandom(self.Episodes)
     print(self.CurrentEpisode.name)
-    self.CurrentEpisode:Initialize(self.Actor)
-
-    self.Actor:setData('pickedObjects', {})
+    self.CurrentEpisode:Initialize(false)
 
     if DEBUG then
         print("Story: Playing the picked episode...")
     end
-    self.CurrentEpisode:Play(self.Actor)
-    self.Actor:fadeCamera (true)
+    self.CurrentEpisode:Play()
+    -- self.Actor:fadeCamera (true)
 
     if DEBUG then
         print("Story: Play - chosen random skin and episode. Playing episode")
     end
-    self:End()
 end
 
 function Story:End()
     if DEBUG then
+        print("Story: End")
         outputConsole("Story:End")
     end
 

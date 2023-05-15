@@ -167,5 +167,6 @@ function SampStoryObjectBase:Destroy()
     if isElement(self.instance) then
         self.instance:setInterior(0)
         self.instance:destroy()
+        self.instance = nil
     end
 end

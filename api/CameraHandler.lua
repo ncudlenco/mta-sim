@@ -76,6 +76,25 @@ function CameraHandler:autoFocus()
     local regionName = actor:getData('currentRegion')
     local focusedActorEpisode = actor:getData('currentEpisode')
 
+    if not regionId or not regionName or not focusedActorEpisode then
+        print('[CameraHandler] Trying to fix the actor '..playerId)
+        local closestPoi = nil
+        local minDist = 99999
+        for _, poi in ipairs(CURRENT_STORY.CurrentEpisode.POI) do
+            if poi.Region then
+                local distance = math.abs((poi.position - actor.position).length)
+                if distance < minDist then
+                    closestPoi = poi
+                    minDist = distance
+                end
+            end
+        end
+        closestPoi.Region:OnPlayerHit(actor)
+        regionId = actor:getData('currentRegionId')
+        regionName = actor:getData('currentRegion')
+        focusedActorEpisode = actor:getData('currentEpisode')
+    end
+
     if DEBUG_CAMERA then
         print("[CameraHandler] target region "..(regionId or 'null')..':'..(regionName or 'null')..' targetEpisode '..(focusedActorEpisode or 'null'))
     end
@@ -128,9 +147,8 @@ function CameraHandler:autoFocus()
                     print('actor '..other_actor:getData('id')..' last action '..lastAction.Name..' ('..isMove..') is not finished: '..isNotFinished)
 
                     if lastAction:is_a(Move) and not lastAction:isFinished(other_actor) then
-                        other_actor:setData('paused', true)
                         lastAction:pause(other_actor)
-                        --Make sure some time will be allowed to this guy afterwards
+                        --Make sure some time will be allocated to this guy afterwards
                         self:requestFocus(other_actor:getData('id'))
                         print('actor '..other_actor:getData('id')..' is now paused and has a focus request prepped')
                     end
@@ -164,8 +182,8 @@ function CameraHandler:autoFocus()
                 if other_actor:getData('paused') and #CURRENT_STORY.History[other_actor:getData('id')] > 0 then
                     local lastAction = CURRENT_STORY.History[other_actor:getData('id')][#CURRENT_STORY.History[other_actor:getData('id')]]
                     if lastAction:is_a(Move) then
-                        lastAction:resume(other_actor)
                         self:requestFocus(other_actor:getData('id')) --reduntant focus requests
+                        lastAction:resume(other_actor)
                     end
                 end
                 other_actor:setData('paused', false)
@@ -173,6 +191,19 @@ function CameraHandler:autoFocus()
         end
     else
         print('Warning! [CameraHandler] could not find a region with id '..(regionId or 'null')..':'..(regionName or 'null')..' in episode '..(focusedActorEpisode or 'null')..' for actor '..(actor:getData('id') or 'null'))
+        print('Trying to fix the actor '..(actor:getData('id') or 'null'))
+        local closestPoi = nil
+        local minDist = 99999
+        for _, poi in ipairs(CURRENT_STORY.CurrentEpisode.POI) do
+            if poi.Region then
+                local distance = math.abs((poi.position - actor.position).length)
+                if distance < minDist then
+                    closestPoi = poi
+                    minDist = distance
+                end
+            end
+        end
+        closestPoi.Region:OnPlayerHit(actor)
     end
 
 end

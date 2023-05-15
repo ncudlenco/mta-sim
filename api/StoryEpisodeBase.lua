@@ -8,6 +8,7 @@ StoryEpisodeBase = class(function(o, params)
     o.CurrentRegion = nil
     o.InteriorId = nil
     o.graphPath = nil
+    o.pathfindingGraph = nil
     o.ObjectsToDelete = {}
     o.POI = {}
     o.name = params.name or ""
@@ -122,6 +123,8 @@ function StoryEpisodeBase:Initialize(...)
                 local closestRegion = Region.GetClosest(player, regionsInRange, true)
                 if DEBUG and closestRegion then
                     print("Warning: Closest reagion for the player "..player:getData('id')..' is '..(closestRegion.name or 'null'))
+                elseif DEBUG then
+                    print('WARNING! Player '..player:getData('id')..' is not inside a region')
                 end
                 local startingPoiIdx = player:getData('startingPoiIdx')
                 if not closestRegion then
@@ -146,7 +149,7 @@ function StoryEpisodeBase:Initialize(...)
                 end
             end)
 
-            local pedsNr = math.max(math.floor(#self.ValidStartingLocations * ACTORS_CROWDING_FACTOR), 0)
+            local pedsNr = math.max(math.floor(#self.ValidStartingLocations * ACTORS_CROWDING_FACTOR), 1)
             if DEBUG then
                 local nr = 0
                 if requiredActors then
@@ -251,7 +254,7 @@ function StoryEpisodeBase:ProcessRegions()
                 end
             else
                 if DEBUG then
-                    print('WARNING! '..o.ObjectId..': '..o.Description..' is not inside a region')
+                    print('WARNING! Object '..o.ObjectId..': '..o.Description..' is not inside a region')
                 end
             end
         end
@@ -262,7 +265,7 @@ function StoryEpisodeBase:ProcessRegions()
     local poisWithRegions = {}
     for i,o in ipairs(self.POI) do
         if o.position then
-            local r = Region.GetClosest(o, self.Regions, false)
+            local r = Region.GetClosest(o, self.Regions, false) or Region.GetClosestByVertex(o, self.Regions)
             if r then
                 table.insert(r.POI, o)
                 table.insert(poisWithRegions, o)
@@ -271,13 +274,22 @@ function StoryEpisodeBase:ProcessRegions()
                     print(o.Description..' is inside '..r.name)
                 end
             else
-                if #o.allActions > 0 then
-                    print('WARNING! '..o.Description..' is not inside a region for episode '..self.name)
-                end
+                print('WARNING! POI '..o.Description..' is not inside a region for episode '..self.name)
             end
         end
     end
     self.POI = poisWithRegions
+    if self.graphId and self.pathfindingGraph then
+        for i,node in ipairs(self.pathfindingGraph) do
+            node.position = Vector3(node.x, node.y, node.z)
+            local r = Region.GetClosest(node, self.Regions, false)
+            if r then
+                node.Region = r
+            else
+                print('WARNING! PATHFINDING node '..i..' is not inside a region for episode '..self.name)
+            end
+        end
+    end
     self.processedRegions = true
 end
 
@@ -333,6 +345,12 @@ function StoryEpisodeBase:ReloadPathGraph()
         end
         if loadPathGraph then
             self.graphId = loadPathGraph(self.graphPath)
+            local otherFile = fileOpen(self.graphPath)
+            if otherFile then
+                local jsonStr = fileRead(otherFile, fileGetSize(otherFile))
+                self.pathfindingGraph = fromJSON("["..jsonStr.."]")
+                fileClose(otherFile)
+            end
         end
     end
     for _, poi in pairs(self.POI) do
@@ -382,6 +400,12 @@ function StoryEpisodeBase:LoadFromFile()
         if self.graphPath then
             if loadPathGraph then
                 self.graphId = loadPathGraph(self.graphPath)
+                local otherFile = fileOpen(self.graphPath)
+                if otherFile then
+                    local jsonStr = fileRead(otherFile, fileGetSize(otherFile))
+                    self.pathfindingGraph = fromJSON("["..jsonStr.."]")
+                    fileClose(otherFile)
+                end
             end
         end
 

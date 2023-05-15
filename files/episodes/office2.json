@@ -1,0 +1,127 @@
+[
+    {
+        "initialized": false,
+        "peds": [],
+        "ValidStartingLocations": [],
+        "graphPath": "files\/paths\/office2.json",
+        "ObjectsToDelete": [],
+        "Objects": [],
+        "temporaryInitialized": false,
+        "name": "office2",
+        "InteriorId": 3,
+        "supertemplates": [],
+        "Disposed": false,
+        "Regions": [
+            {
+                "Description": "",
+                "cameras": [
+                    {
+                        "y": 153.5032135024667,
+                        "x": 210.208694472909,
+                        "lz": 1002.0234375,
+                        "z": 1005.123449720442,
+                        "fov": 70,
+                        "roll": 0,
+                        "ly": 147.5652618408203,
+                        "lx": 210.5081176757812
+                    },
+                    {
+                        "y": 144.4097107127309,
+                        "x": 210.5308074951172,
+                        "lz": 1002.0234375,
+                        "z": 1005.923449732363,
+                        "fov": 70,
+                        "roll": 0,
+                        "ly": 150.0037689208984,
+                        "lx": 210.6650848388672
+                    }
+                ],
+                "Objects": [],
+                "center": {
+                    "y": 148.4926147460938,
+                    "x": 210.6169281005859,
+                    "z": 1002.0234375
+                },
+                "EvaluatingRegion": false,
+                "name": "office",
+                "vertexes": [
+                    {
+                        "y": 144.4928741455078,
+                        "x": 213.1356811523438,
+                        "z": 1002.0234375
+                    },
+                    {
+                        "y": 144.7928924560547,
+                        "x": 208.0356750488281,
+                        "z": 1002.0234375
+                    },
+                    {
+                        "y": 152.3423309326172,
+                        "x": 213.0481719970703,
+                        "z": 1002.0234375
+                    },
+                    {
+                        "y": 152.3423309326172,
+                        "x": 208.2481536865234,
+                        "z": 1002.0234375
+                    }
+                ]
+            }
+        ],
+        "POI": [
+            {
+                "Description": "entrance ",
+                "Interior": 3,
+                "Y": 144.9752960205078,
+                "X": 210.5518646240234,
+                "episodeLinks": [
+                    "house3_preloaded",
+                    "house7",
+                    "house9",
+                    "house10_preloaded"
+                ],
+                "Z": 1003.0234375,
+                "id": 1,
+                "Angle": 178.15673828125,
+                "PossibleActions": [],
+                "allActions": []
+            },
+            {
+                "Description": "middle ",
+                "Interior": 3,
+                "Y": 151.3630828857422,
+                "X": 210.6871032714844,
+                "episodeLinks": [],
+                "Z": 1003.0234375,
+                "id": 2,
+                "Angle": 180.0133514404297,
+                "PossibleActions": [],
+                "allActions": []
+            },
+            {
+                "Description": "middle 2",
+                "Interior": 3,
+                "Y": 146.8148345947266,
+                "X": 212.1724700927734,
+                "episodeLinks": [],
+                "Z": 1003.0234375,
+                "id": 3,
+                "Angle": 83.74655151367188,
+                "PossibleActions": [],
+                "allActions": []
+            },
+            {
+                "Description": "middle 2",
+                "Interior": 3,
+                "Y": 147.2962493896484,
+                "X": 209.9814758300781,
+                "episodeLinks": [],
+                "Z": 1003.0234375,
+                "id": 4,
+                "Angle": 49.6654052734375,
+                "PossibleActions": [],
+                "allActions": []
+            }
+        ]
+    }
+]

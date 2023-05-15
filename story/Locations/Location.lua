@@ -259,7 +259,7 @@ function Location:ProcessNextAction(player)
     local interactionProcessedMap = CURRENT_STORY.interactionProcessedMap
     local interactionPoiMap = CURRENT_STORY.interactionPoiMap
 
-    if event == null then return end
+    if event == nil then return end
 
     local isMoveEvent = event.Action:lower() == 'move'
 
@@ -617,7 +617,7 @@ function Location:GetNextValidAction(player)
     else
         if DEBUG then
             outputConsole("Next action chosen: "..next.Description)
-            print("Next action for actor "..player:getData('id').." chosen: "..next.Description)
+            print("Next action for actor "..player:getData('id').." chosen. Action: "..next.Description.." target location: "..next.NextLocation.Description.." in region: "..next.NextLocation.Region.name.." and episode: "..next.NextLocation.Region.Episode.name)
         end
         if next.NextLocation == self then
             table.insert(self.History[player:getData('id')], next)
@@ -628,7 +628,7 @@ function Location:GetNextValidAction(player)
             self.isBusy = false
             print("Location "..self.Description..' is not busy')
             next.NextLocation.isBusy = true
-            print("Location "..next.Description..' is busy')
+            print("Location "..next.NextLocation.Description..' is busy')
             player:setData('locationId', next.NextLocation.LocationId)
 
         end

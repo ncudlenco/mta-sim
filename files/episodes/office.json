@@ -1,0 +1,124 @@
+[
+    {
+        "initialized": false,
+        "peds": [],
+        "ValidStartingLocations": [],
+        "graphPath": "files\/paths\/office.json",
+        "ObjectsToDelete": [],
+        "Objects": [],
+        "temporaryInitialized": false,
+        "name": "office",
+        "InteriorId": 3,
+        "supertemplates": [],
+        "Disposed": false,
+        "Regions": [
+            {
+                "Description": "",
+                "cameras": [
+                    {
+                        "y": 144.6699920743704,
+                        "x": 223.94900816679,
+                        "lz": 1002.0234375,
+                        "z": 1005.423449710011,
+                        "fov": 70,
+                        "roll": 0,
+                        "ly": 147.5587768554688,
+                        "lx": 219.2128448486328
+                    },
+                    {
+                        "y": 153.1005187854171,
+                        "x": 220.7165740951896,
+                        "lz": 1002.0234375,
+                        "z": 1005.723449699581,
+                        "fov": 70,
+                        "roll": 0,
+                        "ly": 146.8208770751953,
+                        "lx": 220.9730224609375
+                    }
+                ],
+                "Objects": [],
+                "center": {
+                    "y": 148.4571838378906,
+                    "x": 221.1573944091797,
+                    "z": 1002.022644042969
+                },
+                "EvaluatingRegion": false,
+                "name": "office",
+                "vertexes": [
+                    {
+                        "y": 144.8198394775391,
+                        "x": 219.0208892822266,
+                        "z": 1002.0234375
+                    },
+                    {
+                        "y": 152.2078247070312,
+                        "x": 218.7174835205078,
+                        "z": 1002.223388671875
+                    },
+                    {
+                        "y": 152.4501800537109,
+                        "x": 223.4635620117188,
+                        "z": 1002.0234375
+                    },
+                    {
+                        "y": 144.3508911132812,
+                        "x": 223.4276580810547,
+                        "z": 1001.820251464844
+                    }
+                ]
+            }
+        ],
+        "POI": [
+            {
+                "Description": "entrance ",
+                "Interior": 3,
+                "Y": 145.0465393066406,
+                "X": 221.0682373046875,
+                "episodeLinks": [
+                    "common"
+                ],
+                "Z": 1003.0234375,
+                "id": 1,
+                "Angle": 184.2762756347656,
+                "PossibleActions": [],
+                "allActions": []
+            },
+            {
+                "Description": "near desk",
+                "Interior": 3,
+                "Y": 148.551513671875,
+                "X": 223.0885925292969,
+                "episodeLinks": [],
+                "Z": 1003.0234375,
+                "id": 2,
+                "Angle": 356.4428100585938,
+                "PossibleActions": [],
+                "allActions": []
+            },
+            {
+                "Description": "middle ",
+                "Interior": 3,
+                "Y": 150.8813323974609,
+                "X": 221.3600311279297,
+                "episodeLinks": [],
+                "Z": 1003.0234375,
+                "id": 3,
+                "Angle": 46.09494018554688,
+                "PossibleActions": [],
+                "allActions": []
+            },
+            {
+                "Description": "near desk 2",
+                "Interior": 3,
+                "Y": 148.4324188232422,
+                "X": 218.9145812988281,
+                "episodeLinks": [],
+                "Z": 1003.0234375,
+                "id": 4,
+                "Angle": 140.6498413085938,
+                "PossibleActions": [],
+                "allActions": []
+            }
+        ]
+    }
+]

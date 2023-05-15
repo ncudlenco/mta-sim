@@ -18,13 +18,16 @@ GraphStory = class(StoryBase, function(o, spectators, logData)
     o.DynamicEpisodes = {
       "house1_sweet",
       "house1_preloaded",
-      "house3_preloaded",
-      "house7",
+    --   "house3_preloaded", --NOT WORKING! The pathfinding seems flawed here, when we have 2 levels?
+    --   "house7", --NOT WORKING! Potential issue when the link POI is located outside a region
       "house8_preloaded",
       "house9",
-      "house10_preloaded",
-      "house12_preloaded",
-      "garden"
+    --   "house10_preloaded", -- Not Working!
+      "house12_preloaded", -- Working but needs the objects removed. Some flakiness exists but in general it works...
+      "garden",
+      "office",
+      "office2",
+      "common"
     --   "gym1",
     --   "gym2",
     --   "gym3"
@@ -33,7 +36,8 @@ GraphStory = class(StoryBase, function(o, spectators, logData)
     o.SpawnableObjects = {
         "Cigarette",
         "MobilePhone",
-        "Drinks"
+        "Drinks",
+        "Food"
     }
     o.Interactions = {
         "Handshake",
@@ -452,15 +456,6 @@ function GraphStory:Play()
         print("GraphStory: Picking a valid skin for the first actor...")
     end
 
-    for _, spectator in ipairs(self.Spectators) do
-        if not SCREENSHOTS[spectator:getData('id')] then
-            SCREENSHOTS[spectator:getData('id')] = {}
-        end
-        if not SCREENSHOTS[spectator:getData('id')][self.Id] then
-            SCREENSHOTS[spectator:getData('id')][self.Id] = 0
-        end
-    end
-
     self.StartTime = os.time()
     if self.LogData then
         self.RecorderTimer = Timer(
@@ -484,10 +479,13 @@ function GraphStory:Play()
                         spectator:takeScreenShot(960, 540, spectator:getData('id')..';'..spectator:getData('storyId')..';'..spectator.name, 50)
                     else
                         local requestedShots = spectator:getData('takenShots')
-                        local actuallyTaken = SCREENSHOTS[spectator:getData('id')][story.Id]
+                        local actuallyTaken = SCREENSHOTS[spectator:getData('id')][spectator:getData('storyId')]
 
                         if DEBUG then
-                            outputConsole("RecorderTimer - waiting to download all the screenshots: " .. actuallyTaken .. " / " .. requestedShots)
+                            print("RecorderTimer - storyId ".. (spectator:getData('storyId') or "null") .." actorId "..
+                                (spectator:getData('id') or "null") .." waiting to download all the screenshots: " ..
+                                (actuallyTaken or 'null') .. " / " .. (requestedShots or 'null')
+                            )
                         end
 
                         if actuallyTaken >= requestedShots then

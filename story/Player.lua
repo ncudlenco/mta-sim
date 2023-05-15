@@ -8,7 +8,7 @@ function startSimulation(source)
     if not FREE_ROAM and LOAD_FROM_GRAPH then
         CURRENT_STORY = GraphStory(SPECTATORS, LOG_DATA)
     else
-        CURRENT_STORY = Story(source, MAX_ACTIONS, LOG_DATA)
+        CURRENT_STORY = Story(SPECTATORS, MAX_ACTIONS, LOG_DATA)
     end
 
     Timer(function()
@@ -21,20 +21,19 @@ function initializeSpectator(source)
     source:setHudComponentVisible("all", false)
 
     --Set a player specific id to be able to differentiate between players the logged data
-    local g = Guid()
-    source:setData("id", g.Id)
     source:setData("isPed", false)
     math.randomseed(os.clock()*100000000000)
     math.random(); math.random(); math.random()
     source:setData('takenShots', 0)
     source:setData('spawned', false)
 
-    if DEBUG then
-        outputConsole("New player joined the server. Id ".. source:getData('id'))
-    end
 
     table.insert(SPECTATORS, source)
     source:setData("id", "spectator"..#SPECTATORS)
+
+    if DEBUG then
+        outputConsole("New player joined the server. Id ".. source:getData('id'))
+    end
 
     if #SPECTATORS == EXPECTED_SPECTATORS then
         startSimulation(source)
@@ -83,7 +82,7 @@ function terminatePlayer(player, reason)
     if CURRENT_STORY then
         local story = CURRENT_STORY
         if DEBUG then
-            outputConsole("Found story for the player that quit. Trying to clear the objects")
+            outputConsole("Cleaning the objects of the CURRENT_STORY")
         end
         if story and story.CurrentEpisode then
             Timer(function()
@@ -137,6 +136,7 @@ function ( theResource, status, pixels, timestamp, tag )
     if not SCREENSHOTS[playerId][storyId] then
         SCREENSHOTS[playerId][storyId] = 0
     end
+
     SCREENSHOTS[playerId][storyId] = 1 + SCREENSHOTS[playerId][storyId]
     local elapsedMillis = SCREENSHOTS[playerId][storyId] * LOG_FREQUENCY
     local hours = string.format("%02.f", math.floor(elapsedMillis/3600000));

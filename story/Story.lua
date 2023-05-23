@@ -16,12 +16,12 @@ Story = class(StoryBase, function(o, spectators, maxActions, logData)
         -- "house8_preloaded",
         -- "house9",
         -- "house10_preloaded",
-        "house12_preloaded",
+        -- "house12_preloaded",
         -- "garden",
         -- "office",
         -- "office2",
         -- "common"
-        --   "gym1",
+          "gym1",
         --   "gym2",
         --   "gym3"
     }
@@ -48,7 +48,7 @@ Story = class(StoryBase, function(o, spectators, maxActions, logData)
         end
         spectator:setData('storyId', o.Id)
     end
-    o.Loggers = Select(spectators, function(spectator) return Logger('data/'..o.Id..'/'..spectator:getData('id'), true, o, spectator) end)
+    o.Loggers = Select(spectators, function(spectator) return Logger('data_out/'..o.Id..'/'..spectator:getData('id'), true, o, spectator) end)
     o.lastEvents = {}
     o.lastLocations = {}
     o.validMemo = {}
@@ -84,35 +84,46 @@ function Story:Play()
     self.StartTime = os.time()
     if self.LogData then
         self.RecorderTimer = Timer(
-            function (playerId, storyId)
+            function ()
                 local story = CURRENT_STORY
-                local player = story.Actor
-
-                if not story.Disposed then
-                    if player:getData('takenShots') then
-                        player:setData('takenShots', 1 + player:getData('takenShots'))
-                    else
-                        player:setData('takenShots', 1)
-                    end
-                    player:takeScreenShot(1920, 1080, playerId..player:getData('storyId')..player.name, 50)
-                else
-                    local requestedShots = player:getData('takenShots')
-                    local actuallyTaken = SCREENSHOTS[player:getData('id')][story.Id]
-
-                    if DEBUG then
-                        outputConsole("RecorderTimer - waiting to download all the screenshots: " .. actuallyTaken .. " / " .. requestedShots)
-                    end
-
-                    if actuallyTaken >= requestedShots then
-                        if DEBUG then
-                            outputConsole("RecorderTimer - DONE")
-                        end
-                        story.RecorderTimer:destroy()
-                        terminatePlayer(player, "story ended")
+                local elapsedTime = os.time() - self.StartTime
+                print('Elapsed time '..elapsedTime)
+                if elapsedTime > MAX_STORY_TIME then
+                    for _,spectator in ipairs(story.Spectators) do
+                        EndStory(spectator):Apply()
                     end
                 end
-        	end
-        , LOG_FREQUENCY, 0, self.Actor:getData('id'), self.Id)
+
+                for _,spectator in ipairs(story.Spectators) do
+                    if not story.Disposed then
+                        if spectator:getData('takenShots') then
+                            spectator:setData('takenShots', 1 + spectator:getData('takenShots'))
+                        else
+                            spectator:setData('takenShots', 1)
+                        end
+                        spectator:takeScreenShot(960, 540, spectator:getData('id')..';'..spectator:getData('storyId')..';'..spectator.name, 50)
+                    else
+                        local requestedShots = spectator:getData('takenShots')
+                        local actuallyTaken = SCREENSHOTS[spectator:getData('id')][spectator:getData('storyId')]
+
+                        if DEBUG then
+                            print("RecorderTimer - storyId ".. (spectator:getData('storyId') or "null") .." actorId "..
+                                (spectator:getData('id') or "null") .." waiting to download all the screenshots: " ..
+                                (actuallyTaken or 'null') .. " / " .. (requestedShots or 'null')
+                            )
+                        end
+
+                        if actuallyTaken >= requestedShots then
+                            if DEBUG then
+                                outputConsole("RecorderTimer - DONE")
+                            end
+                            story.RecorderTimer:destroy()
+                            terminatePlayer(spectator, "story ended")
+                        end
+                    end
+                end
+            end
+        , LOG_FREQUENCY, 0)
     end
 
     if DEBUG then

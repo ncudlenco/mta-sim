@@ -326,6 +326,7 @@ function StoryEpisodeBase:Destroy()
 
     if self.peds then
         for i,p in ipairs(self.peds) do
+            FirstOrDefault(CURRENT_STORY.Loggers):FlushBuffer(p)
             if isElement(p) then
                 p.interior = 0
                 p.position = Vector3(0,0,0)

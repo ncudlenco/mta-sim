@@ -37,5 +37,5 @@ end
 
 function StoryActionBase:GetLogger(story)
     --TODO when implementing perspectives define logger strategy
-    return FirstOrDefault(story.Loggers, function(logger) return true end)
+    return FirstOrDefault(story.Loggers)
 end

@@ -145,7 +145,8 @@ function ( theResource, status, pixels, timestamp, tag )
     local millisecs = string.format("%03.f", math.floor(elapsedMillis - secs * 1000 - hours*3600000 - mins *60000));
 
     if status == "ok" then
-        local newFile = File(LOAD_FROM_GRAPH..'_out/'..storyId..'/'
+        local rootFolder = (LOAD_FROM_GRAPH or 'data')..'_out'
+        local newFile = File(rootFolder..'/'..storyId..'/'
          ..playerId..'/'
             .. hours..'-'..mins..'-'..secs..'.'..millisecs..'-'..playerName..'.jpg')
         if (newFile) then

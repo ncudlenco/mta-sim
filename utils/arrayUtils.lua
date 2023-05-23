@@ -1,6 +1,6 @@
 function FirstOrDefault(arr, func)
     for _, a in pairs(arr) do --I don't care about the order, this will work on arrays and tables
-        if func(a) then 
+        if not func or func(a) then
             return a
         end
     end
@@ -62,7 +62,7 @@ function Where(arr, func)
     local res = {}
     if arr == nil then return res end
     for _, a in pairs(arr) do --I don't care about the order, this will work on arrays and tables
-        if func(a) then 
+        if func(a) then
             table.insert(res, a)
         end
     end
@@ -80,7 +80,7 @@ function LastIndexOf(arr, item, eqFunc)
             if eqFunc(a, item) then
                 idx = i
             end
-        elseif a == item then 
+        elseif a == item then
             idx = i
         end
     end
@@ -89,7 +89,7 @@ end
 
 function All(arr, func)
     for _, a in ipairs(arr) do
-        if not func(a) then 
+        if not func(a) then
             return false
         end
     end
@@ -101,7 +101,7 @@ function Any(arr, func)
         return #arr > 0
     end
     for _, a in ipairs(arr) do
-        if func(a) then 
+        if func(a) then
             return true
         end
     end
@@ -135,7 +135,7 @@ function Shuffle(arr)
 		local j = math.random(i)
 		arr[i], arr[j] = arr[j], arr[i]
     end
-    
+
     return arr
 end
 

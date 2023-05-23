@@ -357,7 +357,7 @@ function Region:OnPlayerHit(player)
 
     self.EvaluatingRegion = true
     --delay so that all the regionHit events are processed
-    Timer(function()
+    -- Timer(function()
         local actorsInRegions = {}
         local maxValue = 0
 
@@ -379,45 +379,41 @@ function Region:OnPlayerHit(player)
             end
         end
 
-        if CURRENT_STORY.CurrentEpisode.CurrentRegion ~= self then
-            if DEBUG then
-                print("[Region]: Current region doesn't have focus "..self.name)
+        local logger = FirstOrDefault(story.Loggers)
+        if logger ~= nil then
+            --If the region is not explored then describe the objects in it
+            --if there are some players that weren't introduced before, then describe them
+            local actorsDescription = logger:DescribeRegion(self.name, actorsInRegions[self.Id])
+            if actorsDescription then
+                logger:Log(actorsDescription, player, true)
             end
-            self.EvaluatingRegion = false
-            return
+            if not self.isExplored then
+                local pointOfView = player.position
+                local pointOfViewForward = player.matrix.forward
+                if STATIC_CAMERA and player:getData('hasFocus') then
+                    local x, y, z, lx, ly, lz = logger.Spectator:getCameraMatrix()
+                    pointOfView = Vector3(x,y,z)
+                    pointOfViewForward = Vector3(lx,ly,lz) - pointOfView
+                else
+                    pointOfView = Vector3(player.position.x, player.position.y, player.position.z + 1)
+                    pointOfViewForward = player.matrix.forward
+                end
+                local locationMap = self:MapObjectsAndPedsLocations(pointOfView, pointOfViewForward, player.matrix.up)
+
+                self.isExplored = true
+                --describe it here
+                if self.Description and self.Description ~= '' then
+                    logger:Log(self.Description, player, true)
+                end
+                if self.Objects and #self.Objects > 0 then
+                    local objectsDescription = logger:DescribeObjects(player, self.name, self.Objects, locationMap, true)
+                    logger:Log(objectsDescription, player, true)
+                end
+            end
         else
-            if DEBUG then
-                print("[Region]: Region has focus "..self.name)
-            end
+            print("Could not find a logger for actor "..player:getData('id'..'!'))
         end
 
-        -- for _,logger in ipairs(story.Loggers) do
-        --     --If the region is not explored then describe the objects in it
-        --     --if there are some players that weren't introduced before, then describe them
-        --     local actorsDescription = logger:DescribeRegion(self.name, actorsInRegions[self.Id])
-        --     if actorsDescription then
-        --         logger:Log(actorsDescription, player, true)
-        --     end
-        --     if not self.isExplored then
-        --         local pointOfView = player.position
-        --         local pointOfViewForward = player.matrix.forward
-        --         if STATIC_CAMERA and self.cameras and #self.cameras > 0 then
-        --             local x, y, z, lx, ly, lz = logger.Spectator:getCameraMatrix()
-        --             pointOfView = Vector3(x,y,z)
-        --             pointOfViewForward = Vector3(lx,ly,lz) - pointOfView
-        --         end
-        --         local locationMap = self:MapObjectsAndPedsLocations(pointOfView, pointOfViewForward, player.matrix.up)
-
-        --         self.isExplored = true
-        --         --describe it here
-        --         -- if self.Description and self.Description ~= '' then
-        --         --     logger:Log(self.Description, player, true)
-        --         if self.Objects and #self.Objects > 0 then
-        --             local objectsDescription = logger:DescribeObjects(player, self.name, self.Objects, locationMap, true)
-        --             logger:Log(objectsDescription, player, true)
-        --         end
-        --     end
-        -- end
         self.EvaluatingRegion = false
-    end, 2000, 1)
+    -- end, 100, 1, player)
 end

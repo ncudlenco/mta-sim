@@ -9,9 +9,9 @@ function DumbbellsWorkOut:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
     StoryActionBase.Apply(self)
-    
-    StoryActionBase.GetLogger(self, story):Log(self.Performer:getData('skinDescription') .. self.Description .. self.TargetItem.Description, self.Performer)
-    
+
+    StoryActionBase.GetLogger(self, story):Log(self.Description .. self.TargetItem.Description, self.Performer)
+
     local time = random(8000, 18000)
     self.Performer:setAnimation("freeweights", "gym_free_a", time, true, false, false, true)
 

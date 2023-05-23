@@ -1,6 +1,7 @@
 EndStory = class(StoryActionBase, function(o, player)
     params.performer = player
     StoryActionBase.init(o, params)
+    o.IsClosingAction = true
 end)
 
 function EndStory:Apply()
@@ -11,6 +12,8 @@ function EndStory:Apply()
 
     Timer(function(self)
         local story = GetStory(self.Performer)
+        StoryActionBase.GetLogger(self, story):Log('', self.Performer, 'forceCommit')
+
         story:End()
         if not story.LogData and not story.RecorderTimer then
             for _,spectator in ipairs(story.Spectators) do

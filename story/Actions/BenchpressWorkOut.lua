@@ -1,6 +1,6 @@
 BenchpressWorkOut = class(StoryActionBase, function(o, params)
     params.name = 'BenchpressWorkOut'
-    params.description = " working out with the "
+    params.description = " is working out with the "
     StoryActionBase.init(o, params)
     o.how = BenchpressWorkOut.eHow.Slow
 end)
@@ -14,13 +14,13 @@ function BenchpressWorkOut:Apply()
 
     local initialPosition = self.TargetItem.position
     local initialRotation = self.TargetItem.rotation
-    
-    attachElementToBone(self.TargetItem.instance, self.Performer, 12, 
+
+    attachElementToBone(self.TargetItem.instance, self.Performer, 12,
                         self.TargetItem.PosOffset.x, self.TargetItem.PosOffset.y, self.TargetItem.PosOffset.z,
                         self.TargetItem.RotOffset.x, self.TargetItem.RotOffset.y, self.TargetItem.RotOffset.z)
 
-    StoryActionBase.GetLogger(self, story):Log(self.Performer:getData('skinDescription') .. self.Description .. self.TargetItem.Description .. ". When " .. self.Performer:getData('genderNominative') .. " finishes ", self.Performer)
-    
+    StoryActionBase.GetLogger(self, story):Log(self.Description .. self.TargetItem.Description .. ". When " .. self.Performer:getData('genderNominative') .. " finishes ", self.Performer)
+
     self.Performer:setAnimation("benchpress", self.how, time, true, false, false, true)
 
     if DEBUG then
@@ -38,7 +38,7 @@ function BenchpressWorkOut:GetDynamicString()
     return 'return BenchpressWorkOut{}'
 end
 
-BenchpressWorkOut.eHow = 
+BenchpressWorkOut.eHow =
 {
     Slow = "gym_bp_up_a",
     Normal = "gym_bp_up_b",

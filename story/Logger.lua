@@ -14,7 +14,7 @@ end)
 
 function Logger:GetElapsedTime()
     local seconds = tonumber(os.difftime(os.time(), self.Story.StartTime))
-  
+
     if seconds <= 0 then
       return "00:00:00";
     else
@@ -56,7 +56,7 @@ function Logger:DescribeRegion(regionName, actors)
         sentence = PickRandom(sentences)
     end
     local foundOneNewActor = false
-    
+
     if #actors == 1 then
         local skinDescription = actors[1]:getData('skinDescription')
         sentence = sentence .. skinDescription:sub(1,1):lower() .. skinDescription:sub(2) .. ' named ' .. actors[1]:getData('name')
@@ -108,18 +108,18 @@ function Logger:DescribeObjects(player, regionName, objects, locationMap, descri
         'in the right side'
     }
     local leftLinks = {
-        'at the left side', 
+        'at the left side',
         'in left',
         'in the left side'
     }
     local frontLinks = {
-        'straight ahead', 
+        'straight ahead',
         'in front'
     }
 
     local turns = {1}
-    if locationMap then 
-        turns = {'right','left','front','unknown'} 
+    if locationMap then
+        turns = {'right','left','front','unknown'}
         locationMap.right.links = rightLinks
         locationMap.left.links = leftLinks
         locationMap.front.links = frontLinks
@@ -127,7 +127,7 @@ function Logger:DescribeObjects(player, regionName, objects, locationMap, descri
     local turn = nil
     local isFirstSentence = true
     local objectsDescription = ''
-    
+
     while #turns > 0 do
         if locationMap then
             local idx = math.random(#turns)
@@ -162,14 +162,14 @@ function Logger:DescribeObjects(player, regionName, objects, locationMap, descri
             end
         end
 
-        local objs = Select(objectsHashTable, function(v,k) 
-            if v.nr == 1 or not v.pluralTemplate then 
+        local objs = Select(objectsHashTable, function(v,k)
+            if v.nr == 1 or not v.pluralTemplate then
                 if DEBUG_LOGGER then
                     print("Logger: Correct prefix " .. getWordPrefix(k) .. ' ' .. k)
                 end
 
                 return {noun = getWordPrefix(k) .. ' ' .. k, isPlural = false}
-            elseif v.nr then 
+            elseif v.nr then
                 return {noun = v.pluralTemplate:gsub('{count}', ''..num2word(v.nr)), isPlural = true}
             else
                 return {noun = '', isPlural = false}
@@ -207,7 +207,7 @@ function Logger:DescribeObjects(player, regionName, objects, locationMap, descri
             for i=1, numObjects do
                 local objectDescription = shuffledObjects[i].noun
                 if i == 1 then
-                    objectsDescription = objectsDescription .. " " 
+                    objectsDescription = objectsDescription .. " "
                 elseif i == numObjects then
                     objectsDescription = objectsDescription .. " and "
                 else
@@ -238,7 +238,7 @@ function Logger:Log(text, ...)
             if v.is_a and v:is_a(StoryActionBase) then
                 action = v
                 player = action.Performer
-                forceCommit = action.IsClosing
+                forceCommit = action.IsClosingAction
             else
                 player = v
             end
@@ -255,7 +255,7 @@ function Logger:Log(text, ...)
         elseif i == 4 then
             temporalLinks = v
         end
-    end 
+    end
 
     text = trim(text)
 
@@ -299,7 +299,7 @@ function Logger:Log(text, ...)
                 if DEBUG_LOGGER then
                     self.Spectator:outputChat('sentence started with and', 255, 255, 255, false)
                 end
-            else 
+            else
                 math.randomseed(os.clock()*100000000000)
                 dice = math.random()
 
@@ -310,7 +310,7 @@ function Logger:Log(text, ...)
                     end
                     if self.Buffer[player:getData('id')].firstAction then
                         logText = player:getData('name') .. ' '..text
-                    else
+                    elseif not forceCommit then
                         logText = '{nominative_upc} '.. text
                     end
                     commit = not self.Buffer[player:getData('id')].firstAction

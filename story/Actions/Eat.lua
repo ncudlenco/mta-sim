@@ -10,11 +10,11 @@ function Eat:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
     StoryActionBase.Apply(self)
-    
-    StoryActionBase.GetLogger(self, story):Log(self.Description, self, false, true, {"finishes", "finishes drinking"})
+
+    StoryActionBase.GetLogger(self, story):Log(self.Description, self, false, true, {"finishes", "finishes eating"})
 
     time = random(5000, 14000)
-    
+
     if self.how == Eat.eHow.StandUp then
         setPedAnimation(self.Performer, "VENDING", "vend_eat1_P", time, true, true, false, true)
     elseif self.how == Eat.eHow.SitDown then

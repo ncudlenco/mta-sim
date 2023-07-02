@@ -385,7 +385,7 @@ function Region:OnPlayerHit(player)
             --if there are some players that weren't introduced before, then describe them
             local actorsDescription = logger:DescribeRegion(self.name, actorsInRegions[self.Id])
             if actorsDescription then
-                logger:Log(actorsDescription, player, true)
+                logger:AddEnvironmentDescription(actorsDescription)
             end
             if not self.isExplored then
                 local pointOfView = player.position
@@ -402,12 +402,12 @@ function Region:OnPlayerHit(player)
 
                 self.isExplored = true
                 --describe it here
-                if self.Description and self.Description ~= '' then
-                    logger:Log(self.Description, player, true)
-                end
+                -- if self.Description and self.Description ~= '' then
+                --     logger:Log(self.Description, player, true)
+                -- end
                 if self.Objects and #self.Objects > 0 then
                     local objectsDescription = logger:DescribeObjects(player, self.name, self.Objects, locationMap, true)
-                    logger:Log(objectsDescription, player, true)
+                    logger:AddEnvironmentDescription(objectsDescription)
                 end
             end
         else

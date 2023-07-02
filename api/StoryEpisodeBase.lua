@@ -150,6 +150,10 @@ function StoryEpisodeBase:Initialize(...)
             end)
 
             local pedsNr = math.max(math.floor(#self.ValidStartingLocations * ACTORS_CROWDING_FACTOR), 1)
+            if RANDOM_ACTORS_NR then
+                local maxNr = math.min(MAX_ACTORS, #self.ValidStartingLocations)
+                pedsNr = math.random(MIN_ACTORS, maxNr)
+            end
             if DEBUG then
                 local nr = 0
                 if requiredActors then
@@ -326,7 +330,7 @@ function StoryEpisodeBase:Destroy()
 
     if self.peds then
         for i,p in ipairs(self.peds) do
-            FirstOrDefault(CURRENT_STORY.Loggers):FlushBuffer(p)
+            FirstOrDefault(CURRENT_STORY.Loggers):FlushBuffer(p, true)
             if isElement(p) then
                 p.interior = 0
                 p.position = Vector3(0,0,0)

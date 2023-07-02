@@ -228,6 +228,7 @@ function Location:GetNextRandomValidAction(player)
     end)
     if next(nextValidActions) == nil then
         if DEBUG then
+            print("Location:GetNextValidAction - No more valid story actions found. Ending the current story")
             outputConsole("Location:GetNextValidAction - No more valid story actions found. Ending the current story")
         end
         lock = false
@@ -617,6 +618,7 @@ function Location:GetNextValidAction(player)
     else
         if DEBUG then
             outputConsole("Next action chosen: "..next.Description)
+            print("Next action chosen: "..next.Description)
             print("Next action for actor "..player:getData('id').." chosen. Action: "..next.Description.." target location: "..next.NextLocation.Description.." in region: "..next.NextLocation.Region.name.." and episode: "..next.NextLocation.Region.Episode.name)
         end
         if next.NextLocation == self then

@@ -2,14 +2,14 @@ Logger = class(StoryTextLoggerBase, function(o, path, showOnScreen, story, spect
     StoryTextLoggerBase.init(o, path)
     o.ShowOnScreen = showOnScreen
     o.Story = story
-    o.PhraseLinks = {". Then", ". Then", ". Afterwards"}
+    o.PhraseLinks = {"Then", "Then", "Afterwards"}
     o.FirstPhrase = true
     o.PreviousAnd = true
-    o.PreviousObjectDescription = false
     o.TempDependency = false
     o.Buffer = {}
     o.PreviousPlayerCommitId = ''
     o.Spectator = spectator
+    o.PendingRegionDescription = ''
 end)
 
 function Logger:GetElapsedTime()
@@ -223,6 +223,16 @@ function Logger:DescribeObjects(player, regionName, objects, locationMap, descri
     return objectsDescription
 end
 
+function Logger:EndSentence(sentence)
+    if ends_with(sentence, ".") or trim(sentence) == "" then
+        return sentence
+    else return sentence .. '.' end
+end
+
+function Logger:AddEnvironmentDescription(description)
+    self.PendingRegionDescription = self:EndSentence(self.PendingRegionDescription)..' '..description
+end
+
 function Logger:Log(text, ...)
     local isImpersonal = false
     local commit = false
@@ -233,27 +243,27 @@ function Logger:Log(text, ...)
     local skipNominative = false
     local forceCommit = false
     local action = nil
-    for i,v in ipairs(arg) do
+    for i,arg_value in ipairs(arg) do
         if i == 1 then
-            if v.is_a and v:is_a(StoryActionBase) then
-                action = v
+            if arg_value.is_a and arg_value:is_a(StoryActionBase) then
+                action = arg_value
                 player = action.Performer
                 forceCommit = action.IsClosingAction
             else
-                player = v
+                player = arg_value
             end
         elseif i == 2 then
-            if v == 'skipNominative' then
+            if arg_value == 'skipNominative' then
                 skipNominative = true
-            elseif v == 'forceCommit' then
+            elseif arg_value == 'forceCommit' then
                 forceCommit = true
             else
-                withoutLink = v
+                withoutLink = arg_value
             end
         elseif i == 3 then
-            tempDependency = v
+            tempDependency = arg_value
         elseif i == 4 then
-            temporalLinks = v
+            temporalLinks = arg_value
         end
     end
 
@@ -262,31 +272,29 @@ function Logger:Log(text, ...)
     if not self.Buffer[player:getData('id')] then
         self.Buffer[player:getData('id')] = {text = '', TempDependency = false, NextTemporalLinks = {}, firstAction = true}
     end
-    self.Buffer[player:getData('id')].TempDependency = tempDependency
-    self.Buffer[player:getData('id')].NextTemporalLinks = temporalLinks
 
     local logText = ''
     if TIME_STAMP then
         logText = self:GetElapsedTime().." "..text.."\n" -- with stamp
     else
-        if self.FirstPhrase or withoutLink then -- if its the frist phrase add the skin description
-            isImpersonal = true
-            self.PreviousObjectDescription = true
-            logText = text ..'.'
-            if self.Buffer[player:getData('id')].text == '' then
-                self.Buffer[player:getData('id')].text = logText
-            end
-            commit = true
-            logText = ''
-            self.FirstPhrase = false
-            if DEBUG_LOGGER then
-                self.Spectator:outputChat('First phrase or without link', 255, 255, 255, false)
-            end
-        else
+        -- if self.FirstPhrase or withoutLink then -- if its the first phrase add the skin description
+        --     isImpersonal = true
+        --     logText = self:EndSentence(text)
+        --     if self.Buffer[player:getData('id')].text == '' then
+        --         self.Buffer[player:getData('id')].text = logText
+        --     end
+        --     commit = true
+        --     logText = ''
+        --     self.FirstPhrase = false
+        --     if DEBUG_LOGGER then
+        --         self.Spectator:outputChat('First phrase or without link', 255, 255, 255, false)
+        --     end
+        -- else
             if self.Buffer[player:getData('id')].TempDependency then
                 self.Buffer[player:getData('id')].TempDependency = false
-                self.Buffer[player:getData('id')].text = self.Buffer[player:getData('id')].text..'.'
-                logText = 'When {nomitative_lwc} '..PickRandom(self.Buffer[player:getData('id')].NextTemporalLinks)..' '..player:getData('genderNominative')..' '..text
+                self.Buffer[player:getData('id')].firstAction = false
+                self.Buffer[player:getData('id')].text = self:EndSentence(self.Buffer[player:getData('id')].text)
+                logText = 'When '..player:getData('name')..' '..PickRandom(self.Buffer[player:getData('id')].NextTemporalLinks)..' '..player:getData('genderNominative')..' '..text
                 commit = true
                 self.PreviousAnd = false
                 if DEBUG_LOGGER then
@@ -301,21 +309,16 @@ function Logger:Log(text, ...)
                 end
             else
                 math.randomseed(os.clock()*100000000000)
-                dice = math.random()
+                local dice = math.random()
 
-                --20% to end the sentence
-                if dice > 0.8 or self.Buffer[player:getData('id')].firstAction or forceCommit then
+                --50% to end the sentence
+                if dice > 0.5 or self.Buffer[player:getData('id')].firstAction or forceCommit then
                     if self.Buffer[player:getData('id')].text ~= '' then
-                        self.Buffer[player:getData('id')].text = self.Buffer[player:getData('id')].text..'.'
+                        self.Buffer[player:getData('id')].text = self:EndSentence(self.Buffer[player:getData('id')].text)
                     end
-                    if self.Buffer[player:getData('id')].firstAction then
-                        logText = player:getData('name') .. ' '..text
-                    elseif not forceCommit then
-                        logText = '{nominative_upc} '.. text
-                    end
-                    commit = not self.Buffer[player:getData('id')].firstAction
+                    logText = player:getData('name') .. ' '..text
+                    commit = true
                     self.Buffer[player:getData('id')].firstAction = false
-                    self.PreviousObjectDescription = false
                     if DEBUG_LOGGER then
                         local strc = 'false'
                         if commit then
@@ -323,17 +326,21 @@ function Logger:Log(text, ...)
                         end
                         self.Spectator:outputChat('first action or rolled dice to end sentence. commit: '..strc, 255, 255, 255, false)
                     end
-                --30% to link the sentence with an and
-                elseif dice < 0.3 and self.PreviousAnd == false then -- chance of getting a link between phrases with "and"
+                --25% to link the sentence with an and
+                elseif dice < 0.25 and self.PreviousAnd == false then -- chance of getting a link between phrases with "and"
                     logText = " and " .. text
                     self.PreviousAnd = true
                     if DEBUG_LOGGER then
                         self.Spectator:outputChat('rolled dice to link with and', 255, 255, 255, false)
                     end
-                --50% here
+                --25% to link the sentence with a '. {phrase link}'
                 else
-                    phraseLink = PickRandom(self.PhraseLinks) -- chance of getting a link with "dot"
-                    logText = phraseLink .. " " .. player:getData('genderNominative') .. ' '..text
+                    local phraseLink = PickRandom(self.PhraseLinks) -- chance of getting a link with "dot"
+                    if self.Buffer[player:getData('id')].text ~= '' then
+                        self.Buffer[player:getData('id')].text = self:EndSentence(self.Buffer[player:getData('id')].text)
+                    end
+
+                    logText = " " .. phraseLink .. " " .. player:getData('genderNominative') .. ' '..text
                     self.PreviousAnd = false
                     if DEBUG_LOGGER then
                         self.Spectator:outputChat('rolled dice to link with '..phraseLink, 255, 255, 255, false)
@@ -341,7 +348,10 @@ function Logger:Log(text, ...)
                 end
             end
         end
-    end
+    -- end
+
+    self.Buffer[player:getData('id')].TempDependency = tempDependency
+    self.Buffer[player:getData('id')].NextTemporalLinks = temporalLinks
 
     if commit then
         self:FlushBuffer(player)
@@ -362,13 +372,21 @@ function Logger:FlushBuffer(player, endSentence)
         self.PreviousPlayerCommitId = player:getData('id')
     end
     if endSentence then
-        self.Buffer[player:getData('id')].text = self.Buffer[player:getData('id')].text..'.'
+        self.Buffer[player:getData('id')].text = self:EndSentence(self.Buffer[player:getData('id')].text)
+    end
+    local finalText = trim(self.Buffer[player:getData('id')].text)
+    if self.PendingRegionDescription ~= "" then
+        finalText = trim(self:EndSentence(self.PendingRegionDescription)) .. ' ' .. finalText
+        self.PendingRegionDescription = ""
+    end
+    if trim(finalText) == "" then
+        return
     end
     if LOG_DATA then
         local file = File(self.Path .. '/labels.txt')
         if file then                               -- check if it was successfully opened
             file:setPos(file:getSize())            -- move position to the end of the file
-            file:write(self.Buffer[player:getData('id')].text..' ')                    -- append data
+            file:write(finalText..' ')                    -- append data
             file:flush()                           -- Flush the appended data into the file.
             file:close()                           -- close the file once we're done with it
         else
@@ -378,9 +396,9 @@ function Logger:FlushBuffer(player, endSentence)
     if self.ShowOnScreen then
         if self.Spectator then
             if self.Spectator.outputChat then
-                self.Spectator:outputChat(self.Buffer[player:getData('id')].text, 255, 0, 0, false)
+                self.Spectator:outputChat(finalText, 255, 0, 0, false)
             else
-                outputChatBox(self.Buffer[player:getData('id')].text, 255, 0, 0, false)
+                outputChatBox(finalText, 255, 0, 0, false)
             end
         end
     end

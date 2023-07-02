@@ -9,9 +9,9 @@ Story = class(StoryBase, function(o, spectators, maxActions, logData)
         -- House12()
     }
     o.DynamicEpisodes = {
-        -- "house1_sweet",
-        -- "house1_preloaded",
-        -- "house3_preloaded",
+        -- "house1_sweet", --some agents do nothing
+        -- "house1_preloaded", --same problem, logger line 360 error
+        -- "house3_preloaded", --same problem as above
         -- "house7",
         -- "house8_preloaded",
         -- "house9",
@@ -22,8 +22,8 @@ Story = class(StoryBase, function(o, spectators, maxActions, logData)
         -- "office2",
         -- "common"
           "gym1",
-        --   "gym2",
-        --   "gym3"
+          "gym2",
+          "gym3"
     }
     o.SpawnableObjects = {
         "Cigarette",
@@ -149,6 +149,9 @@ function Story:Play()
 end
 
 function Story:End()
+    if self.Disposed then
+        return
+    end
     if DEBUG then
         print("Story: End")
         outputConsole("Story:End")

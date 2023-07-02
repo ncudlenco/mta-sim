@@ -1,5 +1,5 @@
 SmokeOut = class(StoryActionBase, function(o, params)
-    params.description = " throws the "
+    params.description = " throws away the "
     params.name = 'SmokeOut'
 
     StoryActionBase.init(o,params)
@@ -10,8 +10,7 @@ function SmokeOut:Apply()
     table.insert(story.History[self.Performer:getData('id')], self)
     StoryActionBase.Apply(self)
 
-    StoryActionBase.GetLogger(self, story):Log(self.Description .. self.TargetItem.Description .. " from  " .. self.Performer:getData('genderGenitive')
-                     ..  " hand when " .. self.Performer:getData('genderNominative') .. " finishes it", self.Performer)
+    StoryActionBase.GetLogger(self, story):Log(self.Description .. self.TargetItem.Description, self.Performer)
     self.Performer:setAnimation("SMOKING", "M_smk_out", 3000, true, true, false, true)
 
     if DEBUG then

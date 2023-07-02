@@ -10,3 +10,6 @@ story_generator/rocstories
 story_generator/samples_babi/corpus
 story_generator/samples_babi/**//*_out
 corpus/*
+scripts/r10
+scripts/
+data_out/

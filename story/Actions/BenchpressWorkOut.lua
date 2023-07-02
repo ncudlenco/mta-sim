@@ -19,7 +19,7 @@ function BenchpressWorkOut:Apply()
                         self.TargetItem.PosOffset.x, self.TargetItem.PosOffset.y, self.TargetItem.PosOffset.z,
                         self.TargetItem.RotOffset.x, self.TargetItem.RotOffset.y, self.TargetItem.RotOffset.z)
 
-    StoryActionBase.GetLogger(self, story):Log(self.Description .. self.TargetItem.Description .. ". When " .. self.Performer:getData('genderNominative') .. " finishes ", self.Performer)
+    StoryActionBase.GetLogger(self, story):Log(self.Description .. self.TargetItem.Description, self.Performer)
 
     self.Performer:setAnimation("benchpress", self.how, time, true, false, false, true)
 

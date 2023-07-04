@@ -1,6 +1,6 @@
 data/
 ServerGlobals.lua
-.vscode/
+.vscode/*
 story_generator/__pycache__/*
 story_generator/babi/*
 story_generator/story.txt
@@ -13,3 +13,4 @@ corpus/*
 scripts/r10
 scripts/
 data_out/
+.vscode/launch.json

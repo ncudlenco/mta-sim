@@ -362,6 +362,15 @@ function Logger:Log(text, ...)
 end
 
 function Logger:FlushBuffer(player, endSentence)
+    if not player then
+        print("[Error]: FlushBuffer was called for a null player!")
+        return
+    end
+    if not self.Buffer[player:getData('id')] then
+        print("[Warning]: FlushBuffer - The buffer was empty for the player "..player:getData('id'))
+        return
+    end
+    
     if not self.isImpersonal then
         local nominative = player:getData('genderNominative')
         if self.PreviousPlayerCommitId ~= player:getData('id') then

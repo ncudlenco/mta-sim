@@ -206,49 +206,29 @@ function Location:GetNextRandomValidAction(player)
             local li = LastIndexOf(self.History[player:getData('id')], p)
             local lic = LastIndexOf(self.History[player:getData('id')], p.ClosingAction)
             if DEBUG then
-                outputConsole("Evaluating validity of action "..x.Description)
-                outputConsole("Has prerequisite "..p.Description)
+                print("Evaluating validity of action "..x.Description)
+                print("Has prerequisite "..p.Description)
                 if p.ClosingAction then
-                    outputConsole("With closing action "..p.ClosingAction.Description)
+                    print("With closing action "..p.ClosingAction.Description)
                 else
-                    outputConsole("Doesn't have a closing action")
+                    print("Doesn't have a closing action")
                 end
-                outputConsole("Prerequisite last index: "..li)
+                print("Prerequisite last index: "..li)
                 if p.ClosingAction then
-                    outputConsole("Closing action last index "..lic)
+                    print("Closing action last index "..lic)
                 end
                 if p.ClosingAction and lic > li or li ~= -1 then
-                    outputConsole("Marked as valid")
+                    print("Marked as valid")
                 else
-                    outputConsole("Not valid")
+                    print("Not valid")
                 end
             end
             return p.ClosingAction and lic > li or li ~= -1
         end)
     end)
-    if next(nextValidActions) == nil then
-        if DEBUG then
-            print("Location:GetNextValidAction - No more valid story actions found. Ending the current story")
-            outputConsole("Location:GetNextValidAction - No more valid story actions found. Ending the current story")
-        end
-        lock = false
-        return EndStory(player)
-    end
 
     if #nextValidActions > 1 then
         table.remove(nextValidActions, 1)
-    end
-
-    if DEBUG_ACTIONS then
-        if previousAction then
-            str_act = "Actions: Previous action " .. string.sub(previousAction.ActionId, 1, 8) .. "-"
-        else
-            str_act = "Actions: no previous action - "
-        end
-
-        for i, action in ipairs(nextValidActions) do
-            str_act = str_act .. string.sub(action.ActionId, 1, 8) .. " "
-        end
     end
 
     return PickRandom(nextValidActions);
@@ -618,8 +598,12 @@ function Location:GetNextValidAction(player)
     else
         if DEBUG then
             outputConsole("Next action chosen: "..next.Description)
-            print("Next action chosen: "..next.Description)
-            print("Next action for actor "..player:getData('id').." chosen. Action: "..next.Description.." target location: "..next.NextLocation.Description.." in region: "..next.NextLocation.Region.name.." and episode: "..next.NextLocation.Region.Episode.name)
+            print("Next action chosen: "..next.Description .." "..next.Name)
+            if not next.NextLocation then
+                print("Error: Next action had a null next location!")
+            else
+                print("Next action for actor "..player:getData('id').." chosen. Action: "..next.Description.." target location: "..next.NextLocation.Description.." in region: "..next.NextLocation.Region.name.." and episode: "..next.NextLocation.Region.Episode.name)
+            end
         end
         if next.NextLocation == self then
             table.insert(self.History[player:getData('id')], next)

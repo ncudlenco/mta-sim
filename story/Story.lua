@@ -1,3 +1,8 @@
+--1. De rezolvat bug-urile curente pentru a genera random in toate casele
+--2. Interactiuni
+--3. Random inter-episode connections
+
+--Random story
 Story = class(StoryBase, function(o, spectators, maxActions, logData)
     StoryBase.init(o, spectators, maxActions)
     o.LogData = logData
@@ -9,21 +14,23 @@ Story = class(StoryBase, function(o, spectators, maxActions, logData)
         -- House12()
     }
     o.DynamicEpisodes = {
-        -- "house1_sweet", --some agents do nothing
-        -- "house1_preloaded", --same problem, logger line 360 error
-        -- "house3_preloaded", --same problem as above
-        -- "house7",
-        -- "house8_preloaded",
-        -- "house9",
-        -- "house10_preloaded",
-        -- "house12_preloaded",
+        "house1_sweet", --V
+        -- "house1_preloaded", --V (small bug -> the guy sitting on the sofa is sitting in air)
+        -- "house3_preloaded", --V (it ends too soon, 1 error)
+        -- [2023-07-04 22:56:55] ERROR: sv2l\api\StoryEpisodeBase.lua:131: Bad argument @ 'setData' [Expected argument at argument 3, got none]
+        --"house7", --ends too soon
+        --"house8_preloaded",--V
+        -- "house9",--V
+        -- [2023-07-04 23:28:17] ERROR: sv2l\story\Actions\Give.lua:24: attempt to index field 'TargetPlayer' (a nil value)
+        -- "house10_preloaded",--drink action bug loop
+        -- "house12_preloaded",--ends too soon
         -- "garden",
         -- "office",
         -- "office2",
         -- "common"
-          "gym1",
-          "gym2",
-          "gym3"
+        --   "gym1",
+        --   "gym2",
+        --   "gym3"
     }
     o.SpawnableObjects = {
         "Cigarette",

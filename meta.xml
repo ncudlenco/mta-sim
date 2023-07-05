@@ -66,7 +66,7 @@
   <script src="story/TimeOfDay.lua" type="shared" />
   <script src="story/Weather.lua" type="shared" />
   <!-- Needs -->
-  <script src="story/Needs/BaseNeed.lua" type="server" />
+  <!-- <script src="story/Needs/BaseNeed.lua" type="server" />
   <script src="story/Needs/Fun.lua" type="server" />
   <script src="story/Needs/Health.lua" type="server" />
   <script src="story/Needs/Hunger.lua" type="server" />
@@ -76,7 +76,7 @@
   <script src="story/Needs/Rest.lua" type="server" />
   <script src="story/Needs/Socializing.lua" type="server" />
   <script src="story/Needs/Thirst.lua" type="server" />
-  <script src="story/Needs/NeedsGlobals.lua" type="server" />
+  <script src="story/Needs/NeedsGlobals.lua" type="server" /> -->
   <!-- Locations -->
   <script src="story/Locations/Location.lua" type="shared" />
   <script src="story/Locations/Region.lua" type="shared" />

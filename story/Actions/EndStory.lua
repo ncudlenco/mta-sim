@@ -1,4 +1,5 @@
 EndStory = class(StoryActionBase, function(o, player)
+    local params = {}
     params.performer = player
     StoryActionBase.init(o, params)
     o.IsClosingAction = true

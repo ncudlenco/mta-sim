@@ -128,7 +128,7 @@ function StoryEpisodeBase:Initialize(...)
                 end
                 local startingPoiIdx = player:getData('startingPoiIdx')
                 if not closestRegion then
-                    if not player:setData('spawned') and startingPoiIdx and startingPoiIdx < #CURRENT_STORY.CurrentEpisode.POI then
+                    if not player:getData('spawned') and startingPoiIdx and startingPoiIdx < #CURRENT_STORY.CurrentEpisode.POI then
                         closestRegion = CURRENT_STORY.CurrentEpisode.POI[startingPoiIdx].Region
                         if DEBUG then
                             print("Warning: No region was found in range for the player "..player:getData('id')..' but took one from the starting POI '..(closestRegion.name or 'null'))

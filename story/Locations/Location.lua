@@ -196,35 +196,51 @@ end
 function Location:GetNextRandomValidAction(player)
     local story = GetStory(player)
 
-    local previousAction = nil
+    local previousChainOfActions = {}
     if #story.History[player:getData('id')] >= 1 then
-        previousAction = story.History[player:getData('id')][#story.History]
+        local i = #story.History
+        local previousAction = story.History[player:getData('id')][#story.History]
+        table.insert(previousChainOfActions, previousAction)
+
+        --a1
+        --a2 = a1.NextAction
+        --...
+        --an = an-1.NextAction
+        while i-1 > 0 do
+            local pprevAction = story.History[player:getData('id')][i-1]
+            if previousAction.NextAction == pprevAction then
+                previousAction = pprevAction
+                table.insert(previousChainOfActions, pprevAction)
+            end
+            i = i-1
+        end
     end
 
     local nextValidActions = Where(self.PossibleActions, function(x)
-        return (x.NextLocation == self or not x.NextLocation.isBusy) and x ~= previousAction and All(x.Prerequisites, function(p)
-            local li = LastIndexOf(self.History[player:getData('id')], p)
-            local lic = LastIndexOf(self.History[player:getData('id')], p.ClosingAction)
-            if DEBUG then
-                print("Evaluating validity of action "..x.Description)
-                print("Has prerequisite "..p.Description)
-                if p.ClosingAction then
-                    print("With closing action "..p.ClosingAction.Description)
-                else
-                    print("Doesn't have a closing action")
+        return (x.NextLocation == self or not x.NextLocation.isBusy) and All(previousChainOfActions, function(a) return a ~= x end)
+            and All(x.Prerequisites, function(p)
+                local startActionChainIndex = LastIndexOf(self.History[player:getData('id')], p)
+                local endActionChainIndex = LastIndexOf(self.History[player:getData('id')], p.ClosingAction)
+                if DEBUG then
+                    print("Evaluating validity of action "..x.Description)
+                    print("Has prerequisite "..p.Description)
+                    if p.ClosingAction then
+                        print("With closing action "..p.ClosingAction.Description)
+                    else
+                        print("Doesn't have a closing action")
+                    end
+                    print("Prerequisite last index: "..startActionChainIndex)
+                    if p.ClosingAction then
+                        print("Closing action last index "..endActionChainIndex)
+                    end
+                    if p.ClosingAction and endActionChainIndex > startActionChainIndex or startActionChainIndex ~= -1 then
+                        print("Marked as valid")
+                    else
+                        print("Not valid")
+                    end
                 end
-                print("Prerequisite last index: "..li)
-                if p.ClosingAction then
-                    print("Closing action last index "..lic)
-                end
-                if p.ClosingAction and lic > li or li ~= -1 then
-                    print("Marked as valid")
-                else
-                    print("Not valid")
-                end
-            end
-            return p.ClosingAction and lic > li or li ~= -1
-        end)
+                return p.ClosingAction and endActionChainIndex > startActionChainIndex or startActionChainIndex ~= -1
+            end)
     end)
 
     if #nextValidActions > 1 then

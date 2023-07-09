@@ -14,23 +14,23 @@ Story = class(StoryBase, function(o, spectators, maxActions, logData)
         -- House12()
     }
     o.DynamicEpisodes = {
-        "house1_sweet", --V
-        -- "house1_preloaded", --V (small bug -> the guy sitting on the sofa is sitting in air)
-        -- "house3_preloaded", --V (it ends too soon, 1 error)
-        -- [2023-07-04 22:56:55] ERROR: sv2l\api\StoryEpisodeBase.lua:131: Bad argument @ 'setData' [Expected argument at argument 3, got none]
-        --"house7", --ends too soon
-        --"house8_preloaded",--V
+        -- "house1_sweet", --V
+        -- "house1_preloaded", --V 
+        -- (small bug -> the guy sitting on the sofa is sitting in air) and the sit down action is executed always twice
+        -- and the other actions can't be reached randomly: eat, dance, sit down on the other sofa...
+        "house3_preloaded", --V (it ends too soon)
+        -- "house7", --ends too soon
+        -- "house8_preloaded",--V
         -- "house9",--V
-        -- [2023-07-04 23:28:17] ERROR: sv2l\story\Actions\Give.lua:24: attempt to index field 'TargetPlayer' (a nil value)
         -- "house10_preloaded",--drink action bug loop
         -- "house12_preloaded",--ends too soon
         -- "garden",
         -- "office",
         -- "office2",
         -- "common"
-        --   "gym1",
-        --   "gym2",
-        --   "gym3"
+        -- "gym1",
+        -- "gym2",
+        -- "gym3"
     }
     o.SpawnableObjects = {
         "Cigarette",

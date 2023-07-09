@@ -8,7 +8,6 @@ DynamicEpisode = class(StoryEpisodeBase, function(o, name)
     o.name = name or ""
 end)
 
-
 function DynamicEpisode:Initialize(...)
     StoryEpisodeBase.Initialize(self, unpack(arg))
 end

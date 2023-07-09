@@ -35,7 +35,7 @@ function initializeSpectator(source)
         outputConsole("New player joined the server. Id ".. source:getData('id'))
     end
 
-    if #SPECTATORS == EXPECTED_SPECTATORS then
+    if #SPECTATORS == EXPECTED_SPECTATORS and not DEFINING_EPISODES then
         startSimulation(source)
     end
 end
@@ -44,6 +44,9 @@ addEventHandler("onPlayerJoin", getRootElement(), function (prevA, curA) initial
 
 addEventHandler("onPlayerSpawn", getRootElement(),
 function (prevA, curA)
+    if DEFINING_EPISODES then
+        return
+    end
     if DEBUG and source:getData('id') then
         outputConsole("Player "..source:getData('id').."spawned ")
     end

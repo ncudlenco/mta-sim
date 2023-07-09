@@ -1,7 +1,7 @@
 addEvent ( "onElementDoneEditing", true )
 addEvent ( "onActionRetrieved", true )
 
-DEFINING_EPISODES = false
+DEFINING_EPISODES = true
 if DEFINING_EPISODES then
     addEventHandler ( "onClientPlayerSpawn", getLocalPlayer(), function()
         print('onClientPlayerSpawn')
@@ -10,9 +10,11 @@ if DEFINING_EPISODES then
         localPlayer:setData("id", g.Id)
         localPlayer:setData("isPed", false)
 
+        SPECTATORS = {localPlayer}
         print('Player '..g.Id)
-        CLIENT_STORY = Story(localPlayer, 10000, true)
+        CLIENT_STORY = Story(SPECTATORS, 10000, false)
         CURRENT_STORY = CLIENT_STORY
+        Camera.fade(true)
     end)
     function GetStory(player)
         print('GetStory called from client')
@@ -526,6 +528,9 @@ addCommandHandler("episode",
                 if episode:LoadFromFile() then
                     episode:Initialize(localPlayer) --should not create the supertemplate contents
                     outputChatBox("Loaded files/episodes/"..episode.name..".json", 255, 0, 0, false)
+                    if #episode.POI > 0 then
+                        localPlayer.position = Vector3(episode.POI[1].position.x, episode.POI[1].position.y, episode.POI[1].position.z + 1)
+                    end
                 else
                     outputChatBox("File not found files/episodes/"..episode.name..".json", 255, 0, 0, false)
                 end

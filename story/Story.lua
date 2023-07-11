@@ -15,12 +15,13 @@ Story = class(StoryBase, function(o, spectators, maxActions, logData)
     }
     o.DynamicEpisodes = {
         -- "house1_sweet", --V
-        -- "house1_preloaded", --V 
+        -- "house1_preloaded", --V
         -- (small bug -> the guy sitting on the sofa is sitting in air) and the sit down action is executed always twice
         -- and the other actions can't be reached randomly: eat, dance, sit down on the other sofa...
-        "house3_preloaded", --V (it ends too soon)
+        -- "house3_preloaded", --V (it ends too soon)
+        -- "house3_rd",
         -- "house7", --ends too soon
-        -- "house8_preloaded",--V
+        "house8_preloaded",--V
         -- "house9",--V
         -- "house10_preloaded",--drink action bug loop
         -- "house12_preloaded",--ends too soon

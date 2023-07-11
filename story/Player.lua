@@ -1,5 +1,6 @@
 
 function startSimulation(source)
+    print("Starting simulation")
     SCREENSHOTS = {}
     CURRENT_STORY = nil
     if LOAD_FROM_GRAPH and #INPUT_GRAPHS > 0 then
@@ -17,7 +18,9 @@ function startSimulation(source)
 end
 
 function initializeSpectator(source)
-    source:fadeCamera (false)
+    if not DEFINING_EPISODES then
+        source:fadeCamera (false)
+    end
     source:setHudComponentVisible("all", false)
 
     --Set a player specific id to be able to differentiate between players the logged data
@@ -35,8 +38,10 @@ function initializeSpectator(source)
         outputConsole("New player joined the server. Id ".. source:getData('id'))
     end
 
-    if #SPECTATORS == EXPECTED_SPECTATORS and not DEFINING_EPISODES then
-        startSimulation(source)
+    if #SPECTATORS == EXPECTED_SPECTATORS then
+        if not DEFINING_EPISODES then
+            startSimulation(source)
+        end
     end
 end
 

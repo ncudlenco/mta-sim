@@ -234,6 +234,9 @@ function Logger:AddEnvironmentDescription(description)
 end
 
 function Logger:Log(text, ...)
+    if DEFINING_EPISODES then
+        return
+    end
     local isImpersonal = false
     local commit = false
     local player = nil
@@ -370,7 +373,7 @@ function Logger:FlushBuffer(player, endSentence)
         print("[Warning]: FlushBuffer - The buffer was empty for the player "..player:getData('id'))
         return
     end
-    
+
     if not self.isImpersonal then
         local nominative = player:getData('genderNominative')
         if self.PreviousPlayerCommitId ~= player:getData('id') then

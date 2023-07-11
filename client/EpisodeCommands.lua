@@ -1,7 +1,7 @@
 addEvent ( "onElementDoneEditing", true )
 addEvent ( "onActionRetrieved", true )
 
-DEFINING_EPISODES = true
+DEFINING_EPISODES = false
 if DEFINING_EPISODES then
     addEventHandler ( "onClientPlayerSpawn", getLocalPlayer(), function()
         print('onClientPlayerSpawn')
@@ -170,9 +170,9 @@ local function unloadEpisode(episode)
         return false
     end
     removeEventHandler("onClientRender", getRootElement(), text_render)
-    for _,obj in ipairs(episode.ObjectsToDelete) do
-        restoreWorldModel(obj.modelid, obj.size, obj.position.x, obj.position.y, obj.position.z)
-    end
+    -- for _,obj in ipairs(episode.ObjectsToDelete) do
+    --     restoreWorldModel(obj.modelid, obj.size, obj.position.x, obj.position.y, obj.position.z)
+    -- end
     for _, marker in pairs ( markers ) do
         marker:destroy()
     end
@@ -529,7 +529,9 @@ addCommandHandler("episode",
                     episode:Initialize(localPlayer) --should not create the supertemplate contents
                     outputChatBox("Loaded files/episodes/"..episode.name..".json", 255, 0, 0, false)
                     if #episode.POI > 0 then
-                        localPlayer.position = Vector3(episode.POI[1].position.x, episode.POI[1].position.y, episode.POI[1].position.z + 1)
+                        local poi = PickRandom(episode.POI)
+                        localPlayer.position = Vector3(poi.position.x, poi.position.y, poi.position.z + 2)
+                        localPlayer.interior = episode.InteriorId
                     end
                 else
                     outputChatBox("File not found files/episodes/"..episode.name..".json", 255, 0, 0, false)
@@ -1334,7 +1336,7 @@ addCommandHandler("episode",
                 end
                 local function actionRetrieved(action)
                     removeEventHandler ( "onActionRetrieved", getRootElement(), actionRetrieved)
-                    outputChatBox("action retrieved")
+                    outputChatBox("action retrieved "..lastAction:GetDynamicString())
                     prevPosition = localPlayer.position
                     lastAction:Apply()
                 end

@@ -32,7 +32,9 @@ end
 function StoryActionBase:Apply(...)
     local story = GetStory(self.Performer)
     local playerId = self.Performer:getData('id')
-    story.CameraHandler:requestFocus(playerId)
+    if not DEFINING_EPISODES then
+        story.CameraHandler:requestFocus(playerId)
+    end
 end
 
 function StoryActionBase:GetLogger(story)

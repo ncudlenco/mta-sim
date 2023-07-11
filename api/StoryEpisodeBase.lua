@@ -69,6 +69,7 @@ function StoryEpisodeBase:Initialize(...)
             end
 
             --Delete objects
+            print("Deleting world models...")
             for i,v in ipairs(self.ObjectsToDelete) do
                 removeWorldModel(v.modelid, v.size, v.position.x, v.position.y, v.position.z)
             end
@@ -238,6 +239,16 @@ function StoryEpisodeBase:Initialize(...)
             self.initialized = true
         else
             print("SKIPPING EPISODE "..self.name..' initialization because its already initialized')
+        end
+    else
+        --Delete objects
+        print("Deleting world models...")
+        for i,v in ipairs(self.ObjectsToDelete) do
+            removeWorldModel(v.modelid, v.size, v.position.x, v.position.y, v.position.z)
+        end
+        --Create objects
+        for i,v in ipairs(self.Objects) do
+            v:Create()
         end
     end
 end

@@ -201,16 +201,24 @@ function Location:GetNextRandomValidAction(player)
         local i = #story.History
         local previousAction = story.History[player:getData('id')][#story.History]
         table.insert(previousChainOfActions, previousAction)
+        if DEBUG then
+            print("Prev action "..previousAction.Name)
+        end
 
         --a1
         --a2 = a1.NextAction
         --...
         --an = an-1.NextAction
-        while i-1 > 0 do
+        while i-1 > 0 and not previousAction do
             local pprevAction = story.History[player:getData('id')][i-1]
             if previousAction.NextAction == pprevAction then
                 previousAction = pprevAction
                 table.insert(previousChainOfActions, pprevAction)
+                if DEBUG then
+                    print("Prev action "..previousAction.Name)
+                end
+            else
+                previousAction = nil
             end
             i = i-1
         end
@@ -219,8 +227,8 @@ function Location:GetNextRandomValidAction(player)
     local nextValidActions = Where(self.PossibleActions, function(x)
         return (x.NextLocation == self or not x.NextLocation.isBusy) and All(previousChainOfActions, function(a) return a ~= x end)
             and All(x.Prerequisites, function(p)
-                local startActionChainIndex = LastIndexOf(self.History[player:getData('id')], p)
-                local endActionChainIndex = LastIndexOf(self.History[player:getData('id')], p.ClosingAction)
+                local startActionChainIndex = LastIndexOf(self.History[player:getData('id')], p, StoryActionBase.__eq)
+                local endActionChainIndex = LastIndexOf(self.History[player:getData('id')], p.ClosingAction, StoryActionBase.__eq)
                 if DEBUG then
                     print("Evaluating validity of action "..x.Description)
                     print("Has prerequisite "..p.Description)
@@ -622,6 +630,9 @@ function Location:GetNextValidAction(player)
             end
         end
         if next.NextLocation == self then
+            if DEBUG then
+                print("Add next action to history "..next.Name.." - "..next.Description)
+            end
             table.insert(self.History[player:getData('id')], next)
         else
             self.History[player:getData('id')] = {}

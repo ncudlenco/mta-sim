@@ -1,0 +1,150 @@
+[
+    {
+        "objects": [
+            {
+                "dynamicString": "return Bed{description=\"\", noCollisions=true, modelid=Bed.eModel[PickRandom(Bed.eModel)], isRandomModelId=true, interior=9, position=Vector3(0.75244140625,-2.10546875,-1), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "id": 21
+            },
+            {
+                "dynamicString": "return Bed{description=\"\", noCollisions=true, modelid=Bed.eModel[PickRandom(Bed.eModel)], isRandomModelId=true, interior=9, position=Vector3(0.75244140625,-2.1055297851562,0), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "id": 1
+            }
+        ],
+        "poi": {
+            "Description": "bed ",
+            "allActions": [
+                {
+                    "dynamicString": "return GetOn{how = 1,side = 1}",
+                    "isClosingAction": false,
+                    "nextLocation": {
+                        "id": 12
+                    },
+                    "id": 1,
+                    "nextAction": {
+                        "id": 2
+                    },
+                    "closingAction": {
+                        "id": 3
+                    },
+                    "targetItem": {
+                        "id": 21,
+                        "type": "Object"
+                    }
+                },
+                {
+                    "dynamicString": "return Sleep{how = 1}",
+                    "targetItem": {
+                        "id": 21,
+                        "type": "Object"
+                    },
+                    "id": 2,
+                    "nextAction": {
+                        "id": 3
+                    },
+                    "isClosingAction": false,
+                    "nextLocation": {
+                        "id": 12
+                    }
+                },
+                {
+                    "dynamicString": "return GetOff{how = 1,side = 1}",
+                    "targetItem": {
+                        "id": 21,
+                        "type": "Object"
+                    },
+                    "id": 3,
+                    "isClosingAction": true,
+                    "nextLocation": {
+                        "id": 12
+                    }
+                }
+            ],
+            "Y": -1021.366516113281,
+            "X": 2323.26123046875,
+            "Z": 1050.2109375,
+            "Interior": 9,
+            "Angle": 270.8631286621094,
+            "PossibleActions": [
+                {
+                    "id": 1
+                }
+            ],
+            "id": 12
+        },
+        "locations": [
+            {
+                "Description": "bed ",
+                "id": 2,
+                "interior": 9,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "X": 1550.825439453125,
+                "Z": 698.4739990234375,
+                "allActions": [
+                    {
+                        "dynamicString": "return GetOn{how = 1,side = 2}",
+                        "nextLocation": {
+                            "id": 2
+                        },
+                        "targetItem": {
+                            "id": 21,
+                            "type": "Object"
+                        },
+                        "id": 1,
+                        "nextAction": {
+                            "id": 2
+                        },
+                        "closingAction": {
+                            "id": 3
+                        },
+                        "isClosingAction": false
+                    },
+                    {
+                        "dynamicString": "return Sleep{how = 2}",
+                        "targetItem": {
+                            "id": 21,
+                            "type": "Object"
+                        },
+                        "id": 2,
+                        "nextAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 2
+                        },
+                        "isClosingAction": false
+                    },
+                    {
+                        "dynamicString": "return GetOff{how = 1,side = 2}",
+                        "targetItem": {
+                            "id": 21,
+                            "type": "Object"
+                        },
+                        "id": 3,
+                        "nextLocation": {
+                            "id": 2
+                        },
+                        "isClosingAction": false
+                    }
+                ],
+                "Angle": 88.89395141601562,
+                "Y": 698.4739990234375,
+                "Interior": 9
+            }
+        ],
+        "position": {
+            "y": -1012.821166992188,
+            "x": 2325.752685546875,
+            "z": 1053.711059570312
+        },
+        "globalCentroid": {
+            "y": -781.400146484375,
+            "x": 2843.196044921875,
+            "z": 1286.202392578125
+        },
+        "name": "test"
+    }
+]

@@ -290,21 +290,24 @@ function Location:ProcessNextAction(player)
         else
             local wait = Wait { performer = ped1, nextLocation = location, targetItem = ped2, doNothing=false, time=10000000 }
             table.insert(actionsChain, wait)
-            if event.Action == 'HandShake' then
+            if event.Action == 'HandShake' or event.Action == "Handshake" then
                 eventAction = HandShake {performer = ped1, nextLocation = location, targetPlayer = ped2, targetItem = ped2, time = random(6000, 15000)}
             elseif event.Action == 'Kiss' then
                 eventAction = Kiss { performer = ped1, nextLocation = location, targetPlayer = ped2, TargetItem = ped2 }
             elseif event.Action == 'Hug' then
                 eventAction = Hug { performer = ped1, nextLocation = location, targetPlayer = ped2, TargetItem = ped2 }
             elseif event.Action == 'Give' then
-                local object = FirstOrDefault(CURRENT_STORY.CurrentEpisode.Objects, function(o) return o.ObjectId == CURRENT_STORY.reverseObjectMap[event.interactionEvent.Entities[3]] end)
+                local pickedUpObjectId = ped1:getData('pickedObjects')[1]
+                local object = FirstOrDefault(CURRENT_STORY.CurrentEpisode.Objects, function(o) return o.ObjectId == pickedUpObjectId end)
                 if not object then
                     error('Could not find object to give from '..ped1:getData('id')..' to '..ped2:getData('id'))
                 end
                 print('PROCESSING INTERACTION Give from '..ped1:getData('id')..' to '..ped2:getData('id')..' object '..object:__tostring())
                 eventAction = Give { performer = ped1, nextLocation = location, targetPlayer = ped2, TargetItem = object }
             elseif event.Action == 'INV-Give' or event.Action == 'Receive' then
-                local object = FirstOrDefault(CURRENT_STORY.CurrentEpisode.Objects, function(o) return o.ObjectId == CURRENT_STORY.reverseObjectMap[event.interactionEvent.Entities[3]] end)
+                local pickedUpObjectId = ped2:getData('pickedObjects')[1]
+
+                local object = FirstOrDefault(CURRENT_STORY.CurrentEpisode.Objects, function(o) return o.ObjectId == pickedUpObjectId end)
                 if not object then
                     error('Could not find object to give from '..ped1:getData('id')..' to '..ped2:getData('id'))
                 end
@@ -404,7 +407,7 @@ function Location:ProcessNextAction(player)
     if nextEvent then
         nextEvent.isInteraction = Any(CURRENT_STORY.Interactions, function(a) return a:lower() == nextEvent.Action:lower() end)
         if nextEvent.isInteraction then
-            nextEvent.interactionRelation = FirstOrDefault(CURRENT_STORY.temporal[nextEvent.id].relations, function(rel) return CURRENT_STORY.temporal[rel].type == 'starts_with' end)
+            nextEvent.interactionRelation = FirstOrDefault(CURRENT_STORY.temporal[nextEvent.id].relations, function(rel) return CURRENT_STORY.temporal[rel].type == 'starts_with' or CURRENT_STORY.temporal[rel].type == 'same_time' end)
             nextEvent.interactionEvent = FirstOrDefault(CURRENT_STORY.graph, function(a)
                 return a.id and CURRENT_STORY.temporal[a.id] and CURRENT_STORY.temporal[a.id].relations
                     and Any(CURRENT_STORY.temporal[a.id].relations, function(rel) return rel == nextEvent.interactionRelation end) end)
@@ -416,42 +419,54 @@ function Location:ProcessNextAction(player)
         print('Next event: '..nextEvent.id..' isInteraction '..strIsInteraction)
 
         local candidates = Where(CURRENT_STORY.CurrentEpisode.POI, function(poi)
-            return
-            (nextEvent.isInteraction and
-                (
-                    not interactionPoiMap[nextEvent.interactionRelation]
-                    or
-                    poi.LocationId == interactionPoiMap[nextEvent.interactionRelation]
+            if CURRENT_STORY.CurrentEpisode.poiMap and CURRENT_STORY.CurrentEpisode.poiMap[nextEvent.id] then
+                return poi.LocationId == CURRENT_STORY.CurrentEpisode.poiMap[nextEvent.id]
+            else
+                return
+                (nextEvent.isInteraction and
+                    (
+                        not interactionPoiMap[nextEvent.interactionRelation]
+                        or
+                        poi.LocationId == interactionPoiMap[nextEvent.interactionRelation]
+                    )
+                    or not nextEvent.isInteraction --and not poi.isBusy
                 )
-                or not nextEvent.isInteraction --and not poi.isBusy
-            )
-            and
-            poi.Region and nextEvent.Location and (poi.Region.name:lower():find(nextEvent.Location[1]:lower()) and true or false )
-            and
-            (
-                nextEvent.isInteraction
-                or
-                Any(poi.allActions, function(action)
-                    return action.Name:lower() == nextEvent.Action:lower() --the location contains the required action for the next event
-                    and (#nextEvent.Entities < 2 or
-                    (action.TargetItem.ObjectId and #nextEvent.Entities > 1 and action.TargetItem.type == CURRENT_STORY.graph[nextEvent.Entities[2]].Properties.Type --action has a target an object of type x
-                    and action.TargetItem.ObjectId == CURRENT_STORY.reverseObjectMap[nextEvent.Entities[2]]))
-                end)
-            )
+                and
+                poi.Region and nextEvent.Location and (poi.Region.name:lower():find(nextEvent.Location[1]:lower()) and true or false )
+                and
+                (
+                    nextEvent.isInteraction
+                    or
+                    Any(poi.allActions, function(action)
+                        return action.Name:lower() == nextEvent.Action:lower() --the location contains the required action for the next event
+                        and (
+                            #nextEvent.Entities < 2 or
+                            (action.TargetItem.ObjectId and #nextEvent.Entities > 1 and
+                                (
+                                    action.TargetItem and action.TargetItem.type == CURRENT_STORY.graph[nextEvent.Entities[2]].Properties.Type
+                                ) --action has a target an object of type x
+                                and action.TargetItem.ObjectId == CURRENT_STORY.eventObjectMap[nextEvent.Entities[2]]
+                            )
+                        )
+                    end)
+                )
+            end
         end)
         if DEBUG then
             for _,poi in ipairs(candidates) do
-                local isBusyStr = 'false' if poi.isBusy then isBusy = 'true' end
+                local isBusyStr = 'false' if poi.isBusy then isBusyStr = 'true' end
                 print('Candidate location '..poi.Description..' is busy '..isBusyStr)
             end
         end
         if All(candidates, function(poi) return poi.isBusy end) then
             nextLocation = PickRandom(candidates)
+        elseif FirstOrDefault(candidates, function(poi) return poi == location end) then
+            nextLocation = FirstOrDefault(candidates, function(poi) return poi == location end)
         else
             nextLocation = PickRandom(Where(candidates, function(poi) return not poi.isBusy end))
         end
         if not nextLocation then
-            error('Could not find the next location '..nextEvent.id..': '..nextEvent.Location[1])
+            print('Could not find the next location '..nextEvent.id..': '..nextEvent.Location[1])
         elseif nextEvent.isInteraction then
             if interactionPoiMap[nextEvent.interactionRelation] == nextLocation.LocationId then
                 --only subsequent actors reach this section (i.e. after a location was chosen for the interaction)

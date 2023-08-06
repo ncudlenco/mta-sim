@@ -1,0 +1,90 @@
+[
+    {
+        "objects": [
+            {
+                "dynamicString": "return Food{description=\"\", noCollisions=true, modelid=Food.eModel[PickRandom(Food.eModel)], isRandomModelId=true, interior=9, position=Vector3(0.56201171875,0.09881591796875,0.105224609375), rotation=Vector3(270,0,200), posOffset=Vector3(-0.0099999997764826,0.03999999910593,0.059999998658895), rotOffset=Vector3(0,180,0)}",
+                "id": 18
+            }
+        ],
+        "poi": {
+            "isEmpty": true
+        },
+        "locations": [
+            {
+                "Description": "near food",
+                "Interior": 9,
+                "Y": 0.0513916015625,
+                "X": 0.05078125,
+                "episodeLinks": [],
+                "Z": 0.1199951171875,
+                "id": 9,
+                "Angle": -104.4458312988281,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "allActions": [
+                    {
+                        "dynamicString": "return PickUp{where = \"near food\", targetObjectExists = true, hand = 11, how = 1}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 18,
+                            "type": "Object"
+                        },
+                        "id": 1,
+                        "nextAction": [
+                            {
+                                "id": 2
+                            },
+                            {
+                                "id": 3
+                            }
+                        ],
+                        "closingAction": {
+                            "id": 2
+                        },
+                        "nextLocation": {
+                            "id": 9
+                        }
+                    },
+                    {
+                        "dynamicString": "return Eat{how = 2}",
+                        "isClosingAction": true,
+                        "targetItem": {
+                            "id": 18,
+                            "type": "Object"
+                        },
+                        "id": 2,
+                        "nextLocation": {
+                            "id": 9
+                        }
+                    },
+                    {
+                        "dynamicString": "return Give{hand = 11, how = 1}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 18,
+                            "type": "Object"
+                        },
+                        "id": 3,
+                        "nextLocation": {
+                            "id": 9
+                        }
+                    }
+                ]
+            }
+        ],
+        "position": {
+            "y": -1009.760986328125,
+            "x": 2316.736083984375,
+            "z": 1050.2109375
+        },
+        "globalCentroid": {
+            "y": -1009.685913085938,
+            "x": 2317.04248046875,
+            "z": 1050.298583984375
+        },
+        "name": "food"
+    }
+]

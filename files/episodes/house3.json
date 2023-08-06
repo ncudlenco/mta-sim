@@ -991,6 +991,38 @@
 				},
 				"modelid": 2121,
 				"StoryItemType": 1
+			},
+			{
+				"PosOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"Description": "",
+				"noCollisions": true,
+				"isRandomModelId": false,
+				"pluralTemplate": "",
+				"dynamicString": "return Remote{description=\"\", noCollisions=true, modelid=Remote.eModel.Remote1, isRandomModelId=false, interior=3, position=Vector3(2492.8154, -1698.0571, 1014.3103), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+				"type": "Remote",
+				"RotOffset": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"interior": 3,
+				"ObjectId": "14acaddd-c1f9-4bb6-ac36-ad5bd99aaa20",
+				"rotation": {
+					"y": 0,
+					"x": 0,
+					"z": 0
+				},
+				"position": {
+					"x": 2492.8154,
+					"y": -1698.0571,
+					"z": 1014.3103
+				},
+				"modelid": 2344,
+				"StoryItemType": 1
 			}
 		],
 		"name": "house3",

@@ -1,0 +1,88 @@
+[
+    {
+        "objects": [
+            {
+                "dynamicString": "return Bed{description=\"\", noCollisions=true, modelid=1700, isRandomModelId=false, interior=9, position=Vector3(1.130126953125,-2.2205810546875,-1), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "id": 1
+            }
+        ],
+        "poi": {
+            "isEmpty": true
+        },
+        "locations": [
+            {
+                "Description": "bed ",
+                "allActions": [
+                    {
+                        "dynamicString": "return GetOn{how = 1,side = 1}",
+                        "isClosingAction": false,
+                        "nextLocation": {
+                            "id": 1
+                        },
+                        "id": 1,
+                        "nextAction": {
+                            "id": 2
+                        },
+                        "closingAction": {
+                            "id": 3
+                        },
+                        "targetItem": {
+                            "id": 1,
+                            "type": "Object"
+                        }
+                    },
+                    {
+                        "dynamicString": "return Sleep{how = 1}",
+                        "targetItem": {
+                            "id": 1,
+                            "type": "Object"
+                        },
+                        "id": 2,
+                        "nextAction": {
+                            "id": 3
+                        },
+                        "isClosingAction": false,
+                        "nextLocation": {
+                            "id": 1
+                        }
+                    },
+                    {
+                        "dynamicString": "return GetOff{how = 1,side = 1}",
+                        "targetItem": {
+                            "id": 1,
+                            "type": "Object"
+                        },
+                        "id": 3,
+                        "isClosingAction": false,
+                        "nextLocation": {
+                            "id": 1
+                        }
+                    }
+                ],
+                "interior": 9,
+                "Y": 256.9234619140625,
+                "X": 593.82470703125,
+                "Z": 256.9234619140625,
+                "Interior": 9,
+                "Angle": 270.8631286621094,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "id": 1
+            }
+        ],
+        "position": {
+            "y": -1013.476013183594,
+            "x": 2317.86181640625,
+            "z": 1054.715087890625
+        },
+        "globalCentroid": {
+            "y": -886.1245727539062,
+            "x": 2615.33935546875,
+            "z": 1182.6767578125
+        },
+        "name": "1700"
+    }
+]

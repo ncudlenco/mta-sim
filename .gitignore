@@ -14,3 +14,5 @@ scripts/r10
 scripts/
 data_out/
 .vscode/launch.json
+random/*
+test_*_out/*

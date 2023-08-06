@@ -1,10 +1,22 @@
-function FirstOrDefault(arr, func)
-    for _, a in pairs(arr) do --I don't care about the order, this will work on arrays and tables
+function FirstOrDefault(arr, func, getKvp)
+    for k, a in pairs(arr) do --I don't care about the order, this will work on arrays and tables
         if not func or func(a) then
-            return a
+            if getKvp then
+                return {key = k, value = a}
+            else
+                return a
+            end
         end
     end
     return nil
+end
+
+function BoolToStr(bool)
+    local str = 'false'
+    if bool then
+        str = 'true'
+    end
+    return str
 end
 
 function Select(arr, func)
@@ -140,6 +152,10 @@ function Shuffle(arr)
 end
 
 function isArray(t)
+    if type(t) ~= "table" then
+        return false
+    end
+
     local i = 0
     for _ in pairs(t) do
       i = i + 1
@@ -215,6 +231,12 @@ function concat(arr1, arr2)
         table.insert(res, v)
     end
     return res
+end
+
+function CopyContents(from, to)
+    for k,v in pairs(from) do
+        to[k] = v
+    end
 end
 
 function notVeryDeepCopy(obj)

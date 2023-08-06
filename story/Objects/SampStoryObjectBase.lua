@@ -153,9 +153,10 @@ function SampStoryObjectBase:Destroy(...)
 end
 
 function SampStoryObjectBase:ChangeModel(newModelid)
+    local hadInstance = self.instance ~= nil
     self:Destroy()
     self.modelid = newModelid
-    if self.instance ~= nil then
+    if hadInstance then
         self:Create()
     end
     if self.updateDescription then

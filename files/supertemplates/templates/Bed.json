@@ -1,0 +1,32 @@
+[
+    {
+        "objects": [
+            {
+                "id": 21,
+                "dynamicString": "return Bed{description=\"\", noCollisions=true, modelid=1802, isRandomModelId=false, interior=9, position=Vector3(0.75244140625,-2.10546875,-1), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}"
+            }
+        ],
+        "poi": {
+            "Description": "bed ",
+            "id": 12,
+            "PossibleActions": [
+                {
+                    "id": 1
+                }
+            ],
+            "X": 2325.49267578125
+        },
+        "locations": [],
+        "position": {
+            "y": -1012.885375976562,
+            "x": 2325.49267578125,
+            "z": 1053.711059570312
+        },
+        "globalCentroid": {
+            "y": -1014.990844726562,
+            "x": 2326.2451171875,
+            "z": 1052.711059570312
+        },
+        "name": "Bed"
+    }
+]

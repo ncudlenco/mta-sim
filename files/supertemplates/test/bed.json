@@ -1,0 +1,21 @@
+[
+    {
+        "objects": [
+            {
+                "dynamicString": "return Bed{description=\"\", noCollisions=true, modelid=Bed.eModel[PickRandom(Bed.eModel)], isRandomModelId=true, interior=9, position=Vector3(0.6796875,-1.9769287109375,-1), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "id": 1
+            }
+        ],
+        "locations": [],
+        "position": {
+            "y": -1021.977905273438,
+            "x": 2324.685302734375,
+            "z": 1050.2109375
+        },
+        "globalCentroid": {
+            "y": -1023.954833984375,
+            "x": 2325.364990234375,
+            "z": 1049.2109375
+        }
+    }
+]

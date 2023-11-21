@@ -11,11 +11,14 @@ function Kiss:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
 
-
+    local function isNaN( v ) return type( v ) == "number" and v ~= v end
     local function faceP1ToP2(p1, p2)
         local targetFront = p2.position - p1.position
         local angle = p1.matrix.forward:angleAboutAxis(targetFront, p1.matrix.up)
-        p1.rotation = Vector3(0,0,p1.rotation.z + math.deg(angle))
+        print("Signed angle is: "..angle)
+        if not isNaN(angle) then
+            p1.rotation = Vector3(0,0,p1.rotation.z + math.deg(angle))
+        end
     end
 
     StoryActionBase.Apply(self)
@@ -25,7 +28,7 @@ function Kiss:Apply()
     faceP1ToP2(self.TargetPlayer, self.Performer)
 
 
-    local time = 4000
+    local time = 6000
     StoryActionBase.GetLogger(self, story):Log(" and " .. self.TargetPlayer:getData('name') .. self.Description, self)
 
     local performerKissType = nil

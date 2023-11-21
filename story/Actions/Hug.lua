@@ -14,6 +14,7 @@ function Hug:Apply()
     local function faceP1ToP2(p1, p2)
         local targetFront = p2.position - p1.position
         local angle = p1.matrix.forward:angleAboutAxis(targetFront, p1.matrix.up)
+        print("Signed angle is: "..angle)
         p1.rotation = Vector3(0,0,p1.rotation.z + math.deg(angle))
     end
     StoryActionBase.Apply(self)

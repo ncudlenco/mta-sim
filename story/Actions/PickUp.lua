@@ -19,9 +19,9 @@ function PickUp:Apply()
 
     StoryActionBase.Apply(self)
 
-    local pickedObjects = self.Performer:getData('pickedObjects')
+    local pickedObjects = {}
 
-    if type(pickedObjects) == 'boolean' then
+    if type(pickedObjects) == 'boolean' or not pickedObjects then
         pickedObjects = {}
     end
 
@@ -37,8 +37,6 @@ function PickUp:Apply()
             sameDescription = true
         end
     end
-
-    outputChatBox("PickUp:Apply - HEREEEEE")
 
     if sameObject then
         StoryActionBase.GetLogger(self, story):Log(self.Description .. "the same ".. self.TargetItem.Description .. " from " .. self.Where, self)

@@ -45,6 +45,12 @@ function Supertemplate.Load(name)
     return nil
 end
 
+function Supertemplate:Destroy()
+    if self.instantiatedTemplate and isElement(self.instantiatedTemplate) then
+        self.instantiatedTemplate:Destroy()
+    end
+end
+
 --Things to do:
 --1. Create super template: creates a folder named $supertemplatename
 --2. Add template: insert existing template into a supertemplate

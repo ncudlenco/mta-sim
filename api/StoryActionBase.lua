@@ -35,6 +35,9 @@ function StoryActionBase:Apply(...)
     if not DEFINING_EPISODES then
         story.CameraHandler:requestFocus(playerId)
     end
+    if self.Performer and self.NextLocation and self.NextLocation.LocationId then
+        self.Performer:setData('nextTargetLocation', self.NextLocation.LocationId)
+    end
 end
 
 function StoryActionBase:GetLogger(story)

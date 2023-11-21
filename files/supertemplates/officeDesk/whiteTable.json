@@ -1,0 +1,253 @@
+[
+    {
+        "objects": [
+            {
+                "dynamicString": "return Chair{description=\"\", noCollisions=true, modelid=2331, isRandomModelId=false, interior=8, position=Vector3(0.796630859375,-0.1373291015625,-0.957763671875), rotation=Vector3(356.8583984375,0,359.39059448242), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "id": 12
+            },
+            {
+                "dynamicString": "return Laptop{description=\"\", noCollisions=true, modelid=7188, isRandomModelId=false, interior=8, position=Vector3(1.38720703125,-0.1512451171875,-0.1715087890625), rotation=Vector3(0,0,-90), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "id": 14
+            },
+            {
+                "dynamicString": "return Desk{description=\"\", noCollisions=true, modelid=2333, isRandomModelId=false, interior=8, position=Vector3(0.593017578125,0.3603515625,-1.1131591796875), rotation=Vector3(356.8583984375,0,-90), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "id": 13
+            }
+        ],
+        "poi": {
+            "isEmpty": true
+        },
+        "locations": [
+            {
+                "Description": " hallway to entrance door ",
+                "Interior": 8,
+                "Y": -10.4112548828125,
+                "X": -1.67724609375,
+                "episodeLinks": [],
+                "Z": 0,
+                "id": 8,
+                "Angle": 180,
+                "PossibleActions": [],
+                "allActions": []
+            },
+            {
+                "Description": " the desk ",
+                "Interior": 8,
+                "Y": -0.095703125,
+                "X": 0.255126953125,
+                "episodeLinks": [],
+                "Z": 0,
+                "id": 2,
+                "Angle": 266.2842,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "allActions": [
+                    {
+                        "dynamicString": "return SitDown{how = 1, rotation = nil}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 12,
+                            "type": "Object"
+                        },
+                        "id": 1,
+                        "nextAction": {
+                            "id": 2
+                        },
+                        "closingAction": {
+                            "id": 8
+                        },
+                        "nextLocation": {
+                            "id": 8
+                        }
+                    },
+                    {
+                        "dynamicString": "return OpenLaptop{}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 14,
+                            "type": "Object"
+                        },
+                        "id": 2,
+                        "nextAction": [
+                            {
+                                "id": 3
+                            },
+                            {
+                                "id": 4
+                            },
+                            {
+                                "id": 5
+                            },
+                            {
+                                "id": 6
+                            },
+                            {
+                                "id": 7
+                            }
+                        ],
+                        "nextLocation": {
+                            "id": 8
+                        }
+                    },
+                    {
+                        "dynamicString": "return TypeOnKeyboard{}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 14,
+                            "type": "Object"
+                        },
+                        "id": 3,
+                        "nextAction": [
+                            {
+                                "id": 3
+                            },
+                            {
+                                "id": 4
+                            },
+                            {
+                                "id": 5
+                            },
+                            {
+                                "id": 6
+                            },
+                            {
+                                "id": 7
+                            }
+                        ],
+                        "nextLocation": {
+                            "id": 8
+                        }
+                    },
+                    {
+                        "dynamicString": "return PunchDesk{}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 14,
+                            "type": "Object"
+                        },
+                        "id": 4,
+                        "nextAction": [
+                            {
+                                "id": 3
+                            },
+                            {
+                                "id": 4
+                            },
+                            {
+                                "id": 5
+                            },
+                            {
+                                "id": 6
+                            },
+                            {
+                                "id": 7
+                            }
+                        ],
+                        "nextLocation": {
+                            "id": 8
+                        }
+                    },
+                    {
+                        "dynamicString": "return LayOnElbow{}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 14,
+                            "type": "Object"
+                        },
+                        "id": 5,
+                        "nextAction": [
+                            {
+                                "id": 3
+                            },
+                            {
+                                "id": 4
+                            },
+                            {
+                                "id": 5
+                            },
+                            {
+                                "id": 6
+                            },
+                            {
+                                "id": 7
+                            }
+                        ],
+                        "nextLocation": {
+                            "id": 8
+                        }
+                    },
+                    {
+                        "dynamicString": "return LookAtTheWatch{}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 14,
+                            "type": "Object"
+                        },
+                        "id": 6,
+                        "nextAction": [
+                            {
+                                "id": 3
+                            },
+                            {
+                                "id": 4
+                            },
+                            {
+                                "id": 5
+                            },
+                            {
+                                "id": 6
+                            },
+                            {
+                                "id": 7
+                            }
+                        ],
+                        "nextLocation": {
+                            "id": 8
+                        }
+                    },
+                    {
+                        "dynamicString": "return CloseLaptop{}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 14,
+                            "type": "Object"
+                        },
+                        "id": 7,
+                        "nextAction": {
+                            "id": 8
+                        },
+                        "nextLocation": {
+                            "id": 8
+                        }
+                    },
+                    {
+                        "dynamicString": "return StandUp{how = 1}",
+                        "isClosingAction": true,
+                        "targetItem": {
+                            "id": 12,
+                            "type": "Object"
+                        },
+                        "id": 8,
+                        "nextLocation": {
+                            "id": 8
+                        }
+                    }
+                ]
+            }
+        ],
+        "position": {
+            "y": -1122.5087890625,
+            "x": 2366.977294921875,
+            "z": 1050.875
+        },
+        "globalCentroid": {
+            "y": -1124.595825195312,
+            "x": 2367.248291015625,
+            "z": 1050.426513671875
+        },
+        "name": "whiteTable"
+    }
+]

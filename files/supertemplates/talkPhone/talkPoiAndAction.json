@@ -1,0 +1,88 @@
+[
+    {
+        "objects": [
+            {
+                "dynamicString": "return MobilePhone{description=\"\", noCollisions=false, modelid=330, isRandomModelId=false, interior=9, position=Vector3(0.09033203125,0.01873779296875,-1.5), rotation=Vector3(0,0,0), posOffset=Vector3(0.029999965801835,0,-0.0099999997764826), rotOffset=Vector3(0,273,0)}",
+                "id": 20
+            }
+        ],
+        "poi": {
+            "isEmpty": true
+        },
+        "locations": [
+            {
+                "Description": "second floor hallway",
+                "Interior": 9,
+                "Y": 0.08282470703125,
+                "X": -0.001708984375,
+                "episodeLinks": [],
+                "Z": 0,
+                "id": 11,
+                "Angle": 278.1958618164063,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "allActions": [
+                    {
+                        "dynamicString": "return AnswerPhone{}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 20,
+                            "type": "Object"
+                        },
+                        "id": 1,
+                        "nextAction": {
+                            "id": 2
+                        },
+                        "closingAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 11
+                        }
+                    },
+                    {
+                        "dynamicString": "return TalkPhone{}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 20,
+                            "type": "Object"
+                        },
+                        "id": 2,
+                        "nextAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 11
+                        }
+                    },
+                    {
+                        "dynamicString": "return HangUp{}",
+                        "isClosingAction": true,
+                        "targetItem": {
+                            "id": 20,
+                            "type": "Object"
+                        },
+                        "id": 3,
+                        "nextLocation": {
+                            "id": 11
+                        }
+                    }
+                ]
+            }
+        ],
+        "position": {
+            "y": -1012.719116210938,
+            "x": 2318.305419921875,
+            "z": 1054.71875
+        },
+        "globalCentroid": {
+            "y": -1012.668334960938,
+            "x": 2318.349609375,
+            "z": 1053.96875
+        },
+        "name": "talkPoiAndAction"
+    }
+]

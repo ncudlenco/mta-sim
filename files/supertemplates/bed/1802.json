@@ -1,1 +1,150 @@
-[ { "objects": [ { "id": 1, "dynamicString": "return Bed{description=\"\", noCollisions=true, modelid=1802, isRandomModelId=false, interior=9, position=Vector3(1.130126953125,-2.2205810546875,-1), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}" } ], "poi": { "isEmpty": true }, "locations": [ { "Description": "bed ", "id": 1, "PossibleActions": [ { "id": 1 } ], "X": -0.00634765625, "Z": 0, "allActions": [ { "dynamicString": "return GetOn{how = 1,side = 1}", "nextLocation": { "id": 1 }, "targetItem": { "id": 1, "type": "Object" }, "id": 1, "nextAction": { "id": 2 }, "closingAction": { "id": 3 }, "isClosingAction": false }, { "dynamicString": "return Sleep{how = 1}", "targetItem": { "id": 1, "type": "Object" }, "id": 2, "nextAction": { "id": 3 }, "nextLocation": { "id": 1 }, "isClosingAction": false }, { "dynamicString": "return GetOff{how = 1,side = 1}", "targetItem": { "id": 1, "type": "Object" }, "id": 3, "nextLocation": { "id": 1 }, "isClosingAction": false } ], "Angle": 270.8631286621094, "Y": 0, "Interior": 9 } ], "position": { "y": -1014.607849121094, "x": 2327.468994140625, "z": 1050.2109375 }, "globalCentroid": { "y": -1015.718139648438, "x": 2328.03076171875, "z": 1049.7109375 } } ]
+[
+    {
+        "objects": [
+            {
+                "dynamicString": "return Bed{description=\"\", noCollisions=true, modelid=1802, isRandomModelId=false, interior=9, position=Vector3(-2.188232421875,-1.70849609375,-1), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "id": 40
+            }
+        ],
+        "poi": {
+            "isEmpty": true
+        },
+        "locations": [
+            {
+                "Description": "bedroom bed right",
+                "Interior": 9,
+                "Y": 0.1341552734375,
+                "X": -0.46142578125,
+                "episodeLinks": [],
+                "Z": 0.0416259765625,
+                "id": 40,
+                "Angle": 92.49420166015625,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "allActions": [
+                    {
+                        "dynamicString": "return GetOn{how = 1,side = 2}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 40,
+                            "type": "Object"
+                        },
+                        "id": 1,
+                        "nextAction": {
+                            "id": 2
+                        },
+                        "closingAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 40
+                        }
+                    },
+                    {
+                        "dynamicString": "return Sleep{how = 2}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 40,
+                            "type": "Object"
+                        },
+                        "id": 2,
+                        "nextAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 40
+                        }
+                    },
+                    {
+                        "dynamicString": "return GetOff{how = 1,side = 2}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 40,
+                            "type": "Object"
+                        },
+                        "id": 3,
+                        "nextLocation": {
+                            "id": 40
+                        }
+                    }
+                ]
+            },
+            {
+                "Description": "bedroom bed",
+                "Interior": 9,
+                "Y": 0.12554931640625,
+                "X": -2.946533203125,
+                "episodeLinks": [],
+                "Z": 0,
+                "id": 39,
+                "Angle": 273.265869140625,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "allActions": [
+                    {
+                        "dynamicString": "return GetOn{how = 1,side = 1}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 40,
+                            "type": "Object"
+                        },
+                        "id": 1,
+                        "nextAction": {
+                            "id": 2
+                        },
+                        "closingAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 39
+                        }
+                    },
+                    {
+                        "dynamicString": "return Sleep{how = 1}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 40,
+                            "type": "Object"
+                        },
+                        "id": 2,
+                        "nextAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 39
+                        }
+                    },
+                    {
+                        "dynamicString": "return GetOff{how = 1,side = 1}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 40,
+                            "type": "Object"
+                        },
+                        "id": 3,
+                        "nextLocation": {
+                            "id": 39
+                        }
+                    }
+                ]
+            }
+        ],
+        "position": {
+            "y": -1008.8583984375,
+            "x": 2328.148681640625,
+            "z": 1054.71875
+        },
+        "globalCentroid": {
+            "y": -1009.34130859375,
+            "x": 2326.283203125,
+            "z": 1054.399291992188
+        },
+        "name": "1700"
+    }
+]

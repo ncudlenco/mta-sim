@@ -113,6 +113,10 @@ function StoryEpisodeBase:Initialize(...)
             print("SKIPPING EPISODE "..self.name..' temporary initialization because its already initialized')
         end
         if not temporaryInitialize and (not self.initialized and true or false) then
+            for _, value in ipairs(self.POI) do
+                value.isBusy = false
+            end
+
             addEventHandler( "onColShapeHit", self.regionsGroup, function(player)
                 if not player:getData('isPed') then
                     return
@@ -185,7 +189,7 @@ function StoryEpisodeBase:Initialize(...)
                         Y = 0,
                         Z = 0,
                         Angle = 0,
-                        busy = false,
+                        isBusy = false,
                         LocationId = 'dummyLocationId ---- set later in Process Actions',
                         Description = 'dummyLocationId ---- set later in Process Actions',
                         Interior = 0,
@@ -559,6 +563,7 @@ function StoryEpisodeBase:LoadFromFile()
                     local offsets = s.offsets[idx]
                     template:UpdatePosition(Vector3(offsets.offset.x, offsets.offset.y, offsets.offset.z))
                     template:UpdatePosition(nil, Vector3(offsets.rotationOffset.x, offsets.rotationOffset.y, offsets.rotationOffset.z), Vector3(s.position.x, s.position.y, s.position.z), true)
+                    -- The check is needed when defining episodes because otherwise all the objects inserted from the supertemplate will also be saved, resulting in overlaping objects when loading.
                     if not DEFINING_EPISODES then
                         template:InsertInEpisode(self, true)
                     end

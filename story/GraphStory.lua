@@ -23,7 +23,7 @@ GraphStory = class(StoryBase, function(o, spectators, logData)
       "house8_preloaded",
       "house9",
     --   "house10_preloaded", -- Not Working!
-      "house12_preloaded", -- Working but needs the objects removed. Some flakiness exists but in general it works...
+    --   "house12_preloaded", -- Working but needs the objects removed. Some flakiness exists but in general it works...
       "garden",
       "office",
       "office2",
@@ -136,8 +136,12 @@ function GraphStory:ExploreValidEpisodesSubset(
         print('Required actions '..join(';', Select(requiredActions, function(e) return e.name..' - '..e.location..' -> '..(e.target or '') end)))
     end
     if (#requiredLocations + #requiredObjects + #requiredActions) == 0 then
+        print('All the requirements were fullfilled for the subset '..join(';', Select(currentSubset, function(e) return e.name end)))
         return currentSubset
     elseif #episodes == 0 then
+        if DEBUG_VALIDATION then
+            print("No episodes left to evaluate but all the requirements were not fullfilled^^^.")
+        end
         return {} --If I still have requirements by I don't have episodes left to evaluate then there's no valid episode subset
     else
         local unexploredBucket = concat(episodes, {})
@@ -160,9 +164,21 @@ function GraphStory:ExploreValidEpisodesSubset(
                     unexploredBucket = Where(unexploredBucket, function(e) return e ~= maxCoverData.episode end)
                 end
             else
+                if DEBUG_VALIDATION then
+                    print("No further valid episodes exist.")
+                    print('Required locations '..join(';', requiredLocations))
+                    print('Required objects '..join(';', Select(requiredObjects, function(e) return e.name end)))
+                    print('Required actions '..join(';', Select(requiredActions, function(e) return e.name..' - '..e.location..' -> '..(e.target or '') end)))
+                end
                 return {}  --If I still have requirements and episodes but there's no further valid episode => there's no valid episode subset
             end
         end
+    end
+    if DEBUG_VALIDATION then
+        print("No episodes left to explore but all the requirements were not yet fullfilled.")
+        print('Required locations '..join(';', requiredLocations))
+        print('Required objects '..join(';', Select(requiredObjects, function(e) return e.name end)))
+        print('Required actions '..join(';', Select(requiredActions, function(e) return e.name..' - '..e.location..' -> '..(e.target or '') end)))
     end
     return {} --Couldn't find anything
 end
@@ -252,16 +268,16 @@ function GraphStory:ValidateEpisode(
             print('Required objects nr '..#requiredObjects)
         end
         self:MapObjectsActionsAndPoi(requiredObjects, episode, actionMap, eventMap, objectMap, eventObjectMap, poiMap)
-        for key, value in pairs(objectMap) do
+        for eventRoId, realObjectId in pairs(eventObjectMap) do
             if DEBUG_VALIDATION then
-                print('!!!!!!!!!!!!!!!!!!!!!!Mapped '..key..' to '..value)
+                print('!!!!!!!!!!!!!!!!!!!!!!Mapped '..eventRoId..' to '..realObjectId)
             end
-            table.insert(validObjects, {id = value})
+            table.insert(validObjects, {id = eventRoId})
         end
 
         for key, value in pairs(eventMap) do
             if DEBUG_VALIDATION then
-                print('!!!!!!!!!!!!!!!!!!!!!!Mapped action '..key..' to '..value)
+                print('!!!!!!!!!!!!!!!!!!!!!!Mapped action ('..self.graph[key].Action..')'..key..' to '..value)
             end
             table.insert(validActions, {id = key, name = self.graph[key].Action, location = self.graph[key].Location})
         end
@@ -308,7 +324,7 @@ function GraphStory:ValidateEpisode(
                         a:lower() == ra.name:lower()
                     end)
                     or Any(episode.POI, function(poi)
-                        if DEBUG_VALIDATION then
+                        if DEBUG_ACTION_VALIDATION then
                             if poi.Region then
                                 print('***'..poi.Region.name..'')
                             else
@@ -318,7 +334,7 @@ function GraphStory:ValidateEpisode(
                         return
                             poi.Region and
                             Any(poi.allActions, function(a)
-                                if DEBUG_VALIDATION then
+                                if DEBUG_ACTION_VALIDATION then
                                     print('**********'..a.Name)
                                     if a.TargetItem and a.TargetItem.ObjectId then
                                         print('**********->'..a.TargetItem.ObjectId)
@@ -326,7 +342,11 @@ function GraphStory:ValidateEpisode(
                                         print('**********->'..a.TargetItem.Region.name)
                                     end
                                 end
-                                return a.Name:lower() == ra.name:lower() and (ra.name == 'Move' or not a.TargetItem or a.TargetItem and a.TargetItem.ObjectId and objectMap[a.TargetItem.ObjectId])
+                                return a.Name:lower() == ra.name:lower() and (
+                                    ra.name == 'Move' -- The action is of type move.
+                                    or not a.TargetItem --The action has no target
+                                    or a.TargetItem and inList(a.TargetItem.type, self.SpawnableObjects) --The action has as target a spawnable object
+                                    or a.TargetItem and a.TargetItem.ObjectId and objectMap[a.TargetItem.ObjectId]) --The action has as target a real object and that object is valid
                             end)
                             and (poi.Region.name:lower():find(ra.location:lower()) and true or false )
                     end)
@@ -353,6 +373,12 @@ function GraphStory:ValidateEpisode(
                     requiredObjects = Where(requiredObjects, function(ro) return not Any(validObjects, function(vo) return vo.id == ro.id end) end),
                     requiredActions = Where(requiredActions, function(ra) return not Any(validActions, function(va) return va.name == ra.name and va.location == ra.location end) end)
                 }
+                if DEBUG_VALIDATION then
+                    print('Result of ValidateEpisode '..episode.name)
+                    print('Required locations '..join(';', res.requiredLocations))
+                    print('Required objects '..join(';', Select(res.requiredObjects, function(e) return e.name end)))
+                    print('Required actions '..join(';', Select(res.requiredActions, function(e) return e.name..' - '..e.location..' -> '..(e.target or '') end)))
+                end
             -- end
         -- end
     -- end
@@ -513,6 +539,13 @@ function GraphStory:Play()
                     if elapsedTime > MAX_STORY_TIME then
                         for _,spectator in ipairs(story.Spectators) do
                             EndStory(spectator):Apply()
+                            local file = File(LOAD_FROM_GRAPH..'_out/'..self.Id..'/'..spectator:getData('id') .. '/MAX_STORY_TIME_EXCEEDED')
+                            if file then                               -- check if it was successfully opened
+                                file:setPos(file:getSize())            -- move position to the end of the file
+                                file:write('Maximum story time of '..MAX_STORY_TIME..' was exceeded. The story ended unexpectedly.')                    -- append data
+                                file:flush()                           -- Flush the appended data into the file.
+                                file:close()                           -- close the file once we're done with it
+                            end
                         end
                     end
 
@@ -581,12 +614,17 @@ end
 
 function GraphStory:MapObjectsActionsAndPoi(requiredObjects, episode, actionMap, eventMap, objectMap, eventObjectMap, poiMap)
     return All(requiredObjects, function(ro)
-        if eventObjectMap[ro.id] then return true end
-        if DEBUG_VALIDATION then
-            print("The object "..ro.id..':'..ro.name..' is not mapped in any of ')
+        -- if eventObjectMap[ro.id] then return true end
+        if DEBUG_VALIDATION and not eventObjectMap[ro.id] then
+            print("The object "..ro.id..':'..ro.name..' ()'..(ro.location or '')..' is not mapped in any of ')
             for k, v in pairs(eventObjectMap) do
                 print(k)
             end
+        end
+
+        if Any(self.SpawnableObjects, function(o) return o:lower() == ro.name:lower() end) then
+            eventObjectMap[ro.id] = 'spawnable'
+            return true
         end
 
         local eventsWithObjectAsTarget = Where(self.graph, function(g)
@@ -598,11 +636,12 @@ function GraphStory:MapObjectsActionsAndPoi(requiredObjects, episode, actionMap,
                 --The event is not interaction and is with the required object
                 and #g.Entities == 2 and g.Entities[2] == ro.id
                 --The event is in the same location as the required object (this will not be valid if the object can move to a different place -- most likely we will not support that)
-                and (#g.Location == 0 or g.Location[1] == '' or g.Location[1] == ro.location)
+                and (#g.Location == 0 or g.Location[1] == '' or g.Location[1]:lower():find(ro.location:lower()))
             end
         )
 
         if DEBUG_VALIDATION then
+            print("Events with object as target:vvv")
             for _, e in ipairs(eventsWithObjectAsTarget) do
                 print("Event with object "..ro.name..' as target '..e.id)
             end
@@ -616,7 +655,7 @@ function GraphStory:MapObjectsActionsAndPoi(requiredObjects, episode, actionMap,
             local poiMap = {}
 
             if DEBUG_VALIDATION then
-                print('Assessing actions in poi '..poi.Description)
+                print('Assessing actions in poi '..poi.Description..' in region '..poi.Region.name)
             end
 
             -- Starting from the action with the object as target,
@@ -631,6 +670,20 @@ function GraphStory:MapObjectsActionsAndPoi(requiredObjects, episode, actionMap,
             if DEBUG_VALIDATION then
                 print("Action with matching object "..actionWithMatchingObject.Name)
             end
+
+            if #eventsWithObjectAsTarget == 0 then
+                print("The object is not used in any events "..ro.name)
+                eventObjectMap[ro.id] = actionWithMatchingObject.TargetItem.ObjectId
+                objectMap[actionWithMatchingObject.TargetItem.ObjectId] = ro.id
+                return {
+                    actionMap = {},
+                    eventMap = {},
+                    objectMap = objectMap,
+                    eventObjectMap = eventObjectMap,
+                    poiMap = {}
+                }
+            end
+
             -- find a matching event (same action name and location) then
             local eventMatchingAction = FirstOrDefault(eventsWithObjectAsTarget, function(event)
                 return event.Action:lower() == actionWithMatchingObject.Name:lower()
@@ -697,7 +750,7 @@ function GraphStory:MapObjectsActionsAndPoi(requiredObjects, episode, actionMap,
             ----verify going forward in time if all the actions have matching events
             currentAction = actionWithMatchingObject
             currentEvent = eventMatchingAction
-            while currentAction and currentAction.NextAction do
+            while currentAction and currentAction.NextAction and self.temporal[currentEvent.id].next do
                 local nextEventId = self.temporal[currentEvent.id].next
                 if not nextEventId then
                     if DEBUG_VALIDATION then
@@ -707,24 +760,28 @@ function GraphStory:MapObjectsActionsAndPoi(requiredObjects, episode, actionMap,
                 end
                 local nextEvent = self.graph[nextEventId]
 
-                local nextActions = { currentAction.NextAction }
-                if isArray(currentAction.NextAction) then
-                    nextActions = currentAction.NextAction
-                end
-
-                --if multiple possible next actions, choose the first one that matches the next event
-                currentAction = FirstOrDefault(nextActions, function(action)
-                    return self:MatchEventAndAction(action, nextEvent, poi, actionMap, eventMap, objectMap, eventObjectMap, poiMap)
-                end)
-                if not currentAction then
-                    if DEBUG_VALIDATION then
-                        print("There is no next action that matches the next event!")
+                if nextEvent.Action:lower() ~= 'move' and nextEvent.Action:lower() ~= 'give' and nextEvent.Action:lower() ~= 'inv-give' then
+                    local nextActions = { currentAction.NextAction }
+                    if isArray(currentAction.NextAction) then
+                        nextActions = currentAction.NextAction
                     end
-                    return nil
-                end
 
-                if DEBUG_VALIDATION then
-                    print("Next action that also matches next event "..currentAction.Name)
+                    --if multiple possible next actions, choose the first one that matches the next event
+                    currentAction = FirstOrDefault(nextActions, function(action)
+                        return self:MatchEventAndAction(action, nextEvent, poi, actionMap, eventMap, objectMap, eventObjectMap, poiMap)
+                    end)
+                    if not currentAction then
+                        if DEBUG_VALIDATION then
+                            print("There is no next action that matches the next event!")
+                        end
+                        return nil
+                    end
+
+                    if DEBUG_VALIDATION then
+                        print("Next action that also matches next event "..currentAction.Name)
+                    end
+                else
+                    print('The event does not follow the chain of actions. Event: '..nextEvent.Action..' Action: '..currentAction.Name)
                 end
                 currentEvent = nextEvent
             end
@@ -880,86 +937,35 @@ function GraphStory:ProcessActions(graphActors)
             return event.id == self.temporal['starting_actions'][a.id]
         end)
         if not firstEvent then
-            error('Could not find the first event for actor '..a.id)
+            print('Could not find the first event for actor '..a.id)
+            return false
         elseif DEBUG then
             print('First event: '..firstEvent.id..' in location '..firstEvent.Location[1]..' with actor '..firstEvent.Entities[1])
         end
-        firstEvent.isInteraction = Any(self.Interactions, function(a) return a:lower() == firstEvent.Action:lower() end)
-        if firstEvent.isInteraction then
-            firstEvent.interactionRelation = FirstOrDefault(self.temporal[firstEvent.id].relations, function(rel) return self.temporal[rel].type == 'starts_with' or self.temporal[rel].type == 'same_time' end)
-            print("first event interaction relation ".. (firstEvent.interactionRelation or ''))
 
-            firstEvent.interactionEvent = FirstOrDefault(self.graph, function(a)
-                return a.id and self.temporal[a.id] and self.temporal[a.id].relations
-                    and Any(self.temporal[a.id].relations, function(rel) return rel == firstEvent.interactionRelation end) end)
-        end
-        --if it is an interaction -> the poi has to be the same for both actors...
-        local firstLocation = nil
-        if poiMap[firstEvent.id] then
-            firstLocation = FirstOrDefault(episode.POI, function(poi) return poi.LocationId == poiMap[firstEvent.id] end)
-        end
-        if not firstLocation then
-            firstLocation = PickRandom(Where(episode.POI, function(poi)
-                return
-                    (firstEvent.isInteraction and
-                        (
-                            not interactionPoiMap[firstEvent.interactionRelation]
-                            or
-                            poi.LocationId == interactionPoiMap[firstEvent.interactionRelation]
-                        )
-                        or not firstEvent.isInteraction and not poi.isBusy
-                    )
-                    and
-                    (poi.Region and poi.Region.name:lower():find(firstEvent.Location[1]:lower()) and true or false) --the location name is the one specified in the first event
-                    and
-                    (
-                        firstEvent.isInteraction
-                        or
-                        Any(poi.allActions, function(action)
-                            return action.Name:lower() == firstEvent.Action:lower()
-                            and (#firstEvent.Entities < 2 or
-                                (action.TargetItem.ObjectId and action.TargetItem.type == self.graph[firstEvent.Entities[2]].Properties.Type --action has as target an object of type x
-                                and action.TargetItem.ObjectId == eventObjectMap[firstEvent.Entities[2]]
-                                )
-                            ) --the instance of the object is the one required
-                        end)
-                    )
-                    --the location contains an action defined in the first event
-            end))
-        end
-
-        if not firstLocation then
-            local isInteraction = "false"
-            if firstEvent.isInteraction then
-                isInteraction = "true"
+        local firstLocation = PickRandom(Where(self.CurrentEpisode.POI, function(poi)
+            local eventLocation = ""
+            if firstEvent.Location and firstEvent.Location[1] then
+                eventLocation = firstEvent.Location[1]
             end
-            local locationId = interactionPoiMap[firstEvent.interactionRelation] or ''
-            print('Could not find the first location \''..firstEvent.Location[1]..'\', isInteraction: '..isInteraction..' interactionLocationId: \''..locationId..'\'')
+        return not poi.isBusy and poi.Region.name:lower():find(eventLocation:lower()) end))
+
+        if not firstLocation then
+            print("Error: could not find a valid first location for event "..firstEvent.id)
             return false
         end
 
-        print('Actor '..a.id..' will be spawned in the location '..firstLocation.Description)
+        -- print('Actor '..a.id..' will be spawned in the location '..firstLocation.Description)
 
-        --this is the first location -> the place where the actor or ped is first spawned
-        firstLocation.isBusy = true
+        -- --this is the first location -> the place where the actor or ped is first spawned
+        -- firstLocation.isBusy = true
         local ped = FirstOrDefault(self.CurrentEpisode.peds, function(p) return p:getData('id') == a.id end)
         ped:setData('startingPoiIdx', LastIndexOf(episode.POI, firstLocation))
         ped.interior = firstLocation.Interior
-        if firstEvent.isInteraction then
-            if interactionPoiMap[firstEvent.interactionRelation] == firstLocation.LocationId then
-                --only the second player reaches this code
-                ped.position = firstLocation.position + Vector3(-0.7,-0.7,0)
-            else
-                --only the first player reaches this code
-                ped.position =  firstLocation.position
-            end
-            interactionPoiMap[firstEvent.interactionRelation] = firstLocation.LocationId
-        else
-            ped.position = firstLocation.position
-            ped.rotation = Vector3(0,0,firstLocation.Angle)
-        end
-        --else
-            --this is a ped => it's starting location id is set in StoryEpisodeBase.Initialize()
+        ped.position = firstLocation.position
+        ped.rotation = Vector3(0,0,firstLocation.Angle)
+
+        firstEvent.isStartingEvent = true
         self.interactionPoiMap = interactionPoiMap
         self.interactionProcessedMap = interactionProcessedMap
         self.lastEvents[a.id] = firstEvent

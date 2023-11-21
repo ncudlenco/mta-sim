@@ -6,7 +6,11 @@ Sink = class(SampStoryObjectBase, function(o, params)
 end
 )
 
-Sink.eModel = 
+Sink.eModel =
 {
     bathroomSink01 = 2523,
+    bathroomSink02 = 2515,
+    bathroomSink03 = 2518,
+    bathroomSink04 = 2524,
+    bathroomSink05 = 2739,
 }

@@ -1,0 +1,167 @@
+[
+    {
+        "objects": [
+            {
+                "dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=1768, isRandomModelId=false, interior=1, position=Vector3(-0.90576171875,-0.171630859375,-1), rotation=Vector3(0,0,90), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "id": 1
+            }
+        ],
+        "poi": {
+            "isEmpty": true
+        },
+        "locations": [
+            {
+                "Description": "livingroom sofa",
+                "Interior": 1,
+                "Y": 0.1629638671875,
+                "X": -0.249267578125,
+                "episodeLinks": [],
+                "Z": 0,
+                "id": 1,
+                "Angle": 92.70074462890625,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "allActions": [
+                    {
+                        "dynamicString": "return SitDown{how = 2, rotation = nil}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 1,
+                            "type": "Object"
+                        },
+                        "id": 1,
+                        "nextAction": {
+                            "id": 2
+                        },
+                        "closingAction": {
+                            "id": 2
+                        },
+                        "nextLocation": {
+                            "id": 1
+                        }
+                    },
+                    {
+                        "dynamicString": "return StandUp{how = 2}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 1,
+                            "type": "Object"
+                        },
+                        "id": 2,
+                        "nextLocation": {
+                            "id": 1
+                        }
+                    }
+                ]
+            },
+            {
+                "Description": "livingroom sofa",
+                "Interior": 1,
+                "Y": 0.78759765625,
+                "X": -0.224365234375,
+                "episodeLinks": [],
+                "Z": 0,
+                "id": 2,
+                "Angle": 92.70074462890625,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "allActions": [
+                    {
+                        "dynamicString": "return SitDown{how = 2, rotation = nil}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 1,
+                            "type": "Object"
+                        },
+                        "id": 1,
+                        "nextAction": {
+                            "id": 2
+                        },
+                        "closingAction": {
+                            "id": 2
+                        },
+                        "nextLocation": {
+                            "id": 2
+                        }
+                    },
+                    {
+                        "dynamicString": "return StandUp{how = 2}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 1,
+                            "type": "Object"
+                        },
+                        "id": 2,
+                        "nextLocation": {
+                            "id": 2
+                        }
+                    }
+                ]
+            },
+            {
+                "Description": "livingroom sofa",
+                "Interior": 1,
+                "Y": 1.4974365234375,
+                "X": -0.353759765625,
+                "episodeLinks": [],
+                "Z": 0,
+                "id": 3,
+                "Angle": 92.70074462890625,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "allActions": [
+                    {
+                        "dynamicString": "return SitDown{how = 2, rotation = nil}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 1,
+                            "type": "Object"
+                        },
+                        "id": 1,
+                        "nextAction": {
+                            "id": 2
+                        },
+                        "closingAction": {
+                            "id": 2
+                        },
+                        "nextLocation": {
+                            "id": 3
+                        }
+                    },
+                    {
+                        "dynamicString": "return StandUp{how = 2}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 1,
+                            "type": "Object"
+                        },
+                        "id": 2,
+                        "nextLocation": {
+                            "id": 3
+                        }
+                    }
+                ]
+            }
+        ],
+        "position": {
+            "y": -1675.6240234375,
+            "x": 2532.163330078125,
+            "z": 1015.498596191406
+        },
+        "globalCentroid": {
+            "y": -1675.054931640625,
+            "x": 2531.72998046875,
+            "z": 1015.248596191406
+        },
+        "name": "1768"
+    }
+]

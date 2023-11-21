@@ -14,6 +14,7 @@ function EndStory:Apply()
     Timer(function(self)
         local story = GetStory(self.Performer)
         story:End()
+        PedHandler:Dispose(self.Performer)
         if not story.LogData and not story.RecorderTimer then
             for _,spectator in ipairs(story.Spectators) do
                 terminatePlayer(spectator, "story ended - end story call")

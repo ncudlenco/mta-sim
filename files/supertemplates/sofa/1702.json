@@ -1,0 +1,120 @@
+[
+    {
+        "objects": [
+            {
+                "dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=1702, isRandomModelId=false, interior=1, position=Vector3(-1.016357421875,-0.476806640625,-1), rotation=Vector3(0,0,90), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "id": 1
+            }
+        ],
+        "poi": {
+            "isEmpty": true
+        },
+        "locations": [
+            {
+                "Description": "livingroom sofa",
+                "Interior": 1,
+                "Y": 0.078369140625,
+                "X": -0.3095703125,
+                "episodeLinks": [],
+                "Z": 0,
+                "id": 1,
+                "Angle": 87.47323608398438,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "allActions": [
+                    {
+                        "dynamicString": "return SitDown{how = 2, rotation = nil}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 1,
+                            "type": "Object"
+                        },
+                        "id": 1,
+                        "nextAction": {
+                            "id": 2
+                        },
+                        "closingAction": {
+                            "id": 2
+                        },
+                        "nextLocation": {
+                            "id": 1
+                        }
+                    },
+                    {
+                        "dynamicString": "return StandUp{how = 2}",
+                        "isClosingAction": true,
+                        "targetItem": {
+                            "id": 1,
+                            "type": "Object"
+                        },
+                        "id": 2,
+                        "nextLocation": {
+                            "id": 1
+                        }
+                    }
+                ]
+            },
+            {
+                "Description": "livingroom sofa",
+                "Interior": 1,
+                "Y": 0.938720703125,
+                "X": -0.393310546875,
+                "episodeLinks": [],
+                "Z": 0,
+                "id": 2,
+                "Angle": 87.78656005859375,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "allActions": [
+                    {
+                        "dynamicString": "return SitDown{how = 2, rotation = nil}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 1,
+                            "type": "Object"
+                        },
+                        "id": 1,
+                        "nextAction": {
+                            "id": 2
+                        },
+                        "closingAction": {
+                            "id": 2
+                        },
+                        "nextLocation": {
+                            "id": 2
+                        }
+                    },
+                    {
+                        "dynamicString": "return StandUp{how = 2}",
+                        "isClosingAction": true,
+                        "targetItem": {
+                            "id": 1,
+                            "type": "Object"
+                        },
+                        "id": 2,
+                        "nextLocation": {
+                            "id": 2
+                        }
+                    }
+                ]
+            }
+        ],
+        "position": {
+            "y": -1675.808837890625,
+            "x": 2533.525146484375,
+            "z": 1015.498596191406
+        },
+        "globalCentroid": {
+            "y": -1675.628784179688,
+            "x": 2532.9521484375,
+            "z": 1015.165283203125
+        },
+        "name": "1702"
+    }
+]

@@ -1,13 +1,13 @@
 FIRST_ACTOR = nil
 SECOND_ACTOR = nil
 PERFORM_MULTI_ACTION = nil
-PERFORM_MULTI_ACTION_FIRST_ACTOR = nil 
+PERFORM_MULTI_ACTION_FIRST_ACTOR = nil
 MULTI_ACTION_DONE = nil
 
 function OnGlobalActionFinished(delay, playerId, storyId, callback, destroyedItem)
     function getActorData(player)
         return {
-            id = player:getData('id'), 
+            id = player:getData('id'),
             Name = player:getData('first_name'),
             Surname = player:getData('surname'),
             Gender = player:getData('gender')
@@ -68,5 +68,5 @@ function OnGlobalActionFinished(delay, playerId, storyId, callback, destroyedIte
         nextAction.Performer = lastAction.Performer
         nextAction:Apply()
 
-    end, delay, 1, playerId, storyId)    
+    end, delay, 1, playerId, storyId)
 end

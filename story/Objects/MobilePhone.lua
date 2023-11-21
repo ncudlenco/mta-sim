@@ -2,6 +2,7 @@ MobilePhone = class(SampStoryObjectBase, function(o, params)
     params.description = PickRandom({"mobile phone", "phone", "cell phone"})
     params.pluralTemplate = "{count} mobile phones"
     params.type = 'MobilePhone'
+    params.noCollisions = true
 
     SampStoryObjectBase.init(o, params)
 
@@ -26,7 +27,7 @@ function MobilePhone:updateRotOffsetStandUp()
     return self.Description
 end
 
-MobilePhone.eModel = 
+MobilePhone.eModel =
 {
     MobilePhone1 = 330
 }

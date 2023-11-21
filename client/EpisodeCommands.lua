@@ -1,19 +1,11 @@
 addEvent ( "onElementDoneEditing", true )
 addEvent ( "onActionRetrieved", true )
 
-DEFINING_EPISODES = false
+DEFINING_EPISODES = true
 if DEFINING_EPISODES then
     addEventHandler ( "onClientPlayerSpawn", getLocalPlayer(), function()
         print('onClientPlayerSpawn')
-
-        local g = Guid()
-        localPlayer:setData("id", g.Id)
-        localPlayer:setData("isPed", false)
-
-        SPECTATORS = {localPlayer}
-        print('Player '..g.Id)
-        CLIENT_STORY = Story(SPECTATORS, 10000, false)
-        CURRENT_STORY = CLIENT_STORY
+        InitializeStory()
         Camera.fade(true)
     end)
     function GetStory(player)
@@ -26,6 +18,17 @@ if DEFINING_EPISODES then
         end
         return CLIENT_STORY
     end
+end
+
+function InitializeStory()
+    local g = Guid()
+    localPlayer:setData("id", g.Id)
+    localPlayer:setData("isPed", false)
+
+    SPECTATORS = {localPlayer}
+    print('Player '..g.Id)
+    CLIENT_STORY = Story(SPECTATORS, 10000, false)
+    CURRENT_STORY = CLIENT_STORY
 end
 
 local episode = DynamicEpisode()
@@ -528,7 +531,7 @@ addCommandHandler("episode",
                 if episode:LoadFromFile() then
                     episode:Initialize(localPlayer) --should not create the supertemplate contents
                     outputChatBox("Loaded files/episodes/"..episode.name..".json", 255, 0, 0, false)
-                    if #episode.POI > 0 then
+                    if #episode.POI > 0 and localPlayer.interior ~= episode.InteriorId then
                         local poi = PickRandom(episode.POI)
                         localPlayer.position = Vector3(poi.position.x, poi.position.y, poi.position.z + 2)
                         localPlayer.interior = episode.InteriorId
@@ -541,6 +544,7 @@ addCommandHandler("episode",
             end
 		    addEventHandler("onClientRender", getRootElement(), text_render)
             CLIENT_STORY.CurrentEpisode = episode
+            CURRENT_STORY = CLIENT_STORY
         elseif command == "save" then
             DEFINING_EPISODES = true
             if param1 then
@@ -610,8 +614,8 @@ addCommandHandler("episode",
                     r.POI = nil
                     r.isExplored = nil
                 end
+                local supertemplateInstances = {}
                 if episode.supertemplates then
-                    local supertemplateInstances = {}
                     for _,st in ipairs(episode.supertemplates) do
                         table.insert(supertemplateInstances, st.instantiatedTemplate)
                         st.instantiatedTemplate = nil
@@ -651,6 +655,7 @@ addCommandHandler("episode",
         elseif command == "cancel" then
             removeEventHandler("onClientKey", root, playerPressedKey)
             showCursor(false)
+            setCameraTarget(localPlayer)
             if currentRegion and currentRegion.markers then
                 for _,v in currentRegion.markers do
                     v:destroy()
@@ -767,6 +772,48 @@ addCommandHandler("episode",
                 end
 
                 table.remove(episode.POI, id)
+            elseif param1 == "supertemplate" then
+                local poi = nil
+                local minDist = 1000
+                local id = -1
+                for i,v in ipairs (episode.supertemplates) do
+                    local dist = math.abs((localPlayer.position - Vector3(v.position.x, v.position.y, v.position.z)).length)
+                    if dist < minDist then
+                        minDist = dist
+                        poi = v
+                        id = i
+                    end
+                end
+                if poi == nil then
+                    outputChatBox('Could not find any supertemplate nearby. Place the player in the desired supertemplate position')
+                   return
+                end
+
+                episode.supertemplates[id].instantiatedTemplate:Destroy()
+                table.remove(episode.supertemplates, id)
+            elseif param1 == "camera" then
+                if not param2 then
+                    outputChatBox("[info] Write the number of the camera to be deleted: Ex: episode delete camera 1", 255, 0, 0, false)
+                end
+
+                local id = tonumber(param2)
+                local regionsInRange = Region.FilterWithinRange(localPlayer.position, episode.Regions, 1.5)
+                local closestRegion = Region.GetClosest(localPlayer, regionsInRange, true)
+                if closestRegion == nil then
+                    outputChatBox('A region for the current player location could not be found. Make sure you create regions first.')
+                    return
+                end
+
+                if not closestRegion.cameras or #closestRegion.cameras == 0 then
+                    outputChatBox("The region has no cameras defined",255,255,0)
+                    return
+                end
+
+                if id <= 0 or id > #closestRegion.cameras then
+                    outputChatBox("Invalid camera id "..id..'. Expected a number between 1 and '..#closestRegion.cameras)
+                    return
+                end
+                table.remove(closestRegion.cameras, id)
             end
         elseif command == "restore" then
             if param1 == "object" then
@@ -878,7 +925,8 @@ addCommandHandler("episode",
                 end
                 addEventHandler ( "onClientClick", getRootElement(), onClick)
             elseif param1 == "poi" then
-                local idx = tonumber(arg[1])
+                local idx = tonumber(param2)
+                outputChatBox("Got poi idx "..(idx or 'nil')..'('..(param2 or 'nil')..')')
                 if idx and idx <= #episode.POI then
                     episode.POI[idx].X = localPlayer.position.x;
                     episode.POI[idx].Y = localPlayer.position.y;
@@ -890,6 +938,8 @@ addCommandHandler("episode",
                     if idx <= #markers then
                         markers[i].position = localPlayer.position
                     end
+                else
+                    outputChatBox("No modification applied because the poi idx was null or greater than "..#pisode.POI)
                 end
             elseif param1 == "vertex" then
                 if episode.Regions then
@@ -1321,6 +1371,9 @@ addCommandHandler("episode",
             outputChatBox("episode add action: add an action in the point of interest where the player is currently located", 0, 0, 255, false)
             outputChatBox("episode linkactions: in the POI where the player is located, add an action to the POI possibleActions, define NextAxtion (can contain multiple actions) for an action", 0, 0, 255, false)
         elseif command == "test" then
+            if not CURRENT_STORY then
+                InitializeStory()
+            end
             if param1 == "action" then
                 outputChatBox("episode test action name param1_name param1_value param2_name param2_value...", 255, 0, 0, false)
                 local actionName = param2
@@ -1469,6 +1522,9 @@ addCommandHandler("supertemplate",
             supertemplate = Supertemplate.Load(param1)
             outputChatBox("Supertemplate loaded", 255, 0, 0, false)
         elseif command == "save" then
+            if not param1 then
+                param1 = supertemplate.name
+            end
             if param2 ~= "o" and fileExists("files/supertemplates/"..param1.."/"..param1..".json") then
                 outputChatBox("files/supertemplates/"..param1.."/"..param1..".json already exists. To overwrite it type supertemplate save template_name o", 255, 0, 0, false)
                 return
@@ -1493,16 +1549,6 @@ addCommandHandler("supertemplate",
             if param1 == 'current' or param1 == nil or param1 == '' then
                 if #supertemplate.templates == 0 then
                     supertemplate.position = template.position
-                else
-                    local firstTemplate = Template.Load(supertemplate.name, supertemplate.templates[1])
-                    template:ComputeGlobalCentroid()
-                    template:Rebase(supertemplate.position,
-                        Vector3(
-                            firstTemplate.globalCentroid.x,
-                            firstTemplate.globalCentroid.y,
-                            firstTemplate.globalCentroid.z
-                        ) - template.globalCentroid
-                    )
                 end
                 template:Serialize("files/supertemplates/"..supertemplate.name)
                 table.insert(supertemplate.templates, template.name)
@@ -1510,17 +1556,6 @@ addCommandHandler("supertemplate",
                 local template = Template.Load(supertemplate.name, param1)
                 if #supertemplate.templates == 0 then
                     supertemplate.position = template.position
-                else
-                    local firstTemplate = Template.Load(supertemplate.name, supertemplate.templates[1])
-                    template:ComputeGlobalCentroid()
-                    template:Rebase(
-                        supertemplate.position,
-                        Vector3(
-                            firstTemplate.globalCentroid.x,
-                            firstTemplate.globalCentroid.y,
-                            firstTemplate.globalCentroid.z
-                        ) - template.globalCentroid
-                    )
                 end
                 template:Serialize("files/supertemplates/"..supertemplate.name)
                 table.insert(supertemplate.templates, template.name)
@@ -1584,7 +1619,11 @@ addCommandHandler("supertemplate",
                     supertemplate.instantiatedTemplate = template
                     --insert serialized supertemplate in episode
                     supertemplate.position = supertemplate.position:unpack()
+                    if not episode.supertemplates then
+                        episode.supertemplates = {}
+                    end
                     table.insert(episode.supertemplates, supertemplate)
+                    outputChatBox("Current episode supertemplates: "..#episode.supertemplates)
                 end
             end
             addEventHandler ( "onElementDoneEditing", getRootElement(), finishedOffsettingTemplate)
@@ -1593,7 +1632,7 @@ addCommandHandler("supertemplate",
 )
 --the coordinates of the mainpoi is not relative
 addCommandHandler("template",
-    function (commandName, command, param1, param2, ...)
+    function (commandName, command, param1, param2, param3, ...)
         if command == "save" then
             outputChatBox('Notice that this command only serializes the template now (it doesn\'t serialize the closest poi)\nAnd only as part of a supertemplate')
             local name = param2
@@ -1619,21 +1658,15 @@ addCommandHandler("template",
                 outputChatBox('The supertemplate '..param1..' doesn\'t exist. Make sure it is saved first (the full path mods/deathmatch/resources/sv2l/files/supertemplates/'..param1..'/'..param1..'.json exists)')
                 return
             end
+            if inList(template.name, supertemplate.templates) then
+                outputChatBox("The template "..template.name..' already is part of the supertemplate '..param1)
+                return
+            end
 
             if #supertemplate.templates == 0 then
                 supertemplate.position = template.position
-            else
-                local firstTemplate = Template.Load(param1, supertemplate.templates[1])
-                template:ComputeGlobalCentroid()
-                template:Rebase(
-                    supertemplate.position,
-                    Vector3(
-                        firstTemplate.globalCentroid.x,
-                        firstTemplate.globalCentroid.y,
-                        firstTemplate.globalCentroid.z
-                    ) - template.globalCentroid
-                )
             end
+
             template:Serialize("files/supertemplates/"..param1)
             table.insert(supertemplate.templates, template.name)
             supertemplate:Serialize(param1)
@@ -1658,12 +1691,14 @@ addCommandHandler("template",
         elseif command == "add" then
             if param1 == "poi" then
                 local poi = nil
+                local poiId = -1
                 local minDist = 1000
                 for i,v in ipairs (episode.POI) do
                     local dist = math.abs((localPlayer.position - Vector3(v.X, v.Y, v.Z)).length)
                     if dist < minDist then
                         minDist = dist
                         poi = v
+                        poiId = i
                     end
                 end
 
@@ -1671,20 +1706,17 @@ addCommandHandler("template",
                     outputChatBox("Could not find a POI nearby!")
                     return
                 else
-                    outputChatBox("Found a POI nearby")
+                    outputChatBox("Found a POI nearby:"..poiId..':'..poi.Description..'('..poi.LocationId..')')
                 end
 
-                local relativePoint = localPlayer.position
-                if template.position then
-                    relativePoint = template.position
-                else
+                if not template.position then
                     template.position = localPlayer.position
                 end
 
-                local mainPoi, objects, locations = poi:Serialize(episode, relativePoint, template.objects, template.locations, template.poi, true)
-                outputChatBox("poi serialized: "..#objects..' objects ; '..#locations..' locations and the main poi')
+                local mainPoi, objects, locations = poi:Serialize(episode, template.position, template.objects, template.locations, template.poi, true)
+                outputChatBox("POI serialized: "..#objects..' objects ; '..#locations..' locations and the main poi')
 
-                template:AddItems(mainPoi, objects, locations)
+                template:AddItems(mainPoi)
 
                 outputChatBox("poi successfully added ")
             elseif param1 == 'object' then
@@ -1704,6 +1736,7 @@ addCommandHandler("template",
                     local targetItemRelativePosition = Vector3(sourceObject.position.x, sourceObject.position.y, sourceObject.position.z) - template.position
                     objectCopy.position = targetItemRelativePosition
                     objectCopy.instance = nil
+                    objectCopy.isRandomModelId = false;
                     objectCopy:UpdateData(true)
                     objectCopy.id = id
 
@@ -1717,6 +1750,7 @@ addCommandHandler("template",
             else
                 outputChatBox("template add poi or template add object id")
             end
+            --TODO: find out why the first template is inserted correctly but the second one has the POI somewhat offsetted
         elseif command == "insert" then
             if param1 and param2 then
                 template = Template.Load(param1, param2)
@@ -1740,7 +1774,7 @@ addCommandHandler("template",
                 outputChatBox("Episode objects before: "..#episode.Objects, 255, 255, 255, false)
                 outputChatBox("Episode poi before: "..#episode.POI, 255, 255, 255, false)
 
-                if template:InsertInEpisode(episode) then
+                if template:InsertInEpisode(episode, true) then
                     outputChatBox("Episode objects after: "..#episode.Objects, 255, 255, 255, false)
                     outputChatBox("Episode poi after: "..#episode.POI, 255, 255, 255, false)
 
@@ -1757,6 +1791,14 @@ addCommandHandler("template",
             relativePosition = localPlayer.position
             addEventHandler("onClientKey", root, playerPressedKey)
             addEventHandler ( "onElementDoneEditing", getRootElement(), includeTemplateInEpisode)
+        elseif command == "list" then
+            outputChatBox("Current position: "..template.position.x..', '..template.position.y..', '..template.position.z)
+            for _, value in ipairs(template.locations) do
+                outputChatBox("POI "..value.id..':'..value.Description)
+            end
+            for _, value in ipairs(template.objects) do
+                outputChatBox("Object "..value.id..':'..value.dynamicString)
+            end
         else
             outputChatBox("Command not found. Try the following: template save; template create; template insert; template add poi; template add object")
             outputChatBox("A template is a POI, with actions and their dependencies. The actions dependencies are their target items and next locations.")

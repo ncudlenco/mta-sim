@@ -1,7 +1,7 @@
 import cv2
 import os
 
-path = ".\\"
+path = "Z:\\More games\\GTA San Andreas\\MTA-SA\\server\\mods\\deathmatch\\resources\\sv2l\\random\\v0_100"
 directories = [ name for name in os.listdir(path) if os.path.isdir(os.path.join(path, name)) ]
 for directory in directories:
     print("Working on {}...".format(directory))

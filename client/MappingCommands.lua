@@ -1,8 +1,8 @@
 
 local json = {}
 local markers = {}
-local function text_render ( ) 
-    for i, node in pairs ( json ) do 
+local function text_render ( )
+    for i, node in pairs ( json ) do
         if #markers == #json and i > 100 then
             break
         end
@@ -10,14 +10,14 @@ local function text_render ( )
         local y = node["y"]
         local z = node["z"]
         local id = node["id"]
-        local sx, sy, _ = getScreenFromWorldPosition ( x, y, z ) 
-        
+        local sx, sy, _ = getScreenFromWorldPosition ( x, y, z )
+
         local playerZ = localPlayer.position.z
         if (localPlayer.position - Vector3(x, y, z)).length < 10 then
-            if sx then 
+            if sx then
                 local sw, sh = guiGetScreenSize ( )
-                dxDrawText ( id.." "..toJSON(node["edges"]), sx, sy, sw, sh, tocolor ( 255, 200, 0, 255 ), 1.0, "default-bold" ) 
-            end 
+                dxDrawText ( id.." "..toJSON(node["edges"]), sx, sy, sw, sh, tocolor ( 255, 200, 0, 255 ), 1.0, "default-bold" )
+            end
         end
 
         if #markers < #json then
@@ -32,14 +32,14 @@ local function text_render ( )
             table.insert(markers, marker)
         end
     end
-end 
+end
 
 addCommandHandler("graph",
     function (commandName, command, param1)
         if command == "new" then
             removeEventHandler("onClientRender", getRootElement(), text_render)
             json = {}
-            for _, marker in pairs ( markers ) do 
+            for _, marker in pairs ( markers ) do
                 marker:destroy()
             end
             markers = {}
@@ -77,6 +77,26 @@ addCommandHandler("graph",
 	end
 )
 
+addCommandHandler("modify",
+function (commandName, what, param1, param2)
+    if what == "node" then
+        if not param1 then
+            outputChatBox("A node id was expected: Ex: modify node 5")
+            return
+        end
+
+        local id = tonumber(param1)
+        local groundZ = getGroundPosition (localPlayer.position.x, localPlayer.position.y, localPlayer.position.z)
+        if not groundZ or groundZ == 0 then
+            groundZ = localPlayer.position.z - 1
+        end
+        json[id].x = localPlayer.position.x
+        json[id].y = localPlayer.position.y
+        json[id].z = groundZ
+    end
+end
+)
+
 addCommandHandler("add",
 	function (commandName, what, param1, param2)
         if what == "node" then
@@ -93,13 +113,13 @@ addCommandHandler("add",
                 local id2 = tonumber(param2)
                 local idx1 = id1+1
                 local idx2 = id2+1
-    
+
                 local node1 = json[idx1]
                 local node2 = json[idx2]
 
                 markers[idx1]:setColor(0,255,0,128)
                 markers[idx2]:setColor(0,255,0,128)
-    
+
                 local v2 = Vector3(node2["x"], node2["y"], node2["z"])
                 local v1 = Vector3(node1["x"], node1["y"], node1["z"])
                 local edgeV = v2 - v1

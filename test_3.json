@@ -1,0 +1,193 @@
+{
+    "actor0": {
+        "Action": "Exists",
+        "Entities": [
+            "actor0"
+        ],
+        "Location": null,
+        "Timeframe": null,
+        "Properties": {
+            "Gender": 2,
+            "Name": "Mary"
+        }
+    },
+    "actor1": {
+        "Action": "Exists",
+        "Entities": [
+            "actor1"
+        ],
+        "Location": null,
+        "Timeframe": null,
+        "Properties": {
+            "Gender": 1,
+            "Name": "John"
+        }
+    },
+    "drink_obj": {
+        "Action": "Exists",
+        "Entities": [
+            "drink_obj"
+        ],
+        "Location": null,
+        "Timeframe": null,
+        "Properties": {
+            "Type": "Drinks"
+        }
+    },
+    "food_obj": {
+        "Action": "Exists",
+        "Entities": [
+            "food_obj"
+        ],
+        "Location": null,
+        "Timeframe": null,
+        "Properties": {
+            "Type": "Food"
+        }
+    },
+    "a0a1": {
+        "Action": "PickUp",
+        "Entities": [
+            "actor0",
+            "drink_obj"
+        ],
+        "Location": [
+            ""
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a0a2": {
+        "Action": "Drink",
+        "Entities": [
+            "actor0",
+            "drink_obj"
+        ],
+        "Location": [
+            ""
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a0a3": {
+        "Action": "PutDown",
+        "Entities": [
+            "actor0",
+            "drink_obj"
+        ],
+        "Location": [
+            ""
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a0a4": {
+        "Action": "HandShake",
+        "Entities": [
+            "actor0",
+            "actor1"
+        ],
+        "Location": [
+            ""
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a0a5": {
+        "Action": "Move",
+        "Entities": [
+            "actor0"
+        ],
+        "Location": [
+            "",
+            "garden"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a1a1": {
+        "Action": "PickUp",
+        "Entities": [
+            "actor1",
+            "food_obj"
+        ],
+        "Location": [
+            ""
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a1a2": {
+        "Action": "Eat",
+        "Entities": [
+            "actor1",
+            "food_obj"
+        ],
+        "Location": [
+            ""
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a1a3": {
+        "Action": "HandShake",
+        "Entities": [
+            "actor1",
+            "actor0"
+        ],
+        "Location": [
+            ""
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "temporal": {
+        "timeline": {
+            "actor0": "[('a0a1', 'PickUp', 'Drinks'), ('a0a2', 'Drink', 'Drinks'), ('a0a3', 'PutDown', 'Drinks'), ('a0a4', 'Handshake', ''), ('a0a5', 'Move', 'Garden'), ('a0a6', 'Inv-Give', 'Drinks'), ('a0a7', 'Drink', 'Drinks'), ('a0a8', 'Give', 'Drinks', 'a1')]",
+            "actor1": "[('a1a1', 'PickUp', 'Food'), ('a1a2', 'Eat', 'Food'), ('a1a3', 'Handshake', ''), ('a1a4', 'PickUp', 'Drinks'), ('a1a5', 'Give', 'Drinks', 'a0'), ('a1a6', 'Inv-Give', 'Drinks', 'a0')]"
+        },
+        "starting_actions": {
+            "actor0": "a0a1",
+            "actor1": "a1a1"
+        },
+        "a0a1": {
+            "relations": null,
+            "next": "a0a2"
+        },
+        "a0a2": {
+            "relations": null,
+            "next": "a0a3"
+        },
+        "a0a3": {
+            "relations": null,
+            "next": "a0a4"
+        },
+        "a0a4": {
+            "relations": [
+                "tm0"
+            ],
+            "next": "a0a5"
+        },
+        "tm0": {
+            "type": "starts_with"
+        },
+        "a0a5": {
+            "relations": null,
+            "next": null
+        },
+        "a1a1": {
+            "relations": null,
+            "next": "a1a2"
+        },
+        "a1a2": {
+            "relations": null,
+            "next": "a1a3"
+        },
+        "a1a3": {
+            "relations": [
+                "tm0"
+            ],
+            "next": null
+        }
+    }
+}

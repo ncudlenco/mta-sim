@@ -264,108 +264,119 @@ function Location:ProcessNextAction(player)
     local interactionProcessedMap = CURRENT_STORY.interactionProcessedMap
     local interactionPoiMap = CURRENT_STORY.interactionPoiMap
 
-    if event == nil then return end
+    if event == nil then return {isStartingEvent = false} end
 
     local isMoveEvent = event.Action:lower() == 'move'
-
-    local isInteractionStr = "false"
-    if event.isInteraction then
-        isInteractionStr = "true"
-    end
-    print(event.id..' isInteraction '..isInteractionStr)
-    --if the event action has prerequisites then add them first if they are not already in the queue
-    local eventAction = nil
     local actionsChain = {}
+    if not event.isStartingEvent then
+        local isInteractionStr = "false"
+        if event.isInteraction then
+            isInteractionStr = "true"
+        end
+        print(event.id..' isInteraction '..isInteractionStr)
+        --if the event action has prerequisites then add them first if they are not already in the queue
+        local eventAction = nil
 
-    if event.isInteraction then
-        --set the actors one in front of the other in the same location...
-        --create the interaction actions / locations
-        local ped1 = FirstOrDefault(CURRENT_STORY.CurrentEpisode.peds, function(p) return p:getData('id') == event.Entities[1] end)
-        local ped2 = FirstOrDefault(CURRENT_STORY.CurrentEpisode.peds, function(p) return p:getData('id') == event.Entities[2] end)
+        if event.isInteraction then
+            --set the actors one in front of the other in the same location...
+            --create the interaction actions / locations
+            local ped1 = FirstOrDefault(CURRENT_STORY.CurrentEpisode.peds, function(p) return p:getData('id') == event.Entities[1] end)
+            local ped2 = FirstOrDefault(CURRENT_STORY.CurrentEpisode.peds, function(p) return p:getData('id') == event.Entities[2] end)
 
-        --The interaction action will be executed only from the first actor
-        if interactionProcessedMap[event.interactionRelation] then
-            local wait = Wait { performer = ped1, nextLocation = location, targetItem = ped2, doNothing=true, time=10000000 }
-            eventAction = wait
-        else
-            local wait = Wait { performer = ped1, nextLocation = location, targetItem = ped2, doNothing=false, time=10000000 }
-            table.insert(actionsChain, wait)
-            if event.Action == 'HandShake' or event.Action == "Handshake" then
-                eventAction = HandShake {performer = ped1, nextLocation = location, targetPlayer = ped2, targetItem = ped2, time = random(6000, 15000)}
-            elseif event.Action == 'Kiss' then
-                eventAction = Kiss { performer = ped1, nextLocation = location, targetPlayer = ped2, TargetItem = ped2 }
-            elseif event.Action == 'Hug' then
-                eventAction = Hug { performer = ped1, nextLocation = location, targetPlayer = ped2, TargetItem = ped2 }
-            elseif event.Action == 'Give' then
-                local pickedUpObjectId = ped1:getData('pickedObjects')[1]
-                local object = FirstOrDefault(CURRENT_STORY.CurrentEpisode.Objects, function(o) return o.ObjectId == pickedUpObjectId end)
-                if not object then
-                    error('Could not find object to give from '..ped1:getData('id')..' to '..ped2:getData('id'))
-                end
-                print('PROCESSING INTERACTION Give from '..ped1:getData('id')..' to '..ped2:getData('id')..' object '..object:__tostring())
-                eventAction = Give { performer = ped1, nextLocation = location, targetPlayer = ped2, TargetItem = object }
-            elseif event.Action == 'INV-Give' or event.Action == 'Receive' then
-                local pickedUpObjectId = ped2:getData('pickedObjects')[1]
-
-                local object = FirstOrDefault(CURRENT_STORY.CurrentEpisode.Objects, function(o) return o.ObjectId == pickedUpObjectId end)
-                if not object then
-                    error('Could not find object to give from '..ped1:getData('id')..' to '..ped2:getData('id'))
-                end
-                print('PROCESSING INTERACTION INV-Give from '..ped1:getData('id')..' to '..ped2:getData('id')..' object '..object.ObjectId..': '..object:__tostring())
-                eventAction = Receive { performer = ped1, nextLocation = location, targetPlayer = ped2, TargetItem = object }
-            elseif event.Action == 'Laugh' then
-                local jokeTarget = PickRandom({ped1, ped2})
-                eventAction = Laugh { performer = ped1, nextLocation = location, targetPlayer = ped2, TargetItem = jokeTarget }
-            elseif event.Action == 'Talk' then
-                eventAction = Talk { performer = ped1, nextLocation = location, targetPlayer = ped2, TargetItem = ped2 }
+            --The interaction action will be executed only from the first actor
+            if interactionProcessedMap[event.interactionRelation] then
+                local wait = Wait { performer = ped1, nextLocation = location, targetItem = ped2, targetInteraction = event.interactionRelation, doNothing=true, time=10000000 }
+                eventAction = wait
             else
-                error('Interaction '..event.Action..' not implemented')
-            end
+                local wait = Wait { performer = ped1, nextLocation = location, targetItem = ped2, targetInteraction = event.interactionRelation, doNothing=false, time=10000000 }
+                table.insert(actionsChain, wait)
+                if event.Action == 'HandShake' or event.Action == "Handshake" then
+                    eventAction = HandShake {performer = ped1, nextLocation = location, targetPlayer = ped2, targetItem = ped2, time = random(6000, 15000)}
+                elseif event.Action == 'Kiss' then
+                    eventAction = Kiss { performer = ped1, nextLocation = location, targetPlayer = ped2, TargetItem = ped2 }
+                elseif event.Action == 'Hug' then
+                    eventAction = Hug { performer = ped1, nextLocation = location, targetPlayer = ped2, TargetItem = ped2 }
+                elseif event.Action == 'Give' then
+                    local pickedUpObjectId = ped1:getData('pickedObjects')[1][1]
+                    local object = FirstOrDefault(CURRENT_STORY.CurrentEpisode.Objects, function(o) return o.ObjectId == pickedUpObjectId end)
+                    if not object then
+                        error('Could not find object to give from '..ped1:getData('id')..' to '..ped2:getData('id'))
+                    end
+                    print('PROCESSING INTERACTION Give from '..ped1:getData('id')..' to '..ped2:getData('id')..' object '..object:__tostring())
+                    eventAction = Give { performer = ped1, nextLocation = location, targetPlayer = ped2, TargetItem = object }
+                elseif event.Action == 'INV-Give' or event.Action == 'Receive' then
+                    local pickedUpObjectId = ped2:getData('pickedObjects')[1][1]
 
+                    local object = FirstOrDefault(CURRENT_STORY.CurrentEpisode.Objects, function(o) return o.ObjectId == pickedUpObjectId end)
+                    if not object then
+                        error('Could not find object '..(pickedUpObjectId or 'null_object')..' that '..ped1:getData('id')..' would receive from '..ped2:getData('id'))
+                    end
+                    print('PROCESSING INTERACTION INV-Give from '..ped1:getData('id')..' to '..ped2:getData('id')..' object '..object.ObjectId..': '..object:__tostring())
+                    eventAction = Receive { performer = ped1, nextLocation = location, targetPlayer = ped2, TargetItem = object }
+                elseif event.Action == 'Laugh' then
+                    local jokeTarget = PickRandom({ped1, ped2})
+                    eventAction = Laugh { performer = ped1, nextLocation = location, targetPlayer = ped2, TargetItem = jokeTarget }
+                elseif event.Action == 'Talk' then
+                    eventAction = Talk { performer = ped1, nextLocation = location, targetPlayer = ped2, TargetItem = ped2 }
+                else
+                    error('Interaction '..event.Action..' not implemented')
+                end
+
+                if not eventAction then
+                    error('Event action could not be instantiated. '..event.Action)
+                end
+                wait.NextAction = eventAction
+            end
+            interactionProcessedMap[event.interactionRelation] = true
+        elseif not isMoveEvent then
+            eventAction = FirstOrDefault(location.allActions, function(action) return action.Name:lower() == event.Action:lower() end)
             if not eventAction then
-                error('Event action could not be instantiated. '..event.Action)
+                error('Event action could not be found '..event.Action)
             end
-            wait.NextAction = eventAction
-        end
-        interactionProcessedMap[event.interactionRelation] = true
-    elseif not isMoveEvent then
-        eventAction = FirstOrDefault(location.allActions, function(action) return action.Name:lower() == event.Action:lower() end)
-        if not eventAction then
-            error('Event action could not be found '..event.Action)
-        end
-        -- local mandatoryPrevAction = eventAction
-        -- local guard = 0
-        -- while(mandatoryPrevAction and guard < 10) do
-        --     print('Mandatory action:'.. mandatoryPrevAction.Name)
+            -- local mandatoryPrevAction = eventAction
+            -- local guard = 0
+            -- while(mandatoryPrevAction and guard < 10) do
+            --     print('Mandatory action:'.. mandatoryPrevAction.Name)
 
-        --     mandatoryPrevAction = FirstOrDefault(location.allActions, function(action)
-        --         print('Evaluating as prev action '.. action.ActionId .. ': '..action.Name)
-        --         if (action.NextAction and not isArray(action.NextAction)) then
-        --             print('Next action '.. action.NextAction.ActionId .. ': '..action.NextAction.Name)
-        --         end
-        --         return mandatoryPrevAction ~= action and action.Name ~= 'Move' and
-        --             action.NextAction and ((isArray(action.NextAction) and Any(action.NextAction, function(na)
-        --             return na == mandatoryPrevAction
-        --         end))
-        --         or (not isArray(action.NextAction) and action.NextAction == mandatoryPrevAction ))
-        --     end)
-        --     if mandatoryPrevAction then
-        --         print('Mandatory prev action:'.. mandatoryPrevAction.Name)
-        --         table.insert(actionsChain, 1, mandatoryPrevAction)
-        --     end
-        --     guard = guard + 1
-        -- end
-        -- if guard >= 10 then
-        --     error('Infinite loop mandatoryPrevAction')
-        -- end
-    end
-    if not isMoveEvent then
-        print(eventAction.Name)
-        table.insert(actionsChain, eventAction)
+            --     mandatoryPrevAction = FirstOrDefault(location.allActions, function(action)
+            --         print('Evaluating as prev action '.. action.ActionId .. ': '..action.Name)
+            --         if (action.NextAction and not isArray(action.NextAction)) then
+            --             print('Next action '.. action.NextAction.ActionId .. ': '..action.NextAction.Name)
+            --         end
+            --         return mandatoryPrevAction ~= action and action.Name ~= 'Move' and
+            --             action.NextAction and ((isArray(action.NextAction) and Any(action.NextAction, function(na)
+            --             return na == mandatoryPrevAction
+            --         end))
+            --         or (not isArray(action.NextAction) and action.NextAction == mandatoryPrevAction ))
+            --     end)
+            --     if mandatoryPrevAction then
+            --         print('Mandatory prev action:'.. mandatoryPrevAction.Name)
+            --         table.insert(actionsChain, 1, mandatoryPrevAction)
+            --     end
+            --     guard = guard + 1
+            -- end
+            -- if guard >= 10 then
+            --     error('Infinite loop mandatoryPrevAction')
+            -- end
+        end
+        if not isMoveEvent then
+            print(eventAction.Name)
+            table.insert(actionsChain, eventAction)
+        end
     end
 --looking backward in the graph's chain of events to see if any actions were already processed is not necessary because
 --in the steps below, we make sure that when we reach the first action from an enforced chain, then we process all their previous and following mandatory actions
-    local nextEvent = FirstOrDefault(CURRENT_STORY.graph, function(evt) return evt.id == CURRENT_STORY.temporal[event.id].next end)
+    local nextEvent;
+    if event.isStartingEvent then
+        nextEvent = event
+    else
+        print(player:getData('id')..' current event '..event.Action)
+        nextEvent = FirstOrDefault(CURRENT_STORY.graph, function(evt) return evt.id == CURRENT_STORY.temporal[event.id].next end)
+        if nextEvent then
+            print(player:getData('id')..' next event '..nextEvent.Action)
+        end
+    end
+
     if not isMoveEvent then
         -- local nextMandatoryAction = eventAction.NextAction
         -- while (nextMandatoryAction) do
@@ -445,7 +456,7 @@ function Location:ProcessNextAction(player)
                                 (
                                     action.TargetItem and action.TargetItem.type == CURRENT_STORY.graph[nextEvent.Entities[2]].Properties.Type
                                 ) --action has a target an object of type x
-                                and action.TargetItem.ObjectId == CURRENT_STORY.eventObjectMap[nextEvent.Entities[2]]
+                                and (CURRENT_STORY.eventObjectMap[nextEvent.Entities[2]] == 'spawnable' or action.TargetItem.ObjectId == CURRENT_STORY.eventObjectMap[nextEvent.Entities[2]])
                             )
                         )
                     end)
@@ -454,13 +465,22 @@ function Location:ProcessNextAction(player)
         end)
         if DEBUG then
             for _,poi in ipairs(candidates) do
-                local isBusyStr = 'false' if poi.isBusy then isBusyStr = 'true' end
+                local isBusyStr = 'false'
+                if poi.isBusy then isBusyStr = 'true' end
                 print('Candidate location '..poi.Description..' is busy '..isBusyStr)
             end
         end
+        -- if Any(CURRENT_STORY.CurrentEpisode.peds, function(p) return p:getData('waitingFor') == nextLocation.LocationId end) then
+        --     --Move randomly if someone else is waiting on my location to be vacated but I am occupying it with my waiting around...
+        --     local randomMove = PickRandom(Where(self.NextLocation.PossibleActions, function(a) return a.Name == 'Move' and not a.NextLocation.isBusy end))
+        --     randomMove.NextLocation.isBusy = true
+        --     self.Performer:setData('locationId', randomMove.NextLocation.LocationId)
+        --     randomMove.Performer = self.Performer
+        --     randomMove:Apply()
+        -- end
         if All(candidates, function(poi) return poi.isBusy end) then
             nextLocation = PickRandom(candidates)
-        elseif FirstOrDefault(candidates, function(poi) return poi == location end) then
+        elseif FirstOrDefault(candidates, function(poi) return poi == location and not Any(CURRENT_STORY.CurrentEpisode.peds, function(p) return p:getData('waitingFor') == poi.LocationId end) end) then
             nextLocation = FirstOrDefault(candidates, function(poi) return poi == location end)
         else
             nextLocation = PickRandom(Where(candidates, function(poi) return not poi.isBusy end))
@@ -488,7 +508,8 @@ function Location:ProcessNextAction(player)
         end)
         if DEBUG then
             for _,poi in ipairs(candidates) do
-                local isBusyStr = 'false' if poi.isBusy then isBusy = 'true' end
+                local isBusyStr = 'false'
+                if poi.isBusy then isBusyStr = 'true' end
                 print('Candidate location '..poi.Description..' is busy '..isBusyStr)
             end
         end
@@ -516,11 +537,17 @@ function Location:ProcessNextAction(player)
     for _, action in ipairs(CURRENT_STORY.actionsQueues[player:getData('id')]) do
         print(action.Name..' '..action:GetDynamicString())
     end
+
+    if event.isStartingEvent then
+        event.isStartingEvent = false
+        return {isStartingEvent = true}
+    end
+    return {isStartingEvent = false}
 end
 
 lock = false
 function Location:GetNextValidAction(player)
-    if CURRENT_STORY.Disposed then
+    if CURRENT_STORY and CURRENT_STORY.Disposed then
         return EmptyAction({Performer = player})
     end
 
@@ -567,7 +594,12 @@ function Location:GetNextValidAction(player)
         next = self:GetNextRandomValidAction(player)
     else
         local q = CURRENT_STORY.actionsQueues[player:getData('id')]
-        if #q == 0 then self:ProcessNextAction(player) end
+        local isStartingEvent = false;
+        if #q == 0 then isStartingEvent = self:ProcessNextAction(player).isStartingEvent end
+        if #q == 0 and isStartingEvent then
+            --Adds the initial actions to the queue and finds the next event
+            self:ProcessNextAction(player)
+        end
         if #q > 0 then
             next = q[1]
             local sssss = '?????'
@@ -596,9 +628,11 @@ function Location:GetNextValidAction(player)
                                 player:setAnimation("cop_ambient", "coplook_loop", 5000, true, false, false, true)
                                 Timer(wait, 5000, 1)
                             elseif not self.doNothing then
+                                player:setData('waitingFor',nil)
                                 OnGlobalActionFinished(1000, player:getData('id'), player:getData('storyId'))
                             end
                         end
+                        player:setData('waitingFor', next.NextLocation.LocationId)
                         wait()
                         print('NextLocation is busy. Waiting')
                         lock = false

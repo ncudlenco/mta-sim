@@ -64,6 +64,10 @@ function (prevA, curA)
         if story and not FREE_ROAM then
             Timer(function()
                 for i,ped in ipairs(story.CurrentEpisode.peds) do
+                    local lastLocation = story.lastLocations[ped:getData('id')]
+                    if lastLocation then
+                        lastLocation.isBusy = false
+                    end
                     local idx = ped:getData('startingPoiIdx')
                     if DEBUG then
                         print("Starting poi idx for ped "..ped:getData('id')..' in POI with index '..idx)

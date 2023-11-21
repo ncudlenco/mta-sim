@@ -6,21 +6,21 @@ Receive = class(StoryActionBase, function(o, params)
 
     o.TargetPlayer = params.targetPlayer
     o.how = params.how or PickUp.eHow.Normal
-    o.hand = params.hand or PickUp.eHand.Right
+    o.hand = params.hand or PickUp.eHand.Left
 end)
 
 function Receive:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
-    
+
     StoryActionBase.Apply(self)
-    
+
     local function faceP1ToP2(p1, p2)
         local targetFront = p2.position - p1.position
         local angle = p1.matrix.forward:angleAboutAxis(targetFront, p1.matrix.up)
         p1.rotation = Vector3(0,0,p1.rotation.z + math.deg(angle))
     end
-    
+
     self.TargetPlayer.position = self.Performer.position + Vector3(-0.5,-0.5,0)
 
     outputConsole("Facing players one to the other...")
@@ -43,7 +43,7 @@ function Receive:Apply()
     OnGlobalActionFinished(time, self.TargetPlayer:getData('id'), self.TargetPlayer:getData('storyId'), function()
         detachElementFromBone(self.TargetItem.instance)
         local pickedObjects = self.TargetPlayer:getData('pickedObjects')
-        if type(pickedObjects) == 'boolean' then
+        if type(pickedObjects) == 'boolean' or not pickedObjects then
             pickedObjects = {}
         end
         pickedObjects = Where(pickedObjects, function(po) return po[1] ~= self.TargetItem.ObjectId end)
@@ -57,14 +57,14 @@ function Receive:Apply()
             self.TargetItem:updatePositionOffsetSitDown()
             self.TargetItem:updateRotOffsetSitDown()
         end
-        attachElementToBone(self.TargetItem.instance, self.Performer, self.hand, 
+        attachElementToBone(self.TargetItem.instance, self.Performer, self.hand,
             self.TargetItem.PosOffset.x, self.TargetItem.PosOffset.y, self.TargetItem.PosOffset.z,
             self.TargetItem.RotOffset.x, self.TargetItem.RotOffset.y, self.TargetItem.RotOffset.z
         )
 
         local pickedObjects = self.Performer:getData('pickedObjects')
 
-        if type(pickedObjects) == 'boolean' then
+        if type(pickedObjects) == 'boolean' or not pickedObjects then
             pickedObjects = {}
         end
         table.insert(pickedObjects, {self.TargetItem.ObjectId, self.TargetItem.Description})

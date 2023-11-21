@@ -1,0 +1,334 @@
+{
+    "actor0": {
+        "Action": "Exists",
+        "Entities": [
+            "actor0"
+        ],
+        "Location": null,
+        "Timeframe": null,
+        "Properties": {
+            "Gender": 2,
+            "Name": "Mary"
+        }
+    },
+    "actor1": {
+        "Action": "Exists",
+        "Entities": [
+            "actor1"
+        ],
+        "Location": null,
+        "Timeframe": null,
+        "Properties": {
+            "Gender": 1,
+            "Name": "John"
+        }
+    },
+    "object0": {
+        "Action": "Exists",
+        "Entities": [
+            "object0"
+        ],
+        "Location": null,
+        "Timeframe": null,
+        "Properties": {
+            "Type": "Drinks"
+        }
+    },
+    "object1": {
+        "Action": "Exists",
+        "Entities": [
+            "object1"
+        ],
+        "Location": null,
+        "Timeframe": null,
+        "Properties": {
+            "Type": "Food"
+        }
+    },
+    "action0": {
+        "Action": "PickUp",
+        "Entities": [
+            "actor0",
+            "object0"
+        ],
+        "Location": [
+            ""
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "action1": {
+        "Action": "Drink",
+        "Entities": [
+            "actor0",
+            "object0"
+        ],
+        "Location": [
+            ""
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "action2": {
+        "Action": "PutDown",
+        "Entities": [
+            "actor0",
+            "object0"
+        ],
+        "Location": [
+            ""
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "action2.1": {
+        "Action": "HandShake",
+        "Entities": [
+            "actor0",
+            "actor1"
+        ],
+        "Location": [
+            ""
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "action2.2": {
+        "Action": "HandShake",
+        "Entities": [
+            "actor1",
+            "actor0"
+        ],
+        "Location": [
+            ""
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "action3": {
+        "Action": "Talk",
+        "Entities": [
+            "actor0",
+            "actor1"
+        ],
+        "Location": [
+            ""
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "action3.2": {
+        "Action": "Talk",
+        "Entities": [
+            "actor1",
+            "actor0"
+        ],
+        "Location": [
+            ""
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "action4": {
+        "Action": "Kiss",
+        "Entities": [
+            "actor0",
+            "actor1"
+        ],
+        "Location": [
+            ""
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "action4.2": {
+        "Action": "Kiss",
+        "Entities": [
+            "actor1",
+            "actor0"
+        ],
+        "Location": [
+            ""
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "action8": {
+        "Action": "Hug",
+        "Entities": [
+            "actor0",
+            "actor1"
+        ],
+        "Location": [
+            ""
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "action8.2": {
+        "Action": "Hug",
+        "Entities": [
+            "actor1",
+            "actor0"
+        ],
+        "Location": [
+            ""
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "action9": {
+        "Action": "Laugh",
+        "Entities": [
+            "actor0",
+            "actor1"
+        ],
+        "Location": [
+            ""
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "action9.2": {
+        "Action": "Laugh",
+        "Entities": [
+            "actor1",
+            "actor0"
+        ],
+        "Location": [
+            ""
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+
+    "action5": {
+        "Action": "PickUp",
+        "Entities": [
+            "actor1",
+            "object1"
+        ],
+        "Location": [
+            ""
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "action6": {
+        "Action": "Eat",
+        "Entities": [
+            "actor1",
+            "object1"
+        ],
+        "Location": [
+            ""
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "action7": {
+        "Action": "Move",
+        "Entities": [
+            "actor1"
+        ],
+        "Location": [
+            "",
+            "garden"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "temporal": {
+        "timeline": {
+            "actor0": "[('action0', 'PickUp', 'Drinks'), ('action1', 'Drink', 'Drinks'), ('action2', 'PutDown', 'Drinks'), ('action2.1', 'Handshake', ''), ('action3', 'Move', 'Bedroom'), ('action4', 'Move', 'Garden'), ('action8', 'Move', 'Garden')]",
+            "actor1": "[('action5', 'PickUp', 'Food'), ('action6', 'Eat', 'Food'), ('action2.2', 'Handshake', ''), ('action7', 'Move', 'Garden')]"
+        },
+        "starting_actions": {
+            "actor0": "action0",
+            "actor1": "action5"
+        },
+        "action0": {
+            "relations": null,
+            "next": "action1"
+        },
+        "action1": {
+            "relations": null,
+            "next": "action2"
+        },
+        "action2": {
+            "relations": null,
+            "next": "action2.1"
+        },
+        "action2.1": {
+            "relations": [
+                "tm0"
+            ],
+            "next": "action3"
+        },
+        "tm0": {
+            "type": "starts_with"
+        },
+        "tm1": {
+            "type": "starts_with"
+        },
+        "tm2": {
+            "type": "starts_with"
+        },
+        "tm3": {
+            "type": "starts_with"
+        },
+        "tm4": {
+            "type": "starts_with"
+        },
+        "action3": {
+            "relations": ["tm1"],
+            "next": "action4"
+        },
+        "action4": {
+            "relations": ["tm2"],
+            "next": "action8"
+        },
+        "action5": {
+            "relations": null,
+            "next": "action6"
+        },
+        "action6": {
+            "relations": null,
+            "next": "action2.2"
+        },
+        "action2.2": {
+            "relations": [
+                "tm0"
+            ],
+            "next": "action3.2"
+        },
+        "action3.2": {
+            "relations": ["tm1"],
+            "next": "action4.2"
+        },
+        "action4.2": {
+            "relations": ["tm2"],
+            "next": "action8.2"
+        },
+        "action8.2": {
+            "relations": ["tm3"],
+            "next": "action9.2"
+        },
+        "action9.2": {
+            "relations": ["tm4"],
+            "next": "action7"
+        },
+        "action7": {
+            "relations": null,
+            "next": null
+        },
+        "action8": {
+            "relations": ["tm3"],
+            "next": "action9"
+        },
+        "action9": {
+            "relations": ["tm4"],
+            "next": null
+        }
+    }
+}

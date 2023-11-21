@@ -484,10 +484,18 @@ function Move.hasReachedMarker(player, marker)
         print("[FATAL ERROR] The player was null while calling Move.hasReachedMarker")
         return
     end
+    if player:isDead() then
+        print("[FATAL ERROR] The player was dead while calling Move.hasReachedMarker")
+        return
+    end
     local playerId = player:getData('id')
     local story = CURRENT_STORY
     local lastAction = story.History[playerId][#story.History[playerId]]
-    local plan = lastAction.planningData[playerId]
+    local plan = {}
+    if lastAction.planningData[playerId] then
+        plan = lastAction.planningData[playerId]
+    end
+
     local distance = math.abs((player.position - marker.position).length)
     -- print('Actor '..playerId..' distance to marker '..marker:getData('idx')..' is '..distance..' and marker size is '..marker.size)
     if distance < marker.size then

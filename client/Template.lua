@@ -75,7 +75,11 @@ function Template:Destroy()
 end
 
 function Template:Rebase(newRelativePosition, offsetVector)
+    if not offsetVector then
+        offsetVector = Vector3(0,0,0)
+    end
     local oldRelativePosition = self.position
+    outputChatBox("Rebasing... Old global position: "..self.position:__tostring()..'. New global position: '..newRelativePosition:__tostring())
     self.position = newRelativePosition
     if self.poi.instance and isElement(self.poi.instance) then
         self.poi.instance.position = self.position
@@ -85,15 +89,18 @@ function Template:Rebase(newRelativePosition, offsetVector)
         --             (   global coordinates           )   offseted to another centroid ; compute relative to the new position
         obj.position = oldRelativePosition + obj.position + offsetVector - newRelativePosition
         if obj.instance then
-            obj.instance = obj.position
+            obj.instance.position = obj.position
         end
         obj:UpdateData(true)
     end
     for _,p in pairs(self.locations) do
         local newPosition = Vector3(p.X, p.Y, p.Z) + oldRelativePosition + offsetVector - newRelativePosition
         p.X = newPosition.x
-        p.Y = newPosition.z
+        p.Y = newPosition.y
         p.Z = newPosition.z
+        if p.instance then
+            p.instance.position = newPosition
+        end
     end
 end
 
@@ -152,6 +159,7 @@ function Template:UpdatePosition(translation, rotation, relativePosition, dontUp
                     p = p:Rotate(rotation)
                     p = p + Vector3(self.offset.x, self.offset.y, self.offset.z) + relativePosition
                     v.instance.position = p
+                    v.Angle = v.Angle + rotation.z
                 end
             end
         end
@@ -177,9 +185,9 @@ end
 --each template will be inserted, the user will translate / rotate the template as needed or set it to be skipped
 --when done offsetting the template, the offsets / skip flag are stored serialized inside the supertemplate object
 --the supertemplate object is pushed in the supertemplates array of the episode
---[optional] at this point the user may write supertemplate save name o to save the offsets as default (the skip flag is ignored when inserting via supertempalte insert command)
+--[optional] at this point the user may write supertemplate save name o to save the offsets as default (the skip flag is ignored when inserting via supertemplate insert command)
 --after the episode initialize (not for editing purposes), the supertemplates are expanded into api objects, pois and actions
------(for each temlate in the supertemplate, instantiate with offsets relative to the supertemplate position then insert in episode)
+-----(for each template in the supertemplate, instantiate with offsets relative to the supertemplate position then insert in episode)
 
 function Template:GetSerializedOffsets()
     return {
@@ -255,6 +263,9 @@ function Template:InsertInEpisode(episode, deserialize)
             obj
         )
         objectsMap[o.id] = #episode.Objects
+        if obj.instance then
+            obj.instance:destroy()
+        end
     end
     local function addSerializedPoiToTmpList(v, idx)
         v.X = v.instance.position.x
@@ -265,6 +276,9 @@ function Template:InsertInEpisode(episode, deserialize)
         print('v.Interior: '..v.Interior)
         local obj = Location(v.X, v.Y, v.Z, v.Angle, v.Interior, v.Description)
         table.insert(episode.POI, obj)
+        obj.LocationId = #episode.POI..'_'..episode.name
+        obj.episodeLinks = {}
+        obj.Episode = episode
         poiMap[v.id] = #episode.POI
     end
     local allPoi = {}

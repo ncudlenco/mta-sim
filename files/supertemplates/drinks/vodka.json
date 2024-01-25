@@ -1,1 +1,108 @@
-[ { "objects": [ { "dynamicString": "return Drinks{description=\"\", noCollisions=true, modelid=Drinks.eModel[PickRandom(Drinks.eModel)], isRandomModelId=true, interior=9, position=Vector3(0.003173828125,-0.8135986328125,-0.054443359375), rotation=Vector3(0,0,160), posOffset=Vector3(-0.029999999329448,0.029999999329448,0.10999999940395), rotOffset=Vector3(0,90,0)}", "id": 17 } ], "poi": { "isEmpty": true }, "locations": [ { "Description": "barroom counter", "Interior": 9, "Y": -0.29547119140625, "X": -0.078369140625, "episodeLinks": [ ], "Z": -0.070068359375, "id": 8, "Angle": -199.4668579101563, "PossibleActions": [ { "id": 1 } ], "allActions": [ { "dynamicString": "return PickUp{where = \"kitchen counter\", targetObjectExists = true, hand = 11, how = 1}", "isClosingAction": false, "targetItem": { "id": 17, "type": "Object" }, "id": 1, "nextAction": [ { "id": 2 }, { "id": 4 } ], "closingAction": { "id": 3 }, "nextLocation": { "id": 8 } }, { "dynamicString": "return Drink{}", "isClosingAction": false, "targetItem": { "id": 17, "type": "Object" }, "id": 2, "nextAction": { "id": 3 }, "nextLocation": { "id": 8 } }, { "dynamicString": "return PutDown{where = \"kitchen counter\", how = 1}", "isClosingAction": true, "targetItem": { "id": 17, "type": "Object" }, "id": 3, "nextLocation": { "id": 8 } }, { "dynamicString": "return Give{hand = 11, how = 1}", "isClosingAction": false, "targetItem": { "id": 17, "type": "Object" }, "id": 4, "nextLocation": { "id": 8 } } ] } ], "position": { "y": -1014.137329101562, "x": 2325.133544921875, "z": 1050.2109375 }, "globalCentroid": { "y": -1014.69189453125, "x": 2325.095947265625, "z": 1050.133666992188 }, "name": "vodka" } ]
+[
+    {
+        "objects": [
+            {
+                "dynamicString": "return Drinks{description=\"\", noCollisions=true, modelid=Drinks.eModel[PickRandom(Drinks.eModel)], isRandomModelId=true, interior=9, position=Vector3(0.003173828125,-0.8135986328125,-0.054443359375), rotation=Vector3(0,0,160), posOffset=Vector3(-0.029999999329448,0.029999999329448,0.10999999940395), rotOffset=Vector3(0,90,0)}",
+                "id": 17
+            }
+        ],
+        "poi": {
+            "isEmpty": true
+        },
+        "locations": [
+            {
+                "Description": "barroom counter",
+                "Interior": 9,
+                "Y": -0.29547119140625,
+                "X": -0.078369140625,
+                "episodeLinks": [],
+                "Z": -0.070068359375,
+                "id": 8,
+                "Angle": -199.4668579101563,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "allActions": [
+                    {
+                        "dynamicString": "return PickUp{where = \"kitchen counter\", targetObjectExists = true, hand = 11, how = 1}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 17,
+                            "type": "Object"
+                        },
+                        "id": 1,
+                        "nextAction": [
+                            {
+                                "id": 2
+                            },
+                            {
+                                "id": 4
+                            },
+                            {
+                                "id": 3
+                            }
+                        ],
+                        "closingAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 8
+                        }
+                    },
+                    {
+                        "dynamicString": "return Drink{}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 17,
+                            "type": "Object"
+                        },
+                        "id": 2,
+                        "nextAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 8
+                        }
+                    },
+                    {
+                        "dynamicString": "return PutDown{where = \"kitchen counter\", how = 1}",
+                        "isClosingAction": true,
+                        "targetItem": {
+                            "id": 17,
+                            "type": "Object"
+                        },
+                        "id": 3,
+                        "nextLocation": {
+                            "id": 8
+                        }
+                    },
+                    {
+                        "dynamicString": "return Give{hand = 11, how = 1}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 17,
+                            "type": "Object"
+                        },
+                        "id": 4,
+                        "nextLocation": {
+                            "id": 8
+                        }
+                    }
+                ]
+            }
+        ],
+        "position": {
+            "y": -1014.137329101562,
+            "x": 2325.133544921875,
+            "z": 1050.2109375
+        },
+        "globalCentroid": {
+            "y": -1014.69189453125,
+            "x": 2325.095947265625,
+            "z": 1050.133666992188
+        },
+        "name": "vodka"
+    }
+]

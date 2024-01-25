@@ -1,0 +1,73 @@
+[
+    {
+        "objects": [
+            {
+                "dynamicString": "return ArmChair{description=\"\", noCollisions=true, modelid=1765, isRandomModelId=false, interior=8, position=Vector3(-0.489501953125,0.941162109375,-1), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "id": 1
+            }
+        ],
+        "poi": {
+            "isEmpty": true
+        },
+        "locations": [
+            {
+                "Description": "next to armchair",
+                "Interior": 8,
+                "Y": 0.27490234375,
+                "X": 0.01708984375,
+                "episodeLinks": [],
+                "Z": 0,
+                "id": 1,
+                "Angle": 4.156707763671875,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "allActions": [
+                    {
+                        "dynamicString": "return SitDown{how = 2, rotation = nil}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 1,
+                            "type": "Object"
+                        },
+                        "id": 1,
+                        "nextAction": {
+                            "id": 2
+                        },
+                        "closingAction": {
+                            "id": 2
+                        },
+                        "nextLocation": {
+                            "id": 1
+                        }
+                    },
+                    {
+                        "dynamicString": "return StandUp{how = 2}",
+                        "isClosingAction": true,
+                        "targetItem": {
+                            "id": 1,
+                            "type": "Object"
+                        },
+                        "id": 2,
+                        "nextLocation": {
+                            "id": 1
+                        }
+                    }
+                ]
+            }
+        ],
+        "position": {
+            "y": -1131.48291015625,
+            "x": 2364.761962890625,
+            "z": 1050.875
+        },
+        "globalCentroid": {
+            "y": -1130.874877929688,
+            "x": 2364.52587890625,
+            "z": 1050.375
+        },
+        "name": "2291"
+    }
+]

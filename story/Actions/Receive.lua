@@ -38,6 +38,15 @@ function Receive:Apply()
         outputConsole("Give:Apply")
     end
 
+    local pickedUpObjectId = self.TargetPlayer:getData('pickedObjects')[1][1]
+
+    local object = FirstOrDefault(CURRENT_STORY.CurrentEpisode.Objects, function(o) return o.ObjectId == pickedUpObjectId end)
+    if not object then
+        error('Could not find object '..(pickedUpObjectId or 'null_object')..' that '..self.Performer:getData('id')..' would receive from '..self.TargetPlayer:getData('id'))
+    end
+
+    self.TargetItem = object
+
     outputConsole("Swapping object from one player to the other...")
 -- Note to self: seems like waiting never finishes...
     OnGlobalActionFinished(time, self.TargetPlayer:getData('id'), self.TargetPlayer:getData('storyId'), function()

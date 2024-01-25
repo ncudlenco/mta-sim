@@ -1,0 +1,50 @@
+[
+    {
+        "objects": [],
+        "poi": {
+            "isEmpty": true
+        },
+        "locations": [
+            {
+                "Description": "pink carpet",
+                "Interior": 5,
+                "Y": 0.3781156539916992,
+                "X": -0.21759033203125,
+                "episodeLinks": [],
+                "Z": 0,
+                "id": 3,
+                "Angle": 88.9642333984375,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "allActions": [
+                    {
+                        "dynamicString": "return TaiChi{}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": -1,
+                            "type": "none"
+                        },
+                        "id": 1,
+                        "nextLocation": {
+                            "id": 3
+                        }
+                    }
+                ]
+            }
+        ],
+        "position": {
+            "y": 4.769857883453369,
+            "x": 772.9302368164062,
+            "z": 1000.780212402344
+        },
+        "globalCentroid": {
+            "y": 5.147973537445068,
+            "x": 772.712646484375,
+            "z": 1000.780212402344
+        },
+        "name": "yoga"
+    }
+]

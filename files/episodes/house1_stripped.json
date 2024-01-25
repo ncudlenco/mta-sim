@@ -1,0 +1,3004 @@
+[
+    {
+        "initialized": false,
+        "peds": [],
+        "ValidStartingLocations": [],
+        "graphPath": "files\/paths\/house1_stripped.json",
+        "ObjectsToDelete": [
+            {
+                "PosOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "Description": "",
+                "noCollisions": false,
+                "scale": 1,
+                "isRandomModelId": false,
+                "pluralTemplate": "",
+                "size": 2.5,
+                "dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=1819, isRandomModelId=false, noRandomId=true, interior=1, position=Vector3(-2166.7880859375,644.16973876953,1056.4017333984), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "type": "SampStoryObjectBase",
+                "RotOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "interior": 1,
+                "ObjectId": "49b39a05-658d-45c4-beee-b5bd1d911d32",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "position": {
+                    "y": 644.1697387695312,
+                    "x": -2166.7880859375,
+                    "z": 1056.401733398438
+                },
+                "Region": [],
+                "modelid": 1819,
+                "StoryItemType": 1
+            },
+            {
+                "PosOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "Description": "",
+                "noCollisions": false,
+                "scale": 1,
+                "isRandomModelId": false,
+                "pluralTemplate": "",
+                "size": 2.5,
+                "dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2271, isRandomModelId=false, noRandomId=true, interior=1, position=Vector3(-2161.9421386719,647.37341308594,1057.9807128906), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "type": "SampStoryObjectBase",
+                "RotOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "interior": 1,
+                "ObjectId": "49b39a05-658d-45c4-beee-b5bd1d911d32",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "position": {
+                    "y": 647.3734130859375,
+                    "x": -2161.942138671875,
+                    "z": 1057.980712890625
+                },
+                "Region": [],
+                "modelid": 2271,
+                "StoryItemType": 1
+            },
+            {
+                "PosOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "Description": "",
+                "noCollisions": false,
+                "scale": 1,
+                "isRandomModelId": false,
+                "pluralTemplate": "",
+                "size": 2.5,
+                "dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2270, isRandomModelId=false, noRandomId=true, interior=1, position=Vector3(-2158.47265625,647.47338867188,1058.0871582031), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "type": "SampStoryObjectBase",
+                "RotOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "interior": 1,
+                "ObjectId": "d4bddcc3-46be-4eb4-a07a-f554c2e3555f",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "position": {
+                    "y": 647.473388671875,
+                    "x": -2158.47265625,
+                    "z": 1058.087158203125
+                },
+                "Region": [],
+                "modelid": 2270,
+                "StoryItemType": 1
+            },
+            {
+                "PosOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "Description": "",
+                "noCollisions": false,
+                "scale": 1,
+                "isRandomModelId": false,
+                "pluralTemplate": "",
+                "size": 2.5,
+                "dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=1742, isRandomModelId=false, noRandomId=true, interior=1, position=Vector3(-2159.9775390625,647.23114013672,1056.5860595703), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "type": "SampStoryObjectBase",
+                "RotOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "interior": 1,
+                "ObjectId": "d4bddcc3-46be-4eb4-a07a-f554c2e3555f",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "position": {
+                    "y": 647.2311401367188,
+                    "x": -2159.9775390625,
+                    "z": 1056.586059570312
+                },
+                "Region": [],
+                "modelid": 1742,
+                "StoryItemType": 1
+            },
+            {
+                "PosOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "Description": "",
+                "noCollisions": false,
+                "scale": 1,
+                "isRandomModelId": false,
+                "pluralTemplate": "",
+                "size": 2.5,
+                "dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=1819, isRandomModelId=false, noRandomId=true, interior=1, position=Vector3(-2166.7880859375,644.16973876953,1056.4017333984), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "type": "SampStoryObjectBase",
+                "RotOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "interior": 1,
+                "ObjectId": "d4bddcc3-46be-4eb4-a07a-f554c2e3555f",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "position": {
+                    "y": 644.1697387695312,
+                    "x": -2166.7880859375,
+                    "z": 1056.401733398438
+                },
+                "Region": [],
+                "modelid": 1819,
+                "StoryItemType": 1
+            },
+            {
+                "PosOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "Description": "",
+                "noCollisions": false,
+                "scale": 1,
+                "isRandomModelId": false,
+                "pluralTemplate": "",
+                "size": 2.5,
+                "dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2271, isRandomModelId=false, noRandomId=true, interior=1, position=Vector3(-2161.9421386719,647.37341308594,1057.9807128906), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "type": "SampStoryObjectBase",
+                "RotOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "interior": 1,
+                "ObjectId": "d4bddcc3-46be-4eb4-a07a-f554c2e3555f",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "position": {
+                    "y": 647.3734130859375,
+                    "x": -2161.942138671875,
+                    "z": 1057.980712890625
+                },
+                "Region": [],
+                "modelid": 2271,
+                "StoryItemType": 1
+            },
+            {
+                "PosOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "Description": "",
+                "noCollisions": false,
+                "scale": 1,
+                "isRandomModelId": false,
+                "pluralTemplate": "",
+                "size": 2.5,
+                "dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2270, isRandomModelId=false, noRandomId=true, interior=1, position=Vector3(-2158.47265625,647.47338867188,1058.0871582031), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "type": "SampStoryObjectBase",
+                "RotOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "interior": 1,
+                "ObjectId": "d4bddcc3-46be-4eb4-a07a-f554c2e3555f",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "position": {
+                    "y": 647.473388671875,
+                    "x": -2158.47265625,
+                    "z": 1058.087158203125
+                },
+                "Region": [],
+                "modelid": 2270,
+                "StoryItemType": 1
+            },
+            {
+                "PosOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "Description": "",
+                "noCollisions": false,
+                "scale": 1,
+                "isRandomModelId": false,
+                "pluralTemplate": "",
+                "size": 2.5,
+                "dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=1742, isRandomModelId=false, noRandomId=true, interior=1, position=Vector3(-2159.9775390625,647.23114013672,1056.5860595703), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "type": "SampStoryObjectBase",
+                "RotOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "interior": 1,
+                "ObjectId": "d4bddcc3-46be-4eb4-a07a-f554c2e3555f",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "position": {
+                    "y": 647.2311401367188,
+                    "x": -2159.9775390625,
+                    "z": 1056.586059570312
+                },
+                "Region": [],
+                "modelid": 1742,
+                "StoryItemType": 1
+            },
+            {
+                "PosOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "Description": "",
+                "noCollisions": false,
+                "scale": 1,
+                "isRandomModelId": false,
+                "pluralTemplate": "",
+                "size": 7,
+                "dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=14543, isRandomModelId=false, noRandomId=true, interior=1, position=Vector3(-2165.8188476562,645.443359375,1056.59375), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "type": "SampStoryObjectBase",
+                "RotOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "interior": 1,
+                "ObjectId": "d4bddcc3-46be-4eb4-a07a-f554c2e3555f",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "position": {
+                    "y": 645.443359375,
+                    "x": -2165.81884765625,
+                    "z": 1056.59375
+                },
+                "Region": [],
+                "modelid": 14543,
+                "StoryItemType": 1
+            },
+            {
+                "PosOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "Description": "",
+                "noCollisions": false,
+                "scale": 1,
+                "isRandomModelId": false,
+                "pluralTemplate": "",
+                "size": 3.5,
+                "dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=1819, isRandomModelId=false, noRandomId=true, interior=1, position=Vector3(-2166.9382324219,643.88836669922,1056.5285644531), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "type": "SampStoryObjectBase",
+                "RotOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "interior": 1,
+                "ObjectId": "d4bddcc3-46be-4eb4-a07a-f554c2e3555f",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "position": {
+                    "y": 643.8883666992188,
+                    "x": -2166.938232421875,
+                    "z": 1056.528564453125
+                },
+                "Region": [],
+                "modelid": 1819,
+                "StoryItemType": 1
+            },
+            {
+                "PosOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "Description": "",
+                "noCollisions": false,
+                "scale": 1,
+                "isRandomModelId": false,
+                "pluralTemplate": "",
+                "size": 6,
+                "dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2225, isRandomModelId=false, noRandomId=true, interior=1, position=Vector3(-2165.4536132812,641.24377441406,1056.5949707031), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "type": "SampStoryObjectBase",
+                "RotOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "interior": 1,
+                "ObjectId": "d4bddcc3-46be-4eb4-a07a-f554c2e3555f",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "position": {
+                    "y": 641.2437744140625,
+                    "x": -2165.45361328125,
+                    "z": 1056.594970703125
+                },
+                "Region": [],
+                "modelid": 2225,
+                "StoryItemType": 1
+            },
+            {
+                "PosOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "Description": "",
+                "noCollisions": false,
+                "scale": 1,
+                "isRandomModelId": false,
+                "pluralTemplate": "",
+                "size": 4.5,
+                "dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2233, isRandomModelId=false, noRandomId=true, interior=1, position=Vector3(-2165.515625,641.26300048828,1056.5950927734), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "type": "SampStoryObjectBase",
+                "RotOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "interior": 1,
+                "ObjectId": "d4bddcc3-46be-4eb4-a07a-f554c2e3555f",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "position": {
+                    "y": 641.2630004882812,
+                    "x": -2165.515625,
+                    "z": 1056.595092773438
+                },
+                "Region": [],
+                "modelid": 2233,
+                "StoryItemType": 1
+            },
+            {
+                "PosOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "Description": "",
+                "noCollisions": false,
+                "scale": 1,
+                "isRandomModelId": false,
+                "pluralTemplate": "",
+                "size": 6,
+                "dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2296, isRandomModelId=false, noRandomId=true, interior=1, position=Vector3(-2167.6848144531,644.04901123047,1056.59375), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "type": "SampStoryObjectBase",
+                "RotOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "interior": 1,
+                "ObjectId": "7fb81f70-17de-47b5-a2f6-25fa78249d7b",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "position": {
+                    "y": 644.0490112304688,
+                    "x": -2167.684814453125,
+                    "z": 1056.59375
+                },
+                "Region": [],
+                "modelid": 2296,
+                "StoryItemType": 1
+            },
+            {
+                "PosOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "Description": "",
+                "noCollisions": false,
+                "scale": 1,
+                "isRandomModelId": false,
+                "pluralTemplate": "",
+                "size": 16,
+                "dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2233, isRandomModelId=false, noRandomId=true, interior=1, position=Vector3(-2159.9118652344,642.11004638672,1056.59375), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "type": "SampStoryObjectBase",
+                "RotOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "interior": 1,
+                "ObjectId": "7fb81f70-17de-47b5-a2f6-25fa78249d7b",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "position": {
+                    "y": 642.1100463867188,
+                    "x": -2159.911865234375,
+                    "z": 1056.59375
+                },
+                "Region": [],
+                "modelid": 2233,
+                "StoryItemType": 1
+            },
+            {
+                "PosOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "Description": "",
+                "noCollisions": false,
+                "scale": 1,
+                "isRandomModelId": false,
+                "pluralTemplate": "",
+                "size": 14,
+                "dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2296, isRandomModelId=false, noRandomId=true, interior=1, position=Vector3(-2161.2004394531,642.2490234375,1056.59375), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "type": "SampStoryObjectBase",
+                "RotOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "interior": 1,
+                "ObjectId": "7fb81f70-17de-47b5-a2f6-25fa78249d7b",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "position": {
+                    "y": 642.2490234375,
+                    "x": -2161.200439453125,
+                    "z": 1056.59375
+                },
+                "Region": [],
+                "modelid": 2296,
+                "StoryItemType": 1
+            },
+            {
+                "PosOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "Description": "",
+                "noCollisions": false,
+                "scale": 1,
+                "isRandomModelId": false,
+                "pluralTemplate": "",
+                "size": 14.5,
+                "dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=14543, isRandomModelId=false, noRandomId=true, interior=1, position=Vector3(-2160.4296875,641.74835205078,1056.736328125), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "type": "SampStoryObjectBase",
+                "RotOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "interior": 1,
+                "ObjectId": "7fb81f70-17de-47b5-a2f6-25fa78249d7b",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "position": {
+                    "y": 641.7483520507812,
+                    "x": -2160.4296875,
+                    "z": 1056.736328125
+                },
+                "Region": [],
+                "modelid": 14543,
+                "StoryItemType": 1
+            },
+            {
+                "PosOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "Description": "",
+                "noCollisions": false,
+                "scale": 1,
+                "isRandomModelId": false,
+                "pluralTemplate": "",
+                "size": 13,
+                "dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=14535, isRandomModelId=false, noRandomId=true, interior=1, position=Vector3(-2160.5971679688,641.74835205078,1056.7229003906), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "type": "SampStoryObjectBase",
+                "RotOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "interior": 1,
+                "ObjectId": "7fb81f70-17de-47b5-a2f6-25fa78249d7b",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "position": {
+                    "y": 641.7483520507812,
+                    "x": -2160.59716796875,
+                    "z": 1056.722900390625
+                },
+                "Region": [],
+                "modelid": 14535,
+                "StoryItemType": 1
+            },
+            {
+                "PosOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "Description": "",
+                "noCollisions": false,
+                "scale": 1,
+                "isRandomModelId": false,
+                "pluralTemplate": "",
+                "size": 2.5,
+                "dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=2707, isRandomModelId=false, noRandomId=true, interior=1, position=Vector3(-2157.34375,638.92980957031,1057.4599609375), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "type": "SampStoryObjectBase",
+                "RotOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "interior": 1,
+                "ObjectId": "7fb81f70-17de-47b5-a2f6-25fa78249d7b",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "position": {
+                    "y": 638.9298095703125,
+                    "x": -2157.34375,
+                    "z": 1057.4599609375
+                },
+                "Region": [],
+                "modelid": 2707,
+                "StoryItemType": 1
+            }
+        ],
+        "Objects": [
+            {
+                "PosOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "Description": "painting",
+                "noCollisions": false,
+                "scale": 1,
+                "isRandomModelId": true,
+                "pluralTemplate": "{count} paintings",
+                "size": 2.5,
+                "dynamicString": "return Painting{description=\"painting\", noCollisions=false, modelid=2265, isRandomModelId=true, noRandomId=true, interior=1, position=Vector3(-2158.4775390625,646.75341796875,1058.7052001953), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "type": "Painting",
+                "RotOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "interior": 1,
+                "ObjectId": "1_house1_stripped",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "position": {
+                    "y": 646.75341796875,
+                    "x": -2158.4775390625,
+                    "z": 1058.705200195312
+                },
+                "Region": [],
+                "modelid": 2265,
+                "StoryItemType": 1
+            },
+            {
+                "PosOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "Description": "bookshelf",
+                "noCollisions": false,
+                "scale": 1,
+                "isRandomModelId": false,
+                "pluralTemplate": "{count} bookshelfs",
+                "size": 2.5,
+                "dynamicString": "return Bookshelf{description=\"bookshelf\", noCollisions=false, modelid=1742, isRandomModelId=false, noRandomId=true, interior=1, position=Vector3(-2160.5053710938,647.36761474609,1056.5860595703), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "type": "Bookshelf",
+                "RotOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "interior": 1,
+                "ObjectId": "2_house1_stripped",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "position": {
+                    "y": 647.3676147460938,
+                    "x": -2160.50537109375,
+                    "z": 1056.586059570312
+                },
+                "Region": [],
+                "modelid": 1742,
+                "StoryItemType": 1
+            },
+            {
+                "PosOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "Description": "painting",
+                "noCollisions": false,
+                "scale": 1,
+                "isRandomModelId": true,
+                "pluralTemplate": "{count} paintings",
+                "size": 2.5,
+                "dynamicString": "return Painting{description=\"painting\", noCollisions=false, modelid=2268, isRandomModelId=true, noRandomId=true, interior=1, position=Vector3(-2165.9240722656,641.18609619141,1058.4306640625), rotation=Vector3(0,0,180.00001525879), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "type": "Painting",
+                "RotOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "interior": 1,
+                "ObjectId": "3_house1_stripped",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 180.0000152587891
+                },
+                "position": {
+                    "y": 641.1860961914062,
+                    "x": -2165.924072265625,
+                    "z": 1058.4306640625
+                },
+                "Region": [],
+                "modelid": 2268,
+                "StoryItemType": 1
+            },
+            {
+                "PosOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "Description": "cabinets",
+                "noCollisions": true,
+                "scale": 1,
+                "isRandomModelId": false,
+                "pluralTemplate": "{count} cabinetss",
+                "size": 2.5,
+                "dynamicString": "return SampStoryObjectBase{description=\"cabinets\", noCollisions=true, modelid=14720, isRandomModelId=nil, noRandomId=true, interior=1, position=Vector3(-2162.6030273438,638.16644287109,1056.5860595703), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "type": "SampStoryObjectBase",
+                "RotOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "interior": 1,
+                "ObjectId": "4_house1_stripped",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "position": {
+                    "y": 638.1664428710938,
+                    "x": -2162.60302734375,
+                    "z": 1056.586059570312
+                },
+                "Region": [],
+                "modelid": 14720,
+                "StoryItemType": 1
+            },
+            {
+                "PosOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "Description": "sink",
+                "noCollisions": true,
+                "scale": 1,
+                "isRandomModelId": false,
+                "pluralTemplate": "{count} sinks",
+                "size": 2.5,
+                "dynamicString": "return Sink{description=\"sink\", noCollisions=true, modelid=2523, isRandomModelId=false, noRandomId=true, interior=1, position=Vector3(-2160.0815429688,637.61303710938,1050.5870361328), rotation=Vector3(0,0,180.00001525879), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "type": "Sink",
+                "RotOffset": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 0
+                },
+                "interior": 1,
+                "ObjectId": "5_house1_stripped",
+                "rotation": {
+                    "y": 0,
+                    "x": 0,
+                    "z": 180.0000152587891
+                },
+                "position": {
+                    "y": 637.613037109375,
+                    "x": -2160.08154296875,
+                    "z": 1050.587036132812
+                },
+                "Region": [],
+                "modelid": 2523,
+                "StoryItemType": 1
+            }
+        ],
+        "temporaryInitialized": false,
+        "name": "house1_stripped",
+        "InteriorId": 1,
+        "supertemplates": [
+            {
+                "name": "drinks",
+                "position": {
+                    "y": 639.093505859375,
+                    "x": -2158.555908203125,
+                    "z": 1057.586059570312
+                },
+                "templateIdx": 2,
+                "offsets": [
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": -0.7000000476837158,
+                            "x": -0.1000000163912773,
+                            "z": 0.1099999994039536
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    }
+                ],
+                "templates": [
+                    "vodka"
+                ]
+            },
+            {
+                "name": "drinks",
+                "position": {
+                    "y": 640.8997802734375,
+                    "x": -2162.20751953125,
+                    "z": 1057.586059570312
+                },
+                "templateIdx": 2,
+                "offsets": [
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": -0.5,
+                            "x": -0.2000000029802322,
+                            "z": 0.1199999824166298
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    }
+                ],
+                "templates": [
+                    "vodka"
+                ]
+            },
+            {
+                "name": "food",
+                "position": {
+                    "y": 638.7892456054688,
+                    "x": -2159.5947265625,
+                    "z": 1057.586059570312
+                },
+                "templateIdx": 2,
+                "offsets": [
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0.2000000178813934,
+                            "x": 0.1000000014901161,
+                            "z": 0.1599999964237213
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 80
+                        }
+                    }
+                ],
+                "templates": [
+                    "anyFood"
+                ]
+            },
+            {
+                "name": "food",
+                "position": {
+                    "y": 639.1790771484375,
+                    "x": -2161.236572265625,
+                    "z": 1057.586059570312
+                },
+                "templateIdx": 2,
+                "offsets": [
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": -0.2000000029802322,
+                            "x": 0.5,
+                            "z": 0.1500000059604645
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": -15
+                        }
+                    }
+                ],
+                "templates": [
+                    "anyFood"
+                ]
+            },
+            {
+                "name": "table",
+                "position": {
+                    "y": 644.2263793945312,
+                    "x": -2163.55419921875,
+                    "z": 1057.59375
+                },
+                "templateIdx": 5,
+                "offsets": [
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": -0.1000000014901161,
+                            "x": 1.500000238418579,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 180
+                        }
+                    },
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0.5,
+                            "x": 1,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    },
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 2,
+                            "x": 3,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": -180
+                        }
+                    },
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0,
+                            "x": 1.399999976158142,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    }
+                ],
+                "templates": [
+                    "6RedChairTable",
+                    "2117",
+                    "1811",
+                    "1720"
+                ]
+            },
+            {
+                "name": "smoke",
+                "position": {
+                    "y": 640.585205078125,
+                    "x": -2158.39111328125,
+                    "z": 1057.586059570312
+                },
+                "templateIdx": 2,
+                "offsets": [
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    }
+                ],
+                "templates": [
+                    "cigar"
+                ]
+            },
+            {
+                "name": "talkPhone",
+                "position": {
+                    "y": 641.5404052734375,
+                    "x": -2158.48291015625,
+                    "z": 1057.59375
+                },
+                "templateIdx": 2,
+                "offsets": [
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    }
+                ],
+                "templates": [
+                    "talkPoiAndAction"
+                ]
+            },
+            {
+                "name": "sofa",
+                "position": {
+                    "y": 644.7593383789062,
+                    "x": -2166.07373046875,
+                    "z": 1057.59375
+                },
+                "templateIdx": 19,
+                "templates": [
+                    "1768",
+                    "1760",
+                    "1703",
+                    "1702",
+                    "1723",
+                    "1757",
+                    "1713",
+                    "1764",
+                    "1757",
+                    "1728",
+                    "1763",
+                    "1766",
+                    "1761",
+                    "1756",
+                    "1753",
+                    "2290",
+                    "1712",
+                    "1706"
+                ],
+                "offsets": [
+                    {
+                        "offset": {
+                            "y": 0.4000000059604645,
+                            "x": 0.9000000953674316,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 180
+                        }
+                    },
+                    {
+                        "offset": {
+                            "y": 0.4000000059604645,
+                            "x": 0.9000000953674316,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 180
+                        }
+                    },
+                    {
+                        "offset": {
+                            "y": 0.6000000238418579,
+                            "x": 0.9000000953674316,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 180
+                        }
+                    },
+                    {
+                        "offset": {
+                            "y": 0.2000000029802322,
+                            "x": 0.8000000715255737,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 180
+                        }
+                    },
+                    {
+                        "offset": {
+                            "y": 0.5,
+                            "x": 0.9000000953674316,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 180
+                        }
+                    },
+                    {
+                        "offset": {
+                            "y": 0.5,
+                            "x": 1.100000143051147,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 180
+                        }
+                    },
+                    {
+                        "offset": {
+                            "y": 0.4000000059604645,
+                            "x": 0.9000000953674316,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 180
+                        }
+                    },
+                    {
+                        "offset": {
+                            "y": 0.8000000715255737,
+                            "x": 1.00000011920929,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 180
+                        }
+                    },
+                    {
+                        "offset": {
+                            "y": 0.5,
+                            "x": 1,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 180
+                        }
+                    },
+                    {
+                        "offset": {
+                            "y": 0.5,
+                            "x": 1,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 180
+                        }
+                    },
+                    {
+                        "offset": {
+                            "y": 0,
+                            "x": 1,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    },
+                    {
+                        "offset": {
+                            "y": 0.5,
+                            "x": 1,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 180
+                        }
+                    },
+                    {
+                        "offset": {
+                            "y": 0.5,
+                            "x": 1,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 180
+                        }
+                    },
+                    {
+                        "offset": {
+                            "y": 0.5,
+                            "x": 1,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 180
+                        }
+                    },
+                    {
+                        "offset": {
+                            "y": 1,
+                            "x": 1,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 180
+                        }
+                    },
+                    {
+                        "offset": {
+                            "y": 1,
+                            "x": 1,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 180
+                        }
+                    },
+                    {
+                        "offset": {
+                            "y": 0.7000000476837158,
+                            "x": 1.400000095367432,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    },
+                    {
+                        "offset": {
+                            "y": 0,
+                            "x": -0.2000000029802322,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "musicPlayer",
+                "position": {
+                    "y": 643.1753540039062,
+                    "x": -2166.593994140625,
+                    "z": 1057.59375
+                },
+                "templateIdx": 4,
+                "templates": [
+                    "turnTable",
+                    "2231",
+                    "tapePlayer"
+                ],
+                "offsets": [
+                    {
+                        "offset": {
+                            "y": -0.6000000238418579,
+                            "x": 0,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 180
+                        }
+                    },
+                    {
+                        "offset": {
+                            "y": -0.8000000715255737,
+                            "x": 0,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 180
+                        }
+                    },
+                    {
+                        "offset": {
+                            "y": -0.7000000476837158,
+                            "x": 0.2000000029802322,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 180
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "tv",
+                "position": {
+                    "y": 644.7258911132812,
+                    "x": -2165.287109375,
+                    "z": 1057.59375
+                },
+                "templateIdx": 25,
+                "offsets": [
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0.7000000476837158,
+                            "x": -2.200000286102295,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 30
+                        }
+                    },
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0.9000000357627869,
+                            "x": -2.400000095367432,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 30
+                        }
+                    },
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0.7000000476837158,
+                            "x": -2.099999904632568,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 45
+                        }
+                    },
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0.6000000238418579,
+                            "x": -2.100000143051147,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 30
+                        }
+                    },
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0.8000000715255737,
+                            "x": -2.199999809265137,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 30
+                        }
+                    },
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0.5,
+                            "x": -1.899999976158142,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 25
+                        }
+                    },
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0.8000000715255737,
+                            "x": -2.299999713897705,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 30
+                        }
+                    },
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0.6000000238418579,
+                            "x": -2.200000047683716,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 30
+                        }
+                    },
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0.7999999523162842,
+                            "x": -1.899999976158142,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 30
+                        }
+                    },
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0.7100000381469727,
+                            "x": -2.000000476837158,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 30
+                        }
+                    },
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0.8000000715255737,
+                            "x": -1.799999833106995,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 30
+                        }
+                    },
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0.9000000953674316,
+                            "x": -1.700000047683716,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 30
+                        }
+                    },
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 1,
+                            "x": -2,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 30
+                        }
+                    },
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": -0.5,
+                            "x": -2.200000047683716,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 45
+                        }
+                    },
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0.7000000476837158,
+                            "x": -1.899999856948853,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    },
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0.5,
+                            "x": -2.400000095367432,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 40
+                        }
+                    },
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0.5,
+                            "x": -2.999999284744263,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 45
+                        }
+                    },
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0.8000000715255737,
+                            "x": -2.299999713897705,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    },
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0.9000000953674316,
+                            "x": -2.199999809265137,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 30
+                        }
+                    },
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0.9000000953674316,
+                            "x": -2.199999809265137,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 30
+                        }
+                    },
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0.4000000059604645,
+                            "x": -2.199999809265137,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 45
+                        }
+                    },
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0.9000000953674316,
+                            "x": -1.99999988079071,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 30
+                        }
+                    },
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0.9000000953674316,
+                            "x": -1.699999928474426,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 25
+                        }
+                    },
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0.6000000238418579,
+                            "x": -1.800000071525574,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 25
+                        }
+                    }
+                ],
+                "templates": [
+                    "1429",
+                    "1518",
+                    "1717",
+                    "1747",
+                    "1748",
+                    "1749",
+                    "1750",
+                    "1751",
+                    "1752",
+                    "1781",
+                    "1786",
+                    "1791",
+                    "1792",
+                    "2091",
+                    "2093",
+                    "2224",
+                    "2296",
+                    "2297",
+                    "2318",
+                    "2322",
+                    "2344",
+                    "2595",
+                    "2596",
+                    "2648"
+                ]
+            },
+            {
+                "name": "officeDesk",
+                "position": {
+                    "y": 644.703857421875,
+                    "x": -2166.339599609375,
+                    "z": 1057.59375
+                },
+                "templateIdx": 6,
+                "offsets": [
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0.5,
+                            "x": 0.1000000014901161,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 90
+                        }
+                    },
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 1.399999976158142,
+                            "x": 0.2000000029802322,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 90
+                        }
+                    },
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0.6000000238418579,
+                            "x": 0.300000011920929,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 90
+                        }
+                    },
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0.6000000238418579,
+                            "x": 0.9000000953674316,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 90
+                        }
+                    },
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0.5,
+                            "x": 0,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 90
+                        }
+                    }
+                ],
+                "templates": [
+                    "whiteTable",
+                    "1999",
+                    "2008",
+                    "2165",
+                    "2181"
+                ]
+            },
+            {
+                "name": "talkPhone",
+                "position": {
+                    "y": 641.336181640625,
+                    "x": -2163.87744140625,
+                    "z": 1057.593017578125
+                },
+                "templateIdx": 2,
+                "offsets": [
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    }
+                ],
+                "templates": [
+                    "talkPoiAndAction"
+                ]
+            },
+            {
+                "name": "smoke",
+                "position": {
+                    "y": 641.4926147460938,
+                    "x": -2164.67626953125,
+                    "z": 1057.593994140625
+                },
+                "templateIdx": 2,
+                "templates": [
+                    "cigar"
+                ],
+                "offsets": [
+                    {
+                        "offset": {
+                            "y": 0,
+                            "x": -0.2000000029802322,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "smoke",
+                "position": {
+                    "y": 646.4544677734375,
+                    "x": -2169.531982421875,
+                    "z": 1057.59375
+                },
+                "templateIdx": 2,
+                "offsets": [
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    }
+                ],
+                "templates": [
+                    "cigar"
+                ]
+            },
+            {
+                "name": "talkPhone",
+                "position": {
+                    "y": 644.8555908203125,
+                    "x": -2169.375732421875,
+                    "z": 1057.59375
+                },
+                "templateIdx": 2,
+                "offsets": [
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    }
+                ],
+                "templates": [
+                    "talkPoiAndAction"
+                ]
+            },
+            {
+                "name": "talkPhone",
+                "position": {
+                    "y": 643.876708984375,
+                    "x": -2170.960205078125,
+                    "z": 1057.59375
+                },
+                "templateIdx": 2,
+                "offsets": [
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    }
+                ],
+                "templates": [
+                    "talkPoiAndAction"
+                ]
+            },
+            {
+                "name": "smoke",
+                "position": {
+                    "y": 641.0614624023438,
+                    "x": -2169.534912109375,
+                    "z": 1057.59375
+                },
+                "templateIdx": 2,
+                "offsets": [
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    }
+                ],
+                "templates": [
+                    "cigar"
+                ]
+            },
+            {
+                "name": "smoke",
+                "position": {
+                    "y": 638.5986328125,
+                    "x": -2171.08203125,
+                    "z": 1057.595336914062
+                },
+                "templateIdx": 2,
+                "offsets": [
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    }
+                ],
+                "templates": [
+                    "cigar"
+                ]
+            },
+            {
+                "name": "talkPhone",
+                "position": {
+                    "y": 638.7417602539062,
+                    "x": -2170.084716796875,
+                    "z": 1057.5966796875
+                },
+                "templateIdx": 2,
+                "offsets": [
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    }
+                ],
+                "templates": [
+                    "talkPoiAndAction"
+                ]
+            },
+            {
+                "name": "bed",
+                "position": {
+                    "y": 643.7059326171875,
+                    "x": -2168.325439453125,
+                    "z": 1052.375
+                },
+                "templateIdx": 19,
+                "templates": [
+                    "1700",
+                    "2302",
+                    "1794",
+                    "2300",
+                    "2301",
+                    "2090",
+                    "2298",
+                    "2299",
+                    "1797",
+                    "1701",
+                    "1745",
+                    "1793",
+                    "1795",
+                    "1798",
+                    "1799",
+                    "1801",
+                    "1802",
+                    "1803"
+                ],
+                "offsets": [
+                    {
+                        "offset": {
+                            "y": 1,
+                            "x": 1.5,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    },
+                    {
+                        "offset": {
+                            "y": 1,
+                            "x": -1,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    },
+                    {
+                        "offset": {
+                            "y": 1,
+                            "x": 1,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    },
+                    {
+                        "offset": {
+                            "y": 0.5,
+                            "x": -1.5,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    },
+                    {
+                        "offset": {
+                            "y": 1.300000071525574,
+                            "x": -1.5,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    },
+                    {
+                        "offset": {
+                            "y": 1.5,
+                            "x": 1.400000095367432,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    },
+                    {
+                        "offset": {
+                            "y": 1.200000047683716,
+                            "x": 0.7000000476837158,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    },
+                    {
+                        "offset": {
+                            "y": 1.299999952316284,
+                            "x": 1.300000071525574,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    },
+                    {
+                        "offset": {
+                            "y": 1.100000023841858,
+                            "x": 1.50000011920929,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    },
+                    {
+                        "offset": {
+                            "y": 1.200000047683716,
+                            "x": 1.50000011920929,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    },
+                    {
+                        "offset": {
+                            "y": 1,
+                            "x": 1.700000166893005,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    },
+                    {
+                        "offset": {
+                            "y": 1.400000095367432,
+                            "x": 1.700000166893005,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    },
+                    {
+                        "offset": {
+                            "y": 1.300000071525574,
+                            "x": 1.600000143051147,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    },
+                    {
+                        "offset": {
+                            "y": 1,
+                            "x": 1.700000166893005,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    },
+                    {
+                        "offset": {
+                            "y": 1.100000023841858,
+                            "x": 1.600000143051147,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    },
+                    {
+                        "offset": {
+                            "y": 1,
+                            "x": 1.700000166893005,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    },
+                    {
+                        "offset": {
+                            "y": 1.200000047683716,
+                            "x": 1.50000011920929,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    },
+                    {
+                        "offset": {
+                            "y": 1.300000071525574,
+                            "x": 1.700000166893005,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "officeDesk",
+                "position": {
+                    "y": 641.3485717773438,
+                    "x": -2161.213134765625,
+                    "z": 1052.375
+                },
+                "templateIdx": 6,
+                "templates": [
+                    "whiteTable",
+                    "1999",
+                    "2008",
+                    "2165",
+                    "2181"
+                ],
+                "offsets": [
+                    {
+                        "offset": {
+                            "y": 0.5,
+                            "x": 1.599999785423279,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    },
+                    {
+                        "offset": {
+                            "y": 0,
+                            "x": 2.5,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    },
+                    {
+                        "offset": {
+                            "y": 0,
+                            "x": 1.799999833106995,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    },
+                    {
+                        "offset": {
+                            "y": -0.6000000238418579,
+                            "x": 2,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    },
+                    {
+                        "offset": {
+                            "y": 0.4000000059604645,
+                            "x": 1.799999952316284,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "talkPhone",
+                "position": {
+                    "y": 642.349853515625,
+                    "x": -2163.810791015625,
+                    "z": 1052.375
+                },
+                "templateIdx": 2,
+                "templates": [
+                    "talkPoiAndAction"
+                ],
+                "offsets": [
+                    {
+                        "offset": {
+                            "y": 0.300000011920929,
+                            "x": 0,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "smoke",
+                "position": {
+                    "y": 642.4835205078125,
+                    "x": -2162.16162109375,
+                    "z": 1052.375
+                },
+                "templateIdx": 2,
+                "templates": [
+                    "cigar"
+                ],
+                "offsets": [
+                    {
+                        "offset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "armchair",
+                "position": {
+                    "y": 642.537109375,
+                    "x": -2166.4697265625,
+                    "z": 1052.375
+                },
+                "templateIdx": 8,
+                "templates": [
+                    "2291",
+                    "1769",
+                    "1767",
+                    "1765",
+                    "1759",
+                    "1758",
+                    "1755"
+                ],
+                "offsets": [
+                    {
+                        "offset": {
+                            "y": -1.100000023841858,
+                            "x": -0.5,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 180
+                        }
+                    },
+                    {
+                        "offset": {
+                            "y": -1,
+                            "x": 0,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 180
+                        }
+                    },
+                    {
+                        "offset": {
+                            "y": -1.200000166893005,
+                            "x": 0,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 180
+                        }
+                    },
+                    {
+                        "offset": {
+                            "y": -1.100000023841858,
+                            "x": 0,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 180
+                        }
+                    },
+                    {
+                        "offset": {
+                            "y": -1.100000023841858,
+                            "x": 0,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 180
+                        }
+                    },
+                    {
+                        "offset": {
+                            "y": -1.200000047683716,
+                            "x": 0,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 180
+                        }
+                    },
+                    {
+                        "offset": {
+                            "y": -1.100000023841858,
+                            "x": 0,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 180
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "interactions",
+                "position": {
+                    "y": 642.4876098632812,
+                    "x": -2168.5947265625,
+                    "z": 1057.59375
+                },
+                "templateIdx": 2,
+                "offsets": [
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": -0.2000000029802322,
+                            "x": -0.5,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    }
+                ],
+                "templates": [
+                    "poi"
+                ]
+            },
+            {
+                "name": "interactions",
+                "position": {
+                    "y": 643.4564208984375,
+                    "x": -2166.47802734375,
+                    "z": 1057.59375
+                },
+                "templateIdx": 2,
+                "offsets": [
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0.3999999761581421,
+                            "x": 0.6000000238418579,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    }
+                ],
+                "templates": [
+                    "poi"
+                ]
+            },
+            {
+                "name": "interactions",
+                "position": {
+                    "y": 640.399658203125,
+                    "x": -2160.995361328125,
+                    "z": 1057.586059570312
+                },
+                "templateIdx": 2,
+                "offsets": [
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0.1000000014901161,
+                            "x": 1.799999952316284,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    }
+                ],
+                "templates": [
+                    "poi"
+                ]
+            },
+            {
+                "name": "interactions",
+                "position": {
+                    "y": 642.463134765625,
+                    "x": -2169.06884765625,
+                    "z": 1052.375
+                },
+                "templateIdx": 2,
+                "offsets": [
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0.1000000014901161,
+                            "x": 1.600000023841858,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    }
+                ],
+                "templates": [
+                    "poi"
+                ]
+            }
+        ],
+        "Disposed": false,
+        "Regions": [
+            {
+                "Description": "a radiator",
+                "cameras": [
+                    {
+                        "y": 635.72131347656,
+                        "x": -2170.3308105469,
+                        "lz": 1056.59375,
+                        "z": 1058.7937011719,
+                        "fov": 70,
+                        "roll": 0,
+                        "ly": 646.92132568359,
+                        "lx": -2170.2551269531
+                    },
+                    {
+                        "y": 648.86851806939,
+                        "x": -2170.3837890625,
+                        "lz": 1056.599609375,
+                        "z": 1059.2995605469,
+                        "fov": 70,
+                        "roll": 0,
+                        "ly": 637.96984863281,
+                        "lx": -2170.4401855469
+                    }
+                ],
+                "Objects": [],
+                "center": {
+                    "y": 641.4681396484375,
+                    "x": -2170.071044921875,
+                    "z": 1056.592041015625
+                },
+                "EvaluatingRegion": false,
+                "name": "hallway",
+                "vertexes": [
+                    {
+                        "y": 637.66943359375,
+                        "x": -2171.9052734375,
+                        "z": 1056.586059570313
+                    },
+                    {
+                        "y": 637.4094848632812,
+                        "x": -2168.873291015625,
+                        "z": 1056.59326171875
+                    },
+                    {
+                        "y": 647.3965454101562,
+                        "x": -2168.993408203125,
+                        "z": 1056.59375
+                    },
+                    {
+                        "y": 647.4558715820312,
+                        "x": -2171.71044921875,
+                        "z": 1056.59375
+                    }
+                ]
+            },
+            {
+                "Description": "",
+                "cameras": [
+                    {
+                        "y": 647.35192871094,
+                        "x": -2168.6154296845,
+                        "lz": 1056.5927734375,
+                        "z": 1059.2927246094,
+                        "fov": 70,
+                        "roll": 0,
+                        "ly": 641.34271240234,
+                        "lx": -2163.6662597656
+                    },
+                    {
+                        "y": 641.2418823242188,
+                        "x": -2163.47900390625,
+                        "lz": 1056.59375,
+                        "z": 1059.693701185286,
+                        "fov": 103.5,
+                        "roll": 0,
+                        "ly": 646.0255126953125,
+                        "lx": -2166.941650390625
+                    }
+                ],
+                "Objects": [],
+                "center": {
+                    "y": 644.1637573242188,
+                    "x": -2166.0166015625,
+                    "z": 1056.59375
+                },
+                "EvaluatingRegion": false,
+                "name": "livingroom",
+                "vertexes": [
+                    {
+                        "y": 640.930908203125,
+                        "x": -2168.779296875,
+                        "z": 1056.59375
+                    },
+                    {
+                        "y": 647.310791015625,
+                        "x": -2168.753662109375,
+                        "z": 1056.59375
+                    },
+                    {
+                        "y": 647.3788452148438,
+                        "x": -2163.260009765625,
+                        "z": 1056.59375
+                    },
+                    {
+                        "y": 641.0343627929688,
+                        "x": -2163.27392578125,
+                        "z": 1056.59375
+                    }
+                ]
+            },
+            {
+                "Description": "",
+                "cameras": [
+                    {
+                        "y": 647.116406224668,
+                        "x": -2157.765820279717,
+                        "lz": 1056.586059570312,
+                        "z": 1059.876010781154,
+                        "lx": -2161.52783203125,
+                        "ly": 641.7991943359375,
+                        "roll": 0,
+                        "fov": 89.5
+                    }
+                ],
+                "Objects": [],
+                "center": {
+                    "y": 642.0723876953125,
+                    "x": -2159.993896484375,
+                    "z": 1056.586059570313
+                },
+                "EvaluatingRegion": false,
+                "name": "kitchen",
+                "vertexes": [
+                    {
+                        "y": 647.1939086914062,
+                        "x": -2162.959716796875,
+                        "z": 1056.586059570313
+                    },
+                    {
+                        "y": 637.0506591796875,
+                        "x": -2162.5419921875,
+                        "z": 1056.586059570313
+                    },
+                    {
+                        "y": 636.732666015625,
+                        "x": -2157.0595703125,
+                        "z": 1056.586059570313
+                    },
+                    {
+                        "y": 647.312255859375,
+                        "x": -2157.414306640625,
+                        "z": 1056.586059570313
+                    }
+                ]
+            },
+            {
+                "Description": "",
+                "cameras": [
+                    {
+                        "y": 638.4566650390625,
+                        "x": -2171.27871093899,
+                        "lz": 1053.96875,
+                        "z": 1059.668701186776,
+                        "lx": -2164.52001953125,
+                        "ly": 638.7688598632812,
+                        "roll": 0,
+                        "fov": 70
+                    }
+                ],
+                "Objects": [],
+                "center": {
+                    "y": 638.6353149414062,
+                    "x": -2166.24560546875,
+                    "z": 1055.276489257812
+                },
+                "EvaluatingRegion": false,
+                "name": "stairs",
+                "vertexes": [
+                    {
+                        "y": 639.5079956054688,
+                        "x": -2168.78759765625,
+                        "z": 1056.572875976562
+                    },
+                    {
+                        "y": 638.2308349609375,
+                        "x": -2168.82568359375,
+                        "z": 1056.576049804688
+                    },
+                    {
+                        "y": 637.289306640625,
+                        "x": -2163.693115234375,
+                        "z": 1053.96875
+                    },
+                    {
+                        "y": 639.5131225585938,
+                        "x": -2163.67626953125,
+                        "z": 1053.988159179688
+                    }
+                ]
+            },
+            {
+                "Description": "",
+                "cameras": [
+                    {
+                        "y": 635.5065429657698,
+                        "x": -2172.052001945674,
+                        "lz": 1053.593994140625,
+                        "z": 1052.993920862675,
+                        "lx": -2166.658935546875,
+                        "ly": 639.4369506835938,
+                        "roll": 0,
+                        "fov": 86.5
+                    }
+                ],
+                "Objects": [],
+                "center": {
+                    "y": 637.5033569335938,
+                    "x": -2167.954833984375,
+                    "z": 1052.410888671875
+                },
+                "EvaluatingRegion": false,
+                "name": "stairs2",
+                "vertexes": [
+                    {
+                        "y": 637.3547973632812,
+                        "x": -2163.728271484375,
+                        "z": 1053.96875
+                    },
+                    {
+                        "y": 635.3980102539062,
+                        "x": -2163.685302734375,
+                        "z": 1053.97607421875
+                    },
+                    {
+                        "y": 635.3892211914062,
+                        "x": -2171.350341796875,
+                        "z": 1051.375
+                    },
+                    {
+                        "y": 639.7341918945312,
+                        "x": -2171.95751953125,
+                        "z": 1051.371704101562
+                    },
+                    {
+                        "y": 639.6400756835938,
+                        "x": -2169.0537109375,
+                        "z": 1051.363159179688
+                    }
+                ]
+            },
+            {
+                "Description": "",
+                "cameras": [
+                    {
+                        "y": 640.4586059451103,
+                        "x": -2171.870263665915,
+                        "lz": 1051.375,
+                        "z": 1054.774951189756,
+                        "lx": -2165.177734375,
+                        "ly": 645.7544555664062,
+                        "roll": 0,
+                        "fov": 76.5
+                    }
+                ],
+                "Objects": [],
+                "center": {
+                    "y": 643.3616943359375,
+                    "x": -2164.722900390625,
+                    "z": 1051.375
+                },
+                "EvaluatingRegion": false,
+                "name": "bedroom",
+                "vertexes": [
+                    {
+                        "y": 642.98974609375,
+                        "x": -2157.816162109375,
+                        "z": 1051.375
+                    },
+                    {
+                        "y": 640.3642578125,
+                        "x": -2157.69287109375,
+                        "z": 1051.375
+                    },
+                    {
+                        "y": 640.3578491210938,
+                        "x": -2171.31201171875,
+                        "z": 1051.375
+                    },
+                    {
+                        "y": 646.54443359375,
+                        "x": -2171.31298828125,
+                        "z": 1051.375
+                    },
+                    {
+                        "y": 646.55224609375,
+                        "x": -2165.480224609375,
+                        "z": 1051.375
+                    }
+                ]
+            }
+        ],
+        "POI": [
+            {
+                "Description": "hallway ",
+                "Interior": 1,
+                "Y": 645.277587890625,
+                "X": -2171.299560546875,
+                "episodeLinks": [
+                    "garden"
+                ],
+                "Z": 1057.59375,
+                "id": 1,
+                "Angle": 93.93075561523438,
+                "PossibleActions": [],
+                "allActions": []
+            },
+            {
+                "Description": "narnia ",
+                "Interior": 1,
+                "Y": 642.2976684570312,
+                "X": -2171.3056640625,
+                "episodeLinks": [
+                    "common"
+                ],
+                "Z": 1057.59375,
+                "id": 2,
+                "Angle": 94.53631591796875,
+                "PossibleActions": [],
+                "allActions": []
+            },
+            {
+                "Description": "bathroom sink",
+                "Interior": 1,
+                "Y": 638.099609375,
+                "X": -2160.645263671875,
+                "episodeLinks": [],
+                "Z": 1057.586059570312,
+                "id": 3,
+                "Angle": 182.407470703125,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "allActions": [
+                    {
+                        "dynamicString": "return WashHands{}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 5,
+                            "type": "Object"
+                        },
+                        "id": 1,
+                        "nextLocation": {
+                            "id": 3
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+]

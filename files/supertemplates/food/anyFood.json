@@ -33,9 +33,14 @@
                             "type": "Object"
                         },
                         "id": 1,
-                        "nextAction": {
-                            "id": 2
-                        },
+                        "nextAction": [
+                            {
+                                "id": 2
+                            },
+                            {
+                                "id": 3
+                            }
+                        ],
                         "closingAction": {
                             "id": 2
                         },
@@ -51,6 +56,18 @@
                             "type": "Object"
                         },
                         "id": 2,
+                        "nextLocation": {
+                            "id": 6
+                        }
+                    },
+                    {
+                        "dynamicString": "return Give{hand = 12, how = 1}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 5,
+                            "type": "Object"
+                        },
+                        "id": 3,
                         "nextLocation": {
                             "id": 6
                         }

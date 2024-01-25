@@ -404,7 +404,7 @@ function Move:FindNextShortestPath(player)
         Timer(Move.teleport, 5000, 1, self.Performer, self)
         return
     end
-    print("Find shortest path between "..(player:getData('currentRegion') or 'null')..' and '..(contextSegments[1].Region.name or 'null'))
+    print(player:getData('id')..": Find shortest path between "..(player:getData('currentRegion') or 'null')..' and '..(contextSegments[1].Region.name or 'null'))
     if math.abs((player.position - contextSegments[1].position).length) < 1.5 then
         local m = self:InitializeMarker(contextSegments[1].position.x, contextSegments[1].position.y, contextSegments[1].position.z, player)
         self.planningData[player:getData('id')].paused = false
@@ -466,6 +466,9 @@ function Move:FindNextShortestPath(player)
                     end, 100, 1)
                     if not DISABLE_BETWEEN_POINTS_TELEPORTATION then
                         Move.wait(player)
+                    end
+                    if DEBUG_PATHFINDING then
+                        print("Move callback finished")
                     end
                 else
                     print('[FATAL ERROR!] No shortest path found!')

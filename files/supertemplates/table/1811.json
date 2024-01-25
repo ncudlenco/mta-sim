@@ -1,0 +1,582 @@
+[
+    {
+        "objects": [
+            {
+                "dynamicString": "return Food{description=\"\", noCollisions=true, modelid=Food.eModel[PickRandom(Food.eModel)], isRandomModelId=true, interior=8, position=Vector3(-0.361572265625,1.70068359375,-0.2108154296875), rotation=Vector3(270,0,110), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,180,0)}",
+                "id": 10
+            },
+            {
+                "dynamicString": "return Food{description=\"\", noCollisions=true, modelid=Food.eModel[PickRandom(Food.eModel)], isRandomModelId=true, interior=8, position=Vector3(-1.068603515625,1.7496337890625,-0.2008056640625), rotation=Vector3(270,0,110.00006103516), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,180,0)}",
+                "id": 8
+            },
+            {
+                "dynamicString": "return Food{description=\"\", noCollisions=true, modelid=Food.eModel[PickRandom(Food.eModel)], isRandomModelId=true, interior=8, position=Vector3(-1.21630859375,1.8890380859375,-0.2208251953125), rotation=Vector3(270,0,200), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,180,0)}",
+                "id": 6
+            },
+            {
+                "dynamicString": "return Food{description=\"\", noCollisions=true, modelid=Food.eModel[PickRandom(Food.eModel)], isRandomModelId=true, interior=8, position=Vector3(-0.998046875,1.94140625,-0.2008056640625), rotation=Vector3(270,0,290), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,180,0)}",
+                "id": 12
+            },
+            {
+                "dynamicString": "return Food{description=\"\", noCollisions=true, modelid=Food.eModel[PickRandom(Food.eModel)], isRandomModelId=true, interior=8, position=Vector3(-0.148193359375,1.951416015625,-0.2308349609375), rotation=Vector3(270,0,290), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,180,0)}",
+                "id": 14
+            },
+            {
+                "dynamicString": "return Food{description=\"\", noCollisions=true, modelid=Food.eModel[PickRandom(Food.eModel)], isRandomModelId=true, interior=8, position=Vector3(-0.069580078125,1.7381591796875,-0.2708740234375), rotation=Vector3(296.56506347656,270,243.43496704102), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,180,0)}",
+                "id": 16
+            },
+            {
+                "dynamicString": "return Table{description=\"\", noCollisions=true, modelid=2117, isRandomModelId=false, interior=8, position=Vector3(-1.18115234375,1.8031005859375,-1), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "id": 1
+            },
+            {
+                "dynamicString": "return Plate{description=\"\", noCollisions=false, modelid=2812, isRandomModelId=false, interior=8, position=Vector3(-1.29931640625,1.8074951171875,-0.1927490234375), rotation=Vector3(0,0,90), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "id": 2
+            },
+            {
+                "dynamicString": "return Plate{description=\"\", noCollisions=false, modelid=2812, isRandomModelId=false, interior=8, position=Vector3(-0.798095703125,1.7767333984375,-0.2005615234375), rotation=Vector3(0,0,275.00006103516), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "id": 3
+            },
+            {
+                "dynamicString": "return Plate{description=\"\", noCollisions=false, modelid=2812, isRandomModelId=false, interior=8, position=Vector3(-0.798095703125,1.7767333984375,-0.2005615234375), rotation=Vector3(0,0,275.00006103516), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "id": 4
+            },
+            {
+                "dynamicString": "return Plate{description=\"\", noCollisions=false, modelid=2812, isRandomModelId=false, interior=8, position=Vector3(-0.297119140625,1.831298828125,-0.1998291015625), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "id": 5
+            },
+            {
+                "dynamicString": "return Chair{description=\"\", noCollisions=true, modelid=1811, isRandomModelId=false, interior=8, position=Vector3(-2.035400390625,1.847412109375,-0.5001220703125), rotation=Vector3(0,0,180.00028991699), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "id": 7
+            },
+            {
+                "dynamicString": "return Chair{description=\"\", noCollisions=true, modelid=1811, isRandomModelId=false, interior=8, position=Vector3(-1.026611328125,0.9302978515625,-0.5001220703125), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "id": 9
+            },
+            {
+                "dynamicString": "return Chair{description=\"\", noCollisions=true, modelid=1811, isRandomModelId=false, interior=8, position=Vector3(-0.31982421875,0.88134765625,-0.5001220703125), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "id": 11
+            },
+            {
+                "dynamicString": "return Chair{description=\"\", noCollisions=true, modelid=1811, isRandomModelId=false, interior=8, position=Vector3(-1.039794921875,2.7607421875,-0.5001220703125), rotation=Vector3(0,0,90), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "id": 13
+            },
+            {
+                "dynamicString": "return Chair{description=\"\", noCollisions=true, modelid=1811, isRandomModelId=false, interior=8, position=Vector3(-0.18994140625,2.770751953125,-0.5001220703125), rotation=Vector3(0,0,90), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "id": 15
+            },
+            {
+                "dynamicString": "return Chair{description=\"\", noCollisions=true, modelid=1811, isRandomModelId=false, interior=8, position=Vector3(0.749755859375,1.780029296875,-0.5001220703125), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "id": 17
+            }
+        ],
+        "poi": {
+            "isEmpty": true
+        },
+        "locations": [
+            {
+                "Description": "kitchen chair",
+                "Interior": 8,
+                "Y": 0.219482421875,
+                "X": -0.258544921875,
+                "episodeLinks": [],
+                "Z": 0,
+                "id": 3,
+                "Angle": 8.9095458984375,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "allActions": [
+                    {
+                        "dynamicString": "return SitDown{how = 1, rotation = nil}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 11,
+                            "type": "Object"
+                        },
+                        "id": 1,
+                        "nextAction": [
+                            {
+                                "id": 2
+                            },
+                            {
+                                "id": 4
+                            }
+                        ],
+                        "closingAction": {
+                            "id": 4
+                        },
+                        "nextLocation": {
+                            "id": 3
+                        }
+                    },
+                    {
+                        "dynamicString": "return PickUp{where = \"the table\", targetObjectExists = true, hand = 12, how = 3}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 10,
+                            "type": "Object"
+                        },
+                        "id": 2,
+                        "nextAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 3
+                        }
+                    },
+                    {
+                        "dynamicString": "return Eat{how = 1}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 10,
+                            "type": "Object"
+                        },
+                        "id": 3,
+                        "nextAction": {
+                            "id": 4
+                        },
+                        "nextLocation": {
+                            "id": 3
+                        }
+                    },
+                    {
+                        "dynamicString": "return StandUp{how = 1}",
+                        "isClosingAction": true,
+                        "targetItem": {
+                            "id": 11,
+                            "type": "Object"
+                        },
+                        "id": 4,
+                        "nextLocation": {
+                            "id": 3
+                        }
+                    }
+                ]
+            },
+            {
+                "Description": "kitchen chair",
+                "Interior": 8,
+                "Y": 0.2684326171875,
+                "X": -0.96533203125,
+                "episodeLinks": [],
+                "Z": 0,
+                "id": 2,
+                "Angle": 368.9095458984375,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "allActions": [
+                    {
+                        "dynamicString": "return SitDown{how = 1, rotation = nil}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 9,
+                            "type": "Object"
+                        },
+                        "id": 1,
+                        "nextAction": [
+                            {
+                                "id": 2
+                            },
+                            {
+                                "id": 4
+                            }
+                        ],
+                        "closingAction": {
+                            "id": 4
+                        },
+                        "nextLocation": {
+                            "id": 2
+                        }
+                    },
+                    {
+                        "dynamicString": "return PickUp{where = \"the table\", targetObjectExists = true, hand = 12, how = 3}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 8,
+                            "type": "Object"
+                        },
+                        "id": 2,
+                        "nextAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 2
+                        }
+                    },
+                    {
+                        "dynamicString": "return Eat{how = 1}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 8,
+                            "type": "Object"
+                        },
+                        "id": 3,
+                        "nextAction": {
+                            "id": 4
+                        },
+                        "nextLocation": {
+                            "id": 2
+                        }
+                    },
+                    {
+                        "dynamicString": "return StandUp{how = 1}",
+                        "isClosingAction": true,
+                        "targetItem": {
+                            "id": 9,
+                            "type": "Object"
+                        },
+                        "id": 4,
+                        "nextLocation": {
+                            "id": 2
+                        }
+                    }
+                ]
+            },
+            {
+                "Description": "kitchen chair",
+                "Interior": 8,
+                "Y": 1.7862548828125,
+                "X": -2.697265625,
+                "episodeLinks": [],
+                "Z": 0,
+                "id": 1,
+                "Angle": 278.9095458984375,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "allActions": [
+                    {
+                        "dynamicString": "return SitDown{how = 1, rotation = nil}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 7,
+                            "type": "Object"
+                        },
+                        "id": 1,
+                        "nextAction": [
+                            {
+                                "id": 2
+                            },
+                            {
+                                "id": 4
+                            }
+                        ],
+                        "closingAction": {
+                            "id": 4
+                        },
+                        "nextLocation": {
+                            "id": 1
+                        }
+                    },
+                    {
+                        "dynamicString": "return PickUp{where = \"the table\", targetObjectExists = true, hand = 12, how = 3}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 6,
+                            "type": "Object"
+                        },
+                        "id": 2,
+                        "nextAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 1
+                        }
+                    },
+                    {
+                        "dynamicString": "return Eat{how = 1}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 6,
+                            "type": "Object"
+                        },
+                        "id": 3,
+                        "nextAction": {
+                            "id": 4
+                        },
+                        "nextLocation": {
+                            "id": 1
+                        }
+                    },
+                    {
+                        "dynamicString": "return StandUp{how = 1}",
+                        "isClosingAction": true,
+                        "targetItem": {
+                            "id": 7,
+                            "type": "Object"
+                        },
+                        "id": 4,
+                        "nextLocation": {
+                            "id": 1
+                        }
+                    }
+                ]
+            },
+            {
+                "Description": "kitchen chair",
+                "Interior": 8,
+                "Y": 3.422607421875,
+                "X": -1.10107421875,
+                "episodeLinks": [],
+                "Z": 0,
+                "id": 4,
+                "Angle": -171.0904541015625,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "allActions": [
+                    {
+                        "dynamicString": "return SitDown{how = 1, rotation = nil}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 13,
+                            "type": "Object"
+                        },
+                        "id": 1,
+                        "nextAction": [
+                            {
+                                "id": 2
+                            },
+                            {
+                                "id": 4
+                            }
+                        ],
+                        "closingAction": {
+                            "id": 4
+                        },
+                        "nextLocation": {
+                            "id": 4
+                        }
+                    },
+                    {
+                        "dynamicString": "return PickUp{where = \"the table\", targetObjectExists = true, hand = 12, how = 3}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 12,
+                            "type": "Object"
+                        },
+                        "id": 2,
+                        "nextAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 4
+                        }
+                    },
+                    {
+                        "dynamicString": "return Eat{how = 1}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 12,
+                            "type": "Object"
+                        },
+                        "id": 3,
+                        "nextAction": {
+                            "id": 4
+                        },
+                        "nextLocation": {
+                            "id": 4
+                        }
+                    },
+                    {
+                        "dynamicString": "return StandUp{how = 1}",
+                        "isClosingAction": true,
+                        "targetItem": {
+                            "id": 13,
+                            "type": "Object"
+                        },
+                        "id": 4,
+                        "nextLocation": {
+                            "id": 4
+                        }
+                    }
+                ]
+            },
+            {
+                "Description": "kitchen chair",
+                "Interior": 8,
+                "Y": 3.4326171875,
+                "X": -0.251220703125,
+                "episodeLinks": [],
+                "Z": 0,
+                "id": 5,
+                "Angle": -171.0904541015625,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "allActions": [
+                    {
+                        "dynamicString": "return SitDown{how = 1, rotation = nil}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 15,
+                            "type": "Object"
+                        },
+                        "id": 1,
+                        "nextAction": [
+                            {
+                                "id": 2
+                            },
+                            {
+                                "id": 4
+                            }
+                        ],
+                        "closingAction": {
+                            "id": 4
+                        },
+                        "nextLocation": {
+                            "id": 5
+                        }
+                    },
+                    {
+                        "dynamicString": "return PickUp{where = \"the table\", targetObjectExists = true, hand = 12, how = 3}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 14,
+                            "type": "Object"
+                        },
+                        "id": 2,
+                        "nextAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 5
+                        }
+                    },
+                    {
+                        "dynamicString": "return Eat{how = 1}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 14,
+                            "type": "Object"
+                        },
+                        "id": 3,
+                        "nextAction": {
+                            "id": 4
+                        },
+                        "nextLocation": {
+                            "id": 5
+                        }
+                    },
+                    {
+                        "dynamicString": "return StandUp{how = 1}",
+                        "isClosingAction": true,
+                        "targetItem": {
+                            "id": 15,
+                            "type": "Object"
+                        },
+                        "id": 4,
+                        "nextLocation": {
+                            "id": 5
+                        }
+                    }
+                ]
+            },
+            {
+                "Description": "kitchen chair",
+                "Interior": 8,
+                "Y": 1.84130859375,
+                "X": 1.41162109375,
+                "episodeLinks": [],
+                "Z": 0,
+                "id": 6,
+                "Angle": 98.9095458984375,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "allActions": [
+                    {
+                        "dynamicString": "return SitDown{how = 1, rotation = nil}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 17,
+                            "type": "Object"
+                        },
+                        "id": 1,
+                        "nextAction": [
+                            {
+                                "id": 2
+                            },
+                            {
+                                "id": 4
+                            }
+                        ],
+                        "closingAction": {
+                            "id": 4
+                        },
+                        "nextLocation": {
+                            "id": 6
+                        }
+                    },
+                    {
+                        "dynamicString": "return PickUp{where = \"the table\", targetObjectExists = true, hand = 12, how = 3}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 16,
+                            "type": "Object"
+                        },
+                        "id": 2,
+                        "nextAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 6
+                        }
+                    },
+                    {
+                        "dynamicString": "return Eat{how = 1}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 16,
+                            "type": "Object"
+                        },
+                        "id": 3,
+                        "nextAction": {
+                            "id": 4
+                        },
+                        "nextLocation": {
+                            "id": 6
+                        }
+                    },
+                    {
+                        "dynamicString": "return StandUp{how = 1}",
+                        "isClosingAction": true,
+                        "targetItem": {
+                            "id": 17,
+                            "type": "Object"
+                        },
+                        "id": 4,
+                        "nextLocation": {
+                            "id": 6
+                        }
+                    }
+                ]
+            }
+        ],
+        "position": {
+            "y": -1123.86865234375,
+            "x": 2366.954833984375,
+            "z": 1050.875
+        },
+        "globalCentroid": {
+            "y": -1122.046630859375,
+            "x": 2366.260986328125,
+            "z": 1050.605834960938
+        },
+        "name": "1811"
+    }
+]

@@ -39,7 +39,6 @@ function Give:Apply()
     end
 
     outputConsole("Swapping object from one player to the other...")
--- Note to self: seems like waiting never finishes...
     OnGlobalActionFinished(time, self.Performer:getData('id'), self.Performer:getData('storyId'), function()
         detachElementFromBone(self.TargetItem.instance)
         local pickedObjects = self.Performer:getData('pickedObjects')

@@ -1,1 +1,72 @@
-[ { "objects": [ { "dynamicString": "return Cigarette{description=\"\", noCollisions=false, modelid=3027, interior=1, position=Vector3(-0.08984375,0.0970458984375,-1.3522338867188), rotation=Vector3(0,0,0), posOffset=Vector3(-0.019999999552965,0.050000000745058,0.10000000149012), rotOffset=Vector3(0,90,0)}", "id": 8 } ], "poi": { "Description": "smoke ", "Interior": 1, "Y": -1674.702392578125, "X": 2536.500732421875, "Z": 1015.498596191406, "id": 9, "Angle": 272.7989501953125, "PossibleActions": [ { "id": 1 }, { "id": 1 } ], "allActions": [ { "dynamicString": "return SmokeIn{}", "targetItem": { "id": 8, "type": "Object" }, "id": 1, "nextAction": { "id": 2 }, "closingAction": { "id": 3 }, "nextLocation": { "id": 9 } }, { "dynamicString": "return Smoke{}", "targetItem": { "id": 8, "type": "Object" }, "id": 2, "nextAction": { "id": 3 }, "nextLocation": { "id": 9 } }, { "dynamicString": "return SmokeOut{}", "targetItem": { "id": 8, "type": "Object" }, "id": 3, "nextLocation": { "id": 9 } } ] }, "locations": [ ] } ]
+[
+    {
+        "objects": [
+            {
+                "dynamicString": "return Cigarette{description=\"\", noCollisions=false, modelid=3027, interior=1, position=Vector3(-0.08984375,0.0970458984375,-1.3522338867188), rotation=Vector3(0,0,0), posOffset=Vector3(-0.019999999552965,0.050000000745058,0.10000000149012), rotOffset=Vector3(0,90,0)}",
+                "id": 8
+            }
+        ],
+        "poi": {
+            "Description": "smoke ",
+            "Interior": 1,
+            "Y": -1674.702392578125,
+            "X": 2536.500732421875,
+            "Z": 1015.498596191406,
+            "id": 9,
+            "Angle": 272.7989501953125,
+            "PossibleActions": [
+                {
+                    "id": 1
+                },
+                {
+                    "id": 1
+                }
+            ],
+            "allActions": [
+                {
+                    "dynamicString": "return SmokeIn{}",
+                    "targetItem": {
+                        "id": 8,
+                        "type": "Object"
+                    },
+                    "id": 1,
+                    "nextAction": {
+                        "id": 2
+                    },
+                    "closingAction": {
+                        "id": 3
+                    },
+                    "nextLocation": {
+                        "id": 9
+                    }
+                },
+                {
+                    "dynamicString": "return Smoke{}",
+                    "targetItem": {
+                        "id": 8,
+                        "type": "Object"
+                    },
+                    "id": 2,
+                    "nextAction": {
+                        "id": 3
+                    },
+                    "nextLocation": {
+                        "id": 9
+                    }
+                },
+                {
+                    "dynamicString": "return SmokeOut{}",
+                    "targetItem": {
+                        "id": 8,
+                        "type": "Object"
+                    },
+                    "id": 3,
+                    "nextLocation": {
+                        "id": 9
+                    }
+                }
+            ]
+        },
+        "locations": []
+    }
+]

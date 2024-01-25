@@ -1,1 +1,18 @@
-[ { "offsets": [ ], "templates": [ "whiteTable" ], "name": "officeDesk", "position": { "y": -1122.5087890625, "x": 2366.977294921875, "z": 1050.875 } } ]
+[
+    {
+        "offsets": [],
+        "templates": [
+            "whiteTable",
+            "1999",
+            "2008",
+            "2165",
+            "2181"
+        ],
+        "name": "officeDesk",
+        "position": {
+            "y": -1122.5087890625,
+            "x": 2366.977294921875,
+            "z": 1050.875
+        }
+    }
+]

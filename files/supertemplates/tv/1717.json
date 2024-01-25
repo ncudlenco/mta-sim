@@ -1,0 +1,94 @@
+[
+    {
+        "objects": [
+            {
+                "dynamicString": "return Remote{description=\"\", noCollisions=false, modelid=2344, isRandomModelId=false, interior=8, position=Vector3(-0.56103515625,0.5123291015625,0.2220458984375), rotation=Vector3(0,0,230.00025939941), posOffset=Vector3(-0.019999999552965,0.014999999664724,0.15000000596046), rotOffset=Vector3(270,0,0)}",
+                "id": 1
+            },
+            {
+                "dynamicString": "return Televisor{description=\"\", noCollisions=false, modelid=1717, isRandomModelId=false, interior=8, position=Vector3(-0.866455078125,-0.2645263671875,-1.007568359375), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "id": 2
+            }
+        ],
+        "poi": {
+            "isEmpty": true
+        },
+        "locations": [
+            {
+                "Description": "near tv",
+                "Interior": 8,
+                "Y": 0.071533203125,
+                "X": -0.18701171875,
+                "episodeLinks": [],
+                "Z": 0,
+                "id": 1,
+                "Angle": 38.93695068359375,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "allActions": [
+                    {
+                        "dynamicString": "return PickUp{where = \"the TV\", targetObjectExists = true, hand = 12, how = 1}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 1,
+                            "type": "Object"
+                        },
+                        "id": 1,
+                        "nextAction": [
+                            {
+                                "id": 2
+                            },
+                            {
+                                "id": 3
+                            }
+                        ],
+                        "closingAction": {
+                            "id": 2
+                        },
+                        "nextLocation": {
+                            "id": 1
+                        }
+                    },
+                    {
+                        "dynamicString": "return PutDown{where = \"kitchen counter\", how = 1}",
+                        "isClosingAction": true,
+                        "targetItem": {
+                            "id": 1,
+                            "type": "Object"
+                        },
+                        "id": 2,
+                        "nextLocation": {
+                            "id": 1
+                        }
+                    },
+                    {
+                        "dynamicString": "return Give{hand = 12, how = 1}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 1,
+                            "type": "Object"
+                        },
+                        "id": 3,
+                        "nextLocation": {
+                            "id": 1
+                        }
+                    }
+                ]
+            }
+        ],
+        "position": {
+            "y": -1122.180541992188,
+            "x": 2366.2880859375,
+            "z": 1050.875
+        },
+        "globalCentroid": {
+            "y": -1122.074096679688,
+            "x": 2365.75,
+            "z": 1050.613159179688
+        },
+        "name": "1717"
+    }
+]

@@ -2,7 +2,7 @@
     {
         "objects": [
             {
-                "dynamicString": "return SampStoryObjectBase{description=\"\", noCollisions=false, modelid=1702, isRandomModelId=false, interior=1, position=Vector3(-1.016357421875,-0.476806640625,-1), rotation=Vector3(0,0,90), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "dynamicString": "return Sofa{description=\"\", noCollisions=false, modelid=1702, isRandomModelId=false, interior=1, position=Vector3(-1.016357421875,-0.476806640625,-1), rotation=Vector3(0,0,90), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
                 "id": 1
             }
         ],

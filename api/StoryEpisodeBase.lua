@@ -208,6 +208,7 @@ function StoryEpisodeBase:Initialize(...)
                     error('A valid skin could not be found for ped '..i)
                 end
                 validStartingPoi.isBusy = true
+                print('Location '..validStartingPoi.Description..' is set to busy')
                 local ped = PedHandler:GetOrCreatePed(skin.Id, validStartingPoi.X, validStartingPoi.Y, validStartingPoi.Z, validStartingPoi.Angle)
                 if not ped then
                     error('Error while creating the ped '..i)
@@ -478,9 +479,14 @@ function StoryEpisodeBase:LoadFromFile()
             if v.PossibleActions then
                 obj.PossibleActions = v.PossibleActions
             end
+            obj.interactionsOnly = v.interactionsOnly or false
+            if obj.interactionsOnly then
+                print('Deserialized location with interactions only '..obj.Description)
+            end
             obj.LocationId = k..'_'..self.name
             obj.episodeLinks = v.episodeLinks or {}
             obj.Episode = self
+            obj.isBusy = false
             table.insert(deserializedPOI, obj)
         end
         self.POI = deserializedPOI

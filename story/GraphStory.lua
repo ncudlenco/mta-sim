@@ -17,20 +17,20 @@ GraphStory = class(StoryBase, function(o, spectators, logData)
     }
     o.DynamicEpisodes = {
       "house1_sweet",
-      "house1_preloaded",
-    --   "house3_preloaded", --NOT WORKING! The pathfinding seems flawed here, when we have 2 levels?
-    --   "house7", --NOT WORKING! Potential issue when the link POI is located outside a region
-      "house8_preloaded",
-      "house9",
+      "house1_stripped",
+    -- --   "house3_preloaded", --NOT WORKING! The pathfinding seems flawed here, when we have 2 levels?
+    -- --   "house7", --NOT WORKING! Potential issue when the link POI is located outside a region
+    --   "house8_preloaded",
+    --   "house9",
     --   "house10_preloaded", -- Not Working!
     --   "house12_preloaded", -- Working but needs the objects removed. Some flakiness exists but in general it works...
       "garden",
-      "office",
-      "office2",
+    --   "office",
+    --   "office2",
       "common",
-      "gym1",
-      "gym2",
-      "gym3"
+    --   "gym1",
+    --   "gym2",
+    --   "gym3"
     }
     o.Disposed = false
     o.SpawnableObjects = {
@@ -38,6 +38,13 @@ GraphStory = class(StoryBase, function(o, spectators, logData)
         "MobilePhone",
         -- "Drinks",
         -- "Food"
+    }
+    o.PickUpableObjects = {
+        "Cigarette",
+        "MobilePhone",
+        "Drinks",
+        "Food",
+        "Remote"
     }
     o.Interactions = {
         "Handshake",
@@ -52,6 +59,7 @@ GraphStory = class(StoryBase, function(o, spectators, logData)
     o.MiddleActions = {
         "Drink",
         "Smoke",
+        "LookAtObject",
         "TalkPhone",
         "Eat"
     }
@@ -394,7 +402,7 @@ function GraphStory:ValidateEpisode(
     return res
 end
 
-function GraphStory:GetValidEpisodes()
+function GraphStory:GetValidEpisodes(requiredActors)
     if DEBUG then
         print("GraphStory:GetValidEpisodes: loading all available episodes in memory")--!!!!!!!!!!!!!!!
     end
@@ -437,14 +445,53 @@ function GraphStory:GetValidEpisodes()
             print(v)
         end
     end
+
+    local requiredObjects = {}
+    for _, requiredActor in ipairs(requiredActors) do
+        local eventId = self.temporal.starting_actions[requiredActor.id]
+        while eventId ~= nil do
+            local objectId = nil
+            if self.graph[eventId].Entities[3] then
+                objectId = self.graph[eventId].Entities[3]
+            elseif self.graph[eventId].Entities[2] then
+                objectId = self.graph[eventId].Entities[2]
+            end
+
+            if objectId and self.graph[objectId] and self.graph[objectId].Properties then
+                if self.graph[objectId].Properties.Gender then
+                    objectId = nil
+                end
+            elseif objectId then
+                print("Warning! The event seems invalid: "..objectId)
+            end
+
+            if objectId and LastIndexOf(requiredObjects, objectId, function(rObject, __) return rObject.id == objectId end) == -1 then
+                if DEBUG then
+                    print("Required object "..objectId)
+                end
+
+                local existsEvent = self.graph[objectId]
+                local location = ''
+                if existsEvent.Location and #existsEvent.Location > 0 then location = existsEvent.Location[1] end
+
+                table.insert(requiredObjects, { location = location, name = existsEvent.Properties.Type, id = existsEvent.id })
+            end
+
+            eventId = self.temporal[eventId].next
+        end
+    end
+
+    if DEBUG then
+        print("********Finished retrieving the required objects*******")
+    end
 --a list of all the objects and their locations (temporary objects i.e. cigarette should not be checked )
-    local requiredObjects = Select(Where(self.graph, function(event)
-        return event.Action == 'Exists' and not event.Properties.Gender
-    end), function(event)
-        local location = ''
-        if event.Location and #event.Location > 0 then location = event.Location[1] end
-        return { location = location, name = event.Properties.Type, id = event.id }
-    end)
+    -- local requiredObjects = Select(Where(self.graph, function(event)
+    --     return event.Action == 'Exists' and not event.Properties.Gender
+    -- end), function(event)
+    --     local location = ''
+    --     if event.Location and #event.Location > 0 then location = event.Location[1] end
+    --     return { location = location, name = event.Properties.Type, id = event.id }
+    -- end)
     --a list of all the actions and their locations (a POI is placed in a location, in a POI I have allActions)
     local requiredActions = Select(Where(self.graph, function(event)
         return event.Action ~= 'Exists'
@@ -475,26 +522,6 @@ function GraphStory:Play()
         print("GraphStory: Loading dynamic episodes..")
     end
 
---choose a random valid episode
-    math.randomseed(os.clock()*100000000000)
-    math.random(); math.random(); math.random()
-    math.randomseed(os.clock()*100000000000)
-    math.random(); math.random(); math.random()
-    self.Episodes = self:GetValidEpisodes()
-    if (not self.Episodes or #self.Episodes == 0) then
-        outputConsole("We could not find any valid episodes for the file "..LOAD_FROM_GRAPH)
-        for i,spectator in ipairs(self.Spectators) do
-            terminatePlayer(spectator, "We could not find any valid episodes for the file "..LOAD_FROM_GRAPH)
-        end
-        return
-    end
-
-    local worldObjects = Element.getAllByType('object')
-    for i, o in ipairs(worldObjects) do
-        o.collisions = false
-    end
-    triggerClientEvent ( "onDisablePedCollisions", getRootElement(), true )
-
     if DEBUG then
         print("GraphStory:Play Required actors:")
     end
@@ -512,9 +539,25 @@ function GraphStory:Play()
         error('No actors provided in the input graph. Make sure the format is the one required: ex: {"Action": "Exists", "id": ..., "Actor":{"id":...,"Gender":...,"Name":...}}')
     end
 
-    if DEBUG then
-        print("GraphStory: Picking a valid skin for the first actor...")
+--choose a random valid episode
+    math.randomseed(os.clock()*100000000000)
+    math.random(); math.random(); math.random()
+    math.randomseed(os.clock()*100000000000)
+    math.random(); math.random(); math.random()
+    self.Episodes = self:GetValidEpisodes(requiredActors)
+    if (not self.Episodes or #self.Episodes == 0) then
+        outputConsole("We could not find any valid episodes for the file "..LOAD_FROM_GRAPH)
+        for i,spectator in ipairs(self.Spectators) do
+            terminatePlayer(spectator, "We could not find any valid episodes for the file "..LOAD_FROM_GRAPH)
+        end
+        return
     end
+
+    local worldObjects = Element.getAllByType('object')
+    for i, o in ipairs(worldObjects) do
+        o.collisions = false
+    end
+    triggerClientEvent ( "onDisablePedCollisions", getRootElement(), true )
 
     if DEBUG then
         print("GraphStory: Loading a random valid episode from "..#self.Episodes.."...")
@@ -614,7 +657,7 @@ end
 
 function GraphStory:MapObjectsActionsAndPoi(requiredObjects, episode, actionMap, eventMap, objectMap, eventObjectMap, poiMap)
     return All(requiredObjects, function(ro)
-        -- if eventObjectMap[ro.id] then return true end
+        if eventObjectMap[ro.id] then return true end
         if DEBUG_VALIDATION and not eventObjectMap[ro.id] then
             print("The object "..ro.id..':'..ro.name..' ()'..(ro.location or '')..' is not mapped in any of ')
             for k, v in pairs(eventObjectMap) do
@@ -633,6 +676,9 @@ function GraphStory:MapObjectsActionsAndPoi(requiredObjects, episode, actionMap,
                 not actionMap[g.id]
                 --The event is of type action
                 and g.Action ~= 'Exists'
+                and g.Action ~= 'LookAtObject'
+                -- and g.Action ~= 'Drink'
+                -- and g.Action ~= 'Eat'
                 --The event is not interaction and is with the required object
                 and #g.Entities == 2 and g.Entities[2] == ro.id
                 --The event is in the same location as the required object (this will not be valid if the object can move to a different place -- most likely we will not support that)
@@ -664,7 +710,22 @@ function GraphStory:MapObjectsActionsAndPoi(requiredObjects, episode, actionMap,
                 if DEBUG_VALIDATION then
                     print("Action with matching object does not exist!")
                 end
-                return nil
+                if #eventsWithObjectAsTarget == 0 then
+                    local episodeObject = FirstOrDefault(episode.Objects, function(eO) return eO.ObjectId and eO.type == ro.name end)
+                    if episodeObject then
+                        actionWithMatchingObject = {
+                            Name = "none",
+                            TargetItem = {
+                                ObjectId = episodeObject.ObjectId
+                            }
+                        }
+                    elseif DEBUG_VALIDATION then
+                        print("This object does not exist in the episode!")
+                        return nil
+                    end
+                else
+                    return nil
+                end
             end
 
             if DEBUG_VALIDATION then
@@ -701,89 +762,97 @@ function GraphStory:MapObjectsActionsAndPoi(requiredObjects, episode, actionMap,
                 print('Event matching action '..eventMatchingAction.id)
             end
 
-
             local currentAction = actionWithMatchingObject
             local currentEvent = eventMatchingAction
             self:MatchEventAndAction(currentAction, currentEvent, poi, actionMap, eventMap, objectMap, eventObjectMap, poiMap)
-            ----verify going back in time if all the actions have matching events (same location, same target objects)
-            local previousActionsCandidates = Where(poi.allActions, function(a)
-                return
-                    (not isArray(a.NextAction) and a.NextAction == currentAction)
-                    or (isArray(a.NextAction) and inList(currentAction, a.NextAction))
-            end)
-            while previousActionsCandidates and #previousActionsCandidates > 0 do
-                local previousEventId = FirstOrDefault(self.temporal, function(t) return t.next == currentEvent.id end, true)
-                if not previousEventId then
-                    if DEBUG_VALIDATION then
-                        print("Previous event was null!")
+            if currentAction.Name ~= "PickUp" then
+                ----verify going back in time if all the actions have matching events (same location, same target objects)
+                local previousActionsCandidates = Where(poi.allActions, function(a)
+                    return
+                        (not isArray(a.NextAction) and a.NextAction == currentAction)
+                        or (isArray(a.NextAction) and inList(currentAction, a.NextAction))
+                end)
+                while previousActionsCandidates and #previousActionsCandidates > 0 do
+                    local previousEventId = FirstOrDefault(self.temporal, function(t) return t.next == currentEvent.id end, true)
+                    if not previousEventId then
+                        if DEBUG_VALIDATION then
+                            print("Previous event was null!")
+                        end
+                        return nil
+                    else
+                        previousEventId = previousEventId.key
                     end
-                    return nil
-                else
-                    previousEventId = previousEventId.key
-                end
-                local previousEvent = self.graph[previousEventId]
+                    local previousEvent = self.graph[previousEventId]
 
-                if DEBUG_VALIDATION then
-                    print('Previous event '..previousEvent.id)
-                end
-
-                local previousAction = FirstOrDefault(previousActionsCandidates, function(previousAction)
                     if DEBUG_VALIDATION then
+                        print('Previous event '..previousEvent.id)
+                    end
+
+                    local previousAction = FirstOrDefault(previousActionsCandidates, function(previousAction)
+                        if DEBUG_VALIDATION then
+                            print("Previous action "..previousAction.Name)
+                        end
+                        return self:MatchEventAndAction(previousAction, previousEvent, poi, actionMap, eventMap, objectMap, eventObjectMap, poiMap)
+                    end)
+                    if not previousAction then
+                        if DEBUG_VALIDATION then
+                            print("The event and action can't be matched")
+                        end
+                        return nil
+                    else
                         print("Previous action "..previousAction.Name)
                     end
-                    return self:MatchEventAndAction(previousAction, previousEvent, poi, actionMap, eventMap, objectMap, eventObjectMap, poiMap)
-                end)
-                if not previousAction then
-                    if DEBUG_VALIDATION then
-                        print("The event and action can't be matched")
-                    end
-                    return nil
-                else
-                    print("Previous action "..previousAction.Name)
+
+                    currentAction = previousAction
+                    previousActionsCandidates = Where(poi.allActions, function(a) return ((not isArray(a.NextAction) or #a.NextAction == 1) and a.NextAction == currentAction) or (isArray(a.NextAction) and inList(currentAction, a.NextAction)) end)
+                    currentEvent = previousEvent
                 end
 
-                currentAction = previousAction
-                previousActionsCandidates = Where(poi.allActions, function(a) return ((not isArray(a.NextAction) or #a.NextAction == 1) and a.NextAction == currentAction) or (isArray(a.NextAction) and inList(currentAction, a.NextAction)) end)
-                currentEvent = previousEvent
-            end
-
-            ----verify going forward in time if all the actions have matching events
-            currentAction = actionWithMatchingObject
-            currentEvent = eventMatchingAction
-            while currentAction and currentAction.NextAction and self.temporal[currentEvent.id].next do
-                local nextEventId = self.temporal[currentEvent.id].next
-                if not nextEventId then
-                    if DEBUG_VALIDATION then
-                        print("Next event was null but next action exists!")
-                    end
-                    return nil
-                end
-                local nextEvent = self.graph[nextEventId]
-
-                if nextEvent.Action:lower() ~= 'move' and nextEvent.Action:lower() ~= 'give' and nextEvent.Action:lower() ~= 'inv-give' then
-                    local nextActions = { currentAction.NextAction }
-                    if isArray(currentAction.NextAction) then
-                        nextActions = currentAction.NextAction
-                    end
-
-                    --if multiple possible next actions, choose the first one that matches the next event
-                    currentAction = FirstOrDefault(nextActions, function(action)
-                        return self:MatchEventAndAction(action, nextEvent, poi, actionMap, eventMap, objectMap, eventObjectMap, poiMap)
-                    end)
-                    if not currentAction then
+                ----verify going forward in time if all the actions have matching events
+                currentAction = actionWithMatchingObject
+                currentEvent = eventMatchingAction
+                while currentAction and currentAction.NextAction and self.temporal[currentEvent.id].next do
+                    local nextEventId = self.temporal[currentEvent.id].next
+                    if not nextEventId then
                         if DEBUG_VALIDATION then
-                            print("There is no next action that matches the next event!")
+                            print("Next event was null but next action exists!")
                         end
                         return nil
                     end
+                    local nextEvent = self.graph[nextEventId]
 
-                    if DEBUG_VALIDATION then
-                        print("Next action that also matches next event "..currentAction.Name)
+                    if
+                            nextEvent.Action:lower() ~= 'move'
+                        and nextEvent.Action:lower() ~= 'give'
+                        and nextEvent.Action:lower() ~= 'inv-give'
+                        and nextEvent.Action:lower() ~= 'lookatobject'
+                        -- and nextEvent.Action:lower() ~= 'drink'
+                        -- and nextEvent.Action:lower() ~= 'eat'
+                    then
+                        local nextActions = { currentAction.NextAction }
+                        if isArray(currentAction.NextAction) then
+                            nextActions = currentAction.NextAction
+                        end
+
+                        --if multiple possible next actions, choose the first one that matches the next event
+                        currentAction = FirstOrDefault(nextActions, function(action)
+                            return self:MatchEventAndAction(action, nextEvent, poi, actionMap, eventMap, objectMap, eventObjectMap, poiMap)
+                        end)
+                        if not currentAction then
+                            if DEBUG_VALIDATION then
+                                print("There is no next action that matches the next event!")
+                            end
+                            return nil
+                        end
+
+                        if DEBUG_VALIDATION then
+                            print("Next action that also matches next event "..currentAction.Name)
+                        end
+                    else
+                        print('The event does not follow the chain of actions. Event: '..nextEvent.Action..' Action: '..currentAction.Name)
                     end
-                else
-                    print('The event does not follow the chain of actions. Event: '..nextEvent.Action..' Action: '..currentAction.Name)
+                    currentEvent = nextEvent
                 end
-                currentEvent = nextEvent
             end
 
             if DEBUG_VALIDATION then
@@ -958,8 +1027,9 @@ function GraphStory:ProcessActions(graphActors)
         -- print('Actor '..a.id..' will be spawned in the location '..firstLocation.Description)
 
         -- --this is the first location -> the place where the actor or ped is first spawned
-        -- firstLocation.isBusy = true
+        firstLocation.isBusy = true
         local ped = FirstOrDefault(self.CurrentEpisode.peds, function(p) return p:getData('id') == a.id end)
+        print(ped:getData('id')..'Location '..firstLocation.Description..' is set to busy')
         ped:setData('startingPoiIdx', LastIndexOf(episode.POI, firstLocation))
         ped.interior = firstLocation.Interior
         ped.position = firstLocation.position

@@ -1,0 +1,40 @@
+[
+    {
+        "objects": [
+        ],
+        "poi": {
+            "isEmpty": true
+        },
+        "locations": [
+            {
+                "Description": "interaction poi",
+                "Interior": 1,
+                "Y": 0.0186767578125,
+                "X": -0.934814453125,
+                "episodeLinks": [],
+                "Z": 0,
+                "id": 6,
+                "Angle": 90.55416870117188,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "allActions": [
+                ],
+                "interactionsOnly": true
+            }
+        ],
+        "position": {
+            "y": -1675.940673828125,
+            "x": 2525.951416015625,
+            "z": 1015.498596191406
+        },
+        "globalCentroid": {
+            "y": -1676.010986328125,
+            "x": 2524.77587890625,
+            "z": 1015.447631835938
+        },
+        "name": "poi"
+    }
+]

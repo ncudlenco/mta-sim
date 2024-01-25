@@ -19,18 +19,6 @@
         },
         "locations": [
             {
-                "Description": " hallway to entrance door ",
-                "Interior": 8,
-                "Y": -10.4112548828125,
-                "X": -1.67724609375,
-                "episodeLinks": [],
-                "Z": 0,
-                "id": 8,
-                "Angle": 180,
-                "PossibleActions": [],
-                "allActions": []
-            },
-            {
                 "Description": " the desk ",
                 "Interior": 8,
                 "Y": -0.095703125,
@@ -60,7 +48,7 @@
                             "id": 8
                         },
                         "nextLocation": {
-                            "id": 8
+                            "id": 2
                         }
                     },
                     {
@@ -89,7 +77,7 @@
                             }
                         ],
                         "nextLocation": {
-                            "id": 8
+                            "id": 2
                         }
                     },
                     {
@@ -118,7 +106,7 @@
                             }
                         ],
                         "nextLocation": {
-                            "id": 8
+                            "id": 2
                         }
                     },
                     {
@@ -147,7 +135,7 @@
                             }
                         ],
                         "nextLocation": {
-                            "id": 8
+                            "id": 2
                         }
                     },
                     {
@@ -176,7 +164,7 @@
                             }
                         ],
                         "nextLocation": {
-                            "id": 8
+                            "id": 2
                         }
                     },
                     {
@@ -205,7 +193,7 @@
                             }
                         ],
                         "nextLocation": {
-                            "id": 8
+                            "id": 2
                         }
                     },
                     {
@@ -220,7 +208,7 @@
                             "id": 8
                         },
                         "nextLocation": {
-                            "id": 8
+                            "id": 2
                         }
                     },
                     {
@@ -232,7 +220,7 @@
                         },
                         "id": 8,
                         "nextLocation": {
-                            "id": 8
+                            "id": 2
                         }
                     }
                 ]

@@ -263,6 +263,7 @@ function Template:InsertInEpisode(episode, deserialize)
             obj
         )
         objectsMap[o.id] = #episode.Objects
+        print("Mapped "..o.id..' to object '..objectsMap[o.id]..' - '..obj.Description)
         if obj.instance then
             obj.instance:destroy()
         end
@@ -278,6 +279,10 @@ function Template:InsertInEpisode(episode, deserialize)
         table.insert(episode.POI, obj)
         obj.LocationId = #episode.POI..'_'..episode.name
         obj.episodeLinks = {}
+        obj.interactionsOnly = v.interactionsOnly or false
+        if obj.interactionsOnly then
+            print('Deserialized location with interactions only '..obj.Description)
+        end
         obj.Episode = episode
         poiMap[v.id] = #episode.POI
     end
@@ -308,6 +313,7 @@ function Template:InsertInEpisode(episode, deserialize)
             if a.targetItem then
                 if a.targetItem.type == "Object" then
                     action.TargetItem = episode.Objects[objectsMap[a.targetItem.id] or a.targetItem.id]
+                    print('Action '..action.Description..' with target '..action.TargetItem.Description)
                 elseif a.targetItem.type == "Location" then
                     if poiMap[a.targetItem.id] > episode.POI then
                         action.TargetItem = episode.POI[poiMap[a.targetItem.id] or a.targetItem.id]

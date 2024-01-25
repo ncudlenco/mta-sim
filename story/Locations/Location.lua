@@ -15,6 +15,7 @@ Location = class(StoryLocationBase, function(o, x, y, z, angle, interior, descri
         o.position = {x=x, y=y, z=z}
         o.rotation = {x=0, y=0, z=angle}
     end
+    o.interactionsOnly = false
     o.allActions = {}
     o.metatable = {}
     o.episodeLinks = episodeLinks or {}
@@ -29,8 +30,11 @@ function Location:setData(key, value)
 end
 
 function Location:SpawnPlayerHere(player, spectate)
-    self.isBusy = true
-    player:setData('locationId', self.LocationId)
+    if not spectate then
+        self.isBusy = true
+        print(player:getData('id')..'Location '..self.Description..' is set to busy')
+        player:setData('locationId', self.LocationId)
+    end
     local z = self.Z
     if spectate then
         z = self.Z + 3
@@ -42,6 +46,7 @@ function Location:SpawnPlayerHere(player, spectate)
     end
     if DEBUG then
         outputConsole("Location:SpawnPlayerHere")
+        print("Location:SpawnPlayerHere")
     end
 end
 
@@ -258,12 +263,28 @@ function Location:GetNextRandomValidAction(player)
     return PickRandom(nextValidActions);
 end
 
+function InstantiateAction(event, player, location, object)
+    if event.Action == 'Drink' then
+        return Drink { performer = player, nextLocation = location, TargetItem = object }
+    elseif event.Action == 'LookAtObject' then
+        return LookAtObject { performer = player, nextLocation = location, TargetItem = object }
+    end
+    return nil
+end
+
 function Location:ProcessNextAction(player)
     local event = CURRENT_STORY.lastEvents[player:getData('id')]
     local location = CURRENT_STORY.lastLocations[player:getData('id')]
     local interactionProcessedMap = CURRENT_STORY.interactionProcessedMap
     local interactionPoiMap = CURRENT_STORY.interactionPoiMap
 
+    for _, poi in ipairs(CURRENT_STORY.CurrentEpisode.POI) do
+        local isBusyString = 'false'
+        if poi.isBusy then
+            isBusyString = 'true'
+        end
+        print(poi.LocationId..' '..poi.Description..' '..isBusyString)
+    end
     if event == nil then return {isStartingEvent = false} end
 
     local isMoveEvent = event.Action:lower() == 'move'
@@ -305,14 +326,8 @@ function Location:ProcessNextAction(player)
                     print('PROCESSING INTERACTION Give from '..ped1:getData('id')..' to '..ped2:getData('id')..' object '..object:__tostring())
                     eventAction = Give { performer = ped1, nextLocation = location, targetPlayer = ped2, TargetItem = object }
                 elseif event.Action == 'INV-Give' or event.Action == 'Receive' then
-                    local pickedUpObjectId = ped2:getData('pickedObjects')[1][1]
-
-                    local object = FirstOrDefault(CURRENT_STORY.CurrentEpisode.Objects, function(o) return o.ObjectId == pickedUpObjectId end)
-                    if not object then
-                        error('Could not find object '..(pickedUpObjectId or 'null_object')..' that '..ped1:getData('id')..' would receive from '..ped2:getData('id'))
-                    end
-                    print('PROCESSING INTERACTION INV-Give from '..ped1:getData('id')..' to '..ped2:getData('id')..' object '..object.ObjectId..': '..object:__tostring())
-                    eventAction = Receive { performer = ped1, nextLocation = location, targetPlayer = ped2, TargetItem = object }
+                    print('PROCESSING INTERACTION INV-Give from '..ped1:getData('id')..' to '..ped2:getData('id')..' object: whatever object has or will have the other actor')
+                    eventAction = Receive { performer = ped1, nextLocation = location, targetPlayer = ped2, TargetItem = nil }
                 elseif event.Action == 'Laugh' then
                     local jokeTarget = PickRandom({ped1, ped2})
                     eventAction = Laugh { performer = ped1, nextLocation = location, targetPlayer = ped2, TargetItem = jokeTarget }
@@ -329,7 +344,20 @@ function Location:ProcessNextAction(player)
             end
             interactionProcessedMap[event.interactionRelation] = true
         elseif not isMoveEvent then
-            eventAction = FirstOrDefault(location.allActions, function(action) return action.Name:lower() == event.Action:lower() end)
+            local pickedUpObjects = player:getData('pickedObjects')
+            local isActionWithObjectCurrentlyPicked = event and #event.Entities > 1 and #pickedUpObjects > 0 and #pickedUpObjects[1] > 0 and CURRENT_STORY.eventObjectMap[event.Entities[2]] == pickedUpObjects[1][1]
+
+            if isActionWithObjectCurrentlyPicked then
+                local object = FirstOrDefault(CURRENT_STORY.CurrentEpisode.Objects, function(o) return o.ObjectId == pickedUpObjects[1][1] end)
+                eventAction = InstantiateAction(event, player, location, object)
+            end
+            if eventAction == nil and event.Action == 'LookAtObject' then
+                local object = FirstOrDefault(CURRENT_STORY.CurrentEpisode.Objects, function(o) return o.ObjectId == CURRENT_STORY.eventObjectMap[event.Entities[2]] end)
+                eventAction = InstantiateAction(event, player, location, object)
+            end
+            if eventAction == nil then
+                eventAction = FirstOrDefault(location.allActions, function(action) return action.Name:lower() == event.Action:lower() end)
+            end
             if not eventAction then
                 error('Event action could not be found '..event.Action)
             end
@@ -427,7 +455,13 @@ function Location:ProcessNextAction(player)
         if nextEvent.isInteraction then
             strIsInteraction = 'true'
         end
-        print('Next event: '..nextEvent.id..' isInteraction '..strIsInteraction)
+
+        local isActionWithObjectThatWillBeReceived = event and nextEvent and event.Action == 'INV-Give' and #nextEvent.Entities > 1 and nextEvent.Entities[2] == event.Entities[3]
+        local pickedUpObjects = player:getData('pickedObjects')
+        local isActionWithObjectCurrentlyPicked = nextEvent and #nextEvent.Entities > 1 and #pickedUpObjects > 0 and #pickedUpObjects[1] > 0 and CURRENT_STORY.eventObjectMap[nextEvent.Entities[2]] == pickedUpObjects[1][1]
+        local isActionWithPickedUpObject = isActionWithObjectThatWillBeReceived or isActionWithObjectCurrentlyPicked
+
+        print('Next event: '..nextEvent.id..' isInteraction '..strIsInteraction..' isActionWithPickedUpObject '..BoolToStr(isActionWithPickedUpObject))
 
         local candidates = Where(CURRENT_STORY.CurrentEpisode.POI, function(poi)
             if CURRENT_STORY.CurrentEpisode.poiMap and CURRENT_STORY.CurrentEpisode.poiMap[nextEvent.id] then
@@ -435,6 +469,7 @@ function Location:ProcessNextAction(player)
             else
                 return
                 (nextEvent.isInteraction and
+                    poi.interactionsOnly and
                     (
                         not interactionPoiMap[nextEvent.interactionRelation]
                         or
@@ -446,7 +481,7 @@ function Location:ProcessNextAction(player)
                 poi.Region and nextEvent.Location and (poi.Region.name:lower():find(nextEvent.Location[1]:lower()) and true or false )
                 and
                 (
-                    nextEvent.isInteraction
+                    nextEvent.isInteraction and poi.interactionsOnly
                     or
                     Any(poi.allActions, function(action)
                         return action.Name:lower() == nextEvent.Action:lower() --the location contains the required action for the next event
@@ -463,6 +498,16 @@ function Location:ProcessNextAction(player)
                 )
             end
         end)
+        if not nextEvent.isInteraction and #candidates == 0 and isActionWithPickedUpObject then
+            candidates = Where(CURRENT_STORY.CurrentEpisode.POI, function(poi)
+                return poi.Region and nextEvent.Location and (poi.Region.name:lower():find(nextEvent.Location[1]:lower()) and true or false )
+            end)
+        end
+        if nextEvent.Action == 'LookAtObject' then
+            candidates = {
+                location
+            }
+        end
         if DEBUG then
             for _,poi in ipairs(candidates) do
                 local isBusyStr = 'false'
@@ -478,9 +523,13 @@ function Location:ProcessNextAction(player)
         --     randomMove.Performer = self.Performer
         --     randomMove:Apply()
         -- end
-        if All(candidates, function(poi) return poi.isBusy end) then
+        if All(candidates, function(poi) return poi ~= location and poi.isBusy end) then
             nextLocation = PickRandom(candidates)
-        elseif FirstOrDefault(candidates, function(poi) return poi == location and not Any(CURRENT_STORY.CurrentEpisode.peds, function(p) return p:getData('waitingFor') == poi.LocationId end) end) then
+        -- If the current location is among the next candidates, choose this one. This helps in case there are multiple actions in the same location: e.g. SitDown, PickUp, Eat, GetUp (on different chairs)
+        -- I would like to execute all these actions on the same chair (same location)
+        elseif FirstOrDefault(candidates, function(poi) return poi == location end)
+        --     and not Any(CURRENT_STORY.CurrentEpisode.peds, function(p) return p:getData('waitingFor') == poi.LocationId end) end)
+        then
             nextLocation = FirstOrDefault(candidates, function(poi) return poi == location end)
         else
             nextLocation = PickRandom(Where(candidates, function(poi) return not poi.isBusy end))
@@ -496,6 +545,7 @@ function Location:ProcessNextAction(player)
                 clone.allActions = nextLocation.allActions --should include move actions here...
                 clone.Episode = nextLocation.Episode
                 nextLocation = clone
+                print("Set nextLocation to a clone of the next location position, shifted by 0.7 "..nextLocation.Description)
             end
             interactionPoiMap[nextEvent.interactionRelation] = nextLocation.LocationId
         end
@@ -558,14 +608,14 @@ function Location:GetNextValidAction(player)
     lock = true
 
     if DEBUG then
-        outputConsole("Location:GetNextValidAction")
+        print("Location:GetNextValidAction")
     end
     if player == nil and DEBUG then
-        outputConsole("Error Location:GetNextValidAction: Actor is null ")
+        print("Error Location:GetNextValidAction: Actor is null ")
     end
     local story = GetStory(player)
     if DEBUG and story == nil then
-        outputConsole("Error Location:GetNextValidAction: story is null")
+        print("Error Location:GetNextValidAction: story is null")
     end
     if not self.History then
         self.History = {}
@@ -615,6 +665,7 @@ function Location:GetNextValidAction(player)
                         --the actor occupying the location finished his mandatory tasks. move him around randomly to clear the location
                         local randomMove = PickRandom(Where(next.NextLocation.PossibleActions, function(a) return a.Name == 'Move' and not a.NextLocation.isBusy end))
                         randomMove.NextLocation.isBusy = true
+                        print('Location ..'..randomMove.NextLocation.Description..' is set to busy')
                         occupyingActor:setData('locationId', randomMove.NextLocation.LocationId)
                         randomMove.Performer = occupyingActor
                         randomMove:Apply()
@@ -622,7 +673,7 @@ function Location:GetNextValidAction(player)
                         local function wait()
                             local occupyingActor = FirstOrDefault(CURRENT_STORY.CurrentEpisode.peds, function(act) return act:getData('locationId') == next.NextLocation.LocationId end)
                             if (not occupyingActor) then
-                                print('Occupying actor not found for location '..next.NextLocation.LocationId)
+                                print('Occupying actor not found for location '..next.NextLocation.LocationId..' ('..next.Description..')')
                             end
                             if next.NextLocation.isBusy and (not occupyingActor or not occupyingActor:getData('storyEnded')) then
                                 player:setAnimation("cop_ambient", "coplook_loop", 5000, true, false, false, true)
@@ -633,8 +684,8 @@ function Location:GetNextValidAction(player)
                             end
                         end
                         player:setData('waitingFor', next.NextLocation.LocationId)
-                        wait()
                         print('NextLocation is busy. Waiting')
+                        wait()
                         lock = false
                         return nil
                     end
@@ -688,9 +739,9 @@ function Location:GetNextValidAction(player)
             next.NextLocation.History[player:getData('id')] = {next}
             --the actor will change the location
             self.isBusy = false
-            print("Location "..self.Description..' is not busy')
+            print(player:getData('id').."Location "..self.Description..' is not busy')
             next.NextLocation.isBusy = true
-            print("Location "..next.NextLocation.Description..' is busy')
+            print(player:getData('id').."Location "..next.NextLocation.Description..' is busy')
             player:setData('locationId', next.NextLocation.LocationId)
 
         end

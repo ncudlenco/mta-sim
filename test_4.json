@@ -4,7 +4,9 @@
         "Entities": [
             "actor0"
         ],
-        "Location": null,
+        "Location": [
+            "bedroom"
+        ],
         "Timeframe": null,
         "Properties": {
             "Gender": 2,
@@ -16,11 +18,78 @@
         "Entities": [
             "actor1"
         ],
-        "Location": null,
+        "Location": [
+            "bedroom"
+        ],
         "Timeframe": null,
         "Properties": {
             "Gender": 1,
             "Name": "John"
+        }
+    },
+    "Desk": {
+        "Action": "Exists",
+        "Entities": [
+            "Desk"
+        ],
+        "Location": [
+            "bedroom"
+        ],
+        "Timeframe": null,
+        "Properties": {
+            "Type": "Desk"
+        }
+    },
+    "Bed": {
+        "Action": "Exists",
+        "Entities": [
+            "Bed"
+        ],
+        "Location": [
+            "bedroom"
+        ],
+        "Timeframe": null,
+        "Properties": {
+            "Type": "Bed"
+        }
+    },
+    "Sofa": {
+        "Action": "Exists",
+        "Entities": [
+            "Sofa"
+        ],
+        "Location": [
+            "livingroom"
+        ],
+        "Timeframe": null,
+        "Properties": {
+            "Type": "Sofa"
+        }
+    },
+    "Sink": {
+        "Action": "Exists",
+        "Entities": [
+            "Sink"
+        ],
+        "Location": [
+            "kitchen"
+        ],
+        "Timeframe": null,
+        "Properties": {
+            "Type": "Sink"
+        }
+    },
+    "phone": {
+        "Action": "Exists",
+        "Entities": [
+            "phone"
+        ],
+        "Location": [
+            "bedroom"
+        ],
+        "Timeframe": null,
+        "Properties": {
+            "Type": "MobilePhone"
         }
     },
     "drink_obj": {
@@ -28,7 +97,9 @@
         "Entities": [
             "drink_obj"
         ],
-        "Location": null,
+        "Location": [
+            "kitchen"
+        ],
         "Timeframe": null,
         "Properties": {
             "Type": "Drinks"
@@ -39,62 +110,240 @@
         "Entities": [
             "food_obj"
         ],
-        "Location": null,
+        "Location": [
+            "kitchen"
+        ],
         "Timeframe": null,
         "Properties": {
             "Type": "Food"
         }
     },
-    "a0a1": {
-        "Action": "PickUp",
+    "food_obj2": {
+        "Action": "Exists",
         "Entities": [
-            "actor0",
-            "drink_obj"
+            "food_obj2"
         ],
         "Location": [
-            ""
+            "kitchen"
+        ],
+        "Timeframe": null,
+        "Properties": {
+            "Type": "Food"
+        }
+    },
+    "chair": {
+        "Action": "Exists",
+        "Entities": [
+            "chair"
+        ],
+        "Location": [
+            "kitchen"
+        ],
+        "Timeframe": null,
+        "Properties": {
+            "Type": "Chair"
+        }
+    },
+    "officeChair": {
+        "Action": "Exists",
+        "Entities": [
+            "officeChair"
+        ],
+        "Location": [
+            "bedroom"
+        ],
+        "Timeframe": null,
+        "Properties": {
+            "Type": "Chair"
+        }
+    },
+    "laptop": {
+        "Action": "Exists",
+        "Entities": [
+            "laptop"
+        ],
+        "Location": [
+            "bedroom"
+        ],
+        "Timeframe": null,
+        "Properties": {
+            "Type": "Laptop"
+        }
+    },
+    "chair2": {
+        "Action": "Exists",
+        "Entities": [
+            "chair2"
+        ],
+        "Location": [
+            "kitchen"
+        ],
+        "Timeframe": null,
+        "Properties": {
+            "Type": "Chair"
+        }
+    },
+    "armchair": {
+        "Action": "Exists",
+        "Entities": [
+            "armchair"
+        ],
+        "Location": [
+            "bedroom"
+        ],
+        "Timeframe": null,
+        "Properties": {
+            "Type": "ArmChair"
+        }
+    },
+    "remote": {
+        "Action": "Exists",
+        "Entities": [
+            "remote"
+        ],
+        "Location": [
+            "livingroom"
+        ],
+        "Timeframe": null,
+        "Properties": {
+            "Type": "Remote"
+        }
+    },
+    "TV": {
+        "Action": "Exists",
+        "Entities": [
+            "TV"
+        ],
+        "Location": [
+            "livingroom"
+        ],
+        "Timeframe": null,
+        "Properties": {
+            "Type": "Televisor"
+        }
+    },
+    "a0a0":{
+        "Action": "GetOn",
+        "Entities": [
+            "actor0",
+            "Bed"
+        ],
+        "Location": [
+            "bedroom"
         ],
         "Timeframe": null,
         "Properties": {}
     },
-    "a0a2": {
-        "Action": "Drink",
+    "a0a1":{
+        "Action": "Sleep",
         "Entities": [
             "actor0",
-            "drink_obj"
+            "Bed"
         ],
         "Location": [
-            ""
+            "bedroom"
         ],
         "Timeframe": null,
         "Properties": {}
     },
-    "a0a3": {
-        "Action": "PutDown",
+    "a1a0":{
+        "Action": "GetOn",
         "Entities": [
-            "actor0",
-            "drink_obj"
+            "actor1",
+            "Bed"
         ],
         "Location": [
-            ""
+            "bedroom"
         ],
         "Timeframe": null,
         "Properties": {}
     },
-    "a0a4": {
-        "Action": "HandShake",
+    "a1a1":{
+        "Action": "Sleep",
+        "Entities": [
+            "actor1",
+            "Bed"
+        ],
+        "Location": [
+            "bedroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a0a1.1":{
+        "Action": "GetOff",
+        "Entities": [
+            "actor0",
+            "Bed"
+        ],
+        "Location": [
+            "bedroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a1a1.1":{
+        "Action": "GetOff",
+        "Entities": [
+            "actor1",
+            "Bed"
+        ],
+        "Location": [
+            "bedroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a0a2":{
+        "Action": "Kiss",
         "Entities": [
             "actor0",
             "actor1"
         ],
         "Location": [
-            ""
+            "bedroom"
         ],
         "Timeframe": null,
         "Properties": {}
     },
-    "a0a5": {
-        "Action": "Move",
+    "a1a2":{
+        "Action": "Kiss",
+        "Entities": [
+            "actor1",
+            "actor0"
+        ],
+        "Location": [
+            "bedroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a0a3":{
+        "Action": "WashHands",
+        "Entities": [
+            "actor0",
+            "Sink"
+        ],
+        "Location": [
+            "kitchen"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a1a3":{
+        "Action": "WashHands",
+        "Entities": [
+            "actor1",
+            "Sink"
+        ],
+        "Location": [
+            "kitchen"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a0a4":{
+        "Action": "TaiChi",
         "Entities": [
             "actor0"
         ],
@@ -104,11 +353,91 @@
         "Timeframe": null,
         "Properties": {}
     },
-    "a0a6": {
-        "Action": "INV-Give",
+    "a1a4":{
+        "Action": "SmokeIn",
+        "Entities": [
+            "actor1"
+        ],
+        "Location": [
+            "garden"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a1a4.1":{
+        "Action": "Smoke",
+        "Entities": [
+            "actor1"
+        ],
+        "Location": [
+            "garden"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a1a4.2":{
+        "Action": "SmokeOut",
+        "Entities": [
+            "actor1"
+        ],
+        "Location": [
+            "garden"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a0a5":{
+        "Action": "Talk",
         "Entities": [
             "actor0",
+            "actor1"
+        ],
+        "Location": [
+            "garden"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a1a5":{
+        "Action": "Talk",
+        "Entities": [
             "actor1",
+            "actor0"
+        ],
+        "Location": [
+            "garden"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a0a6":{
+        "Action": "TaiChi",
+        "Entities": [
+            "actor0"
+        ],
+        "Location": [
+            "garden"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a1a6":{
+        "Action": "PickUp",
+        "Entities": [
+            "actor1",
+            "drink_obj"
+        ],
+        "Location": [
+            "kitchen"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a1a7": {
+        "Action": "Give",
+        "Entities": [
+            "actor1",
+            "actor0",
             "drink_obj"
         ],
         "Location": [
@@ -118,6 +447,19 @@
         "Properties": {}
     },
     "a0a7": {
+        "Action": "INV-Give",
+        "Entities": [
+            "actor0",
+            "actor1",
+            "drink_obj"
+        ],
+        "Location": [
+            "garden"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a0a8": {
         "Action": "Drink",
         "Entities": [
             "actor0",
@@ -129,7 +471,7 @@
         "Timeframe": null,
         "Properties": {}
     },
-    "a0a8": {
+    "a0a9": {
         "Action": "Give",
         "Entities": [
             "actor0",
@@ -142,68 +484,7 @@
         "Timeframe": null,
         "Properties": {}
     },
-    "a1a1": {
-        "Action": "PickUp",
-        "Entities": [
-            "actor1",
-            "food_obj"
-        ],
-        "Location": [
-            ""
-        ],
-        "Timeframe": null,
-        "Properties": {}
-    },
-    "a1a2": {
-        "Action": "Eat",
-        "Entities": [
-            "actor1",
-            "food_obj"
-        ],
-        "Location": [
-            ""
-        ],
-        "Timeframe": null,
-        "Properties": {}
-    },
-    "a1a3": {
-        "Action": "HandShake",
-        "Entities": [
-            "actor1",
-            "actor0"
-        ],
-        "Location": [
-            ""
-        ],
-        "Timeframe": null,
-        "Properties": {}
-    },
-    "a1a4": {
-        "Action": "PickUp",
-        "Entities": [
-            "actor1",
-            "drink_obj"
-        ],
-        "Location": [
-            ""
-        ],
-        "Timeframe": null,
-        "Properties": {}
-    },
-    "a1a5": {
-        "Action": "Give",
-        "Entities": [
-            "actor1",
-            "actor0",
-            "drink_obj"
-        ],
-        "Location": [
-            ""
-        ],
-        "Timeframe": null,
-        "Properties": {}
-    },
-    "a1a6": {
+    "a1a8": {
         "Action": "INV-Give",
         "Entities": [
             "actor1",
@@ -211,84 +492,534 @@
             "drink_obj"
         ],
         "Location": [
-            ""
+            "garden"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a0a10":{
+        "Action": "TaiChi",
+        "Entities": [
+            "actor0"
+        ],
+        "Location": [
+            "garden"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a1a9": {
+        "Action": "PutDown",
+        "Entities": [
+            "actor1",
+            "drink_obj"
+        ],
+        "Location": [
+            "kitchen"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a1a10": {
+        "Action": "PickUp",
+        "Entities": [
+            "actor1",
+            "remote"
+        ],
+        "Location": [
+            "livingroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a1a11": {
+        "Action": "SitDown",
+        "Entities": [
+            "actor1",
+            "Sofa"
+        ],
+        "Location": [
+            "livingroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a1a12": {
+        "Action": "LookAtObject",
+        "Entities": [
+            "actor1",
+            "TV"
+        ],
+        "Location": [
+            "livingroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a1a13": {
+        "Action": "LookAtObject",
+        "Entities": [
+            "actor1",
+            "TV"
+        ],
+        "Location": [
+            "livingroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a1a14": {
+        "Action": "StandUp",
+        "Entities": [
+            "actor1",
+            "Sofa"
+        ],
+        "Location": [
+            "livingroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a0a11": {
+        "Action": "INV-Give",
+        "Entities": [
+            "actor0",
+            "actor1",
+            "remote"
+        ],
+        "Location": [
+            "hallway"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a1a15": {
+        "Action": "Give",
+        "Entities": [
+            "actor1",
+            "actor0",
+            "remote"
+        ],
+        "Location": [
+            "hallway"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a1a16": {
+        "Action": "SitDown",
+        "Entities": [
+            "actor1",
+            "Sofa"
+        ],
+        "Location": [
+            "livingroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a0a12": {
+        "Action": "SitDown",
+        "Entities": [
+            "actor0",
+            "Sofa"
+        ],
+        "Location": [
+            "livingroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a0a13": {
+        "Action": "LookAtObject",
+        "Entities": [
+            "actor0",
+            "TV"
+        ],
+        "Location": [
+            "livingroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a1a17": {
+        "Action": "LookAtObject",
+        "Entities": [
+            "actor1",
+            "TV"
+        ],
+        "Location": [
+            "livingroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a0a14": {
+        "Action": "StandUp",
+        "Entities": [
+            "actor0",
+            "Sofa"
+        ],
+        "Location": [
+            "livingroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a0a15": {
+        "Action": "PutDown",
+        "Entities": [
+            "actor0",
+            "remote"
+        ],
+        "Location": [
+            "livingroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a1a18": {
+        "Action": "StandUp",
+        "Entities": [
+            "actor1",
+            "Sofa"
+        ],
+        "Location": [
+            "livingroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a1a19": {
+        "Action": "Hug",
+        "Entities": [
+            "actor1",
+            "actor0"
+        ],
+        "Location": [
+            "livingroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a0a16": {
+        "Action": "Hug",
+        "Entities": [
+            "actor0",
+            "actor1"
+        ],
+        "Location": [
+            "livingroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a1a20": {
+        "Action": "SitDown",
+        "Entities": [
+            "actor1",
+            "chair"
+        ],
+        "Location": [
+            "kitchen"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a0a17": {
+        "Action": "SitDown",
+        "Entities": [
+            "actor0",
+            "chair2"
+        ],
+        "Location": [
+            "kitchen"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a1a21": {
+        "Action": "PickUp",
+        "Entities": [
+            "actor1",
+            "food_obj"
+        ],
+        "Location": [
+            "kitchen"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a0a18": {
+        "Action": "PickUp",
+        "Entities": [
+            "actor0",
+            "food_obj2"
+        ],
+        "Location": [
+            "kitchen"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a1a22": {
+        "Action": "Eat",
+        "Entities": [
+            "actor1",
+            "food_obj"
+        ],
+        "Location": [
+            "kitchen"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a0a19": {
+        "Action": "Eat",
+        "Entities": [
+            "actor1",
+            "food_obj2"
+        ],
+        "Location": [
+            "kitchen"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a1a23": {
+        "Action": "StandUp",
+        "Entities": [
+            "actor1",
+            "chair"
+        ],
+        "Location": [
+            "kitchen"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a0a20": {
+        "Action": "StandUp",
+        "Entities": [
+            "actor0",
+            "chair2"
+        ],
+        "Location": [
+            "kitchen"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a0a21":{
+        "Action": "SitDown",
+        "Entities": [
+            "actor0",
+            "officeChair"
+        ],
+        "Location": [
+            "bedroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a0a22":{
+        "Action": "OpenLaptop",
+        "Entities": [
+            "actor0",
+            "laptop"
+        ],
+        "Location": [
+            "bedroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a0a23":{
+        "Action": "TypeOnKeyboard",
+        "Entities": [
+            "actor0",
+            "laptop"
+        ],
+        "Location": [
+            "bedroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a0a24":{
+        "Action": "LayOnElbow",
+        "Entities": [
+            "actor0",
+            "laptop"
+        ],
+        "Location": [
+            "bedroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a0a25":{
+        "Action": "LookAtTheWatch",
+        "Entities": [
+            "actor0",
+            "laptop"
+        ],
+        "Location": [
+            "bedroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a0a26":{
+        "Action": "PunchDesk",
+        "Entities": [
+            "actor0",
+            "laptop"
+        ],
+        "Location": [
+            "bedroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a1a24": {
+        "Action": "AnswerPhone",
+        "Entities": [
+            "actor1",
+            "phone"
+        ],
+        "Location": [
+            "bedroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a1a24.1": {
+        "Action": "TalkPhone",
+        "Entities": [
+            "actor1",
+            "phone"
+        ],
+        "Location": [
+            "bedroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a1a24.2": {
+        "Action": "HangUp",
+        "Entities": [
+            "actor1",
+            "phone"
+        ],
+        "Location": [
+            "bedroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+
+    "a1a25": {
+        "Action": "SitDown",
+        "Entities": [
+            "actor1",
+            "armchair"
+        ],
+        "Location": [
+            "bedroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a1a26": {
+        "Action": "StandUp",
+        "Entities": [
+            "actor1",
+            "armchair"
+        ],
+        "Location": [
+            "bedroom"
         ],
         "Timeframe": null,
         "Properties": {}
     },
     "temporal": {
         "timeline": {
-            "actor0": "[('a0a1', 'PickUp', 'Drinks'), ('a0a2', 'Drink', 'Drinks'), ('a0a3', 'PutDown', 'Drinks'), ('a0a4', 'Handshake', ''), ('a0a5', 'Move', 'Garden'), ('a0a6', 'Inv-Give', 'Drinks'), ('a0a7', 'Drink', 'Drinks'), ('a0a8', 'Give', 'Drinks', 'a1')]",
-            "actor1": "[('a1a1', 'PickUp', 'Food'), ('a1a2', 'Eat', 'Food'), ('a1a3', 'Handshake', ''), ('a1a4', 'PickUp', 'Drinks'), ('a1a5', 'Give', 'Drinks', 'a0'), ('a1a6', 'Inv-Give', 'Drinks', 'a0')]"
+            "actor0": "[--too-long--]",
+            "actor1": "[--too-long--]"
         },
         "starting_actions": {
-            "actor0": "action0",
-            "actor1": "a1a1"
+            "actor0": "a0a0",
+            "actor1": "a1a0"
+        },
+        "a0a0": {
+            "relations": null,
+            "next": "a0a1"
         },
         "a0a1": {
             "relations": null,
+            "next": "a0a1.1"
+        },
+        "a0a1.1": {
+            "relations": null,
             "next": "a0a2"
         },
-        "a0a2": {
+        "a1a0": {
             "relations": null,
+            "next": "a1a1"
+        },
+        "a1a1": {
+            "relations": null,
+            "next": "a1a1.1"
+        },
+        "a1a1.1": {
+            "relations": null,
+            "next": "a1a2"
+        },
+        "a0a2": {
+            "relations": [
+                "tm0"
+            ],
             "next": "a0a3"
+        },
+        "a1a2": {
+            "relations": [
+                "tm0"
+            ],
+            "next": "a1a3"
+        },
+        "tm0": {
+            "type": "starts_with"
         },
         "a0a3": {
             "relations": null,
             "next": "a0a4"
         },
-        "a0a4": {
-            "relations": [
-                "tm0"
-            ],
-            "next": "a0a5"
-        },
-        "tm0": {
-            "type": "starts_with"
-        },
-        "a0a5": {
-            "relations": null,
-            "next": null
-        },
-        "a0a6": {
-            "relations": [
-                "tm1"
-            ],
-            "next": "a0a7"
-        },
-        "tm1": {
-            "type": "starts_with"
-        },
-        "a0a7": {
-            "relations": null,
-            "next": "a0a8"
-        },
-        "a0a8": {
-            "relations": [
-                "tm2"
-            ],
-            "next": null
-        },
-        "tm2": {
-            "type": "starts_with"
-        },
-        "a1a1": {
-            "relations": null,
-            "next": "a1a2"
-        },
-        "a1a2": {
-            "relations": null,
-            "next": "a1a3"
-        },
         "a1a3": {
-            "relations": [
-                "tm0"
-            ],
-            "next": null
+            "relations": null,
+            "next": "a1a4"
+        },
+        "a0a4": {
+            "relations": null,
+            "next": "a0a5"
         },
         "a1a4": {
             "relations": null,
+            "next": "a1a4.1"
+        },
+        "a1a4.1": {
+            "relations": null,
+            "next": "a1a4.2"
+        },
+        "a1a4.2": {
+            "relations": null,
             "next": "a1a5"
+        },
+        "a0a5": {
+            "relations": [
+                "tm1"
+            ],
+            "next": "a0a6"
         },
         "a1a5": {
             "relations": [
@@ -296,10 +1027,203 @@
             ],
             "next": "a1a6"
         },
+        "tm1": {
+            "type": "starts_with"
+        },
+        "a0a6": {
+            "relations": null,
+            "next": "a0a7"
+        },
         "a1a6": {
+            "relations": null,
+            "next": "a1a7"
+        },
+        "a0a7": {
             "relations": [
                 "tm2"
             ],
+            "next": "a0a8"
+        },
+        "a1a7": {
+            "relations": [
+                "tm2"
+            ],
+            "next": "a1a8"
+        },
+        "tm2": {
+            "type": "starts_with"
+        },
+        "a0a8": {
+            "relations": null,
+            "next": "a0a9"
+        },
+        "a0a9": {
+            "relations": [
+                "tm3"
+            ],
+            "next": "a0a10"
+        },
+        "a1a8": {
+            "relations": [
+                "tm3"
+            ],
+            "next": "a1a9"
+        },
+        "tm3": {
+            "type": "starts_with"
+        },
+        "a0a10": {
+            "relations": null,
+            "next": "a0a11"
+        },
+        "a1a9": {
+            "relations": null,
+            "next": "a1a10"
+        },
+        "a1a10": {
+            "relations": null,
+            "next": "a1a11"
+        },
+        "a1a11": {
+            "relations": null,
+            "next": "a1a12"
+        },
+        "a1a12": {
+            "relations": null,
+            "next": "a1a13"
+        },
+        "a1a13": {
+            "relations": null,
+            "next": "a1a14"
+        },
+        "a1a14": {
+            "relations": null,
+            "next": "a1a15"
+        },
+        "a0a11": {
+            "relations": [
+                "tm4"
+            ],
+            "next": "a0a12"
+        },
+        "a1a15": {
+            "relations": [
+                "tm4"
+            ],
+            "next": "a1a16"
+        },
+        "tm4": {
+            "type": "starts_with"
+        },
+        "a1a16": {
+            "relations": null,
+            "next": "a1a17"
+        },
+        "a0a12": {
+            "relations": null,
+            "next": "a0a13"
+        },
+        "a1a17": {
+            "relations": null,
+            "next": "a1a18"
+        },
+        "a0a13": {
+            "relations": null,
+            "next": "a0a14"
+        },
+        "a1a18": {
+            "relations": null,
+            "next": "a1a19"
+        },
+        "a0a14": {
+            "relations": null,
+            "next": "a0a15"
+        },
+        "a0a15": {
+            "relations": null,
+            "next": "a0a16"
+        },
+        "a0a16": {
+            "relations": [
+                "tm5"
+            ],
+            "next": "a0a17"
+        },
+        "a1a19": {
+            "relations": [
+                "tm5"
+            ],
+            "next": "a1a20"
+        },
+        "tm5": {
+            "type": "starts_with"
+        },
+        "a0a17": {
+            "relations": null,
+            "next": "a0a18"
+        },
+        "a1a20": {
+            "relations": null,
+            "next": "a1a21"
+        },
+        "a0a18": {
+            "relations": null,
+            "next": "a0a19"
+        },
+        "a1a21": {
+            "relations": null,
+            "next": "a1a22"
+        },
+        "a0a19": {
+            "relations": null,
+            "next": "a0a20"
+        },
+        "a0a20": {
+            "relations": null,
+            "next": "a0a21"
+        },
+        "a0a21": {
+            "relations": null,
+            "next": "a0a22"
+        },
+        "a0a22": {
+            "relations": null,
+            "next": "a0a23"
+        },
+        "a0a23": {
+            "relations": null,
+            "next": "a0a24"
+        },
+        "a0a24": {
+            "relations": null,
+            "next": "a0a25"
+        },
+        "a0a25": {
+            "relations": null,
+            "next": "a0a26"
+        },
+        "a0a26": {
+            "relations": null,
+            "next": null
+        },
+        "a1a22": {
+            "relations": null,
+            "next": "a1a23"
+        },
+        "a1a23": {
+            "relations": null,
+            "next": "a1a25"
+        },
+        "a1a24": {
+            "relations": null,
+            "next": "a1a25"
+        },
+        "a1a25": {
+            "relations": null,
+            "next": "a1a26"
+        },
+        "a1a26": {
+            "relations": null,
             "next": null
         }
     }

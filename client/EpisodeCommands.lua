@@ -101,7 +101,7 @@ local function text_render ( )
                 local actionsText = ""
                 if #poi.PossibleActions > 0 then
                     local a = poi.PossibleActions[1]
-                    actionsText = a.id..": "..a.Description
+                    actionsText = a.id..": "..a.Description..' ('..(a.TargetItem.Description or '-')..')'
                     while (a) do
                         a = a.NextAction
                         if not a then
@@ -110,11 +110,11 @@ local function text_render ( )
                         if isArray(a) then
                             actionsText = actionsText.." -random- ["
                             for k, ra in ipairs(a) do
-                                actionsText = actionsText..ra.id..": "..ra.Description.."; "
+                                actionsText = actionsText..ra.id..": "..ra.Description..' ('..(ra.TargetItem.Description or '-')..')'.."; "
                             end
                             actionsText = actionsText..']'
                         else
-                            actionsText = actionsText.." -mandatory- "..a.id..": "..a.Description
+                            actionsText = actionsText.." -mandatory- "..a.id..": "..a.Description..' ('..(a.TargetItem.Description or '-')..')'
                         end
                     end
                 end
@@ -1747,6 +1747,13 @@ addCommandHandler("template",
                 end
 
                 outputChatBox("object successfully added "..param2)
+            elseif param1 == 'supertemplate' then
+                if param2 == nil or param2 == '' then
+                    outputChatBox("Invalid supertemplate name")
+                    return
+                end
+
+                local s = Supertemplate.Load(param2)
             else
                 outputChatBox("template add poi or template add object id")
             end

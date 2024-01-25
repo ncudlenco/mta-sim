@@ -294,7 +294,9 @@ function Region.GetClosest(element, regions, isInstance)
     OUT_OF = OUT_OF + 1
     if closestRegion == nil then
         MALFUNCTIONS = MALFUNCTIONS + 1
-        print("[WARNING!] IsPointInside malfunctioned "..MALFUNCTIONS..' times out of '..OUT_OF)
+        if DEBUG then
+            print("[WARNING!] IsPointInside malfunctioned "..MALFUNCTIONS..' times out of '..OUT_OF)
+        end
     end
     return closestRegion
 end

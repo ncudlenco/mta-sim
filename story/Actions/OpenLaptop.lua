@@ -1,8 +1,13 @@
 OpenLaptop = class(StoryActionBase, function(o, params)
-    params.description = " opens the laptop lid "
     params.name = 'OpenLaptop'
 
     StoryActionBase.init(o,params)
+
+    if o.TargetItem and o.TargetItem.type == 'Laptop' then
+        o.Description = " opens the laptop lid "
+    else
+        o.Description = " powers on the PC "
+    end
 end)
 
 function OpenLaptop:Apply()
@@ -11,7 +16,9 @@ function OpenLaptop:Apply()
     StoryActionBase.Apply(self)
 
     StoryActionBase.GetLogger(self, story):Log(self.Description, self)
-    self.TargetItem:ChangeModel(Laptop.eModel.Open)
+    if self.TargetItem and self.TargetItem.type == 'Laptop' then
+        self.TargetItem:ChangeModel(Laptop.eModel.Open)
+    end
 
     if DEBUG then
         outputConsole("OpenLaptop:Apply")

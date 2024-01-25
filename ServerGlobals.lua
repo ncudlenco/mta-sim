@@ -1,9 +1,9 @@
 CURRENT_STORY = nil
 SCREENSHOTS = {}
-MAX_ACTIONS = 1000
-MAX_STORY_TIME = 360
+MAX_ACTIONS = 10000
+MAX_STORY_TIME = 1200
 LOG_FREQUENCY = 1000 / 30 --in milliseconds
-DEBUG = false
+DEBUG = true
 DEBUG_PATHFINDING = false
 DEBUG_VALIDATION = false
 DEBUG_ACTION_VALIDATION = false
@@ -19,28 +19,44 @@ MIN_ACTORS = 1
 MAX_ACTORS = 1
 RANDOM_ACTORS_NR = true
 EXPECTED_SPECTATORS = 1
-LOG_DATA = false
+LOG_DATA = true
 SIMULATION_MODE = false
 
 STATIC_CAMERA = SIMULATION_MODE
 FREE_ROAM = not SIMULATION_MODE
 DEFINING_EPISODES = not SIMULATION_MODE
 
-DISABLE_BETWEEN_POINTS_TELEPORTATION = true
+DISABLE_BETWEEN_POINTS_TELEPORTATION = false
 -- TODO next: run all graphs from v0_100 and write down the state for each graph
 -- TODO: I remember there was still a problem with interlocking agents
 -- DONE: I remember there was a problem with planning for pick upable objects (next actions might be different that the ones defined in the json): pick up, sit down, drink, get up, put down. Agents should be allowed to sit down and get up without doing any action (i.e. inner actions should be optional).
 
 -- DONE: create and test templates for each bed, add them to a beds supertemplate
--- TODO: create and test supertemplates for all objects
--- TODO: add all possible supertemplates (or as many as possible) in all episodes (i.e. multiple chairs at a table, all sit downable, all having food and drink items on the table)
+-- MOSTLY_DONE: create and test supertemplates for all objects
+-- MOSTLY DONE: add all possible supertemplates (or as many as possible) in all episodes (i.e. multiple chairs at a table, all sit downable, all having food and drink items on the table)
 -- DONE: create sinks supertemplate
--- TODO: create more chairsAtTable supertemplates
--- TODO: create all armchairs supertemplates
+-- DONE: create more table supertemplates
+-- DONE: create all armchairs supertemplates
 -- TODO: create all toilets supertemplates
 -- TODO: add all these supertemplates in all episodes and rework the graphs
+----Done: house9
+----Done: house1_sweet -> add a Sink object somewhere underneath the floor with wash hands and sink as target
+    --   "house1_preloaded",
+    --   "house3_preloaded", --NOT WORKING! The pathfinding seems flawed here, when we have 2 levels?
+    --   "house7", --NOT WORKING! Potential issue when the link POI is located outside a region
+    --   "house8_preloaded",
+    --   "house10_preloaded", -- Not Working!
+    --   "house12_preloaded", -- Working but needs the objects removed. Some flakiness exists but in general it works...
+    --   "garden",
+    --   "office",
+    --   "office2",
+    --   "common",
+    --   "gym1",
+    --   "gym2",
+    --   "gym3"
 
-LOAD_FROM_GRAPH = false
+
+LOAD_FROM_GRAPH = true
 INPUT_GRAPHS = {
     -- 'random/v1_1actor/g0', --success
     -- 'random/v1_1actor/g1', --fail: we don't have an episode where the actor can open the laptop and dance; Done: solve the relative insertion point for supertemplates then fill the houses with all these objects.
@@ -144,13 +160,16 @@ INPUT_GRAPHS = {
     -- 'random/v1_nomove/v4_3actors/g7',
     -- 'random/v1_nomove/v4_3actors/g8',
     -- 'random/v1_nomove/v4_3actors/g9',
-    -- 'test_1',
-    -- 'test_2',
-    'test_order',
-    'test_order',
-    'test_order',
-    'test_order',
-    'test_order',
+    -- 'test_3.json',
+    'test_4.json',
+    'test_4.json',
+    'test_4.json',
+    'test_4.json',
+    -- 'test_order',
+    -- 'test_order',
+    -- 'test_order',
+    -- 'test_order',
+    -- 'test_order',
     -- 'test_3.json',
     -- 'test_4.json',
     -- 'test_5.txt',

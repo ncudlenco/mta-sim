@@ -7,6 +7,7 @@ PickUp = class(StoryActionBase, function(o, params)
     o.TargetObjectExists = params.targetObjectExists or true
     o.how = params.how or PickUp.eHow.Normal
     o.hand = params.hand or PickUp.eHand.Right
+    o.updateOffets = true
 end)
 
 function PickUp:Apply()
@@ -49,14 +50,18 @@ function PickUp:Apply()
     local time = 500
     if self.how == PickUp.eHow.Normal then
         time = 200
-        self.TargetItem:updatePositionOffsetStandUp()
-        self.TargetItem:updateRotOffsetStandUp()
+        if self.updateOffets then
+            self.TargetItem:updatePositionOffsetStandUp()
+            self.TargetItem:updateRotOffsetStandUp()
+        end
         self.Performer:setAnimation("BAR", "Barserve_bottle", time, true, true, false, true)
     elseif self.how == PickUp.eHow.Down then
         self.Performer:setAnimation("MISC", "Case_pickup", time, true, true, false, true)
     elseif self.how == PickUp.eHow.Sit then
-        self.TargetItem:updatePositionOffsetSitDown()
-        self.TargetItem:updateRotOffsetSitDown()
+        if self.updateOffets then
+            self.TargetItem:updatePositionOffsetSitDown()
+            self.TargetItem:updateRotOffsetSitDown()
+        end
         self.Performer:setAnimation("INT_OFFICE", "OFF_Sit_Drink", time, true, true, false, true)
     elseif self.how == PickUp.eHow.FloorBarbell then
         time = 2500

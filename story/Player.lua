@@ -64,10 +64,10 @@ function (prevA, curA)
         if story and not FREE_ROAM then
             Timer(function()
                 for i,ped in ipairs(story.CurrentEpisode.peds) do
-                    local lastLocation = story.lastLocations[ped:getData('id')]
-                    if lastLocation then
-                        lastLocation.isBusy = false
-                    end
+                    -- local lastLocation = story.lastLocations[ped:getData('id')]
+                    -- if lastLocation then
+                    --     lastLocation.isBusy = false
+                    -- end
                     local idx = ped:getData('startingPoiIdx')
                     if DEBUG then
                         print("Starting poi idx for ped "..ped:getData('id')..' in POI with index '..idx)
@@ -157,7 +157,10 @@ function ( theResource, status, pixels, timestamp, tag )
     local millisecs = string.format("%03.f", math.floor(elapsedMillis - secs * 1000 - hours*3600000 - mins *60000));
 
     if status == "ok" then
-        local rootFolder = (LOAD_FROM_GRAPH or 'data')..'_out'
+        local rootFolder = 'data_out'
+        if type(LOAD_FROM_GRAPH) == "string" then
+            rootFolder = LOAD_FROM_GRAPH..'_out'
+        end
         local newFile = File(rootFolder..'/'..storyId..'/'
          ..playerId..'/'
             .. hours..'-'..mins..'-'..secs..'.'..millisecs..'-'..playerName..'.jpg')

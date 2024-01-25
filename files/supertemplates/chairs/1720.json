@@ -1,0 +1,112 @@
+[
+    {
+        "objects": [
+            {
+                "dynamicString": "return Food{description=\"\", noCollisions=true, modelid=Food.eModel[PickRandom(Food.eModel)], isRandomModelId=true, interior=8, position=Vector3(0.3466796875,-1.39599609375,-0.1607666015625), rotation=Vector3(296.56506347656,270,243.43496704102), posOffset=Vector3(-0.03999999910593,0.070000000298023,0.050000000745058), rotOffset=Vector3(0,90,0)}",
+                "id": 1
+            },
+            {
+                "dynamicString": "return Chair{description=\"\", noCollisions=true, modelid=1720, isRandomModelId=false, interior=8, position=Vector3(0.26513671875,-0.7542724609375,-0.9998779296875), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "id": 2
+            }
+        ],
+        "poi": {
+            "isEmpty": true
+        },
+        "locations": [
+            {
+                "Description": "kitchen chair",
+                "Interior": 8,
+                "Y": 0.144775390625,
+                "X": 0.231201171875,
+                "episodeLinks": [],
+                "Z": 0,
+                "id": 1,
+                "Angle": 179.65234375,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "allActions": [
+                    {
+                        "dynamicString": "return SitDown{how = 1, rotation = nil}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 1,
+                            "type": "Object"
+                        },
+                        "id": 1,
+                        "nextAction": [
+                            {
+                                "id": 2
+                            },
+                            {
+                                "id": 4
+                            }
+                        ],
+                        "closingAction": {
+                            "id": 4
+                        },
+                        "nextLocation": {
+                            "id": 1
+                        }
+                    },
+                    {
+                        "dynamicString": "return PickUp{where = \"the table\", targetObjectExists = true, hand = 12, how = 3}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 1,
+                            "type": "Object"
+                        },
+                        "id": 2,
+                        "nextAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 1
+                        }
+                    },
+                    {
+                        "dynamicString": "return Eat{how = 1}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 1,
+                            "type": "Object"
+                        },
+                        "id": 3,
+                        "nextAction": {
+                            "id": 4
+                        },
+                        "nextLocation": {
+                            "id": 1
+                        }
+                    },
+                    {
+                        "dynamicString": "return StandUp{how = 1}",
+                        "isClosingAction": true,
+                        "targetItem": {
+                            "id": 1,
+                            "type": "Object"
+                        },
+                        "id": 4,
+                        "nextLocation": {
+                            "id": 1
+                        }
+                    }
+                ]
+            }
+        ],
+        "position": {
+            "y": -1121.233642578125,
+            "x": 2365.062744140625,
+            "z": 1050.875
+        },
+        "globalCentroid": {
+            "y": -1121.902099609375,
+            "x": 2365.34375,
+            "z": 1050.364868164062
+        },
+        "name": "1720"
+    }
+]

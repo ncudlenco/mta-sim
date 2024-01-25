@@ -1,0 +1,112 @@
+[
+    {
+        "objects": [
+            {
+                "dynamicString": "return Food{description=\"\", noCollisions=true, modelid=Food.eModel[PickRandom(Food.eModel)], isRandomModelId=true, interior=1, position=Vector3(-1.840087890625,-0.0648193359375,-0.1607666015625), rotation=Vector3(270,0,110), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,180,0)}",
+                "id": 2
+            },
+            {
+                "dynamicString": "return Chair{description=\"\", noCollisions=true, modelid=2121, isRandomModelId=false, interior=1, position=Vector3(-0.936279296875,-0.1519775390625,-0.5001220703125), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "id": 1
+            }
+        ],
+        "poi": {
+            "isEmpty": true
+        },
+        "locations": [
+            {
+                "Description": "kitchen chair",
+                "Interior": 1,
+                "Y": -0.1495361328125,
+                "X": -0.351806640625,
+                "episodeLinks": [],
+                "Z": 0,
+                "id": 2,
+                "Angle": 89.269775390625,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "allActions": [
+                    {
+                        "dynamicString": "return SitDown{how = 1, rotation = nil}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 2,
+                            "type": "Object"
+                        },
+                        "id": 1,
+                        "nextAction": [
+                            {
+                                "id": 2
+                            },
+                            {
+                                "id": 4
+                            }
+                        ],
+                        "closingAction": {
+                            "id": 4
+                        },
+                        "nextLocation": {
+                            "id": 1
+                        }
+                    },
+                    {
+                        "dynamicString": "return PickUp{where = \"the table\", targetObjectExists = true, hand = 12, how = 3}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 2,
+                            "type": "Object"
+                        },
+                        "id": 2,
+                        "nextAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 1
+                        }
+                    },
+                    {
+                        "dynamicString": "return Eat{how = 1}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 2,
+                            "type": "Object"
+                        },
+                        "id": 3,
+                        "nextAction": {
+                            "id": 4
+                        },
+                        "nextLocation": {
+                            "id": 1
+                        }
+                    },
+                    {
+                        "dynamicString": "return StandUp{how = 1}",
+                        "isClosingAction": true,
+                        "targetItem": {
+                            "id": 2,
+                            "type": "Object"
+                        },
+                        "id": 4,
+                        "nextLocation": {
+                            "id": 1
+                        }
+                    }
+                ]
+            }
+        ],
+        "position": {
+            "y": -1674.614990234375,
+            "x": 2533.434814453125,
+            "z": 1015.498596191406
+        },
+        "globalCentroid": {
+            "y": -1676.449340820312,
+            "x": 2533.470947265625,
+            "z": 1016.445434570312
+        },
+        "name": "chair"
+    }
+]

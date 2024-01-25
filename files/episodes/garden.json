@@ -1,13 +1,286 @@
 [
     {
-        "InteriorId": 0,
+        "initialized": false,
         "peds": [],
         "ValidStartingLocations": [],
+        "graphPath": "files\/paths\/garden.json",
         "ObjectsToDelete": [],
         "Objects": [],
-        "graphPath": "files\/paths\/garden.json",
+        "temporaryInitialized": false,
         "name": "garden",
-        "supertemplates": [],
+        "InteriorId": 0,
+        "supertemplates": [
+            {
+                "name": "taiChi",
+                "position": {
+                    "y": -507.1651306152344,
+                    "x": 801.4617919921875,
+                    "z": 17.3359375
+                },
+                "templateIdx": 2,
+                "templates": [
+                    "yoga"
+                ],
+                "offsets": [
+                    {
+                        "offset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "smoke",
+                "position": {
+                    "y": -513.5684204101562,
+                    "x": 797.9453735351562,
+                    "z": 16.94523429870605
+                },
+                "templateIdx": 2,
+                "templates": [
+                    "cigar"
+                ],
+                "offsets": [
+                    {
+                        "offset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "smoke",
+                "position": {
+                    "y": -509.4927062988281,
+                    "x": 798.2894897460938,
+                    "z": 17.30415344238281
+                },
+                "templateIdx": 2,
+                "templates": [
+                    "cigar"
+                ],
+                "offsets": [
+                    {
+                        "offset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "smoke",
+                "position": {
+                    "y": -512.164306640625,
+                    "x": 794.9161376953125,
+                    "z": 17.11894607543945
+                },
+                "templateIdx": 2,
+                "templates": [
+                    "cigar"
+                ],
+                "offsets": [
+                    {
+                        "offset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "talkPhone",
+                "position": {
+                    "y": -514.3148803710938,
+                    "x": 803.072998046875,
+                    "z": 16.82843780517578
+                },
+                "templateIdx": 2,
+                "templates": [
+                    "talkPoiAndAction"
+                ],
+                "offsets": [
+                    {
+                        "offset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "talkPhone",
+                "position": {
+                    "y": -512.6812744140625,
+                    "x": 800.7674560546875,
+                    "z": 17.01274299621582
+                },
+                "templateIdx": 2,
+                "templates": [
+                    "talkPoiAndAction"
+                ],
+                "offsets": [
+                    {
+                        "offset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "taiChi",
+                "position": {
+                    "y": -509.7940673828125,
+                    "x": 804.6572265625,
+                    "z": 17.07090950012207
+                },
+                "templateIdx": 2,
+                "templates": [
+                    "yoga"
+                ],
+                "offsets": [
+                    {
+                        "offset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "interactions",
+                "position": {
+                    "y": -509.8228454589844,
+                    "x": 800.2597045898438,
+                    "z": 17.2160758972168
+                },
+                "templateIdx": 2,
+                "offsets": [
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0.2000000178813934,
+                            "x": 0.4000000059604645,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    }
+                ],
+                "templates": [
+                    "poi"
+                ]
+            },
+            {
+                "name": "interactions",
+                "position": {
+                    "y": -516.239990234375,
+                    "x": 802.4332885742188,
+                    "z": 16.70181846618652
+                },
+                "templateIdx": 2,
+                "offsets": [
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0,
+                            "x": 0.800000011920929,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    }
+                ],
+                "templates": [
+                    "poi"
+                ]
+            },
+            {
+                "name": "interactions",
+                "position": {
+                    "y": -511.5176696777344,
+                    "x": 793.1051025390625,
+                    "z": 17.1827220916748
+                },
+                "templateIdx": 2,
+                "offsets": [
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0,
+                            "x": 0.5,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    }
+                ],
+                "templates": [
+                    "poi"
+                ]
+            }
+        ],
         "Disposed": false,
         "Regions": [
             {
@@ -129,14 +402,73 @@
                         "z": 16.32328605651855
                     }
                 ]
+            },
+            {
+                "Description": "",
+                "cameras": [
+                    {
+                        "y": -523.7462158277631,
+                        "x": 793.4238159134984,
+                        "lz": 15.75493144989014,
+                        "z": 18.85493317991495,
+                        "lx": 793.3652954101562,
+                        "ly": -511.7551879882812,
+                        "roll": 0,
+                        "fov": 70
+                    },
+                    {
+                        "y": -510.04248046875,
+                        "x": 784.4230346679688,
+                        "lz": 15.83144664764404,
+                        "z": 23.33144836872816,
+                        "lx": 794.3160400390625,
+                        "ly": -515.079345703125,
+                        "roll": 0,
+                        "fov": 86
+                    }
+                ],
+                "Objects": [],
+                "center": {
+                    "y": -515.1084594726562,
+                    "x": 792.73486328125,
+                    "z": 15.8288402557373
+                },
+                "EvaluatingRegion": false,
+                "name": "driveway",
+                "vertexes": [
+                    {
+                        "y": -510.3093566894531,
+                        "x": 789.7099609375,
+                        "z": 16.30189323425293
+                    },
+                    {
+                        "y": -519.9334716796875,
+                        "x": 789.843017578125,
+                        "z": 15.42172527313232
+                    },
+                    {
+                        "y": -520.0330200195312,
+                        "x": 795.7919311523438,
+                        "z": 15.34288597106934
+                    },
+                    {
+                        "y": -510.1578674316406,
+                        "x": 795.5945434570312,
+                        "z": 16.24885368347168
+                    }
+                ]
             }
         ],
         "POI": [
             {
                 "Description": "house entrance",
+                "Interior": 0,
+                "Y": -506.4792175292969,
+                "X": 795.0894775390625,
                 "episodeLinks": [
                     "house1_sweet",
                     "house1_preloaded",
+                    "house1_stripped",
                     "house3_preloaded",
                     "house7",
                     "house8_preloaded",
@@ -144,9 +476,6 @@
                     "house10_preloaded",
                     "house12_preloaded"
                 ],
-                "Interior": 0,
-                "Y": -506.4792175292969,
-                "X": 795.0894775390625,
                 "Z": 18.0129222869873,
                 "id": 1,
                 "Angle": 185.0909118652344,
@@ -158,6 +487,7 @@
                 "Interior": 0,
                 "Y": -510.5158386230469,
                 "X": 794.979736328125,
+                "episodeLinks": [],
                 "Z": 17.28152847290039,
                 "id": 2,
                 "Angle": 181.8126068115234,
@@ -169,6 +499,7 @@
                 "Interior": 0,
                 "Y": -511.5870971679688,
                 "X": 798.00927734375,
+                "episodeLinks": [],
                 "Z": 17.12056541442871,
                 "id": 3,
                 "Angle": 222.5463562011719,
@@ -180,6 +511,7 @@
                 "Interior": 0,
                 "Y": -513.8286743164062,
                 "X": 801.325439453125,
+                "episodeLinks": [],
                 "Z": 16.91915512084961,
                 "id": 4,
                 "Angle": 236.3331756591797,
@@ -191,6 +523,7 @@
                 "Interior": 0,
                 "Y": -515.7196655273438,
                 "X": 799.2701416015625,
+                "episodeLinks": [],
                 "Z": 16.74733734130859,
                 "id": 5,
                 "Angle": 125.7254333496094,
@@ -202,6 +535,7 @@
                 "Interior": 0,
                 "Y": -507.1709594726562,
                 "X": 800.205322265625,
+                "episodeLinks": [],
                 "Z": 17.3359375,
                 "id": 6,
                 "Angle": 175.5225219726562,
@@ -213,6 +547,7 @@
                 "Interior": 0,
                 "Y": -508.9539184570312,
                 "X": 803.0442504882812,
+                "episodeLinks": [],
                 "Z": 17.17858123779297,
                 "id": 7,
                 "Angle": 172.7025146484375,
@@ -224,6 +559,7 @@
                 "Interior": 0,
                 "Y": -512.0217895507812,
                 "X": 803.841796875,
+                "episodeLinks": [],
                 "Z": 16.95181274414062,
                 "id": 8,
                 "Angle": 167.375732421875,

@@ -8,6 +8,8 @@ Furniture = class(SampStoryObjectBase, function(o, params)
         params.description = "sink"
     elseif params.modelid == Furniture.eModel.House3LivingRoom2 or params.modelid == Furniture.eModel.House1LivingRoom2 then
         params.description = "chair"
+    elseif params.modelid == Furniture.eModel.WoodenChestOfDrawers then
+        params.description = "wooden chest of drawers"
     end
 
     SampStoryObjectBase.init(o, params)
@@ -19,5 +21,6 @@ Furniture.eModel = {
     House3Kitchen1 = 14472,
     House10Kitchen1= 2136,
     House1LivingRoom1 = 14543,
-    House1LivingRoom2 = 14535
+    House1LivingRoom2 = 14535,
+    WoodenChestOfDrawers = 2323
 }

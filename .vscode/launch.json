@@ -8,7 +8,7 @@
             "type": "mtasa",
             "request": "launch",
             "name": "Launch MTA:SA",
-            "serverpath": "Z:\\More games\\GTA San Andreas\\MTA-SA\\server"
+            "serverpath": "Z:\\More games\\GTA San Andreas\\MTA-SA1.6\\server"
         }
     ]
 }

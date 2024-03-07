@@ -1,7 +1,7 @@
 addEvent ( "onElementDoneEditing", true )
 addEvent ( "onActionRetrieved", true )
 
-DEFINING_EPISODES = true
+DEFINING_EPISODES = false
 if DEFINING_EPISODES then
     addEventHandler ( "onClientPlayerSpawn", getLocalPlayer(), function()
         print('onClientPlayerSpawn')

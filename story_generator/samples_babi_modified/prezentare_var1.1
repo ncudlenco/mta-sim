@@ -1,0 +1,301 @@
+{
+    "actor0": {
+        "Action": "Exists",
+        "Entities": [
+            "actor0"
+        ],
+        "Location": null,
+        "Timeframe": null,
+        "Properties": {
+            "Gender": 1,
+            "Name": "Bogdan"
+        }
+    },
+    "actor1": {
+        "Action": "Exists",
+        "Entities": [
+            "actor1"
+        ],
+        "Location": null,
+        "Timeframe": null,
+        "Properties": {
+            "Gender": 1,
+            "Name": "Dragos"
+        }
+    },
+    "actor2": {
+        "Action": "Exists",
+        "Entities": [
+            "actor2"
+        ],
+        "Location": null,
+        "Timeframe": null,
+        "Properties": {
+            "Gender": 2,
+            "Name": "Alina"
+        }
+    },
+    "object0": {
+        "Action": "Exists",
+        "Entities": [
+            "object0"
+        ],
+        "Location": null,
+        "Timeframe": null,
+        "Properties": {
+            "Type": "drink"
+        }
+    },
+    "action0": {
+        "Action": "moved",
+        "Entities": [
+            "actor0"
+        ],
+        "Location": [
+            "",
+            "barroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "action1": {
+        "Action": "moved",
+        "Entities": [
+            "actor1"
+        ],
+        "Location": [
+            "",
+            "barroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "action2": {
+        "Action": "handshake",
+        "Entities": [
+            "actor1",
+            "actor0"
+        ],
+        "Location": [
+            "barroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "action3": {
+        "Action": "INV-handshake",
+        "Entities": [
+            "actor0",
+            "actor1"
+        ],
+        "Location": [
+            "barroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "action4": {
+        "Action": "moved",
+        "Entities": [
+            "actor2"
+        ],
+        "Location": [
+            "",
+            "garden"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "action5": {
+        "Action": "took",
+        "Entities": [
+            "actor0",
+            "object0"
+        ],
+        "Location": [
+            "barroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "action6": {
+        "Action": "handed",
+        "Entities": [
+            "actor0",
+            "object0",
+            "actor1"
+        ],
+        "Location": [
+            "barroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "action7": {
+        "Action": "INV-handed",
+        "Entities": [
+            "actor1",
+            "object0",
+            "actor0"
+        ],
+        "Location": [
+            "barroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "action8": {
+        "Action": "travelled",
+        "Entities": [
+            "actor1"
+        ],
+        "Location": [
+            "barroom",
+            "garden"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "action9": {
+        "Action": "gave",
+        "Entities": [
+            "actor1",
+            "object0",
+            "actor2"
+        ],
+        "Location": [
+            "garden"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "action10": {
+        "Action": "INV-gave",
+        "Entities": [
+            "actor2",
+            "object0",
+            "actor1"
+        ],
+        "Location": [
+            "garden"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "action11": {
+        "Action": "hugs",
+        "Entities": [
+            "actor2",
+            "actor1"
+        ],
+        "Location": [
+            "garden"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "action12": {
+        "Action": "INV-hugs",
+        "Entities": [
+            "actor1",
+            "actor2"
+        ],
+        "Location": [
+            "garden"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "temporal": {
+        "timeline": {
+            "actor0": "[('action0', 'moved'), ('action3', 'INV-handshake'), ('action5', 'took'), ('action6', 'handed')]",
+            "actor1": "[('action1', 'moved'), ('action2', 'handshake'), ('action7', 'INV-handed'), ('action8', 'travelled'), ('action9', 'gave'), ('action12', 'INV-hugs')]",
+            "actor2": "[('action4', 'moved'), ('action10', 'INV-gave'), ('action11', 'hugs')]"
+        },
+        "starting_actions": {
+            "actor0": "action0",
+            "actor1": "action1",
+            "actor2": "action4"
+        },
+        "action0": {
+            "relations": null,
+            "next": "action1"
+        },
+        "tm0": {
+            "type": "starts_with"
+        },
+        "action3": {
+            "relations": [
+                "tm0"
+            ],
+            "next": "action4"
+        },
+        "action5": {
+            "relations": null,
+            "next": "action6"
+        },
+        "tm1": {
+            "type": "starts_with"
+        },
+        "action6": {
+            "relations": [
+                "tm1"
+            ],
+            "next": "action7"
+        },
+        "action1": {
+            "relations": null,
+            "next": "action2"
+        },
+        "action2": {
+            "relations": [
+                "tm0"
+            ],
+            "next": "action3"
+        },
+        "action7": {
+            "relations": [
+                "tm1"
+            ],
+            "next": "action8"
+        },
+        "action8": {
+            "relations": null,
+            "next": "action9"
+        },
+        "tm2": {
+            "type": "starts_with"
+        },
+        "action9": {
+            "relations": [
+                "tm2"
+            ],
+            "next": "action10"
+        },
+        "tm3": {
+            "type": "starts_with"
+        },
+        "action12": {
+            "relations": [
+                "tm3"
+            ],
+            "next": null
+        },
+        "action4": {
+            "relations": null,
+            "next": "action5"
+        },
+        "action10": {
+            "relations": [
+                "tm2"
+            ],
+            "next": "action11"
+        },
+        "action11": {
+            "relations": [
+                "tm3"
+            ],
+            "next": "action12"
+        }
+    }
+}

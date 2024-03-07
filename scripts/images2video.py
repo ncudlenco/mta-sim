@@ -1,10 +1,10 @@
 import cv2
 import os
 
-path = "Z:\\More games\\GTA San Andreas\\MTA-SA\\server\\mods\\deathmatch\\resources\\sv2l"
+path = "Z:\\More games\\GTA San Andreas\\MTA-SA1.6\\server\\mods\\deathmatch\\resources\\sv2l"
 directories = [ name for name in os.listdir(path) if os.path.isdir(os.path.join(path, name)) ]
 # for directory in directories:
-directory = "test_4.json_out"
+directory = "test_1_out"
 print("Working on {}...".format(directory))
 for dd in os.listdir(os.path.join(path, directory)):
     for subdirectory in os.listdir(os.path.join(path, directory, dd)):

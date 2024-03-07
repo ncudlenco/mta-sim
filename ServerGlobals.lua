@@ -3,7 +3,7 @@ SCREENSHOTS = {}
 MAX_ACTIONS = 10000
 MAX_STORY_TIME = 1200
 LOG_FREQUENCY = 1000 / 30 --in milliseconds
-DEBUG = true
+DEBUG = false
 DEBUG_PATHFINDING = false
 DEBUG_VALIDATION = false
 DEBUG_ACTION_VALIDATION = false
@@ -19,8 +19,8 @@ MIN_ACTORS = 1
 MAX_ACTORS = 1
 RANDOM_ACTORS_NR = true
 EXPECTED_SPECTATORS = 1
-LOG_DATA = true
 SIMULATION_MODE = false
+LOG_DATA = SIMULATION_MODE and true
 
 STATIC_CAMERA = SIMULATION_MODE
 FREE_ROAM = not SIMULATION_MODE
@@ -161,10 +161,10 @@ INPUT_GRAPHS = {
     -- 'random/v1_nomove/v4_3actors/g8',
     -- 'random/v1_nomove/v4_3actors/g9',
     -- 'test_3.json',
-    'test_4.json',
-    'test_4.json',
-    'test_4.json',
-    'test_4.json',
+    'test_1',
+    -- 'test_1',
+    -- 'test_1',
+    -- 'test_1',
     -- 'test_order',
     -- 'test_order',
     -- 'test_order',

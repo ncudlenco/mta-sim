@@ -4,7 +4,9 @@
         "Entities": [
             "actor0"
         ],
-        "Location": null,
+        "Location": [
+            "garden"
+        ],
         "Timeframe": null,
         "Properties": {
             "Gender": 2,
@@ -16,21 +18,12 @@
         "Entities": [
             "object0"
         ],
-        "Location": null,
+        "Location": [
+            "kitchen"
+        ],
         "Timeframe": null,
         "Properties": {
             "Type": "Drinks"
-        }
-    },
-    "object1": {
-        "Action": "Exists",
-        "Entities": [
-            "object1"
-        ],
-        "Location": null,
-        "Timeframe": null,
-        "Properties": {
-            "Type": "Food"
         }
     },
     "action0": {
@@ -40,7 +33,7 @@
             "object0"
         ],
         "Location": [
-            ""
+            "kitchen"
         ],
         "Timeframe": null,
         "Properties": {}
@@ -52,7 +45,7 @@
             "object0"
         ],
         "Location": [
-            ""
+            "living"
         ],
         "Timeframe": null,
         "Properties": {}
@@ -64,7 +57,7 @@
             "object0"
         ],
         "Location": [
-            ""
+            "kitchen"
         ],
         "Timeframe": null,
         "Properties": {}
@@ -75,7 +68,7 @@
             "actor0"
         ],
         "Location": [
-            "",
+            "kitchen",
             "hallway"
         ],
         "Timeframe": null,
@@ -110,7 +103,7 @@
         },
         "action2": {
             "relations": null,
-            "next": "action3"
+            "next": null
         },
         "action3": {
             "relations": null,

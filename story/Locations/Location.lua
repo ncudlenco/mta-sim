@@ -457,8 +457,21 @@ function Location:ProcessNextAction(player)
         end
 
         local isActionWithObjectThatWillBeReceived = event and nextEvent and event.Action == 'INV-Give' and #nextEvent.Entities > 1 and nextEvent.Entities[2] == event.Entities[3]
+        local pickedUpObjectId = nil
         local pickedUpObjects = player:getData('pickedObjects')
-        local isActionWithObjectCurrentlyPicked = nextEvent and #nextEvent.Entities > 1 and #pickedUpObjects > 0 and #pickedUpObjects[1] > 0 and CURRENT_STORY.eventObjectMap[nextEvent.Entities[2]] == pickedUpObjects[1][1]
+        if #pickedUpObjects > 0 and #pickedUpObjects[1] > 0 then
+            pickedUpObjectId = pickedUpObjects[1][1]
+            if DEBUG then
+                print("Currently picked up object: "..pickedUpObjects[1][1])
+            end
+        end
+        if event and event.Action == 'PickUp' and event.Entities and #event.Entities > 1 then
+            pickedUpObjectId = CURRENT_STORY.eventObjectMap[event.Entities[2]]
+        end
+        if DEBUG and CURRENT_STORY.eventObjectMap[nextEvent.Entities[2]] then
+            print("Mapped object for next event "..CURRENT_STORY.eventObjectMap[nextEvent.Entities[2]])
+        end
+        local isActionWithObjectCurrentlyPicked = nextEvent and #nextEvent.Entities > 1 and pickedUpObjectId ~= nil and CURRENT_STORY.eventObjectMap[nextEvent.Entities[2]] == pickedUpObjectId
         local isActionWithPickedUpObject = isActionWithObjectThatWillBeReceived or isActionWithObjectCurrentlyPicked
 
         print('Next event: '..nextEvent.id..' isInteraction '..strIsInteraction..' isActionWithPickedUpObject '..BoolToStr(isActionWithPickedUpObject))

@@ -192,5 +192,5 @@
   <script src="ServerCommands.lua" type="server" />
   <script src="client/EpisodeCommands.lua" type="client" />
   <script src="client/MappingCommands.lua" type="client" />
-  <min_mta_version server="1.5.5-9.14370" client="1.5.5-9.14370" />
+  <min_mta_version server="1.6.0-9.21695" client="1.6.0-9.21695" />
 </meta>

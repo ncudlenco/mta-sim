@@ -2,12 +2,15 @@ CURRENT_STORY = nil
 SCREENSHOTS = {}
 MAX_ACTIONS = 10000
 MAX_STORY_TIME = 1200
-LOG_FREQUENCY = 1000 / 30 --in milliseconds
+LOG_FREQUENCY = 1000 / 50 --milliseconds / frames
+WIDTH_RESOLUTION = 1920
+HEIGHT_RESOLUTION = 1080
 DEBUG = false
 DEBUG_PATHFINDING = false
 DEBUG_VALIDATION = false
 DEBUG_ACTION_VALIDATION = false
 DEBUG_LOGGER = false
+DEBUG_SCREENSHOTS = true
 DEBUG_OBJECTS = false
 DEBUG_EPISODE = false
 DEBUG_ACTIONS = false
@@ -19,8 +22,8 @@ MIN_ACTORS = 1
 MAX_ACTORS = 1
 RANDOM_ACTORS_NR = true
 EXPECTED_SPECTATORS = 1
-SIMULATION_MODE = false
-LOG_DATA = SIMULATION_MODE and true
+SIMULATION_MODE = true
+LOG_DATA = SIMULATION_MODE and false
 
 STATIC_CAMERA = SIMULATION_MODE
 FREE_ROAM = not SIMULATION_MODE
@@ -161,7 +164,21 @@ INPUT_GRAPHS = {
     -- 'random/v1_nomove/v4_3actors/g8',
     -- 'random/v1_nomove/v4_3actors/g9',
     -- 'test_3.json',
-    'test_1',
+    -- 'complex_graphs/c1',
+    -- 'complex_graphs/c1',
+    -- 'complex_graphs/c1',
+    -- 'complex_graphs/c2.json',
+    -- 'complex_graphs/c2.json',
+    -- 'complex_graphs/c2.json',
+    'complex_graphs/c3.json',
+    'complex_graphs/c3.json',
+    'complex_graphs/c3.json',
+    -- 'complex_graphs/c4.json',
+    -- 'complex_graphs/c4.json',
+    -- 'complex_graphs/c4.json',
+    -- 'complex_graphs/c10.json',
+    -- 'complex_graphs/c10.json',
+    -- 'complex_graphs/c10.json',
     -- 'test_1',
     -- 'test_1',
     -- 'test_1',

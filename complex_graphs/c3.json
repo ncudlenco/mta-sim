@@ -1,0 +1,263 @@
+{
+    "Bed": {
+        "Action": "Exists",
+        "Entities": [
+            "Bed"
+        ],
+        "Location": [
+            "bedroom"
+        ],
+        "Timeframe": null,
+        "Properties": {
+            "Type": "Bed"
+        }
+    },
+    "sink": {
+        "Action": "Exists",
+        "Entities": [
+            "sink"
+        ],
+        "Location": [
+            "bathroom"
+        ],
+        "Timeframe": null,
+        "Properties": {
+            "Type": "Sink"
+        }
+    },
+    "alice": {
+        "Action": "Exists",
+        "Entities": [
+            "alice"
+        ],
+        "Location": [
+            "bedroom"
+        ],
+        "Timeframe": null,
+        "Properties": {
+            "Gender": 2,
+            "Name": "Alice"
+        }
+    },
+    "bob": {
+        "Action": "Exists",
+        "Entities": [
+            "bob"
+        ],
+        "Location": [
+            "bedroom"
+        ],
+        "Timeframe": null,
+        "Properties": {
+            "Gender": 1,
+            "Name": "Bob"
+        }
+    },
+    "a1":{
+        "Action": "GetOn",
+        "Entities": [
+            "alice",
+            "Bed"
+        ],
+        "Location": [
+            "bedroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a2":{
+        "Action": "Sleep",
+        "Entities": [
+            "alice",
+            "Bed"
+        ],
+        "Location": [
+            "bedroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a3":{
+        "Action": "GetOff",
+        "Entities": [
+            "alice",
+            "Bed"
+        ],
+        "Location": [
+            "bedroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "b1":{
+        "Action": "GetOn",
+        "Entities": [
+            "bob",
+            "Bed"
+        ],
+        "Location": [
+            "bedroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "b2":{
+        "Action": "Sleep",
+        "Entities": [
+            "bob",
+            "Bed"
+        ],
+        "Location": [
+            "bedroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "b3":{
+        "Action": "GetOff",
+        "Entities": [
+            "bob",
+            "Bed"
+        ],
+        "Location": [
+            "bedroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a4":{
+        "Action": "Talk",
+        "Entities": [
+            "alice",
+            "bob"
+        ],
+        "Location": [
+            "bedroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "b4":{
+        "Action": "Talk",
+        "Entities": [
+            "bob",
+            "alice"
+        ],
+        "Location": [
+            "bedroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a5":{
+        "Action": "Move",
+        "Entities": [
+            "alice"
+        ],
+        "Location": [
+            "bedroom",
+            "bathroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "b5":{
+        "Action": "Move",
+        "Entities": [
+            "bob"
+        ],
+        "Location": [
+            "bedroom",
+            "bathroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a6":{
+        "Action": "WashHands",
+        "Entities": [
+            "alice",
+            "sink"
+        ],
+        "Location": [
+            "bathroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "b6":{
+        "Action": "WashHands",
+        "Entities": [
+            "bob",
+            "sink"
+        ],
+        "Location": [
+            "bathroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "temporal": {
+        "starting_actions": {
+            "alice": "a1",
+            "bob": "b1"
+        },
+        "a1": {
+            "relations": null,
+            "next": "a2"
+        },
+        "a2": {
+            "relations": null,
+            "next": "a3"
+        },
+        "a3": {
+            "relations": null,
+            "next": "a4"
+        },
+        "a4": {
+            "relations": [
+                "tm0"
+            ],
+            "next": "a5"
+        },
+        "a5": {
+            "relations": null,
+            "next": "a6"
+        },
+        "a6": {
+            "relations": null,
+            "next": null
+        },
+        "tm0": {
+            "type": "starts_with"
+        },
+        "b1": {
+            "relations": null,
+            "next": "b2"
+        },
+        "b2": {
+            "relations": null,
+            "next": "b3"
+        },
+        "b3": {
+            "relations": null,
+            "next": "b4"
+        },
+        "b4": {
+            "relations": [
+                "tm0"
+            ],
+            "next": "b5"
+        },
+        "b5": {
+            "relations": null,
+            "next": "b6"
+        },
+        "b6": {
+            "relations": [
+                "tm0"
+            ],
+            "next": null
+        }
+    }
+}

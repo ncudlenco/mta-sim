@@ -1,0 +1,230 @@
+{
+    "Sofa": {
+        "Action": "Exists",
+        "Entities": [
+            "Sofa"
+        ],
+        "Location": [
+            "livingroom"
+        ],
+        "Timeframe": null,
+        "Properties": {
+            "Type": "Sofa"
+        }
+    },
+    "remote": {
+        "Action": "Exists",
+        "Entities": [
+            "remote"
+        ],
+        "Location": [
+            "livingroom"
+        ],
+        "Timeframe": null,
+        "Properties": {
+            "Type": "Remote"
+        }
+    },
+    "TV": {
+        "Action": "Exists",
+        "Entities": [
+            "TV"
+        ],
+        "Location": [
+            "livingroom"
+        ],
+        "Timeframe": null,
+        "Properties": {
+            "Type": "Televisor"
+        }
+    },
+    "alice": {
+        "Action": "Exists",
+        "Entities": [
+            "alice"
+        ],
+        "Location": [
+            "livingroom"
+        ],
+        "Timeframe": null,
+        "Properties": {
+            "Gender": 2,
+            "Name": "Alice"
+        }
+    },
+    "bob": {
+        "Action": "Exists",
+        "Entities": [
+            "bob"
+        ],
+        "Location": [
+            "livingroom"
+        ],
+        "Timeframe": null,
+        "Properties": {
+            "Gender": 1,
+            "Name": "Bob"
+        }
+    },
+    "b1": {
+        "Action": "PickUp",
+        "Entities": [
+            "bob",
+            "remote"
+        ],
+        "Location": [
+            "livingroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "b2": {
+        "Action": "Give",
+        "Entities": [
+            "bob",
+            "alice",
+            "remote"
+        ],
+        "Location": [
+            "livingroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a1": {
+        "Action": "INV-Give",
+        "Entities": [
+            "alice",
+            "bob",
+            "remote"
+        ],
+        "Location": [
+            "livingroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "b3": {
+        "Action": "SitDown",
+        "Entities": [
+            "bob",
+            "Sofa"
+        ],
+        "Location": [
+            "livingroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "b4": {
+        "Action": "LookAtObject",
+        "Entities": [
+            "bob",
+            "TV"
+        ],
+        "Location": [
+            "livingroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "b5": {
+        "Action": "StandUp",
+        "Entities": [
+            "alice",
+            "Sofa"
+        ],
+        "Location": [
+            "livingroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a2": {
+        "Action": "SitDown",
+        "Entities": [
+            "alice",
+            "Sofa"
+        ],
+        "Location": [
+            "livingroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a3": {
+        "Action": "LookAtObject",
+        "Entities": [
+            "alice",
+            "TV"
+        ],
+        "Location": [
+            "livingroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "a4": {
+        "Action": "StandUp",
+        "Entities": [
+            "alice",
+            "Sofa"
+        ],
+        "Location": [
+            "livingroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "temporal": {
+        "starting_actions": {
+            "alice": "a1",
+            "bob": "b1"
+        },
+        "a1": {
+            "relations": [
+                "tm0"
+            ],
+            "next": "a2"
+        },
+        "a2": {
+            "relations": null,
+            "next": "a3"
+        },
+        "a3": {
+            "relations": null,
+            "next": "a4"
+        },
+        "a4": {
+            "relations": null,
+            "next": null
+        },
+        "tm0": {
+            "type": "starts_with"
+        },
+        "b1": {
+            "relations": null,
+            "next": "b2"
+        },
+        "b2": {
+            "relations": [
+                "tm0"
+            ],
+            "next": "b3"
+        },
+        "b3": {
+            "relations": null,
+            "next": "b4"
+        },
+        "b4": {
+            "relations": [
+                "tm0"
+            ],
+            "next": "b5"
+        },
+        "b5": {
+            "relations": null,
+            "next": null
+        }
+    }
+}

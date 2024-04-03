@@ -32,6 +32,7 @@ function CameraHandler:requestFocus(playerId)
     if not self.isFocused then --First time.
         self:autoFocus()
         for _, spectator in ipairs(CURRENT_STORY.Spectators) do
+            spectator:setData('fadedCamera', true)
             spectator:fadeCamera(true)
         end
     end

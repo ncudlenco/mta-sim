@@ -18,23 +18,23 @@
                     "z": 17.3359375
                 },
                 "templateIdx": 2,
-                "templates": [
-                    "yoga"
-                ],
                 "offsets": [
                     {
+                        "skip": false,
                         "offset": {
                             "y": 0,
                             "x": 0,
                             "z": 0
                         },
-                        "skip": false,
                         "rotationOffset": {
                             "y": 0,
                             "x": 0,
                             "z": 0
                         }
                     }
+                ],
+                "templates": [
+                    "yoga"
                 ]
             },
             {
@@ -45,23 +45,23 @@
                     "z": 16.94523429870605
                 },
                 "templateIdx": 2,
-                "templates": [
-                    "cigar"
-                ],
                 "offsets": [
                     {
+                        "skip": false,
                         "offset": {
                             "y": 0,
                             "x": 0,
                             "z": 0
                         },
-                        "skip": false,
                         "rotationOffset": {
                             "y": 0,
                             "x": 0,
                             "z": 0
                         }
                     }
+                ],
+                "templates": [
+                    "cigar"
                 ]
             },
             {
@@ -72,23 +72,23 @@
                     "z": 17.30415344238281
                 },
                 "templateIdx": 2,
-                "templates": [
-                    "cigar"
-                ],
                 "offsets": [
                     {
+                        "skip": false,
                         "offset": {
                             "y": 0,
                             "x": 0,
                             "z": 0
                         },
-                        "skip": false,
                         "rotationOffset": {
                             "y": 0,
                             "x": 0,
                             "z": 0
                         }
                     }
+                ],
+                "templates": [
+                    "cigar"
                 ]
             },
             {
@@ -99,23 +99,23 @@
                     "z": 17.11894607543945
                 },
                 "templateIdx": 2,
-                "templates": [
-                    "cigar"
-                ],
                 "offsets": [
                     {
+                        "skip": false,
                         "offset": {
                             "y": 0,
                             "x": 0,
                             "z": 0
                         },
-                        "skip": false,
                         "rotationOffset": {
                             "y": 0,
                             "x": 0,
                             "z": 0
                         }
                     }
+                ],
+                "templates": [
+                    "cigar"
                 ]
             },
             {
@@ -126,23 +126,23 @@
                     "z": 16.82843780517578
                 },
                 "templateIdx": 2,
-                "templates": [
-                    "talkPoiAndAction"
-                ],
                 "offsets": [
                     {
+                        "skip": false,
                         "offset": {
                             "y": 0,
                             "x": 0,
                             "z": 0
                         },
-                        "skip": false,
                         "rotationOffset": {
                             "y": 0,
                             "x": 0,
                             "z": 0
                         }
                     }
+                ],
+                "templates": [
+                    "talkPoiAndAction"
                 ]
             },
             {
@@ -153,23 +153,23 @@
                     "z": 17.01274299621582
                 },
                 "templateIdx": 2,
-                "templates": [
-                    "talkPoiAndAction"
-                ],
                 "offsets": [
                     {
+                        "skip": false,
                         "offset": {
                             "y": 0,
                             "x": 0,
                             "z": 0
                         },
-                        "skip": false,
                         "rotationOffset": {
                             "y": 0,
                             "x": 0,
                             "z": 0
                         }
                     }
+                ],
+                "templates": [
+                    "talkPoiAndAction"
                 ]
             },
             {
@@ -180,23 +180,23 @@
                     "z": 17.07090950012207
                 },
                 "templateIdx": 2,
-                "templates": [
-                    "yoga"
-                ],
                 "offsets": [
                     {
+                        "skip": false,
                         "offset": {
                             "y": 0,
                             "x": 0,
                             "z": 0
                         },
-                        "skip": false,
                         "rotationOffset": {
                             "y": 0,
                             "x": 0,
                             "z": 0
                         }
                     }
+                ],
+                "templates": [
+                    "yoga"
                 ]
             },
             {
@@ -207,23 +207,23 @@
                     "z": 17.2160758972168
                 },
                 "templateIdx": 2,
+                "templates": [
+                    "poi"
+                ],
                 "offsets": [
                     {
-                        "skip": false,
                         "offset": {
                             "y": 0.2000000178813934,
                             "x": 0.4000000059604645,
                             "z": 0
                         },
+                        "skip": false,
                         "rotationOffset": {
                             "y": 0,
                             "x": 0,
                             "z": 0
                         }
                     }
-                ],
-                "templates": [
-                    "poi"
                 ]
             },
             {
@@ -234,23 +234,23 @@
                     "z": 16.70181846618652
                 },
                 "templateIdx": 2,
+                "templates": [
+                    "poi"
+                ],
                 "offsets": [
                     {
-                        "skip": false,
                         "offset": {
                             "y": 0,
                             "x": 0.800000011920929,
                             "z": 0
                         },
+                        "skip": false,
                         "rotationOffset": {
                             "y": 0,
                             "x": 0,
                             "z": 0
                         }
                     }
-                ],
-                "templates": [
-                    "poi"
                 ]
             },
             {
@@ -261,12 +261,39 @@
                     "z": 17.1827220916748
                 },
                 "templateIdx": 2,
+                "templates": [
+                    "poi"
+                ],
+                "offsets": [
+                    {
+                        "offset": {
+                            "y": 0,
+                            "x": 0.5,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "interactions",
+                "position": {
+                    "y": -508.6812438964844,
+                    "x": 793.9136352539062,
+                    "z": 18.0129222869873
+                },
+                "templateIdx": 2,
                 "offsets": [
                     {
                         "skip": false,
                         "offset": {
-                            "y": 0,
-                            "x": 0.5,
+                            "y": 1.100000143051147,
+                            "x": 0.9000000953674316,
                             "z": 0
                         },
                         "rotationOffset": {
@@ -291,20 +318,20 @@
                         "x": 789.9621703922749,
                         "lz": 16.8114070892334,
                         "z": 19.51140785962343,
-                        "fov": 70,
-                        "roll": 0,
+                        "lx": 794.75146484375,
                         "ly": -509.3203430175781,
-                        "lx": 794.75146484375
+                        "roll": 0,
+                        "fov": 70
                     },
                     {
                         "y": -510.0627807602286,
                         "x": 790.3007323890924,
                         "lz": 17.0129222869873,
                         "z": 18.91292304545641,
-                        "fov": 102.5,
-                        "roll": 0,
+                        "lx": 792.6947631835938,
                         "ly": -506.0674743652344,
-                        "lx": 792.6947631835938
+                        "roll": 0,
+                        "fov": 102.5
                     }
                 ],
                 "Objects": [],
@@ -346,20 +373,20 @@
                         "x": 800.3962524682283,
                         "lz": 15.91462230682373,
                         "z": 21.01462402939796,
-                        "fov": 99.5,
-                        "roll": 0,
+                        "lx": 800.4254760742188,
                         "ly": -511.1691284179688,
-                        "lx": 800.4254760742188
+                        "roll": 0,
+                        "fov": 99.5
                     },
                     {
                         "y": -521.6305969133973,
                         "x": 805.9422729089856,
                         "lz": 16.06266975402832,
                         "z": 19.16267053037882,
-                        "fov": 84,
-                        "roll": 0,
+                        "lx": 799.9281005859375,
                         "ly": -512.2374877929688,
-                        "lx": 799.9281005859375
+                        "roll": 0,
+                        "fov": 84
                     }
                 ],
                 "Objects": [],
@@ -411,20 +438,20 @@
                         "x": 793.4238159134984,
                         "lz": 15.75493144989014,
                         "z": 18.85493317991495,
-                        "lx": 793.3652954101562,
-                        "ly": -511.7551879882812,
+                        "fov": 70,
                         "roll": 0,
-                        "fov": 70
+                        "ly": -511.7551879882812,
+                        "lx": 793.3652954101562
                     },
                     {
                         "y": -510.04248046875,
                         "x": 784.4230346679688,
                         "lz": 15.83144664764404,
                         "z": 23.33144836872816,
-                        "lx": 794.3160400390625,
-                        "ly": -515.079345703125,
+                        "fov": 86,
                         "roll": 0,
-                        "fov": 86
+                        "ly": -515.079345703125,
+                        "lx": 794.3160400390625
                     }
                 ],
                 "Objects": [],
@@ -457,6 +484,40 @@
                         "z": 16.24885368347168
                     }
                 ]
+            },
+            {
+                "Description": "",
+                "cameras": [],
+                "Objects": [],
+                "center": {
+                    "y": -522.5673828125,
+                    "x": 798.8167724609375,
+                    "z": 15.3359375
+                },
+                "EvaluatingRegion": false,
+                "name": "street",
+                "vertexes": [
+                    {
+                        "y": -520.1771850585938,
+                        "x": 790.5322265625,
+                        "z": 15.3359375
+                    },
+                    {
+                        "y": -524.9315795898438,
+                        "x": 790.0130004882812,
+                        "z": 15.3359375
+                    },
+                    {
+                        "y": -524.8310546875,
+                        "x": 807.4497680664062,
+                        "z": 15.3359375
+                    },
+                    {
+                        "y": -520.3297729492188,
+                        "x": 807.272216796875,
+                        "z": 15.3359375
+                    }
+                ]
             }
         ],
         "POI": [
@@ -467,8 +528,8 @@
                 "X": 795.0894775390625,
                 "episodeLinks": [
                     "house1_sweet",
-                    "house1_preloaded",
                     "house1_stripped",
+                    "house1_preloaded",
                     "house3_preloaded",
                     "house7",
                     "house8_preloaded",
@@ -563,6 +624,18 @@
                 "Z": 16.95181274414062,
                 "id": 8,
                 "Angle": 167.375732421875,
+                "PossibleActions": [],
+                "allActions": []
+            },
+            {
+                "Description": "street ",
+                "Interior": 0,
+                "Y": -523.3262939453125,
+                "X": 792.7884521484375,
+                "episodeLinks": [],
+                "Z": 16.3359375,
+                "id": 9,
+                "Angle": 340.0066223144531,
                 "PossibleActions": [],
                 "allActions": []
             }

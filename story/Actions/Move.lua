@@ -94,6 +94,7 @@ function Move.destinationReached(player, source)
         return --The marker needs to be reprocessed when the action is resumed.
     end
     player:setAnimation()
+    player:setData('isMoving', false)
     if path and DEBUG_PATHFINDING then
 		outputConsole("Player "..player:getData('name').." reached marker "..sourceIdx.." / "..#path)
 		print("Player "..player:getData('name').." reached marker "..sourceIdx.." / "..#path)
@@ -130,6 +131,7 @@ function Move.destinationReached(player, source)
 
             local lib = lastAction.planningData[player:getData('id')].lib
             local how = lastAction.planningData[player:getData('id')].how
+            player:setData('isMoving', true)
             player:setAnimation(lib, how, -1, true, true, true, true)
         end
         if not DISABLE_BETWEEN_POINTS_TELEPORTATION then
@@ -144,8 +146,13 @@ function Move.destinationReached(player, source)
         if #lastAction.planningData[player:getData('id')].contextSegments > 0 then
             --teleport player to next context, save snapshot for that player
             local nextPoi = lastAction.planningData[player:getData('id')].contextSegments[1]
+            local occupyingActor = FirstOrDefault(CURRENT_STORY.CurrentEpisode.peds, function(p) return math.abs((p.position - nextPoi.position).length) < 0.003 end)
+            if occupyingActor then
+                occupyingActor.position = occupyingActor.position + occupyingActor.matrix.forward * 0.5
+            end
             print('!!!!!!!!!!!!!Teleporting player '..player:getData('id')..' to context '..nextPoi.Episode.name)
             player:setAnimation() --stop the animation - the player will stop moving
+            player:setData('isMoving', false)
             player.position = nextPoi.position
             player.rotation = nextPoi.rotation
             player.interior = nextPoi.Episode.InteriorId
@@ -163,6 +170,7 @@ function Move.destinationReached(player, source)
             nextPoi.Region:OnPlayerHit(player)
             story.CameraHandler:requestFocus(player:getData('id')) --Actors changing contexts get an extra focus request
         else
+            player:setData('isMoving', false)
             player:setAnimation() --stop the animation - the player will stop moving
             player.position = lastAction.NextLocation.position
             player.rotation = lastAction.NextLocation.rotation
@@ -269,7 +277,7 @@ function Move:Apply()
     StoryActionBase.Apply(self) --TODO: make this call for each action!!!!!!!!!!
     local teleport = false
     if self.NextLocation.Episode and self.NextLocation.Episode.name ~= self.Performer:getData('currentEpisode') then
-        print('SWITCHING CONTEXT')
+        print('SWITCHING CONTEXT from '..self.Performer:getData('currentEpisode')..' to '..self.NextLocation.Episode.name)
 
         local contextSwitchingPath = self:getLinks(self.Performer:getData('currentEpisode'), {})
         if not contextSwitchingPath then
@@ -312,6 +320,9 @@ function Move:InternalShortestPath(graphId, pathfindingGraph, source, sourceRegi
             end
         end
         print("INFO, pathfinding graph and source region '"..sourceRegion.name.."'found for start point")
+        if start then
+            print("INFO, start node id:"..start.id)
+        end
     else
         print("WARNING, no pathfinding graph or source region for start point")
     end
@@ -326,7 +337,10 @@ function Move:InternalShortestPath(graphId, pathfindingGraph, source, sourceRegi
                 last = p
             end
         end
-        print("INFO, pathfinding graph and source region found for end point")
+        print("INFO, pathfinding graph and source region '"..targetRegion.name.."' found for end point")
+        if last then
+            print("INFO, last node id:"..last.id)
+        end
     else
         print("WARNING, no pathfinding graph or source region for end point")
     end
@@ -424,10 +438,8 @@ function Move:FindNextShortestPath(player)
                     local how = self.planningData[player:getData('id')].how
 
                     if DEBUG_PATHFINDING then
-                        local strActorIdx = string.gsub(player:getData('id'), "actor", "")
-                        print('Path found between '..player:getData('id')..' and '..self.TargetItem.Region.name..' actor idx:'..strActorIdx)
-                        local actorIdx = tonumber(strActorIdx) + 1
-                        print('As nr '..actorIdx)
+                        local actorIdx = LastIndexOf(CURRENT_STORY.CurrentEpisode.peds, player:getData('id'), function(other, item) return other:getData('id') == item end)
+                        print('Path found between '..player:getData('id')..' and '..self.TargetItem.Region.name..' actor idx:'..actorIdx..'. The path length is '..#result)
                         local colorCode = 255 / 4 * actorIdx
                         if DEBUG_MARKERS[player:getData('id')] then
                             for _,m in ipairs(DEBUG_MARKERS[player:getData('id')]) do
@@ -463,6 +475,7 @@ function Move:FindNextShortestPath(player)
 
                     Timer(function()
                         player:setAnimation(lib, how, -1, true, true, true, true)
+                        player:setData('isMoving', true)
                     end, 100, 1)
                     if not DISABLE_BETWEEN_POINTS_TELEPORTATION then
                         Move.wait(player)
@@ -511,8 +524,10 @@ function Move.hasReachedMarker(player, marker)
             player:setRotation(0,0,findRotation(player.position.x, player.position.y, plan.path[idx][1], plan.path[idx][2]), "default", true)
             -- print("After computation ROTATION: "..player.rotation.z..'; Position: '..player.position.x..', '..player.position.y..', '..player.position.z)
             player:setAnimation(plan.lib, plan.how, -1, true, true, true, true)
+            player:setData('isMoving', true)
+
             print('Actor '..playerId..' rerunning timer for marker '..marker:getData('idx'))
-            Timer(Move.hasReachedMarker, 1000, 1, player, marker)
+            Timer(Move.hasReachedMarker, 300, 1, player, marker)
         else
             print("[FATAL ERROR] "..playerId..". The player had no plan or the path is empty but Move.hasReachedMarker has been called")
         end
@@ -570,6 +585,8 @@ function Move.teleport(player, lastAction)
         return
     else
         player:setAnimation() --stop the animation - the player will stop moving
+        player:setData('isMoving', false)
+
         player.position = lastAction.NextLocation.position
         player.interior = lastAction.NextLocation.Episode.InteriorId
         player.rotation = lastAction.NextLocation.rotation
@@ -591,7 +608,10 @@ end
 
 function Move:pause(player)
     player:setData('paused', true)
-    player:setAnimation() --Stop the player wherever it is
+    if player:getData('isMoving') then
+        player:setAnimation() --Stop the player wherever it is
+        player:setData('isMoving', false)
+    end
     print('Pause called for '..player:getData('id'))
     if self.planningData[self.Performer:getData('id')] then
         self.planningData[self.Performer:getData('id')].paused = true

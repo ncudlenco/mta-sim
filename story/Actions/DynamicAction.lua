@@ -12,7 +12,8 @@ end)
 function DynamicAction:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
-    
+    StoryActionBase.Apply(self)
+
     StoryActionBase.GetLogger(self, story):Log(" " ..self.Description, self)
 
     setPedAnimation(self.Performer, self.block, self.anim, self.time or 3000, self.loop or true, self.updatePosition or true, self.interruptable or false, self.freezeLastFrame or true)
@@ -27,6 +28,7 @@ end
 function DynamicAction:GetDynamicString()
     return 'return DynamicAction{ block = '..self.block..','..
         'anim = '..self.anim..', '..
+        'name = '..self.Name..', '..
         'time = '..(self.time or 'nil')..', '..
         'loop = '..(self.loop or 'nil')..', '..
         'updatePosition = '..(self.updatePosition or 'nil')..', '..

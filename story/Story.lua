@@ -109,12 +109,12 @@ function Story:Play()
                         else
                             spectator:setData('takenShots', 1)
                         end
-                        spectator:takeScreenShot(960, 540, spectator:getData('id')..';'..spectator:getData('storyId')..';'..spectator.name, 50)
+                        spectator:takeScreenShot(WIDTH_RESOLUTION, HEIGHT_RESOLUTION, spectator:getData('id')..';'..spectator:getData('storyId')..';'..spectator.name, 100)
                     else
                         local requestedShots = spectator:getData('takenShots')
                         local actuallyTaken = SCREENSHOTS[spectator:getData('id')][spectator:getData('storyId')]
 
-                        if DEBUG then
+                        if DEBUG_SCREENSHOTS then
                             print("RecorderTimer - storyId ".. (spectator:getData('storyId') or "null") .." actorId "..
                                 (spectator:getData('id') or "null") .." waiting to download all the screenshots: " ..
                                 (actuallyTaken or 'null') .. " / " .. (requestedShots or 'null')
@@ -122,7 +122,7 @@ function Story:Play()
                         end
 
                         if actuallyTaken >= requestedShots then
-                            if DEBUG then
+                            if DEBUG_SCREENSHOTS then
                                 outputConsole("RecorderTimer - DONE")
                             end
                             story.RecorderTimer:destroy()

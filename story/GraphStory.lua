@@ -16,18 +16,18 @@ GraphStory = class(StoryBase, function(o, spectators, logData)
         -- House12()
     }
     o.DynamicEpisodes = {
-      "house1_sweet",
-      "house1_stripped",
+    --   "house1_sweet",
+    --   "house1_stripped",
     -- --   "house3_preloaded", --NOT WORKING! The pathfinding seems flawed here, when we have 2 levels?
     -- --   "house7", --NOT WORKING! Potential issue when the link POI is located outside a region
     --   "house8_preloaded",
-    --   "house9",
+      "house9",
     --   "house10_preloaded", -- Not Working!
     --   "house12_preloaded", -- Working but needs the objects removed. Some flakiness exists but in general it works...
       "garden",
     --   "office",
     --   "office2",
-      "common",
+    --   "common",
     --   "gym1",
     --   "gym2",
     --   "gym3"
@@ -594,17 +594,19 @@ function GraphStory:Play()
 
                     for _,spectator in ipairs(story.Spectators) do
                         if not story.Disposed then
-                            if spectator:getData('takenShots') then
-                                spectator:setData('takenShots', 1 + spectator:getData('takenShots'))
-                            else
-                                spectator:setData('takenShots', 1)
+                            if spectator:getData('fadedCamera') then
+                                if spectator:getData('takenShots') then
+                                    spectator:setData('takenShots', 1 + spectator:getData('takenShots'))
+                                else
+                                    spectator:setData('takenShots', 1)
+                                end
+                                spectator:takeScreenShot(WIDTH_RESOLUTION, HEIGHT_RESOLUTION, spectator:getData('id')..';'..spectator:getData('storyId')..';'..spectator.name, 75)
                             end
-                            spectator:takeScreenShot(960, 540, spectator:getData('id')..';'..spectator:getData('storyId')..';'..spectator.name, 50)
                         else
                             local requestedShots = spectator:getData('takenShots')
                             local actuallyTaken = SCREENSHOTS[spectator:getData('id')][spectator:getData('storyId')]
 
-                            if DEBUG then
+                            if DEBUG_SCREENSHOTS then
                                 print("RecorderTimer - storyId ".. (spectator:getData('storyId') or "null") .." actorId "..
                                     (spectator:getData('id') or "null") .." waiting to download all the screenshots: " ..
                                     (actuallyTaken or 'null') .. " / " .. (requestedShots or 'null')
@@ -612,8 +614,8 @@ function GraphStory:Play()
                             end
 
                             if actuallyTaken >= requestedShots then
-                                if DEBUG then
-                                    outputConsole("RecorderTimer - DONE")
+                                if DEBUG_SCREENSHOTS then
+                                    print("RecorderTimer - DONE")
                                 end
                                 story.RecorderTimer:destroy()
                                 terminatePlayer(spectator, "story ended")

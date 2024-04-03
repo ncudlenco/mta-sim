@@ -28,6 +28,7 @@ function initializeSpectator(source)
     math.randomseed(os.clock()*100000000000)
     math.random(); math.random(); math.random()
     source:setData('takenShots', 0)
+    source:setData('fadedCamera', false)
     source:setData('spawned', false)
 
 

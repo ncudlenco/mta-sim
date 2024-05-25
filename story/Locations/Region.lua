@@ -314,9 +314,52 @@ function Region.GetClosestByVertex(element, regions)
     return closestRegion
 end
 
-function Region:SetRandomStaticCamera()
+-- Define a function to transform the actor's position into the camera's coordinate system
+local function isActorSeenByCamera(camera, actor)
+    local actorPos = actor.position
+
+    local cameraPos = Vector3(camera.x, camera.y, camera.z)
+    local cameraLookAtPos = Vector3(camera.lx, camera.ly, camera.lz)
+    -- Calculate the view direction of the camera
+    local viewDir = cameraLookAtPos - cameraPos
+    viewDir:normalize()
+
+    -- Calculate the right and up vectors using the view direction and world up vector
+    local worldUp = Vector3(0, 1, 0)
+    local right = viewDir:cross(worldUp)
+    right:normalize()
+    local up = right:cross(viewDir)
+    up:normalize()
+
+    -- Apply roll rotation to the right and up vectors
+    right = right:rotateAroundAxis(viewDir, camera.roll)
+    up = up:rotateAroundAxis(viewDir, camera.roll)
+
+    -- Calculate the vector from the camera to the actor
+    local camToActor = actorPos - cameraPos
+
+    -- Normalize the camToActor vector
+    camToActor:normalize()
+
+    -- Calculate the dot products for view, right, and up directions
+    local dotView = viewDir:dot(camToActor)
+    local dotRight = right:dot(camToActor)
+    local dotUp = up:dot(camToActor)
+
+    -- Calculate the angles using the dot products
+    local angleView = math.acos(dotView)
+    local angleHorizontal = math.atan2(dotRight, dotView)
+    local angleVertical = math.atan2(dotUp, dotView)
+
+    -- Convert the camera's FOV from degrees to radians
+    local fovRad = math.rad(camera.fov)
+
+    -- Check if the angles are within the camera's field of view
+    return angleView <= (fovRad / 2) and math.abs(angleHorizontal) <= (fovRad / 2) and math.abs(angleVertical) <= (fovRad / 2)
+end
+
+function Region:SetStaticCamera(cameraPos, actor)
     if STATIC_CAMERA and self.cameras and #self.cameras > 0 then
-        local cameraPos = PickRandom(self.cameras)
         local story = CURRENT_STORY
         for _, spectator in ipairs(story.Spectators) do
             spectator:setCameraMatrix(cameraPos.x, cameraPos.y, cameraPos.z, cameraPos.lx, cameraPos.ly, cameraPos.lz, cameraPos.roll, cameraPos.fov)
@@ -327,10 +370,32 @@ function Region:SetRandomStaticCamera()
     end
 end
 
-function Region:AssignFocus()
+function Region:SetRandomStaticCamera()
+    self:SetStaticCamera(PickRandom(self.cameras))
+end
+
+---Set the camera to the first camera that sees the actor or to a random camera if none of them see the actor
+---@param actor table
+function Region:SetStaticCameraWhereActorIsInFOVOrRandom(actor)
+    local cameraPos = PickRandom(Where(self.cameras, function(c) return isActorSeenByCamera(c, actor) end))
+    if cameraPos == nil then
+        if DEBUG then
+            print('No camera sees the actor, setting random camera')
+        end
+        cameraPos = PickRandom(self.cameras)
+    elseif DEBUG then
+        print('Camera sees the actor'..'cameraPos: '..cameraPos.x)
+    end
+    self:SetStaticCamera(cameraPos, actor)
+end
+
+function Region:AssignFocus(actor)
+    if DEBUG then
+        print('[Region]: AssignFocus '..self.name)
+    end
     CURRENT_STORY.CurrentEpisode.CurrentRegion = self
     CURRENT_STORY.CurrentFocusedEpisode = self.Episode
-    self:SetRandomStaticCamera()
+    self:SetStaticCameraWhereActorIsInFOVOrRandom(actor)
 end
 
 function Region:OnPlayerHit(player)

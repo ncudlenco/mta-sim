@@ -17,6 +17,7 @@ StoryEpisodeBase = class(function(o, params)
     o.supertemplates = params.supertemplates or {}
     o.temporaryInitialized = false
     o.initialized = false
+    o.paused = false
 end)
 
 function StoryEpisodeBase:__eq(other)
@@ -583,4 +584,49 @@ function StoryEpisodeBase:LoadFromFile()
     else
         return false
     end
+end
+
+function StoryEpisodeBase:Pause(actor)
+    self.paused = true
+    for _, other_actor in ipairs(self.peds) do
+        if not other_actor:getData('storyEnded') and other_actor:getData('id') ~= actor:getData('id')
+            and other_actor:getData('currentEpisode') == self.name then
+            print('actor '..other_actor:getData('id')..' is in old focused episode')
+            if #CURRENT_STORY.History[other_actor:getData('id')] > 0 then
+                local lastAction = CURRENT_STORY.History[other_actor:getData('id')][#CURRENT_STORY.History[other_actor:getData('id')]]
+                local isMove = 'false'
+                if lastAction:is_a(Move) then
+                    isMove = 'true'
+                end
+                local isNotFinished = 'false'
+                if lastAction:is_a(Move) and not lastAction:isFinished(other_actor) then
+                    isNotFinished = 'true'
+                end
+                print('actor '..other_actor:getData('id')..' last action '..lastAction.Name..' (is a move action: '..isMove..') is not finished: '..isNotFinished)
+
+                if lastAction:is_a(Move) and not lastAction:isFinished(other_actor) then
+                    lastAction:pause(other_actor)
+                    --Make sure some time will be allocated to this actor afterwards
+                    CURRENT_STORY.CameraHandler:requestFocus(other_actor:getData('id'))
+                    print('actor '..other_actor:getData('id')..' is now paused and has a focus request prepped')
+                end
+            end
+        end
+    end
+end
+
+function StoryEpisodeBase:Resume()
+    for _, actor in ipairs(self.peds) do
+        if actor:getData('currentEpisode') == self.name then
+            if actor:getData('paused') and #CURRENT_STORY.History[actor:getData('id')] > 0 then
+                local lastAction = CURRENT_STORY.History[actor:getData('id')][#CURRENT_STORY.History[actor:getData('id')]]
+                if lastAction:is_a(Move) then
+                    CURRENT_STORY.CameraHandler:requestFocus(actor:getData('id')) --reduntant focus requests
+                    lastAction:resume(actor)
+                end
+            end
+            actor:setData('paused', false)
+        end
+    end
+    self.paused = false
 end

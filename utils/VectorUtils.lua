@@ -82,3 +82,21 @@ function VectorUtils.angleAboutAxis(me, other, axis)
     return me:projectOnPlane(axis):signedAngle(other:projectOnPlane(axis), axis)
 end
 Vector3.angleAboutAxis = VectorUtils.angleAboutAxis
+
+
+--- Rotates a vector around an axis by a given angle
+---@param me table
+---@param axis table
+---@param angle number
+---@return table
+function VectorUtils.rotateAroundAxis(me, axis, angle)
+    local cosTheta = math.cos(angle)
+    local sinTheta = math.sin(angle)
+    local dot = me:dot(axis)
+    return Vector3(
+        cosTheta * me.x + sinTheta * (axis.y * me.z - axis.z * me.y) + (1 - cosTheta) * dot * axis.x,
+        cosTheta * me.y + sinTheta * (axis.z * me.x - axis.x * me.z) + (1 - cosTheta) * dot * axis.y,
+        cosTheta * me.z + sinTheta * (axis.x * me.y - axis.y * me.x) + (1 - cosTheta) * dot * axis.z
+    )
+end
+Vector3.rotateAroundAxis = VectorUtils.rotateAroundAxis

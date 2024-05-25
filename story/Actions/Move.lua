@@ -53,6 +53,21 @@ function Move.releaseLock(playerId)
     GLOBAL_LOCKS[playerId] = {}
     return true
 end
+
+local function switchPickedObjectsInterior(actor, episode)
+    local pickedObjects = actor:getData('pickedObjects')
+    if episode and pickedObjects then
+        for _, o in ipairs(pickedObjects) do
+            print("Switching interior for object "..o[1])
+            local object = FirstOrDefault(CURRENT_STORY.CurrentEpisode.Objects, function(obj) return obj.ObjectId == o[1] end)
+            if object and object.instance then
+                print("Found object instance, switching to interior "..episode.InteriorId..' of episode '..episode.name)
+                object.instance.interior = episode.InteriorId
+            end
+        end
+    end
+end
+
 function Move.destinationReached(player, source)
     if not source then
         if DEBUG_PATHFINDING then
@@ -156,6 +171,9 @@ function Move.destinationReached(player, source)
             player.position = nextPoi.position
             player.rotation = nextPoi.rotation
             player.interior = nextPoi.Episode.InteriorId
+            -- switch picked objects interior
+            switchPickedObjectsInterior(player, nextPoi.Episode)
+
             table.remove(lastAction.planningData[player:getData('id')].contextSegments, 1)
             for _, context in ipairs(lastAction.planningData[player:getData('id')].contextSegments) do
                 print("Contexts: ["..player:getData('id').."]. Target location: "..context.Description.." in region: "..context.Region.name.." and episode: "..context.Episode.name)

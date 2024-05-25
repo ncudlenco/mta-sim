@@ -50,6 +50,11 @@ function MetaEpisode:Initialize(actor, isTemporaryInitialize, actors, graphOfEve
         end
     end
 
+    -- Propagate all peds to all episodes
+    for _,e in ipairs(self.Episodes) do
+        e.peds = self.peds
+    end
+
     -- Link with move actions the episodes
     self.episodeLinks = DropNull(Select(self.POI, function(poi)
         print("PreEvaluating "..poi.Episode.name..": "..poi.Description)

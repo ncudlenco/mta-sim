@@ -7,6 +7,7 @@ Give = class(StoryActionBase, function(o, params)
     o.TargetPlayer = params.targetPlayer
     o.how = params.how or PickUp.eHow.Normal
     o.hand = params.hand or PickUp.eHand.Right
+    o.isInteraction = true
 end)
 
 function Give:Apply()

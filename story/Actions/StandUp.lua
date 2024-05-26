@@ -50,8 +50,8 @@ function StandUp:Apply()
 
     Timer(function()
         self.Performer.rotation = self.NextLocation.rotation
-    end, duration, 1)
-    OnGlobalActionFinished(duration, self.Performer:getData('id'), self.Performer:getData('storyId'))
+    end, duration + 200, 1)
+    OnGlobalActionFinished(duration + 300, self.Performer:getData('id'), self.Performer:getData('storyId'))
 end
 
 function StandUp:GetDynamicString()

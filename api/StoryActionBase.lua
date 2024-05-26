@@ -45,8 +45,8 @@ function StoryActionBase:GetLogger(story)
     return FirstOrDefault(story.Loggers)
 end
 
-function StoryActionBase:pause()
+function StoryActionBase:pause(player)
 end
 
-function StoryActionBase:resume()
+function StoryActionBase:resume(player)
 end

@@ -25,6 +25,17 @@ function OnGlobalActionFinished(delay, playerId, storyId, callback, destroyedIte
             callback(playerId, storyId)
         end
 
+        local actor = FirstOrDefault(CURRENT_STORY.CurrentEpisode.peds, function(ped) return ped:getData('id') == playerId end)
+        if not actor then
+            print("[FATAL ERROR] [ActionsGlobal] Actor "..playerId.." not found!")
+            return
+        end
+        if actor:getData('requestPause') then
+            actor:setData('requestPause', false)
+            actor:setData('paused', true)
+            CURRENT_STORY.CameraHandler:requestFocus(actor:getData('id'))
+            return
+        end
         -- story.CameraHandler:freeFocus(playerId)
 
         if not lastAction then
@@ -33,7 +44,6 @@ function OnGlobalActionFinished(delay, playerId, storyId, callback, destroyedIte
                 print("GlobalAction:Apply - the last action was null, initiating the first action protocol")
             end
             --The case where the first action didn't start because the location was busy
-            local actor = FirstOrDefault(CURRENT_STORY.CurrentEpisode.peds, function(ped) return ped:getData('id') == playerId end)
             local idx = actor:getData('startingPoiIdx')
             if DEBUG then
                 print("Starting poi idx for ped "..idx)

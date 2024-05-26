@@ -1,12 +1,14 @@
 CameraHandler = class(function(o)
-    o.FocusRequests = {'actor0'}
+    o.FocusRequests = {}
     o.isFocused = false
+    o.isSwitchingContext = false
 end
 )
 
 function CameraHandler:Reset()
-    self.FocusRequests = {'actor0'}
+    self.FocusRequests = {}
     self.isFocused = false
+    self.isSwitchingContext = false
 end
 
 function CameraHandler:__tostring()
@@ -36,6 +38,18 @@ function CameraHandler:requestFocus(playerId)
             spectator:fadeCamera(true)
         end
     end
+end
+
+function CameraHandler:FadeForAll(fade, time)
+    if not time then
+        time = 1000
+    end
+    Timer(function(fade)
+        for _, spectator in ipairs(CURRENT_STORY.Spectators) do
+            spectator:setData('fadedCamera', fade)
+            spectator:fadeCamera(fade)
+        end
+    end, time, 1, fade)
 end
 
 
@@ -75,7 +89,7 @@ function CameraHandler:getCurrentRegionAndEpisode(actor)
         episodeName = actor:getData('currentEpisode')
     end
 
-    return regionId, regionName, targetEpisode
+    return regionId, regionName, episodeName
 end
 
 --- Switches the interior of picked objects in a given region for a specific actor.
@@ -136,6 +150,9 @@ end
 --          - restore the context snapshot for all actors (if any)
 --          - resume the simulation
 function CameraHandler:autoFocus()
+    if self.isSwitchingContext then
+        return
+    end
     if DEBUG_CAMERA then
         print("[CameraHandler] autoFocus ")
         print("[CameraHandler] "..self:__tostring())
@@ -183,6 +200,9 @@ function CameraHandler:autoFocus()
 
     -- Before making the switch to the other context
     if contextChanged then
+        if DEBUG then
+            print("The episode name for the actor that is about to receive focus "..playerId.." is "..episodeName..". The episode in focus is "..CURRENT_STORY.CurrentFocusedEpisode.name)
+        end
         -- Pause all actions of the actors in the old focused episode (only move actions that are not finished for now)
         -- This needs to be enhanced: most of the time, other complex actions are not finished yet and it takes a while to finish them.
         -- A strategy needs to be defined regarding when precisely to switch focus to the new episode, because this may result in actions being interrupted due to game optimizations of the streamed entities.
@@ -198,10 +218,29 @@ function CameraHandler:autoFocus()
         -- 3.2 The last paused action should be re-executed as fast as possible (while the screen is still faded).
         -- 3.3 The screen should be faded in after the last action is finished and the episode is resumed.
         -- 4. The chain of actions should resume normally, choosing the next actions for all actors in that episode.
-        CURRENT_STORY.CurrentFocusedEpisode:Pause(actor)
+        CURRENT_STORY.CurrentFocusedEpisode:RequestPause()
+        self.isSwitchingContext = true
+        self:WaitUntilEpisodePausedThenAssignFocusToRegion(playerId, regionId, contextChanged)
+    else
+        self:assignFocusToRegion(actor, region, contextChanged)
     end
+end
 
-    self:assignFocusToRegion(actor, region, contextChanged)
+function CameraHandler:WaitUntilEpisodePausedThenAssignFocusToRegion(playerId, regionId, contextChanged, unfaded)
+    Timer(function(playerId, regionId, contextChanged)
+        if not CURRENT_STORY.CurrentFocusedEpisode:AreAllActionsPaused() then
+            CURRENT_STORY.CameraHandler:WaitUntilEpisodePausedThenAssignFocusToRegion(playerId, regionId, contextChanged)
+        elseif not unfaded then
+            self:FadeForAll(false, 0)
+            CURRENT_STORY.CameraHandler:WaitUntilEpisodePausedThenAssignFocusToRegion(playerId, regionId, contextChanged, true)
+        else
+            CURRENT_STORY.CameraHandler.isSwitchingContext = false
+            local actor = FirstOrDefault(CURRENT_STORY.CurrentEpisode.peds, function(ped) return ped:getData('id') == playerId end)
+            local region = FirstOrDefault(CURRENT_STORY.CurrentEpisode.Regions, function(r) return r.Id == regionId end)
+            CURRENT_STORY.CameraHandler:assignFocusToRegion(actor, region, contextChanged)
+        end
+    end, 1000, 1, playerId, regionId, contextChanged)
+
 end
 
 --- Assigns focus to a given actor in a given region. If the region is not found, the function attempts to fix this by triggering a region hit from the closest point of interest (POI) with respect to the actor.
@@ -219,6 +258,9 @@ function CameraHandler:assignFocusToRegion(actor, region, contextChanged)
 
         -- Resume the actions of the actors in the new focused episode
         CURRENT_STORY.CurrentFocusedEpisode:Resume()
+        if contextChanged then
+            self:FadeForAll(true, 1500)
+        end
     else
         print('Warning! [CameraHandler] could not find a region with id '..(regionId or 'null')..':'..(regionName or 'null')..' in episode '..(episodeName or 'null')..' for actor '..(actor:getData('id') or 'null'))
         print('Trying to fix the actor '..(actor:getData('id') or 'null'))

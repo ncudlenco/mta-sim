@@ -5,6 +5,7 @@ Kiss = class(StoryActionBase, function(o, params)
     StoryActionBase.init(o,params)
 
     o.TargetPlayer = params.targetPlayer
+    o.isInteraction = true
 end)
 
 function Kiss:Apply()

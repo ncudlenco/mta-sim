@@ -5,11 +5,13 @@ Talk = class(StoryActionBase, function(o, params)
     StoryActionBase.init(o,params)
 
     o.TargetPlayer = params.targetPlayer
+    o.isInteraction = true
 end)
 
 function Talk:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
+
     StoryActionBase.Apply(self)
 
     local function faceP1ToP2(p1, p2)

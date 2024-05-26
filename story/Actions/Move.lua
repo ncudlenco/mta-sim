@@ -114,6 +114,11 @@ function Move.destinationReached(player, source)
 		outputConsole("Player "..player:getData('name').." reached marker "..sourceIdx.." / "..#path)
 		print("Player "..player:getData('name').." reached marker "..sourceIdx.." / "..#path)
 	end
+    if player:getData('requestPause') then
+        lastAction:pause(player)
+        CURRENT_STORY.CameraHandler:requestFocus(player:getData('id'))
+        return
+    end
 	if (path and sourceIdx + 1 <= #path) then
 		local idx = sourceIdx + 1
 		if DEBUG_PATHFINDING then
@@ -294,6 +299,27 @@ function Move:Apply()
     local contextSegments = {self.NextLocation}
     StoryActionBase.Apply(self) --TODO: make this call for each action!!!!!!!!!!
     local teleport = false
+    if not self.Performer:getData('currentEpisode') then
+        print('[Move.Apply] Actor does not have a current episode set! Trying to fix the actor '..self.Performer:getData('id'))
+        local closestPoi = nil
+        local minDist = 99999
+        for _, poi in ipairs(CURRENT_STORY.CurrentEpisode.POI) do
+            if poi.Region then
+                local distance = math.abs((poi.position - self.Performer.position).length)
+                if distance < minDist then
+                    closestPoi = poi
+                    minDist = distance
+                end
+            end
+        end
+        if closestPoi == nil then
+            return regionId, regionName, episodeName
+        end
+    end
+    if not self.Performer:getData('currentEpisode') then
+        print('[FATAL ERROR][Move.Apply] Actor '..self.Performer:getData('id')..' does not have a current episode set!')
+        return
+    end
     if self.NextLocation.Episode and self.NextLocation.Episode.name ~= self.Performer:getData('currentEpisode') then
         print('SWITCHING CONTEXT from '..self.Performer:getData('currentEpisode')..' to '..self.NextLocation.Episode.name)
 
@@ -426,13 +452,13 @@ function Move:FindNextShortestPath(player)
     end
     local resumePoi = self.planningData[player:getData('id')].resumePoi
     if resumePoi then
-        player.position = resumePoi.position
-        player.rotation = resumePoi.rotation
+        -- player.position = resumePoi.position
+        -- player.rotation = resumePoi.rotation
         player.interior = resumePoi.Episode.InteriorId
         resumePoi.Region:OnPlayerHit(player)
     end
     if contextSegments[1].Episode.name ~= player:getData('currentEpisode') then
-        print("[FATAL ERROR!] Move:FindNextShortestPath - The context segment episode ".. contextSegments[1].Episode.name .." was different than the player episode "..player:getData('currentEpisode').."!")
+        print("[FATAL ERROR!] Move:FindNextShortestPath - The context segment episode ".. contextSegments[1].Episode.name .." was different than the player episode "..player:getData('currentEpisode').."! Teleporting player "..player:getData('id').."...")
         Timer(Move.teleport, 5000, 1, self.Performer, self)
         return
     end
@@ -510,22 +536,32 @@ function Move:FindNextShortestPath(player)
 end
 
 function Move.hasReachedMarker(player, marker)
-    if not marker or not isElement(marker) or not marker.position then
-        print("[Warning] The marker was null while calling Move.hasReachedMarker")
-        return
-    end
     if not player or not player.position then
         print("[FATAL ERROR] The player was null while calling Move.hasReachedMarker")
         return
     end
+    if not marker or not isElement(marker) or not marker.position then
+        print("[Warning] The marker was null while calling Move.hasReachedMarker for player "..player:getData('id').."!")
+        return
+    end
     if player:isDead() then
-        print("[FATAL ERROR] The player was dead while calling Move.hasReachedMarker")
+        print("[FATAL ERROR] The player was dead while calling Move.hasReachedMarker for marker "..marker:getData('idx').." and player "..player:getData('id').."!")
         return
     end
     local playerId = player:getData('id')
     local story = CURRENT_STORY
     local lastAction = story.History[playerId][#story.History[playerId]]
     local plan = {}
+
+    if not lastAction:is_a(Move) then
+        print("[Fatal Error] The last action was not a Move action for player "..playerId)
+        return
+    end
+
+    if not lastAction.planningData then
+        print("[Fatal Error] The planning data was null for player "..playerId)
+        return
+    end
     if lastAction.planningData[playerId] then
         plan = lastAction.planningData[playerId]
     end
@@ -625,17 +661,24 @@ function Move:isFinished(player)
 end
 
 function Move:pause(player)
-    player:setData('paused', true)
     if player:getData('isMoving') then
         player:setAnimation() --Stop the player wherever it is
         player:setData('isMoving', false)
     end
-    print('Pause called for '..player:getData('id'))
-    if self.planningData[self.Performer:getData('id')] then
-        self.planningData[self.Performer:getData('id')].paused = true
+    if DEBUG then
+        print('Move.Pause called for '..player:getData('id'))
+    end
+    if self.planningData[player:getData('id')] then
+        self.planningData[player:getData('id')].paused = true
     else
         print('[FATAL ERROR] [Move:pause] Could not find a plan for '..player:getData('id'))
     end
+
+    Timer(function(player)
+        player:setData('requestPause', false)
+        player:setData('paused', true)
+    end,
+    1000, 1, player)
 end
 
 function Move:resume(player)
@@ -643,7 +686,7 @@ function Move:resume(player)
         print('Resume called for '..player:getData('id'))
         local plan = self.planningData[player:getData('id')]
         if plan then
-            if #plan.contextSegments > 0 and #plan.path == 0 then
+            if plan.contextSegments and #plan.contextSegments > 0 and #plan.path == 0 then
                 print('The plan had an empty path for '..player:getData('id'))
                 self:FindNextShortestPath(player)
                 return

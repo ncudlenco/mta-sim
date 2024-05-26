@@ -690,6 +690,10 @@ function Location:GetNextValidAction(player)
                             end
                             if next.NextLocation.isBusy and (not occupyingActor or not occupyingActor:getData('storyEnded')) then
                                 player:setAnimation("cop_ambient", "coplook_loop", 5000, true, false, false, true)
+                                if player:getData('requestPause') then
+                                    player:setData('requestPause', false)
+                                    player:setData('paused', true)
+                                end
                                 Timer(wait, 5000, 1)
                             elseif not self.doNothing then
                                 player:setData('waitingFor',nil)

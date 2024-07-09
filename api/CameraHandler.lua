@@ -226,10 +226,13 @@ function CameraHandler:autoFocus()
     end
 end
 
-function CameraHandler:WaitUntilEpisodePausedThenAssignFocusToRegion(playerId, regionId, contextChanged, unfaded)
-    Timer(function(playerId, regionId, contextChanged)
-        if not CURRENT_STORY.CurrentFocusedEpisode:AreAllActionsPaused() then
-            CURRENT_STORY.CameraHandler:WaitUntilEpisodePausedThenAssignFocusToRegion(playerId, regionId, contextChanged)
+function CameraHandler:WaitUntilEpisodePausedThenAssignFocusToRegion(playerId, regionId, contextChanged, unfaded, maxWaitTime)
+    if not maxWaitTime then
+        maxWaitTime = 30000
+    end
+    Timer(function(playerId, regionId, contextChanged, maxWaitTime)
+        if not CURRENT_STORY.CurrentFocusedEpisode:AreAllActionsPaused(maxWaitTime <= 0) then
+            CURRENT_STORY.CameraHandler:WaitUntilEpisodePausedThenAssignFocusToRegion(playerId, regionId, contextChanged, false, maxWaitTime)
         elseif not unfaded then
             self:FadeForAll(false, 0)
             CURRENT_STORY.CameraHandler:WaitUntilEpisodePausedThenAssignFocusToRegion(playerId, regionId, contextChanged, true)
@@ -239,7 +242,7 @@ function CameraHandler:WaitUntilEpisodePausedThenAssignFocusToRegion(playerId, r
             local region = FirstOrDefault(CURRENT_STORY.CurrentEpisode.Regions, function(r) return r.Id == regionId end)
             CURRENT_STORY.CameraHandler:assignFocusToRegion(actor, region, contextChanged)
         end
-    end, 1000, 1, playerId, regionId, contextChanged)
+    end, 1000, 1, playerId, regionId, contextChanged, maxWaitTime - 1000)
 
 end
 
@@ -256,9 +259,9 @@ function CameraHandler:assignFocusToRegion(actor, region, contextChanged)
         region:AssignFocus(actor)
         self:focusTimeReached(actor:getData('id'), contextChanged)
 
-        -- Resume the actions of the actors in the new focused episode
-        CURRENT_STORY.CurrentFocusedEpisode:Resume()
         if contextChanged then
+            -- Resume the actions of the actors in the new focused episode
+            CURRENT_STORY.CurrentFocusedEpisode:Resume()
             self:FadeForAll(true, 1500)
         end
     else
@@ -275,7 +278,9 @@ function CameraHandler:assignFocusToRegion(actor, region, contextChanged)
                 end
             end
         end
-        closestPoi.Region:OnPlayerHit(actor)
+        if closestPoi then
+            closestPoi.Region:OnPlayerHit(actor)
+        end
     end
 end
 
@@ -297,6 +302,14 @@ function CameraHandler:updatePerspective(playerId)
     end
 end
 
+function CameraHandler:clearFocusRequests(playerId)
+    local idx = LastIndexOf(self.FocusRequests, playerId)
+    while idx > 0 do
+        table.remove(self.FocusRequests, idx)
+        idx = LastIndexOf(self.FocusRequests, playerId)
+    end
+end
+
 --- Frees the focus from the player with the given ID.
 --- @param playerId string The ID of the player to free the focus from.
 -- If there are no more focus requests, it finds all paused peds in the current episode and assigns focus to a random paused ped.
@@ -313,16 +326,16 @@ function CameraHandler:freeFocus(playerId)
         table.remove(self.FocusRequests, idx)
     end
 
-    if #self.FocusRequests == 0 then
-        local pausedPeds = Where(CURRENT_STORY.CurrentEpisode.peds, function(ped) return ped:getData('paused') end)
-        if #pausedPeds > 0 then
-            local pausedPlayer = PickRandom(pausedPeds):getData('id')
-            print('Assigning focus to paused player '..pausedPlayer)
-            self:requestFocus(pausedPlayer) --If the current player's time expired and there are other players waiting
-        else
-            --problem
-        end
-    end
+    -- if #self.FocusRequests == 0 then
+    --     local pausedPeds = Where(CURRENT_STORY.CurrentEpisode.peds, function(ped) return ped:getData('paused') end)
+    --     if #pausedPeds > 0 then
+    --         local pausedPlayer = PickRandom(pausedPeds):getData('id')
+    --         print('Assigning focus to paused player '..pausedPlayer)
+    --         self:requestFocus(pausedPlayer) --If the current player's time expired and there are other players waiting
+    --     else
+    --         --problem
+    --     end
+    -- end
     if #self.FocusRequests == 0 then
         self.isFocused = false
     else

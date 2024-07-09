@@ -1,5 +1,5 @@
 Template = class(function(o, params)
-    o.poi = params.poi or params.POI or {isEmpty=true}
+    o.poi = params.poi or params.POI or { isEmpty = true }
     o.objects = params.objects or params.Objects or {}
     o.locations = params.locations or params.Locations or {}
     o.name = params.name or ''
@@ -11,16 +11,16 @@ Template = class(function(o, params)
         o.position = Vector3(o.position.x, o.position.y, o.position.z)
     end
     o.globalCentroid = params.globalCentroid or nil
-    o.offset = Vector3(0,0,0)
-    o.rotationOffset = Vector3(0,0,0)
+    o.offset = Vector3(0, 0, 0)
+    o.rotationOffset = Vector3(0, 0, 0)
 end)
 
 function Template:ComputeGlobalCentroid()
-    self.globalCentroid = Vector3(0,0,0)
-    for _,p in pairs(self.locations) do
+    self.globalCentroid = Vector3(0, 0, 0)
+    for _, p in pairs(self.locations) do
         self.globalCentroid = self.globalCentroid + Vector3(p.X, p.Y, p.Z)
     end
-    for _,o in pairs(self.objects) do
+    for _, o in pairs(self.objects) do
         local obj = loadstring(o.dynamicString)()
         self.globalCentroid = self.globalCentroid + obj.position
     end
@@ -33,7 +33,9 @@ end
 --poi here is the fixed point, relative to which the coordinates of the objects and locations are saved
 --when a template is part of a supertemplate, poi must be equal to the relative point of the supertemplate
 function Template:Instantiate(interior, position)
-    print('Template:Instantiate interior '..interior)
+    if DEBUG and DEBUG_TEMPLATES then
+        print('Template:Instantiate interior ' .. interior)
+    end
     self.poi.instance = Marker(position.x, position.y, position.z - 1, "cylinder", 1, 255, 0, 255, 128)
     self.poi.instance.interior = interior
 
@@ -42,7 +44,7 @@ function Template:Instantiate(interior, position)
     self.Z = position.z
     self.position = Vector3(self.X, self.Y, self.Z)
 
-    for _,o in pairs(self.objects) do
+    for _, o in pairs(self.objects) do
         local obj = loadstring(o.dynamicString)()
         obj.interior = interior
         obj.position = position + obj.position
@@ -50,7 +52,7 @@ function Template:Instantiate(interior, position)
         o.instance = obj.instance
     end
 
-    for _,p in pairs(self.locations) do
+    for _, p in pairs(self.locations) do
         local relativelyMoved = position + Vector3(p.X, p.Y, p.Z)
         p.instance = Marker(relativelyMoved.x, relativelyMoved.y, relativelyMoved.z - 1, "cylinder", 1, 0, 255, 255, 128)
         p.instance.interior = interior
@@ -62,12 +64,12 @@ function Template:Destroy()
     if isElement(self.poi.instance) then
         self.poi.instance:destroy()
     end
-    for _,o in pairs(self.objects) do
+    for _, o in pairs(self.objects) do
         if isElement(o.instance) then
             o.instance:destroy()
         end
     end
-    for _,p in pairs(self.locations) do
+    for _, p in pairs(self.locations) do
         if isElement(p.instance) then
             p.instance:destroy()
         end
@@ -76,15 +78,16 @@ end
 
 function Template:Rebase(newRelativePosition, offsetVector)
     if not offsetVector then
-        offsetVector = Vector3(0,0,0)
+        offsetVector = Vector3(0, 0, 0)
     end
     local oldRelativePosition = self.position
-    outputChatBox("Rebasing... Old global position: "..self.position:__tostring()..'. New global position: '..newRelativePosition:__tostring())
+    outputChatBox("Rebasing... Old global position: " ..
+        self.position:__tostring() .. '. New global position: ' .. newRelativePosition:__tostring())
     self.position = newRelativePosition
     if self.poi.instance and isElement(self.poi.instance) then
         self.poi.instance.position = self.position
     end
-    for _,o in pairs(self.objects) do
+    for _, o in pairs(self.objects) do
         local obj = loadstring(o.dynamicString)()
         --             (   global coordinates           )   offseted to another centroid ; compute relative to the new position
         obj.position = oldRelativePosition + obj.position + offsetVector - newRelativePosition
@@ -93,7 +96,7 @@ function Template:Rebase(newRelativePosition, offsetVector)
         end
         obj:UpdateData(true)
     end
-    for _,p in pairs(self.locations) do
+    for _, p in pairs(self.locations) do
         local newPosition = Vector3(p.X, p.Y, p.Z) + oldRelativePosition + offsetVector - newRelativePosition
         p.X = newPosition.x
         p.Y = newPosition.y
@@ -118,7 +121,8 @@ function Template:UpdatePosition(translation, rotation, relativePosition, dontUp
             self.poi.Angle = self.poi.Angle + rotation.z
         end
         if relativePosition then
-            local p = self.poi.instance.position - Vector3(self.offset.x, self.offset.y, self.offset.z) - relativePosition
+            local p = self.poi.instance.position - Vector3(self.offset.x, self.offset.y, self.offset.z) -
+                relativePosition
             p = p:Rotate(rotation)
             p = p + Vector3(self.offset.x, self.offset.y, self.offset.z) + relativePosition
             self.poi.instance.position = p
@@ -135,13 +139,14 @@ function Template:UpdatePosition(translation, rotation, relativePosition, dontUp
     self.Z = self.poi.instance.position.z
     self.position = Vector3(self.X, self.Y, self.Z)
     if self.objects then
-        for _,v in pairs(self.objects) do
+        for _, v in pairs(self.objects) do
             if v.instance then
                 if translation then
                     v.instance.position = v.instance.position + translation
                 elseif rotation then
                     v.instance.rotation = v.instance.rotation + rotation
-                    local p = v.instance.position - Vector3(self.offset.x, self.offset.y, self.offset.z) - relativePosition
+                    local p = v.instance.position - Vector3(self.offset.x, self.offset.y, self.offset.z) -
+                        relativePosition
                     p = p:Rotate(rotation)
                     p = p + Vector3(self.offset.x, self.offset.y, self.offset.z) + relativePosition
                     v.instance.position = p
@@ -150,12 +155,13 @@ function Template:UpdatePosition(translation, rotation, relativePosition, dontUp
         end
     end
     if self.locations then
-        for _,v in pairs(self.locations) do
+        for _, v in pairs(self.locations) do
             if v.instance then
                 if translation then
                     v.instance.position = v.instance.position + translation
                 elseif rotation then
-                    local p = v.instance.position - Vector3(self.offset.x, self.offset.y, self.offset.z) - relativePosition
+                    local p = v.instance.position - Vector3(self.offset.x, self.offset.y, self.offset.z) -
+                        relativePosition
                     p = p:Rotate(rotation)
                     p = p + Vector3(self.offset.x, self.offset.y, self.offset.z) + relativePosition
                     v.instance.position = p
@@ -200,7 +206,7 @@ end
 function Template:Serialize(directory)
     self:ComputeGlobalCentroid()
     local instances = {}
-    for _,obj in ipairs(self.objects) do
+    for _, obj in ipairs(self.objects) do
         table.insert(instances, obj.instance)
         if obj.position and obj.position.unpack then
             obj.position = obj.position:unpack()
@@ -224,22 +230,22 @@ function Template:Serialize(directory)
         loc.instance = nil
     end
     local template = {
-        poi = self.poi, --serialized beforehand
+        poi = self.poi,             --serialized beforehand
         objects = self.objects,
         locations = self.locations, --these must be serialized beforehand
         globalCentroid = self.globalCentroid:unpack(),
         position = self.position:unpack(),
         name = self.name
     }
-    local fileHandle = fileCreate(directory.."/"..self.name..".json")
+    local fileHandle = fileCreate(directory .. "/" .. self.name .. ".json")
     if fileHandle then
         local jsonStr = toJSON(template)
         fileWrite(fileHandle, jsonStr)
         fileClose(fileHandle)
-        outputChatBox("Saved "..directory.."/"..self.name..".json", 255, 0, 0, false)
+        outputChatBox("Saved " .. directory .. "/" .. self.name .. ".json", 255, 0, 0, false)
     end
     if #instances == #self.objects then
-        for i,obj in ipairs(self.objects) do
+        for i, obj in ipairs(self.objects) do
             obj.instance = instances[i]
         end
     end
@@ -254,7 +260,7 @@ function Template:InsertInEpisode(episode, deserialize)
     local objectsMap = {}
     local poiMap = {}
     --add the dependent objects in the episode objects list
-    for _,o in ipairs(template.objects) do
+    for _, o in ipairs(template.objects) do
         local obj = loadstring(o.dynamicString)()
         obj.instance = o.instance
         obj:UpdateData(not (deserialize and true or false))
@@ -263,7 +269,9 @@ function Template:InsertInEpisode(episode, deserialize)
             obj
         )
         objectsMap[o.id] = #episode.Objects
-        print("Mapped "..o.id..' to object '..objectsMap[o.id]..' - '..obj.Description)
+        if DEBUG and DEBUG_TEMPLATES then
+            print("Mapped " .. o.id .. ' to object ' .. objectsMap[o.id] .. ' - ' .. obj.Description)
+        end
         if obj.instance then
             obj.instance:destroy()
         end
@@ -274,14 +282,18 @@ function Template:InsertInEpisode(episode, deserialize)
         v.Z = v.instance.position.z + 1
         v.Interior = v.instance.interior
         v.instance:destroy()
-        print('v.Interior: '..v.Interior)
+        if DEBUG and DEBUG_TEMPLATES then
+            print('v.Interior: ' .. v.Interior)
+        end
         local obj = Location(v.X, v.Y, v.Z, v.Angle, v.Interior, v.Description)
         table.insert(episode.POI, obj)
-        obj.LocationId = #episode.POI..'_'..episode.name
+        obj.LocationId = #episode.POI .. '_' .. episode.name
         obj.episodeLinks = {}
         obj.interactionsOnly = v.interactionsOnly or false
         if obj.interactionsOnly then
-            print('Deserialized location with interactions only '..obj.Description)
+            if DEBUG and DEBUG_TEMPLATES then
+                print('Deserialized location with interactions only ' .. obj.Description)
+            end
         end
         obj.Episode = episode
         poiMap[v.id] = #episode.POI
@@ -297,23 +309,25 @@ function Template:InsertInEpisode(episode, deserialize)
     end
     outputChatBox('reached locations processing')
     --add the dependent POI in the temporary POI list
-    for _,v in ipairs(template.locations) do
+    for _, v in ipairs(template.locations) do
         addSerializedPoiToTmpList(v)
         table.insert(allPoi, v)
     end
     --remap the action target ids in all POI from the temporary list
-    for _,rawpoi in ipairs(allPoi) do
+    for _, rawpoi in ipairs(allPoi) do
         local poi = episode.POI[poiMap[rawpoi.id]]
         --order is important here!
         local deserializedAllActions = {}
-        for _,a in ipairs(rawpoi.allActions) do
+        for _, a in ipairs(rawpoi.allActions) do
             local action = loadstring(a.dynamicString)()
             action.id = a.id
             action.TargetItem = nil
             if a.targetItem then
                 if a.targetItem.type == "Object" then
                     action.TargetItem = episode.Objects[objectsMap[a.targetItem.id] or a.targetItem.id]
-                    print('Action '..action.Description..' with target '..action.TargetItem.Description)
+                    if DEBUG and DEBUG_TEMPLATES then
+                        print('Action ' .. action.Description .. ' with target ' .. action.TargetItem.Description)
+                    end
                 elseif a.targetItem.type == "Location" then
                     if poiMap[a.targetItem.id] > episode.POI then
                         action.TargetItem = episode.POI[poiMap[a.targetItem.id] or a.targetItem.id]
@@ -327,7 +341,7 @@ function Template:InsertInEpisode(episode, deserialize)
             end
             table.insert(deserializedAllActions, action)
         end
-        for i,a in ipairs(rawpoi.allActions) do
+        for i, a in ipairs(rawpoi.allActions) do
             local action = deserializedAllActions[i]
             if a.nextAction then
                 if isArray(a.nextAction) then
@@ -345,7 +359,7 @@ function Template:InsertInEpisode(episode, deserialize)
         end
         poi.allActions = deserializedAllActions
         local deserializedPossibleActions = {}
-        for _,a in ipairs(rawpoi.PossibleActions) do
+        for _, a in ipairs(rawpoi.PossibleActions) do
             table.insert(deserializedPossibleActions, deserializedAllActions[a.id])
         end
         poi.PossibleActions = deserializedPossibleActions
@@ -360,13 +374,13 @@ function Template:AddItems(mainPoi, objects, locations)
     -- for _,l in ipairs(locations) do
     --     table.insert(self.locations, o)
     -- end
-    if #Where(self.locations, function (x) return x.id == mainPoi.id end) == 0 then
+    if #Where(self.locations, function(x) return x.id == mainPoi.id end) == 0 then
         table.insert(self.locations, mainPoi)
     end
 end
 
 function Template.Load(supertemplate, name)
-    local file = fileOpen("files/supertemplates/"..supertemplate.."/"..name..".json")
+    local file = fileOpen("files/supertemplates/" .. supertemplate .. "/" .. name .. ".json")
     if file then
         local jsonStr = fileRead(file, fileGetSize(file))
         local raw = fromJSON(jsonStr)
@@ -381,7 +395,7 @@ function Template.Load(supertemplate, name)
             outputChatBox("Something went wrong while deserializing the template")
             return nil
         else
-            outputChatBox("Template "..template.name..' was successfully loaded')
+            outputChatBox("Template " .. template.name .. ' was successfully loaded')
             return template
         end
     end

@@ -65,24 +65,7 @@ function (prevA, curA)
         if story and not FREE_ROAM then
             Timer(function()
                 for i,ped in ipairs(story.CurrentEpisode.peds) do
-                    -- local lastLocation = story.lastLocations[ped:getData('id')]
-                    -- if lastLocation then
-                    --     lastLocation.isBusy = false
-                    -- end
-                    local idx = ped:getData('startingPoiIdx')
-                    if DEBUG then
-                        print("Starting poi idx for ped "..ped:getData('id')..' in POI with index '..idx)
-                    end
-                    if idx > 0 then
-                        local firstAction = story.CurrentEpisode.POI[idx]:GetNextValidAction(ped)
-                        if firstAction then
-                            firstAction:Apply()
-                        else
-                            if DEBUG then
-                                print("No valid action found, the ped is waiting "..ped:getData('id'))
-                            end
-                        end
-                    end
+                    OnGlobalActionFinished(0, ped:getData('id'), ped:getData('storyId'))
                 end
             end, 5000, 1)
         end

@@ -38,7 +38,9 @@ function MetaEpisode:Initialize(actor, isTemporaryInitialize, actors, graphOfEve
     for _,e in ipairs(self.Episodes) do
         for _,poi in ipairs(e.POI) do
             poi.Episode = e
-            print('Assigning episode '..e.name..' to poi '..poi.Description)
+            if DEBUG_METAEPISODE then
+                print('[MetaEpisode.Initialize] Assigning episode '..e.name..' to poi '..poi.Description)
+            end
         end
         self.POI = concat(self.POI, e.POI)
         self.Objects = concat(self.Objects, e.Objects)
@@ -57,12 +59,18 @@ function MetaEpisode:Initialize(actor, isTemporaryInitialize, actors, graphOfEve
 
     -- Link with move actions the episodes
     self.episodeLinks = DropNull(Select(self.POI, function(poi)
-        print("PreEvaluating "..poi.Episode.name..": "..poi.Description)
+        if DEBUG_METAEPISODE then
+            print("[MetaEpisode.Initialize] PreEvaluating "..poi.Episode.name..": "..poi.Description)
+        end
         if #poi.episodeLinks > 0 then
-            print("Evaluating "..poi.Episode.name..": "..poi.Description)
+            if DEBUG_METAEPISODE then
+                print("[MetaEpisode.Initialize] Evaluating "..poi.Episode.name..": "..poi.Description)
+            end
             local linkedEpisode = FirstOrDefault(self.Episodes, function(e) return Any(poi.episodeLinks, function(l) return l == e.name end) end)
             if linkedEpisode then
-                print("[Episode link] source POI: "..poi.Episode.name..": "..poi.Description..' --> '..linkedEpisode.name)
+                if DEBUG_METAEPISODE then
+                    print("[MetaEpisode.Initialize] [Episode link] source POI: "..poi.Episode.name..": "..poi.Description..' --> '..linkedEpisode.name)
+                end
                 return {sourcePoi = poi, targetEpisode = linkedEpisode}
             else
                 return nil
@@ -86,7 +94,7 @@ function MetaEpisode:Initialize(actor, isTemporaryInitialize, actors, graphOfEve
                         table.insert(l1.PossibleActions, moveAction)
                         table.insert(l1.allActions, moveAction)
                         if DEBUG_CHAIN_LINKED_ACTIONS then
-                            print('Move action from '..l1.Description..' to '..l2.Description)
+                            print('[MetaEpisode.Initialize] Move action from '..l1.Description..' to '..l2.Description)
                         end
                     end
                 end

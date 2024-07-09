@@ -15,7 +15,7 @@ function TaiChi:Apply()
 
     time = random(8000, 15000)
 
-    self.Performer:setAnimation("PARK", "Tai_Chi_Loop", time, true, true, false, true)
+    self.Performer:setAnimation("PARK", "Tai_Chi_Loop", -1, true, true, false, true)
 
     if DEBUG then
         outputConsole("TaiChi:Apply")

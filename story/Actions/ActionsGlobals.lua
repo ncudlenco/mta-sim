@@ -5,7 +5,7 @@ PERFORM_MULTI_ACTION_FIRST_ACTOR = nil
 MULTI_ACTION_DONE = nil
 
 function OnGlobalActionFinished(delay, playerId, storyId, callback, destroyedItem)
-    function getActorData(player)
+    local function getActorData(player)
         return {
             id = player:getData('id'),
             Name = player:getData('first_name'),
@@ -18,8 +18,8 @@ function OnGlobalActionFinished(delay, playerId, storyId, callback, destroyedIte
         local story = CURRENT_STORY
         local lastAction = story.History[playerId][#story.History[playerId]]
         if DEBUG then
-            outputConsole("GlobalAction:Apply - getting next valid action")
-            print("GlobalAction:Apply - getting next valid action")
+            outputConsole("GlobalAction:Apply - getting next valid action ".. playerId)
+            print("GlobalAction:Apply - getting next valid action ".. playerId)
         end
         if callback then
             callback(playerId, storyId)
@@ -38,6 +38,7 @@ function OnGlobalActionFinished(delay, playerId, storyId, callback, destroyedIte
         end
         -- story.CameraHandler:freeFocus(playerId)
 
+        local nextAction = nil
         if not lastAction then
             if DEBUG then
                 outputConsole("GlobalAction:Apply - the last action was null, initiating the first action protocol")
@@ -51,32 +52,64 @@ function OnGlobalActionFinished(delay, playerId, storyId, callback, destroyedIte
             if idx > 0 then
                 local firstAction = CURRENT_STORY.CurrentEpisode.POI[idx]:GetNextValidAction(actor)
                 if firstAction then
-                    firstAction:Apply()
+                    nextAction = firstAction
                 else
                     if DEBUG then
-                        print("No valid action found, the ped is waiting "..actor:getData('id'))
+                        print("[FATAL ERROR][ActionsGlobals] No valid initial action found for the ped "..actor:getData('id'))
                     end
                 end
             end
-            return
-        end
-        if not LOAD_FROM_GRAPH and lastAction.NextAction then
-            if isArray(lastAction.NextAction) then
-                nextAction = PickRandom(lastAction.NextAction)
+        else
+            if not LOAD_FROM_GRAPH and lastAction.NextAction then
+                if isArray(lastAction.NextAction) then
+                    nextAction = PickRandom(lastAction.NextAction)
+                else
+                    nextAction = lastAction.NextAction
+                end
+            elseif DEFINING_EPISODES then
+                nextAction = EmptyAction({Performer = player})
+            elseif lastAction.NextLocation then
+                nextAction = lastAction.NextLocation:GetNextValidAction(lastAction.Performer)
+                if not nextAction then
+                    return
+                end
             else
-                nextAction = lastAction.NextAction
-            end
-        elseif DEFINING_EPISODES then
-            nextAction = EmptyAction({Performer = player})
-        elseif lastAction.NextLocation then
-            nextAction = lastAction.NextLocation:GetNextValidAction(lastAction.Performer)
-            if not nextAction then
-                return
+                print("[FATAL ERROR][ActionsGlobals] No valid action found for the ped "..actor:getData('id'))
             end
         end
 
-        nextAction.Performer = lastAction.Performer
-        nextAction:Apply()
+
+        if nextAction then
+            if not actor:getData('currentEpisode') then
+                print('[ActionsGlobal] Actor does not have a current episode set! Trying to fix the actor '..actor:getData('id'))
+                local closestPoi = nil
+                local minDist = 99999
+                for _, poi in ipairs(CURRENT_STORY.CurrentEpisode.POI) do
+                    if poi.Region then
+                        local distance = math.abs((poi.position - actor.position).length)
+                        if distance < minDist then
+                            closestPoi = poi
+                            minDist = distance
+                        end
+                    end
+                end
+                if closestPoi then
+                    closestPoi.Region:OnPlayerHit(actor)
+                end
+            end
+
+            if not actor:getData('currentEpisode') then
+                print('[FatalError][ActionsGlobal] Actor cannot be assigned to an episode '..actor:getData('id'))
+            end
+
+            story.ActionsOrchestrator:EnqueueAction(nextAction, actor)
+            -- Insert here an action manager that keeps an eye on the temporal part from the graph.
+            -- Initially, all the actors were spawned in their initial location, then the first action was applied, disregarding any temporal constraints.
+            -- Now, the temporal constraints should be taken into account, the action should be applied only when the time is right.
+            -- As a start, we will enforce next constraints, across actors
+            -- nextAction.Performer = actor
+            -- nextAction:Apply()
+        end
 
     end, delay, 1, playerId, storyId)
 end

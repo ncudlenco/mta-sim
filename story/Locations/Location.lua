@@ -32,7 +32,7 @@ end
 function Location:SpawnPlayerHere(player, spectate)
     if not spectate then
         self.isBusy = true
-        print(player:getData('id')..'Location '..self.Description..' is set to busy')
+        print('[SpawnPlayerHere] '..player:getData('id')..' Location '..self.Description..' is set to busy')
         player:setData('locationId', self.LocationId)
     end
     local z = self.Z
@@ -273,8 +273,13 @@ function InstantiateAction(event, player, location, object)
 end
 
 function Location:ProcessNextAction(player)
-    local event = CURRENT_STORY.lastEvents[player:getData('id')]
-    local location = CURRENT_STORY.lastLocations[player:getData('id')]
+    local event = CURRENT_STORY.nextEvents[player:getData('id')]
+    local location = CURRENT_STORY.nextLocations[player:getData('id')]
+    local previousLocation = CURRENT_STORY.lastLocations[player:getData('id')]
+    if not CURRENT_STORY.lastEvents[player:getData('id')] then
+        CURRENT_STORY.lastEvents[player:getData('id')] = {}
+    end
+
     local interactionProcessedMap = CURRENT_STORY.interactionProcessedMap
     local interactionPoiMap = CURRENT_STORY.interactionPoiMap
 
@@ -283,12 +288,34 @@ function Location:ProcessNextAction(player)
         if poi.isBusy then
             isBusyString = 'true'
         end
-        print(poi.LocationId..' '..poi.Description..' '..isBusyString)
+        if DEBUG_PROCESSACTIONS then
+            print(poi.LocationId..' '..poi.Description..' '..isBusyString)
+        end
     end
     if event == nil then return {isStartingEvent = false} end
 
+    if DEBUG then
+        print(player:getData('id')..' Processing next event '..event.id..' '..event.Action..' in location '..location.Description)
+    end
+    local lastEvents = CURRENT_STORY.lastEvents[player:getData('id')]
+    if not event.isStartingEvent and (#lastEvents == 0 or event.id ~= lastEvents[#lastEvents]) then
+        table.insert(CURRENT_STORY.lastEvents[player:getData('id')], event)
+    end
+
     local isMoveEvent = event.Action:lower() == 'move'
     local actionsChain = {}
+
+    if previousLocation and location and previousLocation ~= location then
+        --if this is an interaction then create a move action with target the other player. handle internally inside the move action the positioning of the two players
+        --
+        print('Next action is in another location. Inserting a Move action from '..previousLocation.Description..' to '..location.Description..' in episode '..location.Episode.name)
+        local moveAction = FirstOrDefault(previousLocation.allActions, function(action) return action.Name == 'Move' and action.TargetItem == location end)
+        --actually I need to clone the move action to point to different coordinates inside the next location
+        local clone = Move{performer = moveAction.Performer, targetItem = location, nextLocation = location, prerequisites = moveAction.Prerequisites, graphId = moveAction.graphId}
+        clone.TargetItem = location
+        table.insert(CURRENT_STORY.actionsQueues[player:getData('id')], clone)
+    end
+
     if not event.isStartingEvent then
         local isInteractionStr = "false"
         if event.isInteraction then
@@ -298,6 +325,7 @@ function Location:ProcessNextAction(player)
         --if the event action has prerequisites then add them first if they are not already in the queue
         local eventAction = nil
 
+        -- First, map the current event to the action that will be executed. For interactions we need to create a wait action
         if event.isInteraction then
             --set the actors one in front of the other in the same location...
             --create the interaction actions / locations
@@ -392,6 +420,7 @@ function Location:ProcessNextAction(player)
             table.insert(actionsChain, eventAction)
         end
     end
+
 --looking backward in the graph's chain of events to see if any actions were already processed is not necessary because
 --in the steps below, we make sure that when we reach the first action from an enforced chain, then we process all their previous and following mandatory actions
     local nextEvent;
@@ -399,7 +428,7 @@ function Location:ProcessNextAction(player)
         nextEvent = event
     else
         print(player:getData('id')..' current event '..event.Action)
-        nextEvent = FirstOrDefault(CURRENT_STORY.graph, function(evt) return evt.id == CURRENT_STORY.temporal[event.id].next end)
+        nextEvent = FirstOrDefault(CURRENT_STORY.graph, function(evt) return evt.id == CURRENT_STORY:GetNextEvent(event.id, player:getData('id')) end)
         if nextEvent then
             print(player:getData('id')..' next event '..nextEvent.Action)
         end
@@ -477,11 +506,13 @@ function Location:ProcessNextAction(player)
         print('Next event: '..nextEvent.id..' isInteraction '..strIsInteraction..' isActionWithPickedUpObject '..BoolToStr(isActionWithPickedUpObject))
 
         local candidates = Where(CURRENT_STORY.CurrentEpisode.POI, function(poi)
+            if DEBUG and DEBUG_LOCATION_CANDIDATES then
+                print('Checking candidate location '..poi.Description)
+            end
             if CURRENT_STORY.CurrentEpisode.poiMap and CURRENT_STORY.CurrentEpisode.poiMap[nextEvent.id] then
                 return poi.LocationId == CURRENT_STORY.CurrentEpisode.poiMap[nextEvent.id]
             else
-                return
-                (nextEvent.isInteraction and
+                local isValidInteractionPoiOrNotInteractionAtAll = nextEvent.isInteraction and
                     poi.interactionsOnly and
                     (
                         not interactionPoiMap[nextEvent.interactionRelation]
@@ -489,26 +520,39 @@ function Location:ProcessNextAction(player)
                         poi.LocationId == interactionPoiMap[nextEvent.interactionRelation]
                     )
                     or not nextEvent.isInteraction --and not poi.isBusy
-                )
-                and
-                poi.Region and nextEvent.Location and (poi.Region.name:lower():find(nextEvent.Location[1]:lower()) and true or false )
-                and
-                (
-                    nextEvent.isInteraction and poi.interactionsOnly
-                    or
-                    Any(poi.allActions, function(action)
-                        return action.Name:lower() == nextEvent.Action:lower() --the location contains the required action for the next event
-                        and (
-                            #nextEvent.Entities < 2 or
-                            (action.TargetItem.ObjectId and #nextEvent.Entities > 1 and
-                                (
-                                    action.TargetItem and action.TargetItem.type == CURRENT_STORY.graph[nextEvent.Entities[2]].Properties.Type
-                                ) --action has a target an object of type x
-                                and (CURRENT_STORY.eventObjectMap[nextEvent.Entities[2]] == 'spawnable' or action.TargetItem.ObjectId == CURRENT_STORY.eventObjectMap[nextEvent.Entities[2]])
-                            )
+                local nextEventTargetLocation = isMoveEvent and nextEvent.Location[2] or nextEvent.Location[1]
+                local isValidRegion = poi.Region and nextEvent.Location and (poi.Region.name:lower():find(nextEventTargetLocation:lower()) and true or false)
+                local restrictInteractionsToInteractionPois = nextEvent.isInteraction and poi.interactionsOnly
+                local locationContainsObjectOfEvent = Any(poi.allActions, function(action)
+                    return action.Name:lower() == nextEvent.Action:lower() --the location contains the required action for the next event
+                    and (
+                        #nextEvent.Entities < 2 or
+                        (action.TargetItem.ObjectId and #nextEvent.Entities > 1 and
+                            (
+                                action.TargetItem and action.TargetItem.type == CURRENT_STORY.graph[nextEvent.Entities[2]].Properties.Type
+                            ) --action has a target an object of type x
+                            and (CURRENT_STORY.eventObjectMap[nextEvent.Entities[2]] == 'spawnable' or action.TargetItem.ObjectId == CURRENT_STORY.eventObjectMap[nextEvent.Entities[2]])
                         )
-                    end)
-                )
+                    )
+                end)
+
+                if DEBUG and DEBUG_LOCATION_CANDIDATES then
+                    print('isValidInteractionPoiOrNotInteractionAtAll '..BoolToStr(isValidInteractionPoiOrNotInteractionAtAll)
+                        ..' and isValidRegion '..BoolToStr(isValidRegion)
+                        ..' and (restrictInteractionsToInteractionPois '..BoolToStr(restrictInteractionsToInteractionPois)
+                        ..' or locationContainsObjectOfEvent '..BoolToStr(locationContainsObjectOfEvent)..')')
+                end
+
+                return
+                    isValidInteractionPoiOrNotInteractionAtAll
+                    and
+                    isValidRegion
+                    and
+                    (
+                        restrictInteractionsToInteractionPois
+                        or
+                        locationContainsObjectOfEvent
+                    )
             end
         end)
         if not nextEvent.isInteraction and #candidates == 0 and isActionWithPickedUpObject then
@@ -582,19 +626,10 @@ function Location:ProcessNextAction(player)
             nextLocation = PickRandom(Where(candidates, function(poi) return not poi.isBusy end))
         end
     end
-    if nextLocation and nextLocation ~= location then
-        --if this is an interaction then create a move action with target the other player. handle internally inside the move action the positioning of the two players
-        --
-        print('Next action is in another location. Inserting a Move action from '..location.Description..' to '..nextLocation.Description..' in episode '..nextLocation.Episode.name)
-        local moveAction = FirstOrDefault(location.allActions, function(action) return action.Name == 'Move' and action.TargetItem == nextLocation end)
-        --actually I need to clone the move action to point to different coordinates inside the next location
-        local clone = Move{performer = moveAction.Performer, targetItem = nextLocation, nextLocation = nextLocation, prerequisites = moveAction.Prerequisites, graphId = moveAction.graphId}
-        clone.TargetItem = nextLocation
-        table.insert(CURRENT_STORY.actionsQueues[player:getData('id')], clone)
-    end
 
-    CURRENT_STORY.lastEvents[player:getData('id')] = nextEvent
-    CURRENT_STORY.lastLocations[player:getData('id')] = nextLocation
+    CURRENT_STORY.nextEvents[player:getData('id')] = nextEvent
+    CURRENT_STORY.nextLocations[player:getData('id')] = nextLocation
+    CURRENT_STORY.lastLocations[player:getData('id')] = location
 
     print('Actions queue for actor '..player:getData('id'))
     for _, action in ipairs(CURRENT_STORY.actionsQueues[player:getData('id')]) do
@@ -678,7 +713,7 @@ function Location:GetNextValidAction(player)
                         --the actor occupying the location finished his mandatory tasks. move him around randomly to clear the location
                         local randomMove = PickRandom(Where(next.NextLocation.PossibleActions, function(a) return a.Name == 'Move' and not a.NextLocation.isBusy end))
                         randomMove.NextLocation.isBusy = true
-                        print('Location ..'..randomMove.NextLocation.Description..' is set to busy')
+                        print('[Location.GetNextValidAction] Move randomly occupying actor '..occupyingActor:getData('id')..'. Location ..'..randomMove.NextLocation.Description..' is set to busy')
                         occupyingActor:setData('locationId', randomMove.NextLocation.LocationId)
                         randomMove.Performer = occupyingActor
                         randomMove:Apply()

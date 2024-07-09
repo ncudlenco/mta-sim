@@ -48,6 +48,7 @@
 	<script src="utils/bone_pos_rot.lua" type="client" />
   <!-- Api -->
   <script src="api/CameraHandler.lua" type="shared"/>
+  <script src="api/ActionsOrchestrator.lua" type="shared" />
   <script src="api/PedHandler.lua" type="shared"/>
   <script src="api/eStoryItemType.lua" type="shared"/>
   <script src="api/IStoryItem.lua" type="shared"/>

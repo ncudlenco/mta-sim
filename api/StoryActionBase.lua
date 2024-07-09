@@ -30,6 +30,9 @@ function StoryActionBase:__eq(other)
 end
 
 function StoryActionBase:Apply(...)
+    if DEBUG then
+        print("StoryActionBase:Apply - "..self.Name)
+    end
     local story = GetStory(self.Performer)
     local playerId = self.Performer:getData('id')
     if not DEFINING_EPISODES then
@@ -45,7 +48,7 @@ function StoryActionBase:GetLogger(story)
     return FirstOrDefault(story.Loggers)
 end
 
-function StoryActionBase:pause(player)
+function StoryActionBase:pause(actor)
 end
 
 function StoryActionBase:resume(player)

@@ -41,7 +41,9 @@ SampStoryObjectBase = class(StoryObjectBase, function(o, params)
         end
     end
 
-    print("Object "..o.type)
+    if DEBUG_OBJECTS then
+        print("Object "..o.type)
+    end
     o.dynamicString = 'return '..o.type..'{description="'..params.description..'", noCollisions='..noCollisionStr..', modelid='..o.modelid..', isRandomModelId='..tostring(params.isRandomModelId)..', noRandomId=true' .. ', interior='..params.interior..', position=Vector3('..params.position.x..','..params.position.y..','..params.position.z..'), rotation=Vector3('..params.rotation.x..','..params.rotation.y..','..params.rotation.z..'), posOffset=Vector3('..o.PosOffset.x..','..o.PosOffset.y..','..o.PosOffset.z..'), rotOffset=Vector3('..o.RotOffset.x..','..o.RotOffset.y..','..o.RotOffset.z..')}'
     if DEBUG_OBJECTS then
         print("\nObject: Creating object class - " .. o.dynamicString .. "\n")

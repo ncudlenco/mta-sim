@@ -208,7 +208,7 @@ function StoryEpisodeBase:Initialize(...)
                     error('A valid skin could not be found for ped '..i)
                 end
                 validStartingPoi.isBusy = true
-                print('Location '..validStartingPoi.Description..' is set to busy')
+                print('[StoryEpisodeBase.Initialize] Location '..validStartingPoi.Description..' is set to busy')
                 local ped = PedHandler:GetOrCreatePed(skin.Id, validStartingPoi.X, validStartingPoi.Y, validStartingPoi.Z, validStartingPoi.Angle)
                 if not ped then
                     error('Error while creating the ped '..i)
@@ -259,7 +259,7 @@ function StoryEpisodeBase:Initialize(...)
 end
 
 function StoryEpisodeBase:ProcessRegions()
-    if DEBUG then
+    if DEBUG and DEBUG_PROCESSREGIONS then
         print('StoryEpisodeBase:ProcessRegions - '..self.name..' started to identify which objects are inside which region')
         outputConsole('StoryEpisodeBase:ProcessRegions - '..self.name..' started to identify which objects are inside which region')
     end
@@ -269,7 +269,7 @@ function StoryEpisodeBase:ProcessRegions()
             if r then
                 table.insert(r.Objects, o)
                 o.Region = r
-                if DEBUG then
+                if DEBUG and DEBUG_PROCESSREGIONS then
                     print(o.ObjectId..': '..o.Description..' is inside '..r.name)
                 end
             else
@@ -279,7 +279,7 @@ function StoryEpisodeBase:ProcessRegions()
             end
         end
     end
-    if DEBUG then
+    if DEBUG and DEBUG_PROCESSREGIONS then
         print('StoryEpisodeBase:ProcessRegions - '..self.name..' started to identify which POI are inside which region')
     end
     local poisWithRegions = {}
@@ -290,7 +290,7 @@ function StoryEpisodeBase:ProcessRegions()
                 table.insert(r.POI, o)
                 table.insert(poisWithRegions, o)
                 o.Region = r
-                if DEBUG then
+                if DEBUG and DEBUG_PROCESSREGIONS then
                     print(o.Description..' is inside '..r.name)
                 end
             else
@@ -588,7 +588,9 @@ end
 function StoryEpisodeBase:RequestPause()
     for _, actor in ipairs(self.peds) do
         if not actor:getData('storyEnded')
-            and actor:getData('currentEpisode') == self.name then
+            and actor:getData('currentEpisode') == self.name
+            and not actor:getData('isAwaitingConstraints')
+            then
             if DEBUG then
                 print('actor '..actor:getData('id')..' is in old focused episode')
             end
@@ -598,12 +600,12 @@ function StoryEpisodeBase:RequestPause()
                 if lastAction:is_a(Move) then
                     isMove = 'true'
                 end
-                local isNotFinished = 'false'
-                if lastAction:is_a(Move) and not lastAction:isFinished(actor) then
-                    isNotFinished = 'true'
+                local isMoveActionFinished = 'false'
+                if lastAction:is_a(Move) and lastAction:isFinished(actor) then
+                    isMoveActionFinished = 'true'
                 end
                 if DEBUG then
-                    print('Requesting pause for actor '..actor:getData('id')..' last action '..lastAction.Name..' (is a move action: '..isMove..') is not finished: '..isNotFinished)
+                    print('Requesting pause for actor '..actor:getData('id')..' last action '..lastAction.Name..' (is a move action: '..isMove..') is not finished: '..isMoveActionFinished)
                 end
 
                 actor:setData('requestPause', true) -- Handled in ActionsGlobals.OnGlobalActionFinished and in Move:pause
@@ -622,26 +624,40 @@ function StoryEpisodeBase:RequestPause()
     self.paused = true
 end
 
-function StoryEpisodeBase:AreAllActionsPaused()
+function StoryEpisodeBase:AreAllActionsPaused(forcePause)
     return All(
-        Where(self.peds, function(ped) return ped:getData('currentEpisode') == self.name and not ped:getData('storyEnded') end),
+        Where(self.peds,
+            function(ped) return ped:getData('currentEpisode') == self.name and not ped:getData('storyEnded') end),
         function(ped)
-            -- if DEBUG then
-                local isPaused = 'false'
-                if ped:getData('paused') then
-                    isPaused = 'true'
-                end
-                print('Checking if actor '..ped:getData('id')..' is paused '..isPaused)
-            -- end
+            local isAwaitingConstraints = ped:getData('isAwaitingConstraints')
+            local isPaused = ped:getData('paused')
+            if DEBUG then
+                print('Checking if actor ' .. ped:getData('id') .. ' is paused ' .. tostring(isPaused) .. ' is awaiting constraints ' .. tostring(isAwaitingConstraints))
+            end
+            if forcePause then
+                ped:setData('requestPause', false)
+                ped:setData('paused', true)
+                isPaused = true
+            end
 
-            return ped:getData('paused') end)
+            return isPaused or isAwaitingConstraints
+        end)
 end
 
 function StoryEpisodeBase:Resume()
     for _, actor in ipairs(self.peds) do
+        if DEBUG then
+            print('[StoryEpisodeBase:Resume] Evaluating actor '..actor:getData('id')..' from episode '..actor:getData('currentEpisode')..' with storyEnded '..tostring(actor:getData('storyEnded'))..' and currentEpisode '..actor:getData('currentEpisode')..' and requestPause '..tostring(actor:getData('requestPause'))..' and paused '..tostring(actor:getData('paused'))..' and isAwaitingConstraints '..tostring(actor:getData('isAwaitingConstraints'))..' and isAwaitingContextSwitch '..tostring(actor:getData('isAwaitingContextSwitch')))
+        end
         if actor:getData('currentEpisode') == self.name and not actor:getData('storyEnded') then
             actor:setData('requestPause', false)
-            if actor:getData('paused') and #CURRENT_STORY.History[actor:getData('id')] > 0 then
+            if DEBUG then
+                print('Actor '..actor:getData('id')..' reset the requestPause parameter. History length '..#CURRENT_STORY.History[actor:getData('id')])
+            end
+            if not actor:getData('isAwaitingConstraints') and actor:getData('paused') and #CURRENT_STORY.History[actor:getData('id')] > 0 then
+                if DEBUG then
+                    print('Actor '..actor:getData('id')..' is in episode '..actor:getData('currentEpisode')..' and is not awaiting constraints')
+                end
                 local lastAction = CURRENT_STORY.History[actor:getData('id')][#CURRENT_STORY.History[actor:getData('id')]]
                 if lastAction:is_a(Move) then
                     CURRENT_STORY.CameraHandler:requestFocus(actor:getData('id')) --reduntant focus requests
@@ -654,6 +670,11 @@ function StoryEpisodeBase:Resume()
                     end
                     OnGlobalActionFinished(1, actor:getData('id'), actor:getData('storyId'))
                 end
+            elseif actor:getData('isAwaitingContextSwitch') then
+                if DEBUG then
+                    print('Actor '..actor:getData('id')..' is awaiting isAwaitingContextSwitch')
+                end
+                CURRENT_STORY.ActionsOrchestrator:TriggerActionFromQueue(actor)
             end
             actor:setData('paused', false)
         end

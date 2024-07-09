@@ -297,7 +297,7 @@ function Move:Apply()
     end
 
     local contextSegments = {self.NextLocation}
-    StoryActionBase.Apply(self) --TODO: make this call for each action!!!!!!!!!!
+    StoryActionBase.Apply(self)
     local teleport = false
     if not self.Performer:getData('currentEpisode') then
         print('[Move.Apply] Actor does not have a current episode set! Trying to fix the actor '..self.Performer:getData('id'))
@@ -312,8 +312,8 @@ function Move:Apply()
                 end
             end
         end
-        if closestPoi == nil then
-            return regionId, regionName, episodeName
+        if closestPoi then
+            closestPoi.Region:OnPlayerHit(self.Performer)
         end
     end
     if not self.Performer:getData('currentEpisode') then
@@ -499,6 +499,16 @@ function Move:FindNextShortestPath(player)
                         end
                     end
                     self.planningData[player:getData('id')].path = result
+                    if not self.planningData[player:getData('id')].path then
+                        print('[FATAL ERROR!] No shortest path found!')
+                    end
+                    if not self.planningData[player:getData('id')].contextSegments then
+                        print('[FATAL ERROR!] No context segments were set!')
+                    end
+                    if not self.planningData[player:getData('id')].contextSegments[1] then
+                        print('[Warning] The context segments were empty!')
+                        return
+                    end
                     local targetPosition = self.planningData[player:getData('id')].contextSegments[1].position
                     table.insert(self.planningData[player:getData('id')].path, {targetPosition.x, targetPosition.y, targetPosition.z})
                     table.remove(self.planningData[player:getData('id')].contextSegments, 1) ------ The context should only be removed when the player reaches the end of the current segment (done in destinationReached)

@@ -12,8 +12,8 @@ function GetOn:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
     StoryActionBase.Apply(self)
-    
-    ----Bounding box is a function for client side only. eventually develop a mechanism to trigger a client side call then send back to 
+
+    ----Bounding box is a function for client side only. eventually develop a mechanism to trigger a client side call then send back to
     ----the server the result and continue with other processes
     -- local theBed = self.TargetItem
     -- local x0, y0, z0, x1, y1, z1 = theBed:getBoundingBox();
@@ -76,7 +76,7 @@ function GetOn:Apply()
         selfDescription = self.Description:gsub('{temp}', ' ')
     end
     StoryActionBase.GetLogger(self, story):Log(selfDescription .. self.TargetItem.Description, self)
-    self.Performer:setAnimation(block, animation, time, false, updatePedPosition, false, true)
+    self.Performer:setAnimation(block, animation, -1, false, updatePedPosition, false, true)
 
     self.Buffer[id] = self.TargetItem
     if DEBUG then

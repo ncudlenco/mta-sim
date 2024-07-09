@@ -8,6 +8,7 @@ StoryBase = class(function(o, spectators, maxActions)
     o.History = {}
     o.PausedActions = {}
     o.CameraHandler = CameraHandler()
+    o.ActionsOrchestrator = ActionsOrchestrator()
 end)
 
 function StoryBase:Play()

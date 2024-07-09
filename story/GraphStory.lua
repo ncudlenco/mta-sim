@@ -75,6 +75,8 @@ GraphStory = class(StoryBase, function(o, spectators, logData)
     o.temporal = nil
     o.lastEvents = {}
     o.lastLocations = {}
+    o.nextEvents = {}
+    o.nextLocations = {}
     o.validMemo = {}
     print(LOAD_FROM_GRAPH)
     local file = fileOpen(LOAD_FROM_GRAPH)
@@ -87,6 +89,11 @@ GraphStory = class(StoryBase, function(o, spectators, logData)
         if o.graph['temporal'] then
             o.temporal = o.graph['temporal']
             o.graph['temporal'] = nil
+        end
+        for k,v in pairs(o.temporal) do
+            if k then
+                v.key = k
+            end
         end
         if o.graph['temporal_abs'] then
             o.graph['temporal_abs'] = nil
@@ -103,8 +110,6 @@ GraphStory = class(StoryBase, function(o, spectators, logData)
     else
         print("WARNING: The file "..LOAD_FROM_GRAPH.." could not be opened!")
     end
-
-    CURRENT_STORY = o
 end)
 
 function GraphStory:ExploreValidEpisodeLinks(
@@ -402,6 +407,63 @@ function GraphStory:ValidateEpisode(
     return res
 end
 
+function GraphStory:GetNextEvent(currentEventId, actorId)
+    local nextEvents = {}
+    local next = currentEventId
+    local result = nil
+    repeat
+        if self.temporal[next].next then
+            if isArray(self.temporal[next].next) then
+                nextEvents = concat(nextEvents, self.temporal[next].next)
+            else
+                nextEvents = concat(nextEvents, {self.temporal[next].next})
+            end
+        end
+
+        if #nextEvents == 0 then
+            result = nil
+            break
+        end
+        next = nextEvents[1]
+        table.remove(nextEvents, 1)
+        local event = self.graph[next]
+        if event.Entities[1] == actorId then
+            result = next
+            break
+        end
+    until(nextEvents == 0)
+
+    return result
+end
+
+function GraphStory:FindPreviousEventId(eventId, actorId)
+    -- starting from the current event, find the previous event that has the same actor
+    -- temporal does not have a previous field, so we need to go through the graph
+    local previousEvents = {}
+
+    repeat
+        local previousTemporal = FirstOrDefault(self.temporal, function(temporal)
+            return self:IsEventInNextTemporal(eventId, temporal)
+        end)
+
+        if previousTemporal then
+            local previousEvent = self.graph[previousTemporal.key]
+            if previousEvent.Entities[1] == actorId then
+                return previousTemporal.key
+            end
+        end
+    until(#previousEvents == 0)
+    return nil
+end
+
+function GraphStory:IsEventInNextTemporal(eventId, temporal)
+    if isArray(temporal.next) then
+        return Any(temporal.next, function(e) return e == eventId end)
+    else
+        return temporal.next == eventId
+    end
+end
+
 function GraphStory:GetValidEpisodes(requiredActors)
     if DEBUG then
         print("GraphStory:GetValidEpisodes: loading all available episodes in memory")--!!!!!!!!!!!!!!!
@@ -477,7 +539,7 @@ function GraphStory:GetValidEpisodes(requiredActors)
                 table.insert(requiredObjects, { location = location, name = existsEvent.Properties.Type, id = existsEvent.id })
             end
 
-            eventId = self.temporal[eventId].next
+            eventId = self:GetNextEvent(eventId, requiredActor.id)
         end
     end
 
@@ -661,7 +723,7 @@ function GraphStory:MapObjectsActionsAndPoi(requiredObjects, episode, actionMap,
     return All(requiredObjects, function(ro)
         if eventObjectMap[ro.id] then return true end
         if DEBUG_VALIDATION and not eventObjectMap[ro.id] then
-            print("The object "..ro.id..':'..ro.name..' ()'..(ro.location or '')..' is not mapped in any of ')
+            print("The object "..ro.id..':'..ro.name..' ()'..(ro.location or '')..' is not mapped in any of event objects map')
             for k, v in pairs(eventObjectMap) do
                 print(k)
             end
@@ -672,19 +734,19 @@ function GraphStory:MapObjectsActionsAndPoi(requiredObjects, episode, actionMap,
             return true
         end
 
-        local eventsWithObjectAsTarget = Where(self.graph, function(g)
+        local eventsWithObjectAsTarget = Where(self.graph, function(event)
             return
                 --The action was not already processed
-                not actionMap[g.id]
+                not actionMap[event.id]
                 --The event is of type action
-                and g.Action ~= 'Exists'
-                and g.Action ~= 'LookAtObject'
-                -- and g.Action ~= 'Drink'
-                -- and g.Action ~= 'Eat'
+                and event.Action ~= 'Exists'
+                and event.Action ~= 'LookAtObject'
+                -- and event.Action ~= 'Drink'
+                -- and event.Action ~= 'Eat'
                 --The event is not interaction and is with the required object
-                and #g.Entities == 2 and g.Entities[2] == ro.id
+                and #event.Entities == 2 and event.Entities[2] == ro.id
                 --The event is in the same location as the required object (this will not be valid if the object can move to a different place -- most likely we will not support that)
-                and (#g.Location == 0 or g.Location[1] == '' or g.Location[1]:lower():find(ro.location:lower()))
+                and (#event.Location == 0 or event.Location[1] == '' or event.Location[1]:lower():find(ro.location:lower()))
             end
         )
 
@@ -722,8 +784,7 @@ function GraphStory:MapObjectsActionsAndPoi(requiredObjects, episode, actionMap,
                             }
                         }
                     elseif DEBUG_VALIDATION then
-                        print("This object does not exist in the episode!")
-                        return nil
+                        print("This object "..ro.name.." does not exist in the episode!")
                     end
                 else
                     return nil
@@ -775,7 +836,7 @@ function GraphStory:MapObjectsActionsAndPoi(requiredObjects, episode, actionMap,
                         or (isArray(a.NextAction) and inList(currentAction, a.NextAction))
                 end)
                 while previousActionsCandidates and #previousActionsCandidates > 0 do
-                    local previousEventId = FirstOrDefault(self.temporal, function(t) return t.next == currentEvent.id end, true)
+                    local previousEventId = self:FindPreviousEventId(currentEvent.id, currentEvent.Entities[1])
                     if not previousEventId then
                         if DEBUG_VALIDATION then
                             print("Previous event was null!")
@@ -814,7 +875,7 @@ function GraphStory:MapObjectsActionsAndPoi(requiredObjects, episode, actionMap,
                 currentAction = actionWithMatchingObject
                 currentEvent = eventMatchingAction
                 while currentAction and currentAction.NextAction and self.temporal[currentEvent.id].next do
-                    local nextEventId = self.temporal[currentEvent.id].next
+                    local nextEventId = self:GetNextEvent(currentEvent.id, currentEvent.Entities[1])
                     if not nextEventId then
                         if DEBUG_VALIDATION then
                             print("Next event was null but next action exists!")
@@ -874,7 +935,7 @@ function GraphStory:MapObjectsActionsAndPoi(requiredObjects, episode, actionMap,
             print('Episode '..episode.name..' was discarded because the object '..ro.name..' does not exist in region '..ro.location..' or at all or a matching chain of actions could not be found for the object')
         end
         if not matchingPoiData then
-            print("Could not find actions required for the object "..ro.name)
+            print("Could not find actions required for the object "..ro.name..' id '..ro.id..' in location '..ro.location)
             return false
         end
 
@@ -1011,8 +1072,8 @@ function GraphStory:ProcessActions(graphActors)
             print('Could not find the first event for actor '..a.id)
             return false
         elseif DEBUG then
-            print('First event: '..firstEvent.id..' in location '..firstEvent.Location[1]..' with actor '..firstEvent.Entities[1])
         end
+        print('First event: '..firstEvent.id..' in location '..firstEvent.Location[1]..' with actor '..firstEvent.Entities[1])
 
         local firstLocation = PickRandom(Where(self.CurrentEpisode.POI, function(poi)
             local eventLocation = ""
@@ -1031,7 +1092,7 @@ function GraphStory:ProcessActions(graphActors)
         -- --this is the first location -> the place where the actor or ped is first spawned
         firstLocation.isBusy = true
         local ped = FirstOrDefault(self.CurrentEpisode.peds, function(p) return p:getData('id') == a.id end)
-        print(ped:getData('id')..'Location '..firstLocation.Description..' is set to busy')
+        print('[GraphStory.ProcessActions] '..ped:getData('id')..': Location '..firstLocation.Description..' is set to busy')
         ped:setData('startingPoiIdx', LastIndexOf(episode.POI, firstLocation))
         ped.interior = firstLocation.Interior
         ped.position = firstLocation.position
@@ -1040,8 +1101,8 @@ function GraphStory:ProcessActions(graphActors)
         firstEvent.isStartingEvent = true
         self.interactionPoiMap = interactionPoiMap
         self.interactionProcessedMap = interactionProcessedMap
-        self.lastEvents[a.id] = firstEvent
-        self.lastLocations[a.id] = firstLocation
+        self.nextEvents[a.id] = firstEvent
+        self.nextLocations[a.id] = firstLocation
     end
     print("GraphStory:ProcessActions --------------------------------------------------")
     return true

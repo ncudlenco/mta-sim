@@ -1,29 +1,43 @@
+-- Z:\More games\GTA San Andreas\MTA-SA1.6
+
 CURRENT_STORY = nil
 SCREENSHOTS = {}
+
 MAX_ACTIONS = 10000
 MAX_STORY_TIME = 1200
 LOG_FREQUENCY = 1000 / 50 --milliseconds / frames
 WIDTH_RESOLUTION = 1920
 HEIGHT_RESOLUTION = 1080
+
 DEBUG = false
+DEBUG_PROCESSACTIONS = false
+DEBUG_PROCESSREGIONS = false
+DEBUG_TEMPLATES = false
+DEBUG_LOCATION_CANDIDATES = false
+DEBUG_METAEPISODE = false
 DEBUG_PATHFINDING = false
 DEBUG_VALIDATION = false
 DEBUG_ACTION_VALIDATION = false
 DEBUG_LOGGER = false
-DEBUG_SCREENSHOTS = true
+DEBUG_SCREENSHOTS = false
 DEBUG_OBJECTS = false
 DEBUG_EPISODE = false
 DEBUG_ACTIONS = false
 DEBUG_CHAIN_LINKED_ACTIONS = false
 DEBUG_CAMERA = false
+DEBUG_ACTIONS_ORCHESTRATOR = false
+
+-- NOT USED --
 TIME_STAMP = false
 ACTORS_CROWDING_FACTOR = 0.2
 MIN_ACTORS = 1
 MAX_ACTORS = 1
 RANDOM_ACTORS_NR = true
 EXPECTED_SPECTATORS = 1
+-- NOT USED --
+
 SIMULATION_MODE = true
-LOG_DATA = SIMULATION_MODE and false
+LOG_DATA = SIMULATION_MODE and false -- Set this to true if you want to save images and logs for each episode
 
 STATIC_CAMERA = SIMULATION_MODE
 FREE_ROAM = not SIMULATION_MODE
@@ -179,8 +193,8 @@ INPUT_GRAPHS = {
     -- 'complex_graphs/test_switch.json',
     -- 'complex_graphs/test_switch.json',
     -- 'complex_graphs/test_switch.json',
-    'complex_graphs/c10.json',
-    'complex_graphs/c10.json',
+     'complex_graphs/c10_sync.json',
+    --'complex_graphs/test_next.json',
     -- 'test_1',
     -- 'test_1',
     -- 'test_1',

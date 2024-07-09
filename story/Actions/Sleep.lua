@@ -16,11 +16,11 @@ function Sleep:Apply()
     self.Performer.rotation = self.Performer.rotation + Vector3(0,0,180)
 
     local time = random(3000, 18000)
-    if self.how == Sleep.eHow.Left then
-        self.Performer:setAnimation("INT_HOUSE", "BED_Loop_L", time, true, true, false, true)
-    elseif self.how == Sleep.eHow.Right then
-        self.Performer:setAnimation("INT_HOUSE", "BED_Loop_R", time, true, true, false, true)
-    end
+    -- if self.how == Sleep.eHow.Left then
+    --     self.Performer:setAnimation("INT_HOUSE", "BED_Loop_L", time, true, true, false, true)
+    -- elseif self.how == Sleep.eHow.Right then
+    --     self.Performer:setAnimation("INT_HOUSE", "BED_Loop_R", time, true, true, false, true)
+    -- end
 
     if DEBUG then
         outputConsole("Sleep:Apply")

@@ -18,7 +18,7 @@ function GetOff:Apply()
     local block = ""
     local animation = ""
     local updatePedPosition = true
-    
+
     if self.how == GetOff.eHow.Bed then
         time = 2800
         block = "INT_HOUSE"
@@ -28,6 +28,7 @@ function GetOff:Apply()
         elseif self.side == GetOff.eSide.Right then
             animation = "BED_Out_R"
         end
+        self.Performer.rotation = self.Performer.rotation + Vector3(0,0,180)
 
     elseif self.how == GetOff.eHow.GymBike then
         time = 1600
@@ -47,7 +48,7 @@ function GetOff:Apply()
 
     StoryActionBase.GetLogger(self, story):Log(self.Description .. self.TargetItem.Description, self)
     self.Performer:setAnimation(block, animation, time, false, updatePedPosition, false, true)
-    
+
     if DEBUG then
         outputConsole("GetOff:Apply")
     end

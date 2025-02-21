@@ -12,7 +12,7 @@ end)
 function PutDown:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
-    
+
     StoryActionBase.GetLogger(self, story):Log(self.Description .. self.TargetItem.Description .. " on " .. self.Where, self)
     -- self.TargetItem.instance:setCollisionsEnabled(false)
     StoryActionBase.Apply(self)
@@ -34,6 +34,7 @@ function PutDown:Apply()
 
     OnGlobalActionFinished(time, self.Performer:getData('id'), self.Performer:getData('storyId'), function()
         detachElementFromBone(self.TargetItem.instance)
+        self:RemovePickedObject()
         self.TargetItem:Destroy()
         self.TargetItem:Create()
     end)
@@ -47,4 +48,14 @@ PutDown.eHow = {
 
 function PutDown:GetDynamicString()
     return 'return PutDown{where = "'..self.Where..'", how = '..self.how..'}'
+end
+
+function PutDown:RemovePickedObject()
+    local pickedObjects = self.Performer:getData('pickedObjects') or {}
+    for i, value in ipairs(pickedObjects) do
+        if value[1] == self.TargetItem.ObjectId then
+            table.remove(pickedObjects, i)
+            break
+        end
+    end
 end

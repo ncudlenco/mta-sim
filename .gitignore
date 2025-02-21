@@ -18,3 +18,4 @@ random/*
 test_*_out/*
 **/*_out/*
 **/*.mp4
+**/node_modules/*

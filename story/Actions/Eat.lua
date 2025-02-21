@@ -27,6 +27,7 @@ function Eat:Apply()
 
     OnGlobalActionFinished(time, self.Performer:getData('id'), self.Performer:getData('storyId'), function()
         detachElementFromBone(self.TargetItem.instance)
+        self:RemovePickedObject()
         self.TargetItem:Destroy()
         self.TargetItem:Create()
     end)
@@ -40,3 +41,13 @@ Eat.eHow = {
     SitDown = 1,
     StandUp = 2
 }
+
+function Eat:RemovePickedObject()
+    local pickedObjects = self.Performer:getData('pickedObjects') or {}
+    for i, value in ipairs(pickedObjects) do
+        if value[1] == self.TargetItem.ObjectId then
+            table.remove(pickedObjects, i)
+            break
+        end
+    end
+end

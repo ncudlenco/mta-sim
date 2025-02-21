@@ -29,7 +29,7 @@ function Kiss:Apply()
     faceP1ToP2(self.TargetPlayer, self.Performer)
 
 
-    local time = 6000
+    local time = 5000
     StoryActionBase.GetLogger(self, story):Log(" and " .. self.TargetPlayer:getData('name') .. self.Description, self)
 
     local performerKissType = nil

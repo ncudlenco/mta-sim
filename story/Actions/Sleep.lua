@@ -13,7 +13,7 @@ function Sleep:Apply()
 
     StoryActionBase.GetLogger(self, story):Log(self.Description, self, false, true, {" wakes up ", " finishes sleeping "})
     -- self.TargetItem.instance:setCollisionsEnabled(false)
-    self.Performer.rotation = self.Performer.rotation + Vector3(0,0,180)
+    -- self.Performer.rotation = self.Performer.rotation + Vector3(0,0,180)
 
     local time = random(3000, 18000)
     -- if self.how == Sleep.eHow.Left then

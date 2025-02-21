@@ -469,6 +469,8 @@ function Location:ProcessNextAction(player)
         end
     end
 
+    local isnextEventMove = nextEvent and nextEvent.Action:lower() == 'move'
+
     --if this is the first event the player will be spawned in the required location
     --otherwise, if the player is not in the required location then add a move action to the required location (select it from allActions of the currentLocation)
     local nextLocation = nil
@@ -520,7 +522,7 @@ function Location:ProcessNextAction(player)
                         poi.LocationId == interactionPoiMap[nextEvent.interactionRelation]
                     )
                     or not nextEvent.isInteraction --and not poi.isBusy
-                local nextEventTargetLocation = isMoveEvent and nextEvent.Location[2] or nextEvent.Location[1]
+                local nextEventTargetLocation = isnextEventMove and nextEvent.Location[2] or nextEvent.Location[1]
                 local isValidRegion = poi.Region and nextEvent.Location and (poi.Region.name:lower():find(nextEventTargetLocation:lower()) and true or false)
                 local restrictInteractionsToInteractionPois = nextEvent.isInteraction and poi.interactionsOnly
                 local locationContainsObjectOfEvent = Any(poi.allActions, function(action)
@@ -682,6 +684,7 @@ function Location:GetNextValidAction(player)
         if DEBUG then
             outputConsole("Location:GetNextValidAction - max story actions reached. Ending the current story")
         end
+        table.insert(CURRENT_STORY.lastEvents[player:getData('id')], {id = "$@!end_story!@$"})
         lock = false
         return EndStory(player)
     end
@@ -753,23 +756,8 @@ function Location:GetNextValidAction(player)
             outputConsole("Location:GetNextValidAction - next action was null. Ending the current player's story")
             print("Location:GetNextValidAction - next action was null. Ending the current player's story")
         end
+        table.insert(CURRENT_STORY.lastEvents[player:getData('id')], {id = "$@!end_story!@$"})
         lock = false
-        if LOAD_FROM_GRAPH then
-            if Any(CURRENT_STORY.CurrentEpisode.peds, function(ped) return player:getData('id') ~= ped:getData('id') and not ped:getData('storyEnded') end) then
-                if DEBUG then
-                    outputConsole("Location:GetNextValidAction - waiting for the others to finish")
-                end
-                print("Location:GetNextValidAction - actor "..player:getData('id').." finished and is waiting for the others to finish")
-                local unfinishedActors = Where(CURRENT_STORY.CurrentEpisode.peds, function(ped) return player:getData('id') ~= ped:getData('id') and not ped:getData('storyEnded') end)
-                for i,p in ipairs(unfinishedActors) do
-                    print(p:getData('id'))
-                end
-                --the episode is ended for the current actor, wait for all the other actors to finish
-                player:setData('storyEnded', true)
-                player:setAnimation("cop_ambient", "coplook_loop", 0, true, false, false, true)
-                return nil
-            end
-        end
         return EndStory(player)
     else
         if DEBUG then

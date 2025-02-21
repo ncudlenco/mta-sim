@@ -52,7 +52,7 @@ function ActionsOrchestrator:EnqueueActionGraph(action, actor)
         table.insert(self.fulfilled, previousEvent.id)
     end
 
-    if DEBUG and DEBUG_ACTIONS_ORCHESTRATOR then
+    if DEBUG then
         if not lastEvent then
             print("[EnqueueActionGraph] actorId ".. actor:getData('id').." - no last event for action "..action.Name..': '..action:GetDynamicString())
         else
@@ -106,9 +106,11 @@ function ActionsOrchestrator:GetTemporalConstraints(actor, action, lastEvent)
             if temporalData.relations then
                 for _, constraintId in ipairs(temporalData.relations) do
                     local constraint = CURRENT_STORY.temporal[constraintId]
+                    if not constraint then
+                        print("[ERROR] [GetTemporalConstraints] actorId ".. actorId.." - constraintId "..constraintId.." not found")
+                    end
                     if constraint.type == 'starts_with' then
                         local linkedConstraints = Where(CURRENT_STORY.temporal, function(tempConstraint)
-                            print(tempConstraint.key)
                             return
                                 tempConstraint.key ~= 'starting_actions'
                                 and tempConstraint.relations
@@ -190,7 +192,7 @@ function ActionsOrchestrator:ValidateConcurrentConstraints()
 
             local concurrentConstraints = Where(constraints, function(constraint) return constraint.constraint.type == 'concurent' or constraint.constraint.type == 'starts_with' end)
             -- concurent constraints are satisfied if all concurrent or starts_with events linked with the current one have all constraints satisfied
-            local unsatisfied = Where(constraints, function(constraint) return (constraint.type == 'after' or constraint.type == 'before') and not constraint.satisfied end)
+            local unsatisfied = Where(constraints, function(constraint) return (constraint.constraint.type == 'after' or constraint.constraint.type == 'before') and not constraint.satisfied end)
             local isThisValid = #unsatisfied == 0
 
             if isThisValid and #concurrentConstraints > 0 then
@@ -205,7 +207,7 @@ function ActionsOrchestrator:ValidateConcurrentConstraints()
 
                     local linkedRequest = self.actionRequests[constraintActor]
                     if linkedRequest and linkedRequest.eventId == constraintEventId then
-                        local othersNotSatisfied = Where(linkedRequest.constraints, function(constraint) return (constraint.type == 'after' or constraint.type == 'before') and not constraint.satisfied end)
+                        local othersNotSatisfied = Where(linkedRequest.constraints, function(constraint) return (constraint.constraint.type == 'after' or constraint.constraint.type == 'before') and not constraint.satisfied end)
                         isThisValid = #othersNotSatisfied == 0
                     end
 

@@ -48,7 +48,11 @@ function SitDown:Apply()
         duration = 5000
     end
 
-    self.Performer:setAnimation(animationLib, animationId, -1, false, true, false, true)
+    -- Delay the animation to allow the ped position and rotation to be set
+    Timer(function()
+        self.Performer:setAnimation(animationLib, animationId, -1, false, true, false, true)
+    end, 1000, 1)
+
     if DEBUG then
         outputConsole("SitDown:Apply")
     end

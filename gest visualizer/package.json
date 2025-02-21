@@ -1,0 +1,21 @@
+{
+  "name": "gest-visualizer",
+  "version": "1.0.0",
+  "description": "a graph visualiser for gest",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "keywords": [
+    "gest"
+  ],
+  "author": "Cudlenco Nicolae",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^34.0.2",
+    "electron-reload": "^2.0.0-alpha.1"
+  },
+  "dependencies": {
+    "cytoscape-node-html-label": "^1.2.2"
+  }
+}

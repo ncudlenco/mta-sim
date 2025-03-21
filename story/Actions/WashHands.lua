@@ -12,7 +12,7 @@ function WashHands:Apply()
 
     StoryActionBase.GetLogger(self, story):Log(self.Description  .. self.Performer:getData('genderGenitive') .. " hands in the " .. self.TargetItem.Description, self)
 
-    time = random(2000, 8000)
+    local time = random(2000, 8000)
     self.Performer:setAnimation("INT_HOUSE", "wash_up", time, true, true, false, true)
 
     if DEBUG then

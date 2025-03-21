@@ -153,6 +153,7 @@ function Move.destinationReached(player, source)
             local how = lastAction.planningData[player:getData('id')].how
             player:setData('isMoving', true)
             player:setAnimation(lib, how, -1, true, true, true, true)
+            player:setAnimationSpeed(how, lastAction.AnimationSpeed)
         end
         if not DISABLE_BETWEEN_POINTS_TELEPORTATION then
             Move.wait(player)
@@ -527,8 +528,10 @@ function Move:FindNextShortestPath(player)
 
                     player:setRotation(0,0,findRotation(player.position.x, player.position.y, nextPos[1], nextPos[2]), "default", true)
 
+                    local animationSpeed = self.AnimationSpeed
                     Timer(function()
                         player:setAnimation(lib, how, -1, true, true, true, true)
+                        player:setAnimationSpeed(how, animationSpeed)
                         player:setData('isMoving', true)
                     end, 100, 1)
                     if not DISABLE_BETWEEN_POINTS_TELEPORTATION then
@@ -588,10 +591,13 @@ function Move.hasReachedMarker(player, marker)
             player:setRotation(0,0,findRotation(player.position.x, player.position.y, plan.path[idx][1], plan.path[idx][2]), "default", true)
             -- print("After computation ROTATION: "..player.rotation.z..'; Position: '..player.position.x..', '..player.position.y..', '..player.position.z)
             player:setAnimation(plan.lib, plan.how, -1, true, true, true, true)
+            local animationSpeed = lastAction.AnimationSpeed
+            player:setAnimationSpeed(plan.how, animationSpeed)
             player:setData('isMoving', true)
 
             print('Actor '..playerId..' rerunning timer for marker '..marker:getData('idx'))
-            Timer(Move.hasReachedMarker, 300, 1, player, marker)
+            local pollingTime = (300 / math.max(1, math.max(math.min(distance, animationSpeed), 1.5) / 1.5))
+            Timer(Move.hasReachedMarker, pollingTime, 1, player, marker)
         else
             print("[FATAL ERROR] "..playerId..". The player had no plan or the path is empty but Move.hasReachedMarker has been called")
         end

@@ -19,6 +19,7 @@ StoryActionBase = class(IStoryItem, function(o, params)
     o.IsClosingAction = params.isClosingAction or params.IsClosingAction or false
     o.Buffer = {}
     o.Name = params.name or ''
+    o.AnimationSpeed = params.animationSpeed or ANIMATION_SPEED or 1
 end)
 
 function StoryActionBase:__tostring()

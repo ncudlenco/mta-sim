@@ -1091,15 +1091,13 @@ function GraphStory:ProcessActions(graphActors)
         return false
     end
 
-    if DEBUG then
-        for key, value in pairs(eventObjectMap) do
-            print('ProcessActions!!!!!!!!!!!!!!!!!!!!!!Mapped '..key..' to '..value)
-        end
-    end
-
     self.eventObjectMap = eventObjectMap
     self.poiMap = poiMap
     self.eventMap = eventMap
+
+    if DEBUG then
+        self:DebugMap()
+    end
 
     for _,a in ipairs(graphActors) do
         print(a.id)
@@ -1146,6 +1144,22 @@ function GraphStory:ProcessActions(graphActors)
     end
     print("GraphStory:ProcessActions --------------------------------------------------")
     return true
+end
+
+function GraphStory:DebugMap()
+    print("GraphStory:DebugMap --------------------------------------------------")
+    print('Event Objects')
+    for key, value in pairs(self.eventObjectMap) do
+        print('Mapped '..key..' to '..value)
+    end
+    print('POIs')
+    for key, value in pairs(self.poiMap) do
+        print('Mapped '..key..' to '..value)
+    end
+    print('Events')
+    for key, value in pairs(self.eventMap) do
+        print('Mapped '..key..' to '..value)
+    end
 end
 
 function GraphStory:End()

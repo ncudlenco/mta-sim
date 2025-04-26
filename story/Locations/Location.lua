@@ -272,6 +272,7 @@ function InstantiateAction(event, player, location, object)
     return nil
 end
 
+
 function Location:ProcessNextAction(player)
     local event = CURRENT_STORY.nextEvents[player:getData('id')]
     local location = CURRENT_STORY.nextLocations[player:getData('id')]
@@ -325,7 +326,7 @@ function Location:ProcessNextAction(player)
         --if the event action has prerequisites then add them first if they are not already in the queue
         local eventAction = nil
 
-        -- First, map the current event to the action that will be executed. For interactions we need to create a wait action
+        -- First, map the current event to the action that will be executed in the current location (e.g. based on the event action name). For interactions we need to create a wait action.
         if event.isInteraction then
             --set the actors one in front of the other in the same location...
             --create the interaction actions / locations
@@ -496,6 +497,8 @@ function Location:ProcessNextAction(player)
                 print("Currently picked up object: "..pickedUpObjects[1][1])
             end
         end
+        -- PROBLEM: the event object map has to be computed before the evaluation of the location candidates because the location of objects might chage during the simulation.
+        -- id addition, some locations might be mapped
         if event and event.Action == 'PickUp' and event.Entities and #event.Entities > 1 then
             pickedUpObjectId = CURRENT_STORY.eventObjectMap[event.Entities[2]]
         end
@@ -506,14 +509,21 @@ function Location:ProcessNextAction(player)
         local isActionWithPickedUpObject = isActionWithObjectThatWillBeReceived or isActionWithObjectCurrentlyPicked
 
         print('Next event: '..nextEvent.id..' isInteraction '..strIsInteraction..' isActionWithPickedUpObject '..BoolToStr(isActionWithPickedUpObject))
-
-        local candidates = Where(CURRENT_STORY.CurrentEpisode.POI, function(poi)
-            if DEBUG and DEBUG_LOCATION_CANDIDATES then
-                print('Checking candidate location '..poi.Description)
+        local candidates;
+        if CURRENT_STORY.poiMap and CURRENT_STORY.poiMap[nextEvent.id] then
+            print("Assessing if there is an actual location with id "..CURRENT_STORY.poiMap[nextEvent.id])
+            local mappedLocation = FirstOrDefault(CURRENT_STORY.CurrentEpisode.POI, function(poi) return poi.LocationId == CURRENT_STORY.poiMap[nextEvent.id] end)
+            if mappedLocation then
+                if DEBUG and DEBUG_LOCATION_CANDIDATES then
+                    print('Mapped location '..mappedLocation.Description..' for event '..nextEvent.id .. '. Skipping searching for additional candidates.')
+                end
+                candidates = {mappedLocation}
             end
-            if CURRENT_STORY.CurrentEpisode.poiMap and CURRENT_STORY.CurrentEpisode.poiMap[nextEvent.id] then
-                return poi.LocationId == CURRENT_STORY.CurrentEpisode.poiMap[nextEvent.id]
-            else
+        else
+            candidates = Where(CURRENT_STORY.CurrentEpisode.POI, function(poi)
+                if DEBUG and DEBUG_LOCATION_CANDIDATES then
+                    print('Checking candidate location '..poi.Description)
+                end
                 local isValidInteractionPoiOrNotInteractionAtAll = nextEvent.isInteraction and
                     poi.interactionsOnly and
                     (
@@ -555,8 +565,8 @@ function Location:ProcessNextAction(player)
                         or
                         locationContainsObjectOfEvent
                     )
-            end
-        end)
+            end)
+        end
         if not nextEvent.isInteraction and #candidates == 0 and isActionWithPickedUpObject then
             candidates = Where(CURRENT_STORY.CurrentEpisode.POI, function(poi)
                 return poi.Region and nextEvent.Location and (poi.Region.name:lower():find(nextEvent.Location[1]:lower()) and true or false )
@@ -584,14 +594,16 @@ function Location:ProcessNextAction(player)
         -- end
         if All(candidates, function(poi) return poi ~= location and poi.isBusy end) then
             nextLocation = PickRandom(candidates)
+        else
+            nextLocation = PickRandom(Where(candidates, function(poi) return not poi.isBusy end))
+        end
+
         -- If the current location is among the next candidates, choose this one. This helps in case there are multiple actions in the same location: e.g. SitDown, PickUp, Eat, GetUp (on different chairs)
         -- I would like to execute all these actions on the same chair (same location)
-        elseif FirstOrDefault(candidates, function(poi) return poi == location end)
+        if FirstOrDefault(candidates, function(poi) return poi == location end)
         --     and not Any(CURRENT_STORY.CurrentEpisode.peds, function(p) return p:getData('waitingFor') == poi.LocationId end) end)
         then
             nextLocation = FirstOrDefault(candidates, function(poi) return poi == location end)
-        else
-            nextLocation = PickRandom(Where(candidates, function(poi) return not poi.isBusy end))
         end
         if not nextLocation then
             print('Could not find the next location '..nextEvent.id..': '..nextEvent.Location[1])
@@ -609,7 +621,8 @@ function Location:ProcessNextAction(player)
             interactionPoiMap[nextEvent.interactionRelation] = nextLocation.LocationId
         end
 
-        print('Next location '..nextLocation.Description)
+        print('Next location '..nextLocation.Description.." "..nextLocation.LocationId)
+        print("Current location "..location.Description.." "..location.LocationId)
     elseif #event.Location > 1 then
         local candidates = Where(CURRENT_STORY.CurrentEpisode.POI, function(poi)
             return

@@ -720,6 +720,266 @@ function GraphStory:FindLocationAndActionForEvent(event)
         end))
 end
 
+---This function iterates through all the POIs available in an episode (it can be a meta episode that is a composition of multiple local episodes),
+---and for each POI, it finds and maps a chain of events that happen in the same location (both forward and backward in time)
+---starting from the first eventsWithObjectAsTarget that has the same action and location as the action with the object as target.
+---
+---This does not guarantee that all the events from the eventsWithObjectAsTarget are mapped to simulator actions, and it can even result in duplicates.
+---@param episode any
+---@param ro any The required object (the one that is used in the event)
+---@param eventsWithObjectAsTarget any[] The events that have the object as target
+function GraphStory:FindAllValidActionsAndPois(episode, ro, eventsWithObjectAsTarget)
+    DropNull(Select(episode.POI, function(poi)
+        local actionMap = {}
+        local eventMap = {}
+        local objectMap = {}
+        local eventObjectMap = {}
+        local poiMap = {}
+
+        if DEBUG_VALIDATION then
+            print('Assessing actions in poi '..poi.Description..' in region '..poi.Region.name)
+        end
+
+        -- Starting from the action with the object as target,
+        local actionWithMatchingObject = FirstOrDefault(poi.allActions, function(a) return a.TargetItem and a.TargetItem.ObjectId and a.TargetItem.type == ro.name end)
+
+        -- If in the current POI an action with the required object does not exist but also there is no event in the GEST with such an object, just map them.
+        -- There will be no action in the simulation with the given object, but it might still be required to just exist.
+        -- **Note** that an object is either used in an event or it is just a requirement of the episode and never used by anyone in an episode.
+        if not actionWithMatchingObject then
+            if DEBUG_VALIDATION then
+                print("Action with matching object does not exist!")
+            end
+            -- if there is no actual action in the graph with the object, it means that the object is simply a requirement to exist in the environment.
+            if #eventsWithObjectAsTarget == 0 then
+                local episodeObject = FirstOrDefault(episode.Objects, function(eO) return eO.ObjectId and eO.type == ro.name end)
+                if episodeObject then
+                    actionWithMatchingObject = {
+                        Name = "none",
+                        TargetItem = {
+                            ObjectId = episodeObject.ObjectId
+                        }
+                    }
+                elseif DEBUG_VALIDATION then
+                    print("This object "..ro.name.." does not exist in the episode!")
+                end
+            else
+                -- An action with the object was not found in the current POI, but the object is used in some actions within the episode.
+                -- Return NULL, to discard this POI from the current evaluation.
+                return nil
+            end
+        end
+
+        if DEBUG_VALIDATION then
+            print("Action with matching object "..actionWithMatchingObject.Name)
+        end
+
+        -- The object is not used in any of the events, but it is simply a requirement of the episode.
+        if #eventsWithObjectAsTarget == 0 then
+            print("The object is not used in any events "..ro.name)
+            eventObjectMap[ro.id] = actionWithMatchingObject.TargetItem.ObjectId
+            objectMap[actionWithMatchingObject.TargetItem.ObjectId] = ro.id
+            return {
+                actionMap = {},
+                eventMap = {},
+                objectMap = objectMap,
+                eventObjectMap = eventObjectMap,
+                poiMap = {}
+            }
+        end
+
+        -- find the first matching event (same action name and location)
+        local eventMatchingActionAndObject = FirstOrDefault(eventsWithObjectAsTarget, function(event)
+            local isMatchingAction = event.Action:lower() == actionWithMatchingObject.Name:lower()
+            local isAnyActionLocationAllowed = #event.Location == 0 or event.Location == ''
+            local isMatchingLocationInRegion = (poi.Region and poi.Region.name:lower():find(event.Location[1]:lower()) and true or false)
+            local isMatchingLocation = (isAnyActionLocationAllowed or isMatchingLocationInRegion)
+            return isMatchingAction and isMatchingLocation
+        end)
+
+        if not eventMatchingActionAndObject then
+            if DEBUG_VALIDATION then
+                print("Event matching action does not exist!")
+            end
+            return nil
+        end
+
+        if DEBUG_VALIDATION then
+            print('Event matching action '..eventMatchingActionAndObject.id)
+        end
+
+        local currentAction = actionWithMatchingObject
+        local currentEvent = eventMatchingActionAndObject
+        -- The action and event are guaranteed to be matching at this point
+        if not self:MatchEventAndAction(currentAction, currentEvent, poi, actionMap, eventMap, objectMap, eventObjectMap, poiMap) then
+            if DEBUG_VALIDATION then
+                print("[ERROR] The event and action can't be matched. Something went seriously wrong!")
+            end
+            return nil
+        end
+        --The PickUp action was skipped initially because if the object is to bo moved afterwards, then we do not want to enforce the same location.
+        --But now, we are only mapping all the actions that occur in the POI, until the next Move action (that would change the location anyway).
+        --Therefore, when a PickUp action was started from, it will not find previous action candidates if the actor Moves with the picked up object.
+        --If the graph specifies that an action has to be executed somewhere else with the picked up object that was moved, then the current logic will fail.
+        -- if currentAction.Name ~= "PickUp" then
+        ----verify going back in time until a Move is found if all the  actions have matching events (same location, same target objects)
+        local previousActionsCandidates = Where(poi.allActions, function(a)
+            return
+                a.Name:lower() ~= 'move' -- this action changes the location and marks the end of the chain of actions
+                and (
+                    (not isArray(a.NextAction) and a.NextAction == currentAction)
+                    or (isArray(a.NextAction) and inList(currentAction, a.NextAction))
+                )
+        end)
+        while previousActionsCandidates and #previousActionsCandidates > 0 do
+            local previousEventId = self:FindPreviousEventId(currentEvent.id, currentEvent.Entities[1])
+            -- In the current chain of actions, if there is no matching event, then the current POI is invalid (no chain of actions to match the chain of events exists in this location)
+            if not previousEventId then
+                if DEBUG_VALIDATION then
+                    print("Previous event was null!")
+                end
+                return nil
+            end
+            local previousEvent = self.graph[previousEventId]
+
+            if not previousEvent then
+                if DEBUG_VALIDATION then
+                    print("Previous event was null even though the previous event id was "..previousEventId)
+                end
+                return nil
+            end
+
+            if DEBUG_VALIDATION then
+                print('Previous event '..previousEvent.id)
+            end
+
+            local previousAction = FirstOrDefault(previousActionsCandidates, function(previousAction)
+                if DEBUG_VALIDATION then
+                    print("Previous action "..previousAction.Name)
+                end
+                return self:MatchEventAndAction(previousAction, previousEvent, poi, actionMap, eventMap, objectMap, eventObjectMap, poiMap)
+            end)
+            if not previousAction then
+                if DEBUG_VALIDATION then
+                    print("The event and action can't be matched")
+                end
+                return nil
+            else
+                print("Previous action "..previousAction.Name)
+            end
+
+            currentAction = previousAction
+            previousActionsCandidates = Where(poi.allActions, function(a) return a.Name:lower() ~= 'move' and (((not isArray(a.NextAction) or #a.NextAction == 1) and a.NextAction == currentAction) or (isArray(a.NextAction) and inList(currentAction, a.NextAction))) end)
+            currentEvent = previousEvent
+        end
+
+        ----verify going forward in time if all the actions have matching events
+        currentAction = actionWithMatchingObject
+        currentEvent = eventMatchingActionAndObject
+        while currentAction and currentAction.NextAction and self.temporal[currentEvent.id].next do
+            local nextEventId = self:GetNextEvent(currentEvent.id, currentEvent.Entities[1])
+            if not nextEventId then
+                if DEBUG_VALIDATION then
+                    print("Next event was null but next action exists!")
+                end
+                return nil
+            end
+            local nextEvent = self.graph[nextEventId]
+
+            if
+                    nextEvent.Action:lower() ~= 'move'
+                and nextEvent.Action:lower() ~= 'give'
+                and nextEvent.Action:lower() ~= 'inv-give'
+                and nextEvent.Action:lower() ~= 'lookatobject'
+                -- and nextEvent.Action:lower() ~= 'drink'
+                -- and nextEvent.Action:lower() ~= 'eat'
+            then
+                local nextActions = { currentAction.NextAction }
+                if isArray(currentAction.NextAction) then
+                    nextActions = currentAction.NextAction
+                end
+
+                --if multiple possible next actions, choose the first one that matches the next event
+                currentAction = FirstOrDefault(nextActions, function(action)
+                    return self:MatchEventAndAction(action, nextEvent, poi, actionMap, eventMap, objectMap, eventObjectMap, poiMap)
+                end)
+                if not currentAction then
+                    if DEBUG_VALIDATION then
+                        print("There is no next action that matches the next event!")
+                    end
+                    return nil
+                end
+
+                if DEBUG_VALIDATION then
+                    print("Next action that also matches next event "..currentAction.Name)
+                end
+            else
+                print('The event does not follow the chain of actions. Event: '..nextEvent.Action..' Action: '..currentAction.Name)
+                break
+            end
+            currentEvent = nextEvent
+        end
+        -- end -- if currentAction.Name ~= "PickUp"
+
+        if DEBUG_VALIDATION then
+            print("This poi is valid, returning ")
+        end
+
+        return {
+            actionMap = actionMap,
+            eventMap = eventMap,
+            objectMap = objectMap,
+            eventObjectMap = eventObjectMap,
+            poiMap = poiMap
+        }
+    end))
+end
+
+---This function iterates through all the required objects in the apisode, then starting from the object:
+------1. it finds the events that have the object as target (eventsWithObjectAsTarget)
+------2. it finds the POIs that contain actions with the same kind of object as target
+------3. starting from the first action with that object (actionWithMatchingObject), it finds the first event from eventsWithObjectAsTarget with the same action and location (indirectly, the same object as well)
+------4. it maps the pairs of objects, actions and locations between graph and simulator entities (action <-> event action, object <-> second event entity, name of poi region <-> first event location if any)
+------5. it then iterates through all previous actions and events, mapping them as well (until a Move action is found - and the location would be changed)
+------6. it then iterates through all next actions and events, mapping them as well (until a Move action is found - and the location would be changed)
+------7. it returns the action to event map (actionMap), event to action map (eventMap), object to event object map (objectMap), event object to simulator objects map (eventObjectMap) and event id to location id map (poiMap)
+---
+---In short: it finds the matching events and actions that are related to the required object and maps object, events, and locations.
+---
+---Currently, the following actions are not mapped: 'Give', 'Inv-Give', 'LookAtObject', 'Move'.
+---All the process is actor agnostic, meaning that the same object can be used by multiple actors in the same episode.
+---The purpose of the function is two fold:
+---1. To verify if the episode is valid (if all the requierd objects from the graph are present in the episode and if they are used in the same way as in the graph)
+---2. To map the objects, actions and locations between the graph and simulator entities (the mapping is done in the actionMap, eventMap, objectMap, eventObjectMap and poiMap)
+---
+---The map can be used later during simulation run-time to decide where and with what objects exactly in the simulation environment an actor should perform an event.
+---The map has to be then exhaustive, meaning that from all possible actions with objects requested in the graph, all possible places in the simulation environment where the action can be performed are mapped.
+---This then means that the maps should be one to many:
+---   ** actionMap[graphEventId] = {simulatorActionId1, simulatorActionId2, ...}
+---   ** eventMap[simulatorActionId] = {graphEventId1, graphEventId2, ...}
+---   ** objectMap[simulatorObjectId] = {graphObjectId1, graphObjectId2, ...}
+---   ** eventObjectMap[graphObjectId] = {simulatorObjectId1, simulatorObjectId2, ...}
+---   ** poiMap[graphEventId] = {simulatorLocationId1, simulatorLocationId2, ...}
+---
+---CURRENT GRAPH EVENT COVERAGE
+---Only events representing actions with objects are mapped with the exception of 'Exists', 'Move', 'give', 'receive', 'look at object', and interactions are not mapped.
+---(Explanation for interactions: when the evaluation for an object is started, only non-interaction events are considered. In general, by going forward or backward in the chain of events, it is not possible to reach an interaction starting from a non-interaction event.)
+---If the same object is used in multiple events, a random chain of events is selected starting from the event with the object. The same object can be used in multiple actions and events, but the mapping will be done only once.
+---Later on, at runtime, currently on the poiMap and the eventObjectMap are used.
+---Problem1: 2 actors can choose the same POI when they have a same_time constraint leading to interlocking.
+---Mitigation: there should be one to many relationships between events and pois / actions. The final POI should be selected at runtime, based on whether the POI is free or not.
+---
+---Additional consideration: if we employ a one to many relationship between event object and simulator objects, respectively between event and simulator actions, at runtime when 2 actors should use the same object,
+---we need to ensure that the selected POI contains the same object as the one the first actor used.
+---(e.g, both should sit donw on the same sofa, bot there are 3 sofas in the room. The first actor chooses a poi with sofa 1, the second actor then should choose from free POIs with the same sofa - sofa 1.)
+---@param requiredObjects any
+---@param episode any
+---@param actionMap any
+---@param eventMap any
+---@param objectMap any
+---@param eventObjectMap any
+---@param poiMap any
+---@return boolean
 function GraphStory:MapObjectsActionsAndPoi(requiredObjects, episode, actionMap, eventMap, objectMap, eventObjectMap, poiMap)
     return All(requiredObjects, function(ro)
         if eventObjectMap[ro.id] then return true end
@@ -746,7 +1006,7 @@ function GraphStory:MapObjectsActionsAndPoi(requiredObjects, episode, actionMap,
                 -- and event.Action ~= 'Eat'
                 --The event is not interaction and is with the required object
                 and #event.Entities == 2 and event.Entities[2] == ro.id
-                --The event is in the same location as the required object (this will not be valid if the object can move to a different place -- most likely we will not support that)
+                --The event is in the same location as the required object (this will not be valid if the object can move to a different place)
                 and (#event.Location == 0 or event.Location[1] == '' or event.Location[1]:lower():find(ro.location:lower()))
             end
         )
@@ -758,207 +1018,9 @@ function GraphStory:MapObjectsActionsAndPoi(requiredObjects, episode, actionMap,
             end
         end
 
-        local matchingPoiData = PickRandom(DropNull(Select(episode.POI, function(poi)
-            local actionMap = {}
-            local eventMap = {}
-            local objectMap = {}
-            local eventObjectMap = {}
-            local poiMap = {}
-
-            if DEBUG_VALIDATION then
-                print('Assessing actions in poi '..poi.Description..' in region '..poi.Region.name)
-            end
-
-            -- Starting from the action with the object as target,
-            local actionWithMatchingObject = FirstOrDefault(poi.allActions, function(a) return a.TargetItem and a.TargetItem.ObjectId and a.TargetItem.type == ro.name end)
-
-            -- If in the current POI an action with the required object does not exist but also there is no event in the GEST with such an object, just map them.
-            -- There will be no action in the simulation with the given object, but it might still be required to just exist.
-            -- **Note** that an object is either used in an event or it is just a requirement of the episode and never used by anyone in an episode.
-            if not actionWithMatchingObject then
-                if DEBUG_VALIDATION then
-                    print("Action with matching object does not exist!")
-                end
-                -- if there is no actual action in the graph with the object, it means that the object is simply a requirement to exist in the environment.
-                if #eventsWithObjectAsTarget == 0 then
-                    local episodeObject = FirstOrDefault(episode.Objects, function(eO) return eO.ObjectId and eO.type == ro.name end)
-                    if episodeObject then
-                        actionWithMatchingObject = {
-                            Name = "none",
-                            TargetItem = {
-                                ObjectId = episodeObject.ObjectId
-                            }
-                        }
-                    elseif DEBUG_VALIDATION then
-                        print("This object "..ro.name.." does not exist in the episode!")
-                    end
-                else
-                    -- An action with the object was not found in the current POI, but the object is used in some actions within the episode.
-                    -- Return NULL, to discard this POI from the current evaluation.
-                    return nil
-                end
-            end
-
-            if DEBUG_VALIDATION then
-                print("Action with matching object "..actionWithMatchingObject.Name)
-            end
-
-            -- The object is not used in any of the events, but it is simply a requirement of the episode.
-            if #eventsWithObjectAsTarget == 0 then
-                print("The object is not used in any events "..ro.name)
-                eventObjectMap[ro.id] = actionWithMatchingObject.TargetItem.ObjectId
-                objectMap[actionWithMatchingObject.TargetItem.ObjectId] = ro.id
-                return {
-                    actionMap = {},
-                    eventMap = {},
-                    objectMap = objectMap,
-                    eventObjectMap = eventObjectMap,
-                    poiMap = {}
-                }
-            end
-
-            -- find the first matching event (same action name and location)
-            local eventMatchingActionAndObject = FirstOrDefault(eventsWithObjectAsTarget, function(event)
-                local isMatchingAction = event.Action:lower() == actionWithMatchingObject.Name:lower()
-                local isAnyActionLocationAllowed = #event.Location == 0 or event.Location == ''
-                local isMatchingLocationInRegion = (poi.Region and poi.Region.name:lower():find(event.Location[1]:lower()) and true or false)
-                local isMatchingLocation = (isAnyActionLocationAllowed or isMatchingLocationInRegion)
-                return isMatchingAction and isMatchingLocation
-            end)
-
-            if not eventMatchingActionAndObject then
-                if DEBUG_VALIDATION then
-                    print("Event matching action does not exist!")
-                end
-                return nil
-            end
-
-            if DEBUG_VALIDATION then
-                print('Event matching action '..eventMatchingActionAndObject.id)
-            end
-
-            local currentAction = actionWithMatchingObject
-            local currentEvent = eventMatchingActionAndObject
-            -- The action and event are guaranteed to be matching at this point
-            if not self:MatchEventAndAction(currentAction, currentEvent, poi, actionMap, eventMap, objectMap, eventObjectMap, poiMap) then
-                if DEBUG_VALIDATION then
-                    print("[ERROR] The event and action can't be matched. Something went seriously wrong!")
-                end
-                return nil
-            end
-            --Why did you skip the PickUp action? Well, because if the object is to bo moved afterwards, then we do not want to enforce the same location.
-            -- if currentAction.Name ~= "PickUp" then
-            ----verify going back in time until a Move is found if all the  actions have matching events (same location, same target objects)
-            local previousActionsCandidates = Where(poi.allActions, function(a)
-                return
-                    a.Name:lower() ~= 'move' -- this action changes the location and marks the end of the chain of actions
-                    and (
-                        (not isArray(a.NextAction) and a.NextAction == currentAction)
-                        or (isArray(a.NextAction) and inList(currentAction, a.NextAction))
-                    )
-            end)
-            while previousActionsCandidates and #previousActionsCandidates > 0 do
-                local previousEventId = self:FindPreviousEventId(currentEvent.id, currentEvent.Entities[1])
-                -- In the current chain of actions, if there is no matching event, then the current POI is invalid (no chain of actions to match the chain of events exists in this location)
-                if not previousEventId then
-                    if DEBUG_VALIDATION then
-                        print("Previous event was null!")
-                    end
-                    return nil
-                end
-                local previousEvent = self.graph[previousEventId]
-
-                if not previousEvent then
-                    if DEBUG_VALIDATION then
-                        print("Previous event was null even though the previous event id was "..previousEventId)
-                    end
-                    return nil
-                end
-
-                if DEBUG_VALIDATION then
-                    print('Previous event '..previousEvent.id)
-                end
-
-                local previousAction = FirstOrDefault(previousActionsCandidates, function(previousAction)
-                    if DEBUG_VALIDATION then
-                        print("Previous action "..previousAction.Name)
-                    end
-                    return self:MatchEventAndAction(previousAction, previousEvent, poi, actionMap, eventMap, objectMap, eventObjectMap, poiMap)
-                end)
-                if not previousAction then
-                    if DEBUG_VALIDATION then
-                        print("The event and action can't be matched")
-                    end
-                    return nil
-                else
-                    print("Previous action "..previousAction.Name)
-                end
-
-                currentAction = previousAction
-                previousActionsCandidates = Where(poi.allActions, function(a) return a.Name:lower() ~= 'move' and (((not isArray(a.NextAction) or #a.NextAction == 1) and a.NextAction == currentAction) or (isArray(a.NextAction) and inList(currentAction, a.NextAction))) end)
-                currentEvent = previousEvent
-            end
-
-            ----verify going forward in time if all the actions have matching events
-            currentAction = actionWithMatchingObject
-            currentEvent = eventMatchingActionAndObject
-            while currentAction and currentAction.NextAction and self.temporal[currentEvent.id].next do
-                local nextEventId = self:GetNextEvent(currentEvent.id, currentEvent.Entities[1])
-                if not nextEventId then
-                    if DEBUG_VALIDATION then
-                        print("Next event was null but next action exists!")
-                    end
-                    return nil
-                end
-                local nextEvent = self.graph[nextEventId]
-
-                if
-                        nextEvent.Action:lower() ~= 'move'
-                    and nextEvent.Action:lower() ~= 'give'
-                    and nextEvent.Action:lower() ~= 'inv-give'
-                    and nextEvent.Action:lower() ~= 'lookatobject'
-                    -- and nextEvent.Action:lower() ~= 'drink'
-                    -- and nextEvent.Action:lower() ~= 'eat'
-                then
-                    local nextActions = { currentAction.NextAction }
-                    if isArray(currentAction.NextAction) then
-                        nextActions = currentAction.NextAction
-                    end
-
-                    --if multiple possible next actions, choose the first one that matches the next event
-                    currentAction = FirstOrDefault(nextActions, function(action)
-                        return self:MatchEventAndAction(action, nextEvent, poi, actionMap, eventMap, objectMap, eventObjectMap, poiMap)
-                    end)
-                    if not currentAction then
-                        if DEBUG_VALIDATION then
-                            print("There is no next action that matches the next event!")
-                        end
-                        return nil
-                    end
-
-                    if DEBUG_VALIDATION then
-                        print("Next action that also matches next event "..currentAction.Name)
-                    end
-                else
-                    print('The event does not follow the chain of actions. Event: '..nextEvent.Action..' Action: '..currentAction.Name)
-                    break
-                end
-                currentEvent = nextEvent
-            end
-            -- end -- if currentAction.Name ~= "PickUp"
-
-            if DEBUG_VALIDATION then
-                print("This poi is valid, returning ")
-            end
-
-            return {
-                actionMap = actionMap,
-                eventMap = eventMap,
-                objectMap = objectMap,
-                eventObjectMap = eventObjectMap,
-                poiMap = poiMap
-            }
-        end)))
+        local matchingPoiData = PickRandom(
+            self:FindAllValidActionsAndPois(episode, ro, eventsWithObjectAsTarget)
+        )
 
         if not matchingPoiData and DEBUG then
             print('Episode '..episode.name..' was discarded because the object '..ro.name..' does not exist in region '..ro.location..' or at all or a matching chain of actions could not be found for the object')

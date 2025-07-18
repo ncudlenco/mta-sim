@@ -30,6 +30,7 @@ function initializeSpectator(source)
     source:setData('takenShots', 0)
     source:setData('fadedCamera', false)
     source:setData('spawned', false)
+    source:setData('mappedChainId', nil)
 
 
     table.insert(SPECTATORS, source)

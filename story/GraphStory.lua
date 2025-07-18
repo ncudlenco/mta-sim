@@ -356,10 +356,6 @@ function GraphStory:ValidateEpisode(
     requiredObjects,
     requiredActions
 )
-    -- if self.validMemo[episode.name] then --The memo id is not correct because the requirements list changes over time
-    --     return self.validMemo[episode.name]
-    -- end
-
     if DEBUG_VALIDATION then
         print('ValidateEpisode '..episode.name)
         print('Required locations '..join(';', requiredLocations))
@@ -377,143 +373,113 @@ function GraphStory:ValidateEpisode(
     local setCoverScore = 0
     local res = nil
 
-    -- if Any(validLocations) or #requiredLocations == 0 then
-        if not episode.initialized and true or false then
-            episode:Initialize(true)
-        end
-        if DEBUG_VALIDATION then
-            print '---------------------------------------------started processing regions----------------------------------------'
-        end
-        if not episode.processedRegions and true or false then
-            episode:ProcessRegions()
-        end
-        if DEBUG_VALIDATION then
-            print '---------------------------------------------finished processing regions----------------------------------------'
-        end
-        --now I have for all POI and objects the location set
-        local actionMap = {}
-        local eventMap = {}
-        local objectMap = {}
-        local eventObjectMap = {}
-        local poiMap = {}
-        if DEBUG_VALIDATION then
-            print('Required objects nr '..#requiredObjects)
-        end
-        self:MapObjectsActionsAndPoi(requiredObjects, episode, actionMap, eventMap, objectMap, eventObjectMap, poiMap)
-        for eventRoId, realObjectId in pairs(eventObjectMap) do
-            if DEBUG_VALIDATION then
-                print('!!!!!!!!!!!!!!!!!!!!!!Mapped '..eventRoId..' to '..realObjectId)
-            end
-            table.insert(validObjects, {id = eventRoId})
-        end
+    if not episode.initialized and true or false then
+        episode:Initialize(true)
+    end
+    if DEBUG_VALIDATION then
+        print '---------------------------------------------started processing regions----------------------------------------'
+    end
+    if not episode.processedRegions and true or false then
+        episode:ProcessRegions()
+    end
+    if DEBUG_VALIDATION then
+        print '---------------------------------------------finished processing regions----------------------------------------'
+    end
+    --now I have for all POI and objects the location set
+    local actionMap = {}
+    local eventMap = {}
+    local objectMap = {}
+    local eventObjectMap = {}
+    local poiMap = {}
+    if DEBUG_VALIDATION then
+        print('Required objects nr '..#requiredObjects)
+    end
 
-        for key, value in pairs(eventMap) do
-            if DEBUG_VALIDATION then
-                print('!!!!!!!!!!!!!!!!!!!!!!Mapped action ('..self.graph[key].Action..')'..key..' to '..value)
-            end
-            table.insert(validActions, {id = key, name = self.graph[key].Action, location = self.graph[key].Location})
+    -- This function is used only to check if the events requested in the graph can be simulated in the episode with the pre-existing 3D engine entities.
+    -- Partial matches are allowed at this point, because we are exploring individual contextual episodes, and walking through other connected episodes.
+    -- In the end, if a sub-tree of linked episodes that satisfy all the requirements is found, then all the found episodes are wrapped in a meta-episode, which will be used to play the story.
+    -- At this point, the function below works on granular episodes (non-meta-episodes), so it is allowed to have partial matches.
+    self:MapObjectsActionsAndPoi(requiredObjects, episode, actionMap, eventMap, objectMap, eventObjectMap, poiMap)
+    for eventRoId, potentialRealObjects in pairs(eventObjectMap) do
+        if DEBUG_VALIDATION then
+            print('!!!!!!!!!!!!!!!!!!!!!!Mapped '..eventRoId..' to '..#potentialRealObjects..' potential chains of real objects')
         end
-        local requiredActions = Where(requiredActions, function(ra) return not eventMap[ra.id] end)
+        table.insert(validObjects, {id = eventRoId})
+    end
 
-        -- validObjects = Where(requiredObjects, function(ro)
-        --     print(ro.name or 'WARNING: OBJECT NAME WAS NULL BUT IT IS REQUIRED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-        --     local r = FirstOrDefault(episode.Objects, function(o)
-        --         if DEBUG_VALIDATION then
-        --             print(o.type:lower()..' vs '..ro.name:lower())
-        --         end
-        --         return not objectMap[o.ObjectId] and o.type:lower() == ro.name:lower() and
-        --         (o and o.Region and o.Region.name and o.Region.name:lower():find(ro.location:lower()) and true or false)
-        --     end)
-        --     if r then
-        --         objectMap[r.ObjectId] = ro.id
-        --         if DEBUG_VALIDATION then
-        --             print('!!!!!!!!!!!!!!!!!!!!!!Mapped '..r.ObjectId..' to '..ro.id)
-        --         end
-        --         eventObjectMap[ro.id] = r.ObjectId
-        --     else
-        --         if DEBUG_VALIDATION then
-        --             print('!!!!!!!!!!!!!!!!!!!!!!Not mapped '..ro.id)
-        --         end
-        --     end
+    for key, potentialActions in pairs(eventMap) do
+        if DEBUG_VALIDATION then
+            print('!!!!!!!!!!!!!!!!!!!!!!Mapped action ('..self.graph[key].Action..')'..key..' to '..#potentialActions..' potential chains of real actions')
+        end
+        table.insert(validActions, {id = key, name = self.graph[key].Action, location = self.graph[key].Location})
+    end
+    -- Remove the actions that were mapped to something from the list of required actions for the episode to be valid
+    local requiredActions = Where(requiredActions, function(ra) return not eventMap[ra.id] end)
 
-        --     r = r or Any(self.SpawnableObjects, function(o) return o:lower() == ro.name:lower() end)
-        --     if r then
-        --         eventObjectMap[ro.id] = 'spawnable'
-        --     end
-        --     if not r and DEBUG_VALIDATION then
-        --         print('Episode '..episode.name..' was discarded because the object '..ro.name..' does not exist in region '..ro.location..' or at all')
-        --     end
-        --     return r and true or false
-        -- end)
-        -- if Any(validObjects) or #requiredObjects == 0 then
-            Where(requiredActions, function(ra)
-                local res = Any(self.Interactions, function(a) return
-                    -- a:lower() ~= 'give' and
-                    -- a:lower() ~= 'inv-give' and
-                        a:lower() == ra.name:lower()
-                    end)
-                    or Any(self.MiddleActions, function(a) return
-                        a:lower() == ra.name:lower()
-                    end)
-                    or Any(episode.POI, function(poi)
+    Where(requiredActions, function(ra)
+        local res = Any(self.Interactions, function(a) return
+                a:lower() == ra.name:lower()
+            end)
+            or Any(self.MiddleActions, function(a) return
+                a:lower() == ra.name:lower()
+            end)
+            or Any(episode.POI, function(poi)
+                if DEBUG_ACTION_VALIDATION then
+                    if poi.Region then
+                        print('***'..poi.Region.name..'')
+                    else
+                        print('***!!'..poi.Description..' does not have a region')
+                    end
+                end
+                return
+                    poi.Region and
+                    Any(poi.allActions, function(a)
                         if DEBUG_ACTION_VALIDATION then
-                            if poi.Region then
-                                print('***'..poi.Region.name..'')
-                            else
-                                print('***!!'..poi.Description..' does not have a region')
+                            print('**********'..a.Name)
+                            if a.TargetItem and a.TargetItem.ObjectId then
+                                print('**********->'..a.TargetItem.ObjectId)
+                            elseif a.TargetItem and a.TargetItem.Region then
+                                print('**********->'..a.TargetItem.Region.name)
                             end
                         end
-                        return
-                            poi.Region and
-                            Any(poi.allActions, function(a)
-                                if DEBUG_ACTION_VALIDATION then
-                                    print('**********'..a.Name)
-                                    if a.TargetItem and a.TargetItem.ObjectId then
-                                        print('**********->'..a.TargetItem.ObjectId)
-                                    elseif a.TargetItem and a.TargetItem.Region then
-                                        print('**********->'..a.TargetItem.Region.name)
-                                    end
-                                end
-                                return a.Name:lower() == ra.name:lower() and (
-                                    ra.name == 'Move' -- The action is of type move.
-                                    or not a.TargetItem --The action has no target
-                                    or a.TargetItem and inList(a.TargetItem.type, self.SpawnableObjects) --The action has as target a spawnable object
-                                    or a.TargetItem and a.TargetItem.ObjectId and objectMap[a.TargetItem.ObjectId]) --The action has as target a real object and that object is valid
-                            end)
-                            and (poi.Region.name:lower():find(ra.location:lower()) and true or false )
+                        return a.Name:lower() == ra.name:lower() and (
+                            ra.name == 'Move' -- The action is of type move.
+                            or not a.TargetItem --The action has no target
+                            or a.TargetItem and inList(a.TargetItem.type, self.SpawnableObjects) --The action has as target a spawnable object
+                            or a.TargetItem and a.TargetItem.ObjectId and objectMap[a.TargetItem.ObjectId]) --The action has as target a real object and that object is valid
                     end)
-
-                if not res and DEBUG_VALIDATION then
-                    print('Episode '..episode.name..' - the action '..ra.name..' with target '..(ra.target or '')..' does not exist in region '..ra.location..' or at all')
-                end
-
-                if res then
-                    table.insert(validActions, ra)
-                end
-                return res
+                    and (poi.Region.name:lower():find(ra.location:lower()) and true or false )
             end)
-            -- if Any(validActions) or #requiredActions == 0 then
-                setCoverScore = #validLocations + #validObjects + #validActions
-                if DEBUG_VALIDATION then
-                    print('Episode '..episode.name..' validity score is '..setCoverScore)
-                end
-                --episode is valid
-                --remove from current list of constraints the satisfied constraints for the next recursive level
-                res = {
-                    setCoverScore = setCoverScore,
-                    requiredLocations = Where(requiredLocations, function(rl) return not Any(validLocations, function(vl) return vl == rl end) end),
-                    requiredObjects = Where(requiredObjects, function(ro) return not Any(validObjects, function(vo) return vo.id == ro.id end) end),
-                    requiredActions = Where(requiredActions, function(ra) return not Any(validActions, function(va) return va.name == ra.name and va.location == ra.location end) end)
-                }
-                if DEBUG_VALIDATION then
-                    print('Result of ValidateEpisode '..episode.name)
-                    print('Required locations '..join(';', res.requiredLocations))
-                    print('Required objects '..join(';', Select(res.requiredObjects, function(e) return e.name end)))
-                    print('Required actions '..join(';', Select(res.requiredActions, function(e) return e.name..' - '..e.location..' -> '..(e.target or '') end)))
-                end
-            -- end
-        -- end
-    -- end
+
+        if not res and DEBUG_VALIDATION then
+            print('Episode '..episode.name..' - the action '..ra.name..' with target '..(ra.target or '')..' does not exist in region '..ra.location..' or at all in the whole episode!')
+        end
+
+        if res then
+            table.insert(validActions, ra)
+        end
+        return res
+    end)
+
+    setCoverScore = #validLocations + #validObjects + #validActions
+    if DEBUG_VALIDATION then
+        print('Episode '..episode.name..' validity score is '..setCoverScore)
+    end
+    --episode is valid
+    --remove from current list of constraints the satisfied constraints for the next recursive level
+    res = {
+        setCoverScore = setCoverScore,
+        requiredLocations = Where(requiredLocations, function(rl) return not Any(validLocations, function(vl) return vl == rl end) end),
+        requiredObjects = Where(requiredObjects, function(ro) return not Any(validObjects, function(vo) return vo.id == ro.id end) end),
+        requiredActions = Where(requiredActions, function(ra) return not Any(validActions, function(va) return va.name == ra.name and va.location == ra.location end) end)
+    }
+    if DEBUG_VALIDATION then
+        print('Result of ValidateEpisode '..episode.name)
+        print('Required locations '..join(';', res.requiredLocations))
+        print('Required objects '..join(';', Select(res.requiredObjects, function(e) return e.name end)))
+        print('Required actions '..join(';', Select(res.requiredActions, function(e) return e.name..' - '..e.location..' -> '..(e.target or '') end)))
+    end
+
     if not res then
         res = {
             setCoverScore = setCoverScore,
@@ -729,7 +695,7 @@ end
 ---@param ro any The required object (the one that is used in the event)
 ---@param eventsWithObjectAsTarget any[] The events that have the object as target
 function GraphStory:FindAllValidActionsAndPois(episode, ro, eventsWithObjectAsTarget)
-    DropNull(Select(episode.POI, function(poi)
+    Select(episode.POI, function(poi)
         local actionMap = {}
         local eventMap = {}
         local objectMap = {}
@@ -820,8 +786,9 @@ function GraphStory:FindAllValidActionsAndPois(episode, ro, eventsWithObjectAsTa
         --The PickUp action was skipped initially because if the object is to bo moved afterwards, then we do not want to enforce the same location.
         --But now, we are only mapping all the actions that occur in the POI, until the next Move action (that would change the location anyway).
         --Therefore, when a PickUp action was started from, it will not find previous action candidates if the actor Moves with the picked up object.
-        --If the graph specifies that an action has to be executed somewhere else with the picked up object that was moved, then the current logic will fail.
-        -- if currentAction.Name ~= "PickUp" then
+        --If the graph specifies that an action has to be executed somewhere else with the picked up object that was moved, then the current logic will fail, because we will never find an object that otherwise is picked up in a location
+        --where it will be moved in the future.
+
         ----verify going back in time until a Move is found if all the  actions have matching events (same location, same target objects)
         local previousActionsCandidates = Where(poi.allActions, function(a)
             return
@@ -891,8 +858,6 @@ function GraphStory:FindAllValidActionsAndPois(episode, ro, eventsWithObjectAsTa
                 and nextEvent.Action:lower() ~= 'give'
                 and nextEvent.Action:lower() ~= 'inv-give'
                 and nextEvent.Action:lower() ~= 'lookatobject'
-                -- and nextEvent.Action:lower() ~= 'drink'
-                -- and nextEvent.Action:lower() ~= 'eat'
             then
                 local nextActions = { currentAction.NextAction }
                 if isArray(currentAction.NextAction) then
@@ -919,7 +884,6 @@ function GraphStory:FindAllValidActionsAndPois(episode, ro, eventsWithObjectAsTa
             end
             currentEvent = nextEvent
         end
-        -- end -- if currentAction.Name ~= "PickUp"
 
         if DEBUG_VALIDATION then
             print("This poi is valid, returning ")
@@ -932,7 +896,7 @@ function GraphStory:FindAllValidActionsAndPois(episode, ro, eventsWithObjectAsTa
             eventObjectMap = eventObjectMap,
             poiMap = poiMap
         }
-    end))
+    end)
 end
 
 ---This function iterates through all the required objects in the apisode, then starting from the object:
@@ -982,7 +946,7 @@ end
 ---@return boolean
 function GraphStory:MapObjectsActionsAndPoi(requiredObjects, episode, actionMap, eventMap, objectMap, eventObjectMap, poiMap)
     return All(requiredObjects, function(ro)
-        if eventObjectMap[ro.id] then return true end
+        if eventObjectMap[ro.id] and #eventObjectMap[ro.id] > 0 then return true end
         if DEBUG_VALIDATION and not eventObjectMap[ro.id] then
             print("The object "..ro.id..':'..ro.name..' ()'..(ro.location or '')..' is not mapped in any of event objects map')
             for k, v in pairs(eventObjectMap) do
@@ -991,7 +955,7 @@ function GraphStory:MapObjectsActionsAndPoi(requiredObjects, episode, actionMap,
         end
 
         if Any(self.SpawnableObjects, function(o) return o:lower() == ro.name:lower() end) then
-            eventObjectMap[ro.id] = 'spawnable'
+            eventObjectMap[ro.id] = {{value = 'spawnable', chainId = -1}}
             return true
         end
 
@@ -999,14 +963,15 @@ function GraphStory:MapObjectsActionsAndPoi(requiredObjects, episode, actionMap,
             return
                 --The action was not already processed
                 not actionMap[event.id]
-                --The event is of type action
+                --The event is of type action (LookAtObject will be individually mapped during runtime, so we are not mapping it here)
                 and event.Action ~= 'Exists'
                 and event.Action ~= 'LookAtObject'
                 -- and event.Action ~= 'Drink'
                 -- and event.Action ~= 'Eat'
                 --The event is not interaction and is with the required object
                 and #event.Entities == 2 and event.Entities[2] == ro.id
-                --The event is in the same location as the required object (this will not be valid if the object can move to a different place)
+                --The event is in the same location as the required object (this event will not be mapped if the object was moved to a different location)
+                --The consequence of the check below is that only the events occuring in the same location where the object initially exists are considered.
                 and (#event.Location == 0 or event.Location[1] == '' or event.Location[1]:lower():find(ro.location:lower()))
             end
         )
@@ -1018,26 +983,71 @@ function GraphStory:MapObjectsActionsAndPoi(requiredObjects, episode, actionMap,
             end
         end
 
-        local matchingPoiData = PickRandom(
+        local allPotentialMatchingPoiData =
             self:FindAllValidActionsAndPois(episode, ro, eventsWithObjectAsTarget)
-        )
 
-        if not matchingPoiData and DEBUG then
+
+        local anyMatchesFound = self:AggregatePoiData(allPotentialMatchingPoiData, objectMap, eventObjectMap, actionMap, eventMap, poiMap)
+        if not anyMatchesFound and DEBUG then
             print('Episode '..episode.name..' was discarded because the object '..ro.name..' does not exist in region '..ro.location..' or at all or a matching chain of actions could not be found for the object')
         end
-        if not matchingPoiData then
+        if not anyMatchesFound then
             print("Could not find actions required for the object "..ro.name..' id '..ro.id..' in location '..ro.location)
             return false
         end
 
-        CopyContents(matchingPoiData.objectMap, objectMap)
-        CopyContents(matchingPoiData.eventObjectMap, eventObjectMap)
-        CopyContents(matchingPoiData.actionMap, actionMap)
-        CopyContents(matchingPoiData.eventMap, eventMap)
-        CopyContents(matchingPoiData.poiMap, poiMap)
-
         return true
     end)
+end
+
+function GraphStory:AggregatePoiData(poiDatas, objectMap, eventObjectMap, actionMap, eventMap, poiMap)
+    local anyMatchesFound = false
+    for poiIndex, poiData in ipairs(poiDatas) do
+        if poiData then
+            anyMatchesFound = true
+
+            -- Process objectMap
+            for k, v in pairs(poiData.objectMap) do
+                if not objectMap[k] then
+                    objectMap[k] = {}
+                end
+                table.insert(objectMap[k], {value = v, chainId = poiIndex})
+            end
+
+            -- Process eventObjectMap
+            for k, v in pairs(poiData.eventObjectMap) do
+                if not eventObjectMap[k] then
+                    eventObjectMap[k] = {}
+                end
+                table.insert(eventObjectMap[k], {value = v, chainId = poiIndex})
+            end
+
+            -- Process actionMap
+            for k, v in pairs(poiData.actionMap) do
+                if not actionMap[k] then
+                    actionMap[k] = {}
+                end
+                table.insert(actionMap[k], {value = v, chainId = poiIndex})
+            end
+
+            -- Process eventMap
+            for k, v in pairs(poiData.eventMap) do
+                if not eventMap[k] then
+                    eventMap[k] = {}
+                end
+                table.insert(eventMap[k], {value = v, chainId = poiIndex})
+            end
+
+            -- Process poiMap
+            for k, v in pairs(poiData.poiMap) do
+                if not poiMap[k] then
+                    poiMap[k] = {}
+                end
+                table.insert(poiMap[k], {value = v, chainId = poiIndex})
+            end
+        end
+    end
+    return anyMatchesFound
 end
 
 ---This function verifies if the action name and the event action name are equal, if the action location is the same as the event location and if the action object is the same as the event object or both require no object.
@@ -1124,9 +1134,6 @@ function GraphStory:MatchEventAndAction(action, event, poi, actionMap, eventMap,
     end
 end
 
---TODO: find starting locations for all episodes in the valid episodes subset
---update all references to CurrentEpisode
---move peds in story
 function GraphStory:ProcessActions(graphActors)
     print("GraphStory:ProcessActions --------------------------------------------------")
     local episode = self.CurrentEpisode
@@ -1147,7 +1154,8 @@ function GraphStory:ProcessActions(graphActors)
     local objectMap = {}
     local eventObjectMap = {}
     local poiMap = {}
-    -- The object needs to satisfy all the events
+    -- All the objects that exist in the graph MUST be matched in the (meta)episode.
+    -- The function below, already works with the meta episode.
     local allRequiredObjectsMapped = self:MapObjectsActionsAndPoi(requiredObjects, episode, actionMap, eventMap, objectMap, eventObjectMap, poiMap)
     if not allRequiredObjectsMapped then
         return false

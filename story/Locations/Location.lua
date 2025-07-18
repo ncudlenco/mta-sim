@@ -22,6 +22,9 @@ Location = class(StoryLocationBase, function(o, x, y, z, angle, interior, descri
 end)
 
 function Location:getData(key)
+    if key == nil then
+        return nil
+    end
     return self.metatable[key]
 end
 
@@ -198,6 +201,30 @@ function Location:Serialize(episode, relativePosition, _objects, _locations, _ma
     return serializedMainPoi, objects, locations
 end
 
+function Location:GetMappedEventObjectId(eventObjectId, playerChainId)
+    if not playerChainId then
+        return nil
+    end
+
+    local mappedObjects = CURRENT_STORY.eventObjectMap[eventObjectId]
+    if not mappedObjects then return nil end
+
+    if type(mappedObjects) == "string" then
+        return mappedObjects -- Handle "spawnable" case
+    end
+
+    if type(mappedObjects) == "table" and #mappedObjects > 0 then
+        -- If player has a chain ID, prefer that chain
+        for _, tuple in ipairs(mappedObjects) do
+            if tuple.chainId == playerChainId then
+                return tuple.value
+            end
+        end
+    end
+
+    return nil
+end
+
 function Location:GetNextRandomValidAction(player)
     local story = GetStory(player)
 
@@ -284,13 +311,13 @@ function Location:ProcessNextAction(player)
     local interactionProcessedMap = CURRENT_STORY.interactionProcessedMap
     local interactionPoiMap = CURRENT_STORY.interactionPoiMap
 
-    for _, poi in ipairs(CURRENT_STORY.CurrentEpisode.POI) do
-        local isBusyString = 'false'
-        if poi.isBusy then
-            isBusyString = 'true'
-        end
-        if DEBUG_PROCESSACTIONS then
-            print(poi.LocationId..' '..poi.Description..' '..isBusyString)
+    if DEBUG_PROCESSACTIONS then
+        for _, poi in ipairs(CURRENT_STORY.CurrentEpisode.POI) do
+            local isBusyString = 'false'
+            if poi.isBusy then
+                isBusyString = 'true'
+            end
+                print(poi.LocationId..' '..poi.Description..' '..isBusyString)
         end
     end
     if event == nil then return {isStartingEvent = false} end
@@ -374,14 +401,15 @@ function Location:ProcessNextAction(player)
             interactionProcessedMap[event.interactionRelation] = true
         elseif not isMoveEvent then
             local pickedUpObjects = player:getData('pickedObjects')
-            local isActionWithObjectCurrentlyPicked = event and #event.Entities > 1 and #pickedUpObjects > 0 and #pickedUpObjects[1] > 0 and CURRENT_STORY.eventObjectMap[event.Entities[2]] == pickedUpObjects[1][1]
+            local playerChainId = player:getData('mappedChainId')
+            local isActionWithObjectCurrentlyPicked = event and #event.Entities > 1 and #pickedUpObjects > 0 and #pickedUpObjects[1] > 0 and self:GetMappedEventObjectId(event.Entities[2], playerChainId) == pickedUpObjects[1][1]
 
             if isActionWithObjectCurrentlyPicked then
                 local object = FirstOrDefault(CURRENT_STORY.CurrentEpisode.Objects, function(o) return o.ObjectId == pickedUpObjects[1][1] end)
                 eventAction = InstantiateAction(event, player, location, object)
             end
             if eventAction == nil and event.Action == 'LookAtObject' then
-                local object = FirstOrDefault(CURRENT_STORY.CurrentEpisode.Objects, function(o) return o.ObjectId == CURRENT_STORY.eventObjectMap[event.Entities[2]] end)
+                local object = FirstOrDefault(CURRENT_STORY.CurrentEpisode.Objects, function(o) return o.ObjectId == self:GetMappedEventObjectId(event.Entities[2], playerChainId) end)
                 eventAction = InstantiateAction(event, player, location, object)
             end
             if eventAction == nil then
@@ -390,31 +418,6 @@ function Location:ProcessNextAction(player)
             if not eventAction then
                 error('Event action could not be found '..event.Action)
             end
-            -- local mandatoryPrevAction = eventAction
-            -- local guard = 0
-            -- while(mandatoryPrevAction and guard < 10) do
-            --     print('Mandatory action:'.. mandatoryPrevAction.Name)
-
-            --     mandatoryPrevAction = FirstOrDefault(location.allActions, function(action)
-            --         print('Evaluating as prev action '.. action.ActionId .. ': '..action.Name)
-            --         if (action.NextAction and not isArray(action.NextAction)) then
-            --             print('Next action '.. action.NextAction.ActionId .. ': '..action.NextAction.Name)
-            --         end
-            --         return mandatoryPrevAction ~= action and action.Name ~= 'Move' and
-            --             action.NextAction and ((isArray(action.NextAction) and Any(action.NextAction, function(na)
-            --             return na == mandatoryPrevAction
-            --         end))
-            --         or (not isArray(action.NextAction) and action.NextAction == mandatoryPrevAction ))
-            --     end)
-            --     if mandatoryPrevAction then
-            --         print('Mandatory prev action:'.. mandatoryPrevAction.Name)
-            --         table.insert(actionsChain, 1, mandatoryPrevAction)
-            --     end
-            --     guard = guard + 1
-            -- end
-            -- if guard >= 10 then
-            --     error('Infinite loop mandatoryPrevAction')
-            -- end
         end
         if not isMoveEvent then
             print(eventAction.Name)
@@ -498,28 +501,48 @@ function Location:ProcessNextAction(player)
             end
         end
         -- PROBLEM: the event object map has to be computed before the evaluation of the location candidates because the location of objects might chage during the simulation.
-        -- id addition, some locations might be mapped
+        -- in addition, some locations might be mapped
+        local playerChainId = player:getData('mappedChainId')
         if event and event.Action == 'PickUp' and event.Entities and #event.Entities > 1 then
-            pickedUpObjectId = CURRENT_STORY.eventObjectMap[event.Entities[2]]
+            pickedUpObjectId = self:GetMappedEventObjectId(event.Entities[2], playerChainId)
         end
-        if DEBUG and CURRENT_STORY.eventObjectMap[nextEvent.Entities[2]] then
-            print("Mapped object for next event "..CURRENT_STORY.eventObjectMap[nextEvent.Entities[2]])
+        if DEBUG and self:GetMappedEventObjectId(nextEvent.Entities[2], playerChainId) then
+            print("Mapped object for next event "..self:GetMappedEventObjectId(nextEvent.Entities[2], playerChainId))
         end
-        local isActionWithObjectCurrentlyPicked = nextEvent and #nextEvent.Entities > 1 and pickedUpObjectId ~= nil and CURRENT_STORY.eventObjectMap[nextEvent.Entities[2]] == pickedUpObjectId
+        local isActionWithObjectCurrentlyPicked = nextEvent and #nextEvent.Entities > 1 and pickedUpObjectId ~= nil and self:GetMappedEventObjectId(nextEvent.Entities[2], playerChainId) == pickedUpObjectId
         local isActionWithPickedUpObject = isActionWithObjectThatWillBeReceived or isActionWithObjectCurrentlyPicked
 
         print('Next event: '..nextEvent.id..' isInteraction '..strIsInteraction..' isActionWithPickedUpObject '..BoolToStr(isActionWithPickedUpObject))
         local candidates;
         if CURRENT_STORY.poiMap and CURRENT_STORY.poiMap[nextEvent.id] then
-            print("Assessing if there is an actual location with id "..CURRENT_STORY.poiMap[nextEvent.id])
-            local mappedLocation = FirstOrDefault(CURRENT_STORY.CurrentEpisode.POI, function(poi) return poi.LocationId == CURRENT_STORY.poiMap[nextEvent.id] end)
-            if mappedLocation then
-                if DEBUG and DEBUG_LOCATION_CANDIDATES then
+            print("Assessing if there are any actual location candidates with id "..nextEvent.id)
+            -- if the event involves an object and the potential pois are mapped to the event id then use them as candidates
+            -- a problem with this is that there may be multiple valid objects and you have to choose one that was already chosen by a different actor (e.g. sit down on the same sofa)
+            local mappedLocations = Where(CURRENT_STORY.CurrentEpisode.POI, function(poi)
+                local matchingTuple = FirstOrDefault(CURRENT_STORY.poiMap, function(mappedTuple) return poi.LocationId == mappedTuple.value end)
+                if matchingTuple then
+                    poi:setData("mappedChainId_"..nextEvent.id, matchingTuple.chainId)
+                    return true
+                end
+                return false
+            end)
+            if DEBUG and DEBUG_LOCATION_CANDIDATES then
+                -- Print all mapped locations
+                for _,mappedLocation in ipairs(mappedLocations) do
                     print('Mapped location '..mappedLocation.Description..' for event '..nextEvent.id .. '. Skipping searching for additional candidates.')
                 end
-                candidates = {mappedLocation}
+            end
+            if player:getData('mappedChainId') ~= nil then
+                candidates = Where(mappedLocations, function(poi) return poi:getData("mappedChainId_"..nextEvent.id) == player:getData('mappedChainId') end)
+                if #candidates == 0 then
+                    print("WARNING: No locations found for player's assigned chain ID " .. player:getData('mappedChainId')..'. Falling back to any mapped locations.')
+                    candidates = mappedLocations -- Fallback to any available
+                end
+            else
+                candidates = mappedLocations
             end
         else
+            -- Find candidates for locations that are not mapped
             candidates = Where(CURRENT_STORY.CurrentEpisode.POI, function(poi)
                 if DEBUG and DEBUG_LOCATION_CANDIDATES then
                     print('Checking candidate location '..poi.Description)
@@ -543,7 +566,7 @@ function Location:ProcessNextAction(player)
                             (
                                 action.TargetItem and action.TargetItem.type == CURRENT_STORY.graph[nextEvent.Entities[2]].Properties.Type
                             ) --action has a target an object of type x
-                            and (CURRENT_STORY.eventObjectMap[nextEvent.Entities[2]] == 'spawnable' or action.TargetItem.ObjectId == CURRENT_STORY.eventObjectMap[nextEvent.Entities[2]])
+                            and (self:GetMappedEventObjectId(nextEvent.Entities[2], playerChainId) == 'spawnable' or action.TargetItem.ObjectId == self:GetMappedEventObjectId(nextEvent.Entities[2], playerChainId))
                         )
                     )
                 end)
@@ -623,6 +646,15 @@ function Location:ProcessNextAction(player)
 
         print('Next location '..nextLocation.Description.." "..nextLocation.LocationId)
         print("Current location "..location.Description.." "..location.LocationId)
+
+        -- Set the player's chain ID based on the selected location
+        if nextLocation and player:getData('mappedChainId') == nil then
+            local chainId = nextLocation:getData("mappedChainId_"..nextEvent.id)
+            if chainId then
+                player:setData('mappedChainId', chainId)
+                print("Player " .. player:getData('id') .. " assigned to chain ID: " .. chainId)
+            end
+        end
     elseif #event.Location > 1 then
         local candidates = Where(CURRENT_STORY.CurrentEpisode.POI, function(poi)
             return

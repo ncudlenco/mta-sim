@@ -695,7 +695,7 @@ end
 ---@param ro any The required object (the one that is used in the event)
 ---@param eventsWithObjectAsTarget any[] The events that have the object as target
 function GraphStory:FindAllValidActionsAndPois(episode, ro, eventsWithObjectAsTarget)
-    Select(episode.POI, function(poi)
+    return Select(episode.POI, function(poi)
         local actionMap = {}
         local eventMap = {}
         local objectMap = {}
@@ -1003,7 +1003,7 @@ end
 function GraphStory:AggregatePoiData(poiDatas, objectMap, eventObjectMap, actionMap, eventMap, poiMap)
     local anyMatchesFound = false
     for poiIndex, poiData in ipairs(poiDatas) do
-        if poiData then
+        if poiData and poiIndex then
             anyMatchesFound = true
 
             -- Process objectMap
@@ -1220,15 +1220,24 @@ function GraphStory:DebugMap()
     print("GraphStory:DebugMap --------------------------------------------------")
     print('Event Objects')
     for key, value in pairs(self.eventObjectMap) do
-        print('Mapped '..key..' to '..value)
+        print('Event object '..key..' has '..#value..' potential values')
+        for _, v in ipairs(value) do
+            print('Mapped '..key..' to '..v.value..' and chain '..v.chainId)
+        end
     end
     print('POIs')
     for key, value in pairs(self.poiMap) do
-        print('Mapped '..key..' to '..value)
+        print('POI '..key..' has '..#value..' potential values')
+        for _, v in ipairs(value) do
+            print('Mapped '..key..' to '..v.value..' and chain '..v.chainId)
+        end
     end
     print('Events')
     for key, value in pairs(self.eventMap) do
-        print('Mapped '..key..' to '..value)
+        print('Event '..key..' has '..#value..' potential values')
+        for _, v in ipairs(value) do
+            print('Mapped '..key..' to '..v.value..' and chain '..v.chainId)
+        end
     end
 end
 

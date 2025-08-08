@@ -20,6 +20,8 @@ function PedHandler:InitializePed(ped)
     ped:setData('pickedObjects', {})
     ped:setData('hasFocus', false)
     ped:setData('paused', false)
+    ped:setData('mappedChainId', nil)
+
 
     math.randomseed(os.clock()*100000000000)
     math.random(); math.random(); math.random()

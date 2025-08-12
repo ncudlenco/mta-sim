@@ -929,7 +929,7 @@ end
 ---Only events representing actions with objects are mapped with the exception of 'Exists', 'Move', 'give', 'receive', 'look at object', and interactions are not mapped.
 ---(Explanation for interactions: when the evaluation for an object is started, only non-interaction events are considered. In general, by going forward or backward in the chain of events, it is not possible to reach an interaction starting from a non-interaction event.)
 ---If the same object is used in multiple events, a random chain of events is selected starting from the event with the object. The same object can be used in multiple actions and events, but the mapping will be done only once.
----Later on, at runtime, currently on the poiMap and the eventObjectMap are used.
+---Later on, at runtime, currently only the poiMap and the eventObjectMap are used.
 ---Problem1: 2 actors can choose the same POI when they have a same_time constraint leading to interlocking.
 ---Mitigation: there should be one to many relationships between events and pois / actions. The final POI should be selected at runtime, based on whether the POI is free or not.
 ---
@@ -1218,9 +1218,29 @@ end
 
 function GraphStory:DebugMap()
     print("GraphStory:DebugMap --------------------------------------------------")
+
+    -- Chain analysis summary
+    local chainStats = {}
+    for key, value in pairs(self.eventObjectMap) do
+        for _, v in ipairs(value) do
+            chainStats[v.chainId] = (chainStats[v.chainId] or 0) + 1
+        end
+    end
+
+    print('Chain Usage Summary:')
+    for chainId, count in pairs(chainStats) do
+        print('Chain ' .. chainId .. ' is used by ' .. count .. ' mappings')
+    end
+    local chainCount = 0
+    for _ in pairs(chainStats) do chainCount = chainCount + 1 end
+    print('Total chains created: ' .. chainCount .. ' (each POI gets unique chain ID to prevent actor conflicts)')
+
     print('Event Objects')
     for key, value in pairs(self.eventObjectMap) do
         print('Event object '..key..' has '..#value..' potential values')
+        if #value > 10 then
+            print('WARNING: Object '..key..' has excessive mappings ('..#value..'). This may indicate chain ID generation issues.')
+        end
         for _, v in ipairs(value) do
             print('Mapped '..key..' to '..v.value..' and chain '..v.chainId)
         end

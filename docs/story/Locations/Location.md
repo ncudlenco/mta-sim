@@ -96,24 +96,32 @@ Complex synchronization mechanisms:
 - Shared interaction relation IDs prevent duplication
 - Location cloning for proper positioning
 
-**Chain ID System:**
-- Ensures multiple actors use same object instances
-- Prevents object conflicts in multi-actor scenarios
-- Maintains consistency across action sequences
+**Chain ID System (Updated):**
+- **Dynamic Chain Reassignment**: Actors automatically reassigned to appropriate chain IDs when switching between object types
+- **Event-Specific Chains**: Each event gets a chain ID specific to its POI/object combination
+- **Cross-Object Transitions**: Actors can transition from chair chain IDs to bed chain IDs seamlessly
+- **Conflict Prevention**: Multiple actors automatically distributed across available chain IDs for same object type
 
 **Occupancy Management:**
 - Locations marked as busy during use
 - Waiting mechanism for occupied locations
 - Random relocation of finished actors
 
-### Object Mapping System
-Critical for graph-to-simulation translation:
+### Object Mapping System (Updated)
+Critical for graph-to-simulation translation with enhanced chain ID management:
 
 **Chain-Based Mapping:**
-- Objects mapped with unique chain IDs
-- Players assigned to specific chains for consistency
-- Spawnable objects handled specially
-- Picked-up object state tracking
+- **Unique Chain IDs**: Format `"POI_Description_Region_LocationId_GlobalCounter"`
+- **Dynamic Assignment**: Players reassigned to appropriate chains per event (lines 736-748)
+- **Cross-Object Support**: Actors transition between different object chain IDs
+- **Conflict Resolution**: Automatic distribution across available chains for simultaneous usage
+- **Event-Specific Chains**: Each graph event gets chain ID matching its target POI
+
+**Chain Assignment Logic:**
+1. **Selection**: POI selected based on event requirements and chain availability
+2. **Reassignment**: Player chain ID updated to match selected POI's chain (if different)
+3. **Consistency**: Same chain ID maintained for sequential actions on same POI
+4. **Distribution**: Multiple actors automatically get different chain IDs for same object type
 
 ### Action Queue Management
 - Actions queued per actor with temporal ordering

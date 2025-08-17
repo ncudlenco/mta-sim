@@ -80,11 +80,21 @@ Critical for graph-to-simulation translation:
 3. **Bidirectional**: Map both forward and backward temporal chains
 4. **One-to-Many**: Each graph object maps to multiple simulator objects for flexibility
 
-### Chain ID System
-Prevents object conflicts by tracking action sequences:
-- Each mapped POI gets unique `chainId`
-- Ensures consistent object usage across action chains
-- Supports multiple actors using same object types in different locations
+### Chain ID System (Updated)
+**Unique Chain ID Generation:** Each POI gets a globally unique, meaningful chain ID:
+- **Format**: `"POI_Description_Region_LocationId_GlobalCounter"`
+- **Examples**: `"bedroom bed right_bedroom_14_house9_3"`, `"next to armchair_bedroom_38_house9_86"`
+- **Global Counter**: Ensures absolute uniqueness across all POIs (`globalChainCounter`)
+
+**Chain ID Assignment Process:**
+1. **FindAllValidActionsAndPois()** - Captures POI metadata (Description, Region, LocationId)
+2. **AggregatePoiData()** - Creates unique chain IDs using POI data + global counter
+3. **Location.lua** - Assigns actors to chain IDs based on selected POI
+
+**Conflict Prevention:**
+- Prevents multiple actors from using the same POI simultaneously
+- Supports multiple actors using different POIs of the same object type
+- Enables proper distribution across dual-POI objects (e.g., left/right bed sides)
 
 ### Spawnable vs Fixed Objects
 - **SpawnableObjects**: Created at runtime (`Cigarette`, `MobilePhone`)

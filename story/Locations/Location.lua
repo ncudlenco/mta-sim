@@ -218,7 +218,7 @@ function Location:GetMappedEventObjectId(eventObjectId, playerChainId)
                 end
             end
         end
-        
+
         -- Fallback: return the first available mapping if no chain match or no player chain ID
         if DEBUG then
             local chainIdStr = playerChainId and tostring(playerChainId) or "nil"
@@ -518,6 +518,21 @@ function Location:ProcessNextAction(player)
         local isActionWithPickedUpObject = isActionWithObjectThatWillBeReceived or isActionWithObjectCurrentlyPicked
 
         print('Next event: '..nextEvent.id..' isInteraction '..strIsInteraction..' isActionWithPickedUpObject '..BoolToStr(isActionWithPickedUpObject))
+
+        -- Helper function to get chain IDs assigned to other actors
+        local function getOtherActorChainIds()
+            local otherActorChainIds = {}
+            for _, ped in ipairs(CURRENT_STORY.CurrentEpisode.peds) do
+                if ped:getData('id') ~= player:getData('id') then
+                    local otherChainId = ped:getData('mappedChainId')
+                    if otherChainId then
+                        otherActorChainIds[otherChainId] = true
+                    end
+                end
+            end
+            return otherActorChainIds
+        end
+
         local candidates;
         if CURRENT_STORY.poiMap and CURRENT_STORY.poiMap[nextEvent.id] then
             print("Assessing if there are any actual location candidates with id "..nextEvent.id)
@@ -528,6 +543,9 @@ function Location:ProcessNextAction(player)
                     for _, mappedTuple in ipairs(CURRENT_STORY.poiMap[nextEvent.id]) do
                         if poi.LocationId == mappedTuple.value then
                             poi:setData("mappedChainId_"..nextEvent.id, mappedTuple.chainId)
+                            if DEBUG then
+                                print("POI " .. poi.Description .. " (" .. poi.LocationId .. ") mapped to chain " .. mappedTuple.chainId .. " for event " .. nextEvent.id)
+                            end
                             return true
                         end
                     end
@@ -547,7 +565,22 @@ function Location:ProcessNextAction(player)
                     candidates = mappedLocations -- Fallback to any available
                 end
             else
-                candidates = mappedLocations
+                -- Filter out chains that are already assigned to other actors
+                local otherActorChainIds = getOtherActorChainIds()
+
+                candidates = Where(mappedLocations, function(poi)
+                    local poiChainId = poi:getData("mappedChainId_"..nextEvent.id)
+                    local isChainAvailable = not otherActorChainIds[poiChainId]
+                    if DEBUG and not isChainAvailable then
+                        print("Excluding POI " .. poi.Description .. " - chain " .. tostring(poiChainId) .. " already assigned to another actor")
+                    end
+                    return isChainAvailable
+                end)
+
+                if #candidates == 0 then
+                    print("WARNING: All chains for event " .. nextEvent.id .. " are assigned to other actors. Using any available POI as fallback.")
+                    candidates = mappedLocations -- Fallback to any available
+                end
             end
         else
             -- Find candidates for locations that are not mapped
@@ -628,9 +661,46 @@ function Location:ProcessNextAction(player)
             nextLocation = location
             print('WARNING: No location candidates found for event '..nextEvent.id..'. Using current location.')
         elseif All(candidates, function(poi) return poi ~= location and poi.isBusy end) then
-            nextLocation = PickRandom(candidates)
+            -- All candidates are busy, but we need to pick one - apply chain conflict filtering
+            local otherActorChainIds = getOtherActorChainIds()
+
+            local nonConflictingCandidates = Where(candidates, function(poi)
+                local poiChainId = poi:getData("mappedChainId_"..nextEvent.id)
+                return not otherActorChainIds[poiChainId]
+            end)
+
+            if #nonConflictingCandidates > 0 then
+                nextLocation = PickRandom(nonConflictingCandidates)
+                if DEBUG then
+                    print("Selected non-conflicting busy POI: " .. nextLocation.Description)
+                end
+            else
+                nextLocation = PickRandom(candidates)
+                if DEBUG then
+                    print("WARNING: All POIs have chain conflicts, using random busy POI: " .. nextLocation.Description)
+                end
+            end
         else
-            nextLocation = PickRandom(Where(candidates, function(poi) return not poi.isBusy end))
+            -- Apply chain conflict filtering to non-busy candidates
+            local availableCandidates = Where(candidates, function(poi) return not poi.isBusy end)
+            local otherActorChainIds = getOtherActorChainIds()
+
+            local nonConflictingAvailable = Where(availableCandidates, function(poi)
+                local poiChainId = poi:getData("mappedChainId_"..nextEvent.id)
+                return not otherActorChainIds[poiChainId]
+            end)
+
+            if #nonConflictingAvailable > 0 then
+                nextLocation = PickRandom(nonConflictingAvailable)
+                if DEBUG then
+                    print("Selected non-conflicting available POI: " .. nextLocation.Description)
+                end
+            else
+                nextLocation = PickRandom(availableCandidates)
+                if DEBUG then
+                    print("WARNING: All available POIs have chain conflicts, using random available POI")
+                end
+            end
         end
 
         -- If the current location is among the next candidates, choose this one. This helps in case there are multiple actions in the same location: e.g. SitDown, PickUp, Eat, GetUp (on different chairs)
@@ -663,16 +733,18 @@ function Location:ProcessNextAction(player)
         print("Current location "..location.Description.." "..location.LocationId)
 
         -- Set the player's chain ID based on the selected location
-        if nextLocation and player:getData('mappedChainId') == nil then
-            local chainId = nextLocation:getData("mappedChainId_"..nextEvent.id)
-            if chainId then
-                player:setData('mappedChainId', chainId)
-                print("Player " .. player:getData('id') .. " assigned to chain ID: " .. chainId .. " for event " .. nextEvent.id)
+        if nextLocation then
+            local newChainId = nextLocation:getData("mappedChainId_"..nextEvent.id)
+            local currentChainId = player:getData('mappedChainId')
+            
+            if newChainId and newChainId ~= currentChainId then
+                player:setData('mappedChainId', newChainId)
+                print("Player " .. player:getData('id') .. " assigned to chain ID: " .. newChainId .. " for event " .. nextEvent.id)
+            elseif newChainId and newChainId == currentChainId then
+                print("Player " .. player:getData('id') .. " already has chain ID: " .. currentChainId)
             elseif DEBUG then
                 print("No chain ID found for location " .. nextLocation.Description .. " and event " .. nextEvent.id)
             end
-        elseif DEBUG and player:getData('mappedChainId') then
-            print("Player " .. player:getData('id') .. " already has chain ID: " .. player:getData('mappedChainId'))
         end
     elseif #event.Location > 1 then
         local candidates = Where(CURRENT_STORY.CurrentEpisode.POI, function(poi)

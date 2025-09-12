@@ -1,10 +1,21 @@
 import cv2
 import os
 
+def enhance_image(folder, image_name):
+    real_esrgan_exe = "C:\\Users\\nicol\\Downloads\\realesrgan-ncnn-vulkan-20220424-windows\\realesrgan-ncnn-vulkan.exe"
+    input_path = os.path.join(folder, image_name)
+    output_path = os.path.join(folder, "enhanced_" + image_name)
+
+    command = f"{real_esrgan_exe} -i \"{input_path}\" -o \"{output_path}\""
+    os.system(command)
+
+    return output_path
+
+
 path = "Z:\\More games\\GTA San Andreas\\MTA-SA1.6\\server\\mods\\deathmatch\\resources\\sv2l\\complex_graphs"
 directories = [ name for name in os.listdir(path) if os.path.isdir(os.path.join(path, name)) ]
 # for directory in directories:
-directory = "c10.json_out"
+directory = "c10_sync.json_out"
 print("Working on {}...".format(directory))
 for dd in os.listdir(os.path.join(path, directory)):
 # dd = "e1774eab-a4c7-438c-8695-25604f6e2944"
@@ -14,6 +25,7 @@ for dd in os.listdir(os.path.join(path, directory)):
         video_name = os.path.join(video_folder, "{}.mp4".format(directory))
 
         if os.path.exists(video_name):
+            print("Skipping {}, already exists.".format(video_name))
             continue
 
         images = [img for img in os.listdir(image_folder) if img.endswith(".jpg")]
@@ -26,12 +38,13 @@ for dd in os.listdir(os.path.join(path, directory)):
 
         fourcc = cv2.VideoWriter_fourcc(*'mp4v')
 
-        video = cv2.VideoWriter(video_name, fourcc, 15, (width, height))
+        video = cv2.VideoWriter(video_name, fourcc, 10, (width, height))
 
         cur = 1
         for image in images:
             print(f"Working on {cur} / {len(images)}")
-            frame = cv2.imread(os.path.join(image_folder, image))
+            enhanced_image = enhance_image(image_folder, image)
+            frame = cv2.imread(enhanced_image)
             frame = cv2.resize(frame, (width, height))
             video.write(frame)
             cur += 1

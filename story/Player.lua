@@ -94,6 +94,11 @@ function terminatePlayer(player, reason)
     table.remove(SPECTATORS, playerIdx)
 
     if #SPECTATORS == 0 then
+        -- Stop all previously existing timers
+        for _, timer in ipairs(getTimers()) do
+            timer:destroy()
+        end
+
         Timer(function()
             for i,spectator in ipairs(getElementsByType("player")) do
                 if #INPUT_GRAPHS > 0 then

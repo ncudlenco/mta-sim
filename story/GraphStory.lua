@@ -179,7 +179,6 @@ function GraphStory:Play()
                     print('Elapsed time '..elapsedTime)
                     if elapsedTime > MAX_STORY_TIME then
                         for _,spectator in ipairs(story.Spectators) do
-                            EndStory(spectator):Apply()
                             local file = File(LOAD_FROM_GRAPH..'_out/'..self.Id..'/'..spectator:getData('id') .. '/MAX_STORY_TIME_EXCEEDED')
                             if file then                               -- check if it was successfully opened
                                 file:setPos(file:getSize())            -- move position to the end of the file
@@ -187,6 +186,9 @@ function GraphStory:Play()
                                 file:flush()                           -- Flush the appended data into the file.
                                 file:close()                           -- close the file once we're done with it
                             end
+                        end
+                        for _,actor in ipairs(story.CurrentEpisode.peds) do
+                            EndStory(actor):Apply()
                         end
                     end
 
@@ -665,28 +667,6 @@ function GraphStory:GetValidEpisodes(requiredActors)
         end
         return isValid
     end)
-end
-
---- @deprecated - this function is not used anymore
-function GraphStory:FindLocationAndActionForEvent(event)
-    local inventoryItems = {}
-    if self.Actor:getData('inventory') then
-        local length = tonumber(self.Actor:getData('inventory'))
-        for i = 1,length do
-            table.insert(inventoryItems, self.Actor:getData('inventory_'..i))
-        end
-    end
-    local firstLocation = PickRandom(Where(episode.POI, function(poi)
-        return
-            (poi.Region and not event.Location or poi.Region.name:lower():find(event.Location[1]:lower()) and true or false) --the location name is the one specified in the first event
-            and
-            (
-                Any(poi.allActions, function(action) return action.Name:lower() == event.Action:lower() end) --the location contains an action defined in the first event
-                or
-                --the action is with an inventory item => create by hand the action
-                Any(inventoryItems, function(item) return #event.Entities > 1 and item:lower() == self.graph[event.Entities[2]].Properties.Name:lower() end)
-            )
-        end))
 end
 
 ---This function iterates through all the POIs available in an episode (it can be a meta episode that is a composition of multiple local episodes),

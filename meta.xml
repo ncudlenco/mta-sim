@@ -63,6 +63,7 @@
   <script src="api/ScreenshotService.lua" type="server"/>
   <!-- Globals -->
   <script src="ServerGlobals.lua" type="server" />
+  <script src="ErrorHandler.lua" type="server" />
   <!-- Other story related objects -->
   <script src="story/Logger.lua" type="shared" />
   <script src="story/TimeOfDay.lua" type="shared" />

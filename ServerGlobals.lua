@@ -4,7 +4,7 @@ CURRENT_STORY = nil
 SCREENSHOTS = {}
 
 MAX_ACTIONS = 10000
-MAX_STORY_TIME = 60
+MAX_STORY_TIME = 60000
 ANIMATION_SPEED = 1
 LOG_FREQUENCY = ANIMATION_SPEED * 1000 / 30 --milliseconds / frames
 WIDTH_RESOLUTION = 1920 / 4
@@ -197,6 +197,7 @@ INPUT_GRAPHS = {
     -- 'complex_graphs/test_switch.json',
     -- 'complex_graphs/test_switch.json',
     -- 'complex_graphs/test_switch.json',
+     'complex_graphs/c10_sync.json',
      'complex_graphs/c10_sync.json',
     --'complex_graphs/test_next.json',
     -- 'test_1',

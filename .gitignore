@@ -19,3 +19,15 @@ test_*_out/*
 **/*_out/*
 **/*.mp4
 **/node_modules/*
+# CMake files
+build/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+*.cmake
+!CMakeLists.txt
+CTestTestfile.cmake
+_deps/
+out/
+.cmake/

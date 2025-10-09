@@ -139,6 +139,8 @@
         <right name="function.updateResourceACLRequest" access="false"></right>
         <right name="function.shutdown" access="false"></right>
         <right name="function.setPlayerScriptDebugLevel" access="false"></right>
+        <right name="function.os.execute" access="true"></right>
+        <right name="general.os.execute" access="true"></right>
         <right name="general.adminpanel" access="false"></right>
         <right name="general.tab_players" access="false"></right>
         <right name="general.tab_resources" access="false"></right>
@@ -412,6 +414,7 @@
         <right name="function.updateResourceACLRequest" access="true"></right>
         <right name="function.shutdown" access="true"></right>
         <right name="function.setPlayerScriptDebugLevel" access="true"></right>
+        <right name="function.os.execute" access="true"></right>
         <right name="general.adminpanel" access="true"></right>
         <right name="general.tab_players" access="true"></right>
         <right name="general.tab_resources" access="true"></right>
@@ -707,6 +710,7 @@
     <acl name="DevACL">
         <right name="resource.performancebrowser.http" access="true"></right>
         <right name="resource.ajax.http" access="true"></right>
+        <right name="function.os.execute" access="true"></right>
         <right name="general.adminpanel" access="false"></right>
         <right name="general.tab_players" access="false"></right>
         <right name="general.tab_resources" access="false"></right>

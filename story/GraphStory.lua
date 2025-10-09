@@ -2,6 +2,8 @@ GraphStory = class(StoryBase, function(o, spectators, logData)
     StoryBase.init(o, spectators, maxActions)
     o.LogData = logData
     o.globalChainCounter = 0 -- Global counter for unique chain IDs
+    o.screenshotService = ScreenshotService(SCREENSHOT_MODE or "mta")
+    o.screenshotService:Initialize()
     o.AllEpisodes = {
         -- House1(),
         -- House3(),
@@ -17,21 +19,21 @@ GraphStory = class(StoryBase, function(o, spectators, logData)
         -- House12()
     }
     o.DynamicEpisodes = {
-    --   "house1_sweet",
-    --   "house1_stripped",
+      "house1_sweet",
+      "house1_stripped",
     -- --   "house3_preloaded", --NOT WORKING! The pathfinding seems flawed here, when we have 2 levels?
     -- --   "house7", --NOT WORKING! Potential issue when the link POI is located outside a region
-    --   "house8_preloaded",
+      "house8_preloaded",
       "house9",
     --   "house10_preloaded", -- Not Working!
-    --   "house12_preloaded", -- Working but needs the objects removed. Some flakiness exists but in general it works...
+      "house12_preloaded", -- Working but needs the objects removed. Some flakiness exists but in general it works...
       "garden",
-    --   "office",
-    --   "office2",
-    --   "common",
-    --   "gym1",
-    --   "gym2",
-    --   "gym3"
+      "office",
+      "office2",
+      "common",
+      "gym1",
+      "gym2",
+      "gym3"
     }
     o.Disposed = false
     o.SpawnableObjects = {
@@ -196,7 +198,7 @@ function GraphStory:Play()
                                 else
                                     spectator:setData('takenShots', 1)
                                 end
-                                spectator:takeScreenShot(WIDTH_RESOLUTION, HEIGHT_RESOLUTION, spectator:getData('id')..';'..spectator:getData('storyId')..';'..spectator.name, 75)
+                                self.screenshotService:TakeScreenshot(spectator, spectator:getData('storyId'))
                             end
                         else
                             local requestedShots = spectator:getData('takenShots')
@@ -783,7 +785,7 @@ function GraphStory:FindAllValidActionsAndPois(episode, ro, eventsWithObjectAsTa
         for _, startingEvent in ipairs(eventsMatchingActionAndObject) do
             local currentAction = actionWithMatchingObject
             local currentEvent = startingEvent
-            
+
             -- The action and event are guaranteed to be matching at this point
             if not self:MatchEventAndAction(currentAction, currentEvent, poi, actionMap, eventMap, objectMap, eventObjectMap, poiMap) then
                 if DEBUG_VALIDATION then
@@ -912,7 +914,7 @@ function GraphStory:FindAllValidActionsAndPois(episode, ro, eventsWithObjectAsTa
                 break
             end
         end
-        
+
         if not allEventsMatched then
             return nil
         end

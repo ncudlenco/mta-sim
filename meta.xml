@@ -60,6 +60,7 @@
   <script src="api/StoryTextLoggerBase.lua" type="shared"/>
   <script src="api/StoryTimeOfDayBase.lua" type="shared"/>
   <script src="api/StoryWeatherBase.lua" type="shared"/>
+  <script src="api/ScreenshotService.lua" type="server"/>
   <!-- Globals -->
   <script src="ServerGlobals.lua" type="server" />
   <!-- Other story related objects -->

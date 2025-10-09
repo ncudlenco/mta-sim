@@ -4,20 +4,20 @@ CURRENT_STORY = nil
 SCREENSHOTS = {}
 
 MAX_ACTIONS = 10000
-MAX_STORY_TIME = 1200
+MAX_STORY_TIME = 60
 ANIMATION_SPEED = 1
-LOG_FREQUENCY = ANIMATION_SPEED * 1000 / 50 --milliseconds / frames
-WIDTH_RESOLUTION = 1920
-HEIGHT_RESOLUTION = 1080
+LOG_FREQUENCY = ANIMATION_SPEED * 1000 / 30 --milliseconds / frames
+WIDTH_RESOLUTION = 1920 / 4
+HEIGHT_RESOLUTION = 1080 / 4
 
-DEBUG = true
+DEBUG = false
 DEBUG_PROCESSACTIONS = false
 DEBUG_PROCESSREGIONS = false
 DEBUG_TEMPLATES = false
 DEBUG_LOCATION_CANDIDATES = true
 DEBUG_METAEPISODE = false
 DEBUG_PATHFINDING = false
-DEBUG_VALIDATION = true
+DEBUG_VALIDATION = false
 DEBUG_ACTION_VALIDATION = false
 DEBUG_LOGGER = false
 DEBUG_SCREENSHOTS = false
@@ -27,6 +27,9 @@ DEBUG_ACTIONS = false
 DEBUG_CHAIN_LINKED_ACTIONS = false
 DEBUG_CAMERA = false
 DEBUG_ACTIONS_ORCHESTRATOR = false
+
+-- Screenshot Service Configuration
+SCREENSHOT_MODE = "mta" -- "mta" for native MTA screenshots, "powershell" for PowerShell screenshots, "native" for C++ module
 
 -- NOT USED --
 TIME_STAMP = false
@@ -38,7 +41,7 @@ EXPECTED_SPECTATORS = 1
 -- NOT USED --
 
 SIMULATION_MODE = true
-LOG_DATA = SIMULATION_MODE and false -- Set this to true if you want to save images and logs for each episode
+LOG_DATA = SIMULATION_MODE and true -- Set this to true if you want to save images and logs for each episode
 
 STATIC_CAMERA = SIMULATION_MODE
 FREE_ROAM = not SIMULATION_MODE

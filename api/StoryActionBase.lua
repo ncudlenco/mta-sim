@@ -40,6 +40,9 @@ function StoryActionBase:Apply(...)
         story.CameraHandler:requestFocus(playerId)
     end
     if self.Performer and self.NextLocation and self.NextLocation.LocationId then
+        if DEBUG then
+            print("Setting nextTargetLocation for actor "..tostring(playerId).." to "..tostring(self.NextLocation.LocationId))
+        end
         self.Performer:setData('nextTargetLocation', self.NextLocation.LocationId)
     end
 end

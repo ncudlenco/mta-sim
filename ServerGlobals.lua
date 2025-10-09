@@ -198,7 +198,6 @@ INPUT_GRAPHS = {
     -- 'complex_graphs/test_switch.json',
     -- 'complex_graphs/test_switch.json',
      'complex_graphs/c10_sync.json',
-     'complex_graphs/c10_sync.json',
     --'complex_graphs/test_next.json',
     -- 'test_1',
     -- 'test_1',

@@ -137,6 +137,16 @@ addCommandHandler("projectPoint",
 	end
 )
 
+addCommandHandler("stopTime",
+	function (thePlayer, commandName)
+		setGameSpeed(0)
+	end)
+
+addCommandHandler("startTime",
+	function (thePlayer, commandName)
+		setGameSpeed(1)
+	end)
+
 addCommandHandler("isPointInside",
 	function (thePlayer, commandName, param1, param2, param3)
 		local x = tonumber(param1)

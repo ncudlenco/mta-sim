@@ -6,6 +6,8 @@
 Story = class(StoryBase, function(o, spectators, maxActions, logData)
     StoryBase.init(o, spectators, maxActions)
     o.LogData = logData
+    o.screenshotService = ScreenshotService(SCREENSHOT_MODE or "mta")
+    o.screenshotService:Initialize()
     o.Episodes = {
         -- House1(),
         -- House3(),
@@ -109,7 +111,7 @@ function Story:Play()
                         else
                             spectator:setData('takenShots', 1)
                         end
-                        spectator:takeScreenShot(WIDTH_RESOLUTION, HEIGHT_RESOLUTION, spectator:getData('id')..';'..spectator:getData('storyId')..';'..spectator.name, 100)
+                        self.screenshotService:TakeScreenshot(spectator, spectator:getData('storyId'))
                     else
                         local requestedShots = spectator:getData('takenShots')
                         local actuallyTaken = SCREENSHOTS[spectator:getData('id')][spectator:getData('storyId')]

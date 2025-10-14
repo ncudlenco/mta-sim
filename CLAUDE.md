@@ -39,7 +39,7 @@ This system represents one of the first attempts at creating a comprehensive gra
 ## Development Commands
 
 **Testing:**
-- In general, the testing framework doesn't work. It is incomplete and does not fully mock all the functionalities from MTA. I am testing now manually by running the game, connecting, using a specific graph (JSON file), and seing what happens. The information below is true but in practice it is never used.
+- In general, the testing framework doesn't work. It is incomplete and does not fully mock all the functionalities from MTA. I am testing now manually by running the game, connecting, using a specific graph (JSON file), and visual verification + reviewing the clientscript.log and server.log. The information below is true but in practice it is never used.
 - `lua run_tests_standalone.lua` - Run all tests with standalone Lua interpreter - this doesn't work
 - `run_tests.bat` (Windows) or `./run_tests.sh` (Linux/macOS) - Run tests with wrapper scripts that check for Lua availability
 - Tests are located in `test_framework/` and use mock MTA functions for standalone testing
@@ -61,7 +61,7 @@ This is an **MTA San Andreas story simulation system** that generates and execut
 
 **Actions Orchestrator (`api/ActionsOrchestrator.lua`):**
 - Coordinates multi-actor action execution with temporal constraints
-- Manages context switching between different episodes/locations  
+- Manages context switching between different episodes/locations
 - Handles concurrent and synchronized actions between multiple actors
 - Queues actions awaiting constraint satisfaction
 
@@ -101,7 +101,7 @@ This is an **MTA San Andreas story simulation system** that generates and execut
 ### File Organization
 
 - `story/` - Core story execution engine and episode definitions
-- `api/` - Interface classes and action orchestration  
+- `api/` - Interface classes and action orchestration
 - `files/episodes/` - Episode definitions with POIs and object layouts
 - `files/supertemplates/` - Reusable interaction templates
 - `story_generator/` - Python tools for generating synthetic test stories
@@ -122,7 +122,7 @@ This repository includes comprehensive documentation of the system architecture 
 
 ### Architecture Documentation
 - **[System Architecture Overview](arch/system-overview.md)** - High-level system architecture with Mermaid diagrams
-- **[Component Details](arch/component-details.md)** - Detailed component architecture and state machines  
+- **[Component Details](arch/component-details.md)** - Detailed component architecture and state machines
 - **[Data Flow Architecture](arch/data-flow.md)** - Data flow patterns and processing pipelines
 
 ### Component Documentation
@@ -153,3 +153,10 @@ This repository includes comprehensive documentation of the system architecture 
 **Advanced Object Mapping**: Chain ID system ensures consistent object usage across multiple actors while preventing conflicts and managing spawnable vs. fixed objects.
 
 **Camera Synchronization Engine**: Sophisticated multi-spectator camera management with automatic focus switching, cross-episode context transitions, and coordinated fade effects for seamless video generation.
+
+## Development guidelines
+Any new development should follow best engineering practices as DRY, YAGNI, and SOLID principles. The functions must be documented in an LDoc compliant style [https://stevedonovan.github.io/ldoc/manual/doc.md.html].
+
+We are using a custom class-like function located in utils/class.lua.
+
+The overarching architecture should be designed in a way that makes it easy to isolate the core-engine logic from the simulation related business logic. With the idea in mind that this system is to be extended for other games as well. The very next milestone after the idea is fully proved for GTA:SA is to extend it for GTA V through FiveM.

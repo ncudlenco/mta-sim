@@ -11,7 +11,8 @@ def enhance_image(folder, image_name):
 
     return output_path
 
-
+shouldUpscaleFrames = False
+downscalingFactor = 4.0 # Usable when we upscale essentially by generating 4k images and then downscale to 1080p for better quality - this takes more time
 path = "Z:\\More games\\GTA San Andreas\\MTA-SA1.6\\server\\mods\\deathmatch\\resources\\sv2l\\complex_graphs"
 directories = [ name for name in os.listdir(path) if os.path.isdir(os.path.join(path, name)) ]
 # for directory in directories:
@@ -32,8 +33,8 @@ for dd in os.listdir(os.path.join(path, directory)):
 
         frame = cv2.imread(os.path.join(image_folder, images[0]))
         height, width, layers = frame.shape
-        # height = int(height/4)
-        # width = int(width/4)
+        height = int(height / downscalingFactor)
+        width = int(width / downscalingFactor)
         # frame = cv2.resize(frame, (width, height))
 
         fourcc = cv2.VideoWriter_fourcc(*'mp4v')
@@ -43,7 +44,10 @@ for dd in os.listdir(os.path.join(path, directory)):
         cur = 1
         for image in images:
             print(f"Working on {cur} / {len(images)}")
-            enhanced_image = enhance_image(image_folder, image)
+            if shouldUpscaleFrames:
+                enhanced_image = enhance_image(image_folder, image)
+            else:
+                enhanced_image = os.path.join(image_folder, image)
             frame = cv2.imread(enhanced_image)
             frame = cv2.resize(frame, (width, height))
             video.write(frame)

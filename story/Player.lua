@@ -118,6 +118,10 @@ end
 
 addEventHandler ( "onPlayerQuit", root,
 function ( quitType )
+    -- If the simulation was still running, emit an error
+    if not CURRENT_STORY.Disposed then
+        error("The client disconnected from the server during the simulation leaving it in an error state. The simulation will be terminated.")
+    end
     if DEBUG then
         outputConsole(getPlayerName(source).. " has left the server (" .. quitType .. ")")
     end

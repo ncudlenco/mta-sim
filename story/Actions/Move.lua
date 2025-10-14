@@ -596,7 +596,7 @@ function Move.hasReachedMarker(player, marker)
             player:setData('isMoving', true)
 
             print('Actor '..playerId..' rerunning timer for marker '..marker:getData('idx'))
-            local pollingTime = (300 / math.max(1, math.max(math.min(distance, animationSpeed), 1.5) / 1.5))
+            local pollingTime = (600 / math.max(1, math.max(math.min(distance, animationSpeed), 1.5) / 1.5))
             Timer(Move.hasReachedMarker, pollingTime, 1, player, marker)
         else
             print("[FATAL ERROR] "..playerId..". The player had no plan or the path is empty but Move.hasReachedMarker has been called")

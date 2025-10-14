@@ -2,10 +2,6 @@
   "permissions": {
     "allow": [
       "Read(Z:\\More games\\GTA San Andreas\\MTA-SA1.6\\server\\mods\\deathmatch\\logs/**)",
-      "Read(Z:\\More games\\GTA San Andreas\\MTA-SA1.6\\server\\mods\\deathmatch\\logs/**)",
-      "Read(Z:\\More games\\GTA San Andreas\\MTA-SA1.6\\server\\mods\\deathmatch\\logs/**)",
-      "Read(Z:\\More games\\GTA San Andreas\\MTA-SA1.6\\server\\mods\\deathmatch\\logs/**)",
-      "Read(Z:\\More games\\GTA San Andreas\\MTA-SA1.6\\server\\mods\\deathmatch\\logs/**)",
       "WebFetch(domain:github.com)",
       "Bash(./build.bat)"
     ],

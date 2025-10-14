@@ -304,6 +304,77 @@ function InstantiateAction(event, player, location, object)
     return nil
 end
 
+-- Helper function to create a location clone for interaction actors
+function Location:CreateInteractionClone(originalLocation, offset)
+    offset = offset or 0.7
+    local clone = Location(
+        originalLocation.X - offset,
+        originalLocation.Y - offset,
+        originalLocation.Z,
+        originalLocation.Angle,
+        originalLocation.Interior,
+        originalLocation.Description,
+        originalLocation.Region,
+        false
+    )
+    clone.isBusy = false
+    clone.LocationId = originalLocation.LocationId
+    clone.allActions = originalLocation.allActions
+    clone.Episode = originalLocation.Episode
+    clone.interactionsOnly = originalLocation.interactionsOnly
+    return clone
+end
+
+-- Helper function to determine if a location needs cloning for interaction
+function Location:ShouldCloneForInteraction(targetLocation, nextEvent)
+    if not targetLocation.interactionsOnly then
+        return false
+    end
+
+    if not nextEvent or not nextEvent.isInteraction then
+        return false
+    end
+
+    local interactionPoiMap = CURRENT_STORY.interactionPoiMap
+    if not nextEvent.interactionRelation then
+        return false
+    end
+
+    -- Check if another actor already claimed this interaction POI
+    return interactionPoiMap[nextEvent.interactionRelation] == targetLocation.LocationId
+end
+
+-- Helper function to create a Move action between locations
+-- Handles special case when multiple actors move to the same interaction POI
+function Location:CreateMoveAction(targetLocation, nextEvent, moveTemplate)
+    local interactionPoiMap = CURRENT_STORY.interactionPoiMap
+    local finalTarget = targetLocation
+
+    -- Special handling if this is a move towards an interaction POI
+    if targetLocation.interactionsOnly and nextEvent and nextEvent.isInteraction and nextEvent.interactionRelation then
+        if interactionPoiMap[nextEvent.interactionRelation] == targetLocation.LocationId then
+            -- Second actor - create clone to avoid collision
+            finalTarget = self:CreateInteractionClone(targetLocation)
+            print("Creating Move for second actor in interaction - using offset position")
+        else
+            -- First actor - claim this POI for the interaction
+            interactionPoiMap[nextEvent.interactionRelation] = targetLocation.LocationId
+            print("Creating Move for first actor in interaction - claiming POI")
+        end
+    end
+
+    -- Create the move action with the appropriate target
+    local move = Move{
+        performer = moveTemplate.Performer,
+        targetItem = finalTarget,
+        nextLocation = finalTarget,
+        prerequisites = moveTemplate.Prerequisites,
+        graphId = moveTemplate.graphId
+    }
+    move.TargetItem = finalTarget
+    return move
+end
+
 
 function Location:ProcessNextAction(player)
     local event = CURRENT_STORY.nextEvents[player:getData('id')]
@@ -338,15 +409,39 @@ function Location:ProcessNextAction(player)
     local isMoveEvent = event.Action:lower() == 'move'
     local actionsChain = {}
 
+    -- Retrieve nextEvent early so we can use it for Move creation and later reuse it
+    local nextEvent;
+    if event.isStartingEvent then
+        nextEvent = event
+    else
+        print(player:getData('id')..' current event '..event.Action)
+        nextEvent = FirstOrDefault(CURRENT_STORY.graph, function(evt) return evt.id == CURRENT_STORY:GetNextEvent(event.id, player:getData('id')) end)
+    end
+
+    if nextEvent then
+        print(player:getData('id')..' next event '..nextEvent.Action)
+        -- Determine if next event is an interaction and set up its properties
+        nextEvent.isInteraction = Any(CURRENT_STORY.Interactions, function(a) return a:lower() == nextEvent.Action:lower() end)
+        if nextEvent.isInteraction then
+            nextEvent.interactionRelation = FirstOrDefault(CURRENT_STORY.temporal[nextEvent.id].relations, function(rel)
+                return CURRENT_STORY.temporal[rel].type == 'starts_with' or CURRENT_STORY.temporal[rel].type == 'same_time'
+            end)
+            nextEvent.interactionEvent = FirstOrDefault(CURRENT_STORY.graph, function(a)
+                return a.id and CURRENT_STORY.temporal[a.id] and CURRENT_STORY.temporal[a.id].relations
+                    and Any(CURRENT_STORY.temporal[a.id].relations, function(rel) return rel == nextEvent.interactionRelation end)
+            end)
+        end
+    end
+
     if previousLocation and location and previousLocation ~= location then
         --if this is an interaction then create a move action with target the other player. handle internally inside the move action the positioning of the two players
         --
         print('Next action is in another location. Inserting a Move action from '..previousLocation.Description..' to '..location.Description..' in episode '..location.Episode.name)
         local moveAction = FirstOrDefault(previousLocation.allActions, function(action) return action.Name == 'Move' and action.TargetItem == location end)
-        --actually I need to clone the move action to point to different coordinates inside the next location
-        local clone = Move{performer = moveAction.Performer, targetItem = location, nextLocation = location, prerequisites = moveAction.Prerequisites, graphId = moveAction.graphId}
-        clone.TargetItem = location
-        table.insert(CURRENT_STORY.actionsQueues[player:getData('id')], clone)
+
+        -- Use our helper function to create the proper Move action (handles interaction POI cloning if needed)
+        local moveClone = self:CreateMoveAction(location, nextEvent, moveAction)
+        table.insert(CURRENT_STORY.actionsQueues[player:getData('id')], moveClone)
     end
 
     if not event.isStartingEvent then
@@ -432,16 +527,6 @@ function Location:ProcessNextAction(player)
 
 --looking backward in the graph's chain of events to see if any actions were already processed is not necessary because
 --in the steps below, we make sure that when we reach the first action from an enforced chain, then we process all their previous and following mandatory actions
-    local nextEvent;
-    if event.isStartingEvent then
-        nextEvent = event
-    else
-        print(player:getData('id')..' current event '..event.Action)
-        nextEvent = FirstOrDefault(CURRENT_STORY.graph, function(evt) return evt.id == CURRENT_STORY:GetNextEvent(event.id, player:getData('id')) end)
-        if nextEvent then
-            print(player:getData('id')..' next event '..nextEvent.Action)
-        end
-    end
 
     if not isMoveEvent then
         -- local nextMandatoryAction = eventAction.NextAction
@@ -484,13 +569,7 @@ function Location:ProcessNextAction(player)
     --otherwise, if the player is not in the required location then add a move action to the required location (select it from allActions of the currentLocation)
     local nextLocation = nil
     if nextEvent then
-        nextEvent.isInteraction = Any(CURRENT_STORY.Interactions, function(a) return a:lower() == nextEvent.Action:lower() end)
-        if nextEvent.isInteraction then
-            nextEvent.interactionRelation = FirstOrDefault(CURRENT_STORY.temporal[nextEvent.id].relations, function(rel) return CURRENT_STORY.temporal[rel].type == 'starts_with' or CURRENT_STORY.temporal[rel].type == 'same_time' end)
-            nextEvent.interactionEvent = FirstOrDefault(CURRENT_STORY.graph, function(a)
-                return a.id and CURRENT_STORY.temporal[a.id] and CURRENT_STORY.temporal[a.id].relations
-                    and Any(CURRENT_STORY.temporal[a.id].relations, function(rel) return rel == nextEvent.interactionRelation end) end)
-        end
+        -- nextEvent properties were already set earlier when we retrieved it
         local strIsInteraction = 'false'
         if nextEvent.isInteraction then
             strIsInteraction = 'true'
@@ -716,14 +795,9 @@ function Location:ProcessNextAction(player)
             nextLocation = location
             print('WARNING: Using current location '..location.Description..' as fallback for event '..nextEvent.id)
         elseif nextEvent.isInteraction then
-            if interactionPoiMap[nextEvent.interactionRelation] == nextLocation.LocationId then
+            if self:ShouldCloneForInteraction(nextLocation, nextEvent) then
                 --only subsequent actors reach this section (i.e. after a location was chosen for the interaction)
-                local clone = Location(nextLocation.X - 0.7, nextLocation.Y - 0.7, nextLocation.Z, nextLocation.Angle, nextLocation.Interior, nextLocation.Description, nextLocation.Region, false)
-                    --Î(this is an upward arrow) TODO: is it good, is it bad?
-                clone.LocationId = nextLocation.LocationId
-                clone.allActions = nextLocation.allActions --should include move actions here...
-                clone.Episode = nextLocation.Episode
-                nextLocation = clone
+                nextLocation = self:CreateInteractionClone(nextLocation)
                 print("Set nextLocation to a clone of the next location position, shifted by 0.7 "..nextLocation.Description)
             end
             interactionPoiMap[nextEvent.interactionRelation] = nextLocation.LocationId
@@ -736,7 +810,7 @@ function Location:ProcessNextAction(player)
         if nextLocation then
             local newChainId = nextLocation:getData("mappedChainId_"..nextEvent.id)
             local currentChainId = player:getData('mappedChainId')
-            
+
             if newChainId and newChainId ~= currentChainId then
                 player:setData('mappedChainId', newChainId)
                 print("Player " .. player:getData('id') .. " assigned to chain ID: " .. newChainId .. " for event " .. nextEvent.id)
@@ -860,7 +934,9 @@ function Location:GetNextValidAction(player)
                         local function wait()
                             local occupyingActor = FirstOrDefault(CURRENT_STORY.CurrentEpisode.peds, function(act) return act:getData('locationId') == next.NextLocation.LocationId end)
                             if (not occupyingActor) then
-                                print('Occupying actor not found for location '..next.NextLocation.LocationId..' ('..next.Description..')')
+                                print('Occupying actor not found for location '..next.NextLocation.LocationId..' ('..next.NextLocation.Description..')')
+                            else
+                                print('Player '..player:getData('id')..' waiting for location '..next.NextLocation.LocationId..' ('..next.NextLocation.Description..') occupied by actor '..occupyingActor:getData('id'))
                             end
                             if next.NextLocation.isBusy and (not occupyingActor or not occupyingActor:getData('storyEnded')) then
                                 player:setAnimation("cop_ambient", "coplook_loop", 5000, true, false, false, true)

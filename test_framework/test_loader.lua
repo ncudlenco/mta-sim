@@ -47,7 +47,7 @@ dofile("api/StoryActionBase.lua")
 -- Load story components
 dofile("story/Actions/ActionsGlobals.lua")
 dofile("story/GraphStory.lua")
-dofile("story/Story.lua")
+dofile("story/RandomStory.lua")
 dofile("story/Player.lua")
 dofile("story/Logger.lua")
 dofile("story/TimeOfDay.lua")

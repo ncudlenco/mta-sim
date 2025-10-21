@@ -14,7 +14,7 @@ local storedCoronaZTest = nil       -- Stores original corona z-test state
 -- Render-based synchronization: Wait for actual GPU render before notifying server
 local pendingRenderConfirmation = nil  -- {mode: string, callback: function, frameMapping: table}
 local renderConfirmationFrameCount = 0
-local CONFIRMATION_FRAMES_REQUIRED = 2  -- Wait 2 rendered frames to ensure GPU has flushed
+local CONFIRMATION_FRAMES_REQUIRED = 4  -- Wait 4 rendered frames to ensure GPU has flushed
 
 --- Check if texture name should be blacklisted (not segmented)
 --- These are typically invisible elements (collision shapes, markers, coronas, shadows)

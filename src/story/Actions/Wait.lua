@@ -42,8 +42,8 @@ function Wait:Apply()
         outputConsole("Wait:Apply")
     end
     self.Performer:setData("isWaitingForInteraction", self.targetInteraction)
-    self.Performer:getData('isReadyForInteraction', false)
-    self.Performer:getData('isAboutToInitiateInteraction', false)
+    self.Performer:setData('isReadyForInteraction', false)
+    self.Performer:setData('isAboutToInitiateInteraction', false)
 
     self:ExecuteWaitingLoop()
 end

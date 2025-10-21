@@ -90,7 +90,7 @@ function initializeCameraMan(cameraMan)
     cameraMan:setData("id", "spectator"..#SPECTATORS)
 
     if DEBUG then
-        outputConsole("New player joined the server. Id ".. cameraMan:getData('id') .." (waiting for client to download resources)")
+        outputConsole("New player joined the server. Id " .. cameraMan:getData('id') .. " (waiting for client to download resources)")
     end
 
     -- Note: Simulation will start when all spectators signal clientReady

@@ -148,14 +148,19 @@ function Move.destinationReached(player, source)
             print("Skipped marker "..idx..' for actor '..playerId..' because the player is already located at these coordinates')
         else
             -- print("ROTATION: "..player.rotation.z..'; Position: '..player.position.x..', '..player.position.y..', '..player.position.z..'; Target: '..path[idx][1]..', '..path[idx][2])
-            player:setRotation(0,0,findRotation(player.position.x, player.position.y, path[idx][1], path[idx][2]), "default", true)
+            player:setRotation(0, 0, findRotation(player.position.x, player.position.y, path[idx][1], path[idx][2]), "ZYX", true, true)
             -- print("After computation ROTATION: "..player.rotation.z..'; Position: '..player.position.x..', '..player.position.y..', '..player.position.z)
 
             local lib = lastAction.planningData[player:getData('id')].lib
             local how = lastAction.planningData[player:getData('id')].how
-            player:setData('isMoving', true)
-            player:setAnimation(lib, how, -1, true, true, true, true)
-            player:setAnimationSpeed(how, lastAction.AnimationSpeed)
+            local animationSpeed = lastAction.AnimationSpeed
+
+            -- Delay animation start to let rotation settle
+            Timer(function()
+                player:setData('isMoving', true)
+                player:setAnimation(lib, how, -1, true, true, true, true)
+                player:setAnimationSpeed(how, animationSpeed)
+            end, 100, 1)
         end
         if not DISABLE_BETWEEN_POINTS_TELEPORTATION then
             Move.wait(player)
@@ -530,7 +535,7 @@ function Move:FindNextShortestPath(player)
                     self.planningData[player:getData('id')].paused = false
                     Move.hasReachedMarker(player, marker)
 
-                    player:setRotation(0,0,findRotation(player.position.x, player.position.y, nextPos[1], nextPos[2]), "default", true)
+                    player:setRotation(0, 0, findRotation(player.position.x, player.position.y, nextPos[1], nextPos[2]), "ZYX", true, true)
 
                     local animationSpeed = self.AnimationSpeed
                     Timer(function()
@@ -592,12 +597,16 @@ function Move.hasReachedMarker(player, marker)
         if plan and #plan.path > 0 then
             local idx = player:getData('idx')
             -- print("ROTATION: "..player.rotation.z..'; Position: '..player.position.x..', '..player.position.y..', '..player.position.z..'; Target: '..plan.path[idx][1]..', '..plan.path[idx][2])
-            player:setRotation(0,0,findRotation(player.position.x, player.position.y, plan.path[idx][1], plan.path[idx][2]), "default", true)
+            player:setRotation(0, 0, findRotation(player.position.x, player.position.y, plan.path[idx][1], plan.path[idx][2]), "ZYX", true, true)
             -- print("After computation ROTATION: "..player.rotation.z..'; Position: '..player.position.x..', '..player.position.y..', '..player.position.z)
-            player:setAnimation(plan.lib, plan.how, -1, true, true, true, true)
+
+            -- Delay animation start to let rotation settle
             local animationSpeed = lastAction.AnimationSpeed
-            player:setAnimationSpeed(plan.how, animationSpeed)
-            player:setData('isMoving', true)
+            Timer(function()
+                player:setAnimation(plan.lib, plan.how, -1, true, true, true, true)
+                player:setAnimationSpeed(plan.how, animationSpeed)
+                player:setData('isMoving', true)
+            end, 100, 1)
 
             print('Actor '..playerId..' rerunning timer for marker '..marker:getData('idx'))
             local pollingTime = (600 / math.max(1, math.max(math.min(distance, animationSpeed), 1.5) / 1.5))
@@ -670,7 +679,7 @@ function Move.teleport(player, lastAction)
         outputConsole("Move.teleport - Teleport applied for actor "..playerId..'. Calling Action finished...')
         print("Move.teleport - Teleport applied for actor "..playerId..'. Calling Action finished...')
     end
-    OnGlobalActionFinished(0, playerId, player:getData('storyId'))
+    OnGlobalActionFinished(100, playerId, player:getData('storyId'))
 end
 
 function Move:GetDynamicString()

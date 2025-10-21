@@ -9,16 +9,16 @@ function BarbellWorkOut:Apply()
     table.insert(story.History[self.Performer:getData('id')], self)
     StoryActionBase.Apply(self)
     
-    local time = random(7000, 19000)
+    local setupTime = 3000
     StoryActionBase.GetLogger(self, story):Log(self.Description .. self.TargetItem.Description, self, false, true, {"finishes", "finishes working out"})
-    
-    self.Performer:setAnimation("Freeweights", "gym_free_A", time, true, false, false, true)
+
+    self.Performer:setAnimation("Freeweights", "gym_free_A", -1, true, false, true, true)
 
     if DEBUG then
         outputConsole("BarbellWorkOut:Apply")
     end
 
-    OnGlobalActionFinished(time, self.Performer:getData('id'), self.Performer:getData('storyId'))
+    OnGlobalActionFinished(setupTime, self.Performer:getData('id'), self.Performer:getData('storyId'))
 end
 
 function BarbellWorkOut:GetDynamicString()

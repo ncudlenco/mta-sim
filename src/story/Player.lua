@@ -56,22 +56,24 @@ end
 -- @param player The player element that is ready
 function onClientReadySignal()
     local player = source
-    player:setData('clientReady', true)
+    processClientReady(player)
+end
 
+function processClientReady(player)
+    player:setData('clientReady', true)
     if DEBUG then
-        outputConsole("Player ".. player:getData('id') .." client is fully ready (all files downloaded)")
+        outputConsole("Player "..player:getData('id').." signaled client ready ")
     end
 
-    -- Check if all spectators are now ready to start
-    if checkAllSpectatorsReady() and not DEFINING_EPISODES then
+    if checkAllSpectatorsReady() then
         if DEBUG then
-            outputConsole("All spectators are ready, starting simulation")
+            outputConsole("All spectators are ready. Starting simulation ")
         end
-        startSimulation(player)
+        startSimulation()
     end
 end
 
-function initializeCameraMan(cameraMan)
+function initializeCameraMan(cameraMan, triggerClientReady)
     if not DEFINING_EPISODES then
         cameraMan:fadeCamera (false)
     end
@@ -95,6 +97,9 @@ function initializeCameraMan(cameraMan)
 
     -- Note: Simulation will start when all spectators signal clientReady
     -- This is handled in onClientReadySignal() instead
+    if triggerClientReady then
+        processClientReady(cameraMan)
+    end
 end
 
 addEventHandler("onPlayerJoin", getRootElement(), function (prevA, curA) initializeCameraMan(source) end)
@@ -157,7 +162,7 @@ function terminatePlayer(player, reason)
                 if #INPUT_GRAPHS > 0 then
                     table.remove(INPUT_GRAPHS, 1)
                     if #INPUT_GRAPHS > 0 then
-                        initializeCameraMan(player)
+                        initializeCameraMan(player, true)
                     else
                         player:kick(reason)
                     end

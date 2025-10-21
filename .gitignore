@@ -11,7 +11,6 @@ story_generator/samples_babi/corpus
 story_generator/samples_babi/**//*_out
 corpus/*
 scripts/r10
-scripts/
 data_out/
 .vscode/launch.json
 random/*
@@ -31,3 +30,4 @@ CTestTestfile.cmake
 _deps/
 out/
 .cmake/
+nul

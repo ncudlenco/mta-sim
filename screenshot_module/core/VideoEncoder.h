@@ -5,6 +5,7 @@
 #include <mfidl.h>
 #include <mfreadwrite.h>
 #include <d3d11.h>
+#include <d3d11_1.h>  // For ID3D11VideoDevice, ID3D11VideoContext, ID3D11VideoProcessor
 
 /// VideoEncoder: Encodes frames to H.264 video using Media Foundation
 /// Core reusable component (game-agnostic)
@@ -18,6 +19,12 @@ private:
     int height;
     int bitrate;
     bool initialized;
+
+    // Video processor for GPU-accelerated scaling
+    ID3D11VideoDevice* videoDevice;
+    ID3D11VideoContext* videoContext;
+    ID3D11VideoProcessor* videoProcessor;
+    ID3D11VideoProcessorEnumerator* videoProcessorEnum;
 
 public:
     VideoEncoder();
@@ -63,4 +70,11 @@ private:
     /// @param targetHeight Target height
     /// @return Resized texture (caller must release), or nullptr on failure
     ID3D11Texture2D* ResizeTexture(ID3D11Texture2D* source, int targetWidth, int targetHeight);
+
+    /// Initialize GPU video processor for hardware-accelerated scaling
+    /// @return Success
+    bool InitializeVideoProcessor();
+
+    /// Cleanup video processor resources
+    void CleanupVideoProcessor();
 };

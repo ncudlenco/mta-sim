@@ -57,6 +57,11 @@ public:
     /// Get frame height (after cropping)
     int GetHeight() const { return currentHeight; }
 
+    /// Get frame dimensions (width and height)
+    /// @param width Output: frame width
+    /// @param height Output: frame height
+    void GetDimensions(int& width, int& height) const;
+
     /// Check if initialized
     bool IsInitialized() const { return initialized; }
 

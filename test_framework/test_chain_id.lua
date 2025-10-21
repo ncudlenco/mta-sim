@@ -71,7 +71,6 @@ function ChainIdTests:testSingleSofaTwoActors()
     }
 
     -- Create story with GraphStory
-    local story = Story({player1, player2}, 10, false)
     local graphStory = GraphStory(graph, temporal, {}, requiredObjects, {episode}, "TestStory")
 
     -- Initialize mapping structures
@@ -244,7 +243,6 @@ function ChainIdTests:testMultipleChairsKitchen()
     }
 
     -- Create story with GraphStory
-    local story = Story({player1, player2}, 20, false)
     local graphStory = GraphStory(graph, temporal, {}, requiredObjects, {episode}, "KitchenStory")
 
     -- Initialize mapping structures

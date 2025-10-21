@@ -12,13 +12,13 @@ function TypeOnKeyboard:Apply()
 
     StoryActionBase.GetLogger(self, story):Log(self.Description .. " on the " .. self.TargetItem.Description, self)
 
-    local time = random(4000, 12000)
-    self.Performer:setAnimation("INT_OFFICE", "OFF_Sit_Type_Loop", time, true, true, false, true)
+    local setupTime = 3000
+    self.Performer:setAnimation("INT_OFFICE", "OFF_Sit_Type_Loop", -1, true, true, true, true)
     if DEBUG then
         outputConsole("TypeOnKeyboard:Apply")
     end
 
-    OnGlobalActionFinished(time, self.Performer:getData('id'), self.Performer:getData('storyId'))
+    OnGlobalActionFinished(setupTime, self.Performer:getData('id'), self.Performer:getData('storyId'))
 end
 
 function TypeOnKeyboard:GetDynamicString()

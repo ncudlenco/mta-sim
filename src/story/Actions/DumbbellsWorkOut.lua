@@ -12,14 +12,14 @@ function DumbbellsWorkOut:Apply()
 
     StoryActionBase.GetLogger(self, story):Log(self.Description .. self.TargetItem.Description, self.Performer)
 
-    local time = random(8000, 18000)
-    self.Performer:setAnimation("freeweights", "gym_free_a", time, true, false, false, true)
+    local setupTime = 3000
+    self.Performer:setAnimation("freeweights", "gym_free_a", -1, true, false, true, true)
 
     if DEBUG then
         outputConsole("DumbbellsWorkOut:Apply")
     end
 
-    OnGlobalActionFinished(time, self.Performer:getData('id'), self.Performer:getData('storyId'))
+    OnGlobalActionFinished(setupTime, self.Performer:getData('id'), self.Performer:getData('storyId'))
 end
 
 function DumbbellsWorkOut:GetDynamicString()

@@ -13,6 +13,15 @@ function GetOff:Apply()
     table.insert(story.History[self.Performer:getData('id')], self)
     StoryActionBase.Apply(self)
 
+    -- Cleanup benchpress object if this is interrupting a benchpress workout
+    local cleanupData = self.Performer:getData('benchpress_cleanup')
+    if cleanupData then
+        detachElementFromBone(cleanupData.object)
+        setElementPosition(cleanupData.object, cleanupData.position)
+        setElementRotation(cleanupData.object, cleanupData.rotation)
+        self.Performer:setData('benchpress_cleanup', nil)
+    end
+
     -- self.TargetItem.instance:setCollisionsEnabled(false)
 
     local block = ""

@@ -46,15 +46,10 @@ function SitDown:Apply()
     elseif self.how == SitDown.eHow.onSofa then
         animationLib = "INT_HOUSE"
         animationId = "LOU_In"
-
-        -- Calculate forward vector from rotation instead of matrix
-        local rotation = self.rotation or self.Performer.rotation
-        local radians = math.rad(rotation.z)
-        local forwardX = math.sin(radians)
-        local forwardY = math.cos(radians)
-
-        -- Apply position adjustment
-        self.Performer.position = self.Performer.position - Vector3(forwardX, forwardY, 0) * 0.6
+        -- Allow rotation to settle in
+        Timer(function()
+            self.Performer.position = self.Performer.position - self.Performer.matrix.forward * 0.35
+        end, 100, 1)
         duration = 5000
     end
 
@@ -63,7 +58,7 @@ function SitDown:Apply()
         if self.Performer and isElement(self.Performer) then
             self.Performer:setAnimation(animationLib, animationId, -1, false, true, false, true)
         end
-    end, 100, 1)
+    end, 200, 1)
 
     if DEBUG then
         outputConsole("SitDown:Apply")

@@ -296,18 +296,6 @@
         "Timeframe": null,
         "Properties": {}
     },
-    "m11":{
-        "Action": "GetOff",
-        "Entities": [
-            "alice3",
-            "Bed"
-        ],
-        "Location": [
-            "bedroom"
-        ],
-        "Timeframe": null,
-        "Properties": {}
-    },
     "d7":{
         "Action": "GetOn",
         "Entities": [
@@ -322,18 +310,6 @@
     },
     "d8":{
         "Action": "Sleep",
-        "Entities": [
-            "bod3",
-            "Bed"
-        ],
-        "Location": [
-            "bedroom"
-        ],
-        "Timeframe": null,
-        "Properties": {}
-    },
-    "d9":{
-        "Action": "GetOff",
         "Entities": [
             "bod3",
             "Bed"
@@ -721,18 +697,6 @@
         "Timeframe": null,
         "Properties": {}
     },
-    "j5": {
-        "Action": "StandUp",
-        "Entities": [
-            "boj2",
-            "Sofa"
-        ],
-        "Location": [
-            "livingroom"
-        ],
-        "Timeframe": null,
-        "Properties": {}
-    },
     "n2": {
         "Action": "SitDown",
         "Entities": [
@@ -750,18 +714,6 @@
         "Entities": [
             "alice2",
             "TV"
-        ],
-        "Location": [
-            "livingroom"
-        ],
-        "Timeframe": null,
-        "Properties": {}
-    },
-    "n4": {
-        "Action": "StandUp",
-        "Entities": [
-            "alice2",
-            "Sofa"
         ],
         "Location": [
             "livingroom"
@@ -836,27 +788,19 @@
             "type":"starts_with"
          },
         "m10": {
-            "relations": null,
-            "next": "m11"
-        },
-        "m11": {
             "relations": [
-                "m11_starts_with_d9",
-                "m11_before_a1",
-                "m11_before_b1"
+                "m10_before_a1",
+                "m10_before_b1"
             ],
             "next": null
         },
-        "m11_starts_with_d9":{
-            "type":"starts_with"
-        },
-        "m11_before_a1": {
-            "source": "m11",
+        "m10_before_a1": {
+            "source": "m10",
             "type": "before",
             "target": "a1"
         },
-        "m11_before_b1": {
-            "source": "m11",
+        "m10_before_b1": {
+            "source": "m10",
             "type": "before",
             "target": "b1"
         },
@@ -900,44 +844,39 @@
             "next": "d8"
         },
         "d8": {
-            "relations": null,
-            "next": "d9"
-        },
-        "d9": {
             "relations": [
-                "m11_starts_with_d9",
-                "d9_before_b1",
-                "d9_before_a1"
+                "d8_before_a1",
+                "d8_before_b1"
             ],
             "next": null
         },
-        "d9_before_a1": {
-            "source": "d9",
+        "d8_before_a1": {
+            "source": "d8",
             "type": "before",
             "target": "a1"
         },
-        "d9_before_b1": {
-            "source": "d9",
+        "d8_before_b1": {
+            "source": "d8",
             "type": "before",
             "target": "b1"
         },
         "a1": {
             "relations": [
                 "a1_starts_with_b1",
-                "a1_after_m11",
-                "a1_after_d9"
+                "a1_after_m10",
+                "a1_after_d8"
             ],
             "next": "a2"
         },
-        "a1_after_d9": {
+        "a1_after_d8": {
             "source": "a1",
             "type": "after",
-            "target": "d9"
+            "target": "d8"
         },
-        "a1_after_m11": {
+        "a1_after_m10": {
             "source": "a1",
             "type": "after",
-            "target": "m11"
+            "target": "m10"
         },
         "a1_starts_with_b1": {
             "type": "starts_with"
@@ -1003,20 +942,20 @@
         "b1": {
             "relations": [
                 "a1_starts_with_b1",
-                "b1_after_m11",
-                "b1_after_d9"
+                "b1_after_m10",
+                "b1_after_d8"
             ],
             "next": "b2"
         },
-        "b1_after_d9": {
+        "b1_after_d8": {
             "source": "b1",
             "type": "after",
-            "target": "d9"
+            "target": "d8"
         },
-        "b1_after_m11": {
+        "b1_after_m10": {
             "source": "b1",
             "type": "after",
-            "target": "m11"
+            "target": "m10"
         },
         "b2": {
             "relations": null,
@@ -1094,16 +1033,7 @@
         },
         "n3": {
             "relations": null,
-            "next": "n4"
-        },
-        "n4": {
-            "relations": [
-                "n4_starts_with_j5"
-            ],
             "next": null
-        },
-        "n4_starts_with_j5": {
-            "type": "starts_with"
         },
         "nj0": {
             "type": "starts_with"
@@ -1142,12 +1072,6 @@
          },
         "j4": {
             "relations": null,
-            "next": "j5"
-        },
-        "j5": {
-            "relations": [
-                "n4_starts_with_j5"
-            ],
             "next": null
         }
     }

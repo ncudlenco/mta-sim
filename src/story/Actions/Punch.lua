@@ -13,7 +13,7 @@ function Punch:Apply()
 
     StoryActionBase.GetLogger(self, story):Log(self.Description .. self.TargetItem.Description, self.Performer)
 
-    local time = random(8000, 19000)
+    local setupTime = 3000
     local block = ""
     local animation = ""
 
@@ -25,13 +25,13 @@ function Punch:Apply()
         animation = "fightb_2"
     end
 
-    self.Performer:setAnimation(block, animation, time, true, false, false, true)
+    self.Performer:setAnimation(block, animation, -1, true, false, true, true)
 
     if DEBUG then
         outputConsole("Punch:Apply")
     end
 
-    OnGlobalActionFinished(time, self.Performer:getData('id'), self.Performer:getData('storyId'))
+    OnGlobalActionFinished(setupTime, self.Performer:getData('id'), self.Performer:getData('storyId'))
 end
 
 function Punch:GetDynamicString()

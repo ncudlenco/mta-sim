@@ -57,7 +57,8 @@ function EndStory:PausePerformer()
 end
 
 function EndStory:ExecuteEndAnimations()
-    self.Performer:setAnimation("cop_ambient", "coplook_loop", 0, true, false, false, true)
+    -- Simply leave them
+    -- self.Performer:setAnimation("cop_ambient", "coplook_loop", 0, true, false, false, true)
 end
 
 function EndStory:GetDynamicString()

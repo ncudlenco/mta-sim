@@ -25,6 +25,7 @@ Move = class(StoryActionBase, function(o, params)
     o.planningData = {}
     o.graphId = params.graphId
     o.how = params.how or Move.eHow.Walk
+    o.AnimationSpeed = params.AnimationSpeed or 1.0
     o.isMove = true
 end)
 
@@ -205,7 +206,7 @@ function Move.destinationReached(player, source)
                 outputConsole("Move:Apply - getting next valid action")
                 print("Move:Apply - getting next valid action")
             end
-            OnGlobalActionFinished(0, player:getData('id'), player:getData('storyId'))
+            OnGlobalActionFinished(100, player:getData('id'), player:getData('storyId'))
         end
 	end
 
@@ -447,10 +448,6 @@ function Move:FindNextShortestPath(player)
         print("[FATAL ERROR!] Move:FindNextShortestPath - The episode of the next context segment was null!")
         Timer(Move.teleport, 5000, 1, self.Performer, self)
         return
-    elseif contextSegments[1].Episode == nil then
-        print("[FATAL ERROR!] Move:FindNextShortestPath - The episode of the next context segment was null!")
-        Timer(Move.teleport, 5000, 1, self.Performer, self)
-        return
     end
     local resumePoi = self.planningData[player:getData('id')].resumePoi
     if resumePoi then
@@ -514,10 +511,16 @@ function Move:FindNextShortestPath(player)
                     local targetPosition = self.planningData[player:getData('id')].contextSegments[1].position
                     table.insert(self.planningData[player:getData('id')].path, {targetPosition.x, targetPosition.y, targetPosition.z})
                     table.remove(self.planningData[player:getData('id')].contextSegments, 1) ------ The context should only be removed when the player reaches the end of the current segment (done in destinationReached)
-                    local nextPos = self.planningData[player:getData('id')].path[1]
-                    while math.abs((player.position - Vector3(nextPos[1], nextPos[2], nextPos[3])).length) < 1.5 do
-                        table.remove(self.planningData[player:getData('id')].path, 1)
-                        nextPos = self.planningData[player:getData('id')].path[1]
+                    local path = self.planningData[player:getData('id')].path
+                    local nextPos = path[1]
+                    while #path > 0 and nextPos and math.abs((player.position - Vector3(nextPos[1], nextPos[2], nextPos[3])).length) < 1.5 do
+                        table.remove(path, 1)
+                        nextPos = path[1]
+                    end
+                    if not nextPos then
+                        print("[FATAL ERROR] Path became empty while removing close waypoints!")
+                        Timer(Move.teleport, 5000, 1, self.Performer, self)
+                        return
                     end
 
                     self.planningData[player:getData('id')].timeout = 60

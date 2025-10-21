@@ -30,13 +30,15 @@ function SitDown:Apply()
         self.TargetItem.instance:setCollisionsEnabled(false)
     end
 
-    if not (self.rotation == nil) then
+    -- Set rotation first (if provided)
+    if self.rotation then
         self.Performer.rotation = self.rotation
     end
 
     local animationLib = "INT_OFFICE"
     local animationId = "OFF_Sit_In"
-    local duration = 5000
+    local duration = 4000
+
     if self.how == SitDown.eHow.atDesk then
         animationLib = "INT_OFFICE"
         animationId = "OFF_Sit_In"
@@ -44,14 +46,24 @@ function SitDown:Apply()
     elseif self.how == SitDown.eHow.onSofa then
         animationLib = "INT_HOUSE"
         animationId = "LOU_In"
-        self.Performer.position = self.Performer.matrix.position - self.Performer.matrix.forward * 0.6
+
+        -- Calculate forward vector from rotation instead of matrix
+        local rotation = self.rotation or self.Performer.rotation
+        local radians = math.rad(rotation.z)
+        local forwardX = math.sin(radians)
+        local forwardY = math.cos(radians)
+
+        -- Apply position adjustment
+        self.Performer.position = self.Performer.position - Vector3(forwardX, forwardY, 0) * 0.6
         duration = 5000
     end
 
-    -- Delay the animation to allow the ped position and rotation to be set
+    -- Delay animation to allow position/rotation to be applied (reduced from 1000ms to 100ms)
     Timer(function()
-        self.Performer:setAnimation(animationLib, animationId, -1, false, true, false, true)
-    end, 1000, 1)
+        if self.Performer and isElement(self.Performer) then
+            self.Performer:setAnimation(animationLib, animationId, -1, false, true, false, true)
+        end
+    end, 100, 1)
 
     if DEBUG then
         outputConsole("SitDown:Apply")

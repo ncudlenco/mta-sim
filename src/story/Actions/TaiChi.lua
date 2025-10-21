@@ -13,15 +13,20 @@ function TaiChi:Apply()
     StoryActionBase.GetLogger(self, story):Log(self.Description, self)
     self.Performer:setAnimation("PARK", "Tai_Chi_in", 3000, true, true, false, true)
 
-    time = random(8000, 15000)
+    local loopTime = random(8000, 15000)
 
-    self.Performer:setAnimation("PARK", "Tai_Chi_Loop", -1, true, true, false, true)
+    -- Delay second animation until first completes
+    Timer(function()
+        if self.Performer and isElement(self.Performer) then
+            self.Performer:setAnimation("PARK", "Tai_Chi_Loop", -1, true, true, false, true)
+        end
+    end, 3000, 1)
 
     if DEBUG then
         outputConsole("TaiChi:Apply")
     end
 
-    OnGlobalActionFinished(3000 + time, self.Performer:getData('id'), self.Performer:getData('storyId'))
+    OnGlobalActionFinished(3000 + loopTime, self.Performer:getData('id'), self.Performer:getData('storyId'))
 end
 
 function TaiChi:GetDynamicString()

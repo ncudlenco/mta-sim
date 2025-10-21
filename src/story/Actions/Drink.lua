@@ -11,7 +11,7 @@ function Drink:Apply()
 
     StoryActionBase.GetLogger(self, story):Log(self.Description, self, false, true, {"finishes", "finishes drinking"})
 
-    time = random(2000, 6000)
+    local time = random(2000, 6000)
     setPedAnimation(self.Performer, "VENDING", "VEND_Drink2_P", time, true, true, false, true)
 
     if DEBUG then

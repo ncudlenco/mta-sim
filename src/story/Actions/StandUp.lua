@@ -43,7 +43,12 @@ function StandUp:Apply()
         duration = 3000
     end
 
-    self.Performer:setAnimation(animationLib, animationId, duration, false, true, false, true)
+    -- Delay animation to allow rotation to be applied
+    Timer(function()
+        if self.Performer and isElement(self.Performer) then
+            self.Performer:setAnimation(animationLib, animationId, duration, false, true, false, true)
+        end
+    end, 100, 1)
     if DEBUG then
         outputConsole("StandUp:Apply")
     end

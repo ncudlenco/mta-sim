@@ -12,7 +12,7 @@ function LayOnElbow:Apply()
 
     StoryActionBase.GetLogger(self, story):Log(self.Description  .. (self.Performer:getData('genderGenitive') or ' the') ..  " head on the elbow", self)
 
-    time = random(3000, 8000)
+    local time = random(3000, 8000)
     self.Performer:setAnimation("INT_OFFICE", "OFF_Sit_Bored_Loop", time, true, true, false, true)
 
     if DEBUG then

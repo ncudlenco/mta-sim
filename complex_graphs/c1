@@ -142,7 +142,7 @@
     "a3": {
         "Action": "Eat",
         "Entities": [
-            "bob",
+            "alice",
             "food_obj2"
         ],
         "Location": [
@@ -253,8 +253,13 @@
             "bob": "b1"
         },
         "a1": {
-            "relations": null,
+            "relations": [
+                "a1_starts_with_b1"
+            ],
             "next": "a2"
+        },
+        "a1_starts_with_b1": {
+            "type": "starts_with"
         },
         "a2": {
             "relations": null,
@@ -265,18 +270,34 @@
             "next": "a4"
         },
         "a4": {
-            "relations": null,
+            "relations": [
+                "a4_starts_with_b4"
+            ],
             "next": "a5"
+        },
+        "a4_starts_with_b4": {
+            "type": "starts_with"
         },
         "a5": {
             "relations": null,
             "next": "a6"
         },
+        "a7_after_b7": {
+            "source": "a7",
+            "type": "after",
+            "target": "b7"
+        },
         "a6": {
             "relations": [
-                "tm0"
+                "tm0",
+                "a6_before_b7"
             ],
             "next": "a7"
+        },
+        "a6_before_b7": {
+            "source": "a6",
+            "type": "before",
+            "target": "b7"
         },
         "a7": {
             "relations": null,
@@ -286,7 +307,9 @@
             "type": "starts_with"
         },
         "b1": {
-            "relations": null,
+            "relations": [
+                "a1_starts_with_b1"
+            ],
             "next": "b2"
         },
         "b2": {
@@ -298,12 +321,24 @@
             "next": "b4"
         },
         "b4": {
-            "relations": null,
+            "relations": [
+                "a4_starts_with_b4"
+            ],
             "next": "b5"
         },
         "b5": {
             "relations": null,
             "next": "b6"
+        },
+        "b7_before_a6": {
+            "source": "b7",
+            "type": "after",
+            "target": "a6"
+        },
+        "b7_before_a7": {
+            "source": "b7",
+            "type": "before",
+            "target": "a7"
         },
         "b6": {
             "relations": [
@@ -312,7 +347,9 @@
             "next": "b7"
         },
         "b7": {
-            "relations": null,
+            "relations": [
+                "b7_before_a6"
+            ],
             "next": null
         }
     }

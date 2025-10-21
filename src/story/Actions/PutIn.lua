@@ -26,5 +26,5 @@ function PutIn:Apply()
 end
 
 function PutIn:GetDynamicString()
-    return 'return PutIn{where = "'..self.Where..'", how = '..self.how..'}'
+    return 'return PutIn{where = "'..self.Where..'"}'
 end

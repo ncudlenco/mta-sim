@@ -18,6 +18,7 @@ function GetOff:Apply()
     local block = ""
     local animation = ""
     local updatePedPosition = true
+    local time = 0
 
     if self.how == GetOff.eHow.Bed then
         time = 2800
@@ -47,7 +48,13 @@ function GetOff:Apply()
     end
 
     StoryActionBase.GetLogger(self, story):Log(self.Description .. self.TargetItem.Description, self)
-    self.Performer:setAnimation(block, animation, time, false, updatePedPosition, false, true)
+
+    -- Delay animation to allow rotation to be applied
+    Timer(function()
+        if self.Performer and isElement(self.Performer) then
+            self.Performer:setAnimation(block, animation, time, false, updatePedPosition, false, true)
+        end
+    end, 100, 1)
 
     if DEBUG then
         outputConsole("GetOff:Apply")

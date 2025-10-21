@@ -30,11 +30,30 @@ OpenDoor.eHow = {
     Exit = 2
 }
 
-function OpenDoor.destinationReached(player, matchingDimension)
+function OpenDoor.destinationReached(source)
+    if not source or not isElement(source) then
+        print("[OpenDoor] WARNING: Invalid source in destinationReached")
+        return
+    end
+
     local playerId = source:getData("id")
     local storyId = source:getData("storyId")
     local story = CURRENT_STORY
     local lastAction = story.History[playerId][#story.History[playerId]]
+
+    -- Find the actual player element
+    local player = nil
+    for _, ped in ipairs(story.CurrentEpisode.peds) do
+        if ped:getData('id') == playerId then
+            player = ped
+            break
+        end
+    end
+
+    if not player then
+        print("[OpenDoor] ERROR: Could not find player " .. playerId)
+        return
+    end
 
 	if lastAction.path and DEBUG then
 		outputConsole("Player "..player:getData('name').." reached marker "..source:getData("idx").." / "..#lastAction.path)

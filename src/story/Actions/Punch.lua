@@ -13,7 +13,9 @@ function Punch:Apply()
 
     StoryActionBase.GetLogger(self, story):Log(self.Description .. self.TargetItem.Description, self.Performer)
 
-    time = random(8000, 19000)
+    local time = random(8000, 19000)
+    local block = ""
+    local animation = ""
 
     if self.how == Punch.eHow.Punch1 then
         block = "fight_b"

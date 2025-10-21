@@ -187,7 +187,9 @@ function GraphStory:Play()
                         -- Build frameContext for each spectator
                         local anyCollectionTriggered = false
                         for _, spectator in ipairs(self.Spectators) do
-                            print('Triggering collection for spectator '..spectator:getData('id')..' frame '..frameId..' fadedCamera '..tostring(spectator:getData('fadedCamera')))
+                            if DEBUG_SCREENSHOTS then
+                                print('Triggering collection for spectator '..spectator:getData('id')..' frame '..frameId..' fadedCamera '..tostring(spectator:getData('fadedCamera')))
+                            end
                             if spectator:getData('fadedCamera') then
                                 if DEBUG_SCREENSHOTS then
                                     print("[GraphStory] The camera was faded, continue with the collection")

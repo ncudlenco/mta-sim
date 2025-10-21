@@ -12,14 +12,14 @@ function LayOnElbow:Apply()
 
     StoryActionBase.GetLogger(self, story):Log(self.Description  .. (self.Performer:getData('genderGenitive') or ' the') ..  " head on the elbow", self)
 
-    local time = random(3000, 8000)
-    self.Performer:setAnimation("INT_OFFICE", "OFF_Sit_Bored_Loop", time, true, true, false, true)
+    local setupTime = 3000
+    self.Performer:setAnimation("INT_OFFICE", "OFF_Sit_Bored_Loop", -1, true, true, true, true)
 
     if DEBUG then
         outputConsole("LayOnElbow:Apply")
     end
 
-    OnGlobalActionFinished(time, self.Performer:getData('id'), self.Performer:getData('storyId'))
+    OnGlobalActionFinished(setupTime, self.Performer:getData('id'), self.Performer:getData('storyId'))
 end
 
 function LayOnElbow:GetDynamicString()

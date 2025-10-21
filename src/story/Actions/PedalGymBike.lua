@@ -25,14 +25,14 @@ function PedalGymBike:Apply()
 
     StoryActionBase.GetLogger(self, story):Log(self.Description, self)
 
-    local time = random(8000, 21000)
-    self.Performer:setAnimation("GYMNASIUM", self.how, time, true, false, false, true)
+    local setupTime = 3000
+    self.Performer:setAnimation("GYMNASIUM", self.how, -1, true, false, true, true)
 
     if DEBUG then
         outputConsole("PedalGymBike:Apply")
     end
 
-    OnGlobalActionFinished(time, self.Performer:getData('id'), self.Performer:getData('storyId'))
+    OnGlobalActionFinished(setupTime, self.Performer:getData('id'), self.Performer:getData('storyId'))
 end
 
 function PedalGymBike:GetDynamicString()

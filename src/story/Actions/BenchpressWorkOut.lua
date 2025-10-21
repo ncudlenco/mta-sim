@@ -10,7 +10,7 @@ function BenchpressWorkOut:Apply()
     table.insert(story.History[self.Performer:getData('id')], self)
     StoryActionBase.Apply(self)
 
-    local time = random(7000, 18000)
+    local setupTime = 3000
 
     local initialPosition = self.TargetItem.position
     local initialRotation = self.TargetItem.rotation
@@ -21,17 +21,20 @@ function BenchpressWorkOut:Apply()
 
     StoryActionBase.GetLogger(self, story):Log(self.Description .. self.TargetItem.Description, self.Performer)
 
-    self.Performer:setAnimation("benchpress", self.how, time, true, false, false, true)
+    self.Performer:setAnimation("benchpress", self.how, -1, true, false, true, true)
+
+    -- Store cleanup data for when action is interrupted by GetOff
+    self.Performer:setData('benchpress_cleanup', {
+        object = self.TargetItem.instance,
+        position = initialPosition,
+        rotation = initialRotation
+    })
 
     if DEBUG then
         outputConsole("BenchpressWorkOut:Apply")
     end
 
-    OnGlobalActionFinished(time, self.Performer:getData('id'), self.Performer:getData('storyId'), function()
-        detachElementFromBone(self.TargetItem.instance)
-        setElementPosition(self.TargetItem.instance, initialPosition)
-        setElementRotation(self.TargetItem.instance, initialRotation)
-    end)
+    OnGlobalActionFinished(setupTime, self.Performer:getData('id'), self.Performer:getData('storyId'))
 end
 
 function BenchpressWorkOut:GetDynamicString()

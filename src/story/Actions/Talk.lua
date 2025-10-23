@@ -20,7 +20,6 @@ function Talk:Apply()
         p1.rotation = Vector3(0,0,p1.rotation.z + math.deg(angle))
     end
 
-    self.TargetPlayer.position = self.Performer.position + Vector3(-0.5,-0.5,0)
 
     faceP1ToP2(self.Performer, self.TargetPlayer)
     faceP1ToP2(self.TargetPlayer, self.Performer)

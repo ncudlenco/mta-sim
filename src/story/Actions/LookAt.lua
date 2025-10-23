@@ -127,13 +127,16 @@ function LookAt:Apply()
     local isSeated = isInSeatedOrLyingState(self.Performer, story)
 
     if DEBUG then
-        outputConsole("LookAt:Apply - isSeated: " .. tostring(isSeated))
+        print("LookAt:Apply - isSeated: " .. tostring(isSeated))
     end
 
     -- Only rotate the ped if they are standing (not seated/lying)
     if targetPosition and not isSeated then
         if DEBUG then
-            outputConsole("LookAt:Apply - Starting continuous rotation towards target")
+            local performerId = self.Performer:getData('id') or 'unknown'
+            local targetId = (isElement(self.Target) and self.Target:getData('id')) or 'coordinates'
+            print("LookAt:Apply - Starting continuous rotation towards target. "..
+                  "performer=" .. tostring(performerId) .. ", target=" .. tostring(targetId))
         end
 
         -- Start continuous looking with body rotation and head tracking
@@ -150,7 +153,7 @@ function LookAt:Apply()
 
     elseif isSeated and targetPosition then
         if DEBUG then
-            outputConsole("LookAt:Apply - Ped is seated, preserving sitting state (body rotation disabled, head look only)")
+            print("LookAt:Apply - Ped is seated, preserving sitting state (body rotation disabled, head look only)")
         end
 
         -- Start continuous looking with head tracking only (no body rotation)
@@ -167,7 +170,7 @@ function LookAt:Apply()
     end
 
     if DEBUG then
-        outputConsole("LookAt:Apply")
+        print("LookAt:Apply")
     end
 
     -- Timer cleanup is handled automatically when currentAction changes

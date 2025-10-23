@@ -19,7 +19,7 @@
 using namespace Gdiplus;
 
 // Debug control flag - can be controlled from Lua
-bool ENABLE_SCREENSHOT_MODULE_DEBUG = true;
+bool ENABLE_SCREENSHOT_MODULE_DEBUG = false;
 
 // Feature flags
 bool USE_DESKTOP_DUPLICATION = true;  // Desktop Duplication API (fast, video support)

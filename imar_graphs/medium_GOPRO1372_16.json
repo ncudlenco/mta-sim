@@ -190,6 +190,13 @@
         "Timeframe": null,
         "Properties": {}
     },
+    "i5": {
+        "Action": "LookAt",
+        "Entities": ["alice2", "laptop"],
+        "Location": ["classroom"],
+        "Timeframe": null,
+        "Properties": {}
+    },
     "spatial": {
         "officeChair": {
             "relations": [
@@ -280,6 +287,10 @@
             "next": "i4"
         },
         "i4": {
+            "relations": null,
+            "next": "i5"
+        },
+        "i5": {
             "relations": null,
             "next": null
         }

@@ -328,6 +328,74 @@ function InstantiateAction(event, player, location, target)
     return nil
 end
 
+--- Filter location candidates by spatial constraints
+--- Validates each candidate's object position against materialized objects
+---
+--- @param candidates table Array of POI candidates to filter
+--- @param event table The event being processed
+--- @param materializedObjects table Map of materialized objects with positions
+--- @return table Filtered array of candidates that satisfy spatial constraints
+function Location:FilterCandidatesBySpatialConstraints(candidates, event, materializedObjects)
+    -- Only apply spatial filtering for non-interaction events with objects
+    if #event.Entities < 2 or event.isInteraction then
+        return candidates
+    end
+
+    local eventObjectId = event.Entities[2]
+    local spatialConstraints = CURRENT_STORY.SpatialCoordinator:GetSpatialConstraints(eventObjectId)
+
+    -- No constraints means all candidates are valid
+    if not spatialConstraints or #spatialConstraints == 0 then
+        return candidates
+    end
+
+    if DEBUG then
+        print("[Location] Filtering " .. #candidates .. " candidates by spatial constraints for object " .. eventObjectId)
+    end
+
+    local filteredCandidates = Where(candidates, function(candidatePoi)
+        -- Get the object ID for this candidate
+        local candidateObjectId = self:GetMappedEventObjectId(eventObjectId, candidatePoi:getData("mappedChainId_"..event.id))
+
+        if candidateObjectId == 'spawnable' then
+            -- Spawnable objects don't have fixed positions, skip spatial validation
+            return true
+        end
+
+        -- Find the object in the episode
+        local candidateObject = FirstOrDefault(CURRENT_STORY.CurrentEpisode.Objects, function(o)
+            return o.ObjectId == candidateObjectId
+        end)
+
+        if not candidateObject or not candidateObject.position then
+            if DEBUG then
+                print("[Location] No object found for " .. eventObjectId .. " at POI " .. candidatePoi.Description)
+            end
+            return false
+        end
+
+        -- Validate spatial constraints
+        local isValid, reason = CURRENT_STORY.SpatialCoordinator:ValidateAllConstraints(
+            eventObjectId,
+            candidateObject.position,
+            candidateObject.rotation,
+            materializedObjects
+        )
+
+        if not isValid and DEBUG then
+            print("[Location] POI " .. candidatePoi.Description .. " rejected: " .. reason)
+        end
+
+        return isValid
+    end)
+
+    if DEBUG then
+        print("[Location] After spatial filtering: " .. #filteredCandidates .. " / " .. #candidates .. " candidates remain")
+    end
+
+    return filteredCandidates
+end
+
 -- Helper function to create a location clone for interaction actors
 function Location:CreateInteractionClone(originalLocation, offset)
     offset = offset or 0.7
@@ -845,6 +913,10 @@ function Location:ProcessNextAction(player)
                 print('Candidate location '..poi.Description..' is busy '..isBusyStr)
             end
         end
+
+        -- Apply spatial constraint validation
+        candidates = self:FilterCandidatesBySpatialConstraints(candidates, nextEvent, CURRENT_STORY.materializedObjects)
+
         -- if Any(CURRENT_STORY.CurrentEpisode.peds, function(p) return p:getData('waitingFor') == nextLocation.LocationId end) then
         --     --Move randomly if someone else is waiting on my location to be vacated but I am occupying it with my waiting around...
         --     local randomMove = PickRandom(Where(self.NextLocation.PossibleActions, function(a) return a.Name == 'Move' and not a.NextLocation.isBusy end))
@@ -936,6 +1008,35 @@ function Location:ProcessNextAction(player)
                 print("Player " .. player:getData('id') .. " already has chain ID: " .. currentChainId)
             elseif DEBUG then
                 print("No chain ID found for location " .. nextLocation.Description .. " and event " .. nextEvent.id)
+            end
+
+            -- Track object materialization for spatial constraint enforcement
+            if #nextEvent.Entities > 1 and not nextEvent.isInteraction then
+                local eventObjectId = nextEvent.Entities[2]
+                local chainId = nextLocation:getData("mappedChainId_"..nextEvent.id)
+
+                -- Get the actual object instance
+                local objectId = self:GetMappedEventObjectId(eventObjectId, chainId)
+
+                if objectId and objectId ~= 'spawnable' then
+                    local objectInstance = FirstOrDefault(CURRENT_STORY.CurrentEpisode.Objects, function(o)
+                        return o.ObjectId == objectId
+                    end)
+
+                    if objectInstance and objectInstance.position then
+                        -- Record this object as materialized
+                        -- Element reference (if available) for accurate radius calculation
+                        local element = objectInstance.element or nil
+                        CURRENT_STORY.SpatialCoordinator:MaterializeObject(
+                            eventObjectId,
+                            objectInstance.position,
+                            objectInstance.rotation or {x=0, y=0, z=0},
+                            chainId or "unknown",
+                            player:getData('id'),
+                            element
+                        )
+                    end
+                end
             end
         end
     elseif #event.Location > 1 then

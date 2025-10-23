@@ -9,6 +9,7 @@ StoryBase = class(function(o, spectators, maxActions)
     o.PausedActions = {}
     o.CameraHandler = CameraHandler()
     o.ActionsOrchestrator = ActionsOrchestrator()
+    o.SpatialCoordinator = SpatialCoordinator()
 end)
 
 function StoryBase:Play()

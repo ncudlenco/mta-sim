@@ -544,6 +544,18 @@
         "Timeframe": null,
         "Properties": {}
     },
+    "a6.1": {
+        "Action": "LookAtObject",
+        "Entities": [
+            "alice",
+            "bob"
+        ],
+        "Location": [
+            "porch"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
     "a7": {
         "Action": "Move",
         "Entities": [
@@ -912,6 +924,10 @@
                 "tm0",
                 "a6_before_b7"
             ],
+            "next": "a6.1"
+        },
+        "a6.1": {
+            "relations": null,
             "next": "a7"
         },
         "a6_before_b7": {

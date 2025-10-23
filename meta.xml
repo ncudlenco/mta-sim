@@ -42,6 +42,7 @@
   <script src="src/utils/enum.lua" type="shared"/>
   <script src="src/utils/Extent3.lua" type="shared"/>
   <script src="src/utils/guid.lua" type="shared"/>
+  <script src="src/utils/LookingBehavior.lua" type="shared"/>
   <script src="src/utils/bone_attach.lua" />
 	<script src="src/utils/bone_attach_c.lua" type="client" />
 	<script src="src/utils/attach_func.lua" />
@@ -126,7 +127,7 @@
   <script src="src/story/Actions/SitDown.lua" type="shared" />
   <script src="src/story/Actions/StandUp.lua" type="shared" />
   <script src="src/story/Actions/WashHands.lua" type="shared" />
-  <script src="src/story/Actions/LookAtObject.lua" type="shared" />
+  <script src="src/story/Actions/LookAt.lua" type="shared" />
   <script src="src/story/Actions/OpenLaptop.lua" type="shared" />
   <script src="src/story/Actions/CloseLaptop.lua" type="shared" />
   <script src="src/story/Actions/LayOnElbow.lua" type="shared" />
@@ -140,6 +141,7 @@
   <script src="src/story/Actions/Wait.lua" type="shared" />
   <script src="src/story/Actions/PutDown.lua" type="shared" />
   <script src="src/story/Actions/TalkPhone.lua" type="shared" />
+  <script src="src/story/Actions/TakeOut.lua" type="shared" />
   <script src="src/story/Actions/TurnOn.lua" type="shared" />
   <script src="src/story/Actions/TurnOff.lua" type="shared" />
   <script src="src/story/Actions/Dance.lua" type="shared" />
@@ -148,6 +150,7 @@
   <script src="src/story/Actions/Read.lua" type="shared" />
   <script src="src/story/Actions/Smoke.lua" type="shared" />
   <script src="src/story/Actions/SmokeIn.lua" type="shared" />
+  <script src="src/story/Actions/Stash.lua" type="shared" />
   <script src="src/story/Actions/SmokeOut.lua" type="shared" />
   <script src="src/story/Actions/TaiChi.lua" type="shared" />
   <script src="src/story/Actions/BenchpressWorkOut.lua" type="shared" />

@@ -28,6 +28,7 @@ function StandUp:Apply()
     if self.TargetItem.instance then
         self.TargetItem.instance:setCollisionsEnabled(false)
     end
+
     local animationLib = "INT_OFFICE"
     local animationId = "OFF_Sit_2Idle_180"
     local duration = 5000
@@ -36,6 +37,8 @@ function StandUp:Apply()
         animationLib = "INT_OFFICE"
         animationId = "OFF_Sit_2Idle_180"
         duration = 5000
+        -- Re-enable collisions between this actor and all other peds when standing up
+        triggerClientEvent("onEnablePedToPedCollisions", getRootElement(), self.Performer)
     elseif self.how == StandUp.eHow.fromSofa then
         animationLib = "INT_HOUSE"
         animationId = "LOU_Out"
@@ -56,7 +59,7 @@ function StandUp:Apply()
     Timer(function()
         self.Performer.rotation = self.NextLocation.rotation
     end, duration + 200, 1)
-    OnGlobalActionFinished(duration + 300, self.Performer:getData('id'), self.Performer:getData('storyId'))
+    OnGlobalActionFinished(duration + 400, self.Performer:getData('id'), self.Performer:getData('storyId'))
 end
 
 function StandUp:GetDynamicString()

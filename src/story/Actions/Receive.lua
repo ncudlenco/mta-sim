@@ -36,7 +36,7 @@ function Receive:Apply()
     self.TargetPlayer:setAnimation("gangs", "hndshkfa_swt", time, true, false, false, false)
 
     if DEBUG then
-        outputConsole("Give:Apply")
+        outputConsole("Receive:Apply")
     end
 
     local pickedUpObjectId = self.TargetPlayer:getData('pickedObjects')[1][1]

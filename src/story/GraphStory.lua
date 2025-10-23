@@ -25,21 +25,22 @@ GraphStory = class(StoryBase, function(o, spectators, logData, artifactCollectio
         -- House12()
     }
     o.DynamicEpisodes = {
-      "house1_sweet",
-      "house1_stripped",
-    --   "house3_preloaded", --NOT WORKING! The pathfinding seems flawed here, when we have 2 levels?
-    --   "house7", --NOT WORKING! Potential issue when the link POI is located outside a region
-      "house8_preloaded",
-      "house9",
-    --   "house10_preloaded", -- Not Working!
-      "house12_preloaded", -- Working but needs the objects removed. Some flakiness exists but in general it works...
-      "garden",
-      "office",
-      "office2",
-      "common",
-      "gym1",
-      "gym2",
-      "gym3"
+        "classroom1"
+    --   "house1_sweet",
+    --   "house1_stripped",
+    -- --   "house3_preloaded", --NOT WORKING! The pathfinding seems flawed here, when we have 2 levels?
+    -- --   "house7", --NOT WORKING! Potential issue when the link POI is located outside a region
+    --   "house8_preloaded",
+    --   "house9",
+    -- --   "house10_preloaded", -- Not Working!
+    --   "house12_preloaded", -- Working but needs the objects removed. Some flakiness exists but in general it works...
+    --   "garden",
+    --   "office",
+    --   "office2",
+    --   "common",
+    --   "gym1",
+    --   "gym2",
+    --   "gym3"
     }
     o.Disposed = false
     o.SpawnableObjects = {
@@ -484,7 +485,7 @@ function GraphStory:ValidateEpisode(
                         if DEBUG_ACTION_VALIDATION then
                             print('**********'..a.Name)
                             if a.TargetItem and a.TargetItem.ObjectId then
-                                print('**********->'..a.TargetItem.ObjectId)
+                                print('**********->'..a.TargetItem.ObjectId..'('..tostring(a.TargetItem.dynamicString)..')')
                             elseif a.TargetItem and a.TargetItem.Region then
                                 print('**********->'..a.TargetItem.Region.name)
                             end
@@ -913,6 +914,9 @@ function GraphStory:FindAllValidActionsAndPois(episode, ro, eventsWithObjectAsTa
 
                     --if multiple possible next actions, choose the first one that matches the next event
                     currentAction = FirstOrDefault(nextActions, function(action)
+                        if DEBUG_VALIDATION then
+                            print("Next action candidate "..action.Name)
+                        end
                         return self:MatchEventAndAction(action, nextEvent, poi, actionMap, eventMap, objectMap, eventObjectMap, poiMap)
                     end)
                     if not currentAction then

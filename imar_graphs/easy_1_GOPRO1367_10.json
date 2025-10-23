@@ -1,0 +1,157 @@
+{
+    "food_obj": {
+        "Action": "Exists",
+        "Entities": ["food_obj"],
+        "Location": ["classroom"],
+        "Timeframe": null,
+        "Properties": {"Type": "Food"}
+    },
+    "drink_obj": {
+        "Action": "Exists",
+        "Entities": ["drink_obj"],
+        "Location": ["classroom"],
+        "Timeframe": null,
+        "Properties": {"Type": "Drinks"}
+    },
+    "Desk": {
+        "Action": "Exists",
+        "Entities": [
+            "Desk"
+        ],
+        "Location": [
+            "classroom"
+        ],
+        "Timeframe": null,
+        "Properties": {
+            "Type": "Desk"
+        }
+    },
+    "foodChair": {
+        "Action": "Exists",
+        "Entities": [
+            "foodChair"
+        ],
+        "Location": [
+            "classroom"
+        ],
+        "Timeframe": null,
+        "Properties": {
+            "Type": "Chair"
+        }
+    },
+    "bob": {
+        "Action": "Exists",
+        "Entities": [
+            "bob"
+        ],
+        "Location": [
+            "classroom"
+        ],
+        "Timeframe": null,
+        "Properties": {
+            "Gender": 1,
+            "Name": "Bob"
+        }
+    },
+    "m1":{
+        "Action": "SitDown",
+        "Entities": [
+            "bob",
+            "foodChair"
+        ],
+        "Location": [
+            "classroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "m2":{
+        "Action": "PickUp",
+        "Entities": [
+            "bob",
+            "food_obj"
+        ],
+        "Location": [
+            "classroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "m3":{
+        "Action": "Eat",
+        "Entities": [
+            "bob",
+            "food_obj"
+        ],
+        "Location": [
+            "classroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "m4":{
+        "Action": "StandUp",
+        "Entities": [
+            "bob",
+            "foodChair"
+        ],
+        "Location": [
+            "classroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "m4.1":{
+        "Action": "PickUp",
+        "Entities": [
+            "bob",
+            "drink_obj"
+        ],
+        "Location": [
+            "classroom"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "m5":{
+        "Action": "Move",
+        "Entities": [
+            "bob"
+        ],
+        "Location": [
+            "classroom",
+            "hallway"
+        ],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "temporal": {
+        "starting_actions": {
+            "bob": "m1"
+        },
+        "m1": {
+            "relations": null,
+            "next": "m2"
+        },
+        "m2": {
+            "relations": null,
+            "next": "m3"
+        },
+        "m3": {
+            "relations": null,
+            "next": "m4"
+        },
+        "m4": {
+            "relations": null,
+            "next": "m4.1"
+        },
+        "m4.1": {
+            "relations": null,
+            "next": "m5"
+        },
+        "m5": {
+            "relations": null,
+            "next": null
+        }
+    }
+}

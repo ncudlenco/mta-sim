@@ -561,12 +561,21 @@ function StoryEpisodeBase:LoadFromFile()
             math.random(); math.random(); math.random()
 
             for _, s in ipairs(episode.supertemplates) do
-                local idx = math.random(#s.templates)
-                if not s.offsets[idx].skip then
-                    local template = Template.Load(s.name, s.templates[idx])
+                -- Filter out skipped templates
+                local availableIndices = {}
+                for idx, offset in ipairs(s.offsets) do
+                    if not offset.skip then
+                        table.insert(availableIndices, idx)
+                    end
+                end
+
+                -- Randomly select from available templates
+                if #availableIndices > 0 then
+                    local selectedIdx = availableIndices[math.random(#availableIndices)]
+                    local template = Template.Load(s.name, s.templates[selectedIdx])
                     template:Instantiate(episode.InteriorId, Vector3(s.position.x, s.position.y, s.position.z))
                     s.instantiatedTemplate = template
-                    local offsets = s.offsets[idx]
+                    local offsets = s.offsets[selectedIdx]
                     template:UpdatePosition(Vector3(offsets.offset.x, offsets.offset.y, offsets.offset.z))
                     template:UpdatePosition(nil, Vector3(offsets.rotationOffset.x, offsets.rotationOffset.y, offsets.rotationOffset.z), Vector3(s.position.x, s.position.y, s.position.z), true)
                     -- The check is needed when defining episodes because otherwise all the objects inserted from the supertemplate will also be saved, resulting in overlaping objects when loading.

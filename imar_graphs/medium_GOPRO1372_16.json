@@ -162,6 +162,7 @@
         "Timeframe": null,
         "Properties": {}
     },
+
     "i3": {
         "Action": "Talk",
         "Entities": ["alice2", "alice3"],
@@ -175,6 +176,28 @@
         "Location": ["classroom"],
         "Timeframe": null,
         "Properties": {}
+    },
+    "spatial": {
+        "officeChair": {
+            "relations": [
+                {
+                    "type": "behind",
+                    "target": "Desk"
+                }
+            ]
+        },
+        "officeChair2": {
+            "relations": [
+                {
+                    "type": "behind",
+                    "target": "Desk"
+                },
+                {
+                    "type": "near",
+                    "target": "officeChair"
+                }
+            ]
+        }
     },
     "temporal": {
         "starting_actions": {
@@ -190,8 +213,13 @@
             "type": "before",
             "target": "i2"
         },
+        "m1.1_after_i2": {
+            "source": "m1.1",
+            "type": "after",
+            "target": "i2"
+        },
         "m1.1": {
-            "relations": null,
+            "relations": ["m1.1_after_i2"],
             "next": "m1.2"
         },
         "m1.2": {

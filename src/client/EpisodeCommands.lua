@@ -156,14 +156,52 @@ local function text_render ( )
         end
     end
     if episode.supertemplates then
-        for _,s in ipairs(episode.supertemplates) do
+        for i,s in ipairs(episode.supertemplates) do
             if s.position then
                 local sx, sy, _ = getScreenFromWorldPosition ( s.position.x, s.position.y, s.position.z )
                 if sx then
                     local sw, sh = guiGetScreenSize ( )
-                    dxDrawText ( 'supertemplate '..s.name.."\n", sx, sy, sw, sh, tocolor ( 183, 44, 174, 255 ), 1.0, "default-bold" )
+                    local color = tocolor ( 183, 44, 174, 255 ) -- Default magenta
+                    local text = 'supertemplate '..s.name.."\n"
+
+                    -- Show selection status if in group selection mode
+                    if groupSelectionMode and selectedSupertemplates[i] then
+                        color = tocolor ( 255, 165, 0, 255 ) -- Orange for selected
+                        text = text .. "[SELECTED]\n"
+                    end
+
+                    dxDrawText ( text, sx, sy, sw, sh, color, 1.0, "default-bold" )
                 end
             end
+        end
+    end
+
+    -- Show group selection info
+    if groupSelectionMode then
+        local sw, sh = guiGetScreenSize ()
+        local count = 0
+        for _ in pairs(selectedSupertemplates) do
+            count = count + 1
+        end
+
+        local modeText = "GROUP SELECTION MODE"
+        if groupSelectionMode == "selecting" then
+            modeText = modeText .. " - Walk near supertemplates and press 'p' to toggle\nPress 'f' to finalize, 'n' to cancel\nSelected: "..count
+        elseif groupSelectionMode == "selecting_duplicate" then
+            modeText = "DUPLICATE GROUP MODE - Walk near supertemplates and press 'p' to toggle\nPress 'f' to finalize and click to place, 'n' to cancel\nSelected: "..count
+        elseif groupSelectionMode == "moving" then
+            modeText = modeText .. " - Moving " .. count .. " supertemplates\nw/a/s/d/z/x = translate | q/e/h/j/f/g = rotate\nEnter = confirm | n = cancel"
+        end
+
+        dxDrawText ( modeText, sw * 0.3, sh * 0.05, sw * 0.7, sh * 0.15, tocolor ( 255, 165, 0, 255 ), 1.2, "default-bold", "center" )
+    end
+
+    -- Show pivot point
+    if groupPivotPoint then
+        local sx, sy, _ = getScreenFromWorldPosition ( groupPivotPoint.x, groupPivotPoint.y, groupPivotPoint.z )
+        if sx then
+            local sw, sh = guiGetScreenSize ( )
+            dxDrawText ( "PIVOT", sx, sy, sw, sh, tocolor ( 255, 255, 0, 255 ), 1.5, "default-bold" )
         end
     end
 end
@@ -207,8 +245,645 @@ local shiftPressed = false
 local setCamera = false
 local moveTarget = false
 local isTemplate = false
+
+-- Group selection state for supertemplate operations
+local selectedSupertemplates = {} -- { index = true/false }
+local groupSelectionMode = nil -- "selecting" | "moving"
+local groupPivotPoint = nil -- Vector3 rotation center
+local groupSelectionMarkers = {} -- Temporary visual markers
+local originalSupertemplatePositions = {} -- For cancel restoration
+
+--- Find the nearest supertemplate to a position within a maximum distance
+-- @param position Vector3 The position to search from
+-- @param maxDistance number Maximum search distance (default: 2.0)
+-- @return number|nil Index of nearest supertemplate, or nil if none found
+local function FindNearestSupertemplateIndex(position, maxDistance)
+    maxDistance = maxDistance or 2.0
+    if not episode.supertemplates or #episode.supertemplates == 0 then
+        return nil
+    end
+
+    local minDist = maxDistance
+    local nearestIndex = nil
+
+    for i, st in ipairs(episode.supertemplates) do
+        if st.position then
+            local stPos = Vector3(st.position.x, st.position.y, st.position.z)
+            local dist = (position - stPos).length
+            if dist < minDist then
+                minDist = dist
+                nearestIndex = i
+            end
+        end
+    end
+
+    return nearestIndex
+end
+
+--- Toggle selection state for a supertemplate
+-- @param index number Index of supertemplate in episode.supertemplates
+-- @return number Selection count after toggle
+-- @return string Action performed ("added" or "removed")
+local function ToggleSupertemplateSelection(index)
+    if not index or index < 1 or index > #episode.supertemplates then
+        return 0, nil
+    end
+
+    local action = nil
+    if selectedSupertemplates[index] then
+        selectedSupertemplates[index] = nil
+        action = "removed"
+    else
+        selectedSupertemplates[index] = true
+        action = "added"
+    end
+
+    -- Count selected items
+    local count = 0
+    for _ in pairs(selectedSupertemplates) do
+        count = count + 1
+    end
+
+    return count, action
+end
+
+--- Update visual markers for selected supertemplates
+local function UpdateGroupSelectionMarkers()
+    if not episode.supertemplates then
+        return
+    end
+
+    for i, st in ipairs(episode.supertemplates) do
+        if st.instantiatedTemplate and st.instantiatedTemplate.poi and st.instantiatedTemplate.poi.instance then
+            local marker = st.instantiatedTemplate.poi.instance
+            if isElement(marker) and marker.setColor then
+                if selectedSupertemplates[i] then
+                    -- Orange for selected
+                    marker:setColor(255, 165, 0, 128)
+                else
+                    -- Magenta for unselected
+                    marker:setColor(255, 0, 255, 128)
+                end
+            end
+        end
+    end
+end
+
+--- Move a group of supertemplates by a translation vector
+-- @param indices table Table of selected supertemplate indices
+-- @param translation Vector3 Translation to apply
+local function MoveSupertemplateGroup(indices, translation)
+    if not episode.supertemplates then
+        return
+    end
+
+    for index in pairs(indices) do
+        local st = episode.supertemplates[index]
+        if st then
+            -- Update supertemplate position
+            if st.position then
+                local pos = Vector3(st.position.x, st.position.y, st.position.z)
+                pos = pos + translation
+                st.position = pos:unpack()
+            end
+
+            -- Update instantiated template if exists
+            if st.instantiatedTemplate then
+                st.instantiatedTemplate:UpdatePosition(translation, nil, nil, true)
+            end
+        end
+    end
+end
+
+--- Rotate a group of supertemplates around a pivot point
+-- @param indices table Table of selected supertemplate indices
+-- @param rotation Vector3 Rotation to apply (in degrees)
+-- @param pivotPoint Vector3 Point to rotate around
+local function RotateSupertemplateGroup(indices, rotation, pivotPoint)
+    if not episode.supertemplates or not pivotPoint then
+        return
+    end
+
+    for index in pairs(indices) do
+        local st = episode.supertemplates[index]
+        if st and st.position then
+            local pos = Vector3(st.position.x, st.position.y, st.position.z)
+
+            -- Rotate position around pivot
+            local relativePos = pos - pivotPoint
+            relativePos = relativePos:Rotate(rotation)
+            local newPos = relativePos + pivotPoint
+            st.position = newPos:unpack()
+
+            -- Update instantiated template if exists
+            if st.instantiatedTemplate then
+                st.instantiatedTemplate:UpdatePosition(nil, rotation, pivotPoint, true)
+            end
+        end
+    end
+end
+
+--- Duplicate a group of supertemplates to a new position
+-- @param indices table Table of selected supertemplate indices
+-- @param targetPosition Vector3 Center position for duplicated group
+-- @return table Indices of newly created supertemplates
+local function DuplicateSupertemplateGroup(indices, targetPosition)
+    if not episode.supertemplates or not targetPosition then
+        return {}
+    end
+
+    -- Calculate centroid of selected group
+    local centroid = Vector3(0, 0, 0)
+    local count = 0
+    for index in pairs(indices) do
+        local st = episode.supertemplates[index]
+        if st and st.position then
+            centroid = centroid + Vector3(st.position.x, st.position.y, st.position.z)
+            count = count + 1
+        end
+    end
+
+    if count == 0 then
+        return {}
+    end
+
+    centroid = centroid / count
+    local offset = targetPosition - centroid
+
+    -- Duplicate each supertemplate
+    local newIndices = {}
+    for index in pairs(indices) do
+        local originalSt = episode.supertemplates[index]
+        if originalSt then
+            -- Deep copy supertemplate data
+            local newSt = {
+                name = originalSt.name,
+                templates = {},
+                offsets = {},
+                position = nil
+            }
+
+            -- Copy templates list
+            for _, tname in ipairs(originalSt.templates) do
+                table.insert(newSt.templates, tname)
+            end
+
+            -- Copy offsets
+            for _, off in ipairs(originalSt.offsets) do
+                table.insert(newSt.offsets, {
+                    skip = off.skip,
+                    offset = {x = off.offset.x, y = off.offset.y, z = off.offset.z},
+                    rotationOffset = {x = off.rotationOffset.x, y = off.rotationOffset.y, z = off.rotationOffset.z}
+                })
+            end
+
+            -- Apply offset to position
+            if originalSt.position then
+                local oldPos = Vector3(originalSt.position.x, originalSt.position.y, originalSt.position.z)
+                local newPos = oldPos + offset
+                newSt.position = newPos:unpack()
+            end
+
+            -- Instantiate the duplicate
+            if #newSt.templates > 0 then
+                -- Load and instantiate templates
+                local firstTemplate = Template.Load(newSt.name, newSt.templates[1])
+                if firstTemplate then
+                    firstTemplate:Instantiate(localPlayer.interior, Vector3(newSt.position.x, newSt.position.y, newSt.position.z))
+
+                    -- Apply offsets from supertemplate
+                    if newSt.offsets[1] and not newSt.offsets[1].skip then
+                        firstTemplate.offset = Vector3(newSt.offsets[1].offset.x, newSt.offsets[1].offset.y, newSt.offsets[1].offset.z)
+                        firstTemplate.rotationOffset = Vector3(newSt.offsets[1].rotationOffset.x, newSt.offsets[1].rotationOffset.y, newSt.offsets[1].rotationOffset.z)
+                        firstTemplate:UpdatePosition(firstTemplate.offset, firstTemplate.rotationOffset, Vector3(newSt.position.x, newSt.position.y, newSt.position.z), true)
+                    end
+
+                    newSt.instantiatedTemplate = firstTemplate
+                end
+            end
+
+            -- Add to episode
+            if not episode.supertemplates then
+                episode.supertemplates = {}
+            end
+            table.insert(episode.supertemplates, newSt)
+            table.insert(newIndices, #episode.supertemplates)
+        end
+    end
+
+    return newIndices
+end
+
+--- Save a supertemplate group to a file
+-- @param groupName string Name of the group
+-- @param indices table Table of selected supertemplate indices
+-- @param pivotPoint Vector3 Pivot point for the group
+-- @param overwrite boolean Whether to overwrite existing file
+-- @return boolean True if successful, false otherwise
+local function SaveSupertemplateGroup(groupName, indices, pivotPoint, overwrite)
+    if not groupName or groupName == "" then
+        outputChatBox("Group name cannot be empty", 255, 0, 0, false)
+        return false
+    end
+
+    if not indices or not next(indices) then
+        outputChatBox("No supertemplates selected", 255, 0, 0, false)
+        return false
+    end
+
+    local filepath = "files/supertemplate_groups/" .. groupName .. ".json"
+    if not overwrite and fileExists(filepath) then
+        outputChatBox(filepath .. " already exists. Use 'o' flag to overwrite", 255, 0, 0, false)
+        return false
+    end
+
+    -- Build group structure
+    local group = {
+        name = groupName,
+        pivot = pivotPoint and pivotPoint:unpack() or {x = 0, y = 0, z = 0},
+        supertemplates = {}
+    }
+
+    local pivotVec = pivotPoint or Vector3(0, 0, 0)
+
+    for index in pairs(indices) do
+        local st = episode.supertemplates[index]
+        if st then
+            local stEntry = {
+                name = st.name,
+                templates = st.templates,
+                offsets = st.offsets,
+                relativeOffset = {x = 0, y = 0, z = 0},
+                relativeRotation = {x = 0, y = 0, z = 0}
+            }
+
+            -- Calculate relative position from pivot
+            if st.position then
+                local pos = Vector3(st.position.x, st.position.y, st.position.z)
+                local relOffset = pos - pivotVec
+                stEntry.relativeOffset = relOffset:unpack()
+            end
+
+            table.insert(group.supertemplates, stEntry)
+        end
+    end
+
+    -- Save to file
+    local fileHandle = fileCreate(filepath)
+    if fileHandle then
+        local jsonStr = toJSON(group)
+        fileWrite(fileHandle, jsonStr)
+        fileClose(fileHandle)
+        outputChatBox("Saved " .. filepath, 255, 0, 0, false)
+        return true
+    else
+        outputChatBox("Failed to create file " .. filepath, 255, 0, 0, false)
+        return false
+    end
+end
+
+--- Load and instantiate a supertemplate group from a file
+-- @param groupName string Name of the group to load
+-- @param insertionPoint Vector3 Position to instantiate the group
+-- @return table Indices of newly created supertemplates
+local function LoadSupertemplateGroup(groupName, insertionPoint)
+    local filepath = "files/supertemplate_groups/" .. groupName .. ".json"
+
+    if not fileExists(filepath) then
+        outputChatBox("Group file not found: " .. filepath, 255, 0, 0, false)
+        return {}
+    end
+
+    local file = fileOpen(filepath)
+    if not file then
+        outputChatBox("Failed to open file: " .. filepath, 255, 0, 0, false)
+        return {}
+    end
+
+    local jsonStr = fileRead(file, fileGetSize(file))
+    fileClose(file)
+
+    local group = fromJSON(jsonStr)
+    if not group or not group.supertemplates then
+        outputChatBox("Invalid group file format", 255, 0, 0, false)
+        return {}
+    end
+
+    outputChatBox("Loading group '" .. groupName .. "' with " .. #group.supertemplates .. " supertemplates", 255, 0, 0, false)
+
+    local newIndices = {}
+
+    -- Instantiate each supertemplate
+    for _, stEntry in ipairs(group.supertemplates) do
+        local newSt = {
+            name = stEntry.name,
+            templates = stEntry.templates or {},
+            offsets = stEntry.offsets or {},
+            position = nil
+        }
+
+        -- Calculate position from insertion point + relative offset
+        local relOffset = Vector3(stEntry.relativeOffset.x, stEntry.relativeOffset.y, stEntry.relativeOffset.z)
+        local pos = insertionPoint + relOffset
+        newSt.position = pos:unpack()
+
+        -- Instantiate first template
+        if #newSt.templates > 0 then
+            local firstTemplate = Template.Load(newSt.name, newSt.templates[1])
+            if firstTemplate then
+                firstTemplate:Instantiate(localPlayer.interior, pos)
+
+                -- Apply offsets if available
+                if newSt.offsets[1] and not newSt.offsets[1].skip then
+                    firstTemplate.offset = Vector3(newSt.offsets[1].offset.x, newSt.offsets[1].offset.y, newSt.offsets[1].offset.z)
+                    firstTemplate.rotationOffset = Vector3(newSt.offsets[1].rotationOffset.x, newSt.offsets[1].rotationOffset.y, newSt.offsets[1].rotationOffset.z)
+                    firstTemplate:UpdatePosition(firstTemplate.offset, firstTemplate.rotationOffset, pos, true)
+                end
+
+                newSt.instantiatedTemplate = firstTemplate
+            end
+        end
+
+        -- Add to episode
+        if not episode.supertemplates then
+            episode.supertemplates = {}
+        end
+        table.insert(episode.supertemplates, newSt)
+        table.insert(newIndices, #episode.supertemplates)
+    end
+
+    outputChatBox("Loaded " .. #newIndices .. " supertemplates from group '" .. groupName .. "'", 255, 0, 0, false)
+    return newIndices
+end
+
+--- Clear group selection state and reset visual markers
+local function ClearGroupSelection()
+    selectedSupertemplates = {}
+    groupSelectionMode = nil
+    groupPivotPoint = nil
+    originalSupertemplatePositions = {}
+
+    -- Reset all markers to magenta
+    if episode.supertemplates then
+        for _, st in ipairs(episode.supertemplates) do
+            if st.instantiatedTemplate and st.instantiatedTemplate.poi and st.instantiatedTemplate.poi.instance then
+                local marker = st.instantiatedTemplate.poi.instance
+                if isElement(marker) and marker.setColor then
+                    marker:setColor(255, 0, 255, 128)
+                end
+            end
+        end
+    end
+
+    -- Destroy temporary markers
+    for _, marker in ipairs(groupSelectionMarkers) do
+        if isElement(marker) then
+            marker:destroy()
+        end
+    end
+    groupSelectionMarkers = {}
+end
+
 local function playerPressedKey(button, press)
     if (press) then
+        -- Handle group selection mode (both regular and duplicate)
+        if groupSelectionMode == "selecting" or groupSelectionMode == "selecting_duplicate" then
+            if button == "p" then
+                -- Toggle selection of nearest supertemplate
+                local nearestIndex = FindNearestSupertemplateIndex(localPlayer.position)
+                if nearestIndex then
+                    local count, action = ToggleSupertemplateSelection(nearestIndex)
+                    local stName = episode.supertemplates[nearestIndex].name
+                    outputChatBox("Supertemplate '" .. stName .. "' " .. action .. " from selection (" .. count .. " total)", 255, 165, 0, false)
+                    UpdateGroupSelectionMarkers()
+                else
+                    outputChatBox("No supertemplate found nearby (within 2 meters)", 255, 0, 0, false)
+                end
+                return
+            elseif button == "f" then
+                -- Finalize selection
+                local count = 0
+                for _ in pairs(selectedSupertemplates) do
+                    count = count + 1
+                end
+                if count == 0 then
+                    outputChatBox("No supertemplates selected. Press 'n' to cancel or 'p' to select", 255, 0, 0, false)
+                    return
+                end
+
+                if groupSelectionMode == "selecting_duplicate" then
+                    -- Switch to click-to-duplicate mode
+                    outputChatBox("Click to set insertion point for duplicated group", 255, 165, 0, false)
+                    showCursor(true, true)
+                    removeEventHandler("onClientKey", root, playerPressedKey)
+
+                    local function onClickDuplicate(_, state, _, _, worldX, worldY, worldZ)
+                        if state ~= "up" then
+                            return
+                        end
+
+                        local insertionPoint = Vector3(worldX, worldY, worldZ)
+                        removeEventHandler("onClientClick", getRootElement(), onClickDuplicate)
+                        showCursor(false)
+
+                        -- Perform duplication
+                        local originalSelection = {}
+                        for idx in pairs(selectedSupertemplates) do
+                            originalSelection[idx] = true
+                        end
+
+                        local newIndices = DuplicateSupertemplateGroup(originalSelection, insertionPoint)
+                        outputChatBox("Duplicated " .. #newIndices .. " supertemplates", 0, 255, 0, false)
+
+                        -- Select the new duplicates and enter move mode
+                        selectedSupertemplates = {}
+                        for _, idx in ipairs(newIndices) do
+                            selectedSupertemplates[idx] = true
+                        end
+
+                        groupSelectionMode = "moving"
+                        groupPivotPoint = insertionPoint
+
+                        -- Store original positions for cancel
+                        originalSupertemplatePositions = {}
+                        for index in pairs(selectedSupertemplates) do
+                            local st = episode.supertemplates[index]
+                            if st and st.position then
+                                originalSupertemplatePositions[index] = {
+                                    x = st.position.x,
+                                    y = st.position.y,
+                                    z = st.position.z
+                                }
+                            end
+                        end
+
+                        -- Create pivot marker
+                        local groundZ = getGroundPosition(groupPivotPoint.x, groupPivotPoint.y, groupPivotPoint.z)
+                        if not groundZ or groundZ == 0 then
+                            groundZ = groupPivotPoint.z - 1
+                        end
+                        local pivotMarker = Marker(groupPivotPoint.x, groupPivotPoint.y, groundZ, "cylinder", 0.8, 255, 255, 0, 200)
+                        pivotMarker.interior = localPlayer.interior
+                        table.insert(groupSelectionMarkers, pivotMarker)
+
+                        UpdateGroupSelectionMarkers()
+                        addEventHandler("onClientKey", root, playerPressedKey)
+
+                        outputChatBox("Use w/a/s/d/z/x to translate, q/e/h/j/f/g to rotate", 255, 165, 0, false)
+                        outputChatBox("Press Enter to confirm, 'n' to cancel", 255, 165, 0, false)
+                    end
+
+                    addEventHandler("onClientClick", getRootElement(), onClickDuplicate)
+                    return
+                end
+
+                groupSelectionMode = "moving"
+                -- Set pivot point as centroid of selection
+                local centroid = Vector3(0, 0, 0)
+                for index in pairs(selectedSupertemplates) do
+                    local st = episode.supertemplates[index]
+                    if st and st.position then
+                        centroid = centroid + Vector3(st.position.x, st.position.y, st.position.z)
+                    end
+                end
+                groupPivotPoint = centroid / count
+
+                -- Create pivot marker
+                local groundZ = getGroundPosition(groupPivotPoint.x, groupPivotPoint.y, groupPivotPoint.z)
+                if not groundZ or groundZ == 0 then
+                    groundZ = groupPivotPoint.z - 1
+                end
+                local pivotMarker = Marker(groupPivotPoint.x, groupPivotPoint.y, groundZ, "cylinder", 0.8, 255, 255, 0, 200)
+                pivotMarker.interior = localPlayer.interior
+                table.insert(groupSelectionMarkers, pivotMarker)
+
+                -- Store original positions for cancel
+                originalSupertemplatePositions = {}
+                for index in pairs(selectedSupertemplates) do
+                    local st = episode.supertemplates[index]
+                    if st and st.position then
+                        originalSupertemplatePositions[index] = {
+                            x = st.position.x,
+                            y = st.position.y,
+                            z = st.position.z
+                        }
+                    end
+                end
+
+                outputChatBox("Selection finalized (" .. count .. " supertemplates). Now moving group:", 255, 165, 0, false)
+                outputChatBox("Use w/a/s/d/z/x to translate, q/e/h/j/f/g to rotate", 255, 165, 0, false)
+                outputChatBox("Press Enter to confirm, 'n' to cancel", 255, 165, 0, false)
+                return
+            elseif button == "n" then
+                -- Cancel selection
+                ClearGroupSelection()
+                outputChatBox("Group selection cancelled", 255, 0, 0, false)
+                return
+            end
+            return -- Don't process other keys in selection mode
+        end
+
+        -- Handle group movement mode
+        if groupSelectionMode == "moving" then
+            local translationIncrement = 0.1
+            local rotationIncrement = 5
+            if altPressed then
+                translationIncrement = 0.01
+                rotationIncrement = 1
+            end
+            if shiftPressed then
+                translationIncrement = 0.5
+                rotationIncrement = 90
+            end
+
+            local offset = Vector3(0, 0, 0)
+            local translate = false
+            local rotate = false
+
+            if button == "w" then
+                translate = true
+                offset = Vector3(translationIncrement, 0, 0)
+            elseif button == "s" then
+                translate = true
+                offset = Vector3(-translationIncrement, 0, 0)
+            elseif button == "a" then
+                translate = true
+                offset = Vector3(0, -translationIncrement, 0)
+            elseif button == "d" then
+                translate = true
+                offset = Vector3(0, translationIncrement, 0)
+            elseif button == "z" then
+                translate = true
+                offset = Vector3(0, 0, translationIncrement)
+            elseif button == "x" then
+                translate = true
+                offset = Vector3(0, 0, -translationIncrement)
+            elseif button == "q" then
+                rotate = true
+                offset = Vector3(0, 0, rotationIncrement)
+            elseif button == "e" then
+                rotate = true
+                offset = Vector3(0, 0, -rotationIncrement)
+            elseif button == "h" then
+                rotate = true
+                offset = Vector3(0, rotationIncrement, 0)
+            elseif button == "j" then
+                rotate = true
+                offset = Vector3(0, -rotationIncrement, 0)
+            elseif button == "f" then
+                rotate = true
+                offset = Vector3(rotationIncrement, 0, 0)
+            elseif button == "g" then
+                rotate = true
+                offset = Vector3(-rotationIncrement, 0, 0)
+            elseif button == "enter" then
+                -- Confirm changes
+                outputChatBox("Group movement confirmed", 0, 255, 0, false)
+                ClearGroupSelection()
+                return
+            elseif button == "n" then
+                -- Cancel and restore original positions
+                for index, originalPos in pairs(originalSupertemplatePositions) do
+                    local st = episode.supertemplates[index]
+                    if st then
+                        st.position = {x = originalPos.x, y = originalPos.y, z = originalPos.z}
+                        if st.instantiatedTemplate then
+                            local currentPos = Vector3(st.position.x, st.position.y, st.position.z)
+                            st.instantiatedTemplate.position = currentPos
+                            if st.instantiatedTemplate.poi and st.instantiatedTemplate.poi.instance then
+                                st.instantiatedTemplate.poi.instance.position = currentPos
+                            end
+                            -- Restore objects and locations
+                            if st.instantiatedTemplate.objects then
+                                for _, obj in pairs(st.instantiatedTemplate.objects) do
+                                    if obj.instance then
+                                        obj.instance.position = currentPos + Vector3(obj.instance.position.x, obj.instance.position.y, obj.instance.position.z)
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+                outputChatBox("Group movement cancelled, positions restored", 255, 0, 0, false)
+                ClearGroupSelection()
+                return
+            elseif button == "lalt" or button == "ralt" then
+                altPressed = true
+                return
+            elseif button == "lshift" or button == "rshift" then
+                shiftPressed = true
+                return
+            end
+
+            -- Apply transformation
+            if translate then
+                MoveSupertemplateGroup(selectedSupertemplates, offset)
+            elseif rotate then
+                RotateSupertemplateGroup(selectedSupertemplates, offset, groupPivotPoint)
+            end
+            return
+        end
+
         local translationIncrement = 0.1
         local rotationIncrement = 5
         local sizeIncrement = 0.5
@@ -1627,6 +2302,114 @@ addCommandHandler("supertemplate",
                 end
             end
             addEventHandler ( "onElementDoneEditing", getRootElement(), finishedOffsettingTemplate)
+        elseif command == 'movegroup' then
+            -- Start group selection mode for moving
+            if not episode.supertemplates or #episode.supertemplates == 0 then
+                outputChatBox("No supertemplates in current episode", 255, 0, 0, false)
+                return
+            end
+
+            groupSelectionMode = "selecting"
+            selectedSupertemplates = {}
+            outputChatBox("Group selection mode started", 255, 165, 0, false)
+            outputChatBox("Walk near supertemplates and press 'p' to toggle selection", 255, 165, 0, false)
+            outputChatBox("Press 'f' to finalize and start moving, 'n' to cancel", 255, 165, 0, false)
+            addEventHandler("onClientKey", root, playerPressedKey)
+        elseif command == 'duplicategroup' then
+            -- Start group selection mode for duplicating
+            if not episode.supertemplates or #episode.supertemplates == 0 then
+                outputChatBox("No supertemplates in current episode", 255, 0, 0, false)
+                return
+            end
+
+            groupSelectionMode = "selecting_duplicate"
+            selectedSupertemplates = {}
+
+            outputChatBox("Duplicate group mode started", 255, 165, 0, false)
+            outputChatBox("Walk near supertemplates and press 'p' to toggle selection", 255, 165, 0, false)
+            outputChatBox("Press 'f' to finalize and choose insertion point", 255, 165, 0, false)
+            outputChatBox("Press 'n' to cancel", 255, 165, 0, false)
+
+            -- Note: playerPressedKey will handle 'p', 'f', and 'n' keys
+            -- We need to extend it to handle duplicate mode
+            addEventHandler("onClientKey", root, playerPressedKey)
+        elseif command == 'savegroup' then
+            -- Save current selection as a group
+            if not param1 or param1 == "" then
+                outputChatBox("Group name required. Usage: supertemplate savegroup name [o]", 255, 0, 0, false)
+                return
+            end
+
+            if not selectedSupertemplates or not next(selectedSupertemplates) then
+                outputChatBox("No supertemplates selected. Use 'supertemplate movegroup' first", 255, 0, 0, false)
+                return
+            end
+
+            local overwrite = param2 == "o"
+            SaveSupertemplateGroup(param1, selectedSupertemplates, groupPivotPoint, overwrite)
+        elseif command == 'loadgroup' then
+            -- Load and insert a saved group
+            if not param1 or param1 == "" then
+                outputChatBox("Group name required. Usage: supertemplate loadgroup name", 255, 0, 0, false)
+                return
+            end
+
+            outputChatBox("Click to set insertion point for group '" .. param1 .. "'", 255, 165, 0, false)
+            showCursor(true, true)
+
+            function onClickLoadGroup(button, state, absoluteX, absoluteY, worldX, worldY, worldZ, element)
+                if state ~= "up" then
+                    return
+                end
+
+                local insertionPoint = Vector3(worldX, worldY, worldZ)
+                removeEventHandler("onClientClick", getRootElement(), onClickLoadGroup)
+                showCursor(false)
+
+                -- Load group
+                local newIndices = LoadSupertemplateGroup(param1, insertionPoint)
+
+                if #newIndices > 0 then
+                    -- Select the loaded supertemplates
+                    selectedSupertemplates = {}
+                    for _, idx in ipairs(newIndices) do
+                        selectedSupertemplates[idx] = true
+                    end
+
+                    groupSelectionMode = "moving"
+                    groupPivotPoint = insertionPoint
+
+                    -- Store original positions for cancel
+                    originalSupertemplatePositions = {}
+                    for index in pairs(selectedSupertemplates) do
+                        local st = episode.supertemplates[index]
+                        if st and st.position then
+                            originalSupertemplatePositions[index] = {
+                                x = st.position.x,
+                                y = st.position.y,
+                                z = st.position.z
+                            }
+                        end
+                    end
+
+                    -- Create pivot marker
+                    local groundZ = getGroundPosition(groupPivotPoint.x, groupPivotPoint.y, groupPivotPoint.z)
+                    if not groundZ or groundZ == 0 then
+                        groundZ = groupPivotPoint.z - 1
+                    end
+                    local pivotMarker = Marker(groupPivotPoint.x, groupPivotPoint.y, groundZ, "cylinder", 0.8, 255, 255, 0, 200)
+                    pivotMarker.interior = localPlayer.interior
+                    table.insert(groupSelectionMarkers, pivotMarker)
+
+                    UpdateGroupSelectionMarkers()
+                    addEventHandler("onClientKey", root, playerPressedKey)
+
+                    outputChatBox("Group loaded. Use w/a/s/d/z/x to translate, q/e/h/j/f/g to rotate", 255, 165, 0, false)
+                    outputChatBox("Press Enter to confirm, 'n' to cancel", 255, 165, 0, false)
+                end
+            end
+
+            addEventHandler("onClientClick", getRootElement(), onClickLoadGroup)
         end
     end
 )

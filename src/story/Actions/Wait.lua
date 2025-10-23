@@ -6,8 +6,8 @@ Wait = class(StoryActionBase, function(o, params)
     o.Time = params.time
     o.targetInteraction = params.targetInteraction
     o.doNothing = params.doNothing
-    o.isLookingAtTarget = false
-    o.lookAtTimer = nil
+    -- o.isLookingAtTarget = false
+    -- o.lookAtTimer = nil
 end)
 
 function Wait:resume(player)
@@ -27,11 +27,11 @@ function Wait:pause(player)
     end
 
     -- Cleanup looking behavior when pausing
-    if self.isLookingAtTarget then
-        -- LookingBehavior.stopContinuousLooking(self.Performer, self.lookAtTimer)
-        self.lookAtTimer = nil
-        self.isLookingAtTarget = false
-    end
+    -- if self.isLookingAtTarget then
+    --     -- LookingBehavior.stopContinuousLooking(self.Performer, self.lookAtTimer)
+    --     self.lookAtTimer = nil
+    --     self.isLookingAtTarget = false
+    -- end
 
     if player:getData('requestPause') and not player:getData('enteredWaitingLoop') and player:getData('isReadyForInteraction') then
         player:setData('requestPause', false)
@@ -78,12 +78,12 @@ function Wait:ExecuteWaitingLoop()
         -- has already waited and is ready to be interacted with
         if not shouldLookAtEachOther
         then
-            -- Stop looking if currently looking
-            if self.isLookingAtTarget then
-                -- LookingBehavior.stopContinuousLooking(self.Performer, self.lookAtTimer)
-                self.lookAtTimer = nil
-                self.isLookingAtTarget = false
-            end
+            -- -- Stop looking if currently looking
+            -- if self.isLookingAtTarget then
+            --     -- LookingBehavior.stopContinuousLooking(self.Performer, self.lookAtTimer)
+            --     self.lookAtTimer = nil
+            --     self.isLookingAtTarget = false
+            -- end
 
             self.Performer:setAnimation("cop_ambient", "coplook_loop", 5000, true, false, false, true) --TODO: do something smarter
             if DEBUG then
@@ -94,23 +94,23 @@ function Wait:ExecuteWaitingLoop()
             end
         elseif not self.doNothing then
             -- Start looking at each other if not already looking
-            if not self.isLookingAtTarget then
-                -- Use neutral standing animation instead of cop_ambient
-                self.Performer:setAnimation("ped", "idle_stance", -1, true, false, false, true)
+            -- if not self.isLookingAtTarget then
+            --     -- Use neutral standing animation instead of cop_ambient
+            --     self.Performer:setAnimation("ped", "idle_stance", -1, true, false, false, true)
 
-                -- Start continuous looking at the other actor (with body rotation)
-                -- self.lookAtTimer = LookingBehavior.startContinuousLooking(
-                --     self.Performer,
-                --     function()
-                --         return LookingBehavior.isPerformerValid(self.TargetItem)
-                --                and self.TargetItem.position
-                --                or nil
-                --     end,
-                --     { expectedAction = 'Wait', updateInterval = 200, skipBodyRotation = false }
-                -- )
+            --     -- Start continuous looking at the other actor (with body rotation)
+            --     -- self.lookAtTimer = LookingBehavior.startContinuousLooking(
+            --     --     self.Performer,
+            --     --     function()
+            --     --         return LookingBehavior.isPerformerValid(self.TargetItem)
+            --     --                and self.TargetItem.position
+            --     --                or nil
+            --     --     end,
+            --     --     { expectedAction = 'Wait', updateInterval = 200, skipBodyRotation = false }
+            --     -- )
 
-                self.isLookingAtTarget = true
-            end
+            --     self.isLookingAtTarget = true
+            -- end
 
             if not self.TargetItem:getData('isReadyForInteraction') then
                 if DEBUG then
@@ -124,8 +124,8 @@ function Wait:ExecuteWaitingLoop()
                 -- This actor in the next action will initiate the interaction
                 -- CRITICAL: Stop continuous rotation before exiting to let next action take control
                 -- LookingBehavior.stopContinuousLooking(self.Performer, self.lookAtTimer)
-                self.lookAtTimer = nil
-                self.isLookingAtTarget = false
+                -- self.lookAtTimer = nil
+                -- self.isLookingAtTarget = false
 
                 self.Performer:setData('enteredWaitingLoop', false)
                 self.Performer:setData('isAboutToInitiateInteraction', true)
@@ -139,28 +139,28 @@ function Wait:ExecuteWaitingLoop()
         else
             -- Only the passive actor gets here
             -- Start looking at each other if not already looking
-            if not self.isLookingAtTarget then
-                -- Use neutral standing animation instead of cop_ambient
-                self.Performer:setAnimation("ped", "idle_stance", -1, true, false, false, true)
+            -- if not self.isLookingAtTarget then
+            --     -- Use neutral standing animation instead of cop_ambient
+            --     self.Performer:setAnimation("ped", "idle_stance", -1, true, false, false, true)
 
-                -- Start continuous looking at the other actor (with body rotation)
-                -- self.lookAtTimer = LookingBehavior.startContinuousLooking(
-                --     self.Performer,
-                --     function()
-                --         return LookingBehavior.isPerformerValid(self.TargetItem)
-                --                and self.TargetItem.position
-                --                or nil
-                --     end,
-                --     { expectedAction = 'Wait', updateInterval = 200, skipBodyRotation = false }
-                -- )
+            --     -- Start continuous looking at the other actor (with body rotation)
+            --     -- self.lookAtTimer = LookingBehavior.startContinuousLooking(
+            --     --     self.Performer,
+            --     --     function()
+            --     --         return LookingBehavior.isPerformerValid(self.TargetItem)
+            --     --                and self.TargetItem.position
+            --     --                or nil
+            --     --     end,
+            --     --     { expectedAction = 'Wait', updateInterval = 200, skipBodyRotation = false }
+            --     -- )
 
-                self.isLookingAtTarget = true
-            end
+            --     self.isLookingAtTarget = true
+            -- end
 
             -- CRITICAL: Stop continuous rotation before setting ready for interaction
             -- LookingBehavior.stopContinuousLooking(self.Performer, self.lookAtTimer)
-            self.lookAtTimer = nil
-            self.isLookingAtTarget = false
+            -- self.lookAtTimer = nil
+            -- self.isLookingAtTarget = false
 
             self.Performer:setData('isReadyForInteraction', true)
             self.Performer:setData('enteredWaitingLoop', false)

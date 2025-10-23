@@ -41,9 +41,14 @@
                             "type": "Object"
                         },
                         "id": 1,
-                        "nextAction": {
-                            "id": 2
-                        },
+                        "nextAction": [
+                            {
+                                "id": 2
+                            },
+                            {
+                                "id": 8
+                            }
+                        ],
                         "closingAction": {
                             "id": 8
                         },

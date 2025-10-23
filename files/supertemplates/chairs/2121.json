@@ -33,7 +33,7 @@
                         "dynamicString": "return SitDown{how = 1, rotation = nil}",
                         "isClosingAction": false,
                         "targetItem": {
-                            "id": 2,
+                            "id": 1,
                             "type": "Object"
                         },
                         "id": 1,
@@ -86,7 +86,7 @@
                         "dynamicString": "return StandUp{how = 1}",
                         "isClosingAction": true,
                         "targetItem": {
-                            "id": 2,
+                            "id": 1,
                             "type": "Object"
                         },
                         "id": 4,

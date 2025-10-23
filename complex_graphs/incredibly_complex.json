@@ -660,7 +660,7 @@
     "d5": {
         "Action": "PickUp",
         "Entities": ["bod3", "remote"],
-        "Location": ["kitchen"],
+        "Location": ["livingroom"],
         "Timeframe": null,
         "Properties": {}
     },
@@ -737,6 +737,13 @@
     "m11": {
         "Action": "StandUp",
         "Entities": ["alice3", "Sofa"],
+        "Location": ["livingroom"],
+        "Timeframe": null,
+        "Properties": {}
+    },
+    "d10": {
+        "Action": "StandUp",
+        "Entities": ["bod3", "Sofa"],
         "Location": ["livingroom"],
         "Timeframe": null,
         "Properties": {}
@@ -907,6 +914,11 @@
             "relations": null,
             "next": "b5"
         },
+        "b5.2_before_a4": {
+            "source": "b5.2",
+            "type": "before",
+            "target": "a4"
+        },
         "b5": {
             "relations": null,
             "next": "b5.0"
@@ -920,7 +932,7 @@
             "next": "b5.2"
         },
         "b5.2": {
-            "relations": null,
+            "relations": ["b5.2_before_a4"],
             "next": "b5.3"
         },
         "b5.3": {
@@ -932,13 +944,13 @@
             "next": "b6"
         },
         "a4": {
-            "relations": ["a4_after_b4"],
+            "relations": ["a4_after_b5.2"],
             "next": "a5"
         },
-        "a4_after_b4": {
+        "a4_after_b5.2": {
             "source": "a4",
             "type": "after",
-            "target": "b4"
+            "target": "b5.2"
         },
         "a5": {
             "relations": null,
@@ -977,17 +989,37 @@
             "next": "b10"
         },
         "a10": {
-            "relations": null,
+            "relations": ["a10_before_b10"],
             "next": "a11"
         },
+        "a10_before_b10": {
+            "source": "a10",
+            "type": "before",
+            "target": "b10"
+        },
         "b10": {
-            "relations": ["b10_after_a10"],
+            "relations": ["b10_after_a10", "b10_before_a11", "b10_before_j4", "b10_before_n4"],
             "next": null
         },
         "b10_after_a10": {
             "source": "b10",
             "type": "after",
             "target": "a10"
+        },
+        "b10_before_a11": {
+            "source": "b10",
+            "type": "before",
+            "target": "a11"
+        },
+        "b10_before_j4": {
+            "source": "b10",
+            "type": "before",
+            "target": "j4"
+        },
+        "b10_before_n4": {
+            "source": "b10",
+            "type": "before",
+            "target": "n4"
         },
         "a11": {
             "relations": ["a11_after_b10"],
@@ -1015,8 +1047,18 @@
             "next": "a15"
         },
         "a15": {
-            "relations": null,
+            "relations": ["a15_before_j4", "a15_before_n4"],
             "next": "a16"
+        },
+        "a15_before_j4": {
+            "source": "a15",
+            "type": "before",
+            "target": "j4"
+        },
+        "a15_before_n4": {
+            "source": "a15",
+            "type": "before",
+            "target": "n4"
         },
         "a16": {
             "relations": ["a16_after_m10", "a16_after_d9"],
@@ -1123,8 +1165,18 @@
             "next": "n8"
         },
         "n8": {
-            "relations": null,
+            "relations": ["n8_before_m4", "n8_before_d4"],
             "next": null
+        },
+        "n8_before_m4": {
+            "source": "n8",
+            "type": "before",
+            "target": "m4"
+        },
+        "n8_before_d4": {
+            "source": "n8",
+            "type": "before",
+            "target": "d4"
         },
         "j7": {
             "relations": null,
@@ -1135,8 +1187,18 @@
             "next": "j9"
         },
         "j9": {
-            "relations": null,
+            "relations": ["j9_before_m4", "j9_before_d4"],
             "next": null
+        },
+        "j9_before_m4": {
+            "source": "j9",
+            "type": "before",
+            "target": "m4"
+        },
+        "j9_before_d4": {
+            "source": "j9",
+            "type": "before",
+            "target": "d4"
         },
         "m4": {
             "relations": ["md_standup_starts", "m4_after_j9", "m4_after_n8"],
@@ -1203,12 +1265,31 @@
             "next": "d9"
         },
         "m10": {
-            "relations": ["md_watch_tv_starts"],
+            "relations": ["md_watch_tv_starts", "m10_before_a16"],
             "next": "m11"
         },
+        "m10_before_a16": {
+            "source": "m10",
+            "type": "before",
+            "target": "a16"
+        },
         "d9": {
-            "relations": ["md_watch_tv_starts"],
+            "relations": ["md_watch_tv_starts", "d9_before_a16"],
+            "next": "d10"
+        },
+        "d9_before_a16": {
+            "source": "d9",
+            "type": "before",
+            "target": "a16"
+        },
+        "d10": {
+            "relations": ["d10_after_a20"],
             "next": null
+        },
+        "d10_after_a20": {
+            "source": "d10",
+            "type": "after",
+            "target": "a20"
         },
         "m11": {
             "relations": ["m11_after_a20"],

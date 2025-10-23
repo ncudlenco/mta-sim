@@ -110,6 +110,13 @@
         "Timeframe": null,
         "Properties": {}
     },
+    "m1.1.1": {
+        "Action": "Wave",
+        "Entities": ["alice3", "alice2"],
+        "Location": ["classroom"],
+        "Timeframe": null,
+        "Properties": {}
+    },
     "m1.2": {
         "Action": "Talk",
         "Entities": ["alice3", "alice2"],
@@ -162,7 +169,13 @@
         "Timeframe": null,
         "Properties": {}
     },
-
+    "i2.1": {
+        "Action": "LookAt",
+        "Entities": ["alice2", "alice3"],
+        "Location": ["classroom"],
+        "Timeframe": null,
+        "Properties": {}
+    },
     "i3": {
         "Action": "Talk",
         "Entities": ["alice2", "alice3"],
@@ -220,6 +233,10 @@
         },
         "m1.1": {
             "relations": ["m1.1_after_i2"],
+            "next": "m1.1.1"
+        },
+        "m1.1.1": {
+            "relations": null,
             "next": "m1.2"
         },
         "m1.2": {
@@ -252,6 +269,10 @@
         },
         "i2": {
             "relations": ["i2_after_m1"],
+            "next": "i2.1"
+        },
+        "i2.1": {
+            "relations": null,
             "next": "i3"
         },
         "i3": {

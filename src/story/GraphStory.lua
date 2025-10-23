@@ -74,6 +74,7 @@ GraphStory = class(StoryBase, function(o, spectators, logData, artifactCollectio
         "Smoke",
         "LookAtObject",
         "LookAt",
+        "Wave",
         "TalkPhone",
         "AnswerPhone",
         "HangUp",
@@ -1196,10 +1197,11 @@ function GraphStory:MapObjectsActionsAndPoi(requiredObjects, episode, actionMap,
             return
                 --The action was not already processed
                 not actionMap[event.id]
-                --The event is of type action (LookAt/LookAtObject will be individually mapped during runtime, so we are not mapping it here)
+                --The event is of type action (LookAt/LookAtObject/Wave will be individually mapped during runtime, so we are not mapping it here)
                 and event.Action ~= 'Exists'
                 and event.Action ~= 'LookAt'
                 and event.Action ~= 'LookAtObject'
+                and event.Action ~= 'Wave'
                 and event.Action ~= 'TakeOut'
                 and event.Action ~= 'Stash'
                 and event.Action ~= 'AnswerPhone'

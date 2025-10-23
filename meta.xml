@@ -143,6 +143,7 @@
   <script src="src/story/Actions/Receive.lua" type="shared" />
   <script src="src/story/Actions/PutIn.lua" type="shared" />
   <script src="src/story/Actions/Wait.lua" type="shared" />
+  <script src="src/story/Actions/Wave.lua" type="shared" />
   <script src="src/story/Actions/PutDown.lua" type="shared" />
   <script src="src/story/Actions/TalkPhone.lua" type="shared" />
   <script src="src/story/Actions/TakeOut.lua" type="shared" />

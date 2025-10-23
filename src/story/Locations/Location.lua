@@ -308,6 +308,10 @@ function InstantiateAction(event, player, location, target)
         -- LookAt accepts any target (ped, object, or coordinates)
         -- Uses element:getType() internally to determine target type
         return LookAt { performer = player, nextLocation = location, Target = target, TargetItem = target }
+    elseif event.Action == 'Wave' then
+        -- Wave accepts any target (ped, object, or nil for general wave)
+        -- Uses element:getType() internally to determine target type
+        return Wave { performer = player, nextLocation = location, Target = target, TargetItem = target }
     elseif event.Action == 'TakeOut' then
         return TakeOut { performer = player, nextLocation = location, TargetItem = target }
     elseif event.Action == 'Stash' then
@@ -678,7 +682,7 @@ function Location:ProcessNextAction(player)
                 end
             end
 
-            if eventAction == nil and (event.Action == 'LookAt' or event.Action == 'LookAtObject') then
+            if eventAction == nil and (event.Action == 'LookAt' or event.Action == 'LookAtObject' or event.Action == 'Wave') then
                 -- Check if the target entity is an actor or an object
                 local targetEntityId = event.Entities[2]
                 local targetEntity = CURRENT_STORY.graph[targetEntityId]
@@ -690,7 +694,7 @@ function Location:ProcessNextAction(player)
                     if targetActor then
                         eventAction = InstantiateAction(event, player, location, targetActor)
                     else
-                        print('[WARNING] LookAt: Could not find target actor ' .. targetEntityId)
+                        print('[WARNING] ' .. event.Action .. ': Could not find target actor ' .. targetEntityId)
                     end
                 else
                     -- Target is an object
@@ -901,7 +905,7 @@ function Location:ProcessNextAction(player)
                 return poi.Region and nextEvent.Location and (poi.Region.name:lower():find(nextEvent.Location[1]:lower()) and true or false )
             end)
         end
-        if nextEvent.Action == 'LookAt' or nextEvent.Action == 'LookAtObject' then
+        if nextEvent.Action == 'LookAt' or nextEvent.Action == 'LookAtObject' or nextEvent.Action == 'Wave' then
             candidates = {
                 location
             }

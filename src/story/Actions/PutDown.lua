@@ -58,4 +58,5 @@ function PutDown:RemovePickedObject()
             break
         end
     end
+    self.Performer:setData('pickedObjects', pickedObjects)
 end

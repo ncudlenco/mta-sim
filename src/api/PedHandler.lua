@@ -1,5 +1,7 @@
 PedHandler = {
-    PED_ZOO = {}
+    PED_ZOO = {},
+    -- Internal table for tracking spawnable object instances (avoids setData with complex types)
+    inventoryInstances = {}
 }
 
 function PedHandler:ReInitialize()
@@ -23,25 +25,69 @@ function PedHandler:InitializePed(ped)
     ped:setData('mappedChainId', nil)
 
 
-    math.randomseed(os.clock()*100000000000)
-    math.random(); math.random(); math.random()
-    math.randomseed(os.clock()*100000000000)
-    math.random(); math.random(); math.random()
-    local chance = math.random(0, 1)
-    if chance < 0.5 then
-        ped:setData('inventory_1', 'phone')
-        ped:setData('inventory', '1')
+    -- Guarantee all actors have phone and cigarette in inventory
+    ped:setData('inventory_1', 'mobilephone')
+    ped:setData('inventory_2', 'cigarette')
+
+end
+
+--- Check if ped has item type in any inventory slot
+-- @param ped The ped element to check
+-- @param itemType The type of item to search for (e.g., 'phone', 'cigarette')
+-- @return The slot number if found, nil otherwise
+function PedHandler:HasInInventory(ped, itemType)
+    for i = 1, 2 do
+        local slot = ped:getData('inventory_' .. i)
+        if slot and slot:lower() == itemType:lower() then
+            return i
+        end
     end
-    math.randomseed(os.clock()*100000000000)
-    math.random(); math.random(); math.random()
-    math.randomseed(os.clock()*100000000000)
-    math.random(); math.random(); math.random()
-    chance = math.random(0, 1)
-    if chance < 0.5 then
-        ped:setData('inventory_2', 'cigarette')
-        ped:setData('inventory', '2')
+    return nil
+end
+
+--- Get the spawned instance for an inventory item
+-- @param ped The ped element
+-- @param slotNumber The inventory slot number (1 or 2)
+-- @return The object instance or nil
+function PedHandler:GetInventoryInstance(ped, slotNumber)
+    local pedId = ped:getData('id')
+    if not pedId or not self.inventoryInstances[pedId] then
+        return nil
+    end
+    return self.inventoryInstances[pedId][slotNumber]
+end
+
+--- Set the spawned instance for an inventory item
+-- @param ped The ped element
+-- @param slotNumber The inventory slot number (1 or 2)
+-- @param instance The object instance to store
+function PedHandler:SetInventoryInstance(ped, slotNumber, instance)
+    local pedId = ped:getData('id')
+    if not pedId then
+        return
+    end
+    if not self.inventoryInstances[pedId] then
+        self.inventoryInstances[pedId] = {}
+    end
+    self.inventoryInstances[pedId][slotNumber] = instance
+end
+
+--- Clear the spawned instance for an inventory item
+-- @param ped The ped element
+-- @param slotNumber The inventory slot number (1 or 2)
+function PedHandler:ClearInventoryInstance(ped, slotNumber)
+    local pedId = ped:getData('id')
+    if not pedId or not self.inventoryInstances[pedId] then
+        return
     end
 
+    -- Destroy the object instance if it exists
+    local instance = self.inventoryInstances[pedId][slotNumber]
+    if instance and instance.Destroy then
+        instance:Destroy()
+    end
+
+    self.inventoryInstances[pedId][slotNumber] = nil
 end
 
 function PedHandler:GetOrCreatePed(modelId, x, y, z, angle)
@@ -77,6 +123,17 @@ function PedHandler:GetOrCreatePed(modelId, x, y, z, angle)
 end
 
 function PedHandler:Reset(ped)
+    -- Clean up spawnable object instances
+    local pedId = ped:getData('id')
+    if pedId and self.inventoryInstances[pedId] then
+        for _, instance in pairs(self.inventoryInstances[pedId]) do
+            if instance and instance.Destroy then
+                instance:Destroy()
+            end
+        end
+        self.inventoryInstances[pedId] = nil
+    end
+
     ped.interior = 0
     ped.position = Vector3(0,0,0)
     for sData, _ in pairs( getAllElementData( ped ) ) do
@@ -85,6 +142,17 @@ function PedHandler:Reset(ped)
 end
 
 function PedHandler:Dispose(ped)
+    -- Clean up spawnable object instances
+    local pedId = ped:getData('id')
+    if pedId and self.inventoryInstances[pedId] then
+        for _, instance in pairs(self.inventoryInstances[pedId]) do
+            if instance and instance.Destroy then
+                instance:Destroy()
+            end
+        end
+        self.inventoryInstances[pedId] = nil
+    end
+
     ped.interior = 0
     ped.position = Vector3(0,0,0)
     ped:kill()

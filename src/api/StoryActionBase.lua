@@ -45,6 +45,7 @@ function StoryActionBase:Apply(...)
         end
         self.Performer:setData('nextTargetLocation', self.NextLocation.LocationId)
     end
+    self.Performer:setData('currentAction', self.Name)
 end
 
 function StoryActionBase:GetLogger(story)

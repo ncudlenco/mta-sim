@@ -22,7 +22,8 @@ function GetOff:Apply()
         self.Performer:setData('benchpress_cleanup', nil)
     end
 
-    -- self.TargetItem.instance:setCollisionsEnabled(false)
+    -- Re-enable collisions between this actor and all other peds when getting off
+    -- triggerClientEvent("onEnablePedToPedCollisions", getRootElement(), self.Performer)
 
     local block = ""
     local animation = ""

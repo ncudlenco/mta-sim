@@ -17,6 +17,46 @@ function onDisablePedCollisions(var)
     -- end
 end
 
+--- Disable collisions between a specific ped and all other peds
+-- Called when a ped sits down to prevent bumping animations
+-- @param ped The ped element to disable collisions for
+function onDisablePedToPedCollisions(ped)
+    if not ped or not isElement(ped) then
+        return
+    end
+
+    if DEBUG then
+        print("onDisablePedToPedCollisions - Disabling collisions for ped")
+        outputConsole("onDisablePedToPedCollisions - Disabling collisions for ped")
+    end
+
+    for _,v in pairs(getElementsByType("ped")) do
+        if v ~= ped then
+            setElementCollidableWith(ped, v, false)
+        end
+    end
+end
+
+--- Re-enable collisions between a specific ped and all other peds
+-- Called when a ped stands up or gets off furniture
+-- @param ped The ped element to re-enable collisions for
+function onEnablePedToPedCollisions(ped)
+    if not ped or not isElement(ped) then
+        return
+    end
+
+    if DEBUG then
+        print("onEnablePedToPedCollisions - Enabling collisions for ped")
+        outputConsole("onEnablePedToPedCollisions - Enabling collisions for ped")
+    end
+
+    for _,v in pairs(getElementsByType("ped")) do
+        if v ~= ped then
+            setElementCollidableWith(ped, v, true)
+        end
+    end
+end
+
 function initHandlers()
     addEvent("onServerCallsClientFunction", true)
     addEventHandler("onServerCallsClientFunction", resourceRoot, callClientFunction)
@@ -31,6 +71,10 @@ end
 
 addEvent("onDisablePedCollisions", true)
 addEventHandler("onDisablePedCollisions", root, onDisablePedCollisions)
+addEvent("onDisablePedToPedCollisions", true)
+addEventHandler("onDisablePedToPedCollisions", root, onDisablePedToPedCollisions)
+addEvent("onEnablePedToPedCollisions", true)
+addEventHandler("onEnablePedToPedCollisions", root, onEnablePedToPedCollisions)
 addEventHandler("onClientResourceStart", resourceRoot, initHandlers)
 addEventHandler("onClientResourceStart", resourceRoot, onClientResourceReady)
 --todo: disable collisions for spectators with peds https://forum.mtasa.com/topic/123001-new-help-how-to-disable-players-collision/

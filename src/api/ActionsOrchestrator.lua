@@ -346,8 +346,12 @@ function ActionsOrchestrator:ExecuteStartsWithRequests()
                     print("[ExecuteStartsWithRequests] actorId ".. actorId.." ".." eventId "..tostring(eventId).." - action "..action.Name..': '..action:GetDynamicString())
                 end
                 for _, startsWithRequest in ipairs(allStartsWithRequests) do
-                    startsWithRequest.performed = true
-                    self:EnqueueActionLinear(startsWithRequest.action, startsWithRequest.actor)
+                    if not startsWithRequest.performed then
+                        startsWithRequest.performed = true
+                        self:EnqueueActionLinear(startsWithRequest.action, startsWithRequest.actor)
+                    elseif DEBUG and DEBUG_ACTIONS_ORCHESTRATOR then
+                        print("[ExecuteStartsWithRequests] Skipping already-performed action for "..startsWithRequest.actor:getData('id').." event "..tostring(startsWithRequest.eventId))
+                    end
                 end
             end
         end

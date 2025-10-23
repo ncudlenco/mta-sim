@@ -27,8 +27,8 @@ GraphStory = class(StoryBase, function(o, spectators, logData, artifactCollectio
     o.DynamicEpisodes = {
       "house1_sweet",
       "house1_stripped",
-    -- --   "house3_preloaded", --NOT WORKING! The pathfinding seems flawed here, when we have 2 levels?
-    -- --   "house7", --NOT WORKING! Potential issue when the link POI is located outside a region
+    --   "house3_preloaded", --NOT WORKING! The pathfinding seems flawed here, when we have 2 levels?
+    --   "house7", --NOT WORKING! Potential issue when the link POI is located outside a region
       "house8_preloaded",
       "house9",
     --   "house10_preloaded", -- Not Working!
@@ -45,6 +45,7 @@ GraphStory = class(StoryBase, function(o, spectators, logData, artifactCollectio
     o.SpawnableObjects = {
         "Cigarette",
         "MobilePhone",
+        "Phone", -- Alias for MobilePhone
         -- "Drinks",
         -- "Food"
     }
@@ -66,10 +67,17 @@ GraphStory = class(StoryBase, function(o, spectators, logData, artifactCollectio
         "Receive"
     }
     o.MiddleActions = {
+        "TakeOut",
+        "Stash",
         "Drink",
         "Smoke",
         "LookAtObject",
+        "LookAt",
         "TalkPhone",
+        "AnswerPhone",
+        "HangUp",
+        "SmokeIn",
+        "SmokeOut",
         "Eat"
     }
     o.MaxActions = 9999
@@ -896,6 +904,7 @@ function GraphStory:FindAllValidActionsAndPois(episode, ro, eventsWithObjectAsTa
                     and nextEvent.Action:lower() ~= 'give'
                     and nextEvent.Action:lower() ~= 'inv-give'
                     and nextEvent.Action:lower() ~= 'lookatobject'
+                    and nextEvent.Action:lower() ~= 'lookat'
                 then
                     local nextActions = { currentAction.NextAction }
                     if isArray(currentAction.NextAction) then
@@ -1014,9 +1023,18 @@ function GraphStory:MapObjectsActionsAndPoi(requiredObjects, episode, actionMap,
             return
                 --The action was not already processed
                 not actionMap[event.id]
-                --The event is of type action (LookAtObject will be individually mapped during runtime, so we are not mapping it here)
+                --The event is of type action (LookAt/LookAtObject will be individually mapped during runtime, so we are not mapping it here)
                 and event.Action ~= 'Exists'
+                and event.Action ~= 'LookAt'
                 and event.Action ~= 'LookAtObject'
+                and event.Action ~= 'TakeOut'
+                and event.Action ~= 'Stash'
+                and event.Action ~= 'AnswerPhone'
+                and event.Action ~= 'TalkPhone'
+                and event.Action ~= 'HangUp'
+                and event.Action ~= 'SmokeIn'
+                and event.Action ~= 'Smoke'
+                and event.Action ~= 'SmokeOut'
                 -- and event.Action ~= 'Drink'
                 -- and event.Action ~= 'Eat'
                 --The event is not interaction and is with the required object

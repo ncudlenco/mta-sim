@@ -17,11 +17,7 @@ function HangUp:Apply()
         outputConsole("HangUp:Apply")
     end
 
-    OnGlobalActionFinished(2000, self.Performer:getData('id'), self.Performer:getData('storyId'), function()
-        detachElementFromBone(self.TargetItem.instance)
-        self.TargetItem:Destroy()
-        self.TargetItem:Create()
-    end)
+    OnGlobalActionFinished(2000, self.Performer:getData('id'), self.Performer:getData('storyId'))
 end
 
 function HangUp:GetDynamicString()

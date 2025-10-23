@@ -295,11 +295,35 @@ function Location:GetNextRandomValidAction(player)
     return PickRandom(nextValidActions);
 end
 
-function InstantiateAction(event, player, location, object)
+--- Instantiates specific actions that require dynamic object or actor references
+--- @param event table The event from the graph
+--- @param player userdata The ped performing the action
+--- @param location table The location where the action occurs
+--- @param target table|userdata|nil The target object or actor
+--- @return table|nil The instantiated action or nil
+function InstantiateAction(event, player, location, target)
     if event.Action == 'Drink' then
-        return Drink { performer = player, nextLocation = location, TargetItem = object }
-    elseif event.Action == 'LookAtObject' then
-        return LookAtObject { performer = player, nextLocation = location, TargetItem = object }
+        return Drink { performer = player, nextLocation = location, TargetItem = target }
+    elseif event.Action == 'LookAt' or event.Action == 'LookAtObject' then
+        -- LookAt accepts any target (ped, object, or coordinates)
+        -- Uses element:getType() internally to determine target type
+        return LookAt { performer = player, nextLocation = location, Target = target, TargetItem = target }
+    elseif event.Action == 'TakeOut' then
+        return TakeOut { performer = player, nextLocation = location, TargetItem = target }
+    elseif event.Action == 'Stash' then
+        return Stash { performer = player, nextLocation = location, TargetItem = target }
+    elseif event.Action == 'AnswerPhone' then
+        return AnswerPhone { performer = player, nextLocation = location, TargetItem = target }
+    elseif event.Action == 'TalkPhone' then
+        return TalkPhone { performer = player, nextLocation = location, TargetItem = target }
+    elseif event.Action == 'HangUp' then
+        return HangUp { performer = player, nextLocation = location, TargetItem = target }
+    elseif event.Action == 'SmokeIn' then
+        return SmokeIn { performer = player, nextLocation = location, TargetItem = target }
+    elseif event.Action == 'Smoke' then
+        return Smoke { performer = player, nextLocation = location, TargetItem = target }
+    elseif event.Action == 'SmokeOut' then
+        return SmokeOut { performer = player, nextLocation = location, TargetItem = target }
     end
     return nil
 end
@@ -375,6 +399,72 @@ function Location:CreateMoveAction(targetLocation, nextEvent, moveTemplate)
     return move
 end
 
+--- Get or create a spawnable object from actor's inventory
+-- @param event The graph event requiring the object
+-- @param player The ped actor
+-- @return The object instance (existing or newly created), or nil
+function Location:GetOrCreateSpawnableObject(event, player)
+    -- All spawnable object actions now have object entity in graph
+    if #event.Entities < 2 then
+        return nil
+    end
+
+    local playerChainId = player:getData('mappedChainId')
+    local objectId = self:GetMappedEventObjectId(event.Entities[2], playerChainId)
+
+    if objectId ~= 'spawnable' then
+        return nil
+    end
+
+    local objectType = CURRENT_STORY.graph[event.Entities[2]].Properties.Type
+    local inventoryType = objectType:lower()
+    local slotNumber = PedHandler:HasInInventory(player, inventoryType)
+
+    if not slotNumber then
+        return nil
+    end
+
+    -- Check if already instantiated
+    local existingInstance = PedHandler:GetInventoryInstance(player, slotNumber)
+    if existingInstance then
+        return existingInstance
+    end
+
+    -- Create new instance for TakeOut action
+    if event.Action == 'TakeOut' then
+        local x, y, z = getElementPosition(player)
+        local rx, ry, rz = getElementRotation(player)
+        local actorId = player:getData('id')
+
+        local objectInstance = nil
+
+        -- Create object instance (StoryObjectBase assigns default Guid)
+        if inventoryType == "mobilephone" then
+            objectInstance = MobilePhone({
+                modelid = MobilePhone.eModel.MobilePhone1,
+                position = {x=x, y=y, z=z},
+                rotation = {x=rx, y=ry, z=rz},
+                interior = player:getInterior()
+            })
+        elseif inventoryType == "cigarette" then
+            objectInstance = Cigarette({
+                modelid = Cigarette.eModel.Cigarette1,
+                position = {x=x, y=y, z=z},
+                rotation = {x=rx, y=ry, z=rz},
+                interior = player:getInterior()
+            })
+        end
+
+        -- Override ObjectId with pattern: spawnable_<type>_<actor_id> (similar to episode objects)
+        if objectInstance then
+            objectInstance.ObjectId = 'spawnable_' .. inventoryType .. '_' .. actorId
+        end
+
+        return objectInstance
+    end
+
+    return nil
+end
 
 function Location:ProcessNextAction(player)
     local event = CURRENT_STORY.nextEvents[player:getData('id')]
@@ -502,15 +592,43 @@ function Location:ProcessNextAction(player)
         elseif not isMoveEvent then
             local pickedUpObjects = player:getData('pickedObjects')
             local playerChainId = player:getData('mappedChainId')
-            local isActionWithObjectCurrentlyPicked = event and #event.Entities > 1 and #pickedUpObjects > 0 and #pickedUpObjects[1] > 0 and self:GetMappedEventObjectId(event.Entities[2], playerChainId) == pickedUpObjects[1][1]
+            local mappedObject = self:GetMappedEventObjectId(event.Entities[2], playerChainId)
+            local isActionWithObjectCurrentlyPicked = event and #event.Entities > 1 and #pickedUpObjects > 0 and #pickedUpObjects[1] > 0-- and self:GetMappedEventObjectId(event.Entities[2], playerChainId) == pickedUpObjects[1][1]
+            local isActionWithSpawnableObject = mappedObject == 'spawnable'
 
-            if isActionWithObjectCurrentlyPicked then
+            if isActionWithObjectCurrentlyPicked and not isActionWithSpawnableObject then
                 local object = FirstOrDefault(CURRENT_STORY.CurrentEpisode.Objects, function(o) return o.ObjectId == pickedUpObjects[1][1] end)
                 eventAction = InstantiateAction(event, player, location, object)
             end
-            if eventAction == nil and event.Action == 'LookAtObject' then
-                local object = FirstOrDefault(CURRENT_STORY.CurrentEpisode.Objects, function(o) return o.ObjectId == self:GetMappedEventObjectId(event.Entities[2], playerChainId) end)
-                eventAction = InstantiateAction(event, player, location, object)
+
+            -- Handle spawnable objects from actor's inventory
+            if eventAction == nil and event then
+                local objectInstance = self:GetOrCreateSpawnableObject(event, player)
+
+                if objectInstance then
+                    eventAction = InstantiateAction(event, player, location, objectInstance)
+                end
+            end
+
+            if eventAction == nil and (event.Action == 'LookAt' or event.Action == 'LookAtObject') then
+                -- Check if the target entity is an actor or an object
+                local targetEntityId = event.Entities[2]
+                local targetEntity = CURRENT_STORY.graph[targetEntityId]
+
+                -- If target has Gender property, it's an actor
+                if targetEntity and targetEntity.Properties and targetEntity.Properties.Gender then
+                    -- Find the actor ped
+                    local targetActor = FirstOrDefault(CURRENT_STORY.CurrentEpisode.peds, function(p) return p:getData('id') == targetEntityId end)
+                    if targetActor then
+                        eventAction = InstantiateAction(event, player, location, targetActor)
+                    else
+                        print('[WARNING] LookAt: Could not find target actor ' .. targetEntityId)
+                    end
+                else
+                    -- Target is an object
+                    local object = FirstOrDefault(CURRENT_STORY.CurrentEpisode.Objects, function(o) return o.ObjectId == self:GetMappedEventObjectId(event.Entities[2], playerChainId) end)
+                    eventAction = InstantiateAction(event, player, location, object)
+                end
             end
             if eventAction == nil then
                 eventAction = FirstOrDefault(location.allActions, function(action) return action.Name:lower() == event.Action:lower() end)
@@ -715,7 +833,7 @@ function Location:ProcessNextAction(player)
                 return poi.Region and nextEvent.Location and (poi.Region.name:lower():find(nextEvent.Location[1]:lower()) and true or false )
             end)
         end
-        if nextEvent.Action == 'LookAtObject' then
+        if nextEvent.Action == 'LookAt' or nextEvent.Action == 'LookAtObject' then
             candidates = {
                 location
             }

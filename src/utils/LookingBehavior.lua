@@ -14,28 +14,42 @@ end
 
 --- Rotate a ped's body to face towards a target position
 -- Uses matrix calculations to determine the rotation angle and updates the ped's rotation.
--- Includes NaN validation to prevent invalid rotations.
 -- @param performer userdata The ped element to rotate
 -- @param targetPos Vector3 The position to face towards
 -- @return boolean True if rotation was successful, false otherwise
 function LookingBehavior.faceTowardsTarget(performer, targetPos)
     if not performer or not targetPos then
+        if DEBUG then
+            print("LookingBehavior.faceTowardsTarget: Invalid performer or targetPos")
+        end
         return false
     end
 
     if not isElement(performer) or not performer.position then
+        if DEBUG then
+            print("LookingBehavior.faceTowardsTarget: Performer is not an element or has no position")
+        end
         return false
     end
 
     local targetFront = targetPos - performer.position
     local angle = performer.matrix.forward:angleAboutAxis(targetFront, performer.matrix.up)
 
-    if not LookingBehavior.isNaN(angle) then
-        performer.rotation = Vector3(0, 0, performer.rotation.z + math.deg(angle))
-        return true
+    if DEBUG then
+        print(string.format("LookingBehavior.faceTowardsTarget: performer=%s, currentRot=%.2f, angle=%.2f deg",
+            tostring(performer:getData('id') or 'unknown'),
+            performer.rotation.z,
+            math.deg(angle)
+        ))
     end
 
-    return false
+    performer.rotation = Vector3(0, 0, performer.rotation.z + math.deg(angle))
+
+    if DEBUG then
+        print(string.format("LookingBehavior.faceTowardsTarget: Set new rotation to %.2f", performer.rotation.z))
+    end
+
+    return true
 end
 
 --- Trigger client-side head tracking for a ped
@@ -118,19 +132,19 @@ function LookingBehavior.startContinuousLooking(performer, getTargetPosFn, optio
         end
 
         -- Step 2: Delayed head look to allow body rotation to complete
-        -- if initialDelay > 0 then
-        --     Timer(function()
-        --         if LookingBehavior.isPerformerValid(performer, expectedAction) then
-        --             local currentTargetPos = getTargetPosFn()
-        --             if currentTargetPos then
-        --                 LookingBehavior.triggerHeadLook(performer, currentTargetPos)
-        --             end
-        --         end
-        --     end, initialDelay, 1)
-        -- else
-        --     -- Immediate head look
-        --     LookingBehavior.triggerHeadLook(performer, initialTargetPos)
-        -- end
+        if initialDelay > 0 then
+            Timer(function()
+                if LookingBehavior.isPerformerValid(performer, expectedAction) then
+                    local currentTargetPos = getTargetPosFn()
+                    if currentTargetPos then
+                        LookingBehavior.triggerHeadLook(performer, currentTargetPos)
+                    end
+                end
+            end, initialDelay, 1)
+        else
+            -- Immediate head look
+            LookingBehavior.triggerHeadLook(performer, initialTargetPos)
+        end
 
         -- Step 3: Start continuous rotation timer
         rotationTimer = Timer(function()
@@ -139,9 +153,9 @@ function LookingBehavior.startContinuousLooking(performer, getTargetPosFn, optio
                 if rotationTimer and isTimer(rotationTimer) then
                     killTimer(rotationTimer)
                     rotationTimer = nil
-                    -- LookingBehavior.triggerHeadLook(performer, nil) -- Reset head look
+                    LookingBehavior.triggerHeadLook(performer, nil) -- Reset head look
                     if DEBUG then
-                        outputConsole("LookingBehavior: Timer stopped - performer invalid or action changed")
+                        print("LookingBehavior: Timer stopped - performer invalid or action changed")
                     end
                 end
                 return
@@ -155,23 +169,23 @@ function LookingBehavior.startContinuousLooking(performer, getTargetPosFn, optio
                     LookingBehavior.faceTowardsTarget(performer, currentTargetPos)
 
                     -- Then update head look after a small delay (let body turn first)
-                    -- Timer(function()
-                    --     if LookingBehavior.isPerformerValid(performer, expectedAction) then
-                    --         -- LookingBehavior.triggerHeadLook(performer, currentTargetPos)
-                    --     end
-                    -- end, 100, 1)
+                    Timer(function()
+                        if LookingBehavior.isPerformerValid(performer, expectedAction) then
+                            LookingBehavior.triggerHeadLook(performer, currentTargetPos)
+                        end
+                    end, 100, 1)
                 else
                     -- Head-only mode: update head look immediately
-                    -- LookingBehavior.triggerHeadLook(performer, currentTargetPos)
+                    LookingBehavior.triggerHeadLook(performer, currentTargetPos)
                 end
             else
                 -- Target no longer valid, stop timer
                 if rotationTimer and isTimer(rotationTimer) then
                     killTimer(rotationTimer)
                     rotationTimer = nil
-                    -- LookingBehavior.triggerHeadLook(performer, nil) -- Reset head look
+                    LookingBehavior.triggerHeadLook(performer, nil) -- Reset head look
                     if DEBUG then
-                        outputConsole("LookingBehavior: Timer stopped - target invalid")
+                        print("LookingBehavior: Timer stopped - target invalid")
                     end
                 end
             end
@@ -189,11 +203,11 @@ function LookingBehavior.stopContinuousLooking(performer, timerHandle)
     if timerHandle and isTimer(timerHandle) then
         killTimer(timerHandle)
         if DEBUG then
-            outputConsole("LookingBehavior: Manual timer cleanup")
+            print("LookingBehavior: Manual timer cleanup")
         end
     end
 
     if performer and isElement(performer) then
-        -- LookingBehavior.triggerHeadLook(performer, nil) -- Reset head tracking
+        LookingBehavior.triggerHeadLook(performer, nil) -- Reset head tracking
     end
 end

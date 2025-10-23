@@ -262,6 +262,7 @@ function Template:InsertInEpisode(episode, deserialize)
     --add the dependent objects in the episode objects list
     for _, o in ipairs(template.objects) do
         local obj = loadstring(o.dynamicString)()
+        obj.ObjectId = #episode.Objects .. '_' .. episode.name
         obj.instance = o.instance
         obj:UpdateData(not (deserialize and true or false))
         table.insert(

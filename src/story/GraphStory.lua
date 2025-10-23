@@ -91,6 +91,8 @@ GraphStory = class(StoryBase, function(o, spectators, logData, artifactCollectio
     end
     o.graph = nil
     o.temporal = nil
+    o.spatial = nil
+    o.materializedObjects = {}
     o.lastEvents = {}
     o.lastLocations = {}
     o.nextEvents = {}
@@ -115,6 +117,13 @@ GraphStory = class(StoryBase, function(o, spectators, logData, artifactCollectio
         end
         if o.graph['temporal_abs'] then
             o.graph['temporal_abs'] = nil
+        end
+        if o.graph['spatial'] then
+            o.spatial = o.graph['spatial']
+            o.graph['spatial'] = nil
+            if DEBUG then
+                print("GraphStory: loaded spatial constraints")
+            end
         end
         for k,v in pairs(o.graph) do
             if v.Action then
@@ -448,6 +457,24 @@ function GraphStory:ValidateEpisode(
     -- In the end, if a sub-tree of linked episodes that satisfy all the requirements is found, then all the found episodes are wrapped in a meta-episode, which will be used to play the story.
     -- At this point, the function below works on granular episodes (non-meta-episodes), so it is allowed to have partial matches.
     self:MapObjectsActionsAndPoi(requiredObjects, episode, actionMap, eventMap, objectMap, eventObjectMap, poiMap)
+
+    -- Validate spatial constraints for mapped objects
+    local spatiallyValid, failedObjects = self:ValidateSpatialConstraints(episode, eventObjectMap)
+    if not spatiallyValid then
+        if DEBUG_VALIDATION then
+            print('[GraphStory] Episode ' .. episode.name .. ' discarded due to unsatisfiable spatial constraints for objects: ' .. join(', ', failedObjects))
+        end
+        -- Return early with zero score to discard this episode
+        res = {
+            setCoverScore = 0,
+            requiredLocations = requiredLocations,
+            requiredObjects = requiredObjects,
+            requiredActions = requiredActions
+        }
+        self.validMemo[episode.name] = res
+        return res
+    end
+
     for eventRoId, potentialRealObjects in pairs(eventObjectMap) do
         if DEBUG_VALIDATION then
             print('!!!!!!!!!!!!!!!!!!!!!!Mapped '..eventRoId..' to '..#potentialRealObjects..' potential chains of real objects')
@@ -988,6 +1015,148 @@ end
 ---   ** objectMap[simulatorObjectId] = {graphObjectId1, graphObjectId2, ...}
 ---   ** eventObjectMap[graphObjectId] = {simulatorObjectId1, simulatorObjectId2, ...}
 ---   ** poiMap[graphEventId] = {simulatorLocationId1, simulatorLocationId2, ...}
+--- Validate spatial constraints for mapped objects in an episode
+--- Checks if at least one valid spatial configuration exists for each object with constraints
+---
+--- @param episode any The episode being validated
+--- @param eventObjectMap table Map of event object IDs to chains of real object mappings
+--- @return boolean True if all spatial constraints can be satisfied
+--- @return table|nil Objects that failed spatial validation (nil if all valid)
+function GraphStory:ValidateSpatialConstraints(episode, eventObjectMap)
+    if not self.spatial then
+        return true, nil -- No spatial constraints defined
+    end
+
+    local failedObjects = {}
+
+    -- Check each object that has spatial constraints
+    for eventObjectId, spatialConstraintDef in pairs(self.spatial) do
+        if spatialConstraintDef.relations and #spatialConstraintDef.relations > 0 then
+            local relations = spatialConstraintDef.relations
+
+            if DEBUG_VALIDATION then
+                print("[GraphStory] Validating spatial constraints for object " .. eventObjectId)
+            end
+
+            -- Check if this object is mapped
+            if eventObjectMap[eventObjectId] and #eventObjectMap[eventObjectId] > 0 then
+                -- For each relation, check if target object can be found
+                local allRelationsCanBeSatisfied = true
+
+                for _, relation in ipairs(relations) do
+                    local targetObjectId = relation.target
+                    local relationType = relation.type
+
+                    if DEBUG_VALIDATION then
+                        print("[GraphStory] Checking if " .. eventObjectId .. " " .. relationType .. " " .. targetObjectId .. " can be satisfied")
+                    end
+
+                    -- Check if target object is mapped
+                    if eventObjectMap[targetObjectId] and #eventObjectMap[targetObjectId] > 0 then
+                        -- Find at least one valid combination of source and target objects that satisfy the constraint
+                        local foundValidCombination = false
+
+                        for _, sourceChain in ipairs(eventObjectMap[eventObjectId]) do
+                            local sourceObjectId = sourceChain.value
+
+                            if sourceObjectId == 'spawnable' then
+                                -- Spawnable objects don't have fixed positions
+                                foundValidCombination = true
+                                break
+                            end
+
+                            local sourceObject = FirstOrDefault(episode.Objects, function(o)
+                                return o.ObjectId == sourceObjectId
+                            end)
+
+                            if sourceObject and sourceObject.position then
+                                -- Try to find a target object that satisfies the constraint
+                                for _, targetChain in ipairs(eventObjectMap[targetObjectId]) do
+                                    local targetRealObjectId = targetChain.value
+
+                                    if targetRealObjectId ~= 'spawnable' then
+                                        local targetObject = FirstOrDefault(episode.Objects, function(o)
+                                            return o.ObjectId == targetRealObjectId
+                                        end)
+
+                                        if targetObject and targetObject.position then
+                                            -- Get object types for dynamic threshold calculation
+                                            local sourceType = nil
+                                            local targetType = nil
+                                            if self.graph[eventObjectId] and self.graph[eventObjectId].Properties then
+                                                sourceType = self.graph[eventObjectId].Properties.Type
+                                            end
+                                            if self.graph[targetObjectId] and self.graph[targetObjectId].Properties then
+                                                targetType = self.graph[targetObjectId].Properties.Type
+                                            end
+
+                                            -- Get element references if available
+                                            local sourceElement = sourceObject.element or nil
+                                            local targetElement = targetObject.element or nil
+
+                                            -- Validate the spatial relation
+                                            local isValid = self.SpatialCoordinator:ValidateRelation(
+                                                sourceObject.position,
+                                                targetObject.position,
+                                                targetObject.rotation or {x=0, y=0, z=0},
+                                                relationType,
+                                                sourceType,
+                                                targetType,
+                                                sourceElement,
+                                                targetElement
+                                            )
+
+                                            if isValid then
+                                                foundValidCombination = true
+                                                if DEBUG_VALIDATION then
+                                                    print("[GraphStory] ✓ Found valid combination: " .. sourceObjectId .. " " .. relationType .. " " .. targetRealObjectId)
+                                                end
+                                                break
+                                            end
+                                        end
+                                    end
+                                end
+
+                                if foundValidCombination then
+                                    break
+                                end
+                            end
+                        end
+
+                        if not foundValidCombination then
+                            if DEBUG_VALIDATION then
+                                print("[GraphStory] ✗ No valid combination found for " .. eventObjectId .. " " .. relationType .. " " .. targetObjectId)
+                            end
+                            allRelationsCanBeSatisfied = false
+                            break
+                        end
+                    else
+                        if DEBUG_VALIDATION then
+                            print("[GraphStory] Target object " .. targetObjectId .. " not mapped - spatial constraint cannot be validated during episode validation")
+                        end
+                        -- Target not mapped means we can't validate this constraint at episode level
+                        -- It will be validated at runtime - skip this relation
+                    end
+                end
+
+                if not allRelationsCanBeSatisfied then
+                    table.insert(failedObjects, eventObjectId)
+                    if DEBUG_VALIDATION then
+                        print("[GraphStory] Episode " .. episode.name .. " cannot satisfy spatial constraints for object " .. eventObjectId)
+                    end
+                end
+            else
+                if DEBUG_VALIDATION then
+                    print("[GraphStory] Object " .. eventObjectId .. " not mapped, skipping spatial validation")
+                end
+            end
+        end
+    end
+
+    local isValid = #failedObjects == 0
+    return isValid, #failedObjects > 0 and failedObjects or nil
+end
+
 ---
 ---CURRENT GRAPH EVENT COVERAGE
 ---Only events representing actions with objects are mapped with the exception of 'Exists', 'Move', 'give', 'receive', 'look at object', and interactions are not mapped.

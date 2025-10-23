@@ -63,6 +63,7 @@ Inherits from `StoryBase` and orchestrates the entire graph-to-simulation transl
 - **Events**: Represent actions (`Move`, `Drink`, `Sleep`) or existence (`Exists`)
 - **Entities**: [ActorId, ObjectId] pairs defining who does what with what
 - **Temporal**: Defines event sequencing with `next`, `after`, `before`, `starts_with`, `concurrent`
+- **Spatial**: Defines object positional relationships with `on`, `near`, `left`, `right`, `in_front`, `behind`
 - **Properties**: Actor attributes (gender, name) and object types
 
 ### Episode Validation Strategy
@@ -113,11 +114,54 @@ Supports multi-location stories through episode linking:
 - Creates action queues for each actor
 - Delegates constraint satisfaction to ActionsOrchestrator
 
+### Spatial Constraint Processing
+**Purpose:** Enforce positional relationships between objects to synchronize multi-actor scenarios.
+
+**Graph Schema:**
+```json
+"spatial": {
+  "laptop": {
+    "relations": [
+      {"target": "Desk", "type": "on"}
+    ]
+  },
+  "officeChair": {
+    "relations": [
+      {"target": "Desk", "type": "behind"}
+    ]
+  }
+}
+```
+
+**Parsing ([GraphStory.lua:121-127](../src/story/GraphStory.lua#L121-L127)):**
+- Loads `spatial` section during graph initialization
+- Stores in `CURRENT_STORY.spatial`
+- Initializes `CURRENT_STORY.materializedObjects = {}` for runtime tracking
+
+**Supported Relation Types (Global Coordinate System):**
+- **`on`** - Source on top of target (vertical + horizontal proximity)
+- **`near`** - Source near target (3D Euclidean distance ≤ 5.0 units)
+- **`left`** - Source to the left of target (45° to 135°)
+- **`right`** - Source to the right of target (-135° to -45°)
+- **`in_front`** - Source in front of target (-45° to 45°)
+- **`behind`** - Source behind target (beyond ±135°)
+
+**Runtime Enforcement:**
+1. **Object Materialization** - When actor selects location, object positions recorded
+2. **Constraint Validation** - Subsequent actors validate candidates against materialized objects
+3. **Multi-Actor Synchronization** - Ensures objects satisfy spatial relations (e.g., "3 chairs at same desk")
+
+**Implementation:**
+- Validation logic in [SpatialCoordinator.lua](../utils/SpatialCoordinator.md)
+- Integrated into [Location.lua](Locations/Location.md) candidate selection
+- Lazy enforcement - constraints only checked when target objects materialized
+
 ### Critical Validation Points
 1. **Actor Requirements**: Must have `Exists` events with gender/name
 2. **Location Matching**: Graph locations must exist in episode regions
 3. **Object Availability**: Required objects must exist or be spawnable
 4. **Action Chains**: Sequential actions must form valid chains without breaks
 5. **Temporal Consistency**: All temporal constraints must be satisfiable
+6. **Spatial Consistency**: Object positions must satisfy spatial relations when materialized
 
 This system represents a sophisticated graph-to-3D-simulation translation engine with advanced temporal synchronization, object mapping, and multi-episode story support.

@@ -35,6 +35,14 @@ function LookingBehavior.faceTowardsTarget(performer, targetPos)
     local targetFront = targetPos - performer.position
     local angle = performer.matrix.forward:angleAboutAxis(targetFront, performer.matrix.up)
 
+    -- NaN safety check using existing utility
+    if LookingBehavior.isNaN(angle) then
+        if DEBUG then
+            print("LookingBehavior.faceTowardsTarget: Angle is NaN, skipping rotation")
+        end
+        return false
+    end
+
     if DEBUG then
         print(string.format("LookingBehavior.faceTowardsTarget: performer=%s, currentRot=%.2f, angle=%.2f deg",
             tostring(performer:getData('id') or 'unknown'),

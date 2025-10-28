@@ -928,13 +928,10 @@ function GraphStory:FindAllValidActionsAndPois(episode, ro, eventsWithObjectAsTa
                 end
                 local nextEvent = self.graph[nextEventId]
 
-                if
-                        nextEvent.Action:lower() ~= 'move'
-                    and nextEvent.Action:lower() ~= 'give'
-                    and nextEvent.Action:lower() ~= 'inv-give'
-                    and nextEvent.Action:lower() ~= 'lookatobject'
-                    and nextEvent.Action:lower() ~= 'lookat'
-                then
+                -- Check if this event should be validated against the action chain
+                -- Interactions and special actions (Move, LookAt, etc.) can interrupt
+                -- object manipulation chains without requiring explicit nextAction links
+                if not self:IsInteractionOrSkippableAction(nextEvent.Action) then
                     local nextActions = { currentAction.NextAction }
                     if isArray(currentAction.NextAction) then
                         nextActions = currentAction.NextAction
@@ -959,7 +956,10 @@ function GraphStory:FindAllValidActionsAndPois(episode, ro, eventsWithObjectAsTa
                         print("Next action that also matches next event "..currentAction.Name)
                     end
                 else
-                    print('The event does not follow the chain of actions. Event: '..nextEvent.Action..' Action: '..currentAction.Name)
+                    -- This event is an interaction or special action that can interrupt the chain
+                    if DEBUG_VALIDATION then
+                        print('Skipping interaction/special action: '..nextEvent.Action..' (does not need to match action chain)')
+                    end
                     break
                 end
                 currentEvent = nextEvent
@@ -1380,6 +1380,37 @@ function GraphStory:MatchEventAndAction(action, event, poi, actionMap, eventMap,
         end
         return false
     end
+end
+
+--- Determines if an action is an interaction or special action that should skip chain validation.
+--- When validating event sequences against template action chains, interactions (Talk, Hug, etc.)
+--- and certain special actions (Move, LookAt, etc.) should not break the validation chain.
+--- They are allowed to occur between object manipulation actions without requiring explicit
+--- nextAction links in templates.
+---
+--- @param actionName string The name of the action to check
+--- @return boolean True if this action should skip chain validation, false otherwise
+function GraphStory:IsInteractionOrSkippableAction(actionName)
+    local lower = actionName:lower()
+
+    -- Special movement/location actions that can interrupt chains
+    if lower == 'move' then
+        return true
+    end
+
+    -- Check if it's an interaction (Talk, Hug, Kiss, Handshake, etc.)
+    -- These are defined in self.Interactions and represent actor-to-actor actions
+    if Any(self.Interactions, function(a) return a:lower() == lower end) then
+        return true
+    end
+
+    -- Specific non-object actions that can interrupt without breaking chains
+    local skippableActions = {'lookatobject', 'lookat', 'wave'}
+    if inList(lower, skippableActions) then
+        return true
+    end
+
+    return false
 end
 
 function GraphStory:ProcessActions(graphActors)

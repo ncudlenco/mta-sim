@@ -115,6 +115,7 @@
   <!-- Actions -->
   <script src="src/story/Actions/DynamicAction.lua" type="shared" />
   <script src="src/story/Actions/ActionsGlobals.lua" type="shared" />
+  <script src="src/story/Actions/InteractionActionBase.lua" type="shared" />
   <script src="src/story/Actions/AnswerPhone.lua" type="shared" />
   <script src="src/story/Actions/Cook.lua" type="shared" />
   <script src="src/story/Actions/Eat.lua" type="shared" />

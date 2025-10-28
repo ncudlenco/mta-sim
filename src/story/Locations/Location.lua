@@ -40,7 +40,7 @@ function Location:SpawnPlayerHere(player, spectate)
     end
     local z = self.Z
     if spectate then
-        z = self.Z + 3
+        z = self.Z + 20
     end
     player:spawn(self.X, self.Y, z, self.Angle, player.model, self.Interior)
     -- player:fadeCamera (true)
@@ -400,13 +400,16 @@ function Location:FilterCandidatesBySpatialConstraints(candidates, event, materi
     return filteredCandidates
 end
 
--- Helper function to create a location clone for interaction actors
+--- Creates a location clone for interaction actors with specified offset
+--- @param originalLocation Location The original location to clone
+--- @param offset Vector3|nil The offset to apply (default: Vector3(-0.7, -0.7, 0))
+--- @return Location The cloned location
 function Location:CreateInteractionClone(originalLocation, offset)
-    offset = offset or 0.7
+    offset = offset or Vector3(-0.7, -0.7, 0)
     local clone = Location(
-        originalLocation.X - offset,
-        originalLocation.Y - offset,
-        originalLocation.Z,
+        originalLocation.X + offset.x,
+        originalLocation.Y + offset.y,
+        originalLocation.Z + offset.z,
         originalLocation.Angle,
         originalLocation.Interior,
         originalLocation.Description,
@@ -440,17 +443,22 @@ function Location:ShouldCloneForInteraction(targetLocation, nextEvent)
     return interactionPoiMap[nextEvent.interactionRelation] == targetLocation.LocationId
 end
 
--- Helper function to create a Move action between locations
--- Handles special case when multiple actors move to the same interaction POI
-function Location:CreateMoveAction(targetLocation, nextEvent, moveTemplate)
+--- Creates a Move action between locations
+--- Handles special case when multiple actors move to the same interaction POI
+--- @param targetLocation Location The target location
+--- @param nextEvent table|nil The next event (for interaction handling)
+--- @param moveTemplate table The move action template
+--- @param interactionOffset Vector3|nil The offset for interaction positioning
+--- @return Move The created move action
+function Location:CreateMoveAction(targetLocation, nextEvent, moveTemplate, interactionOffset)
     local interactionPoiMap = CURRENT_STORY.interactionPoiMap
     local finalTarget = targetLocation
 
     -- Special handling if this is a move towards an interaction POI
     if targetLocation.interactionsOnly and nextEvent and nextEvent.isInteraction and nextEvent.interactionRelation then
         if interactionPoiMap[nextEvent.interactionRelation] == targetLocation.LocationId then
-            -- Second actor - create clone to avoid collision
-            finalTarget = self:CreateInteractionClone(targetLocation)
+            -- Second actor - create clone to avoid collision, using the interaction's specific offset
+            finalTarget = self:CreateInteractionClone(targetLocation, interactionOffset)
             print("Creating Move for second actor in interaction - using offset position")
         else
             -- First actor - claim this POI for the interaction
@@ -601,8 +609,17 @@ function Location:ProcessNextAction(player)
         print('Next action is in another location. Inserting a Move action from '..previousLocation.Description..' to '..location.Description..' in episode '..location.Episode.name)
         local moveAction = FirstOrDefault(previousLocation.allActions, function(action) return action.Name == 'Move' and action.TargetItem == location end)
 
+        -- Determine interaction offset if this is a move towards an interaction
+        local interactionOffset = nil
+        if nextEvent and nextEvent.isInteraction and nextEvent.interactionRelation then
+            -- Check if we already have a stored action for this interaction
+            if CURRENT_STORY.interactionActionMap and CURRENT_STORY.interactionActionMap[nextEvent.interactionRelation] then
+                interactionOffset = CURRENT_STORY.interactionActionMap[nextEvent.interactionRelation].InteractionOffset
+            end
+        end
+
         -- Use our helper function to create the proper Move action (handles interaction POI cloning if needed)
-        local moveClone = self:CreateMoveAction(location, nextEvent, moveAction)
+        local moveClone = self:CreateMoveAction(location, nextEvent, moveAction, interactionOffset)
         table.insert(CURRENT_STORY.actionsQueues[player:getData('id')], moveClone)
     end
 
@@ -658,6 +675,13 @@ function Location:ProcessNextAction(player)
                 if not eventAction then
                     error('Event action could not be instantiated. '..event.Action)
                 end
+
+                -- Store the interaction action for later offset retrieval
+                if not CURRENT_STORY.interactionActionMap then
+                    CURRENT_STORY.interactionActionMap = {}
+                end
+                CURRENT_STORY.interactionActionMap[event.interactionRelation] = eventAction
+
                 wait.NextAction = eventAction
             end
             interactionProcessedMap[event.interactionRelation] = true
@@ -802,6 +826,27 @@ function Location:ProcessNextAction(player)
             return otherActorChainIds
         end
 
+        -- Helper function to get POIs currently occupied by other actors
+        local function getOccupiedPOIs()
+            local occupiedPOIs = {}
+            for _, ped in ipairs(CURRENT_STORY.CurrentEpisode.peds) do
+                if ped ~= player then
+                    -- Check current location (where actor currently is)
+                    local pedLocationId = ped:getData('locationId')
+                    if pedLocationId then
+                        occupiedPOIs[pedLocationId] = ped:getData('id')
+                    end
+
+                    -- Check reserved location (where actor plans to go during look-ahead)
+                    local pedReservedLocationId = ped:getData('reservedLocationId')
+                    if pedReservedLocationId then
+                        occupiedPOIs[pedReservedLocationId] = ped:getData('id')
+                    end
+                end
+            end
+            return occupiedPOIs
+        end
+
         local candidates;
         if CURRENT_STORY.poiMap and CURRENT_STORY.poiMap[nextEvent.id] then
             print("Assessing if there are any actual location candidates with id "..nextEvent.id)
@@ -929,21 +974,29 @@ function Location:ProcessNextAction(player)
         --     randomMove.Performer = self.Performer
         --     randomMove:Apply()
         -- end
+
+        -- Track whether chain-based selection succeeded (for conditional override logic)
+        local chainSelectionSucceeded = false
+
+        -- Get conflict detection data (used in both branches below)
+        local otherActorChainIds = getOtherActorChainIds()
+        local occupiedPOIs = getOccupiedPOIs()
+
         if #candidates == 0 then
             -- No candidates found, use current location as fallback
             nextLocation = location
             print('WARNING: No location candidates found for event '..nextEvent.id..'. Using current location.')
         elseif All(candidates, function(poi) return poi ~= location and poi.isBusy end) then
             -- All candidates are busy, but we need to pick one - apply chain conflict filtering
-            local otherActorChainIds = getOtherActorChainIds()
-
             local nonConflictingCandidates = Where(candidates, function(poi)
                 local poiChainId = poi:getData("mappedChainId_"..nextEvent.id)
                 return not otherActorChainIds[poiChainId]
+                   and not occupiedPOIs[poi.LocationId]
             end)
 
             if #nonConflictingCandidates > 0 then
                 nextLocation = PickRandom(nonConflictingCandidates)
+                chainSelectionSucceeded = true
                 if DEBUG then
                     print("Selected non-conflicting busy POI: " .. nextLocation.Description)
                 end
@@ -956,15 +1009,16 @@ function Location:ProcessNextAction(player)
         else
             -- Apply chain conflict filtering to non-busy candidates
             local availableCandidates = Where(candidates, function(poi) return not poi.isBusy end)
-            local otherActorChainIds = getOtherActorChainIds()
 
             local nonConflictingAvailable = Where(availableCandidates, function(poi)
                 local poiChainId = poi:getData("mappedChainId_"..nextEvent.id)
                 return not otherActorChainIds[poiChainId]
+                   and not occupiedPOIs[poi.LocationId]
             end)
 
             if #nonConflictingAvailable > 0 then
                 nextLocation = PickRandom(nonConflictingAvailable)
+                chainSelectionSucceeded = true
                 if DEBUG then
                     print("Selected non-conflicting available POI: " .. nextLocation.Description)
                 end
@@ -978,10 +1032,15 @@ function Location:ProcessNextAction(player)
 
         -- If the current location is among the next candidates, choose this one. This helps in case there are multiple actions in the same location: e.g. SitDown, PickUp, Eat, GetUp (on different chairs)
         -- I would like to execute all these actions on the same chair (same location)
-        if FirstOrDefault(candidates, function(poi) return poi == location end)
+        -- Only apply this override if chain selection failed (to preserve chain-based conflict avoidance)
+        if not chainSelectionSucceeded
+           and FirstOrDefault(candidates, function(poi) return poi == location end)
         --     and not Any(CURRENT_STORY.CurrentEpisode.peds, function(p) return p:getData('waitingFor') == poi.LocationId end) end)
         then
             nextLocation = FirstOrDefault(candidates, function(poi) return poi == location end)
+            if DEBUG and nextLocation then
+                print("Chain selection failed, staying at current location: " .. nextLocation.Description)
+            end
         end
         if not nextLocation then
             print('Could not find the next location '..nextEvent.id..': '..nextEvent.Location[1])
@@ -991,8 +1050,17 @@ function Location:ProcessNextAction(player)
         elseif nextEvent.isInteraction then
             if self:ShouldCloneForInteraction(nextLocation, nextEvent) then
                 --only subsequent actors reach this section (i.e. after a location was chosen for the interaction)
-                nextLocation = self:CreateInteractionClone(nextLocation)
-                print("Set nextLocation to a clone of the next location position, shifted by 0.7 "..nextLocation.Description)
+                -- Retrieve the interaction offset from the stored action
+                local interactionOffset = nil
+                if CURRENT_STORY.interactionActionMap and CURRENT_STORY.interactionActionMap[nextEvent.interactionRelation] then
+                    interactionOffset = CURRENT_STORY.interactionActionMap[nextEvent.interactionRelation].InteractionOffset
+                end
+                nextLocation = self:CreateInteractionClone(nextLocation, interactionOffset)
+                if interactionOffset then
+                    print("Set nextLocation to a clone of the next location position, shifted by offset "..nextLocation.Description)
+                else
+                    print("Set nextLocation to a clone of the next location position, using default offset "..nextLocation.Description)
+                end
             end
             interactionPoiMap[nextEvent.interactionRelation] = nextLocation.LocationId
         end
@@ -1012,6 +1080,14 @@ function Location:ProcessNextAction(player)
                 print("Player " .. player:getData('id') .. " already has chain ID: " .. currentChainId)
             elseif DEBUG then
                 print("No chain ID found for location " .. nextLocation.Description .. " and event " .. nextEvent.id)
+            end
+
+            -- Store the reserved location immediately to prevent other actors from selecting it
+            if nextLocation.LocationId ~= location.LocationId then
+                player:setData('reservedLocationId', nextLocation.LocationId)
+                if DEBUG then
+                    print("Player " .. player:getData('id') .. " reserved location " .. nextLocation.Description .. " (" .. nextLocation.LocationId .. ")")
+                end
             end
 
             -- Track object materialization for spatial constraint enforcement
@@ -1218,6 +1294,8 @@ function Location:GetNextValidAction(player)
             next.NextLocation.isBusy = true
             print(player:getData('id').."Location "..next.NextLocation.Description..' is busy')
             player:setData('locationId', next.NextLocation.LocationId)
+            -- Clear reserved location since we've now moved there
+            player:setData('reservedLocationId', nil)
 
         end
     end

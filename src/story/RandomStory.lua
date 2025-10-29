@@ -3,8 +3,8 @@
 --3. Random inter-episode connections
 
 --Random story
-RandomStory = class(StoryBase, function(o, spectators, maxActions, logData, artifactCollectionFactory, artifactManager)
-    StoryBase.init(o, spectators, maxActions)
+RandomStory = class(StoryBase, function(o, spectators, maxActions, logData, artifactCollectionFactory, artifactManager, eventBus)
+    StoryBase.init(o, spectators, maxActions, eventBus)
     o.LogData = logData
 
     -- Use the pre-configured artifact manager passed from Player.lua

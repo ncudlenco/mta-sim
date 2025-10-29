@@ -281,7 +281,7 @@ function ActionsOrchestrator:ExecuteSingularRequests()
                 action.Name .. ': ' .. action:GetDynamicString())
             end
             request.performed = true
-            self:EnqueueActionLinear(action, actor)
+            self:EnqueueActionLinear(action, actor, eventId)  -- Pass eventId
         end
     end
 end
@@ -322,7 +322,8 @@ function ActionsOrchestrator:ExecuteConcurrentRequests()
 
                     concurrentRequest.performed = true
                     Timer(function(concurrentRequest)
-                        self:EnqueueActionLinear(concurrentRequest.action, concurrentRequest.actor)
+                        -- Pass eventId from the captured request
+                        self:EnqueueActionLinear(concurrentRequest.action, concurrentRequest.actor, concurrentRequest.eventId)
                     end, delay, 1, concurrentRequest, self)
                 end
             end
@@ -348,7 +349,7 @@ function ActionsOrchestrator:ExecuteStartsWithRequests()
                 for _, startsWithRequest in ipairs(allStartsWithRequests) do
                     if not startsWithRequest.performed then
                         startsWithRequest.performed = true
-                        self:EnqueueActionLinear(startsWithRequest.action, startsWithRequest.actor)
+                        self:EnqueueActionLinear(startsWithRequest.action, startsWithRequest.actor, startsWithRequest.eventId)  -- Pass eventId
                     elseif DEBUG and DEBUG_ACTIONS_ORCHESTRATOR then
                         print("[ExecuteStartsWithRequests] Skipping already-performed action for "..startsWithRequest.actor:getData('id').." event "..tostring(startsWithRequest.eventId))
                     end
@@ -358,13 +359,42 @@ function ActionsOrchestrator:ExecuteStartsWithRequests()
     end
 end
 
-function ActionsOrchestrator:EnqueueActionLinear(action, actor)
+function ActionsOrchestrator:EnqueueActionLinear(action, actor, eventId)
     -- I need to check wether the actor is in a different context, if so, I have to trigger a context switch and wait for it before executing.
     action.Performer = actor
     actor:setData('isAwaitingConstraints', false)
+
     if DEBUG and DEBUG_ACTIONS_ORCHESTRATOR then
-        print("[EnqueueActionLinear] actorId ".. actor:getData('id').." - action "..action.Name..': '..action:GetDynamicString())
+        print("[EnqueueActionLinear] actorId ".. actor:getData('id').." - action "..action.Name..': '..action:GetDynamicString().." eventId: "..tostring(eventId))
     end
+
+    -- Store eventId on actor (since action instances are shared)
+    -- This is stored regardless of whether we publish, for event_end
+    if eventId then
+        actor:setData('currentGraphEventId', eventId)
+    end
+
+    -- Publish graph event start ONLY if action matches the event's expected action
+    -- This filters out artificially inserted Move actions
+    if eventId and CURRENT_STORY.EventBus and CURRENT_STORY:is_a(GraphStory) then
+        local expectedAction = CURRENT_STORY.graph[eventId] and CURRENT_STORY.graph[eventId].Action
+
+        -- Only publish if this action is the actual graph event action
+        if expectedAction and action.Name == expectedAction then
+            if DEBUG and DEBUG_ACTIONS_ORCHESTRATOR then
+                print("[EnqueueActionLinear] Publishing graph_event_start for "..eventId.." (action matches)")
+            end
+
+            CURRENT_STORY.EventBus:publish("graph_event_start", {
+                eventId = eventId,
+                actorId = actor:getData('id'),
+                actionName = action.Name
+            })
+        elseif DEBUG and DEBUG_ACTIONS_ORCHESTRATOR and expectedAction then
+            print("[EnqueueActionLinear] Skipping graph_event_start for "..eventId.." (action "..action.Name.." != expected "..expectedAction..")")
+        end
+    end
+
     local shouldAwaitContextSwitch = CURRENT_STORY.CurrentFocusedEpisode and actor:getData('currentEpisode') ~= CURRENT_STORY.CurrentFocusedEpisode.name
     if shouldAwaitContextSwitch then
         actor:setData('isAwaitingContextSwitch', true)

@@ -1,5 +1,5 @@
-GraphStory = class(StoryBase, function(o, spectators, logData, artifactCollectionFactory, artifactManager)
-    StoryBase.init(o, spectators, maxActions)
+GraphStory = class(StoryBase, function(o, spectators, logData, artifactCollectionFactory, artifactManager, eventBus)
+    StoryBase.init(o, spectators, nil, eventBus)
     o.LogData = logData
     o.globalChainCounter = 0 -- Global counter for unique chain IDs
 
@@ -25,22 +25,22 @@ GraphStory = class(StoryBase, function(o, spectators, logData, artifactCollectio
         -- House12()
     }
     o.DynamicEpisodes = {
-        "classroom1"
-    --   "house1_sweet",
-    --   "house1_stripped",
-    -- --   "house3_preloaded", --NOT WORKING! The pathfinding seems flawed here, when we have 2 levels?
-    -- --   "house7", --NOT WORKING! Potential issue when the link POI is located outside a region
-    --   "house8_preloaded",
-    --   "house9",
-    -- --   "house10_preloaded", -- Not Working!
-    --   "house12_preloaded", -- Working but needs the objects removed. Some flakiness exists but in general it works...
-    --   "garden",
-    --   "office",
-    --   "office2",
-    --   "common",
-    --   "gym1",
-    --   "gym2",
-    --   "gym3"
+      "classroom1",
+      "house1_sweet",
+      "house1_stripped",
+    --   "house3_preloaded", --NOT WORKING! The pathfinding seems flawed here, when we have 2 levels?
+    --   "house7", --NOT WORKING! Potential issue when the link POI is located outside a region
+      "house8_preloaded",
+      "house9",
+    --   "house10_preloaded", -- Not Working!
+      "house12_preloaded", -- Working but needs the objects removed. Some flakiness exists but in general it works...
+      "garden",
+      "office",
+      "office2",
+      "common",
+      "gym1",
+      "gym2",
+      "gym3"
     }
     o.Disposed = false
     o.SpawnableObjects = {
@@ -126,6 +126,19 @@ GraphStory = class(StoryBase, function(o, spectators, logData, artifactCollectio
                 print("GraphStory: loaded spatial constraints")
             end
         end
+
+        -- Load optional camera section (backwards compatible)
+        o.camera = nil
+        if o.graph['camera'] then
+            o.camera = o.graph['camera']
+            o.graph['camera'] = nil
+            local cmdCount = 0
+            for _ in pairs(o.camera) do cmdCount = cmdCount + 1 end
+            if DEBUG then
+                print("GraphStory: loaded camera controls with "..cmdCount.." commands")
+            end
+        end
+
         for k,v in pairs(o.graph) do
             if v.Action then
                 v.id = k
@@ -255,6 +268,11 @@ function GraphStory:Play()
                     end
                 )
             end
+
+            -- Initialize CameraHandler AFTER manager callbacks are set up
+            -- This ensures legacy mode event emission happens after initialization
+            local hasCameraSection = self.camera ~= nil
+            self.CameraHandler:initialize(hasCameraSection)
 
             -- Separate timer for MAX_STORY_TIME timeout (story's responsibility)
             self.StoryTimeoutTimer = Timer(function()
@@ -1550,6 +1568,11 @@ function GraphStory:End(reason)
 
     if self.Disposed then
         return
+    end
+
+    -- Cleanup EventBus subscriptions
+    if self.EventBus then
+        self.EventBus:clear()
     end
 
     -- Phase 1: Immediate cleanup

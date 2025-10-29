@@ -421,5 +421,10 @@
             "relations": null,
             "next": null
         }
+    },
+    "camera": {
+        "bogdan_picks_up_drink_obj": {
+            "action": "record"
+        }
     }
 }

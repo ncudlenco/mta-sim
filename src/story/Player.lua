@@ -6,23 +6,30 @@ function startSimulation(source)
         LOAD_FROM_GRAPH = INPUT_GRAPHS[1]
     end
 
+    -- Create EventBus first (singleton, created once)
+    local eventBus = EventBus:getInstance()
+
     -- Create MTA-specific adapter provider
     local adapterProvider = MTAAdapterProvider()
     -- Extract game-agnostic spectator data from MTA elements
     local spectatorsData = adapterProvider:extractSpectatorData(SPECTATORS)
-    -- Create artifact collection factory with game-agnostic configuration and MTA adapters
+
+    -- Create artifact collection factory and manager
     local artifactCollectionFactory = ArtifactCollectionFactory(nil, adapterProvider)
-    -- Create artifact collection manager
     local artifactManager = artifactCollectionFactory:createManager()
-    -- Register all collectors (raw, segmentation, depth) using game-agnostic data
+
+    -- Setup event subscriptions BEFORE creating story
     if artifactManager then
+        artifactCollectionFactory:setupEventSubscriptions(artifactManager, eventBus)
+        -- Register all collectors (raw, segmentation, depth) using game-agnostic data
         artifactCollectionFactory:registerCollectors(artifactManager, spectatorsData)
     end
 
+    -- Create story with EventBus injected
     if not FREE_ROAM and LOAD_FROM_GRAPH then
-        CURRENT_STORY = GraphStory(SPECTATORS, LOG_DATA, artifactCollectionFactory, artifactManager)
+        CURRENT_STORY = GraphStory(SPECTATORS, LOG_DATA, artifactCollectionFactory, artifactManager, eventBus)
     else
-        CURRENT_STORY = RandomStory(SPECTATORS, MAX_ACTIONS, LOG_DATA, artifactCollectionFactory, artifactManager)
+        CURRENT_STORY = RandomStory(SPECTATORS, MAX_ACTIONS, LOG_DATA, artifactCollectionFactory, artifactManager, eventBus)
     end
 
     -- Update artifact manager with story ID after story is instantiated

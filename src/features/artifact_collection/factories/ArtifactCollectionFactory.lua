@@ -58,6 +58,37 @@ function ArtifactCollectionFactory:createManager()
     return manager
 end
 
+--- Setup event subscriptions for artifact collection lifecycle
+--- Subscribes manager to artifact collection start/stop events from camera system
+--- This wiring is done by the factory to keep manager camera-agnostic
+---
+--- @param manager ArtifactCollectionManager The manager instance
+--- @param eventBus EventBus The event bus for subscriptions
+function ArtifactCollectionFactory:setupEventSubscriptions(manager, eventBus)
+    if not manager or not eventBus then
+        if DEBUG then
+            print("[ArtifactCollectionFactory] Cannot setup subscriptions: missing dependencies")
+        end
+        return
+    end
+
+    -- When collection should start/resume, resume the collection schedule
+    -- Frame counter is NOT reset - frames continue sequentially
+    eventBus:subscribe("artifact_start_collection", "artifact_manager", function(eventData)
+        manager:resumeScheduledCollection()
+    end)
+
+    -- When collection should pause, pause the collection schedule
+    -- Does NOT finalize videos - just stops capturing frames temporarily
+    eventBus:subscribe("artifact_stop_collection", "artifact_manager", function(eventData)
+        manager:pauseScheduledCollection()
+    end)
+
+    if DEBUG then
+        print("[ArtifactCollectionFactory] Setup artifact collection event subscriptions")
+    end
+end
+
 --- Create screenshot collector
 ---
 --- @param spectatorData SpectatorData The spectator data

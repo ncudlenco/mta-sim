@@ -290,6 +290,35 @@ function Move:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
 
+    -- Check if this is an artificially inserted Move (not from graph) and if we're off-camera
+    local hasEventId = self.Performer:getData('currentGraphEventId') ~= nil
+    local isRecording = story.CameraHandler:isCurrentlyRecording()
+
+    -- Artificially inserted Moves (no eventId) can teleport when off-camera
+    if not hasEventId and not isRecording then
+        if DEBUG then
+            print("[Move] Off-camera teleport for "..self.Performer:getData('id').." to "..self.TargetItem.Description)
+        end
+
+        -- Instant teleport
+        self.Performer:setPosition(self.TargetItem.position)
+        if self.TargetItem.rotation then
+            self.Performer:setRotation(self.TargetItem.rotation)
+        end
+        if self.TargetItem.Interior then
+            self.Performer.interior = self.TargetItem.Interior
+        end
+
+        -- Update actor's episode context
+        if self.TargetItem.Episode then
+            self.Performer:setData('currentEpisode', self.TargetItem.Episode.name)
+        end
+
+        -- Complete immediately (no animation)
+        OnGlobalActionFinished(0, self.Performer:getData('id'), self.Performer:getData('storyId'))
+        return
+    end
+
     if self.TargetItem.Region and self.TargetItem.Region.Id ~= self.Performer:getData('currentRegionId') then
 
         if DEBUG then

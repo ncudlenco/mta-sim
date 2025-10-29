@@ -1,4 +1,4 @@
-StoryBase = class(function(o, spectators, maxActions)
+StoryBase = class(function(o, spectators, maxActions, eventBus)
     o.Spectators = spectators
     o.MaxActions = maxActions
     o.Id = Guid().Id
@@ -7,6 +7,7 @@ StoryBase = class(function(o, spectators, maxActions)
     o.Loggers = {}
     o.History = {}
     o.PausedActions = {}
+    o.EventBus = eventBus or EventBus:getInstance()
     o.CameraHandler = CameraHandler()
     o.ActionsOrchestrator = ActionsOrchestrator()
     o.SpatialCoordinator = SpatialCoordinator()

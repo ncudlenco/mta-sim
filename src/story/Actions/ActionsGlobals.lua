@@ -30,6 +30,31 @@ function OnGlobalActionFinished(delay, playerId, storyId, callback, destroyedIte
             print("[FATAL ERROR] [ActionsGlobal] Actor "..playerId.." not found!")
             return
         end
+
+        -- Publish graph event end (if this was a graph event and action matched)
+        local completedEventId = actor:getData('currentGraphEventId')
+        if completedEventId and story.EventBus and story:is_a(GraphStory) and lastAction then
+            local expectedAction = story.graph[completedEventId] and story.graph[completedEventId].Action
+
+            -- Only publish if the completed action was the actual graph event action
+            if expectedAction and lastAction.Name == expectedAction then
+                if DEBUG then
+                    print("[ActionsGlobals] Publishing graph_event_end for "..completedEventId)
+                end
+
+                story.EventBus:publish("graph_event_end", {
+                    eventId = completedEventId,
+                    actorId = playerId,
+                    actionName = lastAction.Name
+                })
+            elseif DEBUG and expectedAction then
+                print("[ActionsGlobals] Skipping graph_event_end for "..completedEventId.." (action "..lastAction.Name.." != expected "..expectedAction..")")
+            end
+
+            -- Clear the event ID after checking (always clear, even if we didn't publish)
+            actor:setData('currentGraphEventId', nil)
+        end
+
         if actor:getData('requestPause') then
             actor:setData('requestPause', false)
             actor:setData('paused', true)

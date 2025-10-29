@@ -302,6 +302,7 @@ end
 
 --- Start scheduled collection with one-shot timers
 --- Collection callback is invoked on each collection cycle to build frameContext
+--- The factory sets up event subscriptions that control when collection starts/stops
 ---
 --- @param collectionCallback function Called on each collection: collectionCallback(frameId, triggerCollection)
 ---   - frameId: current frame number
@@ -316,19 +317,11 @@ function ArtifactCollectionManager:startScheduledCollection(collectionCallback, 
 
     self.collectionCallback = collectionCallback
     self.completionCallback = completionCallback
-    self.isSchedulingActive = true
-    self.framesCollected = 0
-
-    -- Calculate interval from config
     self.collectionInterval = self.config:getCollectionInterval()
 
     if DEBUG then
-        print(string.format("[ArtifactCollectionManager] Starting scheduled collection (interval: %dms)",
-            self.collectionInterval))
+        print("[ArtifactCollectionManager] Scheduled collection initialized, awaiting start signal")
     end
-
-    -- Schedule first collection
-    self:_scheduleNextCollection()
 
     return true
 end
@@ -379,6 +372,55 @@ function ArtifactCollectionManager:_scheduleNextCollection()
 
     -- Exclude from freeze
     self.freezeAdapter:excludeTimer(self.schedulerTimer)
+end
+
+--- Resume scheduled collection (start or continue after pause)
+--- Does NOT reset frame counter - frames continue sequentially across pause/resume cycles
+--- Use this for camera "record" command to start/resume capturing frames
+function ArtifactCollectionManager:resumeScheduledCollection()
+    if self.isSchedulingActive then
+        if DEBUG then
+            print("[ArtifactCollectionManager] Already scheduling, ignoring resume")
+        end
+        return
+    end
+
+    if not self.collectionCallback then
+        print("[ERROR] ArtifactCollectionManager: Cannot resume - not initialized (call startScheduledCollection first)")
+        return
+    end
+
+    self.isSchedulingActive = true
+
+    if DEBUG then
+        print(string.format("[ArtifactCollectionManager] Resuming scheduled collection (continuing from frame %d)",
+            self.framesCollected))
+    end
+
+    -- Schedule next collection
+    self:_scheduleNextCollection()
+end
+
+--- Pause scheduled collection (temporarily stop capturing frames)
+--- Does NOT stop collectors or finalize videos
+--- Simply sets flag to false - pending timer will complete naturally without rescheduling
+--- Frame counter is preserved for seamless resume
+--- Use this for camera "stop" command to pause capturing frames
+function ArtifactCollectionManager:pauseScheduledCollection()
+    if not self.isSchedulingActive then
+        if DEBUG then
+            print("[ArtifactCollectionManager] Already paused, ignoring pause")
+        end
+        return
+    end
+
+    -- Set flag to false - pending timer will see this and not reschedule
+    self.isSchedulingActive = false
+
+    if DEBUG then
+        print(string.format("[ArtifactCollectionManager] Paused scheduled collection (pending timer will complete, at frame %d)",
+            self.framesCollected))
+    end
 end
 
 --- Stop scheduled collection

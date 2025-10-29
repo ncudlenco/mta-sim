@@ -2,6 +2,10 @@ CameraHandler = class(function(o)
     o.FocusRequests = {}
     o.isFocused = false
     o.isSwitchingContext = false
+
+    -- Recording state (defaults to true for backwards compatibility)
+    o.isRecording = true
+    o.hasCameraCommands = false
 end
 )
 
@@ -9,6 +13,106 @@ function CameraHandler:Reset()
     self.FocusRequests = {}
     self.isFocused = false
     self.isSwitchingContext = false
+end
+
+--- Initialize camera handler with graph camera configuration
+--- @param hasCameraSection boolean Whether graph has camera section
+function CameraHandler:initialize(hasCameraSection)
+    self.hasCameraCommands = hasCameraSection
+
+    if hasCameraSection then
+        -- Camera-controlled mode: start in non-recording state
+        self.isRecording = false
+        if DEBUG then
+            print("[CameraHandler] Camera commands enabled, awaiting 'record' command")
+        end
+    else
+        -- Legacy mode: always recording, emit start signal immediately
+        self.isRecording = true
+        if DEBUG then
+            print("[CameraHandler] No camera section, legacy always-on mode")
+        end
+
+        -- Emit artifact_start_collection immediately for backwards compatibility
+        if CURRENT_STORY.EventBus then
+            CURRENT_STORY.EventBus:publish("artifact_start_collection", {
+                eventId = "legacy_mode",
+                actorId = "system",
+                actionName = "legacy_start"
+            })
+        end
+    end
+
+    -- Subscribe to graph events
+    if CURRENT_STORY.EventBus then
+        CURRENT_STORY.EventBus:subscribe("graph_event_start", "camera_handler", function(eventData)
+            self:onGraphEventStart(eventData)
+        end)
+
+        CURRENT_STORY.EventBus:subscribe("graph_event_end", "camera_handler", function(eventData)
+            self:onGraphEventEnd(eventData)
+        end)
+    end
+end
+
+--- Handle graph event start
+--- CameraHandler reads the graph directly to interpret camera commands
+--- @param eventData table {eventId, actorId, actionName}
+function CameraHandler:onGraphEventStart(eventData)
+    if DEBUG then
+        print("[CameraHandler] Event start: "..eventData.eventId.." - "..eventData.actionName.." (actor: "..eventData.actorId..")")
+    end
+
+    -- Look up camera command in graph (CameraHandler interprets the graph itself)
+    if CURRENT_STORY.camera and CURRENT_STORY.camera[eventData.eventId] then
+        local cameraCmd = CURRENT_STORY.camera[eventData.eventId]
+        self:executeCommand(cameraCmd, eventData)
+    end
+end
+
+--- Handle graph event end
+--- @param eventData table {eventId, actorId, actionName}
+function CameraHandler:onGraphEventEnd(eventData)
+    if DEBUG then
+        print("[CameraHandler] Event end: "..eventData.eventId.." - "..eventData.actionName)
+    end
+    -- Future: handle event-end camera commands if needed
+end
+
+--- Execute camera command from graph
+--- @param cameraCmd table Camera command from graph {action = "record"|"stop"}
+--- @param eventData table Event context {eventId, actorId, actionName}
+function CameraHandler:executeCommand(cameraCmd, eventData)
+    local action = cameraCmd.action
+
+    if action == "record" then
+        if DEBUG then
+            print("[CameraHandler] Starting recording for event "..eventData.eventId)
+        end
+        self.isRecording = true
+
+        -- Notify artifact collection to start
+        if CURRENT_STORY.EventBus then
+            CURRENT_STORY.EventBus:publish("artifact_start_collection", eventData)
+        end
+
+    elseif action == "stop" then
+        if DEBUG then
+            print("[CameraHandler] Stopping recording for event "..eventData.eventId)
+        end
+        self.isRecording = false
+
+        -- Notify artifact collection to stop
+        if CURRENT_STORY.EventBus then
+            CURRENT_STORY.EventBus:publish("artifact_stop_collection", eventData)
+        end
+    end
+end
+
+--- Check if currently recording (for Move action teleportation)
+--- @return boolean True if recording active
+function CameraHandler:isCurrentlyRecording()
+    return self.isRecording
 end
 
 function CameraHandler:__tostring()

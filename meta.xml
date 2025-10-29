@@ -45,6 +45,7 @@
   <script src="src/utils/enum.lua" type="shared"/>
   <script src="src/utils/Extent3.lua" type="shared"/>
   <script src="src/utils/guid.lua" type="shared"/>
+  <script src="src/utils/EventBus.lua" type="shared"/>
   <script src="src/utils/LookingBehavior.lua" type="shared"/>
   <script src="src/utils/SpatialCoordinator.lua" type="shared"/>
   <script src="src/utils/bone_attach.lua" />

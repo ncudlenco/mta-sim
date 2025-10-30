@@ -1,0 +1,6 @@
+{
+  "EXPORT_MODE": false,
+  "INPUT_GRAPHS": [
+    "complex_graphs/c10_sync.json"
+  ],
+}

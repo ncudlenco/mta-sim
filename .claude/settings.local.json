@@ -4,7 +4,8 @@
       "Read(//z/More games/GTA San Andreas/MTA-SA1.6/server/mods/deathmatch/logs/**)",
       "Bash(cat:*)",
       "Bash(paste:*)",
-      "Bash(awk:*)"
+      "Bash(awk:*)",
+      "Read(//z/More games/GTA San Andreas/MTA-SA1.6/server/mods/deathmatch/resources/multiagent_story_system/**)"
     ],
     "deny": [],
     "ask": []

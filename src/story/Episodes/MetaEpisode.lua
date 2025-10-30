@@ -17,6 +17,11 @@ MetaEpisode = class(StoryEpisodeBase, function(o, episodes)
     end
     o.Episodes = episodes
     o.episodeLinks = {}
+
+    -- Episode group metadata (set by GraphStory)
+    o.episodeGroups = nil      -- {[groupId] = {episode1, episode2}}
+    o.episodeToGroup = nil     -- {[episodeName] = groupId}
+    o.actorEpisodeUsage = nil  -- Actor episode usage patterns
 end)
 
 

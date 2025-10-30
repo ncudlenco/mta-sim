@@ -360,12 +360,33 @@ function Move:Apply()
     if self.NextLocation.Episode and self.NextLocation.Episode.name ~= self.Performer:getData('currentEpisode') then
         print('SWITCHING CONTEXT from '..self.Performer:getData('currentEpisode')..' to '..self.NextLocation.Episode.name)
 
-        local contextSwitchingPath = self:getLinks(self.Performer:getData('currentEpisode'), {})
-        if not contextSwitchingPath then
-            print('Warning! Actor '..self.Performer:getData('id')..' wanted to go to a different context '..self.NextLocation.Episode.name..' from '..(self.Performer:getData('currentEpisode') or 'null')..'but we could not find a path')
-            teleport = true
+        -- Check if crossing episode groups
+        local sourceEpisode = self.Performer:getData('currentEpisode')
+        local targetEpisode = self.NextLocation.Episode.name
+        local sourceGroup = CURRENT_STORY.episodeToGroup and CURRENT_STORY.episodeToGroup[sourceEpisode] or nil
+        local targetGroup = CURRENT_STORY.episodeToGroup and CURRENT_STORY.episodeToGroup[targetEpisode] or nil
+
+        if sourceGroup and targetGroup and sourceGroup ~= targetGroup then
+            -- CROSS-GROUP TRANSITION: Direct teleportation (skip pathfinding)
+            if DEBUG_EPISODE_GROUPS then
+                print('[Move] Cross-group teleport: '..self.Performer:getData('id')..
+                      ' from '..sourceEpisode..' (group '..sourceGroup..
+                      ') to '..targetEpisode..' (group '..targetGroup..')')
+            end
+
+            teleport = true  -- Skip getLinks() pathfinding
         else
-            contextSegments = contextSwitchingPath
+            -- SAME GROUP: Try to find path via episodeLinks
+            local contextSwitchingPath = self:getLinks(self.Performer:getData('currentEpisode'), {})
+            if not contextSwitchingPath then
+                print('Warning! Actor '..self.Performer:getData('id')..
+                      ' wanted to go to a different context '..self.NextLocation.Episode.name..
+                      ' from '..(self.Performer:getData('currentEpisode') or 'null')..
+                      ' but we could not find a path')
+                teleport = true
+            else
+                contextSegments = contextSwitchingPath
+            end
         end
     end
 

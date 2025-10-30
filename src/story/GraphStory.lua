@@ -367,17 +367,56 @@ function GraphStory:ExploreValidEpisodesSubset(
                 if DEBUG_VALIDATION then
                     print('Max covering episode is '..maxCoverData.episode.name..' with a score of '..maxCoverData.maxScore.setCoverScore)
                 end
-                local validSubset = self:ExploreValidEpisodeLinks(
+
+                -- Try TWO exploration strategies: prefer linked, allow unlinked
+                local explorationCandidates = {
+                    linked = nil,
+                    all = nil
+                }
+
+                -- Strategy 1: Explore only linked episodes (prefer connected groups)
+                local linkedResult = self:ExploreValidEpisodeLinks(
                     maxCoverData.episode,
                     maxCoverData.maxScore.requiredLocations,
                     maxCoverData.maxScore.requiredObjects,
                     maxCoverData.maxScore.requiredActions,
                     concat(currentSubset, {maxCoverData.episode})
                 )
-                if #validSubset > 0 then
-                    return validSubset
+                if #linkedResult > 0 then
+                    explorationCandidates.linked = linkedResult
+                end
+
+                -- Strategy 2: Explore ALL remaining episodes (allow unlinked)
+                local remainingEpisodes = Where(unexploredBucket, function(e)
+                    return e ~= maxCoverData.episode
+                end)
+                local allResult = self:ExploreValidEpisodesSubset(
+                    remainingEpisodes,
+                    maxCoverData.maxScore.requiredLocations,
+                    maxCoverData.maxScore.requiredObjects,
+                    maxCoverData.maxScore.requiredActions,
+                    concat(currentSubset, {maxCoverData.episode})
+                )
+                if #allResult > 0 then
+                    explorationCandidates.all = allResult
+                end
+
+                -- Choose best strategy: prefer linked (fewer groups), allow unlinked if needed
+                if explorationCandidates.linked and #explorationCandidates.linked > 0 then
+                    if DEBUG_VALIDATION then
+                        print('✓ Found valid subset using linked episodes')
+                    end
+                    return explorationCandidates.linked
+                elseif explorationCandidates.all and #explorationCandidates.all > 0 then
+                    if DEBUG_VALIDATION then
+                        print('✓ Found valid subset using unlinked episodes (multiple groups)')
+                    end
+                    return explorationCandidates.all
                 else
-                    unexploredBucket = Where(unexploredBucket, function(e) return e ~= maxCoverData.episode end)
+                    -- Neither strategy worked, try next episode
+                    unexploredBucket = Where(unexploredBucket, function(e)
+                        return e ~= maxCoverData.episode
+                    end)
                 end
             else
                 if DEBUG_VALIDATION then
@@ -755,6 +794,35 @@ function GraphStory:GetValidEpisodes(requiredActors)
     local validEpisodesSubset = self:ExploreValidEpisodesSubset(self.Episodes, requiredLocations, requiredObjects, requiredActions, {})
 
     print('---------------------------------------------finished GetValidEpisodes: {'..join(';', Select(validEpisodesSubset, function(e) return e.name end))..'} found----------------------------------------')
+
+    -- Detect episode groups and validate
+    if #validEpisodesSubset > 1 then
+        local groupData = self:DetectEpisodeGroups(validEpisodesSubset)
+        self.episodeGroups = groupData.episodeGroups
+        self.episodeToGroup = groupData.episodeToGroup
+
+        if DEBUG_EPISODE_GROUPS then
+            print('[GetValidEpisodes] Detected '..#self.episodeGroups..' episode groups')
+        end
+
+        -- Analyze which groups each actor uses
+        self:AnalyzeActorEpisodeUsage(requiredActors)
+
+        -- Validate no explicit Move actions cross groups
+        if not self:ValidateCrossGroupMoves() then
+            return {}  -- Validation failed
+        end
+    elseif #validEpisodesSubset == 1 then
+        -- Single episode - create trivial group structure
+        self.episodeGroups = {[1] = validEpisodesSubset}
+        self.episodeToGroup = {[validEpisodesSubset[1].name] = 1}
+        self.actorEpisodeUsage = {}
+
+        if DEBUG_EPISODE_GROUPS then
+            print('[GetValidEpisodes] Single episode, trivial group structure')
+        end
+    end
+
 --find all episodes which contain all the required locations
 --and all the required actions
     return Where(self.AllEpisodes, function(e)
@@ -764,6 +832,232 @@ function GraphStory:GetValidEpisodes(requiredActors)
         end
         return isValid
     end)
+end
+
+--- Detects episode groups (connected components) based on episodeLinks.
+--- Episodes in the same group are reachable via episodeLinks.
+--- @param episodes table[] Array of episode objects
+--- @return table Structure: {episodeGroups = {[groupId] = {episode1, episode2}}, episodeToGroup = {[episodeName] = groupId}}
+function GraphStory:DetectEpisodeGroups(episodes)
+    if DEBUG_EPISODE_GROUPS then
+        print('[DetectEpisodeGroups] Analyzing '..#episodes..' episodes')
+    end
+
+    -- Create Union-Find with episode names
+    local episodeNames = Select(episodes, function(e) return e.name end)
+    local uf = UnionFind(episodeNames)
+
+    -- Union episodes that have episodeLinks
+    for _, episode in ipairs(episodes) do
+        for _, poi in ipairs(episode.POI) do
+            if poi.episodeLinks and #poi.episodeLinks > 0 then
+                for _, linkedEpisodeName in ipairs(poi.episodeLinks) do
+                    -- Find the linked episode in our list
+                    local linkedEpisode = FirstOrDefault(episodes, function(e)
+                        return e.name == linkedEpisodeName
+                    end)
+                    if linkedEpisode then
+                        if DEBUG_EPISODE_GROUPS then
+                            print('[DetectEpisodeGroups] Linking '..episode.name..' <-> '..linkedEpisodeName)
+                        end
+                        uf:union(episode.name, linkedEpisode.name)
+                    end
+                end
+            end
+        end
+    end
+
+    -- Extract components and create lookup structures
+    local components = uf:getComponents()
+    local episodeGroups = {}
+    local episodeToGroup = {}
+    local groupId = 1
+
+    for _, episodeNamesInGroup in pairs(components) do
+        episodeGroups[groupId] = {}
+        for _, episodeName in ipairs(episodeNamesInGroup) do
+            local episode = FirstOrDefault(episodes, function(e) return e.name == episodeName end)
+            table.insert(episodeGroups[groupId], episode)
+            episodeToGroup[episodeName] = groupId
+        end
+
+        if DEBUG_EPISODE_GROUPS then
+            print('[DetectEpisodeGroups] Group '..groupId..': '..
+                  join(', ', Select(episodeGroups[groupId], function(e) return e.name end)))
+        end
+
+        groupId = groupId + 1
+    end
+
+    return {
+        episodeGroups = episodeGroups,
+        episodeToGroup = episodeToGroup
+    }
+end
+
+--- Analyzes which episodes and groups each actor uses throughout their event sequence.
+--- Uses poiMap to handle cases where multiple episodes have same location names.
+--- @param requiredActors table[] Array of actor definitions from graph
+function GraphStory:AnalyzeActorEpisodeUsage(requiredActors)
+    if DEBUG_EPISODE_GROUPS then
+        print('[AnalyzeActorEpisodeUsage] Analyzing '..#requiredActors..' actors')
+    end
+
+    self.actorEpisodeUsage = {}
+
+    for _, actor in ipairs(requiredActors) do
+        local actorId = actor.id
+        self.actorEpisodeUsage[actorId] = {
+            episodes = {},  -- Set of episode names used
+            groups = {},    -- Set of group IDs used
+            sequence = {}   -- Ordered sequence of {eventId, episodeName, groupId}
+        }
+
+        -- Walk through actor's event chain
+        local eventId = self.temporal.starting_actions[actorId]
+        while eventId do
+            local event = self.graph[eventId]
+            if event then
+                local episodeName = nil
+
+                -- METHOD 1: Use poiMap to find which episode this event is mapped to
+                if self.poiMap and self.poiMap[eventId] then
+                    local poiMappings = self.poiMap[eventId]
+                    if #poiMappings > 0 then
+                        -- Get the POI from the first mapping
+                        local poiLocationId = poiMappings[1].value
+                        local poi = FirstOrDefault(self.CurrentEpisode.POI, function(p)
+                            return p.LocationId == poiLocationId
+                        end)
+                        if poi and poi.Episode then
+                            episodeName = poi.Episode.name
+                        end
+                    end
+                end
+
+                -- METHOD 2: Fallback - use eventObjectMap to infer episode from objects
+                if not episodeName and #event.Entities > 1 then
+                    local objectId = event.Entities[2]
+                    if self.eventObjectMap and self.eventObjectMap[objectId] then
+                        local objectMappings = self.eventObjectMap[objectId]
+                        if #objectMappings > 0 and objectMappings[1].value ~= 'spawnable' then
+                            local realObjectId = objectMappings[1].value
+                            local obj = FirstOrDefault(self.CurrentEpisode.Objects, function(o)
+                                return o.ObjectId == realObjectId
+                            end)
+                            if obj and obj.Region and obj.Region.Episode then
+                                episodeName = obj.Region.Episode.name
+                            end
+                        end
+                    end
+                end
+
+                if episodeName then
+                    local groupId = self.episodeToGroup[episodeName]
+
+                    -- Track episode and group usage
+                    if not inList(episodeName, self.actorEpisodeUsage[actorId].episodes) then
+                        table.insert(self.actorEpisodeUsage[actorId].episodes, episodeName)
+                    end
+                    if groupId and not inList(groupId, self.actorEpisodeUsage[actorId].groups) then
+                        table.insert(self.actorEpisodeUsage[actorId].groups, groupId)
+                    end
+
+                    -- Record in sequence
+                    table.insert(self.actorEpisodeUsage[actorId].sequence, {
+                        eventId = eventId,
+                        episode = episodeName,
+                        groupId = groupId
+                    })
+                end
+            end
+
+            eventId = self:GetNextEvent(eventId, actorId)
+        end
+
+        if DEBUG_EPISODE_GROUPS then
+            print('[AnalyzeActorEpisodeUsage] Actor '..actorId..
+                  ' uses episodes: '..join(', ', self.actorEpisodeUsage[actorId].episodes)..
+                  ' (groups: '..join(', ', self.actorEpisodeUsage[actorId].groups)..')')
+        end
+    end
+end
+
+--- Validates that explicit Move actions in the graph don't cross episode groups.
+--- Auto-generated Move actions (from MetaEpisode) are allowed to cross groups.
+--- @return boolean True if valid, false if validation fails
+function GraphStory:ValidateCrossGroupMoves()
+    if DEBUG_EPISODE_GROUPS then
+        print('[ValidateCrossGroupMoves] Validating explicit Move actions')
+    end
+
+    -- Find explicit Move events in graph (Action == "Move")
+    local moveEvents = Where(self.graph, function(event)
+        return event.Action and event.Action == 'Move'
+    end)
+
+    for _, moveEvent in ipairs(moveEvents) do
+        local actorId = moveEvent.Entities[1]
+        local sourceLocation = moveEvent.Location and moveEvent.Location[1] or nil
+        local targetLocation = nil
+
+        -- Find target location from next event
+        local nextEventId = self:GetNextEvent(moveEvent.id, actorId)
+        if nextEventId then
+            local nextEvent = self.graph[nextEventId]
+            targetLocation = nextEvent.Location and nextEvent.Location[1] or nil
+        end
+
+        if sourceLocation and targetLocation and sourceLocation ~= targetLocation then
+            -- Use poiMap to determine actual episodes (handles duplicate names)
+            local sourceEpisode = nil
+            local targetEpisode = nil
+
+            -- Find source episode from moveEvent mapping
+            if self.poiMap and self.poiMap[moveEvent.id] then
+                local poiMappings = self.poiMap[moveEvent.id]
+                if #poiMappings > 0 then
+                    local poi = FirstOrDefault(self.CurrentEpisode.POI, function(p)
+                        return p.LocationId == poiMappings[1].value
+                    end)
+                    if poi and poi.Episode then
+                        sourceEpisode = poi.Episode.name
+                    end
+                end
+            end
+
+            -- Find target episode from next event mapping
+            if nextEventId and self.poiMap and self.poiMap[nextEventId] then
+                local poiMappings = self.poiMap[nextEventId]
+                if #poiMappings > 0 then
+                    local poi = FirstOrDefault(self.CurrentEpisode.POI, function(p)
+                        return p.LocationId == poiMappings[1].value
+                    end)
+                    if poi and poi.Episode then
+                        targetEpisode = poi.Episode.name
+                    end
+                end
+            end
+
+            if sourceEpisode and targetEpisode then
+                local sourceGroup = self.episodeToGroup[sourceEpisode]
+                local targetGroup = self.episodeToGroup[targetEpisode]
+
+                if sourceGroup ~= targetGroup then
+                    print('[ERROR] Explicit Move action (event '..moveEvent.id..
+                          ') crosses episode groups: '..sourceEpisode..' (group '..sourceGroup..
+                          ') -> '..targetEpisode..' (group '..targetGroup..')')
+                    print('[ERROR] Actors cannot physically move between unlinked episodes.')
+                    return false
+                end
+            end
+        end
+    end
+
+    if DEBUG_EPISODE_GROUPS then
+        print('[ValidateCrossGroupMoves] ✓ All explicit Move actions are valid')
+    end
+    return true
 end
 
 ---This function iterates through all the POIs available in an episode (it can be a meta episode that is a composition of multiple local episodes),
@@ -1466,6 +1760,17 @@ function GraphStory:ProcessActions(graphActors)
         return false
     end
 
+    -- Pass episode group metadata to MetaEpisode
+    if self.CurrentEpisode then
+        self.CurrentEpisode.episodeGroups = self.episodeGroups
+        self.CurrentEpisode.episodeToGroup = self.episodeToGroup
+        self.CurrentEpisode.actorEpisodeUsage = self.actorEpisodeUsage
+
+        if DEBUG_EPISODE_GROUPS and self.episodeGroups then
+            print('[ProcessActions] Passing '..#self.episodeGroups..' episode groups to MetaEpisode')
+        end
+    end
+
     self.eventObjectMap = eventObjectMap
     self.poiMap = poiMap
     self.eventMap = eventMap
@@ -1488,12 +1793,32 @@ function GraphStory:ProcessActions(graphActors)
         end
         print('First event: '..firstEvent.id..' in location '..firstEvent.Location[1]..' with actor '..firstEvent.Entities[1])
 
-        local firstLocation = PickRandom(Where(self.CurrentEpisode.POI, function(poi)
-            local eventLocation = ""
-            if firstEvent.Location and firstEvent.Location[1] then
-                eventLocation = firstEvent.Location[1]
+        -- Use poiMap to get correct episode's POI (handles duplicate location names)
+        local firstLocation = nil
+        if self.poiMap and self.poiMap[firstEvent.id] then
+            local poiMappings = self.poiMap[firstEvent.id]
+            if #poiMappings > 0 then
+                local poiLocationId = poiMappings[1].value
+                firstLocation = FirstOrDefault(self.CurrentEpisode.POI, function(poi)
+                    return poi.LocationId == poiLocationId and not poi.isBusy
+                end)
+
+                if DEBUG_EPISODE_GROUPS and firstLocation then
+                    print('[ProcessActions] Actor '..a.id..' spawning in '..
+                          firstLocation.Episode.name..': '..firstLocation.Description)
+                end
             end
-        return not poi.isBusy and poi.Region.name:lower():find(eventLocation:lower()) end))
+        end
+
+        -- Fallback to old behavior if no mapping found
+        if not firstLocation then
+            firstLocation = PickRandom(Where(self.CurrentEpisode.POI, function(poi)
+                local eventLocation = ""
+                if firstEvent.Location and firstEvent.Location[1] then
+                    eventLocation = firstEvent.Location[1]
+                end
+            return not poi.isBusy and poi.Region.name:lower():find(eventLocation:lower()) end))
+        end
 
         if not firstLocation then
             print("Error: could not find a valid first location for event "..firstEvent.id)

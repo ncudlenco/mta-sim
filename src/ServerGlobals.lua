@@ -35,6 +35,8 @@ DEBUG_CAMERA = false
 DEBUG_ACTIONS_ORCHESTRATOR = false
 --- Debug flag for spatial validation logging
 DEBUG_SPATIAL = false
+--- Debug flag for episode group detection and cross-group teleportation logging
+DEBUG_EPISODE_GROUPS = true
 
 -- Artifact Collection Configuration
 ARTIFACT_COLLECTION_ENABLED = false -- Enable/disable artifact collection system

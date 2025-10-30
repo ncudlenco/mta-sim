@@ -49,6 +49,7 @@
   <script src="src/utils/LookingBehavior.lua" type="shared"/>
   <script src="src/utils/SpatialCoordinator.lua" type="shared"/>
   <script src="src/utils/ConfigurationLoader.lua" type="server"/>
+  <script src="src/utils/UnionFind.lua" type="server"/>
   <script src="src/utils/bone_attach.lua" />
 	<script src="src/utils/bone_attach_c.lua" type="client" />
 	<script src="src/utils/attach_func.lua" />

@@ -1,1 +1,162 @@
-[ { "objects": [ ], "poi": { "isEmpty": true }, "locations": [ { "Description": "livingroom sofa", "Interior": 1, "Y": 0, "X": 0, "episodeLinks": [ ], "Z": 0, "id": 1, "Angle": 92.70074462890625, "PossibleActions": [ { "id": 1 } ], "allActions": [ { "dynamicString": "return SitDown{how = 2, rotation = nil}", "isClosingAction": false, "targetItem": { "id": -1, "type": "none" }, "id": 1, "nextAction": { "id": 2 }, "closingAction": { "id": 2 }, "nextLocation": { "id": 1 } }, { "dynamicString": "return StandUp{how = 2}", "isClosingAction": false, "targetItem": { "id": -1, "type": "none" }, "id": 2, "nextLocation": { "id": 1 } } ] }, { "Description": "livingroom sofa", "Interior": 1, "Y": 0.6246337890625, "X": 0.02490234375, "episodeLinks": [ ], "Z": 0, "id": 2, "Angle": 92.70074462890625, "PossibleActions": [ { "id": 1 } ], "allActions": [ { "dynamicString": "return SitDown{how = 2, rotation = nil}", "isClosingAction": false, "targetItem": { "id": -1, "type": "none" }, "id": 1, "nextAction": { "id": 2 }, "closingAction": { "id": 2 }, "nextLocation": { "id": 2 } }, { "dynamicString": "return StandUp{how = 2}", "isClosingAction": false, "targetItem": { "id": -1, "type": "none" }, "id": 2, "nextLocation": { "id": 2 } } ] }, { "Description": "livingroom sofa", "Interior": 1, "Y": 1.33447265625, "X": -0.1044921875, "episodeLinks": [ ], "Z": 0, "id": 3, "Angle": 92.70074462890625, "PossibleActions": [ { "id": 1 } ], "allActions": [ { "dynamicString": "return SitDown{how = 2, rotation = nil}", "isClosingAction": false, "targetItem": { "id": -1, "type": "none" }, "id": 1, "nextAction": { "id": 2 }, "closingAction": { "id": 2 }, "nextLocation": { "id": 3 } }, { "dynamicString": "return StandUp{how = 2}", "isClosingAction": false, "targetItem": { "id": -1, "type": "none" }, "id": 2, "nextLocation": { "id": 3 } } ] } ], "position": { "y": -1675.110473632812, "x": 2532.683349609375, "z": 1015.498596191406 }, "globalCentroid": { "y": -1674.457397460938, "x": 2532.65673828125, "z": 1015.498596191406 }, "name": "1234" } ]
+[
+    {
+        "objects": [],
+        "poi": {
+            "isEmpty": true
+        },
+        "locations": [
+            {
+                "Description": "poi near sofa",
+                "Interior": 1,
+                "Y": 0,
+                "X": 0,
+                "episodeLinks": [],
+                "Z": 0,
+                "id": 1,
+                "Angle": 92.70074462890625,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "allActions": [
+                    {
+                        "dynamicString": "return SitDown{how = 2, rotation = nil}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": -1,
+                            "type": "none"
+                        },
+                        "id": 1,
+                        "nextAction": {
+                            "id": 2
+                        },
+                        "closingAction": {
+                            "id": 2
+                        },
+                        "nextLocation": {
+                            "id": 1
+                        }
+                    },
+                    {
+                        "dynamicString": "return StandUp{how = 2}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": -1,
+                            "type": "none"
+                        },
+                        "id": 2,
+                        "nextLocation": {
+                            "id": 1
+                        }
+                    }
+                ]
+            },
+            {
+                "Description": "2nd poi near sofa",
+                "Interior": 1,
+                "Y": 0.6246337890625,
+                "X": 0.02490234375,
+                "episodeLinks": [],
+                "Z": 0,
+                "id": 2,
+                "Angle": 92.70074462890625,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "allActions": [
+                    {
+                        "dynamicString": "return SitDown{how = 2, rotation = nil}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": -1,
+                            "type": "none"
+                        },
+                        "id": 1,
+                        "nextAction": {
+                            "id": 2
+                        },
+                        "closingAction": {
+                            "id": 2
+                        },
+                        "nextLocation": {
+                            "id": 2
+                        }
+                    },
+                    {
+                        "dynamicString": "return StandUp{how = 2}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": -1,
+                            "type": "none"
+                        },
+                        "id": 2,
+                        "nextLocation": {
+                            "id": 2
+                        }
+                    }
+                ]
+            },
+            {
+                "Description": "3rd poi near sofa",
+                "Interior": 1,
+                "Y": 1.33447265625,
+                "X": -0.1044921875,
+                "episodeLinks": [],
+                "Z": 0,
+                "id": 3,
+                "Angle": 92.70074462890625,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "allActions": [
+                    {
+                        "dynamicString": "return SitDown{how = 2, rotation = nil}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": -1,
+                            "type": "none"
+                        },
+                        "id": 1,
+                        "nextAction": {
+                            "id": 2
+                        },
+                        "closingAction": {
+                            "id": 2
+                        },
+                        "nextLocation": {
+                            "id": 3
+                        }
+                    },
+                    {
+                        "dynamicString": "return StandUp{how = 2}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": -1,
+                            "type": "none"
+                        },
+                        "id": 2,
+                        "nextLocation": {
+                            "id": 3
+                        }
+                    }
+                ]
+            }
+        ],
+        "position": {
+            "y": -1675.110473632812,
+            "x": 2532.683349609375,
+            "z": 1015.498596191406
+        },
+        "globalCentroid": {
+            "y": -1674.457397460938,
+            "x": 2532.65673828125,
+            "z": 1015.498596191406
+        },
+        "name": "1234"
+    }
+]

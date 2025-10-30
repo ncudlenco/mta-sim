@@ -99,57 +99,65 @@ GraphStory = class(StoryBase, function(o, spectators, logData, artifactCollectio
     o.nextEvents = {}
     o.nextLocations = {}
     o.validMemo = {}
-    print(LOAD_FROM_GRAPH)
-    local file = fileOpen(LOAD_FROM_GRAPH)
-    if file then
-        o.Loggers = Select(spectators, function(spectator) return Logger(LOAD_FROM_GRAPH..'_out/'..o.Id..'/'..spectator:getData('id'), true, o, spectator) end)
 
-        local jsonStr = fileRead(file, fileGetSize(file))
-        o.graph = fromJSON(jsonStr)
-        fileClose(file)
-        if o.graph['temporal'] then
-            o.temporal = o.graph['temporal']
-            o.graph['temporal'] = nil
-        end
-        for k,v in pairs(o.temporal) do
-            if k then
-                v.key = k
+    -- Only load graph file if LOAD_FROM_GRAPH is a valid string path
+    if LOAD_FROM_GRAPH and type(LOAD_FROM_GRAPH) == "string" then
+        print(LOAD_FROM_GRAPH)
+        local file = fileOpen(LOAD_FROM_GRAPH)
+        if file then
+            o.Loggers = Select(spectators, function(spectator) return Logger(LOAD_FROM_GRAPH..'_out/'..o.Id..'/'..spectator:getData('id'), true, o, spectator) end)
+
+            local jsonStr = fileRead(file, fileGetSize(file))
+            o.graph = fromJSON(jsonStr)
+            fileClose(file)
+            if o.graph['temporal'] then
+                o.temporal = o.graph['temporal']
+                o.graph['temporal'] = nil
             end
-        end
-        if o.graph['temporal_abs'] then
-            o.graph['temporal_abs'] = nil
-        end
-        if o.graph['spatial'] then
-            o.spatial = o.graph['spatial']
-            o.graph['spatial'] = nil
+            for k,v in pairs(o.temporal) do
+                if k then
+                    v.key = k
+                end
+            end
+            if o.graph['temporal_abs'] then
+                o.graph['temporal_abs'] = nil
+            end
+            if o.graph['spatial'] then
+                o.spatial = o.graph['spatial']
+                o.graph['spatial'] = nil
+                if DEBUG then
+                    print("GraphStory: loaded spatial constraints")
+                end
+            end
+
+            -- Load optional camera section (backwards compatible)
+            o.camera = nil
+            if o.graph['camera'] then
+                o.camera = o.graph['camera']
+                o.graph['camera'] = nil
+                local cmdCount = 0
+                for _ in pairs(o.camera) do cmdCount = cmdCount + 1 end
+                if DEBUG then
+                    print("GraphStory: loaded camera controls with "..cmdCount.." commands")
+                end
+            end
+
+            for k,v in pairs(o.graph) do
+                if v.Action then
+                    v.id = k
+                end
+            end
+
             if DEBUG then
-                print("GraphStory: loaded spatial constraints")
+                print("GraphStory: read the file graph.json")
             end
-        end
-
-        -- Load optional camera section (backwards compatible)
-        o.camera = nil
-        if o.graph['camera'] then
-            o.camera = o.graph['camera']
-            o.graph['camera'] = nil
-            local cmdCount = 0
-            for _ in pairs(o.camera) do cmdCount = cmdCount + 1 end
-            if DEBUG then
-                print("GraphStory: loaded camera controls with "..cmdCount.." commands")
-            end
-        end
-
-        for k,v in pairs(o.graph) do
-            if v.Action then
-                v.id = k
-            end
-        end
-
-        if DEBUG then
-            print("GraphStory: read the file graph.json")
+        else
+            print("WARNING: The file "..LOAD_FROM_GRAPH.." could not be opened!")
         end
     else
-        print("WARNING: The file "..LOAD_FROM_GRAPH.." could not be opened!")
+        if DEBUG then
+            print("GraphStory: Skipping graph file loading (LOAD_FROM_GRAPH not set or not a string)")
+        end
     end
 end)
 

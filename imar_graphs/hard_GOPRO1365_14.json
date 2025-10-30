@@ -640,5 +640,10 @@
             "relations": null,
             "next": null
         }
+    },
+    "camera": {
+        "newcomer_enter": {
+            "action": "record"
+        }
     }
 }

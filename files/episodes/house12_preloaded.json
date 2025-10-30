@@ -2328,7 +2328,7 @@
                         "dynamicString": "return SitDown{how = 2, rotation = Vector3(0, 0, 270)}",
                         "isClosingAction": false,
                         "targetItem": {
-                            "id": 23,
+                            "id": 20,
                             "type": "Object"
                         },
                         "id": 1,
@@ -2346,7 +2346,7 @@
                         "dynamicString": "return StandUp{how = 2}",
                         "isClosingAction": true,
                         "targetItem": {
-                            "id": 23,
+                            "id": 20,
                             "type": "Object"
                         },
                         "id": 2,
@@ -2375,7 +2375,7 @@
                         "dynamicString": "return SitDown{how = 1, rotation = Vector3(0, 0, 0)}",
                         "isClosingAction": false,
                         "targetItem": {
-                            "id": 23,
+                            "id": 21,
                             "type": "Object"
                         },
                         "id": 1,
@@ -2468,7 +2468,7 @@
                         "dynamicString": "return StandUp{how = 1}",
                         "isClosingAction": true,
                         "targetItem": {
-                            "id": 23,
+                            "id": 21,
                             "type": "Object"
                         },
                         "id": 7,
@@ -2497,8 +2497,8 @@
                         "dynamicString": "return WashHands{}",
                         "isClosingAction": false,
                         "targetItem": {
-                            "id": 9,
-                            "type": "Location"
+                            "id": -1,
+                            "type": "none"
                         },
                         "id": 1,
                         "nextLocation": {
@@ -2650,7 +2650,7 @@
                         "dynamicString": "return GetOn{how = 1,side = 1}",
                         "isClosingAction": false,
                         "targetItem": {
-                            "id": 27,
+                            "id": 26,
                             "type": "Object"
                         },
                         "id": 1,
@@ -2668,7 +2668,7 @@
                         "dynamicString": "return Sleep{how = 1}",
                         "isClosingAction": false,
                         "targetItem": {
-                            "id": 27,
+                            "id": 26,
                             "type": "Object"
                         },
                         "id": 2,
@@ -2683,7 +2683,7 @@
                         "dynamicString": "return GetOff{how = 1,side = 1}",
                         "isClosingAction": true,
                         "targetItem": {
-                            "id": 27,
+                            "id": 26,
                             "type": "Object"
                         },
                         "id": 3,
@@ -2712,7 +2712,7 @@
                         "dynamicString": "return GetOn{how = 1,side = 1}",
                         "isClosingAction": false,
                         "targetItem": {
-                            "id": 27,
+                            "id": 26,
                             "type": "Object"
                         },
                         "id": 1,
@@ -2730,7 +2730,7 @@
                         "dynamicString": "return Sleep{how = 1}",
                         "isClosingAction": false,
                         "targetItem": {
-                            "id": 27,
+                            "id": 26,
                             "type": "Object"
                         },
                         "id": 2,
@@ -2745,7 +2745,7 @@
                         "dynamicString": "return GetOff{how = 1,side = 1}",
                         "isClosingAction": true,
                         "targetItem": {
-                            "id": 27,
+                            "id": 26,
                             "type": "Object"
                         },
                         "id": 3,
@@ -3070,7 +3070,7 @@
                 "allActions": []
             },
             {
-                "Description": "narnia ",
+                "Description": "episode links poi ",
                 "Interior": 12,
                 "Y": -1144.411743164062,
                 "X": 2316.135498046875,

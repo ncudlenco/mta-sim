@@ -23,7 +23,7 @@
         },
         "locations": [
             {
-                "Description": "bathroom ",
+                "Description": "near table",
                 "Interior": 9,
                 "Y": 3.5654296875,
                 "X": 6.916748046875,
@@ -35,7 +35,7 @@
                 "allActions": []
             },
             {
-                "Description": "kitchen chair",
+                "Description": "near chair",
                 "Interior": 9,
                 "Y": -0.05926513671875,
                 "X": 0.09521484375,

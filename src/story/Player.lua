@@ -1,6 +1,7 @@
 
 function startSimulation(source)
     print("Starting simulation")
+
     CURRENT_STORY = nil
     if LOAD_FROM_GRAPH and #INPUT_GRAPHS > 0 then
         LOAD_FROM_GRAPH = INPUT_GRAPHS[1]
@@ -37,9 +38,30 @@ function startSimulation(source)
         artifactManager:updateConfig({storyId = CURRENT_STORY.Id})
     end
 
-    Timer(function()
-        CURRENT_STORY:Play()
-    end, 2000, 1)
+        -- Handle EXPORT_MODE: export game capabilities and exit
+    if EXPORT_MODE then
+        print("=== EXPORT MODE ACTIVE ===")
+        print("Exporting game capabilities to JSON...")
+
+        -- Run exporter
+        local exporter = GameWorldExporter()
+        exporter:ExportCapabilities()
+
+        print("=== Export Complete ===")
+        print("Shutting down server...")
+
+        -- Shutdown server after export
+        Timer(function()
+            shutdown()
+        end, 2000, 1)
+
+        return
+    else
+        Timer(function()
+            CURRENT_STORY:Play()
+        end, 2000, 1)
+    end
+
 end
 
 --- Check if all spectators are both joined and have finished downloading resources
@@ -184,7 +206,7 @@ end
 addEventHandler ( "onPlayerQuit", root,
 function ( quitType )
     -- If the simulation was still running, emit an error
-    if not CURRENT_STORY.Disposed then
+    if CURRENT_STORY and not CURRENT_STORY.Disposed then
         error("The client disconnected from the server during the simulation leaving it in an error state. The simulation will be terminated.")
     end
     if DEBUG then

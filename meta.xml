@@ -94,6 +94,8 @@
   <!-- Globals -->
   <script src="src/ServerGlobals.lua" type="server" />
   <script src="src/ErrorHandler.lua" type="server" />
+  <!-- Export Module -->
+  <script src="src/export/GameWorldExporter.lua" type="server" />
   <!-- Other story related objects -->
   <script src="src/story/Logger.lua" type="shared" />
   <script src="src/story/TimeOfDay.lua" type="shared" />

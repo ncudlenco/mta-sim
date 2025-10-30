@@ -1,1 +1,15 @@
-[ { "offsets": [ ], "templates": [ "redChair", "6RedChairTable" ], "name": "chairsAndTable", "position": { "y": -1008.92431640625, "x": 2315.0546875, "z": 1050.2109375 } } ]
+[
+    {
+        "offsets": [],
+        "templates": [
+            "redChair",
+            "6RedChairTable"
+        ],
+        "name": "chairsAndTable",
+        "position": {
+            "y": -1008.92431640625,
+            "x": 2315.0546875,
+            "z": 1050.2109375
+        }
+    }
+]

@@ -1,1 +1,88 @@
-[ { "objects": [ { "dynamicString": "return TurnTable{description=\"\", noCollisions=true, modelid=2231, isRandomModelId=false, interior=8, position=Vector3(0.136474609375,1.44775390625,-0.89306640625), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}", "id": 2 } ], "poi": { "isEmpty": true }, "locations": [ { "Description": "livingroom turntable", "Interior": 8, "Y": 0.1898193359375, "X": -0.08251953125, "episodeLinks": [ ], "Z": 0, "id": 2, "Angle": 359.9065856933594, "PossibleActions": [ { "id": 1 } ], "allActions": [ { "dynamicString": "return TurnOn{}", "isClosingAction": false, "targetItem": { "id": 2, "type": "Object" }, "id": 1, "nextAction": { "id": 2 }, "closingAction": { "id": 3 }, "nextLocation": { "id": 2 } }, { "dynamicString": "return Dance{}", "isClosingAction": false, "targetItem": { "id": -1, "type": "none" }, "id": 2, "nextAction": { "id": 3 }, "nextLocation": { "id": 2 } }, { "dynamicString": "return TurnOff{}", "isClosingAction": true, "targetItem": { "id": 2, "type": "Object" }, "id": 3, "nextLocation": { "id": 2 } } ] } ], "position": { "y": -1132.36376953125, "x": 2368.169677734375, "z": 1050.875 }, "globalCentroid": { "y": -1131.544921875, "x": 2368.19677734375, "z": 1050.428466796875 }, "name": "2231" } ]
+[
+    {
+        "objects": [
+            {
+                "dynamicString": "return TurnTable{description=\"\", noCollisions=true, modelid=2231, isRandomModelId=false, interior=8, position=Vector3(0.136474609375,1.44775390625,-0.89306640625), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "id": 2
+            }
+        ],
+        "poi": {
+            "isEmpty": true
+        },
+        "locations": [
+            {
+                "Description": "near turntable",
+                "Interior": 8,
+                "Y": 0.1898193359375,
+                "X": -0.08251953125,
+                "episodeLinks": [],
+                "Z": 0,
+                "id": 2,
+                "Angle": 359.9065856933594,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "allActions": [
+                    {
+                        "dynamicString": "return TurnOn{}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 2,
+                            "type": "Object"
+                        },
+                        "id": 1,
+                        "nextAction": {
+                            "id": 2
+                        },
+                        "closingAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 2
+                        }
+                    },
+                    {
+                        "dynamicString": "return Dance{}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": -1,
+                            "type": "none"
+                        },
+                        "id": 2,
+                        "nextAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 2
+                        }
+                    },
+                    {
+                        "dynamicString": "return TurnOff{}",
+                        "isClosingAction": true,
+                        "targetItem": {
+                            "id": 2,
+                            "type": "Object"
+                        },
+                        "id": 3,
+                        "nextLocation": {
+                            "id": 2
+                        }
+                    }
+                ]
+            }
+        ],
+        "position": {
+            "y": -1132.36376953125,
+            "x": 2368.169677734375,
+            "z": 1050.875
+        },
+        "globalCentroid": {
+            "y": -1131.544921875,
+            "x": 2368.19677734375,
+            "z": 1050.428466796875
+        },
+        "name": "2231"
+    }
+]

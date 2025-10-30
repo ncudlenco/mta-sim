@@ -79,7 +79,7 @@
         },
         "locations": [
             {
-                "Description": "kitchen chair",
+                "Description": "near chair",
                 "Interior": 8,
                 "Y": -0.04541015625,
                 "X": 0.326171875,
@@ -161,7 +161,7 @@
                 ]
             },
             {
-                "Description": "kitchen chair",
+                "Description": "near chair",
                 "Interior": 8,
                 "Y": -1.776611328125,
                 "X": 2.0283203125,
@@ -243,7 +243,7 @@
                 ]
             },
             {
-                "Description": "kitchen chair",
+                "Description": "near chair",
                 "Interior": 8,
                 "Y": -1.7767333984375,
                 "X": 2.72802734375,
@@ -325,7 +325,7 @@
                 ]
             },
             {
-                "Description": "kitchen chair",
+                "Description": "near chair",
                 "Interior": 8,
                 "Y": -0.25,
                 "X": 4.4990234375,
@@ -407,7 +407,7 @@
                 ]
             },
             {
-                "Description": "kitchen chair",
+                "Description": "near chair",
                 "Interior": 8,
                 "Y": 1.28125,
                 "X": 2.89697265625,
@@ -489,7 +489,7 @@
                 ]
             },
             {
-                "Description": "kitchen chair",
+                "Description": "near chair",
                 "Interior": 8,
                 "Y": 1.2813720703125,
                 "X": 2.19775390625,

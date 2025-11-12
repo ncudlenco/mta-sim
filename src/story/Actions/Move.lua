@@ -27,6 +27,11 @@ Move = class(StoryActionBase, function(o, params)
     o.how = params.how or Move.eHow.Walk
     o.AnimationSpeed = params.AnimationSpeed or 1.0
     o.isMove = true
+
+    -- Entity-based movement support
+    o.TargetEntityId = params.targetEntityId or nil
+    o.TargetEntityType = params.targetEntityType or nil  -- "object" | "actor" | nil
+    o.targetActor = nil  -- Resolved in Apply() for actor targets
 end)
 
 Move.eLib = {
@@ -201,6 +206,35 @@ function Move.destinationReached(player, source)
             nextPoi.Region:OnPlayerHit(player)
             story.CameraHandler:requestFocus(player:getData('id')) --Actors changing contexts get an extra focus request
         else
+            -- NEW: For actor targets, check proximity and handle actor movement
+            if lastAction.TargetEntityType == 'actor' and lastAction.targetActor then
+                local targetPos = lastAction.targetActor.position
+                local distance = math.abs((player.position - targetPos).length)
+
+                if distance > 2.0 then
+                    -- Actor moved too far - recalculate path
+                    print('[Move] Target actor moved (distance='..distance..'), recalculating path')
+                    lastAction.planningData[player:getData('id')].contextSegments = {lastAction.NextLocation}
+                    lastAction:FindNextShortestPath(player)
+                    return
+                else
+                    -- Close enough to actor - complete move
+                    print('[Move] Reached target actor '..lastAction.TargetEntityId)
+                    player:setAnimation()
+                    player:setData('isMoving', false)
+                    player.position = targetPos
+                    player.rotation = lastAction.targetActor.rotation
+                    lastAction.planningData[player:getData('id')] = {}
+                    if DEBUG_PATHFINDING then
+                        outputConsole("Move:Apply - getting next valid action")
+                        print("Move:Apply - getting next valid action")
+                    end
+                    OnGlobalActionFinished(100, player:getData('id'), player:getData('storyId'))
+                    return
+                end
+            end
+
+            -- Existing POI-based completion logic
             player:setData('isMoving', false)
             player:setAnimation() --stop the animation - the player will stop moving
             player.position = lastAction.NextLocation.position
@@ -289,6 +323,19 @@ function Move:Apply()
 
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
+
+    -- Resolve actor target reference for entity-based moves
+    if self.TargetEntityType == 'actor' and self.TargetEntityId then
+        self.targetActor = FirstOrDefault(CURRENT_STORY.CurrentEpisode.peds,
+            function(p) return p:getData('id') == self.TargetEntityId end)
+
+        if not self.targetActor then
+            print('[ERROR][Move] Target actor '..self.TargetEntityId..' not found, falling back to POI-based movement')
+            self.TargetEntityType = nil
+        else
+            print('[Move] Moving to actor '..self.TargetEntityId..' at position '..self.targetActor.position.x..', '..self.targetActor.position.y)
+        end
+    end
 
     -- Check if this is an artificially inserted Move (not from graph) and if we're off-camera
     local hasEventId = self.Performer:getData('currentGraphEventId') ~= nil
@@ -517,6 +564,93 @@ function Move:FindNextShortestPath(player)
         return
     end
     print(player:getData('id')..": Find shortest path between "..(player:getData('currentRegion') or 'null')..' and '..(contextSegments[1].Region.name or 'null'))
+
+    -- NEW: For actor targets, use actor's current position as destination
+    if self.TargetEntityType == 'actor' and self.targetActor then
+        local actorPos = self.targetActor.position
+
+        -- Find actor's current region
+        local actorRegion = FirstOrDefault(contextSegments[1].Episode.Regions,
+            function(r) return r.name == self.targetActor:getData('currentRegion') end)
+
+        if not actorRegion then
+            print('[ERROR][Move] Could not determine target actor region, falling back to POI-based movement')
+            self.TargetEntityType = nil
+            -- Continue with existing POI-based logic below
+        else
+            print('[Move] Calculating path to actor at position '..actorPos.x..', '..actorPos.y..' in region '..actorRegion.name)
+
+            -- Check if already close to actor
+            if math.abs((player.position - actorPos).length) < 1.5 then
+                local m = self:InitializeMarker(actorPos.x, actorPos.y, actorPos.z, player)
+                self.planningData[player:getData('id')].paused = false
+                table.remove(self.planningData[player:getData('id')].contextSegments, 1)
+                Move.destinationReached(player, m)
+                return
+            end
+
+            self:InternalShortestPath(
+                contextSegments[1].Episode.graphId,
+                contextSegments[1].Episode.pathfindingGraph,
+                player.position,
+                FirstOrDefault(contextSegments[1].Episode.Regions,
+                    function(r) return r.name == player:getData('currentRegion') end),
+                actorPos,  -- Target = actor's position
+                actorRegion,
+                function(result)
+                    if result then
+                        local lib = self.planningData[player:getData('id')].lib
+                        local how = self.planningData[player:getData('id')].how
+
+                        if DEBUG_PATHFINDING then
+                            print('[Move] Path to actor found, length='..#result)
+                        end
+
+                        self.planningData[player:getData('id')].path = result
+
+                        -- Add actor's position as final waypoint
+                        table.insert(self.planningData[player:getData('id')].path, {actorPos.x, actorPos.y, actorPos.z})
+                        table.remove(self.planningData[player:getData('id')].contextSegments, 1)
+
+                        -- Process path markers (existing logic)
+                        local path = self.planningData[player:getData('id')].path
+                        local nextPos = path[1]
+                        while #path > 0 and nextPos and math.abs((player.position - Vector3(nextPos[1], nextPos[2], nextPos[3])).length) < 1.5 do
+                            table.remove(path, 1)
+                            nextPos = path[1]
+                        end
+                        if not nextPos then
+                            print("[FATAL ERROR] Path became empty while removing close waypoints!")
+                            Timer(Move.teleport, 5000, 1, self.Performer, self)
+                            return
+                        end
+
+                        self.planningData[player:getData('id')].timeout = 60
+                        local marker = self:InitializeMarker(nextPos[1], nextPos[2], nextPos[3], player)
+                        self.planningData[player:getData('id')].paused = false
+                        Move.hasReachedMarker(player, marker)
+
+                        player:setRotation(0, 0, findRotation(player.position.x, player.position.y, nextPos[1], nextPos[2]), "ZYX", true, true)
+
+                        local animationSpeed = self.AnimationSpeed
+                        Timer(function()
+                            player:setAnimation(lib, how, -1, true, true, true, true)
+                            player:setAnimationSpeed(how, animationSpeed)
+                            player:setData('isMoving', true)
+                        end, 100, 1)
+                        if not DISABLE_BETWEEN_POINTS_TELEPORTATION then
+                            Move.wait(player)
+                        end
+                    else
+                        print('[FATAL ERROR!] No shortest path found to actor!')
+                    end
+                end
+            )
+            return  -- Exit early, don't run POI-based logic
+        end
+    end
+
+    -- Existing POI-based pathfinding logic
     if math.abs((player.position - contextSegments[1].position).length) < 1.5 then
         local m = self:InitializeMarker(contextSegments[1].position.x, contextSegments[1].position.y, contextSegments[1].position.z, player)
         self.planningData[player:getData('id')].paused = false
@@ -636,6 +770,30 @@ function Move.hasReachedMarker(player, marker)
     end
     if lastAction.planningData[playerId] then
         plan = lastAction.planningData[playerId]
+    end
+
+    -- NEW: Check if target actor moved significantly
+    if lastAction.TargetEntityType == 'actor' and lastAction.targetActor then
+        local currentTargetPos = lastAction.targetActor.position
+        local path = lastAction.planningData[playerId].path
+
+        if path and #path > 0 then
+            local plannedTarget = Vector3(path[#path][1], path[#path][2], path[#path][3])
+            local displacement = math.abs((plannedTarget - currentTargetPos).length)
+
+            -- Actor moved > 3 units - recalculate path
+            if displacement > 3.0 then
+                print('[Move] Target actor moved '..displacement..' units, recalculating path')
+                lastAction.planningData[playerId].path = {}
+                if lastAction.planningData[playerId].nextMarker then
+                    lastAction.planningData[playerId].nextMarker:destroy()
+                    lastAction.planningData[playerId].nextMarker = nil
+                end
+                lastAction.planningData[playerId].contextSegments = {lastAction.NextLocation}
+                lastAction:FindNextShortestPath(player)
+                return
+            end
+        end
     end
 
     local distance = math.abs((player.position - marker.position).length)

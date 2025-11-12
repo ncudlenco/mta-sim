@@ -14,16 +14,24 @@ function ActionsOrchestrator:Reset()
     self.lock = false
 end
 
-function ActionsOrchestrator:EnqueueAction(action, actor)
+---Enqueues an action for the actor. Routes to graph-based or linear orchestration.
+---@param action table The action to enqueue
+---@param actor table The actor performing the action
+---@param eventId string|nil Optional eventId to associate with this action (defaults to lookup from lastEvents)
+function ActionsOrchestrator:EnqueueAction(action, actor, eventId)
     CURRENT_STORY.CameraHandler:clearFocusRequests(actor:getData('id'))
     if CURRENT_STORY:is_a(GraphStory) then
-        self:EnqueueActionGraph(action, actor)
+        self:EnqueueActionGraph(action, actor, eventId)
     else
-        self:EnqueueActionLinear(action, actor)
+        self:EnqueueActionLinear(action, actor, eventId)
     end
 end
 
-function ActionsOrchestrator:EnqueueActionGraph(action, actor)
+---Enqueues an action in graph-based orchestration with temporal constraint validation.
+---@param action table The action to enqueue
+---@param actor table The actor performing the action
+---@param eventId string|nil Optional eventId to associate with this action (defaults to lookup from lastEvents)
+function ActionsOrchestrator:EnqueueActionGraph(action, actor, eventId)
     -- every actor has to be mapped to the point in time as described in the graph of events where the action is supposed to be performed
     -- eg. of a temporal succession of events across actors
     --   |-----------------------next------------------------v
@@ -52,16 +60,19 @@ function ActionsOrchestrator:EnqueueActionGraph(action, actor)
         table.insert(self.fulfilled, previousEvent.id)
     end
 
+    -- Use provided eventId if available, otherwise fall back to lastEvent.id
+    local effectiveEventId = eventId or (lastEvent and lastEvent.id or nil)
+
     if DEBUG then
         if not lastEvent then
-            print("[EnqueueActionGraph] actorId ".. actor:getData('id').." - no last event for action "..action.Name..': '..action:GetDynamicString())
+            print("[EnqueueActionGraph] actorId ".. actor:getData('id').." - no last event for action "..action.Name..': '..action:GetDynamicString().." (eventId: "..tostring(effectiveEventId)..")")
         else
-            print("[EnqueueActionGraph] actorId ".. actor:getData('id').." event "..lastEvent.id.." - action "..action.Name..': '..action:GetDynamicString())
+            print("[EnqueueActionGraph] actorId ".. actor:getData('id').." event "..lastEvent.id.." - action "..action.Name..': '..action:GetDynamicString().." (eventId: "..tostring(effectiveEventId)..")")
         end
     end
 
     local constraints = self:GetTemporalConstraints(actor, action, lastEvent)
-    self.actionRequests[actor:getData('id')] = {eventId = lastEvent and lastEvent.id or nil, actor = actor, action = action, constraints = constraints}
+    self.actionRequests[actor:getData('id')] = {eventId = effectiveEventId, actor = actor, action = action, constraints = constraints}
 
     if DEBUG and DEBUG_ACTIONS_ORCHESTRATOR then
         print("[EnqueueActionGraph] actorId ".. actor:getData('id').." - constraints "..stringifyTable(constraints))
@@ -96,7 +107,8 @@ function ActionsOrchestrator:GetTemporalConstraints(actor, action, lastEvent)
     local actorId = actor:getData('id')
 
     if DEBUG and DEBUG_ACTIONS_ORCHESTRATOR then
-        print("[GetTemporalConstraints] actorId ".. actorId.." - expected action "..expectedAction)
+        local actionType = action.isArtificial and " (artificial)" or ""
+        print("[GetTemporalConstraints] actorId ".. actorId.." - expected action "..(expectedAction or "nil")..actionType)
     end
 
     if expectedAction and (expectedAction == action.Name or action.Name:lower() == 'move') then
@@ -110,29 +122,37 @@ function ActionsOrchestrator:GetTemporalConstraints(actor, action, lastEvent)
                         print("[ERROR] [GetTemporalConstraints] actorId ".. actorId.." - constraintId "..constraintId.." not found")
                     end
                     if constraint.type == 'starts_with' then
-                        local linkedConstraints = Where(CURRENT_STORY.temporal, function(tempConstraint)
-                            return
-                                tempConstraint.key ~= 'starting_actions'
-                                and tempConstraint.relations
-                                and inList(constraintId, tempConstraint.relations)
-                                and CURRENT_STORY.graph[tempConstraint.key].Entities[1] ~= actorId
-                            end)
-                        for _, linkedConstraint in ipairs(linkedConstraints) do
-                            table.insert(constraints, {actorId = CURRENT_STORY.graph[linkedConstraint.key].Entities[1], eventId = linkedConstraint.key, constraint = constraint})
+                        -- Skip starts_with constraints for artificial actions
+                        -- Artificial moves should not trigger starts_with synchronization
+                        if not action.isArtificial then
+                            local linkedConstraints = Where(CURRENT_STORY.temporal, function(tempConstraint)
+                                return
+                                    tempConstraint.key ~= 'starting_actions'
+                                    and tempConstraint.relations
+                                    and inList(constraintId, tempConstraint.relations)
+                                    and CURRENT_STORY.graph[tempConstraint.key].Entities[1] ~= actorId
+                                end)
+                            for _, linkedConstraint in ipairs(linkedConstraints) do
+                                table.insert(constraints, {actorId = CURRENT_STORY.graph[linkedConstraint.key].Entities[1], eventId = linkedConstraint.key, constraint = constraint})
 
-                            -- Find the event that is before the linked event, this is needed to enforce the order of the events for interactions, where only the initiator will have a request to execute the event
-                            local eventBeforeLinkedStartsWith = FirstOrDefault(CURRENT_STORY.temporal, function(tempConstraint) return tempConstraint.next == linkedConstraint.key end)
-                            if eventBeforeLinkedStartsWith then
-                                table.insert(constraints, {actorId = CURRENT_STORY.graph[eventBeforeLinkedStartsWith.key].Entities[1], eventId = eventBeforeLinkedStartsWith.key, constraint = {type = 'after', source = temporalData.key, target = eventBeforeLinkedStartsWith.key}})
+                                -- Find the event that is before the linked event, this is needed to enforce the order of the events for interactions, where only the initiator will have a request to execute the event
+                                local eventBeforeLinkedStartsWith = FirstOrDefault(CURRENT_STORY.temporal, function(tempConstraint) return tempConstraint.next == linkedConstraint.key end)
+                                if eventBeforeLinkedStartsWith then
+                                    table.insert(constraints, {actorId = CURRENT_STORY.graph[eventBeforeLinkedStartsWith.key].Entities[1], eventId = eventBeforeLinkedStartsWith.key, constraint = {type = 'after', source = temporalData.key, target = eventBeforeLinkedStartsWith.key}})
+                                end
                             end
+                        elseif DEBUG and DEBUG_ACTIONS_ORCHESTRATOR then
+                            print("[GetTemporalConstraints] Skipping starts_with constraint for artificial action")
                         end
                     elseif constraint.type == 'concurent' or constraint.type == 'after' then
+                        -- Always extract after/concurrent constraints (even for artificial actions)
                         table.insert(constraints, {actorId = CURRENT_STORY.graph[constraint.target].Entities[1], eventId = constraint.target, constraint = constraint})
                     end
                 end
             end
 
-            --Find all the constraints of type before that have the current event as a target
+            -- Find all the constraints of type before that have the current event as a target
+            -- Always extract before constraints (even for artificial actions)
             local beforeConstraints = Where(CURRENT_STORY.temporal, function(tempConstraint) return tempConstraint.type == 'before' and tempConstraint.target == lastEvent.id end)
 
             -- Find the events for which the current event has to wait (other actions that have a before constraint with the current event as a target)
@@ -369,14 +389,14 @@ function ActionsOrchestrator:EnqueueActionLinear(action, actor, eventId)
     end
 
     -- Store eventId on actor (since action instances are shared)
-    -- This is stored regardless of whether we publish, for event_end
-    if eventId then
+    -- Skip for artificial actions (navigation-only moves)
+    if eventId and not action.isArtificial then
         actor:setData('currentGraphEventId', eventId)
     end
 
     -- Publish graph event start ONLY if action matches the event's expected action
     -- This filters out artificially inserted Move actions
-    if eventId and CURRENT_STORY.EventBus and CURRENT_STORY:is_a(GraphStory) then
+    if eventId and not action.isArtificial and CURRENT_STORY.EventBus and CURRENT_STORY:is_a(GraphStory) then
         local expectedAction = CURRENT_STORY.graph[eventId] and CURRENT_STORY.graph[eventId].Action
 
         -- Only publish if this action is the actual graph event action

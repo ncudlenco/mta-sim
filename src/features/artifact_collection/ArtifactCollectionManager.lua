@@ -426,10 +426,6 @@ end
 --- Stop scheduled collection
 --- Cancels pending timer, stops all collectors (finalizes videos), and triggers completion callback
 function ArtifactCollectionManager:stopScheduledCollection()
-    if not self.isSchedulingActive then
-        return
-    end
-
     self.isSchedulingActive = false
 
     -- Cancel pending timer

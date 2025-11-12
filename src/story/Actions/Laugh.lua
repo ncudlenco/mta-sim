@@ -22,8 +22,8 @@ function Laugh:Apply()
             -- Actors are now properly positioned and facing each other
             StoryActionBase.GetLogger(self, story):Log(self.Description .. self.TargetPlayer:getData('name') .. " joke", self)
 
-            self.Performer:setAnimation("rapping", "laugh_01", time, true, false, false, false)
-            self.TargetPlayer:setAnimation("rapping", "laugh_01", time, true, false, false, false)
+            self.Performer:setAnimation("rapping", "laugh_01", time, false, false, false, false)
+            self.TargetPlayer:setAnimation("rapping", "laugh_01", time, false, false, false, false)
 
             if DEBUG then
                 outputConsole("Laugh:Apply")

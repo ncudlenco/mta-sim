@@ -11,7 +11,7 @@ function HangUp:Apply()
     StoryActionBase.Apply(self)
 
     StoryActionBase.GetLogger(self, story):Log(self.Description, self)
-    self.Performer:setAnimation("PED", "PHONE_OUT", 2000, true, true, false, true)
+    self.Performer:setAnimation("PED", "PHONE_OUT", 2000, false, false, false, true)
 
     if DEBUG then
         outputConsole("HangUp:Apply")

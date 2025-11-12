@@ -12,7 +12,7 @@ function SmokeIn:Apply()
 
     -- Object is already attached by TakeOut action
     StoryActionBase.GetLogger(self, story):Log(self.Description .. getWordPrefix(self.TargetItem.Description) .. " " .. self.TargetItem.Description, self)
-    self.Performer:setAnimation("SMOKING", "M_smk_in", 3000, true, true, false, true)
+    self.Performer:setAnimation("SMOKING", "M_smk_in", 3000, false, false, false, true)
 
     if DEBUG then
         outputConsole("SmokeIn:Apply")

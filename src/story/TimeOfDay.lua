@@ -5,17 +5,17 @@ TimeOfDay = class(StoryTimeOfDayBase, function(o, hour, minute)
     end
     local description = ""
     if (time > 5 and time < 11) then
-        description = "in the morning"
+        description = "morning"
     elseif (time == 12) then
-        description = "at noon";
+        description = "noon";
     elseif (time > 11 and time < 16) then
-        description = "during the day"
+        description = "afternoon"
     elseif (time > 16 and time < 19) then
-        description = "in the evening"
+        description = "evening"
     elseif (time == 0) then
-        description = "in the middle of the night"
+        description = "midnight"
     else
-        description = "during the night"
+        description = "night"
     end
 
     StoryTimeOfDayBase.init(o, description)

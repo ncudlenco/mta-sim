@@ -55,6 +55,15 @@
 	<script src="src/utils/attach_func.lua" />
 	<script src="src/utils/attach_func.lua" type="client" />
 	<script src="src/utils/bone_pos_rot.lua" type="client" />
+  <!-- Camera System -->
+  <script src="src/story/Camera/CameraSpecParser.lua" type="shared"/>
+  <script src="src/story/Camera/CameraParameters.lua" type="shared"/>
+  <script src="src/utils/CameraValidation.lua" type="server"/>
+  <script src="src/client/CameraValidationClient.lua" type="client"/>
+  <script src="src/client/CameraControlClient.lua" type="client"/>
+  <script src="src/api/CameraHandlerBase.lua" type="shared"/>
+  <script src="src/api/StaticCameraHandler.lua" type="shared"/>
+  <script src="src/api/CinematicCameraHandler.lua" type="shared"/>
   <!-- Api -->
   <script src="src/api/CameraHandler.lua" type="shared"/>
   <script src="src/api/ActionsOrchestrator.lua" type="shared" />

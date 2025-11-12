@@ -28,9 +28,7 @@ end)
 function ConfigurationLoader:load()
     -- Check if file exists
     if not fileExists(self.configPath) then
-        if DEBUG then
-            print("[ConfigurationLoader] Configuration file not found: " .. self.configPath)
-        end
+        print("[ConfigurationLoader] Configuration file not found: " .. self.configPath)
         return nil
     end
 
@@ -45,9 +43,7 @@ function ConfigurationLoader:load()
     local fileSize = fileGetSize(file)
     if fileSize == 0 then
         fileClose(file)
-        if DEBUG then
-            print("[ConfigurationLoader] Configuration file is empty: " .. self.configPath)
-        end
+        print("[ConfigurationLoader] Configuration file is empty: " .. self.configPath)
         return nil
     end
 
@@ -66,9 +62,7 @@ function ConfigurationLoader:load()
         return nil
     end
 
-    if DEBUG then
-        print("[ConfigurationLoader] Successfully loaded configuration from: " .. self.configPath)
-    end
+    print("[ConfigurationLoader] Successfully loaded configuration from: " .. self.configPath)
 
     return config
 end
@@ -104,18 +98,14 @@ function ConfigurationLoader:applyToGlobals(config)
             _G[key] = value
             overrideCount = overrideCount + 1
 
-            if DEBUG then
-                print(string.format("[ConfigurationLoader] Overridden %s: %s -> %s",
-                    key, tostring(oldValue), tostring(value)))
-            end
+            print(string.format("[ConfigurationLoader] Overridden %s: %s -> %s",
+                key, tostring(oldValue), tostring(value)))
         else
-            if DEBUG then
-                print(string.format("[ConfigurationLoader] WARNING: Unknown configuration key '%s' (global variable doesn't exist)", key))
-            end
+            print(string.format("[ConfigurationLoader] WARNING: Unknown configuration key '%s' (global variable doesn't exist)", key))
         end
     end
 
-    if DEBUG or overrideCount > 0 then
+    if overrideCount > 0 then
         print(string.format("[ConfigurationLoader] Applied %d configuration override(s)", overrideCount))
     end
 end

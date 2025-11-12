@@ -32,7 +32,10 @@ function OnGlobalActionFinished(delay, playerId, storyId, callback, destroyedIte
         end
 
         -- Publish graph event end (if this was a graph event and action matched)
+        -- Save the completedEventId before clearing it, so we can pass it to NextActions
         local completedEventId = actor:getData('currentGraphEventId')
+        local eventIdForNextAction = completedEventId  -- Preserve for NextAction propagation
+
         if completedEventId and story.EventBus and story:is_a(GraphStory) and lastAction then
             local expectedAction = story.graph[completedEventId] and story.graph[completedEventId].Action
 
@@ -64,6 +67,8 @@ function OnGlobalActionFinished(delay, playerId, storyId, callback, destroyedIte
         -- story.CameraHandler:freeFocus(playerId)
 
         local nextAction = nil
+        local isNextActionFromChain = false  -- Track if nextAction is from NextAction chain
+
         if not lastAction then
             if DEBUG then
                 outputConsole("GlobalAction:Apply - the last action was null, initiating the first action protocol")
@@ -91,6 +96,7 @@ function OnGlobalActionFinished(delay, playerId, storyId, callback, destroyedIte
                 else
                     nextAction = lastAction.NextAction
                 end
+                isNextActionFromChain = true  -- This action is part of the same event chain
             elseif DEFINING_EPISODES then
                 nextAction = EmptyAction({Performer = player})
             elseif lastAction.NextLocation then
@@ -127,7 +133,16 @@ function OnGlobalActionFinished(delay, playerId, storyId, callback, destroyedIte
                 print('[FatalError][ActionsGlobal] Actor cannot be assigned to an episode '..actor:getData('id'))
             end
 
-            story.ActionsOrchestrator:EnqueueAction(nextAction, actor)
+            -- Pass eventId when enqueueing NextAction from a chain (preserves eventId for NextAction inheritance)
+            -- Otherwise, let the system look up eventId from lastEvents
+            if isNextActionFromChain and eventIdForNextAction then
+                if DEBUG then
+                    print("[ActionsGlobals] Enqueueing NextAction with preserved eventId: "..eventIdForNextAction)
+                end
+                story.ActionsOrchestrator:EnqueueAction(nextAction, actor, eventIdForNextAction)
+            else
+                story.ActionsOrchestrator:EnqueueAction(nextAction, actor)
+            end
             -- Insert here an action manager that keeps an eye on the temporal part from the graph.
             -- Initially, all the actors were spawned in their initial location, then the first action was applied, disregarding any temporal constraints.
             -- Now, the temporal constraints should be taken into account, the action should be applied only when the time is right.

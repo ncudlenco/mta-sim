@@ -3347,7 +3347,7 @@ function SetPlayerSkin:Apply(requiredAttributes)
     if requiredAttributes then
         for k,v in pairs(requiredAttributes) do
             if DEBUG then
-                print('SetPlayerSkin:Apply: set data '..k:lower()..'='..v)
+                print('SetPlayerSkin:Apply: set data '..k:lower()..'='..tostring(v))
             end
             player:setData(k:lower(), v)
         end

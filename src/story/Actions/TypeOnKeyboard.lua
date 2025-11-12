@@ -12,7 +12,7 @@ function TypeOnKeyboard:Apply()
 
     StoryActionBase.GetLogger(self, story):Log(self.Description .. " on the " .. self.TargetItem.Description, self)
 
-    local setupTime = 3000
+    local setupTime = random(5000, 10000)
     self.Performer:setAnimation("INT_OFFICE", "OFF_Sit_Type_Loop", -1, true, true, true, true)
     if DEBUG then
         outputConsole("TypeOnKeyboard:Apply")

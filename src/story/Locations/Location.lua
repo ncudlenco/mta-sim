@@ -400,6 +400,97 @@ function Location:FilterCandidatesBySpatialConstraints(candidates, event, materi
     return filteredCandidates
 end
 
+--- Find POI closest to a position
+--- @param position Vector3 Target position
+--- @param pois table Array of POIs
+--- @return table|nil Closest POI or nil if no POIs provided
+function Location:FindClosestPOI(position, pois)
+    if #pois == 0 then
+        print('[ERROR] FindClosestPOI: No POIs provided')
+        return nil
+    end
+
+    local closest = pois[1]
+    local minDist = math.abs((pois[1].position - position).length)
+
+    for i = 2, #pois do
+        local dist = math.abs((pois[i].position - position).length)
+        if dist < minDist then
+            minDist = dist
+            closest = pois[i]
+        end
+    end
+
+    return closest
+end
+
+--- Find POI that has actions with the specified object
+--- Returns POI closest to object's current position
+--- @param objectEntityId string Graph entity ID
+--- @param player userdata Actor performing action (for chain ID)
+--- @param fallbackLocation table Fallback POI if not found
+--- @return table The resolved POI or fallback
+function Location:FindPOIForObject(objectEntityId, player, fallbackLocation)
+    local playerChainId = player:getData('mappedChainId')
+    local objectId = self:GetMappedEventObjectId(objectEntityId, playerChainId)
+
+    if not objectId or objectId == 'spawnable' then
+        if DEBUG then
+            print('[FindPOIForObject] Object '..objectEntityId..' is spawnable, using fallback')
+        end
+        return fallbackLocation
+    end
+
+    -- Find object instance in episode
+    local objectInstance = FirstOrDefault(CURRENT_STORY.CurrentEpisode.Objects,
+        function(o) return o.ObjectId == objectId end)
+
+    if not objectInstance then
+        print('[ERROR] Object '..objectId..' not found in episode')
+        return fallbackLocation
+    end
+
+    if not objectInstance.position then
+        print('[WARN] Object '..objectId..' has no position')
+        return fallbackLocation
+    end
+
+    -- Find POIs with actions for this object
+    local candidates = Where(CURRENT_STORY.CurrentEpisode.POI, function(poi)
+        return Any(poi.allActions, function(action)
+            return action.TargetItem and
+                   action.TargetItem.ObjectId and
+                   action.TargetItem.ObjectId == objectId
+        end)
+    end)
+
+    if #candidates == 0 then
+        -- No POI with object actions - use nearest POI to object
+        if DEBUG then
+            print('[FindPOIForObject] No POI with actions for object '..objectId..', using nearest POI')
+        end
+        return self:FindClosestPOI(objectInstance.position, CURRENT_STORY.CurrentEpisode.POI)
+    end
+
+    -- Return POI closest to object's current position
+    local closestPOI = candidates[1]
+    local minDist = math.abs((candidates[1].position - objectInstance.position).length)
+
+    for i = 2, #candidates do
+        local dist = math.abs((candidates[i].position - objectInstance.position).length)
+        if dist < minDist then
+            minDist = dist
+            closestPOI = candidates[i]
+        end
+    end
+
+    if DEBUG then
+        print('[FindPOIForObject] Resolved object '..objectEntityId..' to POI '..closestPOI.Description..' (distance='..minDist..')')
+    end
+
+    return closestPOI
+end
+
 --- Creates a location clone for interaction actors with specified offset
 --- @param originalLocation Location The original location to clone
 --- @param offset Vector3|nil The offset to apply (default: Vector3(-0.7, -0.7, 0))
@@ -449,8 +540,19 @@ end
 --- @param nextEvent table|nil The next event (for interaction handling)
 --- @param moveTemplate table The move action template
 --- @param interactionOffset Vector3|nil The offset for interaction positioning
+--- @param targetEntityId string|nil The target entity ID for entity-based moves
+--- @param entityType string|nil The entity type ("actor" or "object")
 --- @return Move The created move action
-function Location:CreateMoveAction(targetLocation, nextEvent, moveTemplate, interactionOffset)
+--- Creates a Move action with proper configuration
+-- @param targetLocation The target location POI
+-- @param nextEvent The next graph event (if any)
+-- @param moveTemplate The template Move action from the location
+-- @param interactionOffset Optional offset for interaction positioning
+-- @param targetEntityId Optional entity ID for entity-based moves
+-- @param entityType Optional entity type ('actor' or 'object')
+-- @param isArtificial Whether this Move is artificial (for navigation) or a real graph event
+-- @return The created Move action
+function Location:CreateMoveAction(targetLocation, nextEvent, moveTemplate, interactionOffset, targetEntityId, entityType, isArtificial)
     local interactionPoiMap = CURRENT_STORY.interactionPoiMap
     local finalTarget = targetLocation
 
@@ -473,9 +575,17 @@ function Location:CreateMoveAction(targetLocation, nextEvent, moveTemplate, inte
         targetItem = finalTarget,
         nextLocation = finalTarget,
         prerequisites = moveTemplate.Prerequisites,
-        graphId = moveTemplate.graphId
+        graphId = moveTemplate.graphId,
+        targetEntityId = targetEntityId,
+        targetEntityType = entityType
     }
     move.TargetItem = finalTarget
+
+    -- Mark artificial moves that shouldn't trigger temporal constraints
+    if isArtificial then
+        move.isArtificial = true
+    end
+
     return move
 end
 
@@ -606,8 +716,57 @@ function Location:ProcessNextAction(player)
     if previousLocation and location and previousLocation ~= location then
         --if this is an interaction then create a move action with target the other player. handle internally inside the move action the positioning of the two players
         --
-        print('Next action is in another location. Inserting a Move action from '..previousLocation.Description..' to '..location.Description..' in episode '..location.Episode.name)
-        local moveAction = FirstOrDefault(previousLocation.allActions, function(action) return action.Name == 'Move' and action.TargetItem == location end)
+
+        -- Detect entity-based Move
+        local isMoveToEntity = event and event.Action:lower() == 'move' and #event.Entities == 2
+        local targetDestination = location
+        local entityType = nil
+        local actualTargetEntityId = nil
+
+        if isMoveToEntity then
+            local targetEntityId = event.Entities[2]
+            local entity = CURRENT_STORY.graph[targetEntityId]
+            local isActor = entity.Properties and entity.Properties.Gender
+
+            if isActor then
+                -- Actor target - Move will track directly
+                print('Next action is Move to actor '..targetEntityId..'. Inserting a Move action from '..previousLocation.Description..' in episode '..location.Episode.name)
+                entityType = 'actor'
+                actualTargetEntityId = targetEntityId
+                -- targetDestination stays as 'location' (placeholder)
+            else
+                -- Object target - check if it's picked up
+                local objectId = self:GetMappedEventObjectId(targetEntityId, player:getData('mappedChainId'))
+
+                -- Check if object is currently held by another actor
+                local holdingActor = nil
+                if objectId and objectId ~= 'spawnable' then
+                    holdingActor = FirstOrDefault(CURRENT_STORY.CurrentEpisode.peds, function(ped)
+                        local pickedObjects = ped:getData('pickedObjects')
+                        if not pickedObjects or #pickedObjects == 0 then return false end
+                        return Any(pickedObjects, function(po) return po[1] == objectId end)
+                    end)
+                end
+
+                if holdingActor then
+                    -- Object is held - convert to actor-based move
+                    print('Next action is Move to object '..targetEntityId..' held by '..holdingActor:getData('id')..', redirecting to actor')
+                    entityType = 'actor'
+                    actualTargetEntityId = holdingActor:getData('id')
+                    targetDestination = location  -- Placeholder for actor tracking
+                else
+                    -- Object not held - resolve to POI normally
+                    entityType = 'object'
+                    actualTargetEntityId = targetEntityId
+                    targetDestination = self:FindPOIForObject(targetEntityId, player, location)
+                    print('Next action is Move to object '..targetEntityId..'. Inserting a Move action from '..previousLocation.Description..' to '..targetDestination.Description..' in episode '..targetDestination.Episode.name)
+                end
+            end
+        else
+            print('Next action is in another location. Inserting a Move action from '..previousLocation.Description..' to '..location.Description..' in episode '..location.Episode.name)
+        end
+
+        local moveAction = FirstOrDefault(previousLocation.allActions, function(action) return action.Name == 'Move' and action.TargetItem == targetDestination end)
 
         -- Determine interaction offset if this is a move towards an interaction
         local interactionOffset = nil
@@ -619,7 +778,9 @@ function Location:ProcessNextAction(player)
         end
 
         -- Use our helper function to create the proper Move action (handles interaction POI cloning if needed)
-        local moveClone = self:CreateMoveAction(location, nextEvent, moveAction, interactionOffset)
+        -- Mark as artificial if this is not a graph Move event (just navigation between locations)
+        local isArtificial = not isMoveEvent
+        local moveClone = self:CreateMoveAction(targetDestination, nextEvent, moveAction, interactionOffset, actualTargetEntityId, entityType, isArtificial)
         table.insert(CURRENT_STORY.actionsQueues[player:getData('id')], moveClone)
     end
 
@@ -910,7 +1071,30 @@ function Location:ProcessNextAction(player)
                         poi.LocationId == interactionPoiMap[nextEvent.interactionRelation]
                     )
                     or not nextEvent.isInteraction --and not poi.isBusy
-                local nextEventTargetLocation = isnextEventMove and nextEvent.Location[2] or nextEvent.Location[1]
+                -- Determine target location for nextEvent
+                -- For entity-based Move (2 entities), resolve entity to region
+                -- For location-based Move (1 entity), use destination location
+                local nextEventTargetLocation
+                if isnextEventMove and #nextEvent.Entities == 2 then
+                    -- Entity-based move - resolve entity to its region
+                    local targetEntityId = nextEvent.Entities[2]
+                    local targetEntity = CURRENT_STORY.graph[targetEntityId]
+
+                    if targetEntity.Properties.Gender then
+                        -- Actor target - use actor's CURRENT region
+                        local targetActor = FirstOrDefault(CURRENT_STORY.CurrentEpisode.peds,
+                            function(p) return p:getData('id') == targetEntityId end)
+                        nextEventTargetLocation = targetActor and targetActor:getData('currentRegion') or nextEvent.Location[1]
+                    else
+                        -- Object target - use object's defined location from graph
+                        nextEventTargetLocation = targetEntity.Location and targetEntity.Location[1] or nextEvent.Location[1]
+                    end
+                elseif isnextEventMove then
+                    -- Location-based move - use destination location
+                    nextEventTargetLocation = nextEvent.Location[2]
+                else
+                    nextEventTargetLocation = nextEvent.Location[1]
+                end
                 local isValidRegion = poi.Region and nextEvent.Location and (poi.Region.name:lower():find(nextEventTargetLocation:lower()) and true or false)
                 local restrictInteractionsToInteractionPois = nextEvent.isInteraction and poi.interactionsOnly
                 local locationContainsObjectOfEvent = Any(poi.allActions, function(action)

@@ -297,7 +297,7 @@ function Logger:Log(text, ...)
                 self.Buffer[player:getData('id')].TempDependency = false
                 self.Buffer[player:getData('id')].firstAction = false
                 self.Buffer[player:getData('id')].text = self:EndSentence(self.Buffer[player:getData('id')].text)
-                logText = 'When '..player:getData('name')..' '..PickRandom(self.Buffer[player:getData('id')].NextTemporalLinks)..' '..player:getData('genderNominative')..' '..text
+                logText = 'When '..tostring(player:getData('name') or '')..' '..tostring(PickRandom(self.Buffer[player:getData('id')].NextTemporalLinks) or '')..' '..tostring(player:getData('genderNominative') or '')..' '..tostring(text or '')
                 commit = true
                 self.PreviousAnd = false
                 if DEBUG_LOGGER then

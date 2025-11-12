@@ -24,8 +24,8 @@ function HandShake:Apply()
 
             -- Start animations
             local shakeType = PickRandom({"hndshkaa", "hndshkda", "hndshkfa", "prtial_hndshk_biz_01"})
-            self.Performer:setAnimation("gangs", shakeType, time, true, false, false, false)
-            self.TargetPlayer:setAnimation("gangs", shakeType, time, true, false, false, false)
+            self.Performer:setAnimation("gangs", shakeType, time, false, false, false, false)
+            self.TargetPlayer:setAnimation("gangs", shakeType, time, false, false, false, false)
 
             if DEBUG then
                 outputConsole("HandShake:Apply")

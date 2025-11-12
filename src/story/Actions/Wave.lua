@@ -27,7 +27,7 @@ Wave = class(StoryActionBase, function(o, params)
     StoryActionBase.init(o, params)
 
     o.Target = params.Target
-    o.loop = params.loop ~= nil and params.loop or true  -- Default to infinite looping
+    o.loop = params.loop ~= nil and params.loop or false
 end)
 
 --- Apply the wave action with optional target rotation and loop/finite mode
@@ -55,16 +55,16 @@ function Wave:Apply()
         -- Infinite loop mode: wave_in (setup) → wave_loop (indefinite)
         local setupTime = 1500
 
-        -- Start with wave_in animation
-        self.Performer:setAnimation("ON_LOOKERS", "wave_in", setupTime, true, false, false, true)
+        -- -- Start with wave_in animation
+        -- self.Performer:setAnimation("ON_LOOKERS", "wave_in", setupTime, true, false, false, true)
 
         -- Transition to indefinite wave_loop after setup
-        Timer(function()
-            if self.Performer and isElement(self.Performer) then
+        -- Timer(function()
+            -- if self.Performer and isElement(self.Performer) then
                 -- -1 time means loop indefinitely, freezeLastFrame=true preserves animation state
-                self.Performer:setAnimation("ON_LOOKERS", "wave_loop", -1, true, false, true, true)
-            end
-        end, setupTime, 1)
+                self.Performer:setAnimation("ON_LOOKERS", "wave_loop", setupTime, false, false, false, false)
+            -- end
+        -- end, setupTime, 1)
 
         if DEBUG then
             outputConsole("Wave:Apply (infinite loop mode)")
@@ -80,19 +80,19 @@ function Wave:Apply()
         local totalDuration = waveInTime + waveLoopTime + waveOutTime
 
         -- Step 1: wave_in
-        self.Performer:setAnimation("ON_LOOKERS", "wave_in", waveInTime, true, false, false, true)
+        self.Performer:setAnimation("ON_LOOKERS", "wave_in", waveInTime, false, false, false, false)
 
         -- Step 2: wave_loop (brief)
         Timer(function()
             if self.Performer and isElement(self.Performer) then
-                self.Performer:setAnimation("ON_LOOKERS", "wave_loop", waveLoopTime, true, false, false, true)
+                self.Performer:setAnimation("ON_LOOKERS", "wave_loop", waveLoopTime, false, false, false, false)
             end
         end, waveInTime, 1)
 
         -- Step 3: wave_out
         Timer(function()
             if self.Performer and isElement(self.Performer) then
-                self.Performer:setAnimation("ON_LOOKERS", "wave_out", waveOutTime, true, false, false, true)
+                self.Performer:setAnimation("ON_LOOKERS", "wave_out", waveOutTime, false, false, false, false)
             end
         end, waveInTime + waveLoopTime, 1)
 

@@ -98,6 +98,18 @@ function LookAt:GetTargetPosition()
     return nil
 end
 
+--- Gets the target element if it's a ped or player
+--- @return userdata|nil The target ped/player element or nil
+function LookAt:GetTargetElement()
+    if self.Target and isElement(self.Target) then
+        local targetType = self.Target:getType()
+        if targetType == "ped" or targetType == "player" then
+            return self.Target
+        end
+    end
+    return nil
+end
+
 function LookAt:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
@@ -145,9 +157,10 @@ function LookAt:Apply()
             function() return self:GetTargetPosition() end,
             {
                 expectedAction = 'LookAt',
-                updateInterval = 200,
+                updateInterval = 1000,
                 skipBodyRotation = false,
-                initialDelay = 500
+                initialDelay = 500,
+                getTargetElementFn = function() return self:GetTargetElement() end
             }
         )
 
@@ -162,9 +175,10 @@ function LookAt:Apply()
             function() return self:GetTargetPosition() end,
             {
                 expectedAction = 'LookAt',
-                updateInterval = 200,
+                updateInterval = 1000,
                 skipBodyRotation = true,
-                initialDelay = 0
+                initialDelay = 0,
+                getTargetElementFn = function() return self:GetTargetElement() end
             }
         )
     end
@@ -174,7 +188,7 @@ function LookAt:Apply()
     end
 
     -- Timer cleanup is handled automatically when currentAction changes
-    OnGlobalActionFinished(3000, self.Performer:getData('id'), self.Performer:getData('storyId'))
+    OnGlobalActionFinished(5000, self.Performer:getData('id'), self.Performer:getData('storyId'))
 end
 
 function LookAt:GetDynamicString()
@@ -188,23 +202,37 @@ end
 if not triggerClientEvent then
     -- We're on the client side
 
-    --- Client-side handler: Makes a ped look at specific coordinates using head tracking
+    --- Client-side handler: Makes a ped look at specific coordinates or target element using head tracking
     --- @param ped userdata The ped to make look
-    --- @param x number|nil Target X coordinate (nil to reset)
+    --- @param x number|nil Target X coordinate (nil if using targetElement)
     --- @param y number|nil Target Y coordinate
     --- @param z number|nil Target Z coordinate
-    local function onPedLookAt(ped, x, y, z)
+    --- @param targetElement userdata|nil Target ped/player element for direct tracking
+    local function onPedLookAt(ped, x, y, z, targetElement)
         if not isElement(ped) then
             return
         end
 
+        -- Priority 1: Use target element if provided (preferred API for ped-to-ped tracking)
+        if targetElement and isElement(targetElement) then
+            local targetType = getElementType(targetElement)
+            if targetType == "ped" or targetType == "player" then
+                -- Use target-based setPedLookAt (smoother tracking, no deprecation warning)
+                -- Parameters: ped, x_offset, y_offset, z_offset, time, blend, target
+                setPedLookAt(ped, 0, 0, 0, 3000, 500, targetElement)
+                return
+            end
+        end
+
+        -- Priority 2: Use coordinates (fallback for objects/static positions)
         if x and y and z then
             -- Make ped's head look at the target coordinates
             -- time parameter set to 3000ms for smooth head movement
             setPedLookAt(ped, x, y, z, 3000)
         else
-            -- No coordinates provided - reset head to default position
-            setPedLookAt(ped)
+            -- No coordinates or target provided - reset head to default position
+            -- Using time=0 stops any active lookat
+            setPedLookAt(ped, 0, 0, 0, 0)
         end
     end
 

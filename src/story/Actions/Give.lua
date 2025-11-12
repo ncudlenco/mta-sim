@@ -26,8 +26,8 @@ function Give:Apply()
             StoryActionBase.GetLogger(self, story):Log(" and " .. self.TargetPlayer:getData('name') .. self.Description, self)
 
             outputConsole("Playing handshake animation...")
-            self.Performer:setAnimation("gangs", "hndshkfa_swt", time, true, false, false, false)
-            self.TargetPlayer:setAnimation("gangs", "hndshkfa_swt", time, true, false, false, false)
+            self.Performer:setAnimation("gangs", "hndshkfa_swt", time, false, false, false, false)
+            self.TargetPlayer:setAnimation("gangs", "hndshkfa_swt", time, false, false, false, false)
 
             if DEBUG then
                 outputConsole("Give:Apply")

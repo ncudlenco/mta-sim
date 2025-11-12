@@ -10,7 +10,7 @@
                 "id": 3
             },
             {
-                "dynamicString": "return Laptop{description=\"\", noCollisions=true, modelid=7188, isRandomModelId=false, interior=8, position=Vector3(-1000,-1000,-1000), rotation=Vector3(0,0,-90), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "dynamicString": "return Laptop{description=\"\", noCollisions=true, modelid=7188, isRandomModelId=false, interior=8, position=Vector3(1.4921875,0.3890380859375,-1.1131591796875), rotation=Vector3(0,0,-90), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0), isVisible=false}",
                 "id": 2
             }
         ],
@@ -46,6 +46,21 @@
                                 "id": 2
                             },
                             {
+                                "id": 3
+                            },
+                            {
+                                "id": 4
+                            },
+                            {
+                                "id": 5
+                            },
+                            {
+                                "id": 6
+                            },
+                            {
+                                "id": 7
+                            },
+                            {
                                 "id": 8
                             }
                         ],
@@ -79,6 +94,9 @@
                             },
                             {
                                 "id": 7
+                            },
+                            {
+                                "id": 8
                             }
                         ],
                         "nextLocation": {
@@ -108,6 +126,9 @@
                             },
                             {
                                 "id": 7
+                            },
+                            {
+                                "id": 8
                             }
                         ],
                         "nextLocation": {
@@ -137,6 +158,9 @@
                             },
                             {
                                 "id": 7
+                            },
+                            {
+                                "id": 8
                             }
                         ],
                         "nextLocation": {
@@ -166,6 +190,9 @@
                             },
                             {
                                 "id": 7
+                            },
+                            {
+                                "id": 8
                             }
                         ],
                         "nextLocation": {
@@ -195,6 +222,9 @@
                             },
                             {
                                 "id": 7
+                            },
+                            {
+                                "id": 8
                             }
                         ],
                         "nextLocation": {
@@ -209,9 +239,23 @@
                             "type": "Object"
                         },
                         "id": 7,
-                        "nextAction": {
-                            "id": 8
-                        },
+                        "nextAction": [
+                            {
+                                "id": 2
+                            },
+                            {
+                                "id": 4
+                            },
+                            {
+                                "id": 5
+                            },
+                            {
+                                "id": 6
+                            },
+                            {
+                                "id": 8
+                            }
+                        ],
                         "nextLocation": {
                             "id": 1
                         }

@@ -39,8 +39,8 @@ function Kiss:Apply()
                 targetKissType = PickRandom({"grlfrd_kiss_01", "grlfrd_kiss_02", "grlfrd_kiss_03"})
             end
 
-            self.Performer:setAnimation("kissing", performerKissType, time, true, false, false, false)
-            self.TargetPlayer:setAnimation("kissing", targetKissType, time, true, false, false, false)
+            self.Performer:setAnimation("kissing", performerKissType, time, false, false, false, false)
+            self.TargetPlayer:setAnimation("kissing", targetKissType, time, false, false, false, false)
 
             if DEBUG then
                 outputConsole("Kiss:Apply")

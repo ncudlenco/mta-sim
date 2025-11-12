@@ -24,7 +24,7 @@ DEBUG_PATHFINDING = false
 DEBUG_VALIDATION = false
 DEBUG_ACTION_VALIDATION = false
 DEBUG_LOGGER = false
-DEBUG_SCREENSHOTS = false
+DEBUG_SCREENSHOTS = true
 -- Screenshot module debugging
 if setScreenshotModuleDebug then setScreenshotModuleDebug(DEBUG_SCREENSHOTS) end
 DEBUG_OBJECTS = false
@@ -36,7 +36,8 @@ DEBUG_ACTIONS_ORCHESTRATOR = false
 --- Debug flag for spatial validation logging
 DEBUG_SPATIAL = false
 --- Debug flag for episode group detection and cross-group teleportation logging
-DEBUG_EPISODE_GROUPS = true
+DEBUG_EPISODE_GROUPS = false
+DEBUG_CAMERA_VALIDATION = false   -- Enable detailed logging of camera position validation and adjustments
 
 -- Artifact Collection Configuration
 ARTIFACT_COLLECTION_ENABLED = false -- Enable/disable artifact collection system
@@ -69,7 +70,7 @@ TIME_STAMP = false
 ACTORS_CROWDING_FACTOR = 0.2
 MIN_ACTORS = 1
 MAX_ACTORS = 1
-RANDOM_ACTORS_NR = true
+RANDOM_ACTORS_NR = false
 EXPECTED_SPECTATORS = 1
 -- NOT USED --
 
@@ -80,6 +81,15 @@ LOG_DATA = SIMULATION_MODE and true -- Set this to true if you want to save imag
 STATIC_CAMERA = SIMULATION_MODE
 FREE_ROAM = not SIMULATION_MODE
 DEFINING_EPISODES = not SIMULATION_MODE
+
+-- Camera validation settings
+ENABLE_CAMERA_VALIDATION = true  -- Enable wall-aware camera positioning with line-of-sight checks
+CAMERA_WALL_OFFSET = 0.5          -- Distance (units) to offset camera from walls when adjusting position
+
+-- Camera follow mode for cinematic continuous tracking
+-- true  = Use MTA's built-in setCameraTarget() with client-side smooth interpolation
+-- false = Use custom timer-based implementation with 3-layer server-side smoothing
+USE_BUILTIN_CAMERA_FOLLOW = true
 
 DISABLE_BETWEEN_POINTS_TELEPORTATION = false
 -- TODO next: run all graphs from v0_100 and write down the state for each graph

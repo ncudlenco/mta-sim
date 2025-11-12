@@ -26,14 +26,14 @@ GraphStory = class(StoryBase, function(o, spectators, logData, artifactCollectio
     }
     o.DynamicEpisodes = {
       "classroom1",
-      "house1_sweet",
+    --   "house1_sweet",
       "house1_stripped",
     --   "house3_preloaded", --NOT WORKING! The pathfinding seems flawed here, when we have 2 levels?
     --   "house7", --NOT WORKING! Potential issue when the link POI is located outside a region
-      "house8_preloaded",
+    --   "house8_preloaded",
       "house9",
     --   "house10_preloaded", -- Not Working!
-      "house12_preloaded", -- Working but needs the objects removed. Some flakiness exists but in general it works...
+    --   "house12_preloaded", -- Working but needs the objects removed. Some flakiness exists but in general it works...
       "garden",
       "office",
       "office2",
@@ -114,6 +114,14 @@ GraphStory = class(StoryBase, function(o, spectators, logData, artifactCollectio
                 o.temporal = o.graph['temporal']
                 o.graph['temporal'] = nil
             end
+            if o.graph['semantic'] then
+                o.semantic = o.graph['semantic']
+                o.graph['semantic'] = nil
+            end
+            if o.graph['logical'] then
+                o.logical = o.graph['logical']
+                o.graph['logical'] = nil
+            end
             for k,v in pairs(o.temporal) do
                 if k then
                     v.key = k
@@ -132,13 +140,22 @@ GraphStory = class(StoryBase, function(o, spectators, logData, artifactCollectio
 
             -- Load optional camera section (backwards compatible)
             o.camera = nil
+            o.cameraMode = "static"  -- Default mode
+
             if o.graph['camera'] then
                 o.camera = o.graph['camera']
                 o.graph['camera'] = nil
+
+                -- Extract mode if specified
+                if o.camera.mode then
+                    o.cameraMode = o.camera.mode
+                    o.camera.mode = nil  -- Remove from command map
+                end
+
                 local cmdCount = 0
                 for _ in pairs(o.camera) do cmdCount = cmdCount + 1 end
                 if DEBUG then
-                    print("GraphStory: loaded camera controls with "..cmdCount.." commands")
+                    print("GraphStory: loaded camera controls ("..o.cameraMode.." mode) with "..cmdCount.." commands")
                 end
             end
 
@@ -191,6 +208,7 @@ function GraphStory:Play()
     self.Episodes = self:GetValidEpisodes(requiredActors)
     if (not self.Episodes or #self.Episodes == 0) then
         outputConsole("We could not find any valid episodes for the file "..LOAD_FROM_GRAPH)
+        print("We could not find any valid episodes for the file "..LOAD_FROM_GRAPH)
         for i,spectator in ipairs(self.Spectators) do
             terminatePlayer(spectator, "We could not find any valid episodes for the file "..LOAD_FROM_GRAPH)
         end
@@ -280,6 +298,13 @@ function GraphStory:Play()
             -- Initialize CameraHandler AFTER manager callbacks are set up
             -- This ensures legacy mode event emission happens after initialization
             local hasCameraSection = self.camera ~= nil
+
+            -- Create appropriate camera handler based on mode
+            self.CameraHandler = CreateCameraHandler({
+                mode = self.cameraMode,
+                commands = self.camera
+            })
+
             self.CameraHandler:initialize(hasCameraSection)
 
             -- Separate timer for MAX_STORY_TIME timeout (story's responsibility)
@@ -781,15 +806,43 @@ function GraphStory:GetValidEpisodes(requiredActors)
     --     return { location = location, name = event.Properties.Type, id = event.id }
     -- end)
     --a list of all the actions and their locations (a POI is placed in a location, in a POI I have allActions)
-    local requiredActions = Select(Where(self.graph, function(event)
-        return event.Action ~= 'Exists'
-    end), function(event)
-        local target = nil
-        if #event.Entities > 1 then target = event.Entities[2] end
-        local location = ''
-        if event.Location and #event.Location > 0 then location = event.Location[1] end
-        return { location = location, name = event.Action, target = target }
-    end)
+    -- Only collect actions from actor event chains (from starting_actions to null)
+    local requiredActions = {}
+    for _, requiredActor in ipairs(requiredActors) do
+        local eventId = self.temporal.starting_actions[requiredActor.id]
+        while eventId ~= nil do
+            local event = self.graph[eventId]
+            if event.Action ~= 'Exists' then
+                if DEBUG then
+                    print("Required action "..event.Action)
+                end
+
+                local target = nil
+                if #event.Entities > 1 then target = event.Entities[2] end
+
+                local location = ''
+                -- For entity-based Move (2 entities), only source location matters for validation
+                if event.Action:lower() == 'move' and #event.Entities == 2 then
+                    if event.Location and #event.Location > 0 then
+                        location = event.Location[1]  -- Source location only
+                    end
+                else
+                    -- Normal actions and location-based Move
+                    if event.Location and #event.Location > 0 then
+                        location = event.Location[1]
+                    end
+                end
+
+                table.insert(requiredActions, { location = location, name = event.Action, target = target })
+            end
+
+            eventId = self:GetNextEvent(eventId, requiredActor.id)
+        end
+    end
+
+    if DEBUG then
+        print("********Finished retrieving the required actions*******")
+    end
 
     local validEpisodesSubset = self:ExploreValidEpisodesSubset(self.Episodes, requiredLocations, requiredObjects, requiredActions, {})
 
@@ -1100,8 +1153,13 @@ function GraphStory:FindAllValidActionsAndPois(episode, ro, eventsWithObjectAsTa
                             ObjectId = episodeObject.ObjectId
                         }
                     }
-                elseif DEBUG_VALIDATION then
-                    print("This object "..ro.name.." does not exist in the episode!")
+                else
+                    -- There are NO events with the object as target in the graph, no action in the current POI, and also the object does not exist in the episode.
+                    -- The episode is invalid still, because the object is required to exist in the graph.
+                    if DEBUG_VALIDATION then
+                        print("This object "..ro.name.." does not exist in the episode!")
+                    end
+                    return nil
                 end
             else
                 -- An action with the object was not found in the current POI, but the object is used in some actions within the episode.
@@ -1921,7 +1979,7 @@ function GraphStory:End(reason)
     self.Disposed = true
 
     -- Phase 2: Wait for collection, then terminate spectators
-    if self.artifactManager and self.artifactManager:isScheduling() then
+    if self.artifactManager then
         if DEBUG then
             print("[GraphStory] Waiting for artifact collection to finish...")
         end

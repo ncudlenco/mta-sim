@@ -104,7 +104,7 @@ end
 
 function initializeCameraMan(cameraMan, triggerClientReady)
     if not DEFINING_EPISODES then
-        cameraMan:fadeCamera (false)
+        -- cameraMan:fadeCamera (false)
     end
     cameraMan:setHudComponentVisible("all", false)
     showChat(cameraMan, false)
@@ -163,7 +163,7 @@ end
 )
 
 function terminatePlayer(player, reason)
-    player:fadeCamera (false)
+    -- player:fadeCamera (false)
     if CURRENT_STORY then
         local story = CURRENT_STORY
         if DEBUG then

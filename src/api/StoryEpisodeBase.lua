@@ -166,8 +166,8 @@ function StoryEpisodeBase:Initialize(...)
                 end
                 print('RequiredActors '..nr)
             end
-            if requiredActors then
-                pedsNr = #requiredActors
+            if LOAD_FROM_GRAPH or requiredActors then
+                pedsNr = requiredActors and #requiredActors or 0
             end
             print('Peds nr '..pedsNr)
             if pedsNr > #self.ValidStartingLocations then
@@ -201,11 +201,20 @@ function StoryEpisodeBase:Initialize(...)
                 elseif DEBUG then
                     print('Valid starting ped point '..validStartingPoi.LocationId..': '..validStartingPoi.Description)
                 end
+                local predefinedSkinId = (requiredActors and requiredActors[i] and requiredActors[i].Properties and requiredActors[i].Properties.SkinId) or nil
                 local skin = PickRandom(Where(SetPlayerSkin.PlayerSkins, function(s)
-                    return s and not s.isTaken and(not requiredActors or requiredActors[i].Properties.Gender == s.Gender )
+                    local hasNoSkinSpecifiedOrMatchesPredefined = not predefinedSkinId or predefinedSkinId == s.Id
+                    local matchesGender = (not requiredActors or requiredActors[i].Properties.Gender == s.Gender)
+                    if s.Id == 51 then
+                        print('Is taken: '..tostring(s.isTaken)..'; PredefinedSkinId: '..tostring(predefinedSkinId)..'; RequiredGender: '..tostring(requiredActors and requiredActors[i] and requiredActors[i].Properties and requiredActors[i].Properties.Gender)..
+                            '; SkinGender: '..tostring(s.Gender))
+                        print('hasNoSkinSpecifiedOrMatchesPredefined: '..tostring(hasNoSkinSpecifiedOrMatchesPredefined)..'; matchesGender: '..tostring(matchesGender))
+                    end
+                    return s and not s.isTaken and hasNoSkinSpecifiedOrMatchesPredefined and matchesGender
                 end))
                 if not skin then
-                    error('A valid skin could not be found for ped '..i)
+                    local pedId = requiredActors[i] and requiredActors[i].Entities and #requiredActors[i].Entities > 0 and requiredActors[i].Entities[1] or 'unknown'
+                    error('A valid skin could not be found for ped '..i..'. Predefined skin id: '..tostring(predefinedSkinId)..'. Ped id: '..pedId)
                 end
                 validStartingPoi.isBusy = true
                 print('[StoryEpisodeBase.Initialize] Location '..validStartingPoi.Description..' is set to busy')
@@ -656,7 +665,7 @@ end
 function StoryEpisodeBase:Resume()
     for _, actor in ipairs(self.peds) do
         if DEBUG then
-            print('[StoryEpisodeBase:Resume] Evaluating actor '..actor:getData('id')..' from episode '..actor:getData('currentEpisode')..' with storyEnded '..tostring(actor:getData('storyEnded'))..' and currentEpisode '..actor:getData('currentEpisode')..' and requestPause '..tostring(actor:getData('requestPause'))..' and paused '..tostring(actor:getData('paused'))..' and isAwaitingConstraints '..tostring(actor:getData('isAwaitingConstraints'))..' and isAwaitingContextSwitch '..tostring(actor:getData('isAwaitingContextSwitch')))
+            print('[StoryEpisodeBase:Resume] Evaluating actor '..tostring(actor:getData('id'))..' from episode '..tostring(actor:getData('currentEpisode'))..' with storyEnded '..tostring(actor:getData('storyEnded'))..' and currentEpisode '..tostring(actor:getData('currentEpisode'))..' and requestPause '..tostring(actor:getData('requestPause'))..' and paused '..tostring(actor:getData('paused'))..' and isAwaitingConstraints '..tostring(actor:getData('isAwaitingConstraints'))..' and isAwaitingContextSwitch '..tostring(actor:getData('isAwaitingContextSwitch')))
         end
         if actor:getData('currentEpisode') == self.name and not actor:getData('storyEnded') then
             actor:setData('requestPause', false)

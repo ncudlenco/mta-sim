@@ -14,7 +14,7 @@ function PutIn:Apply()
     StoryActionBase.GetLogger(self, story):Log(self.Description .. self.TargetItem.Description .. " in " .. self.Where, self)
     -- self.TargetItem.instance:setCollisionsEnabled(false)
 
-    self.Performer:setAnimation("INT_SHOP", "shop_loop", 500, true, true, false, true)
+    self.Performer:setAnimation("INT_SHOP", "shop_loop", 500, false, false, false, true)
     detachElementFromBone(self.TargetItem.instance)
     self.TargetItem:Destroy()
 

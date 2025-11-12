@@ -27,7 +27,7 @@ function EndStory:EndStory()
 
         -- Request story end - story handles collection wait and spectator termination
         if story then
-            story:End("EndStory action executed")
+            story:End()
         end
     end, 5000, 1, self)
 end
@@ -40,13 +40,13 @@ function EndStory:PausePerformer()
             if DEBUG then
                 print("EndStory:PausePerformer - waiting for the others to finish")
             end
-            print("EndStory:PausePerformer - actor "..player:getData('id').." finished and is waiting for the others to finish")
             local unfinishedActors = Where(CURRENT_STORY.CurrentEpisode.peds, function(ped) return player:getData('id') ~= ped:getData('id') and not ped:getData('storyEnded') end)
+            print("EndStory:PausePerformer - actor "..player:getData('id').." finished and is waiting for the others to finish. Unfinished actors: "..#unfinishedActors)
             for i,p in ipairs(unfinishedActors) do
                 print(p:getData('id'))
             end
             --the episode is ended for the current actor, wait for all the other actors to finish
-            otherActorsStillPerforming = true
+            otherActorsStillPerforming = #unfinishedActors > 0
         end
     end
 
@@ -58,7 +58,9 @@ end
 
 function EndStory:ExecuteEndAnimations()
     -- Simply leave them
-    -- self.Performer:setAnimation("cop_ambient", "coplook_loop", 0, true, false, false, true)
+    if DEBUG then
+        self.Performer:setAnimation("cop_ambient", "coplook_loop", 0, true, false, false, true)
+    end
 end
 
 function EndStory:GetDynamicString()

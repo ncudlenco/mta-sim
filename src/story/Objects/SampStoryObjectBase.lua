@@ -13,6 +13,7 @@ SampStoryObjectBase = class(StoryObjectBase, function(o, params)
     o.PosOffset = params.posOffset or params.PosOffset or Vector3(0,0,0)
     o.RotOffset = params.rotOffset or params.RotOffset or Vector3(0,0,0)
     o.Region = {}
+    o.isVisible = params.isVisible or true
     if not params.pluralTemplate and params.description and params.description ~= '' then
         o:SetSimplePluralTemplate()
     else
@@ -144,6 +145,12 @@ end
 function SampStoryObjectBase:Create(...)
     self.instance = Object(self.modelid, self.position, self.rotation, self.noCollisions)
     self.instance:setInterior(self.interior)
+    if not self.isVisible then
+        self.instance:setAlpha(0)
+        self.instance:setCollisionsEnabled(false)
+        -- Move to a hidden dimension to avoid any accidental visibility
+        self.instance:setDimension(0)
+    end
 
     setObjectScale(self.instance, self.scale)
 end

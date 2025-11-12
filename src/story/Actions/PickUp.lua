@@ -54,18 +54,18 @@ function PickUp:Apply()
             self.TargetItem:updatePositionOffsetStandUp()
             self.TargetItem:updateRotOffsetStandUp()
         end
-        self.Performer:setAnimation("BAR", "Barserve_bottle", time, true, true, false, true)
+        self.Performer:setAnimation("BAR", "Barserve_bottle", time, false, false, false, true)
     elseif self.how == PickUp.eHow.Down then
-        self.Performer:setAnimation("MISC", "Case_pickup", time, true, true, false, true)
+        self.Performer:setAnimation("MISC", "Case_pickup", time, false, false, false, true)
     elseif self.how == PickUp.eHow.Sit then
         if self.updateOffets then
             self.TargetItem:updatePositionOffsetSitDown()
             self.TargetItem:updateRotOffsetSitDown()
         end
-        self.Performer:setAnimation("INT_OFFICE", "OFF_Sit_Drink", time, true, true, false, true)
+        self.Performer:setAnimation("INT_OFFICE", "OFF_Sit_Drink", time, false, false, false, true)
     elseif self.how == PickUp.eHow.FloorBarbell then
         time = 2500
-        self.Performer:setAnimation("freeweights", "gym_free_pickup", time, true, false, false, true)
+        self.Performer:setAnimation("freeweights", "gym_free_pickup", time, false, false, false, true)
     end
 
     table.insert(pickedObjects, {self.TargetItem.ObjectId, self.TargetItem.Description})

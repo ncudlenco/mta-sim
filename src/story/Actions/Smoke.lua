@@ -12,7 +12,7 @@ function Smoke:Apply()
 
     local time = random(5000, 16000)
     StoryActionBase.GetLogger(self, story):Log(self.Description .. self.TargetItem.Description, self)
-    self.Performer:setAnimation("SMOKING", "M_smk_drag", time, true, true, false, true)
+    self.Performer:setAnimation("SMOKING", "M_smk_drag", -1, true, true, false, true)
 
     if DEBUG then
         outputConsole("Smoke:Apply")

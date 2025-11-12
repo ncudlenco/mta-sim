@@ -11,7 +11,7 @@ function AnswerPhone:Apply()
 
     -- Object is already attached by TakeOut action
     StoryActionBase.GetLogger(self, story):Log(self.Description .. self.TargetItem.Description, self)
-    self.Performer:setAnimation("PED", "PHONE_IN", 1500, true, true, false, true)
+    self.Performer:setAnimation("PED", "PHONE_IN", 1500, false, false, false, true)
 
     if DEBUG then
         outputConsole("AnswerPhone:Apply")

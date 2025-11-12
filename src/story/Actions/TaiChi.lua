@@ -11,20 +11,21 @@ function TaiChi:Apply()
     StoryActionBase.Apply(self)
 
     StoryActionBase.GetLogger(self, story):Log(self.Description, self)
-    self.Performer:setAnimation("PARK", "Tai_Chi_in", 3000, true, true, false, true)
+    -- self.Performer:setAnimation("PARK", "Tai_Chi_in", 3000, true, true, false, true)
 
+    local time = random(5000, 10000)
     -- Delay second animation until first completes
-    Timer(function()
-        if self.Performer and isElement(self.Performer) then
-            self.Performer:setAnimation("PARK", "Tai_Chi_Loop", -1, true, true, true, true)
-        end
-    end, 3000, 1)
+    -- Timer(function()
+    --     if self.Performer and isElement(self.Performer) then
+    self.Performer:setAnimation("PARK", "Tai_Chi_Loop", -1, true, true, true, true)
+    --     end
+    -- end, 3000, 1)
 
     if DEBUG then
         outputConsole("TaiChi:Apply")
     end
 
-    OnGlobalActionFinished(3000, self.Performer:getData('id'), self.Performer:getData('storyId'))
+    OnGlobalActionFinished(time, self.Performer:getData('id'), self.Performer:getData('storyId'))
 end
 
 function TaiChi:GetDynamicString()

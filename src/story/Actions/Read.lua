@@ -12,7 +12,7 @@ function Read:Apply()
 
     local time = random(3000, 18000)
     StoryActionBase.GetLogger(self, story):Log(self.Description .. self.TargetItem.Description, self, false, true, {"finishes", "finishes reading"})
-    self.Performer:setAnimation("INT_OFFICE", "OFF_Sit_Read", time, true, true, false, true)
+    self.Performer:setAnimation("INT_OFFICE", "OFF_Sit_Read", -1, true, true, false, true)
 
     if DEBUG then
         outputConsole("Read:Apply")

@@ -11,7 +11,7 @@ function Talk:Apply()
     table.insert(story.History[self.Performer:getData('id')], self)
     StoryActionBase.Apply(self)
 
-    local time = math.random(2, 4) * 1000
+    local time = random(5000, 16000)
 
     -- Synchronize actors: rotation → delay → position check → animations
     self:SyncActors(
@@ -25,12 +25,12 @@ function Talk:Apply()
             local talkType = PickRandom({"prtial_gngtlka", "prtial_gngtlkb", "prtial_gngtlkc",
                                          "prtial_gngtlkd", "prtial_gngtlke", "prtial_gngtlkf",
                                          "prtial_gngtlkg", "prtial_gngtlkh"})
-            self.Performer:setAnimation("gangs", talkType, time, true, false, false, false)
+            self.Performer:setAnimation("gangs", talkType, -1, true, false, false, false)
 
             talkType = PickRandom({"prtial_gngtlka", "prtial_gngtlkb", "prtial_gngtlkc",
                                    "prtial_gngtlkd", "prtial_gngtlke", "prtial_gngtlkf",
                                    "prtial_gngtlkg", "prtial_gngtlkh"})
-            self.TargetPlayer:setAnimation("gangs", talkType, time, true, false, false, false)
+            self.TargetPlayer:setAnimation("gangs", talkType, -1, true, false, false, false)
 
             if DEBUG then
                 outputConsole("Talk:Apply")

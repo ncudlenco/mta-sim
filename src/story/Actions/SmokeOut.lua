@@ -11,7 +11,7 @@ function SmokeOut:Apply()
     StoryActionBase.Apply(self)
 
     StoryActionBase.GetLogger(self, story):Log(self.Description .. self.TargetItem.Description, self.Performer)
-    self.Performer:setAnimation("SMOKING", "M_smk_out", 3000, true, true, false, true)
+    self.Performer:setAnimation("SMOKING", "M_smk_out", 3000, false, false, false, true)
 
     if DEBUG then
         outputConsole("SmokeOut:Apply")

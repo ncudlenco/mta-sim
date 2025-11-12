@@ -20,12 +20,12 @@ function PutDown:Apply()
     local time = 500
     if self.how == PutDown.eHow.Normal then
         time = 200
-        self.Performer:setAnimation("BAR", "Barserve_bottle", time, true, true, false, true)
+        self.Performer:setAnimation("BAR", "Barserve_bottle", time, false, false, false, true)
     elseif self.how == PutDown.eHow.Down then
-        self.Performer:setAnimation("MISC", "Case_pickup", time, true, true, false, true)
+        self.Performer:setAnimation("MISC", "Case_pickup", time, false, false, false, true)
     elseif self.how == PutDown.eHow.FloorBarbell then
         time = 1000
-        self.Performer:setAnimation("Freeweights", "gym_free_putdown", time, true, true, false, true)
+        self.Performer:setAnimation("Freeweights", "gym_free_putdown", time, false, false, false, true)
     end
 
     if DEBUG then

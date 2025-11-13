@@ -12,6 +12,20 @@ end)
 function Receive:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
+
+    -- -- Also add a Give action to TargetPlayer's history
+    -- -- This ensures the second actor has the correct action name for event publication
+    -- -- The Receive action is for history tracking only - the Receive action handles both actors
+    -- local giveAction = Give {
+    --     performer = self.TargetPlayer,
+    --     targetPlayer = self.Performer,
+    --     nextLocation = self.NextLocation,
+    --     TargetItem = self.TargetItem,
+    --     how = self.how,
+    --     hand = self.hand
+    -- }
+    -- table.insert(story.History[self.TargetPlayer:getData('id')], giveAction)
+
     StoryActionBase.Apply(self)
 
     local time = 1000
@@ -42,8 +56,16 @@ function Receive:Apply()
             self.TargetItem = object
 
             outputConsole("Swapping object from one player to the other...")
+
+            if DEBUG then
+                print("[DEBUG Receive] Scheduling OnGlobalActionFinished for TargetPlayer (giver): " .. self.TargetPlayer:getData('id') .. " at delay: " .. time)
+            end
+
             -- Schedule object transfer from target to performer
             OnGlobalActionFinished(time, self.TargetPlayer:getData('id'), self.TargetPlayer:getData('storyId'), function()
+                if DEBUG then
+                    print("[DEBUG Receive] TargetPlayer callback executing - removing object from " .. self.TargetPlayer:getData('id'))
+                end
                 detachElementFromBone(self.TargetItem.instance)
                 local pickedObjects = self.TargetPlayer:getData('pickedObjects')
                 if type(pickedObjects) == 'boolean' or not pickedObjects then
@@ -51,9 +73,21 @@ function Receive:Apply()
                 end
                 pickedObjects = Where(pickedObjects, function(po) return po[1] ~= self.TargetItem.ObjectId end)
                 self.TargetPlayer:setData('pickedObjects', pickedObjects)
+                if DEBUG then
+                    print("[DEBUG Receive] TargetPlayer callback completed - object removed")
+                end
             end)
 
+            if DEBUG then
+                print("[DEBUG Receive] Scheduling OnGlobalActionFinished for Performer (receiver): " .. self.Performer:getData('id') .. " at delay: " .. (time+10))
+            end
+
             OnGlobalActionFinished(time+10, self.Performer:getData('id'), self.Performer:getData('storyId'), function()
+                if DEBUG then
+                    print("[DEBUG Receive] Performer callback executing - adding object to " .. self.Performer:getData('id'))
+                    print("[DEBUG Receive] Object to add: " .. tostring(self.TargetItem.ObjectId) .. " (" .. tostring(self.TargetItem.Description) .. ")")
+                end
+
                 if self.how == PickUp.eHow.Normal then
                     self.TargetItem:updatePositionOffsetStandUp()
                     self.TargetItem:updateRotOffsetStandUp()
@@ -71,8 +105,32 @@ function Receive:Apply()
                 if type(pickedObjects) == 'boolean' or not pickedObjects then
                     pickedObjects = {}
                 end
+
+                if DEBUG then
+                    print("[DEBUG Receive] Performer pickedObjects before insert: count = " .. #pickedObjects)
+                end
+
                 table.insert(pickedObjects, {self.TargetItem.ObjectId, self.TargetItem.Description})
+
+                if DEBUG then
+                    print("[Receive] Player "..self.Performer:getData('id').." pickedObjects after receiving:", self.TargetItem.Description )
+                    print("[DEBUG Receive] Performer pickedObjects after insert: count = " .. #pickedObjects)
+                end
+
                 self.Performer:setData('pickedObjects', pickedObjects)
+
+                -- Inherit giver's chain (receiver now owns the object)
+                local giverChainId = self.TargetPlayer:getData('mappedChainId')
+                if giverChainId then
+                    self.Performer:setData('mappedChainId', giverChainId)
+                    if DEBUG then
+                        print("[Receive] Receiver " .. self.Performer:getData('id') .. " inherited chain from giver: " .. giverChainId)
+                    end
+                end
+
+                if DEBUG then
+                    print("[DEBUG Receive] Performer callback completed - object added")
+                end
             end)
         end
     )

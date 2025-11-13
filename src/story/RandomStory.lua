@@ -156,7 +156,7 @@ function RandomStory:Play()
         print("RandomStory: Playing the picked episode...")
     end
     self.CurrentEpisode:Play()
-    -- self.Actor:fadeCamera (true)
+    self.Actor:fadeCamera (true)
 
     if DEBUG then
         print("RandomStory: Play - chosen random skin and episode. Playing episode")

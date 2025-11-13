@@ -151,6 +151,8 @@ function LookAt:Apply()
                   "performer=" .. tostring(performerId) .. ", target=" .. tostring(targetId))
         end
 
+        self.Performer:setAnimation()
+
         -- Start continuous looking with body rotation and head tracking
         self.rotationTimer = LookingBehavior.startContinuousLooking(
             self.Performer,

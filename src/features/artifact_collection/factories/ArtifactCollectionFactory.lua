@@ -231,6 +231,31 @@ function ArtifactCollectionFactory:createDepthCollector(spectatorData)
     return collector
 end
 
+--- Create event frame mapping collector
+--- Maps graph events to frame IDs for video analysis
+--- This is a global collector (not per-spectator)
+---
+--- @return EventFrameMappingCollector|nil Event frame mapping collector instance, or nil if not enabled
+function ArtifactCollectionFactory:createEventFrameMappingCollector()
+    -- Check if event frame mapping is enabled
+    if not self.config.enableEventFrameMapping then
+        if DEBUG then
+            print("[ArtifactCollectionFactory] Event frame mapping disabled in config")
+        end
+        return nil
+    end
+
+    local collector = EventFrameMappingCollector({
+        framesPerSecond = self.config.framesPerSecond
+    })
+
+    if DEBUG then
+        print("[ArtifactCollectionFactory] Created event frame mapping collector")
+    end
+
+    return collector
+end
+
 --- Register all enabled collectors for spectators
 --- Game-agnostic version - accepts spectator data, not game-specific entities
 ---
@@ -245,6 +270,15 @@ function ArtifactCollectionFactory:registerCollectors(manager, spectatorsData)
     if not spectatorsData or #spectatorsData == 0 then
         print("[WARNING] ArtifactCollectionFactory: No spectators provided for collector registration")
         return
+    end
+
+    -- Register event frame mapping collector (global, not per-spectator)
+    local eventMappingCollector = self:createEventFrameMappingCollector()
+    if eventMappingCollector then
+        manager:registerCollector(eventMappingCollector)
+        if DEBUG then
+            print("[ArtifactCollectionFactory] Registered event frame mapping collector")
+        end
     end
 
     for i, spectatorData in ipairs(spectatorsData) do

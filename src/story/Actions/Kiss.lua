@@ -9,6 +9,12 @@ end)
 function Kiss:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
+
+    -- -- Also add to TargetPlayer's history
+    -- -- Kiss is symmetric - both actors perform the same action
+    -- -- This ensures both actors have the correct action name for event publication
+    -- table.insert(story.History[self.TargetPlayer:getData('id')], self)
+
     StoryActionBase.Apply(self)
 
     local time = 5000

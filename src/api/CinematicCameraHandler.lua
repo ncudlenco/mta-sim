@@ -49,7 +49,7 @@ function CinematicCameraHandler:initialize(hasCameraSection)
         Timer(function()
             for _, spectator in ipairs(CURRENT_STORY.Spectators) do
                 spectator:setData('fadedCamera', true)
-                spectator:fadeCamera(true)
+                spectator:fadeCamera(true, 0)
 
                 -- Enable MTA's built-in camera collision (test feature)
                 triggerClientEvent(spectator, "sv2l:enableCameraClip", spectator)

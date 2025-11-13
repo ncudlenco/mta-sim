@@ -958,13 +958,13 @@ function GameWorldExporter:ExtractActionChains()
         sitting = {
             description = "Sitting at location with POI-specific middle actions",
             sequence = {"SitDown", "POI-SpecificActions", "StandUp"},
-            always_available = {"LookAt"},
+            always_available = {"LookAt", "TakeOut", "Stash"},
             poi_specific_actions = {"Eat", "OpenLaptop", "TypeOnKeyboard", "PunchDesk", "LookAtWatch", "LayOnElbow", "CloseLaptop"},
             variations = {
                 chair_eating = {"SitDown", "[Optional]Eat", "StandUp"},
                 chair_laptop = {"SitDown", "[Optional]OpenLaptop", "[Optional]TypeOnKeyboard", "[Optional]PunchDesk", "[Optional]CloseLaptop", "[Optional]LayOnElbow", "[Optional]LookAtWatch", "StandUp"},
-                sofa = {"SitDown", "[Optional]LookAt", "StandUp"},
-                armchair = {"SitDown", "[Optional]LookAt", "StandUp"}
+                sofa = {"SitDown", "[Optional]LookAt", "[Optional]TakeOut", "[Optional]Stash", "StandUp"},
+                armchair = {"SitDown", "[Optional]LookAt", "[Optional]TakeOut", "[Optional]Stash", "StandUp"}
             },
             note = "While sitting: LookAt is ALWAYS available. Other actions (eat, laptop usage, etc.) are ONLY available if defined in that specific POI's allActions. The actual available actions are indicated in individual POI definitions, not as a generic list. Note that Drink is not available while sitting. Note that food actions are ONLY available on chairs with food (not laptop, sofa or armchair).\n\n Actors CAN be left in any seated state before standing up. Context switches (moving between linked episodes of other actors) while some actors are left looping in a state cause bugs on context switch back. BEST PRACTICE: Don't leave actors looping during context switches. Re-sit and follow with previously seated action off camera (include actions in graph but don't record them)."
         },
@@ -1004,7 +1004,7 @@ function GameWorldExporter:ExtractActionChains()
         observation_actions = {
             description = "Actions for observing and gesturing",
             actions = {"LookAt", "Wave"},
-            note = "LookAt can be directed at actors OR objects. Wave is typically a gesture. These actions can be performed standalone, even if they are not explicitly listed in the episode. LookAt can be performed while sitting/standing."
+            note = "LookAt can be directed at actors OR objects but it must be used rarely since it performs no animation. Wave is typically a gesture. These actions can be performed standalone, even if they are not explicitly listed in the episode. LookAt can be performed while sitting/standing."
         },
 
         -- Music player actions
@@ -1111,6 +1111,18 @@ function GameWorldExporter:ExtractActionChains()
             {
                 rule = "Talk, Hug, Kiss, Handshake must be duplicated by the other actor involved (ONLY supports 2 actors)",
                 description = "All these actions require a corresponding response from the other actor"
+            },
+            {
+                rule = "ONLY allowed actions while sitting or sleeping",
+                description = "When the actor sat down or got on bed, ONLY allowed actions are those defined in sitting or bed usage action chains respectively, plus observation_actions and TakeOut/Stash."
+            },
+            {
+                rule = "No overlapping animations can occur",
+                description = "The environment does not support 2 overlapping animations: e.g. talking on the phone while sitting. If an animation is designed to keep the actor in the same state (e.g. eating while seated) it will be part of that action chain."
+            },
+            {
+                rule = "The phone can ONLY be used to talk at it.",
+                description = "The phone can ONLY be used to talk at it - this is a 90s style mobile phone, not a smart phone."
             }
         }
     }

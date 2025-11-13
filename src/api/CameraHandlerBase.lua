@@ -151,8 +151,8 @@ function CameraHandlerBase:FadeForAll(fade, time)
     end
     Timer(function(fade)
         for _, spectator in ipairs(CURRENT_STORY.Spectators) do
-            spectator:setData('fadedCamera', fade)
-            spectator:fadeCamera(fade)
+            spectator:setData('fadedCamera', true)
+            -- spectator:fadeCamera(fade)
         end
     end, time, 1, fade)
 end

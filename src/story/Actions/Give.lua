@@ -12,6 +12,20 @@ end)
 function Give:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
+
+    -- -- Also add a Receive action to TargetPlayer's history
+    -- -- This ensures the second actor has the correct action name for event publication
+    -- -- The Receive action is for history tracking only - the Give action handles both actors
+    -- local receiveAction = Receive {
+    --     performer = self.TargetPlayer,
+    --     targetPlayer = self.Performer,
+    --     nextLocation = self.NextLocation,
+    --     TargetItem = self.TargetItem,
+    --     how = self.how,
+    --     hand = self.hand
+    -- }
+    -- table.insert(story.History[self.TargetPlayer:getData('id')], receiveAction)
+
     StoryActionBase.Apply(self)
 
     local time = 1000
@@ -43,6 +57,12 @@ function Give:Apply()
                 end
                 pickedObjects = Where(pickedObjects, function(po) return po[1] ~= self.TargetItem.ObjectId end)
                 self.Performer:setData('pickedObjects', pickedObjects)
+
+                -- Clear giver's chain (giver no longer owns this object)
+                self.Performer:setData('mappedChainId', nil)
+                if DEBUG then
+                    print("[Give] Cleared chain for giver " .. self.Performer:getData('id'))
+                end
             end)
 
             OnGlobalActionFinished(time+10, self.TargetPlayer:getData('id'), self.TargetPlayer:getData('storyId'), function()
@@ -64,6 +84,9 @@ function Give:Apply()
                     pickedObjects = {}
                 end
                 table.insert(pickedObjects, {self.TargetItem.ObjectId, self.TargetItem.Description})
+                if DEBUG then
+                    print("[Give] Player "..self.TargetPlayer:getData('id').." pickedObjects after receiving:", self.TargetItem.Description )
+                end
                 self.TargetPlayer:setData('pickedObjects', pickedObjects)
             end)
         end

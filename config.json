@@ -1,7 +1,0 @@
-{
-  "EXPORT_MODE": false,
-  "ARTIFACT_COLLECTION_ENABLED": true,
-  "INPUT_GRAPHS": [
-    "input_graphs/story_bcfee2b4_t1_s1_full.json"
-  ]
-}

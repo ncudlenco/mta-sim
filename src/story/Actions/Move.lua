@@ -122,7 +122,10 @@ function Move.destinationReached(player, source)
 	end
     if player:getData('requestPause') then
         lastAction:pause(player)
-        CURRENT_STORY.CameraHandler:requestFocus(player:getData('id'))
+        -- Background actors should not request camera focus
+        if not player:getData("isbackgroundactor") then
+            CURRENT_STORY.CameraHandler:requestFocus(player:getData('id'))
+        end
         return
     end
 	if (path and sourceIdx + 1 <= #path) then
@@ -186,11 +189,11 @@ function Move.destinationReached(player, source)
             print('!!!!!!!!!!!!!Teleporting player '..player:getData('id')..' to context '..nextPoi.Episode.name)
             player:setAnimation() --stop the animation - the player will stop moving
             player:setData('isMoving', false)
+            -- switch picked objects interior
+            switchPickedObjectsInterior(player, nextPoi.Episode)
             player.position = nextPoi.position
             player.rotation = nextPoi.rotation
             player.interior = nextPoi.Episode.InteriorId
-            -- switch picked objects interior
-            switchPickedObjectsInterior(player, nextPoi.Episode)
 
             table.remove(lastAction.planningData[player:getData('id')].contextSegments, 1)
             for _, context in ipairs(lastAction.planningData[player:getData('id')].contextSegments) do
@@ -204,7 +207,10 @@ function Move.destinationReached(player, source)
             lastAction:pause(player)
             --make sure the region player hit event was triggered - needed to set the player's region and episode
             nextPoi.Region:OnPlayerHit(player)
-            story.CameraHandler:requestFocus(player:getData('id')) --Actors changing contexts get an extra focus request
+            -- Background actors should not request camera focus
+            if not player:getData("isbackgroundactor") then
+                story.CameraHandler:requestFocus(player:getData('id')) --Actors changing contexts get an extra focus request
+            end
         else
             -- NEW: For actor targets, check proximity and handle actor movement
             if lastAction.TargetEntityType == 'actor' and lastAction.targetActor then
@@ -254,7 +260,10 @@ function Move.destinationReached(player, source)
     --         story.CameraHandler:updatePerspective(playerId)
     --     end, 100, 1)
     -- else
-        story.CameraHandler:requestFocus(playerId)
+        -- Background actors should not request camera focus
+        if not player:getData("isbackgroundactor") then
+            story.CameraHandler:requestFocus(playerId)
+        end
     -- end
     source:setData('processed', true)
     source:destroy()
@@ -342,29 +351,29 @@ function Move:Apply()
     local isRecording = story.CameraHandler:isCurrentlyRecording()
 
     -- Artificially inserted Moves (no eventId) can teleport when off-camera
-    if not hasEventId and not isRecording then
-        if DEBUG then
-            print("[Move] Off-camera teleport for "..self.Performer:getData('id').." to "..self.TargetItem.Description)
-        end
+    -- if not hasEventId and not isRecording then
+    --     if DEBUG then
+    --         print("[Move] Off-camera teleport for "..self.Performer:getData('id').." to "..self.TargetItem.Description)
+    --     end
 
-        -- Instant teleport
-        self.Performer:setPosition(self.TargetItem.position)
-        if self.TargetItem.rotation then
-            self.Performer:setRotation(self.TargetItem.rotation)
-        end
-        if self.TargetItem.Interior then
-            self.Performer.interior = self.TargetItem.Interior
-        end
+    --     -- Instant teleport
+    --     self.Performer:setPosition(self.TargetItem.position)
+    --     if self.TargetItem.rotation then
+    --         self.Performer:setRotation(self.TargetItem.rotation)
+    --     end
+    --     if self.TargetItem.Interior then
+    --         self.Performer.interior = self.TargetItem.Interior
+    --     end
 
-        -- Update actor's episode context
-        if self.TargetItem.Episode then
-            self.Performer:setData('currentEpisode', self.TargetItem.Episode.name)
-        end
+    --     -- Update actor's episode context
+    --     if self.TargetItem.Episode then
+    --         self.Performer:setData('currentEpisode', self.TargetItem.Episode.name)
+    --     end
 
-        -- Complete immediately (no animation)
-        OnGlobalActionFinished(0, self.Performer:getData('id'), self.Performer:getData('storyId'))
-        return
-    end
+    --     -- Complete immediately (no animation)
+    --     OnGlobalActionFinished(1000, self.Performer:getData('id'), self.Performer:getData('storyId'))
+    --     return
+    -- end
 
     if self.TargetItem.Region and self.TargetItem.Region.Id ~= self.Performer:getData('currentRegionId') then
 

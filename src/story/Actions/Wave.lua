@@ -30,6 +30,37 @@ Wave = class(StoryActionBase, function(o, params)
     o.loop = params.loop ~= nil and params.loop or false
 end)
 
+--- Gets the current target position (updated dynamically for moving targets)
+--- @return Vector3|nil The current target position or nil if target is invalid
+function Wave:GetTargetPosition()
+    if self.Target then
+        -- Check if target is still valid
+        if not isElement(self.Target) or not self.Target.position then
+            return self.TargetCoordinates  -- Fallback to static coordinates if available
+        end
+
+        local targetType = self.Target:getType()
+        if targetType == "ped" or targetType == "player" or self.Target.position then
+            return self.Target.position
+        end
+    elseif self.TargetCoordinates then
+        return self.TargetCoordinates
+    end
+    return nil
+end
+
+--- Gets the target element if it's a ped or player
+--- @return userdata|nil The target ped/player element or nil
+function Wave:GetTargetElement()
+    if self.Target and isElement(self.Target) then
+        local targetType = self.Target:getType()
+        if targetType == "ped" or targetType == "player" then
+            return self.Target
+        end
+    end
+    return nil
+end
+
 --- Apply the wave action with optional target rotation and loop/finite mode
 function Wave:Apply()
     local story = GetStory(self.Performer)
@@ -53,31 +84,57 @@ function Wave:Apply()
 
     if self.loop then
         -- Infinite loop mode: wave_in (setup) → wave_loop (indefinite)
-        local setupTime = 1500
+        local setupTime = 5000
 
-        -- -- Start with wave_in animation
-        -- self.Performer:setAnimation("ON_LOOKERS", "wave_in", setupTime, true, false, false, true)
+        self.rotationTimer = LookingBehavior.startContinuousLooking(
+            self.Performer,
+            function() return self:GetTargetPosition() end,
+            {
+                expectedAction = 'LookAt',
+                updateInterval = 1000,
+                skipBodyRotation = false,
+                initialDelay = 500,
+                getTargetElementFn = function() return self:GetTargetElement() end
+            }
+        )
+
+        -- Start with wave_in animation
+        self.Performer:setAnimation("ON_LOOKERS", "wave_in", setupTime, true, false, false, false)
 
         -- Transition to indefinite wave_loop after setup
-        -- Timer(function()
-            -- if self.Performer and isElement(self.Performer) then
+        Timer(function()
+            if self.Performer and isElement(self.Performer) then
                 -- -1 time means loop indefinitely, freezeLastFrame=true preserves animation state
-                self.Performer:setAnimation("ON_LOOKERS", "wave_loop", setupTime, false, false, false, false)
-            -- end
-        -- end, setupTime, 1)
+                self.Performer:setAnimation("ON_LOOKERS", "wave_loop", -1, true, false, false, false)
+            end
+        end, setupTime, 1)
 
         if DEBUG then
             outputConsole("Wave:Apply (infinite loop mode)")
         end
 
         -- Action is considered complete after setup, but animation continues
-        OnGlobalActionFinished(setupTime, self.Performer:getData('id'), self.Performer:getData('storyId'))
+        OnGlobalActionFinished(setupTime, self.Performer:getData('id'), self.Performer:getData('storyId'), function()
+            LookingBehavior.stopContinuousLooking(self.rotationTimer)
+        end)
     else
         -- Finite mode: wave_in → wave_loop (brief) → wave_out
         local waveInTime = 1500
-        local waveLoopTime = 1500
+        local waveLoopTime = 5000
         local waveOutTime = 1000
         local totalDuration = waveInTime + waveLoopTime + waveOutTime
+
+        self.rotationTimer = LookingBehavior.startContinuousLooking(
+            self.Performer,
+            function() return self:GetTargetPosition() end,
+            {
+                expectedAction = 'LookAt',
+                updateInterval = 1000,
+                skipBodyRotation = false,
+                initialDelay = 500,
+                getTargetElementFn = function() return self:GetTargetElement() end
+            }
+        )
 
         -- Step 1: wave_in
         self.Performer:setAnimation("ON_LOOKERS", "wave_in", waveInTime, false, false, false, false)
@@ -100,7 +157,9 @@ function Wave:Apply()
             outputConsole("Wave:Apply (finite mode)")
         end
 
-        OnGlobalActionFinished(totalDuration, self.Performer:getData('id'), self.Performer:getData('storyId'))
+        OnGlobalActionFinished(totalDuration, self.Performer:getData('id'), self.Performer:getData('storyId'), function()
+            LookingBehavior.stopContinuousLooking(self.rotationTimer)
+        end)
     end
 end
 

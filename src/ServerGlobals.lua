@@ -24,9 +24,12 @@ DEBUG_PATHFINDING = false
 DEBUG_VALIDATION = false
 DEBUG_ACTION_VALIDATION = false
 DEBUG_LOGGER = false
-DEBUG_SCREENSHOTS = true
+DEBUG_SCREENSHOTS = false
 -- Screenshot module debugging
 if setScreenshotModuleDebug then setScreenshotModuleDebug(DEBUG_SCREENSHOTS) end
+-- Screenshot capture mode: set true for VMware (captures full screen instead of window cropping)
+SCREENSHOT_CAPTURE_FULL_SCREEN = false
+if setCaptureFullScreen then setCaptureFullScreen(SCREENSHOT_CAPTURE_FULL_SCREEN) end
 DEBUG_OBJECTS = false
 DEBUG_EPISODE = false
 DEBUG_ACTIONS = false
@@ -40,7 +43,7 @@ DEBUG_EPISODE_GROUPS = false
 DEBUG_CAMERA_VALIDATION = false   -- Enable detailed logging of camera position validation and adjustments
 
 -- Artifact Collection Configuration
-ARTIFACT_COLLECTION_ENABLED = false -- Enable/disable artifact collection system
+ARTIFACT_COLLECTION_ENABLED = true -- Enable/disable artifact collection system
 ARTIFACT_FRAMES_PER_SECOND = 30 -- Frame collection rate (1, 2, 5, 10, 30 fps)
 ARTIFACT_OUTPUT_PATH = "data_out" -- Base path for artifact output
 ARTIFACT_COLLECTION_TIMEOUT = 10000 -- Max wait time for artifact collection (ms)
@@ -60,6 +63,9 @@ ARTIFACT_SEGMENTATION_PNG_FPS = 30 -- Frame rate for PNG capture (frames per sec
 
 -- Depth modality
 ARTIFACT_ENABLE_DEPTH = false -- Enable depth map video recording
+
+-- Event frame mapping collector
+ARTIFACT_ENABLE_EVENT_FRAME_MAPPING = true -- Enable event-to-frame mapping JSON generation
 
 -- Video encoding settings (applies to all modalities that record video)
 ARTIFACT_VIDEO_FPS = 30 -- Video encoding frame rate
@@ -123,37 +129,49 @@ DISABLE_BETWEEN_POINTS_TELEPORTATION = false
 
 LOAD_FROM_GRAPH = true
 INPUT_GRAPHS = {
+    'random_graphs/r2_1.json',
+    -- 'random_graphs/r2_2.json',
+    -- 'random_graphs/r2_3.json',
+    -- 'random_graphs/r2_4.json',
+    -- 'random_graphs/r2_5.json',
+    -- 'random_graphs/r2_6.json',
+    -- 'random_graphs/r2_7.json',
+    -- 'random_graphs/r2_8.json',
+    -- 'random_graphs/r2_9.json',
+    -- 'random_graphs/r2_10.json',
+    -- 'random_graphs/g9.json',
+    -- 'complex_graphs/incredibly_complex.json',
     -- 'imar_graphs/easy_1_P1200253_3.json',
-    -- 'imar_graphs/easy_1_P1200253_3.json',
-    -- 'imar_graphs/easy_1_P1200253_3.json',
-    -- 'imar_graphs/easy_1_P1200253_3.json',
-    -- 'imar_graphs/easy_1_P1200253_3.json',
+    -- -- 'imar_graphs/easy_1_P1200253_3.json',
+    -- -- 'imar_graphs/easy_1_P1200253_3.json',
+    -- -- 'imar_graphs/easy_1_P1200253_3.json',
+    -- -- 'imar_graphs/easy_1_P1200253_3.json',
     -- 'imar_graphs/easy_1_GOPRO1368_12.json',
-    -- 'imar_graphs/easy_1_GOPRO1368_12.json',
-    -- 'imar_graphs/easy_1_GOPRO1368_12.json',
-    -- 'imar_graphs/easy_1_GOPRO1368_12.json',
-    -- 'imar_graphs/easy_1_GOPRO1368_12.json',
+    -- -- 'imar_graphs/easy_1_GOPRO1368_12.json',
+    -- -- 'imar_graphs/easy_1_GOPRO1368_12.json',
+    -- -- 'imar_graphs/easy_1_GOPRO1368_12.json',
+    -- -- 'imar_graphs/easy_1_GOPRO1368_12.json',
+    -- -- 'imar_graphs/easy_1_GOPRO1367_10.json',
+    -- -- 'imar_graphs/easy_1_GOPRO1367_10.json',
     -- 'imar_graphs/easy_1_GOPRO1367_10.json',
-    -- 'imar_graphs/easy_1_GOPRO1367_10.json',
-    -- 'imar_graphs/easy_1_GOPRO1367_10.json',
-    -- 'imar_graphs/easy_1_GOPRO1367_10.json',
-    -- 'imar_graphs/easy_1_GOPRO1367_10.json',
+    -- -- 'imar_graphs/easy_1_GOPRO1367_10.json',
+    -- -- 'imar_graphs/easy_1_GOPRO1367_10.json',
+    -- -- 'imar_graphs/easy_1_P1200253_1.json',
     -- 'imar_graphs/easy_1_P1200253_1.json',
-    -- 'imar_graphs/easy_1_P1200253_1.json',
-    -- 'imar_graphs/easy_1_P1200253_1.json',
-    -- 'imar_graphs/easy_1_P1200253_1.json',
-    -- 'imar_graphs/easy_1_P1200253_1.json',
+    -- -- 'imar_graphs/easy_1_P1200253_1.json',
+    -- -- 'imar_graphs/easy_1_P1200253_1.json',
+    -- -- 'imar_graphs/easy_1_P1200253_1.json',
+    -- -- 'imar_graphs/medium_GOPRO1372_16.json',
+    -- -- 'imar_graphs/medium_GOPRO1372_16.json',
     -- 'imar_graphs/medium_GOPRO1372_16.json',
-    -- 'imar_graphs/medium_GOPRO1372_16.json',
-    -- 'imar_graphs/medium_GOPRO1372_16.json',
-    -- 'imar_graphs/medium_GOPRO1372_16.json',
-    -- 'imar_graphs/medium_GOPRO1372_16.json',
-    'imar_graphs/medium_GOPRO1372_26.json',
-    'imar_graphs/medium_GOPRO1372_26.json',
-    'imar_graphs/medium_GOPRO1372_26.json',
-    'imar_graphs/medium_GOPRO1372_26.json',
-    'imar_graphs/medium_GOPRO1372_26.json',
-    -- 'imar_graphs/hard_GOPRO1365_14.json',
+    -- -- 'imar_graphs/medium_GOPRO1372_16.json',
+    -- -- 'imar_graphs/medium_GOPRO1372_16.json',
+    -- 'imar_graphs/medium_GOPRO1372_26.json',
+    -- -- 'imar_graphs/medium_GOPRO1372_26.json',
+    -- -- 'imar_graphs/medium_GOPRO1372_26.json',
+    -- -- 'imar_graphs/medium_GOPRO1372_26.json',
+    -- -- 'imar_graphs/medium_GOPRO1372_26.json',
+    -- -- 'imar_graphs/hard_GOPRO1365_14.json',
     -- 'imar_graphs/hard_GOPRO1365_14.json',
     -- 'imar_graphs/hard_GOPRO1365_14.json',
     -- 'imar_graphs/hard_GOPRO1365_14.json',

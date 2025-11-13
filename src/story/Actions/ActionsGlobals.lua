@@ -15,14 +15,35 @@ function OnGlobalActionFinished(delay, playerId, storyId, callback, destroyedIte
     end
 
     Timer(function(playerId, storyId)
+        if DEBUG then
+            print("[DEBUG OnGlobalActionFinished] Timer fired for playerId: " .. playerId .. ", delay was: " .. delay)
+            print("[DEBUG OnGlobalActionFinished] Callback is: " .. (callback and "PROVIDED" or "NIL"))
+        end
+
         local story = CURRENT_STORY
         local lastAction = story.History[playerId][#story.History[playerId]]
         if DEBUG then
             outputConsole("GlobalAction:Apply - getting next valid action ".. playerId)
             print("GlobalAction:Apply - getting next valid action ".. playerId)
+            if lastAction then
+                print("[DEBUG OnGlobalActionFinished] Last action was: " .. lastAction.Name)
+            else
+                print("[DEBUG OnGlobalActionFinished] Last action is NIL")
+            end
         end
+
         if callback then
-            callback(playerId, storyId)
+            if DEBUG then
+                print("[DEBUG OnGlobalActionFinished] Executing callback for " .. playerId)
+            end
+            local success, err = pcall(callback, playerId, storyId)
+            if not success then
+                print("[ERROR OnGlobalActionFinished] Callback error: " .. tostring(err))
+            elseif DEBUG then
+                print("[DEBUG OnGlobalActionFinished] Callback completed successfully")
+            end
+        elseif DEBUG then
+            print("[DEBUG OnGlobalActionFinished] Skipping callback (nil)")
         end
 
         local actor = FirstOrDefault(CURRENT_STORY.CurrentEpisode.peds, function(ped) return ped:getData('id') == playerId end)
@@ -39,10 +60,13 @@ function OnGlobalActionFinished(delay, playerId, storyId, callback, destroyedIte
         if completedEventId and story.EventBus and story:is_a(GraphStory) and lastAction then
             local expectedAction = story.graph[completedEventId] and story.graph[completedEventId].Action
 
+            -- Normalize graph action name to match simulator action names (e.g., INV-Give → Receive)
+            local normalizedAction = expectedAction and story:NormalizeActionName(expectedAction) or nil
+
             -- Only publish if the completed action was the actual graph event action
-            if expectedAction and lastAction.Name == expectedAction then
+            if normalizedAction and lastAction.Name == normalizedAction then
                 if DEBUG then
-                    print("[ActionsGlobals] Publishing graph_event_end for "..completedEventId)
+                    print("[ActionsGlobals] Publishing graph_event_end for "..completedEventId.." (action "..lastAction.Name.." matches normalized "..normalizedAction..")")
                 end
 
                 story.EventBus:publish("graph_event_end", {
@@ -51,7 +75,7 @@ function OnGlobalActionFinished(delay, playerId, storyId, callback, destroyedIte
                     actionName = lastAction.Name
                 })
             elseif DEBUG and expectedAction then
-                print("[ActionsGlobals] Skipping graph_event_end for "..completedEventId.." (action "..lastAction.Name.." != expected "..expectedAction..")")
+                print("[ActionsGlobals] Skipping graph_event_end for "..completedEventId.." (action "..lastAction.Name.." != normalized expected "..normalizedAction..")")
             end
 
             -- Clear the event ID after checking (always clear, even if we didn't publish)
@@ -61,7 +85,10 @@ function OnGlobalActionFinished(delay, playerId, storyId, callback, destroyedIte
         if actor:getData('requestPause') then
             actor:setData('requestPause', false)
             actor:setData('paused', true)
-            CURRENT_STORY.CameraHandler:requestFocus(actor:getData('id'))
+            -- Background actors should not request camera focus
+            if not actor:getData("isbackgroundactor") then
+                CURRENT_STORY.CameraHandler:requestFocus(actor:getData('id'))
+            end
             return
         end
         -- story.CameraHandler:freeFocus(playerId)

@@ -43,7 +43,9 @@ function Location:SpawnPlayerHere(player, spectate)
         z = self.Z + 20
     end
     player:spawn(self.X, self.Y, z, self.Angle, player.model, self.Interior)
-    -- player:fadeCamera (true)
+    player:fadeCamera (true)
+    player:setData('fadedCamera', true)
+
     if not STATIC_CAMERA and not spectate then
         player:setCameraTarget(player)
     end
@@ -202,18 +204,40 @@ function Location:Serialize(episode, relativePosition, _objects, _locations, _ma
 end
 
 function Location:GetMappedEventObjectId(eventObjectId, playerChainId)
+    if DEBUG then
+        print("[DEBUG GetMappedEventObjectId] Looking up: " .. tostring(eventObjectId) .. " with chain: " .. tostring(playerChainId))
+    end
+
     local mappedObjects = CURRENT_STORY.eventObjectMap[eventObjectId]
-    if not mappedObjects then return nil end
+    if not mappedObjects then
+        if DEBUG then
+            print("[DEBUG GetMappedEventObjectId] No mapping found")
+        end
+        return nil
+    end
 
     if type(mappedObjects) == "string" then
+        if DEBUG then
+            print("[DEBUG GetMappedEventObjectId] Spawnable object: " .. mappedObjects)
+        end
         return mappedObjects -- Handle "spawnable" case
     end
 
     if type(mappedObjects) == "table" and #mappedObjects > 0 then
+        if DEBUG then
+            print("[DEBUG GetMappedEventObjectId] Found " .. #mappedObjects .. " possible mappings:")
+            for i, tuple in ipairs(mappedObjects) do
+                print("[DEBUG GetMappedEventObjectId]   [" .. i .. "] chainId: " .. tuple.chainId .. ", value: " .. tuple.value)
+            end
+        end
+
         -- If player has a chain ID, prefer that chain
         if playerChainId then
             for _, tuple in ipairs(mappedObjects) do
                 if tuple.chainId == playerChainId then
+                    if DEBUG then
+                        print("[DEBUG GetMappedEventObjectId] MATCH! Returning: " .. tuple.value)
+                    end
                     return tuple.value
                 end
             end
@@ -222,7 +246,7 @@ function Location:GetMappedEventObjectId(eventObjectId, playerChainId)
         -- Fallback: return the first available mapping if no chain match or no player chain ID
         if DEBUG then
             local chainIdStr = playerChainId and tostring(playerChainId) or "nil"
-            print("[GetMappedEventObjectId] No chain match for object " .. eventObjectId .. " with player chain " .. chainIdStr .. ". Using fallback: " .. mappedObjects[1].value)
+            print("[DEBUG GetMappedEventObjectId] No chain match for object " .. eventObjectId .. " with player chain " .. chainIdStr .. ". Using fallback: " .. mappedObjects[1].value)
         end
         return mappedObjects[1].value
     end
@@ -847,23 +871,81 @@ function Location:ProcessNextAction(player)
             end
             interactionProcessedMap[event.interactionRelation] = true
         elseif not isMoveEvent then
+            if DEBUG then
+                print("[DEBUG] === Processing event: " .. event.id .. " Action: " .. event.Action .. " ===")
+                print("[DEBUG] Player: " .. player:getData('id'))
+                print("[DEBUG] Player chain ID: " .. tostring(player:getData('mappedChainId')))
+            end
+
             local pickedUpObjects = player:getData('pickedObjects')
             local playerChainId = player:getData('mappedChainId')
             local mappedObject = self:GetMappedEventObjectId(event.Entities[2], playerChainId)
-            local isActionWithObjectCurrentlyPicked = event and #event.Entities > 1 and #pickedUpObjects > 0 and #pickedUpObjects[1] > 0-- and self:GetMappedEventObjectId(event.Entities[2], playerChainId) == pickedUpObjects[1][1]
+
+            if DEBUG then
+                print("[DEBUG] pickedUpObjects count: " .. #pickedUpObjects)
+                if #pickedUpObjects > 0 then
+                    print("[DEBUG] pickedUpObjects[1]: " .. tostring(pickedUpObjects[1][1]) .. ", " .. tostring(pickedUpObjects[1][2]))
+                end
+                print("[DEBUG] Mapped object ID for event.Entities[2] (" .. tostring(event.Entities[2]) .. "): " .. tostring(mappedObject))
+            end
+
+            local isActionWithObjectCurrentlyPicked = event and #event.Entities > 1 and #pickedUpObjects > 0 and #pickedUpObjects[1] > 0 and self:GetMappedEventObjectId(event.Entities[2], playerChainId) == pickedUpObjects[1][1]
             local isActionWithSpawnableObject = mappedObject == 'spawnable'
 
+            print("isActionWithObjectCurrentlyPicked "..tostring(isActionWithObjectCurrentlyPicked))
+            print("isActionWithSpawnableObject "..tostring(isActionWithSpawnableObject))
             if isActionWithObjectCurrentlyPicked and not isActionWithSpawnableObject then
+                if DEBUG then
+                    print("[DEBUG] === Attempting object lookup ===")
+                    print("[DEBUG] Looking for ObjectId: " .. pickedUpObjects[1][1])
+                    print("[DEBUG] Total objects in CurrentEpisode.Objects: " .. #CURRENT_STORY.CurrentEpisode.Objects)
+
+                    -- Log first 20 objects
+                    print("[DEBUG] Available objects:")
+                    for i = 1, math.min(20, #CURRENT_STORY.CurrentEpisode.Objects) do
+                        local obj = CURRENT_STORY.CurrentEpisode.Objects[i]
+                        print("[DEBUG]   [" .. i .. "] ObjectId: " .. tostring(obj.ObjectId) .. ", Type: " .. tostring(obj.type) .. ", Desc: " .. tostring(obj.Description))
+                    end
+                end
+
                 local object = FirstOrDefault(CURRENT_STORY.CurrentEpisode.Objects, function(o) return o.ObjectId == pickedUpObjects[1][1] end)
+
+                if DEBUG then
+                    print("[DEBUG] Object found: " .. tostring(object ~= nil))
+                    if object then
+                        print("[DEBUG] Found object: " .. object:__tostring())
+                    else
+                        print("[DEBUG] !!! OBJECT NOT FOUND - This will cause InstantiateAction to fail !!!")
+                    end
+                end
+
                 eventAction = InstantiateAction(event, player, location, object)
+
+                if DEBUG then
+                    print("[DEBUG] InstantiateAction result: " .. tostring(eventAction ~= nil))
+                    if eventAction then
+                        print("[DEBUG] Created action: " .. eventAction.Name)
+                    end
+                end
             end
 
             -- Handle spawnable objects from actor's inventory
             if eventAction == nil and event then
+                if DEBUG then
+                    print("[DEBUG] === Trying spawnable object path ===")
+                end
+
                 local objectInstance = self:GetOrCreateSpawnableObject(event, player)
+
+                if DEBUG then
+                    print("[DEBUG] GetOrCreateSpawnableObject result: " .. tostring(objectInstance ~= nil))
+                end
 
                 if objectInstance then
                     eventAction = InstantiateAction(event, player, location, objectInstance)
+                    if DEBUG then
+                        print("[DEBUG] InstantiateAction from spawnable result: " .. tostring(eventAction ~= nil))
+                    end
                 end
             end
 
@@ -888,9 +970,26 @@ function Location:ProcessNextAction(player)
                 end
             end
             if eventAction == nil then
+                if DEBUG then
+                    print("[DEBUG] === Falling back to location.allActions ===")
+                    print("[DEBUG] Available actions in location.allActions:")
+                    for i, action in ipairs(location.allActions) do
+                        print("[DEBUG]   [" .. i .. "] " .. action.Name)
+                    end
+                end
+
                 eventAction = FirstOrDefault(location.allActions, function(action) return action.Name:lower() == event.Action:lower() end)
+
+                if DEBUG then
+                    print("[DEBUG] Fallback action found: " .. tostring(eventAction ~= nil))
+                end
             end
             if not eventAction then
+                if DEBUG then
+                    print("[DEBUG] !!! CRASH IMMINENT !!!")
+                    print("[DEBUG] Event: " .. event.id .. ", Action: " .. event.Action)
+                    print("[DEBUG] All attempts to create action failed")
+                end
                 error('Event action could not be found '..event.Action)
             end
         end
@@ -1134,7 +1233,9 @@ function Location:ProcessNextAction(player)
                 return poi.Region and nextEvent.Location and (poi.Region.name:lower():find(nextEvent.Location[1]:lower()) and true or false )
             end)
         end
-        if nextEvent.Action == 'LookAt' or nextEvent.Action == 'LookAtObject' or nextEvent.Action == 'Wave' then
+        if nextEvent.Action == 'LookAt' or nextEvent.Action == 'LookAtObject' or nextEvent.Action == 'Wave'
+           or ((nextEvent.Action == 'Drink' or nextEvent.Action == 'Eat') and isActionWithPickedUpObject)
+           then
             candidates = {
                 location
             }
@@ -1405,7 +1506,7 @@ function Location:GetNextValidAction(player)
                 print('Next action is to move')
                 if next.NextLocation and next.NextLocation.isBusy and player:getData('locationId') ~= next.NextLocation.LocationId then
                     local occupyingActor = FirstOrDefault(CURRENT_STORY.CurrentEpisode.peds, function(act) return act:getData('locationId') == next.NextLocation.LocationId end)
-                    if occupyingActor and occupyingActor:getData('storyEnded') then
+                    if occupyingActor then
                         --the actor occupying the location finished his mandatory tasks. move him around randomly to clear the location
                         local randomMove = PickRandom(Where(next.NextLocation.PossibleActions, function(a) return a.Name == 'Move' and not a.NextLocation.isBusy end))
                         randomMove.NextLocation.isBusy = true
@@ -1429,8 +1530,18 @@ function Location:GetNextValidAction(player)
                                 end
                                 Timer(wait, 5000, 1)
                             elseif not self.doNothing then
-                                player:setData('waitingFor',nil)
-                                OnGlobalActionFinished(1000, player:getData('id'), player:getData('storyId'))
+                                -- Check if player is currently executing an interaction action
+                                local currentAction = player:getData('currentAction')
+                                local isCurrentlyInInteraction = currentAction and Any(CURRENT_STORY.Interactions, function(a) return a:lower() == currentAction:lower() end)
+
+                                if not isCurrentlyInInteraction then
+                                    player:setData('waitingFor',nil)
+                                    OnGlobalActionFinished(1000, player:getData('id'), player:getData('storyId'))
+                                else
+                                    if DEBUG then
+                                        print("[OLD WAIT LOGIC] Skipping OnGlobalActionFinished for player " .. player:getData('id') .. " because currently in interaction: " .. currentAction)
+                                    end
+                                end
                             end
                         end
                         player:setData('waitingFor', next.NextLocation.LocationId)

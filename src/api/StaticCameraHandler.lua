@@ -41,7 +41,7 @@ function StaticCameraHandler:requestFocus(playerId)
         self:autoFocus()
         for _, spectator in ipairs(CURRENT_STORY.Spectators) do
             spectator:setData('fadedCamera', true)
-            spectator:fadeCamera(true)
+            spectator:fadeCamera(true, 0)
         end
     end
 end

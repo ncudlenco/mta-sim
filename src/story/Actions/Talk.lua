@@ -9,6 +9,12 @@ end)
 function Talk:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
+
+    -- -- Also add to TargetPlayer's history
+    -- -- Talk is symmetric - both actors perform the same action
+    -- -- This ensures both actors have the correct action name for event publication
+    -- table.insert(story.History[self.TargetPlayer:getData('id')], self)
+
     StoryActionBase.Apply(self)
 
     local time = random(5000, 16000)
@@ -25,12 +31,12 @@ function Talk:Apply()
             local talkType = PickRandom({"prtial_gngtlka", "prtial_gngtlkb", "prtial_gngtlkc",
                                          "prtial_gngtlkd", "prtial_gngtlke", "prtial_gngtlkf",
                                          "prtial_gngtlkg", "prtial_gngtlkh"})
-            self.Performer:setAnimation("gangs", talkType, -1, true, false, false, false)
+            self.Performer:setAnimation("gangs", talkType, time, false, false, false, false)
 
             talkType = PickRandom({"prtial_gngtlka", "prtial_gngtlkb", "prtial_gngtlkc",
                                    "prtial_gngtlkd", "prtial_gngtlke", "prtial_gngtlkf",
                                    "prtial_gngtlkg", "prtial_gngtlkh"})
-            self.TargetPlayer:setAnimation("gangs", talkType, -1, true, false, false, false)
+            self.TargetPlayer:setAnimation("gangs", talkType, time, false, false, false, false)
 
             if DEBUG then
                 outputConsole("Talk:Apply")

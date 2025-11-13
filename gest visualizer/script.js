@@ -125,6 +125,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderGraph(data) {
         cy.elements().remove();
         const elements = [];
+
+        // PASS 1: Create all nodes with complete data
         Object.keys(data).forEach(key => {
             if (key !== 'temporal' && key !== 'spatial' && key !== 'semantic' && key !== 'logical' && key !== 'camera') {
                 const nodeData = data[key];
@@ -163,18 +165,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (nodeClass.includes('actor')) {
                     console.log('Created actor node:', key, 'with classes:', nodeClass);
                 }
+            }
+        });
+
+        // PASS 2: Create all edges (same-entity relationships)
+        Object.keys(data).forEach(key => {
+            if (key !== 'temporal' && key !== 'spatial' && key !== 'semantic' && key !== 'logical' && key !== 'camera') {
+                const nodeData = data[key];
 
                 nodeData.Entities?.forEach(entity => {
-                    // Check if this entity is an actor (will be created as "entity actor" node)
-                    const isActor = data[entity]?.Action === "Exists" && 'Gender' in (data[entity]?.Properties || {});
-
-                    // Only create generic entity node if it's not an actor and doesn't exist yet
-                    if (!isActor && !elements.find(e => e.data.id === entity)) {
-                        elements.push({ data: { id: entity, label: entity }, classes: "entity" });
-                    }
-
-                    // Always create the edge
-                    elements.push({ data: { source: key, target: entity, label: 'same-entity' }, classes: 'same-entity' });
+                    // Create edge from this node to each entity it references
+                    elements.push({
+                        data: { source: key, target: entity, label: 'same-entity' },
+                        classes: 'same-entity'
+                    });
                 });
             }
         });
@@ -253,16 +257,35 @@ document.addEventListener('DOMContentLoaded', () => {
         if (data.semantic) {
             Object.keys(data.semantic).forEach(key => {
                 const semantic = data.semantic[key];
+
+                // Create source node if it doesn't exist (for abstract semantic concepts)
+                if (!elements.find(e => e.data.id === key)) {
+                    elements.push({
+                        data: {
+                            id: key,
+                            label: key,
+                            details: `Semantic: ${semantic.type}`
+                        },
+                        classes: 'semantic-node'
+                    });
+                }
+
+                // Create edges to targets
                 if (semantic.type && semantic.targets) {
                     semantic.targets.forEach(target => {
-                        elements.push({
-                            data: {
-                                source: key,
-                                target: target,
-                                label: semantic.type
-                            },
-                            classes: 'semantic-relation'
-                        });
+                        // Verify target node exists before creating edge
+                        if (elements.find(e => e.data.id === target)) {
+                            elements.push({
+                                data: {
+                                    source: key,
+                                    target: target,
+                                    label: semantic.type
+                                },
+                                classes: 'semantic-relation'
+                            });
+                        } else {
+                            console.warn(`[Semantic] Skipping edge: target '${target}' not found for source '${key}'`);
+                        }
                     });
                 }
             });
@@ -281,18 +304,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         },
                         classes: 'logical-relation'
                     });
-                }
-            });
-        }
-
-        // Build temporal graph and compute time slots for chronological ordering
-        const temporalGraph = buildTemporalGraph(data, elements);
-
-        // Assign computed time slots to elements
-        if (temporalGraph && temporalGraph.timeSlots) {
-            elements.forEach(elem => {
-                if (elem.data.id && temporalGraph.timeSlots[elem.data.id] !== undefined) {
-                    elem.data.timeSlot = temporalGraph.timeSlots[elem.data.id];
                 }
             });
         }
@@ -356,136 +367,6 @@ document.addEventListener('DOMContentLoaded', () => {
         toggleButtons.appendChild(button);
     }
 
-    // Build temporal constraint graph and compute time slots
-    function buildTemporalGraph(data, elements) {
-        const graph = {
-            nodes: new Set(),
-            edges: [], // {from, to, type}
-            timeSlots: {} // nodeId -> timeSlot (integer)
-        };
-
-        // Collect all event nodes (exclude entity/actor Exists nodes and scene nodes)
-        elements.forEach(elem => {
-            if (elem.data.id && elem.classes &&
-                !elem.classes.includes('actor') &&
-                !elem.classes.includes('scene') &&
-                elem.classes.includes('event')) {
-                graph.nodes.add(elem.data.id);
-            }
-        });
-
-        // Extract temporal constraints
-        if (data.temporal) {
-            // Process 'next' relationships (implicit 'after')
-            Object.keys(data.temporal).forEach(key => {
-                if (key === 'starting_actions') return;
-                const temporal = data.temporal[key];
-                if (temporal && temporal.next !== null && graph.nodes.has(key) && graph.nodes.has(temporal.next)) {
-                    graph.edges.push({ from: key, to: temporal.next, type: 'next' });
-                }
-            });
-
-            // Process explicit temporal relations
-            Object.keys(data.temporal).forEach(key => {
-                if (key === 'starting_actions') return;
-                const temporal = data.temporal[key];
-                if (temporal && temporal.relations) {
-                    temporal.relations.forEach(relationKey => {
-                        const relation = data.temporal[relationKey];
-                        if (relation?.source && relation?.target &&
-                            graph.nodes.has(relation.source) && graph.nodes.has(relation.target)) {
-                            graph.edges.push({
-                                from: relation.source,
-                                to: relation.target,
-                                type: relation.type
-                            });
-                        }
-                    });
-                }
-            });
-        }
-
-        // Compute time slots using topological sort with constraint handling
-        topologicalSort(graph);
-
-        return graph;
-    }
-
-    // Topological sort with support for temporal constraints
-    function topologicalSort(graph) {
-        const inDegree = {};
-        const timeSlots = {};
-
-        // Initialize
-        graph.nodes.forEach(node => {
-            inDegree[node] = 0;
-            timeSlots[node] = 0;
-        });
-
-        // Build before/after constraints
-        const beforeConstraints = {}; // node -> [nodes that must come before it]
-        const afterConstraints = {};  // node -> [nodes that must come after it]
-        const sameTimeGroups = [];    // [[nodes that must be at same time]]
-
-        graph.edges.forEach(edge => {
-            if (edge.type === 'next' || edge.type === 'after') {
-                // edge.from must come before edge.to
-                if (!beforeConstraints[edge.to]) beforeConstraints[edge.to] = [];
-                beforeConstraints[edge.to].push(edge.from);
-                if (!afterConstraints[edge.from]) afterConstraints[edge.from] = [];
-                afterConstraints[edge.from].push(edge.to);
-            } else if (edge.type === 'starts_with' || edge.type === 'concurrent') {
-                // edge.from and edge.to should be at same time
-                let foundGroup = false;
-                for (let group of sameTimeGroups) {
-                    if (group.includes(edge.from) || group.includes(edge.to)) {
-                        if (!group.includes(edge.from)) group.push(edge.from);
-                        if (!group.includes(edge.to)) group.push(edge.to);
-                        foundGroup = true;
-                        break;
-                    }
-                }
-                if (!foundGroup) {
-                    sameTimeGroups.push([edge.from, edge.to]);
-                }
-            }
-        });
-
-        // Compute minimum time slots based on before constraints
-        const computeTimeSlot = (node, visited = new Set()) => {
-            if (timeSlots[node] !== undefined && timeSlots[node] > 0) return timeSlots[node];
-            if (visited.has(node)) return 0; // Cycle detection
-
-            visited.add(node);
-
-            let maxPredecessorTime = -1;
-            if (beforeConstraints[node]) {
-                beforeConstraints[node].forEach(predecessor => {
-                    const predTime = computeTimeSlot(predecessor, visited);
-                    maxPredecessorTime = Math.max(maxPredecessorTime, predTime);
-                });
-            }
-
-            timeSlots[node] = maxPredecessorTime + 1;
-            return timeSlots[node];
-        };
-
-        // Compute time slots for all nodes
-        graph.nodes.forEach(node => {
-            computeTimeSlot(node);
-        });
-
-        // Align same-time groups
-        sameTimeGroups.forEach(group => {
-            const maxTime = Math.max(...group.map(node => timeSlots[node]));
-            group.forEach(node => {
-                timeSlots[node] = maxTime;
-            });
-        });
-
-        graph.timeSlots = timeSlots;
-    }
-
     // After the layout is applied, manually adjust the positions
     function adjustPositions() {
         const nodes = cy.nodes();
@@ -526,24 +407,11 @@ document.addEventListener('DOMContentLoaded', () => {
         let xOffset = 0;
         Object.keys(groupedNodes).forEach((actor, actorIdx) => {
             const actorNodes = groupedNodes[actor];
-
-            // Sort by timeSlot if available, otherwise by order
-            actorNodes.sort((a, b) => {
-                const aTimeSlot = a.data('timeSlot');
-                const bTimeSlot = b.data('timeSlot');
-
-                if (aTimeSlot !== undefined && bTimeSlot !== undefined) {
-                    return aTimeSlot - bTimeSlot;
-                }
-                return a.data('order') - b.data('order');
-            });
+            actorNodes.sort((a, b) => a.data('order') - b.data('order'));
 
             actorNodes.forEach((node, index) => {
-                const timeSlot = node.data('timeSlot');
-                const yPos = timeSlot !== undefined ? timeSlot * 120 : index * 100;
-
                 node.position({
-                    y: yPos,
+                    y: index * 100,
                     x: actorIdx * 300
                 });
             });

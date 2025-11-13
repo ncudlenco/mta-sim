@@ -57,6 +57,7 @@ function startSimulation(source)
 
         return
     else
+        print('Waiting 2 seconds before starting the story...')
         Timer(function()
             CURRENT_STORY:Play()
         end, 2000, 1)
@@ -104,7 +105,7 @@ end
 
 function initializeCameraMan(cameraMan, triggerClientReady)
     if not DEFINING_EPISODES then
-        -- cameraMan:fadeCamera (false)
+        cameraMan:fadeCamera (true, 0)
     end
     cameraMan:setHudComponentVisible("all", false)
     showChat(cameraMan, false)
@@ -113,7 +114,7 @@ function initializeCameraMan(cameraMan, triggerClientReady)
     cameraMan:setData("isPed", false)
     math.randomseed(os.clock()*100000000000)
     math.random(); math.random(); math.random()
-    cameraMan:setData('fadedCamera', false)
+    cameraMan:setData('fadedCamera', true)
     cameraMan:setData('spawned', false)
     cameraMan:setData('clientReady', false)  -- Initialize as not ready
 
@@ -152,11 +153,12 @@ function (prevA, curA)
             outputConsole("Found story for the spawned player. Picking a random action ")
         end
         if story and not FREE_ROAM then
+            print("[Player.lua] Spectator spawned. Waiting 1 second for the world to stream completely before triggering first action...")
             Timer(function()
                 for i,ped in ipairs(story.CurrentEpisode.peds) do
                     OnGlobalActionFinished(0, ped:getData('id'), ped:getData('storyId'))
                 end
-            end, 5000, 1)
+            end, 1000, 1)
         end
     end
 end
@@ -194,12 +196,14 @@ function terminatePlayer(player, reason)
                         initializeCameraMan(player, true)
                     else
                         player:kick(reason)
+                        print("[PLAYER]: No more graphs to process. Shutting down the server. " ..reason)
                     end
                 else
                     player:kick(reason)
+                    print("[PLAYER]: No input graphs defined. Shutting down the server. " ..reason)
                 end
             end
-        end, 10000,1)
+        end, 1000,1)
     end
 end
 

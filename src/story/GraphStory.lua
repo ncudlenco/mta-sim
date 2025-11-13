@@ -26,7 +26,7 @@ GraphStory = class(StoryBase, function(o, spectators, logData, artifactCollectio
     }
     o.DynamicEpisodes = {
       "classroom1",
-    --   "house1_sweet",
+      "house1_sweet",
       "house1_stripped",
     --   "house3_preloaded", --NOT WORKING! The pathfinding seems flawed here, when we have 2 levels?
     --   "house7", --NOT WORKING! Potential issue when the link POI is located outside a region
@@ -36,7 +36,7 @@ GraphStory = class(StoryBase, function(o, spectators, logData, artifactCollectio
     --   "house12_preloaded", -- Working but needs the objects removed. Some flakiness exists but in general it works...
       "garden",
       "office",
-      "office2",
+    --   "office2",
       "common",
       "gym1",
       "gym2",
@@ -162,6 +162,9 @@ GraphStory = class(StoryBase, function(o, spectators, logData, artifactCollectio
             for k,v in pairs(o.graph) do
                 if v.Action then
                     v.id = k
+                end
+                if v.Properties and v.Properties.scene_type then
+                    o.graph[k] = nil
                 end
             end
 
@@ -547,7 +550,11 @@ function GraphStory:ValidateEpisode(
     -- Partial matches are allowed at this point, because we are exploring individual contextual episodes, and walking through other connected episodes.
     -- In the end, if a sub-tree of linked episodes that satisfy all the requirements is found, then all the found episodes are wrapped in a meta-episode, which will be used to play the story.
     -- At this point, the function below works on granular episodes (non-meta-episodes), so it is allowed to have partial matches.
-    self:MapObjectsActionsAndPoi(requiredObjects, episode, actionMap, eventMap, objectMap, eventObjectMap, poiMap)
+    -- Try to map each object individually (validation mode: count successes, continue on failure)
+    for _, ro in ipairs(requiredObjects) do
+        self:MapSingleObject(ro, episode, actionMap, eventMap, objectMap, eventObjectMap, poiMap)
+        -- Continue regardless of success/failure - we'll count what was mapped later
+    end
 
     -- Validate spatial constraints for mapped objects
     local spatiallyValid, failedObjects = self:ValidateSpatialConstraints(episode, eventObjectMap)
@@ -1307,7 +1314,7 @@ function GraphStory:FindAllValidActionsAndPois(episode, ro, eventsWithObjectAsTa
                 local nextEvent = self.graph[nextEventId]
 
                 -- Check if this event should be validated against the action chain
-                -- Interactions and special actions (Move, LookAt, etc.) can interrupt
+                -- Interactions and special actions (Move, LookAt, TakeOut, Stash, etc.) can interrupt
                 -- object manipulation chains without requiring explicit nextAction links
                 if not self:IsInteractionOrSkippableAction(nextEvent.Action) then
                     local nextActions = { currentAction.NextAction }
@@ -1558,68 +1565,86 @@ end
 ---@return boolean
 function GraphStory:MapObjectsActionsAndPoi(requiredObjects, episode, actionMap, eventMap, objectMap, eventObjectMap, poiMap)
     return All(requiredObjects, function(ro)
-        if eventObjectMap[ro.id] and #eventObjectMap[ro.id] > 0 then return true end
-        if DEBUG_VALIDATION and not eventObjectMap[ro.id] then
-            print("The object "..ro.id..':'..ro.name..' ()'..(ro.location or '')..' is not mapped in any of event objects map')
-            for k, v in pairs(eventObjectMap) do
-                print(k)
-            end
-        end
-
-        if Any(self.SpawnableObjects, function(o) return o:lower() == ro.name:lower() end) then
-            eventObjectMap[ro.id] = {{value = 'spawnable', chainId = -1}}
-            return true
-        end
-
-        local eventsWithObjectAsTarget = Where(self.graph, function(event)
-            return
-                --The action was not already processed
-                not actionMap[event.id]
-                --The event is of type action (LookAt/LookAtObject/Wave will be individually mapped during runtime, so we are not mapping it here)
-                and event.Action ~= 'Exists'
-                and event.Action ~= 'LookAt'
-                and event.Action ~= 'LookAtObject'
-                and event.Action ~= 'Wave'
-                and event.Action ~= 'TakeOut'
-                and event.Action ~= 'Stash'
-                and event.Action ~= 'AnswerPhone'
-                and event.Action ~= 'TalkPhone'
-                and event.Action ~= 'HangUp'
-                and event.Action ~= 'SmokeIn'
-                and event.Action ~= 'Smoke'
-                and event.Action ~= 'SmokeOut'
-                -- and event.Action ~= 'Drink'
-                -- and event.Action ~= 'Eat'
-                --The event is not interaction and is with the required object
-                and #event.Entities == 2 and event.Entities[2] == ro.id
-                --The event is in the same location as the required object (this event will not be mapped if the object was moved to a different location)
-                --The consequence of the check below is that only the events occuring in the same location where the object initially exists are considered.
-                and (#event.Location == 0 or event.Location[1] == '' or event.Location[1]:lower():find(ro.location:lower()))
-            end
-        )
-
-        if DEBUG_VALIDATION then
-            print("Events with object as target:vvv")
-            for _, e in ipairs(eventsWithObjectAsTarget) do
-                print("Event with object "..ro.name..' as target '..e.id)
-            end
-        end
-
-        local allPotentialMatchingPoiData =
-            self:FindAllValidActionsAndPois(episode, ro, eventsWithObjectAsTarget)
-
-
-        local anyMatchesFound = self:AggregatePoiData(allPotentialMatchingPoiData, objectMap, eventObjectMap, actionMap, eventMap, poiMap)
-        if not anyMatchesFound and DEBUG then
-            print('Episode '..episode.name..' was discarded because the object '..ro.name..' does not exist in region '..ro.location..' or at all or a matching chain of actions could not be found for the object')
-        end
-        if not anyMatchesFound then
-            print("Could not find actions required for the object "..ro.name..' id '..ro.id..' in location '..ro.location)
-            return false
-        end
-
-        return true
+        return self:MapSingleObject(ro, episode, actionMap, eventMap, objectMap, eventObjectMap, poiMap)
     end)
+end
+
+--- Maps a single required object to episode objects, actions, and POIs.
+--- Attempts to find matching actions and POIs for the given object and populates the maps.
+--- This function is used in two contexts:
+---   1. Validation mode (ValidateEpisode): Called in a loop to try ALL objects, continue on failure
+---   2. Chain mapping mode (ProcessActions): Called via MapObjectsActionsAndPoi with All() for fail-fast behavior
+---
+--- @param ro table The required object {id, name, location}
+--- @param episode any The episode to map within
+--- @param actionMap table Map of simulator actions to graph events
+--- @param eventMap table Map of graph events to simulator actions
+--- @param objectMap table Map of simulator objects to graph object IDs
+--- @param eventObjectMap table Map of graph object IDs to simulator objects
+--- @param poiMap table Map of graph events to POI location IDs
+--- @return boolean True if object was successfully mapped, false otherwise
+function GraphStory:MapSingleObject(ro, episode, actionMap, eventMap, objectMap, eventObjectMap, poiMap)
+    if eventObjectMap[ro.id] and #eventObjectMap[ro.id] > 0 then return true end
+    if DEBUG_VALIDATION and not eventObjectMap[ro.id] then
+        print("The object "..ro.id..':'..ro.name..' ()'..(ro.location or '')..' is not mapped in any of event objects map')
+        for k, v in pairs(eventObjectMap) do
+            print(k)
+        end
+    end
+
+    if Any(self.SpawnableObjects, function(o) return o:lower() == ro.name:lower() end) then
+        eventObjectMap[ro.id] = {{value = 'spawnable', chainId = -1}}
+        return true
+    end
+
+    local eventsWithObjectAsTarget = Where(self.graph, function(event)
+        return
+            --The action was not already processed
+            not actionMap[event.id]
+            --The event is of type action (LookAt/LookAtObject/Wave will be individually mapped during runtime, so we are not mapping it here)
+            and event.Action ~= 'Exists'
+            and event.Action ~= 'LookAt'
+            and event.Action ~= 'LookAtObject'
+            and event.Action ~= 'Wave'
+            and event.Action ~= 'TakeOut'
+            and event.Action ~= 'Stash'
+            and event.Action ~= 'AnswerPhone'
+            and event.Action ~= 'TalkPhone'
+            and event.Action ~= 'HangUp'
+            and event.Action ~= 'SmokeIn'
+            and event.Action ~= 'Smoke'
+            and event.Action ~= 'SmokeOut'
+            -- and event.Action ~= 'Drink'
+            -- and event.Action ~= 'Eat'
+            --The event is not interaction and is with the required object
+            and #event.Entities == 2 and event.Entities[2] == ro.id
+            --The event is in the same location as the required object (this event will not be mapped if the object was moved to a different location)
+            --The consequence of the check below is that only the events occuring in the same location where the object initially exists are considered.
+            and (#event.Location == 0 or event.Location[1] == '' or event.Location[1]:lower():find(ro.location:lower()))
+        end
+    )
+
+    if DEBUG_VALIDATION then
+        print("Events with object as target:vvv")
+        for _, e in ipairs(eventsWithObjectAsTarget) do
+            print("Event with object "..ro.name..' as target '..e.id)
+        end
+    end
+
+    local allPotentialMatchingPoiData =
+        self:FindAllValidActionsAndPois(episode, ro, eventsWithObjectAsTarget)
+
+
+    local anyMatchesFound = self:AggregatePoiData(allPotentialMatchingPoiData, objectMap, eventObjectMap, actionMap, eventMap, poiMap)
+    if not anyMatchesFound and DEBUG then
+        print('Episode '..episode.name..' was discarded because the object '..ro.name..' does not exist in region '..ro.location..' or at all or a matching chain of actions could not be found for the object')
+    end
+    if not anyMatchesFound then
+        print("Could not find actions required for the object "..ro.name..' id '..ro.id..' in location '..ro.location)
+        return false
+    end
+
+    return true
 end
 
 function GraphStory:AggregatePoiData(poiDatas, objectMap, eventObjectMap, actionMap, eventMap, poiMap)
@@ -1783,12 +1808,26 @@ function GraphStory:IsInteractionOrSkippableAction(actionName)
     end
 
     -- Specific non-object actions that can interrupt without breaking chains
-    local skippableActions = {'lookatobject', 'lookat', 'wave'}
+    local skippableActions = {'lookatobject', 'lookat', 'wave', 'stash', 'takeout'}
     if inList(lower, skippableActions) then
         return true
     end
 
     return false
+end
+
+---Normalize graph action names to simulator action names.
+---Handles inverse actions (INV-*) that map to different simulator classes.
+---This is necessary because graphs use semantic names like "INV-Give" for clarity,
+---while the simulator uses actual action class names like "Receive".
+---@param graphActionName string The action name from the graph event
+---@return string The normalized action name for simulator action comparison
+function GraphStory:NormalizeActionName(graphActionName)
+    local actionNameMap = {
+        ["INV-Give"] = "Receive",
+        -- Future inverse action mappings can be added here as needed
+    }
+    return actionNameMap[graphActionName] or graphActionName
 end
 
 function GraphStory:ProcessActions(graphActors)

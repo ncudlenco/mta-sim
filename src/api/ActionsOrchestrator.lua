@@ -399,10 +399,13 @@ function ActionsOrchestrator:EnqueueActionLinear(action, actor, eventId)
     if eventId and not action.isArtificial and CURRENT_STORY.EventBus and CURRENT_STORY:is_a(GraphStory) then
         local expectedAction = CURRENT_STORY.graph[eventId] and CURRENT_STORY.graph[eventId].Action
 
+        -- Normalize graph action name to match simulator action names (e.g., INV-Give → Receive)
+        local normalizedAction = expectedAction and CURRENT_STORY:NormalizeActionName(expectedAction) or nil
+
         -- Only publish if this action is the actual graph event action
-        if expectedAction and action.Name == expectedAction then
+        if normalizedAction and action.Name == normalizedAction then
             if DEBUG and DEBUG_ACTIONS_ORCHESTRATOR then
-                print("[EnqueueActionLinear] Publishing graph_event_start for "..eventId.." (action matches)")
+                print("[EnqueueActionLinear] Publishing graph_event_start for "..eventId.." (action "..action.Name.." matches normalized "..normalizedAction..")")
             end
 
             CURRENT_STORY.EventBus:publish("graph_event_start", {
@@ -410,8 +413,8 @@ function ActionsOrchestrator:EnqueueActionLinear(action, actor, eventId)
                 actorId = actor:getData('id'),
                 actionName = action.Name
             })
-        elseif DEBUG and DEBUG_ACTIONS_ORCHESTRATOR and expectedAction then
-            print("[EnqueueActionLinear] Skipping graph_event_start for "..eventId.." (action "..action.Name.." != expected "..expectedAction..")")
+        elseif DEBUG and DEBUG_ACTIONS_ORCHESTRATOR and normalizedAction then
+            print("[EnqueueActionLinear] Skipping graph_event_start for "..eventId.." (action "..action.Name.." != normalized expected "..normalizedAction..")")
         end
     end
 
@@ -422,7 +425,10 @@ function ActionsOrchestrator:EnqueueActionLinear(action, actor, eventId)
             print("[EnqueueActionLinear] actorId ".. actor:getData('id').." - action "..action.Name..': '..action:GetDynamicString().." - awaiting context switch")
         end
         self.actionQueue[actor:getData('id')] = action
-        CURRENT_STORY.CameraHandler:requestFocus(actor:getData('id'))
+        -- Background actors should not request camera focus
+        if not actor:getData("isbackgroundactor") then
+            CURRENT_STORY.CameraHandler:requestFocus(actor:getData('id'))
+        end
     else
         action:Apply()
     end

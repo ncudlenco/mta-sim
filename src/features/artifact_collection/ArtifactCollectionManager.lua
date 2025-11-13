@@ -459,8 +459,14 @@ function ArtifactCollectionManager:stopScheduledCollection()
 
     -- Trigger completion callback
     if self.completionCallback then
-        self.completionCallback()
-        self.completionCallback = nil
+        -- Delay completion callback to allow finalization to complete
+        Timer(function()
+            if DEBUG then
+                print("[ArtifactCollectionManager] Invoking completion callback")
+            end
+            self.completionCallback()
+            self.completionCallback = nil
+        end, 1000, 1)
     end
 
     self.collectionCallback = nil

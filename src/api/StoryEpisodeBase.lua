@@ -218,13 +218,15 @@ function StoryEpisodeBase:Initialize(...)
                 end
                 validStartingPoi.isBusy = true
                 print('[StoryEpisodeBase.Initialize] Location '..validStartingPoi.Description..' is set to busy')
-                local ped = PedHandler:GetOrCreatePed(skin.Id, validStartingPoi.X, validStartingPoi.Y, validStartingPoi.Z, validStartingPoi.Angle)
+
+                -- Extract actor ID from graph (use .id or Entities[1]), fallback to numeric index for random stories
+                local actorId = requiredActors and requiredActors[i] and (requiredActors[i].id or (requiredActors[i].Entities and requiredActors[i].Entities[1])) or nil
+
+                local ped = PedHandler:GetOrCreatePed(skin.Id, validStartingPoi.X, validStartingPoi.Y, validStartingPoi.Z, validStartingPoi.Angle, actorId)
                 if not ped then
                     error('Error while creating the ped '..i)
                 end
                 ped.interior = validStartingPoi.Interior
-                local g = Guid()
-                ped:setData("id", i..'')
                 ped:setData("isPed", true)
                 ped:setData('startingPoiIdx', validStartingPoi.dummy or LastIndexOf(self.POI, validStartingPoi))
                 if validStartingPoi.Region then
@@ -626,7 +628,12 @@ function StoryEpisodeBase:RequestPause()
                     print('Requesting pause for actor '..actor:getData('id')..' last action '..lastAction.Name..' (is a move action: '..isMove..') is not finished: '..isMoveActionFinished)
                 end
 
-                actor:setData('requestPause', true) -- Handled in ActionsGlobals.OnGlobalActionFinished and in Move:pause
+                -- Only pause if the last action is NOT a finished Move
+                -- If Move is finished, actor should continue to next action (e.g., Wait)
+                -- Otherwise actor gets stuck: marker is cleared, but Move thinks it's not finished
+                if not (lastAction:is_a(Move) and lastAction:isFinished(actor)) then
+                    actor:setData('requestPause', true) -- Handled in ActionsGlobals.OnGlobalActionFinished and in Move:pause
+                end
                 if lastAction:is_a(Wait) then
                     lastAction:pause(actor)
                 end

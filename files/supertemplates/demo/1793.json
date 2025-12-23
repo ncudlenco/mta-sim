@@ -1,1 +1,87 @@
-[ { "objects": [ { "id": 1, "dynamicString": "return Bed{description=\"\", noCollisions=true, modelid=1793, isRandomModelId=false, interior=9, position=Vector3(0.72216796875,-1.8716430664062,-1), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}" } ], "poi": { "isEmpty": true }, "locations": [ { "Description": "bed ", "id": 1, "PossibleActions": [ { "id": 1 } ], "X": -0.0302734375, "Z": 0, "allActions": [ { "dynamicString": "return GetOn{how = 1,side = 1}", "nextLocation": { "id": 1 }, "targetItem": { "id": 1, "type": "Object" }, "id": 1, "nextAction": { "id": 2 }, "closingAction": { "id": 3 }, "isClosingAction": false }, { "dynamicString": "return Sleep{how = 1}", "targetItem": { "id": 1, "type": "Object" }, "id": 2, "nextAction": { "id": 3 }, "nextLocation": { "id": 1 }, "isClosingAction": false }, { "dynamicString": "return GetOff{how = 1,side = 1}", "targetItem": { "id": 1, "type": "Object" }, "id": 3, "nextLocation": { "id": 1 }, "isClosingAction": false } ], "Angle": 270.8631286621094, "Y": 0.23382568359375, "Interior": 9 }, { "Description": "bed_left ", "id": 2, "PossibleActions": [ ], "X": 2.401611328125, "Z": 0, "allActions": [ ], "Angle": 105.1640014648438, "Y": 0.31268310546875, "Interior": 9 } ], "position": { "y": -1021.720031738281, "x": 2324.142333984375, "z": 1050.2109375 }, "globalCentroid": { "y": -1022.161743164062, "x": 2325.173583984375, "z": 1049.877563476562 }, "name": "1793" } ]
+[
+    {
+        "objects": [
+            {
+                "id": 1,
+                "dynamicString": "return Bed{description=\"\", noCollisions=true, modelid=1793, isRandomModelId=false, interior=9, position=Vector3(0.72216796875,-1.8716430664062,-1), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}"
+            }
+        ],
+        "poi": {
+            "isEmpty": true
+        },
+        "locations": [
+            {
+                "Description": "bed ",
+                "id": 1,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "X": -0.0302734375,
+                "Z": 0,
+                "allActions": [
+                    {
+                        "dynamicString": "return GetOn{how = 1,side = 1}",
+                        "nextLocation": {
+                            "id": 1
+                        },
+                        "targetItem": {
+                            "id": 1,
+                            "type": "Object"
+                        },
+                        "id": 1,
+                        "nextAction": {
+                            "id": 2
+                        },
+                        "closingAction": {
+                            "id": 3
+                        },
+                        "isClosingAction": false
+                    },
+                    {
+                        "dynamicString": "return Sleep{how = 1}",
+                        "targetItem": {
+                            "id": 1,
+                            "type": "Object"
+                        },
+                        "id": 2,
+                        "nextAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 1
+                        },
+                        "isClosingAction": false
+                    },
+                    {
+                        "dynamicString": "return GetOff{how = 1,side = 1}",
+                        "targetItem": {
+                            "id": 1,
+                            "type": "Object"
+                        },
+                        "id": 3,
+                        "nextLocation": {
+                            "id": 1
+                        },
+                        "isClosingAction": false
+                    }
+                ],
+                "Angle": 270.8631286621094,
+                "Y": 0.23382568359375,
+                "Interior": 9
+            }
+        ],
+        "position": {
+            "y": -1021.720031738281,
+            "x": 2324.142333984375,
+            "z": 1050.2109375
+        },
+        "globalCentroid": {
+            "y": -1022.161743164062,
+            "x": 2325.173583984375,
+            "z": 1049.877563476562
+        },
+        "name": "1793"
+    }
+]

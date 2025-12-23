@@ -52,21 +52,24 @@ function OnGlobalActionFinished(delay, playerId, storyId, callback, destroyedIte
             return
         end
 
+        -- Complete action lifecycle: clear currentAction
+        actor:setData('currentAction', nil)
+
         -- Publish graph event end (if this was a graph event and action matched)
         -- Save the completedEventId before clearing it, so we can pass it to NextActions
         local completedEventId = actor:getData('currentGraphEventId')
         local eventIdForNextAction = completedEventId  -- Preserve for NextAction propagation
 
         if completedEventId and story.EventBus and story:is_a(GraphStory) and lastAction then
-            local expectedAction = story.graph[completedEventId] and story.graph[completedEventId].Action
-
-            -- Normalize graph action name to match simulator action names (e.g., INV-Give → Receive)
-            local normalizedAction = expectedAction and story:NormalizeActionName(expectedAction) or nil
+            -- Check if the completed action matches the expected graph action for this actor
+            local currentGraphActionName = actor:getData('currentGraphActionName')
 
             -- Only publish if the completed action was the actual graph event action
-            if normalizedAction and lastAction.Name == normalizedAction then
+            -- Normalize graph action name to handle mappings (e.g., LookAtObject -> LookAt)
+            local normalizedGraphActionName = story:NormalizeActionName(currentGraphActionName)
+            if currentGraphActionName and lastAction.Name == normalizedGraphActionName then
                 if DEBUG then
-                    print("[ActionsGlobals] Publishing graph_event_end for "..completedEventId.." (action "..lastAction.Name.." matches normalized "..normalizedAction..")")
+                    print("[ActionsGlobals] Publishing graph_event_end for "..completedEventId.." (action "..lastAction.Name.." matches currentGraphActionName "..currentGraphActionName..")")
                 end
 
                 story.EventBus:publish("graph_event_end", {
@@ -74,12 +77,65 @@ function OnGlobalActionFinished(delay, playerId, storyId, callback, destroyedIte
                     actorId = playerId,
                     actionName = lastAction.Name
                 })
-            elseif DEBUG and expectedAction then
-                print("[ActionsGlobals] Skipping graph_event_end for "..completedEventId.." (action "..lastAction.Name.." != normalized expected "..normalizedAction..")")
+
+                -- Clear both fields after successful publication (event has ended)
+                actor:setData('currentGraphActionName', nil)
+                actor:setData('currentGraphEventId', nil)
+
+                -- Check if this is part of a synchronized interaction (starts_with or same_time)
+                -- Find all events that share the same relationId
+                -- EventBus handles deduplication automatically
+                local temporal = story.temporal[completedEventId]
+                if temporal and temporal.relations then
+                    for _, relationId in ipairs(temporal.relations) do
+                        local relation = story.temporal[relationId]
+                        if relation and (relation.type == 'starts_with' or relation.type == 'same_time') then
+                            -- Find ALL events with this relationId (many-to-many)
+                            for otherEventId, otherTemporal in pairs(story.temporal) do
+                                if type(otherTemporal) == 'table' and otherTemporal.relations and otherEventId ~= completedEventId then
+                                    -- Check if this other event has the same relationId
+                                    for _, otherRelationId in ipairs(otherTemporal.relations) do
+                                        if otherRelationId == relationId then
+                                            -- This event is part of the same synchronized group
+                                            local otherEvent = story.graph[otherEventId]
+                                            if otherEvent and otherEvent.Entities and otherEvent.Entities[1] then
+                                                if DEBUG then
+                                                    print("[ActionsGlobals] Publishing graph_event_end for "..relation.type.." group event "..otherEventId.." (actor "..otherEvent.Entities[1]..")")
+                                                end
+
+                                                story.EventBus:publish("graph_event_end", {
+                                                    eventId = otherEventId,
+                                                    actorId = otherEvent.Entities[1],
+                                                    actionName = otherEvent.Action
+                                                })
+                                            end
+                                            break
+                                        end
+                                    end
+                                end
+                            end
+                            break  -- Only handle first starts_with relation
+                        end
+                    end
+                end
+            elseif DEBUG and currentGraphActionName then
+                print("[ActionsGlobals] Skipping graph_event_end for "..completedEventId.." (action "..lastAction.Name.." != normalizedGraphActionName "..normalizedGraphActionName..")")
             end
 
-            -- Clear the event ID after checking (always clear, even if we didn't publish)
-            actor:setData('currentGraphEventId', nil)
+            -- For passive actors in starts_with interactions:
+            -- Event may have been fulfilled by active actor, but action name doesn't match
+            -- Check if event is in fulfilled list and clear eventId if so
+            if completedEventId and not (currentGraphActionName and lastAction.Name == normalizedGraphActionName) then
+                -- Main publication was skipped - check if event was fulfilled via starts_with
+                if inList(completedEventId, story.ActionsOrchestrator.fulfilled) then
+                    if DEBUG then
+                        print("[ActionsGlobals] Clearing currentGraphEventId for "..playerId..
+                              " - event "..completedEventId.." already fulfilled via starts_with")
+                    end
+                    actor:setData('currentGraphActionName', nil)
+                    actor:setData('currentGraphEventId', nil)
+                end
+            end
         end
 
         if actor:getData('requestPause') then
@@ -94,7 +150,6 @@ function OnGlobalActionFinished(delay, playerId, storyId, callback, destroyedIte
         -- story.CameraHandler:freeFocus(playerId)
 
         local nextAction = nil
-        local isNextActionFromChain = false  -- Track if nextAction is from NextAction chain
 
         if not lastAction then
             if DEBUG then
@@ -111,9 +166,11 @@ function OnGlobalActionFinished(delay, playerId, storyId, callback, destroyedIte
                 if firstAction then
                     nextAction = firstAction
                 else
+                    -- Actor awaiting constraints - designed behavior, not an error
                     if DEBUG then
-                        print("[FATAL ERROR][ActionsGlobals] No valid initial action found for the ped "..actor:getData('id'))
+                        print("[ActionsGlobals] Actor "..actor:getData('id').." initial action not ready (awaiting constraints)")
                     end
+                    return
                 end
             end
         else
@@ -123,7 +180,6 @@ function OnGlobalActionFinished(delay, playerId, storyId, callback, destroyedIte
                 else
                     nextAction = lastAction.NextAction
                 end
-                isNextActionFromChain = true  -- This action is part of the same event chain
             elseif DEFINING_EPISODES then
                 nextAction = EmptyAction({Performer = player})
             elseif lastAction.NextLocation then
@@ -160,22 +216,20 @@ function OnGlobalActionFinished(delay, playerId, storyId, callback, destroyedIte
                 print('[FatalError][ActionsGlobal] Actor cannot be assigned to an episode '..actor:getData('id'))
             end
 
-            -- Pass eventId when enqueueing NextAction from a chain (preserves eventId for NextAction inheritance)
-            -- Otherwise, let the system look up eventId from lastEvents
-            if isNextActionFromChain and eventIdForNextAction then
-                if DEBUG then
-                    print("[ActionsGlobals] Enqueueing NextAction with preserved eventId: "..eventIdForNextAction)
-                end
-                story.ActionsOrchestrator:EnqueueAction(nextAction, actor, eventIdForNextAction)
-            else
-                story.ActionsOrchestrator:EnqueueAction(nextAction, actor)
+            -- Use actor's currentGraphEventId instead of nextAction.eventId (actions don't store eventId)
+            if DEBUG then
+                local beforeRetrieve = actor:getData('currentGraphEventId')
+                print(string.format("[OnGlobalActionFinished] BEFORE enqueue: actorId=%s currentGraphEventId=%s lastAction=%s",
+                    actor:getData('id'), tostring(beforeRetrieve), tostring(lastAction and lastAction.Name or 'nil')))
             end
-            -- Insert here an action manager that keeps an eye on the temporal part from the graph.
-            -- Initially, all the actors were spawned in their initial location, then the first action was applied, disregarding any temporal constraints.
-            -- Now, the temporal constraints should be taken into account, the action should be applied only when the time is right.
-            -- As a start, we will enforce next constraints, across actors
-            -- nextAction.Performer = actor
-            -- nextAction:Apply()
+
+            local nextEventId = actor:getData('currentGraphEventId')
+
+            -- CONTAMINATION CHECK: Verify eventId inheritance
+            print(string.format("[CONTAMINATION_CHECK][OnGlobalActionFinished] actorId=%s nextAction=%s actor.currentGraphEventId=%s",
+                actor:getData('id'), nextAction.Name, tostring(nextEventId)))
+
+            story.ActionsOrchestrator:EnqueueAction(nextAction, actor, nextEventId)
         end
 
     end, delay, 1, playerId, storyId)

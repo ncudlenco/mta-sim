@@ -21,7 +21,7 @@ DEBUG_TEMPLATES = false
 DEBUG_LOCATION_CANDIDATES = false
 DEBUG_METAEPISODE = false
 DEBUG_PATHFINDING = false
-DEBUG_VALIDATION = false
+DEBUG_VALIDATION = true
 DEBUG_ACTION_VALIDATION = false
 DEBUG_LOGGER = false
 DEBUG_SCREENSHOTS = false
@@ -35,15 +35,18 @@ DEBUG_EPISODE = false
 DEBUG_ACTIONS = false
 DEBUG_CHAIN_LINKED_ACTIONS = false
 DEBUG_CAMERA = false
-DEBUG_ACTIONS_ORCHESTRATOR = false
+DEBUG_ACTIONS_ORCHESTRATOR = true
+DEBUG_POI_ORCHESTRATION = true
 --- Debug flag for spatial validation logging
 DEBUG_SPATIAL = false
 --- Debug flag for episode group detection and cross-group teleportation logging
 DEBUG_EPISODE_GROUPS = false
 DEBUG_CAMERA_VALIDATION = false   -- Enable detailed logging of camera position validation and adjustments
+--- Debug flag for Wait action interaction synchronization logging
+DEBUG_WAIT_SYNC = false -- Enable detailed logging of Wait polling conditions (proximity, location, interaction)
 
 -- Artifact Collection Configuration
-ARTIFACT_COLLECTION_ENABLED = true -- Enable/disable artifact collection system
+ARTIFACT_COLLECTION_ENABLED = false -- Enable/disable artifact collection system
 ARTIFACT_FRAMES_PER_SECOND = 30 -- Frame collection rate (1, 2, 5, 10, 30 fps)
 ARTIFACT_OUTPUT_PATH = "data_out" -- Base path for artifact output
 ARTIFACT_COLLECTION_TIMEOUT = 10000 -- Max wait time for artifact collection (ms)
@@ -129,49 +132,69 @@ DISABLE_BETWEEN_POINTS_TELEPORTATION = false
 
 LOAD_FROM_GRAPH = true
 INPUT_GRAPHS = {
-    'random_graphs/r2_1.json',
+    'random_graphs/r2_0.json',
+    -- 'random_graphs/r2_0.json',
+    -- 'random_graphs/r2_0.json',
+    -- 'random_graphs/r2_2.json',
+    -- 'random_graphs/r2_2.json',
     -- 'random_graphs/r2_2.json',
     -- 'random_graphs/r2_3.json',
+    -- 'random_graphs/r2_3.json',
+    -- 'random_graphs/r2_3.json',
+    -- 'random_graphs/r2_4.json',
+    -- 'random_graphs/r2_4.json',
     -- 'random_graphs/r2_4.json',
     -- 'random_graphs/r2_5.json',
+    -- 'random_graphs/r2_5.json',
+    -- 'random_graphs/r2_5.json',
+    -- 'random_graphs/r2_6.json',
+    -- 'random_graphs/r2_6.json',
     -- 'random_graphs/r2_6.json',
     -- 'random_graphs/r2_7.json',
+    -- 'random_graphs/r2_7.json',
+    -- 'random_graphs/r2_7.json',
+    -- 'random_graphs/r2_8.json',
+    -- 'random_graphs/r2_8.json',
     -- 'random_graphs/r2_8.json',
     -- 'random_graphs/r2_9.json',
+    -- 'random_graphs/r2_9.json',
+    -- 'random_graphs/r2_9.json',
     -- 'random_graphs/r2_10.json',
+    -- 'random_graphs/r2_10.json',
+    -- 'random_graphs/r2_10.json',
+    'complex_graphs/incredibly_complex.json',
     -- 'random_graphs/g9.json',
-    -- 'complex_graphs/incredibly_complex.json',
+    'imar_graphs/easy_1_P1200253_3.json',
     -- 'imar_graphs/easy_1_P1200253_3.json',
-    -- -- 'imar_graphs/easy_1_P1200253_3.json',
-    -- -- 'imar_graphs/easy_1_P1200253_3.json',
-    -- -- 'imar_graphs/easy_1_P1200253_3.json',
-    -- -- 'imar_graphs/easy_1_P1200253_3.json',
+    -- 'imar_graphs/easy_1_P1200253_3.json',
+    -- 'imar_graphs/easy_1_P1200253_3.json',
+    -- 'imar_graphs/easy_1_P1200253_3.json',
+    'imar_graphs/easy_1_GOPRO1368_12.json',
     -- 'imar_graphs/easy_1_GOPRO1368_12.json',
-    -- -- 'imar_graphs/easy_1_GOPRO1368_12.json',
-    -- -- 'imar_graphs/easy_1_GOPRO1368_12.json',
-    -- -- 'imar_graphs/easy_1_GOPRO1368_12.json',
-    -- -- 'imar_graphs/easy_1_GOPRO1368_12.json',
-    -- -- 'imar_graphs/easy_1_GOPRO1367_10.json',
-    -- -- 'imar_graphs/easy_1_GOPRO1367_10.json',
+    -- 'imar_graphs/easy_1_GOPRO1368_12.json',
+    -- 'imar_graphs/easy_1_GOPRO1368_12.json',
+    -- 'imar_graphs/easy_1_GOPRO1368_12.json',
     -- 'imar_graphs/easy_1_GOPRO1367_10.json',
-    -- -- 'imar_graphs/easy_1_GOPRO1367_10.json',
-    -- -- 'imar_graphs/easy_1_GOPRO1367_10.json',
-    -- -- 'imar_graphs/easy_1_P1200253_1.json',
+    -- 'imar_graphs/easy_1_GOPRO1367_10.json',
+    'imar_graphs/easy_1_GOPRO1367_10.json',
+    -- 'imar_graphs/easy_1_GOPRO1367_10.json',
+    -- 'imar_graphs/easy_1_GOPRO1367_10.json',
     -- 'imar_graphs/easy_1_P1200253_1.json',
-    -- -- 'imar_graphs/easy_1_P1200253_1.json',
-    -- -- 'imar_graphs/easy_1_P1200253_1.json',
-    -- -- 'imar_graphs/easy_1_P1200253_1.json',
-    -- -- 'imar_graphs/medium_GOPRO1372_16.json',
-    -- -- 'imar_graphs/medium_GOPRO1372_16.json',
+    'imar_graphs/easy_1_P1200253_1.json',
+    -- 'imar_graphs/easy_1_P1200253_1.json',
+    -- 'imar_graphs/easy_1_P1200253_1.json',
+    -- 'imar_graphs/easy_1_P1200253_1.json',
     -- 'imar_graphs/medium_GOPRO1372_16.json',
-    -- -- 'imar_graphs/medium_GOPRO1372_16.json',
-    -- -- 'imar_graphs/medium_GOPRO1372_16.json',
+    -- 'imar_graphs/medium_GOPRO1372_16.json',
+    'imar_graphs/medium_GOPRO1372_16.json',
+    -- 'imar_graphs/medium_GOPRO1372_16.json',
+    -- 'imar_graphs/medium_GOPRO1372_16.json',
+    'imar_graphs/medium_GOPRO1372_26.json',
     -- 'imar_graphs/medium_GOPRO1372_26.json',
-    -- -- 'imar_graphs/medium_GOPRO1372_26.json',
-    -- -- 'imar_graphs/medium_GOPRO1372_26.json',
-    -- -- 'imar_graphs/medium_GOPRO1372_26.json',
-    -- -- 'imar_graphs/medium_GOPRO1372_26.json',
-    -- -- 'imar_graphs/hard_GOPRO1365_14.json',
+    -- 'imar_graphs/medium_GOPRO1372_26.json',
+    -- 'imar_graphs/medium_GOPRO1372_26.json',
+    -- 'imar_graphs/medium_GOPRO1372_26.json',
+    'imar_graphs/hard_GOPRO1365_14.json',
     -- 'imar_graphs/hard_GOPRO1365_14.json',
     -- 'imar_graphs/hard_GOPRO1365_14.json',
     -- 'imar_graphs/hard_GOPRO1365_14.json',
@@ -301,18 +324,18 @@ INPUT_GRAPHS = {
     -- 'complex_graphs/test_switch.json',
     -- 'complex_graphs/test_switch.json',
     -- 'complex_graphs/test_switch.json',
-    --    'complex_graphs/overlapping_chains_bug.json',
-    --  'complex_graphs/c10_sync.json',
-    --  'complex_graphs/c10_sync.json',
-    --  'complex_graphs/c10_sync.json',
-    --  'complex_graphs/c10_sync.json',
-    --  'complex_graphs/c10_sync.json',
-    --  'complex_graphs/c10_sync.json',
-    --  'complex_graphs/c10_sync.json',
-    --  'complex_graphs/c10_sync.json',
-    --  'complex_graphs/c10_sync.json',
-    --  'complex_graphs/c10_sync.json',
-    --'complex_graphs/test_next.json',
+    -- 'complex_graphs/overlapping_chains_bug.json',
+    'complex_graphs/c10_sync.json',
+    -- 'complex_graphs/c10_sync.json',
+    -- 'complex_graphs/c10_sync.json',
+    -- 'complex_graphs/c10_sync.json',
+    -- 'complex_graphs/c10_sync.json',
+    -- 'complex_graphs/c10_sync.json',
+    -- 'complex_graphs/c10_sync.json',
+    -- 'complex_graphs/c10_sync.json',
+    -- 'complex_graphs/c10_sync.json',
+    -- 'complex_graphs/c10_sync.json',
+    -- 'complex_graphs/test_next.json',
     -- 'test_1',
     -- 'test_1',
     -- 'test_1',

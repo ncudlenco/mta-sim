@@ -456,7 +456,8 @@ end
 --- @param chainId string Chain ID that materialized this object
 --- @param actorId string Actor ID who materialized this object
 --- @param element userdata|nil Optional MTA element reference for accurate radius calculation
-function SpatialCoordinator:MaterializeObject(objectId, position, rotation, chainId, actorId, element)
+--- @param physicalObjectId string|nil Physical object ID in the episode (e.g., "15_classroom1")
+function SpatialCoordinator:MaterializeObject(objectId, position, rotation, chainId, actorId, element, physicalObjectId)
     if not CURRENT_STORY then
         return
     end
@@ -470,15 +471,17 @@ function SpatialCoordinator:MaterializeObject(objectId, position, rotation, chai
         rotation = rotation,
         chainId = chainId,
         actorId = actorId,
-        element = element
+        element = element,
+        physicalObjectId = physicalObjectId
     }
 
     if DEBUG_SPATIAL then
-        print(string.format("[SpatialCoordinator] Materialized %s at (%.2f, %.2f, %.2f) by actor %s chain %s",
+        print(string.format("[SpatialCoordinator] Materialized %s at (%.2f, %.2f, %.2f) by actor %s chain %s physical=%s",
             objectId,
             position.x, position.y, position.z,
             actorId,
-            chainId))
+            chainId,
+            physicalObjectId or "nil"))
     end
 end
 

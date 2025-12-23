@@ -10,7 +10,11 @@
       "Bash(findstr:*)",
       "Read(//z/More games/GTA San Andreas/MTA-SA1.6/server/**)",
       "Bash(python:*)",
-      "Bash(sed:*)"
+      "Bash(sed:*)",
+      "Bash(awk:*)",
+      "Bash(powershell \"Get-Content server.log | Select-Object -Last 800\")",
+      "Bash(powershell \"Get-Content server.log | Select-String -Pattern ''actorId a1 - constraints'' -Context 0,20 | Select-Object -First 1\")",
+      "Bash(powershell:*)"
     ],
     "deny": [],
     "ask": []

@@ -1,0 +1,2000 @@
+[2025-11-19 21:37:39] INFO: INFO, pathfinding graph and source region 'garden' found for end point
+[2025-11-19 21:37:39] INFO: INFO, last node id:3
+[2025-11-19 21:37:39] INFO: [StoryEpisodeBase:Resume] Evaluating actor a7 from episode house9 with storyEnded false and currentEpisode house9 and requestPause false and paused false and isAwaitingConstraints true and isAwaitingContextSwitch false
+[2025-11-19 21:37:39] INFO: [StoryEpisodeBase:Resume] Evaluating actor a3 from episode house9 with storyEnded true and currentEpisode house9 and requestPause false and paused false and isAwaitingConstraints false and isAwaitingContextSwitch false
+[2025-11-19 21:37:39] INFO: [StoryEpisodeBase:Resume] Evaluating actor a2 from episode house9 with storyEnded true and currentEpisode house9 and requestPause false and paused false and isAwaitingConstraints false and isAwaitingContextSwitch false
+[2025-11-19 21:37:39] INFO: [StoryEpisodeBase:Resume] Evaluating actor a1 from episode house9 with storyEnded true and currentEpisode house9 and requestPause false and paused false and isAwaitingConstraints false and isAwaitingContextSwitch false
+[2025-11-19 21:37:39] INFO: [StoryEpisodeBase:Resume] Evaluating actor a0 from episode house9 with storyEnded true and currentEpisode house9 and requestPause false and paused false and isAwaitingConstraints false and isAwaitingContextSwitch false
+[2025-11-19 21:37:39] INFO: Custom callback found path of length 2
+[2025-11-19 21:37:39] INFO: THE TIMEOUT IS 60
+[2025-11-19 21:37:39] INFO: Actor a5 rerunning timer for marker 1
+[2025-11-19 21:37:39] INFO: Custom callback found path of length 2
+[2025-11-19 21:37:39] INFO: THE TIMEOUT IS 60
+[2025-11-19 21:37:39] INFO: Actor a4 rerunning timer for marker 1
+[2025-11-19 21:37:39] INFO: Custom callback found path of length 2
+[2025-11-19 21:37:39] INFO: THE TIMEOUT IS 60
+[2025-11-19 21:37:39] INFO: Actor a6 rerunning timer for marker 1
+[2025-11-19 21:37:39] INFO: Elapsed time 98
+[2025-11-19 21:37:40] INFO: Actor a5 rerunning timer for marker 1
+[2025-11-19 21:37:40] INFO: Actor a4 rerunning timer for marker 1
+[2025-11-19 21:37:40] INFO: Actor a6 rerunning timer for marker 1
+[2025-11-19 21:37:40] INFO: Actor a5 rerunning timer for marker 1
+[2025-11-19 21:37:40] INFO: Actor a4 rerunning timer for marker 1
+[2025-11-19 21:37:40] INFO: Actor a6 has reached marker 1
+[2025-11-19 21:37:40] INFO: Actor a6 has reached marker 2
+[2025-11-19 21:37:40] INFO: Actor a6 rerunning timer for marker 3
+[2025-11-19 21:37:40] INFO: Elapsed time 99
+[2025-11-19 21:37:41] INFO: Actor a5 rerunning timer for marker 1
+[2025-11-19 21:37:41] INFO: Actor a4 has reached marker 1
+[2025-11-19 21:37:41] INFO: Actor a4 has reached marker 2
+[2025-11-19 21:37:41] INFO: Actor a4 rerunning timer for marker 3
+[2025-11-19 21:37:41] INFO: Actor a6 rerunning timer for marker 3
+[2025-11-19 21:37:41] INFO: Elapsed time 100
+[2025-11-19 21:37:41] INFO: Actor a5 has reached marker 1
+[2025-11-19 21:37:41] INFO: Actor a5 rerunning timer for marker 2
+[2025-11-19 21:37:41] INFO: Actor a4 rerunning timer for marker 3
+[2025-11-19 21:37:41] INFO: Actor a6 rerunning timer for marker 3
+[2025-11-19 21:37:42] INFO: Actor a5 has reached marker 2
+[2025-11-19 21:37:42] INFO: a5Location garden  is not busy (actor left)
+[2025-11-19 21:37:42] INFO: a5Location near tai chi area is busy (actor arrived)
+[2025-11-19 21:37:42] INFO: Actor a4 rerunning timer for marker 3
+[2025-11-19 21:37:42] INFO: Actor a6 rerunning timer for marker 3
+[2025-11-19 21:37:42] INFO: [DEBUG OnGlobalActionFinished] Timer fired for playerId: a5, delay was: 100
+[2025-11-19 21:37:42] INFO: [DEBUG OnGlobalActionFinished] Callback is: NIL
+[2025-11-19 21:37:42] INFO: GlobalAction:Apply - getting next valid action a5
+[2025-11-19 21:37:42] INFO: [DEBUG OnGlobalActionFinished] Last action was: Move
+[2025-11-19 21:37:42] INFO: [DEBUG OnGlobalActionFinished] Skipping callback (nil)
+[2025-11-19 21:37:42] INFO: Location:GetNextValidAction
+[2025-11-19 21:37:42] INFO: Story actions nr 1
+[2025-11-19 21:37:42] INFO: [GetNextValidAction] Actor a5 - queue size at entry: 1
+[2025-11-19 21:37:42] INFO: [CONTAMINATION_CHECK][GetNextValidAction] actorId=a5 action=TaiChi next.eventId=a5_37 queue_size=1
+[2025-11-19 21:37:42] INFO: [GetNextValidAction] Actor a5 - popping 'TaiChi' from queue (queue size before pop: 1)
+[2025-11-19 21:37:42] INFO: Next action is TaiChi
+[2025-11-19 21:37:42] INFO: [GetNextValidAction] Actor a5 - queue size after pop: 0
+[2025-11-19 21:37:42] INFO: Next action chosen:  starts doing tai chi  TaiChi
+[2025-11-19 21:37:42] INFO: Next action for actor a5 chosen. Action:  starts doing tai chi  target location: near tai chi area in region: garden and episode: garden
+[2025-11-19 21:37:42] INFO: Add next action to history TaiChi -  starts doing tai chi 
+[2025-11-19 21:37:42] INFO: [CONTAMINATION_CHECK][OnGlobalActionFinished] actorId=a5 nextAction=TaiChi nextAction.eventId=a5_37
+[2025-11-19 21:37:42] INFO: [EnqueueActionGraph] actorId a5 - last events {
+}
+[2025-11-19 21:37:42] INFO: [EnqueueActionGraph] actorId a5 - no last event for action TaiChi: return TaiChi{} (eventId: a5_37)
+[2025-11-19 21:37:42] INFO: [EnqueueActionGraph] actorId a5 - constraints {
+  [1] =   {
+    eventId = "a1_18",
+    actorId = "a1",
+    constraint =     {
+      target = "a1_18",
+      type = "after",
+      source = "a5_37",
+      key = "r13",
+    },
+  },
+  [2] =   {
+    eventId = "a2_23",
+    actorId = "a2",
+    constraint =     {
+      target = "a2_23",
+      type = "after",
+      source = "a5_37",
+      key = "r19",
+    },
+  },
+  [3] =   {
+    eventId = "a3_33",
+    actorId = "a3",
+    constraint =     {
+      target = "a3_33",
+      type = "after",
+      source = "a5_37",
+      key = "r25",
+    },
+  },
+}
+[2025-11-19 21:37:42] INFO: [EnqueueActionGraph] fulfilled {
+  [1] = "a0_1",
+  [2] = "a0_2",
+  [3] = "a0_3",
+  [4] = "a0_4",
+  [5] = "a0_5",
+  [6] = "a0_6",
+  [7] = "a0_7",
+  [8] = "a0_8",
+  [9] = "a0_9",
+  [10] = "a0_10",
+  [11] = "a3_24",
+  [12] = "a3_25",
+  [13] = "a2_19",
+  [14] = "a2_20",
+  [15] = "a2_21",
+  [16] = "a3_26",
+  [17] = "a3_27",
+  [18] = "a3_28",
+  [19] = "a3_29",
+  [20] = "a3_30",
+  [21] = "a2_22",
+  [22] = "a2_23",
+  [23] = "a3_31",
+  [24] = "a3_32",
+  [25] = "a3_33",
+  [26] = "a1_11",
+  [27] = "a1_12",
+  [28] = "a1_13",
+  [29] = "a1_14",
+  [30] = "a1_15",
+  [31] = "a1_16",
+  [32] = "a1_17",
+  [33] = "a1_18",
+}
+[2025-11-19 21:37:42] INFO: [ValidateSingularConstraints] actorId a5  eventId a5_37 - actions: TaiChi
+[2025-11-19 21:37:42] INFO: [ValidateSingularConstraints] actorId a5 - constraint after with actorId a1 and eventId a1_18 isValid true
+[2025-11-19 21:37:42] INFO: [ValidateSingularConstraints] actorId a5 - constraint after with actorId a2 and eventId a2_23 isValid true
+[2025-11-19 21:37:42] INFO: [ValidateSingularConstraints] actorId a5 - constraint after with actorId a3 and eventId a3_33 isValid true
+[2025-11-19 21:37:42] INFO: [ValidateSingularConstraints] actorId a7  eventId a7_43 - actions: not planned yet
+[2025-11-19 21:37:42] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a4 and eventId a4_39 isValid false
+[2025-11-19 21:37:42] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a5 and eventId a5_42 isValid false
+[2025-11-19 21:37:42] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a6 and eventId a6_41 isValid false
+[2025-11-19 21:37:42] INFO: [ExecuteSingularRequests] actorId a5  eventId a5_37 - actions: TaiChi
+[2025-11-19 21:37:42] INFO: [EnqueueActionLinear] actorId a5 - action TaiChi: return TaiChi{} eventId: a5_37
+[2025-11-19 21:37:42] INFO: [CONTAMINATION_CHECK][EnqueueActionLinear] actorId=a5 action=TaiChi action.eventId=a5_37 param_eventId=a5_37
+[2025-11-19 21:37:42] INFO: [EnqueueActionLinear] Re-enqueued action to FRONT of queue for actor a5, queue size: 1
+[2025-11-19 21:37:42] INFO: [EnqueueAction] Action popped from queue, executing directly: TaiChi
+[2025-11-19 21:37:42] INFO: [EnqueueActionLinear] Publishing graph_event_start for a5_37 (action TaiChi matches normalized TaiChi)
+[2025-11-19 21:37:42] INFO: [EventBus] Publishing: graph_event_start with data: {
+  eventId = "a5_37",
+  actionName = "TaiChi",
+  actorId = "a5",
+}
+[2025-11-19 21:37:42] INFO: [CameraHandlerBase] Event start: a5_37 - TaiChi (actor: a5)
+[2025-11-19 21:37:42] INFO: StoryActionBase:Apply - TaiChi
+[2025-11-19 21:37:42] INFO: Setting nextTargetLocation for actor a5 to 18_garden
+[2025-11-19 21:37:42] INFO: [EnqueueActionLinear] Kicking off action loop for idle actor a5 with: TaiChi
+[2025-11-19 21:37:42] INFO: Elapsed time 101
+[2025-11-19 21:37:43] INFO: Actor a4 rerunning timer for marker 3
+[2025-11-19 21:37:43] INFO: Actor a6 rerunning timer for marker 3
+[2025-11-19 21:37:43] INFO: Actor a4 rerunning timer for marker 3
+[2025-11-19 21:37:43] INFO: Actor a6 rerunning timer for marker 3
+[2025-11-19 21:37:43] INFO: Elapsed time 102
+[2025-11-19 21:37:44] INFO: [StaticCameraHandler] assigning focus to actor a6
+[2025-11-19 21:37:44] INFO: [StaticCameraHandler] {
+	FocusRequests: [a5]
+	isFocused: true
+	}
+[2025-11-19 21:37:44] INFO: [Region]: AssignFocus garden
+[2025-11-19 21:37:44] INFO: Camera sees the actorcameraPos: 805.94227290899
+[2025-11-19 21:37:44] INFO: Actor a4 has reached marker 3
+[2025-11-19 21:37:44] INFO: Actor a4 rerunning timer for marker 4
+[2025-11-19 21:37:44] INFO: Actor a6 has reached marker 3
+[2025-11-19 21:37:44] INFO: Actor a6 rerunning timer for marker 4
+[2025-11-19 21:37:44] INFO: Elapsed time 103
+[2025-11-19 21:37:45] INFO: Actor a4 rerunning timer for marker 4
+[2025-11-19 21:37:45] INFO: Actor a6 rerunning timer for marker 4
+[2025-11-19 21:37:45] INFO: Actor a4 has reached marker 4
+[2025-11-19 21:37:45] INFO: a4Location near the cigar is not busy (actor left)
+[2025-11-19 21:37:45] INFO: a4Location near tai chi area is busy (actor arrived)
+[2025-11-19 21:37:45] INFO: Actor a6 has reached marker 4
+[2025-11-19 21:37:45] INFO: a6Location garden  is not busy (actor left)
+[2025-11-19 21:37:45] INFO: a6Location interaction poi is busy (actor arrived)
+[2025-11-19 21:37:45] INFO: [DEBUG OnGlobalActionFinished] Timer fired for playerId: a4, delay was: 100
+[2025-11-19 21:37:45] INFO: [DEBUG OnGlobalActionFinished] Callback is: NIL
+[2025-11-19 21:37:45] INFO: GlobalAction:Apply - getting next valid action a4
+[2025-11-19 21:37:45] INFO: [DEBUG OnGlobalActionFinished] Last action was: Move
+[2025-11-19 21:37:45] INFO: [DEBUG OnGlobalActionFinished] Skipping callback (nil)
+[2025-11-19 21:37:45] INFO: Location:GetNextValidAction
+[2025-11-19 21:37:45] INFO: Story actions nr 1
+[2025-11-19 21:37:45] INFO: [GetNextValidAction] Actor a4 - queue size at entry: 1
+[2025-11-19 21:37:45] INFO: [CONTAMINATION_CHECK][GetNextValidAction] actorId=a4 action=TaiChi next.eventId=a4_34 queue_size=1
+[2025-11-19 21:37:45] INFO: [GetNextValidAction] Actor a4 - popping 'TaiChi' from queue (queue size before pop: 1)
+[2025-11-19 21:37:45] INFO: Next action is TaiChi
+[2025-11-19 21:37:45] INFO: [GetNextValidAction] Actor a4 - queue size after pop: 0
+[2025-11-19 21:37:45] INFO: Next action chosen:  starts doing tai chi  TaiChi
+[2025-11-19 21:37:45] INFO: Next action for actor a4 chosen. Action:  starts doing tai chi  target location: near tai chi area in region: garden and episode: garden
+[2025-11-19 21:37:45] INFO: Add next action to history TaiChi -  starts doing tai chi 
+[2025-11-19 21:37:45] INFO: [CONTAMINATION_CHECK][OnGlobalActionFinished] actorId=a4 nextAction=TaiChi nextAction.eventId=a4_34
+[2025-11-19 21:37:45] INFO: [EnqueueActionGraph] actorId a4 - last events {
+}
+[2025-11-19 21:37:45] INFO: [EnqueueActionGraph] actorId a4 - no last event for action TaiChi: return TaiChi{} (eventId: a4_34)
+[2025-11-19 21:37:45] INFO: [EnqueueActionGraph] actorId a4 - constraints {
+  [1] =   {
+    eventId = "a1_18",
+    actorId = "a1",
+    constraint =     {
+      target = "a1_18",
+      type = "after",
+      source = "a4_34",
+      key = "r11",
+    },
+  },
+  [2] =   {
+    eventId = "a2_23",
+    actorId = "a2",
+    constraint =     {
+      target = "a2_23",
+      type = "after",
+      source = "a4_34",
+      key = "r17",
+    },
+  },
+  [3] =   {
+    eventId = "a3_33",
+    actorId = "a3",
+    constraint =     {
+      target = "a3_33",
+      type = "after",
+      source = "a4_34",
+      key = "r23",
+    },
+  },
+}
+[2025-11-19 21:37:45] INFO: [EnqueueActionGraph] fulfilled {
+  [1] = "a0_1",
+  [2] = "a0_2",
+  [3] = "a0_3",
+  [4] = "a0_4",
+  [5] = "a0_5",
+  [6] = "a0_6",
+  [7] = "a0_7",
+  [8] = "a0_8",
+  [9] = "a0_9",
+  [10] = "a0_10",
+  [11] = "a3_24",
+  [12] = "a3_25",
+  [13] = "a2_19",
+  [14] = "a2_20",
+  [15] = "a2_21",
+  [16] = "a3_26",
+  [17] = "a3_27",
+  [18] = "a3_28",
+  [19] = "a3_29",
+  [20] = "a3_30",
+  [21] = "a2_22",
+  [22] = "a2_23",
+  [23] = "a3_31",
+  [24] = "a3_32",
+  [25] = "a3_33",
+  [26] = "a1_11",
+  [27] = "a1_12",
+  [28] = "a1_13",
+  [29] = "a1_14",
+  [30] = "a1_15",
+  [31] = "a1_16",
+  [32] = "a1_17",
+  [33] = "a1_18",
+}
+[2025-11-19 21:37:45] INFO: [ValidateSingularConstraints] actorId a4  eventId a4_34 - actions: TaiChi
+[2025-11-19 21:37:45] INFO: [ValidateSingularConstraints] actorId a4 - constraint after with actorId a1 and eventId a1_18 isValid true
+[2025-11-19 21:37:45] INFO: [ValidateSingularConstraints] actorId a4 - constraint after with actorId a2 and eventId a2_23 isValid true
+[2025-11-19 21:37:45] INFO: [ValidateSingularConstraints] actorId a4 - constraint after with actorId a3 and eventId a3_33 isValid true
+[2025-11-19 21:37:45] INFO: [ValidateSingularConstraints] actorId a7  eventId a7_43 - actions: not planned yet
+[2025-11-19 21:37:45] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a4 and eventId a4_39 isValid false
+[2025-11-19 21:37:45] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a5 and eventId a5_42 isValid false
+[2025-11-19 21:37:45] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a6 and eventId a6_41 isValid false
+[2025-11-19 21:37:45] INFO: [ExecuteSingularRequests] actorId a4  eventId a4_34 - actions: TaiChi
+[2025-11-19 21:37:45] INFO: [EnqueueActionLinear] actorId a4 - action TaiChi: return TaiChi{} eventId: a4_34
+[2025-11-19 21:37:45] INFO: [CONTAMINATION_CHECK][EnqueueActionLinear] actorId=a4 action=TaiChi action.eventId=a4_34 param_eventId=a4_34
+[2025-11-19 21:37:45] INFO: [EnqueueActionLinear] Re-enqueued action to FRONT of queue for actor a4, queue size: 1
+[2025-11-19 21:37:45] INFO: [EnqueueAction] Action popped from queue, executing directly: TaiChi
+[2025-11-19 21:37:45] INFO: [EnqueueActionLinear] Publishing graph_event_start for a4_34 (action TaiChi matches normalized TaiChi)
+[2025-11-19 21:37:45] INFO: [EventBus] Publishing: graph_event_start with data: {
+  eventId = "a4_34",
+  actionName = "TaiChi",
+  actorId = "a4",
+}
+[2025-11-19 21:37:45] INFO: [CameraHandlerBase] Event start: a4_34 - TaiChi (actor: a4)
+[2025-11-19 21:37:45] INFO: StoryActionBase:Apply - TaiChi
+[2025-11-19 21:37:45] INFO: Setting nextTargetLocation for actor a4 to 12_garden
+[2025-11-19 21:37:45] INFO: [EnqueueActionLinear] Kicking off action loop for idle actor a4 with: TaiChi
+[2025-11-19 21:37:45] INFO: [DEBUG OnGlobalActionFinished] Timer fired for playerId: a6, delay was: 100
+[2025-11-19 21:37:45] INFO: [DEBUG OnGlobalActionFinished] Callback is: NIL
+[2025-11-19 21:37:45] INFO: GlobalAction:Apply - getting next valid action a6
+[2025-11-19 21:37:45] INFO: [DEBUG OnGlobalActionFinished] Last action was: Move
+[2025-11-19 21:37:45] INFO: [DEBUG OnGlobalActionFinished] Skipping callback (nil)
+[2025-11-19 21:37:45] INFO: Location:GetNextValidAction
+[2025-11-19 21:37:45] INFO: Story actions nr 1
+[2025-11-19 21:37:45] INFO: [GetNextValidAction] Actor a6 - queue size at entry: 2
+[2025-11-19 21:37:45] INFO: [CONTAMINATION_CHECK][GetNextValidAction] actorId=a6 action=Wait next.eventId=a6_36 queue_size=2
+[2025-11-19 21:37:45] INFO: [GetNextValidAction] Actor a6 - popping 'Wait' from queue (queue size before pop: 2)
+[2025-11-19 21:37:45] INFO: Next action is Wait
+[2025-11-19 21:37:45] INFO: [GetNextValidAction] Actor a6 - queue size after pop: 1
+[2025-11-19 21:37:45] INFO: Next action chosen:  is waiting for something  Wait
+[2025-11-19 21:37:45] INFO: Next action for actor a6 chosen. Action:  is waiting for something  target location: interaction poi in region: garden and episode: garden
+[2025-11-19 21:37:45] INFO: Add next action to history Wait -  is waiting for something 
+[2025-11-19 21:37:45] INFO: [CONTAMINATION_CHECK][OnGlobalActionFinished] actorId=a6 nextAction=Wait nextAction.eventId=a6_36
+[2025-11-19 21:37:45] INFO: [EnqueueActionGraph] actorId a6 - last events {
+}
+[2025-11-19 21:37:45] INFO: [EnqueueActionGraph] actorId a6 - no last event for action Wait: return Wait{ doNothing = false } (eventId: a6_36)
+[2025-11-19 21:37:45] INFO: [EnqueueActionGraph] actorId a6 - constraints {
+  [1] =   {
+    eventId = "a1_18",
+    actorId = "a1",
+    constraint =     {
+      target = "a1_18",
+      type = "after",
+      source = "a6_36",
+      key = "r15",
+    },
+  },
+  [2] =   {
+    eventId = "a2_23",
+    actorId = "a2",
+    constraint =     {
+      target = "a2_23",
+      type = "after",
+      source = "a6_36",
+      key = "r21",
+    },
+  },
+  [3] =   {
+    eventId = "a3_33",
+    actorId = "a3",
+    constraint =     {
+      target = "a3_33",
+      type = "after",
+      source = "a6_36",
+      key = "r27",
+    },
+  },
+}
+[2025-11-19 21:37:45] INFO: [EnqueueActionGraph] fulfilled {
+  [1] = "a0_1",
+  [2] = "a0_2",
+  [3] = "a0_3",
+  [4] = "a0_4",
+  [5] = "a0_5",
+  [6] = "a0_6",
+  [7] = "a0_7",
+  [8] = "a0_8",
+  [9] = "a0_9",
+  [10] = "a0_10",
+  [11] = "a3_24",
+  [12] = "a3_25",
+  [13] = "a2_19",
+  [14] = "a2_20",
+  [15] = "a2_21",
+  [16] = "a3_26",
+  [17] = "a3_27",
+  [18] = "a3_28",
+  [19] = "a3_29",
+  [20] = "a3_30",
+  [21] = "a2_22",
+  [22] = "a2_23",
+  [23] = "a3_31",
+  [24] = "a3_32",
+  [25] = "a3_33",
+  [26] = "a1_11",
+  [27] = "a1_12",
+  [28] = "a1_13",
+  [29] = "a1_14",
+  [30] = "a1_15",
+  [31] = "a1_16",
+  [32] = "a1_17",
+  [33] = "a1_18",
+}
+[2025-11-19 21:37:45] INFO: [ValidateSingularConstraints] actorId a6  eventId a6_36 - actions: Wait
+[2025-11-19 21:37:45] INFO: [ValidateSingularConstraints] actorId a6 - constraint after with actorId a1 and eventId a1_18 isValid true
+[2025-11-19 21:37:45] INFO: [ValidateSingularConstraints] actorId a6 - constraint after with actorId a2 and eventId a2_23 isValid true
+[2025-11-19 21:37:45] INFO: [ValidateSingularConstraints] actorId a6 - constraint after with actorId a3 and eventId a3_33 isValid true
+[2025-11-19 21:37:45] INFO: [ValidateSingularConstraints] actorId a7  eventId a7_43 - actions: not planned yet
+[2025-11-19 21:37:45] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a4 and eventId a4_39 isValid false
+[2025-11-19 21:37:45] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a5 and eventId a5_42 isValid false
+[2025-11-19 21:37:45] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a6 and eventId a6_41 isValid false
+[2025-11-19 21:37:45] INFO: [ExecuteSingularRequests] actorId a6  eventId a6_36 - actions: Wait
+[2025-11-19 21:37:45] INFO: [EnqueueActionLinear] actorId a6 - action Wait: return Wait{ doNothing = false } eventId: a6_36
+[2025-11-19 21:37:45] INFO: [CONTAMINATION_CHECK][EnqueueActionLinear] actorId=a6 action=Wait action.eventId=a6_36 param_eventId=a6_36
+[2025-11-19 21:37:45] INFO: [EnqueueActionLinear] Re-enqueued action to FRONT of queue for actor a6, queue size: 2
+[2025-11-19 21:37:45] INFO: [EnqueueAction] Action popped from queue, executing directly: Wait
+[2025-11-19 21:37:45] INFO: [EnqueueActionLinear] Skipping graph_event_start for a6_36 (action Wait != normalized expected Talk)
+[2025-11-19 21:37:45] INFO: StoryActionBase:Apply - Wait
+[2025-11-19 21:37:45] INFO: Setting nextTargetLocation for actor a6 to 19_garden
+[2025-11-19 21:37:45] INFO: a6: WAIT AGAIN with distance between a6 and a4 is 3.2022314071655. The other target location is 12_garden The other interaction is nil
+[2025-11-19 21:37:45] INFO: Exiting waiting loop actor a6 enteredWaitingLoop true requestPause false paused false isReadyForInteraction false isWaitingForInteraction r1 isAboutToInitiateInteraction false
+[2025-11-19 21:37:45] INFO: [EnqueueActionLinear] Kicking off action loop for idle actor a6 with: Wait
+[2025-11-19 21:37:45] INFO: Elapsed time 104
+[2025-11-19 21:37:46] INFO: [StaticCameraHandler] assigning focus to actor a5
+[2025-11-19 21:37:46] INFO: [StaticCameraHandler] {
+	FocusRequests: [a4]
+	isFocused: true
+	}
+[2025-11-19 21:37:46] INFO: [Region]: AssignFocus garden
+[2025-11-19 21:37:46] INFO: Camera sees the actorcameraPos: 805.94227290899
+[2025-11-19 21:37:46] INFO: Elapsed time 105
+[2025-11-19 21:37:47] INFO: Elapsed time 106
+[2025-11-19 21:37:48] INFO: [StaticCameraHandler] assigning focus to actor a4
+[2025-11-19 21:37:48] INFO: [StaticCameraHandler] {
+	FocusRequests: []
+	isFocused: true
+	}
+[2025-11-19 21:37:48] INFO: [Region]: AssignFocus garden
+[2025-11-19 21:37:48] INFO: Camera sees the actorcameraPos: 805.94227290899
+[2025-11-19 21:37:48] INFO: Elapsed time 107
+[2025-11-19 21:37:49] INFO: Elapsed time 108
+[2025-11-19 21:37:50] INFO: [DEBUG OnGlobalActionFinished] Timer fired for playerId: a5, delay was: 7960
+[2025-11-19 21:37:50] INFO: [DEBUG OnGlobalActionFinished] Callback is: NIL
+[2025-11-19 21:37:50] INFO: GlobalAction:Apply - getting next valid action a5
+[2025-11-19 21:37:50] INFO: [DEBUG OnGlobalActionFinished] Last action was: TaiChi
+[2025-11-19 21:37:50] INFO: [DEBUG OnGlobalActionFinished] Skipping callback (nil)
+[2025-11-19 21:37:50] INFO: [ActionsGlobals] Publishing graph_event_end for a5_37 (action TaiChi matches normalized TaiChi)
+[2025-11-19 21:37:50] INFO: [EventBus] Publishing: graph_event_end with data: {
+  eventId = "a5_37",
+  actionName = "TaiChi",
+  actorId = "a5",
+}
+[2025-11-19 21:37:50] INFO: [ActionsOrchestrator] Event fulfilled: a5_37 (total fulfilled: 34)
+[2025-11-19 21:37:50] INFO: [ValidateSingularConstraints] actorId a7  eventId a7_43 - actions: not planned yet
+[2025-11-19 21:37:50] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a4 and eventId a4_39 isValid false
+[2025-11-19 21:37:50] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a5 and eventId a5_42 isValid false
+[2025-11-19 21:37:50] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a6 and eventId a6_41 isValid false
+[2025-11-19 21:37:50] INFO: [CameraHandlerBase] Event end: a5_37 - TaiChi
+[2025-11-19 21:37:50] INFO: Location:GetNextValidAction
+[2025-11-19 21:37:50] INFO: Story actions nr 2
+[2025-11-19 21:37:50] INFO: [GetNextValidAction] Actor a5 - queue size at entry: 0
+[2025-11-19 21:37:50] INFO: [PlanNextEventForActor] Actor a5 planning event a5_37 (TaiChi)
+[2025-11-19 21:37:50] INFO: [EnqueueEvent] actorId a5 - eventId a5_38 - last events {
+  [1] =   {
+    isStartingEvent = false,
+    Action = "TaiChi",
+    Location =     {
+      [1] = "garden",
+    },
+    Properties =     {
+    },
+    id = "a5_37",
+    Entities =     {
+      [1] = "a5",
+    },
+  },
+}
+[2025-11-19 21:37:50] INFO: [EnqueueEvent] actorId a5 event a5_38 - awaiting temporal constraints
+[2025-11-19 21:37:50] INFO: [EnqueueEvent] actorId a5 - constraints {
+}
+[2025-11-19 21:37:50] INFO: [EnqueueEvent] fulfilled {
+  [1] = "a0_1",
+  [2] = "a0_2",
+  [3] = "a0_3",
+  [4] = "a0_4",
+  [5] = "a0_5",
+  [6] = "a0_6",
+  [7] = "a0_7",
+  [8] = "a0_8",
+  [9] = "a0_9",
+  [10] = "a0_10",
+  [11] = "a3_24",
+  [12] = "a3_25",
+  [13] = "a2_19",
+  [14] = "a2_20",
+  [15] = "a2_21",
+  [16] = "a3_26",
+  [17] = "a3_27",
+  [18] = "a3_28",
+  [19] = "a3_29",
+  [20] = "a3_30",
+  [21] = "a2_22",
+  [22] = "a2_23",
+  [23] = "a3_31",
+  [24] = "a3_32",
+  [25] = "a3_33",
+  [26] = "a1_11",
+  [27] = "a1_12",
+  [28] = "a1_13",
+  [29] = "a1_14",
+  [30] = "a1_15",
+  [31] = "a1_16",
+  [32] = "a1_17",
+  [33] = "a1_18",
+  [34] = "a5_37",
+}
+[2025-11-19 21:37:50] INFO: [ValidateSingularConstraints] actorId a5  eventId a5_38 - actions: not planned yet
+[2025-11-19 21:37:50] INFO: [ValidateSingularConstraints] actorId a7  eventId a7_43 - actions: not planned yet
+[2025-11-19 21:37:50] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a4 and eventId a4_39 isValid false
+[2025-11-19 21:37:50] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a5 and eventId a5_42 isValid false
+[2025-11-19 21:37:50] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a6 and eventId a6_41 isValid false
+[2025-11-19 21:37:50] INFO: [ProcessEventRequests] Planning for actorId a5 event a5_38 (segment 1)
+[2025-11-19 21:37:50] INFO: [EventPlanner] PlanNextAction called for actor: a5, event: a5_38
+[2025-11-19 21:37:50] INFO: [EventPlanner] EnsureTemporalSegmentComputed for event: a5_38
+[2025-11-19 21:37:50] INFO: [EventPlanner] RouteToFlowHandler for event: a5_38, action: Hug
+[2025-11-19 21:37:50] INFO: [EventPlanner] PlanInteractionAction for event: a5_38
+[2025-11-19 21:37:50] INFO: [EventPlanner] Selected POI with score: 0 (collisions allowed if no other option)
+[2025-11-19 21:37:50] INFO: [EventPlanner] First actor claims interaction POI: 20_garden
+[2025-11-19 21:37:50] INFO: [EventPlanner] Tracked POI usage: segment=1, poi=20_garden, actor=a5
+[2025-11-19 21:37:50] INFO: [EventPlanner] Planned 3 action(s) for actor: a5
+[2025-11-19 21:37:50] INFO: [ProcessEventRequests] Planned 3 action(s) for actorId a5 event a5_38 (1 artificial): Move, Wait, Hug
+[2025-11-19 21:37:50] INFO: [ExecuteSingularRequests] actorId a5  eventId a5_38 - actions: Move, Wait, Hug
+[2025-11-19 21:37:50] INFO: [EnqueueActionLinear] actorId a5 - action Move: return Move{graphId = -1, how = WALK_civi} eventId: a5_38
+[2025-11-19 21:37:50] INFO: [CONTAMINATION_CHECK][EnqueueActionLinear] actorId=a5 action=Move action.eventId=a5_38 param_eventId=a5_38
+[2025-11-19 21:37:50] INFO: [EnqueueActionLinear] Added action to queue for actor a5, queue size: 1
+[2025-11-19 21:37:50] INFO: [EnqueueAction] Actor a5 at wrong location (at 18_garden, needs 20_garden)
+[2025-11-19 21:37:50] INFO: [CONTAMINATION_CHECK][EnqueueForPOI] actorId=a5 action=Move action.eventId=a5_38 param_eventId=a5_38 locationId=20_garden
+[2025-11-19 21:37:50] INFO: [EnqueueForPOI] Actor a5 queued for POI 20_garden (position 1)
+[2025-11-19 21:37:50] INFO: [ProcessPOIQueue] Checking occupancy for POI 20_garden
+[2025-11-19 21:37:50] INFO:   - occupyingActor: nil
+[2025-11-19 21:37:50] INFO:   - targetPOI.isBusy: false
+[2025-11-19 21:37:50] INFO: [ProcessPOIQueue] Actor a5 acquired POI 20_garden
+[2025-11-19 21:37:50] INFO: [CONTAMINATION_CHECK][ProcessPOIQueue_Execute] actorId=a5 action=Move first.action.eventId=a5_38 first.eventId=a5_38 locationId=20_garden
+[2025-11-19 21:37:50] INFO: Move:Apply
+[2025-11-19 21:37:50] INFO: StoryActionBase:Apply - Move
+[2025-11-19 21:37:50] INFO: [StaticCameraHandler] assigning focus to actor a5
+[2025-11-19 21:37:50] INFO: [StaticCameraHandler] {
+	FocusRequests: []
+	isFocused: false
+	}
+[2025-11-19 21:37:50] INFO: [Region]: AssignFocus garden
+[2025-11-19 21:37:50] INFO: Camera sees the actorcameraPos: 800.39625246823
+[2025-11-19 21:37:50] INFO: Setting nextTargetLocation for actor a5 to 20_garden
+[2025-11-19 21:37:50] INFO: Contexts: [a5]. Target location: interaction poi in region: garden and episode: garden
+[2025-11-19 21:37:50] INFO: a5: Find shortest path between garden and garden
+[2025-11-19 21:37:50] INFO: INFO, pathfinding graph and source region 'garden'found for start point
+[2025-11-19 21:37:50] INFO: INFO, start node id:5
+[2025-11-19 21:37:50] INFO: INFO, pathfinding graph and source region 'garden' found for end point
+[2025-11-19 21:37:50] INFO: INFO, last node id:6
+[2025-11-19 21:37:50] INFO: [EnqueueActionLinear] Kicking off action loop for idle actor a5 with: Move
+[2025-11-19 21:37:50] INFO: [EnqueueActionLinear] actorId a5 - action Wait: return Wait{ doNothing = false } eventId: a5_38
+[2025-11-19 21:37:50] INFO: [CONTAMINATION_CHECK][EnqueueActionLinear] actorId=a5 action=Wait action.eventId=a5_38 param_eventId=a5_38
+[2025-11-19 21:37:50] INFO: [EnqueueActionLinear] Added action to queue for actor a5, queue size: 1
+[2025-11-19 21:37:50] INFO: [EnqueueActionLinear] actorId a5 - action Hug: return Hug{} eventId: a5_38
+[2025-11-19 21:37:50] INFO: [CONTAMINATION_CHECK][EnqueueActionLinear] actorId=a5 action=Hug action.eventId=a5_38 param_eventId=a5_38
+[2025-11-19 21:37:50] INFO: [EnqueueActionLinear] Added action to queue for actor a5, queue size: 2
+[2025-11-19 21:37:50] INFO: [PlanNextEventForActor] Enqueued event a5_38 for actor a5
+[2025-11-19 21:37:50] INFO: [GetNextValidAction] Actor a5 - queue size after planning: 2, eventPlanned: true
+[2025-11-19 21:37:50] INFO: [GetNextValidAction] Actor a5 - planning succeeded, returning nil to let action loop start
+[2025-11-19 21:37:50] INFO: Custom callback found path of length 2
+[2025-11-19 21:37:50] INFO: THE TIMEOUT IS 60
+[2025-11-19 21:37:50] INFO: Actor a5 rerunning timer for marker 1
+[2025-11-19 21:37:50] INFO: a6: WAIT AGAIN with distance between a6 and a4 is 3.0709483623505. The other target location is 12_garden The other interaction is nil
+[2025-11-19 21:37:50] INFO: Exiting waiting loop actor a6 enteredWaitingLoop true requestPause false paused false isReadyForInteraction false isWaitingForInteraction r1 isAboutToInitiateInteraction false
+[2025-11-19 21:37:50] INFO: Elapsed time 109
+[2025-11-19 21:37:51] INFO: Actor a5 rerunning timer for marker 1
+[2025-11-19 21:37:51] INFO: Actor a5 rerunning timer for marker 1
+[2025-11-19 21:37:51] INFO: Elapsed time 110
+[2025-11-19 21:37:52] INFO: Actor a5 rerunning timer for marker 1
+[2025-11-19 21:37:52] INFO: Elapsed time 111
+[2025-11-19 21:37:53] INFO: Actor a5 rerunning timer for marker 1
+[2025-11-19 21:37:54] INFO: Actor a5 rerunning timer for marker 1
+[2025-11-19 21:37:54] INFO: Elapsed time 113
+[2025-11-19 21:37:54] INFO: Actor a5 has reached marker 1
+[2025-11-19 21:37:54] INFO: Actor a5 rerunning timer for marker 2
+[2025-11-19 21:37:54] INFO: [StaticCameraHandler] assigning focus to actor a5
+[2025-11-19 21:37:54] INFO: [StaticCameraHandler] {
+	FocusRequests: []
+	isFocused: false
+	}
+[2025-11-19 21:37:54] INFO: [Region]: AssignFocus garden
+[2025-11-19 21:37:54] INFO: Camera sees the actorcameraPos: 800.39625246823
+[2025-11-19 21:37:54] INFO: Actor a5 rerunning timer for marker 2
+[2025-11-19 21:37:55] INFO: Elapsed time 114
+[2025-11-19 21:37:55] INFO: [DEBUG OnGlobalActionFinished] Timer fired for playerId: a4, delay was: 9440
+[2025-11-19 21:37:55] INFO: [DEBUG OnGlobalActionFinished] Callback is: NIL
+[2025-11-19 21:37:55] INFO: GlobalAction:Apply - getting next valid action a4
+[2025-11-19 21:37:55] INFO: [DEBUG OnGlobalActionFinished] Last action was: TaiChi
+[2025-11-19 21:37:55] INFO: [DEBUG OnGlobalActionFinished] Skipping callback (nil)
+[2025-11-19 21:37:55] INFO: [ActionsGlobals] Publishing graph_event_end for a4_34 (action TaiChi matches normalized TaiChi)
+[2025-11-19 21:37:55] INFO: [EventBus] Publishing: graph_event_end with data: {
+  eventId = "a4_34",
+  actionName = "TaiChi",
+  actorId = "a4",
+}
+[2025-11-19 21:37:55] INFO: [ActionsOrchestrator] Event fulfilled: a4_34 (total fulfilled: 35)
+[2025-11-19 21:37:55] INFO: [ValidateSingularConstraints] actorId a7  eventId a7_43 - actions: not planned yet
+[2025-11-19 21:37:55] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a4 and eventId a4_39 isValid false
+[2025-11-19 21:37:55] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a5 and eventId a5_42 isValid false
+[2025-11-19 21:37:55] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a6 and eventId a6_41 isValid false
+[2025-11-19 21:37:55] INFO: [CameraHandlerBase] Event end: a4_34 - TaiChi
+[2025-11-19 21:37:55] INFO: Location:GetNextValidAction
+[2025-11-19 21:37:55] INFO: Story actions nr 2
+[2025-11-19 21:37:55] INFO: [GetNextValidAction] Actor a4 - queue size at entry: 0
+[2025-11-19 21:37:55] INFO: [PlanNextEventForActor] Actor a4 planning event a4_34 (TaiChi)
+[2025-11-19 21:37:55] INFO: [EnqueueEvent] actorId a4 - eventId a4_35 - last events {
+  [1] =   {
+    isStartingEvent = false,
+    Action = "TaiChi",
+    Location =     {
+      [1] = "garden",
+    },
+    Properties =     {
+    },
+    id = "a4_34",
+    Entities =     {
+      [1] = "a4",
+    },
+  },
+}
+[2025-11-19 21:37:55] INFO: [EnqueueEvent] actorId a4 event a4_35 - awaiting temporal constraints
+[2025-11-19 21:37:55] INFO: [EnqueueEvent] actorId a4 - constraints {
+}
+[2025-11-19 21:37:55] INFO: [EnqueueEvent] fulfilled {
+  [1] = "a0_1",
+  [2] = "a0_2",
+  [3] = "a0_3",
+  [4] = "a0_4",
+  [5] = "a0_5",
+  [6] = "a0_6",
+  [7] = "a0_7",
+  [8] = "a0_8",
+  [9] = "a0_9",
+  [10] = "a0_10",
+  [11] = "a3_24",
+  [12] = "a3_25",
+  [13] = "a2_19",
+  [14] = "a2_20",
+  [15] = "a2_21",
+  [16] = "a3_26",
+  [17] = "a3_27",
+  [18] = "a3_28",
+  [19] = "a3_29",
+  [20] = "a3_30",
+  [21] = "a2_22",
+  [22] = "a2_23",
+  [23] = "a3_31",
+  [24] = "a3_32",
+  [25] = "a3_33",
+  [26] = "a1_11",
+  [27] = "a1_12",
+  [28] = "a1_13",
+  [29] = "a1_14",
+  [30] = "a1_15",
+  [31] = "a1_16",
+  [32] = "a1_17",
+  [33] = "a1_18",
+  [34] = "a5_37",
+  [35] = "a4_34",
+}
+[2025-11-19 21:37:55] INFO: [ValidateSingularConstraints] actorId a4  eventId a4_35 - actions: not planned yet
+[2025-11-19 21:37:55] INFO: [ValidateSingularConstraints] actorId a7  eventId a7_43 - actions: not planned yet
+[2025-11-19 21:37:55] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a4 and eventId a4_39 isValid false
+[2025-11-19 21:37:55] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a5 and eventId a5_42 isValid false
+[2025-11-19 21:37:55] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a6 and eventId a6_41 isValid false
+[2025-11-19 21:37:55] INFO: [ProcessEventRequests] Planning for actorId a4 event a4_35 (segment 1)
+[2025-11-19 21:37:55] INFO: [EventPlanner] PlanNextAction called for actor: a4, event: a4_35
+[2025-11-19 21:37:55] INFO: [EventPlanner] EnsureTemporalSegmentComputed for event: a4_35
+[2025-11-19 21:37:55] INFO: [EventPlanner] RouteToFlowHandler for event: a4_35, action: Talk
+[2025-11-19 21:37:55] INFO: [EventPlanner] PlanInteractionAction for event: a4_35
+[2025-11-19 21:37:55] INFO: [POICoordinator] Registered clone POI: 19_garden_clone
+[2025-11-19 21:37:55] INFO: [EventPlanner] Second actor uses clone POI for interaction
+[2025-11-19 21:37:55] INFO: [EventPlanner] Planned 3 action(s) for actor: a4
+[2025-11-19 21:37:55] INFO: [ProcessEventRequests] Planned 3 action(s) for actorId a4 event a4_35 (1 artificial): Move, Wait, Talk
+[2025-11-19 21:37:55] INFO: [ExecuteSingularRequests] actorId a4  eventId a4_35 - actions: Move, Wait, Talk
+[2025-11-19 21:37:55] INFO: [EnqueueActionLinear] actorId a4 - action Move: return Move{graphId = -1, how = WALK_civi} eventId: a4_35
+[2025-11-19 21:37:55] INFO: [CONTAMINATION_CHECK][EnqueueActionLinear] actorId=a4 action=Move action.eventId=a4_35 param_eventId=a4_35
+[2025-11-19 21:37:55] INFO: [EnqueueActionLinear] Added action to queue for actor a4, queue size: 1
+[2025-11-19 21:37:55] INFO: [EnqueueAction] Actor a4 at wrong location (at 12_garden, needs 19_garden_clone)
+[2025-11-19 21:37:55] INFO: [EnqueueAction] This is a cloned interaction POI - will coordinate through queue
+[2025-11-19 21:37:55] INFO: [CONTAMINATION_CHECK][EnqueueForPOI] actorId=a4 action=Move action.eventId=a4_35 param_eventId=a4_35 locationId=19_garden_clone
+[2025-11-19 21:37:55] INFO: [EnqueueForPOI] Actor a4 queued for POI 19_garden_clone (position 1)
+[2025-11-19 21:37:55] INFO: [ProcessPOIQueue] Found clone POI: 19_garden_clone
+[2025-11-19 21:37:55] INFO: [ProcessPOIQueue] Checking occupancy for POI 19_garden_clone
+[2025-11-19 21:37:55] INFO:   - occupyingActor: nil
+[2025-11-19 21:37:55] INFO:   - targetPOI.isBusy: false
+[2025-11-19 21:37:55] INFO: [ProcessPOIQueue] Actor a4 acquired POI 19_garden_clone
+[2025-11-19 21:37:55] INFO: [CONTAMINATION_CHECK][ProcessPOIQueue_Execute] actorId=a4 action=Move first.action.eventId=a4_35 first.eventId=a4_35 locationId=19_garden_clone
+[2025-11-19 21:37:55] INFO: Move:Apply
+[2025-11-19 21:37:55] INFO: StoryActionBase:Apply - Move
+[2025-11-19 21:37:55] INFO: Setting nextTargetLocation for actor a4 to 19_garden_clone
+[2025-11-19 21:37:55] INFO: Contexts: [a4]. Target location: interaction poi_clone in region: garden and episode: garden
+[2025-11-19 21:37:55] INFO: a4: Find shortest path between garden and garden
+[2025-11-19 21:37:55] INFO: INFO, pathfinding graph and source region 'garden'found for start point
+[2025-11-19 21:37:55] INFO: INFO, start node id:4
+[2025-11-19 21:37:55] INFO: INFO, pathfinding graph and source region 'garden' found for end point
+[2025-11-19 21:37:55] INFO: INFO, last node id:3
+[2025-11-19 21:37:55] INFO: [EnqueueActionLinear] Kicking off action loop for idle actor a4 with: Move
+[2025-11-19 21:37:55] INFO: [EnqueueActionLinear] actorId a4 - action Wait: return Wait{ doNothing = true } eventId: a4_35
+[2025-11-19 21:37:55] INFO: [CONTAMINATION_CHECK][EnqueueActionLinear] actorId=a4 action=Wait action.eventId=a4_35 param_eventId=a4_35
+[2025-11-19 21:37:55] INFO: [EnqueueActionLinear] Added action to queue for actor a4, queue size: 1
+[2025-11-19 21:37:55] INFO: [EnqueueActionLinear] actorId a4 - action Talk: return Talk{} eventId: a4_35
+[2025-11-19 21:37:55] INFO: [CONTAMINATION_CHECK][EnqueueActionLinear] actorId=a4 action=Talk action.eventId=a4_35 param_eventId=a4_35
+[2025-11-19 21:37:55] INFO: [EnqueueActionLinear] Added action to queue for actor a4, queue size: 2
+[2025-11-19 21:37:55] INFO: [PlanNextEventForActor] Enqueued event a4_35 for actor a4
+[2025-11-19 21:37:55] INFO: [GetNextValidAction] Actor a4 - queue size after planning: 2, eventPlanned: true
+[2025-11-19 21:37:55] INFO: [GetNextValidAction] Actor a4 - planning succeeded, returning nil to let action loop start
+[2025-11-19 21:37:55] INFO: Custom callback found path of length 2
+[2025-11-19 21:37:55] INFO: THE TIMEOUT IS 60
+[2025-11-19 21:37:55] INFO: Actor a4 rerunning timer for marker 1
+[2025-11-19 21:37:55] INFO: Actor a5 has reached marker 2
+[2025-11-19 21:37:55] INFO: a5Location near tai chi area is not busy (actor left)
+[2025-11-19 21:37:55] INFO: a5Location interaction poi is busy (actor arrived)
+[2025-11-19 21:37:55] INFO: [DEBUG OnGlobalActionFinished] Timer fired for playerId: a5, delay was: 100
+[2025-11-19 21:37:55] INFO: [DEBUG OnGlobalActionFinished] Callback is: NIL
+[2025-11-19 21:37:55] INFO: GlobalAction:Apply - getting next valid action a5
+[2025-11-19 21:37:55] INFO: [DEBUG OnGlobalActionFinished] Last action was: Move
+[2025-11-19 21:37:55] INFO: [DEBUG OnGlobalActionFinished] Skipping callback (nil)
+[2025-11-19 21:37:55] INFO: Location:GetNextValidAction
+[2025-11-19 21:37:55] INFO: Story actions nr 3
+[2025-11-19 21:37:55] INFO: [GetNextValidAction] Actor a5 - queue size at entry: 2
+[2025-11-19 21:37:55] INFO: [CONTAMINATION_CHECK][GetNextValidAction] actorId=a5 action=Wait next.eventId=a5_38 queue_size=2
+[2025-11-19 21:37:55] INFO: [GetNextValidAction] Actor a5 - popping 'Wait' from queue (queue size before pop: 2)
+[2025-11-19 21:37:55] INFO: Next action is Wait
+[2025-11-19 21:37:55] INFO: [GetNextValidAction] Actor a5 - queue size after pop: 1
+[2025-11-19 21:37:55] INFO: Next action chosen:  is looking around  Wait
+[2025-11-19 21:37:55] INFO: Next action for actor a5 chosen. Action:  is looking around  target location: interaction poi in region: garden and episode: garden
+[2025-11-19 21:37:55] INFO: Add next action to history Wait -  is looking around 
+[2025-11-19 21:37:55] INFO: [CONTAMINATION_CHECK][OnGlobalActionFinished] actorId=a5 nextAction=Wait nextAction.eventId=a5_38
+[2025-11-19 21:37:55] INFO: [EnqueueActionGraph] actorId a5 - last events {
+  [1] =   {
+    isStartingEvent = false,
+    Action = "TaiChi",
+    Location =     {
+      [1] = "garden",
+    },
+    Properties =     {
+    },
+    id = "a5_37",
+    Entities =     {
+      [1] = "a5",
+    },
+  },
+}
+[2025-11-19 21:37:55] INFO: [EnqueueActionGraph] actorId a5 event a5_37 - action Wait: return Wait{ doNothing = false } (eventId: a5_38)
+[2025-11-19 21:37:55] INFO: [EnqueueActionGraph] actorId a5 - constraints {
+}
+[2025-11-19 21:37:55] INFO: [EnqueueActionGraph] fulfilled {
+  [1] = "a0_1",
+  [2] = "a0_2",
+  [3] = "a0_3",
+  [4] = "a0_4",
+  [5] = "a0_5",
+  [6] = "a0_6",
+  [7] = "a0_7",
+  [8] = "a0_8",
+  [9] = "a0_9",
+  [10] = "a0_10",
+  [11] = "a3_24",
+  [12] = "a3_25",
+  [13] = "a2_19",
+  [14] = "a2_20",
+  [15] = "a2_21",
+  [16] = "a3_26",
+  [17] = "a3_27",
+  [18] = "a3_28",
+  [19] = "a3_29",
+  [20] = "a3_30",
+  [21] = "a2_22",
+  [22] = "a2_23",
+  [23] = "a3_31",
+  [24] = "a3_32",
+  [25] = "a3_33",
+  [26] = "a1_11",
+  [27] = "a1_12",
+  [28] = "a1_13",
+  [29] = "a1_14",
+  [30] = "a1_15",
+  [31] = "a1_16",
+  [32] = "a1_17",
+  [33] = "a1_18",
+  [34] = "a5_37",
+  [35] = "a4_34",
+}
+[2025-11-19 21:37:55] INFO: [ValidateSingularConstraints] actorId a5  eventId a5_38 - actions: Wait
+[2025-11-19 21:37:55] INFO: [ValidateSingularConstraints] actorId a7  eventId a7_43 - actions: not planned yet
+[2025-11-19 21:37:55] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a4 and eventId a4_39 isValid false
+[2025-11-19 21:37:55] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a5 and eventId a5_42 isValid false
+[2025-11-19 21:37:55] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a6 and eventId a6_41 isValid false
+[2025-11-19 21:37:55] INFO: [ExecuteSingularRequests] actorId a5  eventId a5_38 - actions: Wait
+[2025-11-19 21:37:55] INFO: [EnqueueActionLinear] actorId a5 - action Wait: return Wait{ doNothing = false } eventId: a5_38
+[2025-11-19 21:37:55] INFO: [CONTAMINATION_CHECK][EnqueueActionLinear] actorId=a5 action=Wait action.eventId=a5_38 param_eventId=a5_38
+[2025-11-19 21:37:55] INFO: [EnqueueActionLinear] Re-enqueued action to FRONT of queue for actor a5, queue size: 2
+[2025-11-19 21:37:55] INFO: [EnqueueAction] Action popped from queue, executing directly: Wait
+[2025-11-19 21:37:55] INFO: [EnqueueActionLinear] Skipping graph_event_start for a5_38 (action Wait != normalized expected Hug)
+[2025-11-19 21:37:55] INFO: StoryActionBase:Apply - Wait
+[2025-11-19 21:37:55] INFO: Setting nextTargetLocation for actor a5 to 20_garden
+[2025-11-19 21:37:55] INFO: a5: WAIT AGAIN with distance between a5 and a4 is 9.6542587280273. The other target location is 19_garden_clone The other interaction is nil
+[2025-11-19 21:37:55] INFO: Exiting waiting loop actor a5 enteredWaitingLoop true requestPause false paused false isReadyForInteraction false isWaitingForInteraction r2 isAboutToInitiateInteraction false
+[2025-11-19 21:37:55] INFO: [EnqueueActionLinear] Kicking off action loop for idle actor a5 with: Wait
+[2025-11-19 21:37:55] INFO: a6: WAIT AGAIN with distance between a6 and a4 is 3.0197811126709. The other target location is 19_garden_clone The other interaction is nil
+[2025-11-19 21:37:55] INFO: Exiting waiting loop actor a6 enteredWaitingLoop true requestPause false paused false isReadyForInteraction false isWaitingForInteraction r1 isAboutToInitiateInteraction false
+[2025-11-19 21:37:55] INFO: Actor a4 rerunning timer for marker 1
+[2025-11-19 21:37:56] INFO: Elapsed time 115
+[2025-11-19 21:37:56] INFO: [StaticCameraHandler] assigning focus to actor a4
+[2025-11-19 21:37:56] INFO: [StaticCameraHandler] {
+	FocusRequests: []
+	isFocused: true
+	}
+[2025-11-19 21:37:56] INFO: [Region]: AssignFocus garden
+[2025-11-19 21:37:56] INFO: Camera sees the actorcameraPos: 805.94227290899
+[2025-11-19 21:37:56] INFO: Actor a4 has reached marker 1
+[2025-11-19 21:37:56] INFO: Actor a4 has reached marker 2
+[2025-11-19 21:37:56] INFO: Actor a4 rerunning timer for marker 3
+[2025-11-19 21:37:57] INFO: Elapsed time 116
+[2025-11-19 21:37:57] INFO: Actor a4 rerunning timer for marker 3
+[2025-11-19 21:37:57] INFO: Actor a4 rerunning timer for marker 3
+[2025-11-19 21:37:58] INFO: Elapsed time 117
+[2025-11-19 21:37:58] INFO: [StaticCameraHandler] assigning focus to actor a4
+[2025-11-19 21:37:58] INFO: [StaticCameraHandler] {
+	FocusRequests: []
+	isFocused: true
+	}
+[2025-11-19 21:37:58] INFO: [Region]: AssignFocus garden
+[2025-11-19 21:37:58] INFO: Camera sees the actorcameraPos: 800.39625246823
+[2025-11-19 21:37:58] INFO: Actor a4 rerunning timer for marker 3
+[2025-11-19 21:37:59] INFO: Actor a4 rerunning timer for marker 3
+[2025-11-19 21:37:59] INFO: Elapsed time 118
+[2025-11-19 21:37:59] INFO: Actor a4 has reached marker 3
+[2025-11-19 21:37:59] INFO: Actor a4 has reached marker 4
+[2025-11-19 21:37:59] INFO: a4Location near tai chi area is not busy (actor left)
+[2025-11-19 21:37:59] INFO: a4Location interaction poi_clone is busy (actor arrived)
+[2025-11-19 21:37:59] INFO: Skipped marker 4 for actor a4 because the player is already located at these coordinates
+[2025-11-19 21:37:59] INFO: [DEBUG OnGlobalActionFinished] Timer fired for playerId: a4, delay was: 100
+[2025-11-19 21:37:59] INFO: [DEBUG OnGlobalActionFinished] Callback is: NIL
+[2025-11-19 21:37:59] INFO: GlobalAction:Apply - getting next valid action a4
+[2025-11-19 21:37:59] INFO: [DEBUG OnGlobalActionFinished] Last action was: Move
+[2025-11-19 21:37:59] INFO: [DEBUG OnGlobalActionFinished] Skipping callback (nil)
+[2025-11-19 21:37:59] INFO: Location:GetNextValidAction
+[2025-11-19 21:37:59] INFO: Story actions nr 3
+[2025-11-19 21:37:59] INFO: [GetNextValidAction] Actor a4 - queue size at entry: 2
+[2025-11-19 21:37:59] INFO: [CONTAMINATION_CHECK][GetNextValidAction] actorId=a4 action=Wait next.eventId=a4_35 queue_size=2
+[2025-11-19 21:37:59] INFO: [GetNextValidAction] Actor a4 - popping 'Wait' from queue (queue size before pop: 2)
+[2025-11-19 21:37:59] INFO: Next action is Wait
+[2025-11-19 21:37:59] INFO: [GetNextValidAction] Actor a4 - queue size after pop: 1
+[2025-11-19 21:37:59] INFO: Next action chosen:  is looking around  Wait
+[2025-11-19 21:37:59] INFO: Next action for actor a4 chosen. Action:  is looking around  target location: interaction poi_clone in region: garden and episode: garden
+[2025-11-19 21:37:59] INFO: Add next action to history Wait -  is looking around 
+[2025-11-19 21:37:59] INFO: [CONTAMINATION_CHECK][OnGlobalActionFinished] actorId=a4 nextAction=Wait nextAction.eventId=a4_35
+[2025-11-19 21:37:59] INFO: [EnqueueActionGraph] actorId a4 - last events {
+  [1] =   {
+    isStartingEvent = false,
+    Action = "TaiChi",
+    Location =     {
+      [1] = "garden",
+    },
+    Properties =     {
+    },
+    id = "a4_34",
+    Entities =     {
+      [1] = "a4",
+    },
+  },
+}
+[2025-11-19 21:37:59] INFO: [EnqueueActionGraph] actorId a4 event a4_34 - action Wait: return Wait{ doNothing = true } (eventId: a4_35)
+[2025-11-19 21:37:59] INFO: [EnqueueActionGraph] actorId a4 - constraints {
+}
+[2025-11-19 21:37:59] INFO: [EnqueueActionGraph] fulfilled {
+  [1] = "a0_1",
+  [2] = "a0_2",
+  [3] = "a0_3",
+  [4] = "a0_4",
+  [5] = "a0_5",
+  [6] = "a0_6",
+  [7] = "a0_7",
+  [8] = "a0_8",
+  [9] = "a0_9",
+  [10] = "a0_10",
+  [11] = "a3_24",
+  [12] = "a3_25",
+  [13] = "a2_19",
+  [14] = "a2_20",
+  [15] = "a2_21",
+  [16] = "a3_26",
+  [17] = "a3_27",
+  [18] = "a3_28",
+  [19] = "a3_29",
+  [20] = "a3_30",
+  [21] = "a2_22",
+  [22] = "a2_23",
+  [23] = "a3_31",
+  [24] = "a3_32",
+  [25] = "a3_33",
+  [26] = "a1_11",
+  [27] = "a1_12",
+  [28] = "a1_13",
+  [29] = "a1_14",
+  [30] = "a1_15",
+  [31] = "a1_16",
+  [32] = "a1_17",
+  [33] = "a1_18",
+  [34] = "a5_37",
+  [35] = "a4_34",
+}
+[2025-11-19 21:37:59] INFO: [ValidateSingularConstraints] actorId a4  eventId a4_35 - actions: Wait
+[2025-11-19 21:37:59] INFO: [ValidateSingularConstraints] actorId a7  eventId a7_43 - actions: not planned yet
+[2025-11-19 21:37:59] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a4 and eventId a4_39 isValid false
+[2025-11-19 21:37:59] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a5 and eventId a5_42 isValid false
+[2025-11-19 21:37:59] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a6 and eventId a6_41 isValid false
+[2025-11-19 21:37:59] INFO: [ExecuteSingularRequests] actorId a4  eventId a4_35 - actions: Wait
+[2025-11-19 21:37:59] INFO: [EnqueueActionLinear] actorId a4 - action Wait: return Wait{ doNothing = true } eventId: a4_35
+[2025-11-19 21:37:59] INFO: [CONTAMINATION_CHECK][EnqueueActionLinear] actorId=a4 action=Wait action.eventId=a4_35 param_eventId=a4_35
+[2025-11-19 21:37:59] INFO: [EnqueueActionLinear] Re-enqueued action to FRONT of queue for actor a4, queue size: 2
+[2025-11-19 21:37:59] INFO: [EnqueueAction] Action popped from queue, executing directly: Wait
+[2025-11-19 21:37:59] INFO: [EnqueueActionLinear] Skipping graph_event_start for a4_35 (action Wait != normalized expected Talk)
+[2025-11-19 21:37:59] INFO: StoryActionBase:Apply - Wait
+[2025-11-19 21:37:59] INFO: Setting nextTargetLocation for actor a4 to 19_garden_clone
+[2025-11-19 21:37:59] INFO: LookingBehavior.faceTowardsTarget: performer=a4, currentRot=90.55, angle=-135.55 deg
+[2025-11-19 21:37:59] INFO: LookingBehavior.faceTowardsTarget: Set new rotation to 315.00
+[2025-11-19 21:37:59] INFO: LookingBehavior: Manual timer cleanup
+[2025-11-19 21:37:59] INFO: a4: WAIT IS FINISHED with do nothing (next action is not called) distance between a4 and a6 is 0.98908799886703. The other target location is 19_garden The other interaction is r1
+[2025-11-19 21:37:59] INFO: Exiting waiting loop actor a4 enteredWaitingLoop false requestPause false paused false isReadyForInteraction true isWaitingForInteraction r1 isAboutToInitiateInteraction false
+[2025-11-19 21:37:59] INFO: [EnqueueActionLinear] Kicking off action loop for idle actor a4 with: Wait
+[2025-11-19 21:38:00] INFO: Elapsed time 119
+[2025-11-19 21:38:00] INFO: [StaticCameraHandler] assigning focus to actor a4
+[2025-11-19 21:38:00] INFO: [StaticCameraHandler] {
+	FocusRequests: []
+	isFocused: true
+	}
+[2025-11-19 21:38:00] INFO: [Region]: AssignFocus garden
+[2025-11-19 21:38:00] INFO: Camera sees the actorcameraPos: 800.39625246823
+[2025-11-19 21:38:00] INFO: a5: WAIT AGAIN with distance between a5 and a4 is 6.7831621170044. The other target location is 19_garden_clone The other interaction is r1
+[2025-11-19 21:38:00] INFO: Exiting waiting loop actor a5 enteredWaitingLoop true requestPause false paused false isReadyForInteraction false isWaitingForInteraction r2 isAboutToInitiateInteraction false
+[2025-11-19 21:38:00] INFO: LookingBehavior.faceTowardsTarget: performer=a6, currentRot=90.55, angle=44.45 deg
+[2025-11-19 21:38:00] INFO: LookingBehavior.faceTowardsTarget: Set new rotation to 135.00
+[2025-11-19 21:38:00] INFO: LookingBehavior: Manual timer cleanup
+[2025-11-19 21:38:00] INFO: a6: WAIT IS FINISHED with distance between a6 and a4 is 0.98908799886703. The other target location is 19_garden_clone The other interaction is r1
+[2025-11-19 21:38:00] INFO: Exiting waiting loop actor a6 enteredWaitingLoop false requestPause false paused false isReadyForInteraction false isWaitingForInteraction nil isAboutToInitiateInteraction true
+[2025-11-19 21:38:01] INFO: Elapsed time 120
+[2025-11-19 21:38:01] INFO: [DEBUG OnGlobalActionFinished] Timer fired for playerId: a6, delay was: 1000
+[2025-11-19 21:38:01] INFO: [DEBUG OnGlobalActionFinished] Callback is: NIL
+[2025-11-19 21:38:01] INFO: GlobalAction:Apply - getting next valid action a6
+[2025-11-19 21:38:01] INFO: [DEBUG OnGlobalActionFinished] Last action was: Wait
+[2025-11-19 21:38:01] INFO: [DEBUG OnGlobalActionFinished] Skipping callback (nil)
+[2025-11-19 21:38:01] INFO: [ActionsGlobals] Skipping graph_event_end for a6_36 (action Wait != normalized expected Talk)
+[2025-11-19 21:38:01] INFO: Location:GetNextValidAction
+[2025-11-19 21:38:01] INFO: Story actions nr 2
+[2025-11-19 21:38:01] INFO: [GetNextValidAction] Actor a6 - queue size at entry: 1
+[2025-11-19 21:38:01] INFO: [CONTAMINATION_CHECK][GetNextValidAction] actorId=a6 action=Talk next.eventId=a6_36 queue_size=1
+[2025-11-19 21:38:01] INFO: [GetNextValidAction] Actor a6 - popping 'Talk' from queue (queue size before pop: 1)
+[2025-11-19 21:38:01] INFO: Next action is Talk
+[2025-11-19 21:38:01] INFO: [GetNextValidAction] Actor a6 - queue size after pop: 0
+[2025-11-19 21:38:01] INFO: Next action chosen:  talks to  Talk
+[2025-11-19 21:38:01] INFO: Next action for actor a6 chosen. Action:  talks to  target location: interaction poi in region: garden and episode: garden
+[2025-11-19 21:38:01] INFO: Add next action to history Talk -  talks to 
+[2025-11-19 21:38:01] INFO: [CONTAMINATION_CHECK][OnGlobalActionFinished] actorId=a6 nextAction=Talk nextAction.eventId=a6_36
+[2025-11-19 21:38:01] INFO: [EnqueueActionGraph] actorId a6 - last events {
+}
+[2025-11-19 21:38:01] INFO: [EnqueueActionGraph] actorId a6 - no last event for action Talk: return Talk{} (eventId: a6_36)
+[2025-11-19 21:38:01] INFO: [EnqueueActionGraph] actorId a6 - constraints {
+  [1] =   {
+    eventId = "a1_18",
+    actorId = "a1",
+    constraint =     {
+      target = "a1_18",
+      type = "after",
+      source = "a6_36",
+      key = "r15",
+    },
+  },
+  [2] =   {
+    eventId = "a2_23",
+    actorId = "a2",
+    constraint =     {
+      target = "a2_23",
+      type = "after",
+      source = "a6_36",
+      key = "r21",
+    },
+  },
+  [3] =   {
+    eventId = "a3_33",
+    actorId = "a3",
+    constraint =     {
+      target = "a3_33",
+      type = "after",
+      source = "a6_36",
+      key = "r27",
+    },
+  },
+}
+[2025-11-19 21:38:01] INFO: [EnqueueActionGraph] fulfilled {
+  [1] = "a0_1",
+  [2] = "a0_2",
+  [3] = "a0_3",
+  [4] = "a0_4",
+  [5] = "a0_5",
+  [6] = "a0_6",
+  [7] = "a0_7",
+  [8] = "a0_8",
+  [9] = "a0_9",
+  [10] = "a0_10",
+  [11] = "a3_24",
+  [12] = "a3_25",
+  [13] = "a2_19",
+  [14] = "a2_20",
+  [15] = "a2_21",
+  [16] = "a3_26",
+  [17] = "a3_27",
+  [18] = "a3_28",
+  [19] = "a3_29",
+  [20] = "a3_30",
+  [21] = "a2_22",
+  [22] = "a2_23",
+  [23] = "a3_31",
+  [24] = "a3_32",
+  [25] = "a3_33",
+  [26] = "a1_11",
+  [27] = "a1_12",
+  [28] = "a1_13",
+  [29] = "a1_14",
+  [30] = "a1_15",
+  [31] = "a1_16",
+  [32] = "a1_17",
+  [33] = "a1_18",
+  [34] = "a5_37",
+  [35] = "a4_34",
+}
+[2025-11-19 21:38:01] INFO: [ValidateSingularConstraints] actorId a6  eventId a6_36 - actions: Talk
+[2025-11-19 21:38:01] INFO: [ValidateSingularConstraints] actorId a6 - constraint after with actorId a1 and eventId a1_18 isValid true
+[2025-11-19 21:38:01] INFO: [ValidateSingularConstraints] actorId a6 - constraint after with actorId a2 and eventId a2_23 isValid true
+[2025-11-19 21:38:01] INFO: [ValidateSingularConstraints] actorId a6 - constraint after with actorId a3 and eventId a3_33 isValid true
+[2025-11-19 21:38:01] INFO: [ValidateSingularConstraints] actorId a7  eventId a7_43 - actions: not planned yet
+[2025-11-19 21:38:01] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a4 and eventId a4_39 isValid false
+[2025-11-19 21:38:01] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a5 and eventId a5_42 isValid false
+[2025-11-19 21:38:01] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a6 and eventId a6_41 isValid false
+[2025-11-19 21:38:01] INFO: [ExecuteSingularRequests] actorId a6  eventId a6_36 - actions: Talk
+[2025-11-19 21:38:01] INFO: [EnqueueActionLinear] actorId a6 - action Talk: return Talk{} eventId: a6_36
+[2025-11-19 21:38:01] INFO: [CONTAMINATION_CHECK][EnqueueActionLinear] actorId=a6 action=Talk action.eventId=a6_36 param_eventId=a6_36
+[2025-11-19 21:38:01] INFO: [EnqueueActionLinear] Re-enqueued action to FRONT of queue for actor a6, queue size: 1
+[2025-11-19 21:38:01] INFO: [EnqueueAction] Action popped from queue, executing directly: Talk
+[2025-11-19 21:38:01] INFO: [EnqueueActionLinear] Publishing graph_event_start for a6_36 (action Talk matches normalized Talk)
+[2025-11-19 21:38:01] INFO: [EventBus] Publishing: graph_event_start with data: {
+  eventId = "a6_36",
+  actionName = "Talk",
+  actorId = "a6",
+}
+[2025-11-19 21:38:01] INFO: [CameraHandlerBase] Event start: a6_36 - Talk (actor: a6)
+[2025-11-19 21:38:01] INFO: StoryActionBase:Apply - Talk
+[2025-11-19 21:38:01] INFO: Setting nextTargetLocation for actor a6 to 19_garden
+[2025-11-19 21:38:01] INFO: LookingBehavior.faceTowardsTarget: performer=a6, currentRot=0.00, angle=135.00 deg
+[2025-11-19 21:38:01] INFO: LookingBehavior.faceTowardsTarget: Set new rotation to 135.00
+[2025-11-19 21:38:01] INFO: LookingBehavior.faceTowardsTarget: performer=a4, currentRot=0.00, angle=-45.00 deg
+[2025-11-19 21:38:01] INFO: LookingBehavior.faceTowardsTarget: Set new rotation to 315.00
+[2025-11-19 21:38:01] INFO: [EnqueueActionLinear] Kicking off action loop for idle actor a6 with: Talk
+[2025-11-19 21:38:02] INFO: [Interaction] Corrected offset: was 0.99, now 0.71
+[2025-11-19 21:38:02] INFO: Elapsed time 121
+[2025-11-19 21:38:02] INFO: [StaticCameraHandler] assigning focus to actor a6
+[2025-11-19 21:38:02] INFO: [StaticCameraHandler] {
+	FocusRequests: []
+	isFocused: true
+	}
+[2025-11-19 21:38:02] INFO: [Region]: AssignFocus garden
+[2025-11-19 21:38:02] INFO: Camera sees the actorcameraPos: 805.94227290899
+[2025-11-19 21:38:03] INFO: Elapsed time 122
+[2025-11-19 21:38:04] INFO: Elapsed time 123
+[2025-11-19 21:38:05] INFO: Elapsed time 124
+[2025-11-19 21:38:05] INFO: a5: WAIT AGAIN with distance between a5 and a4 is 6.8666534423828. The other target location is 19_garden_clone The other interaction is r1
+[2025-11-19 21:38:05] INFO: Exiting waiting loop actor a5 enteredWaitingLoop true requestPause false paused false isReadyForInteraction false isWaitingForInteraction r2 isAboutToInitiateInteraction false
+[2025-11-19 21:38:06] INFO: Elapsed time 125
+[2025-11-19 21:38:07] INFO: Elapsed time 126
+[2025-11-19 21:38:08] INFO: Elapsed time 127
+[2025-11-19 21:38:09] INFO: Elapsed time 128
+[2025-11-19 21:38:10] INFO: Elapsed time 129
+[2025-11-19 21:38:10] INFO: a5: WAIT AGAIN with distance between a5 and a4 is 6.8666534423828. The other target location is 19_garden_clone The other interaction is r1
+[2025-11-19 21:38:10] INFO: Exiting waiting loop actor a5 enteredWaitingLoop true requestPause false paused false isReadyForInteraction false isWaitingForInteraction r2 isAboutToInitiateInteraction false
+[2025-11-19 21:38:11] INFO: Elapsed time 130
+[2025-11-19 21:38:12] INFO: Elapsed time 131
+[2025-11-19 21:38:13] INFO: Elapsed time 132
+[2025-11-19 21:38:14] INFO: Elapsed time 133
+[2025-11-19 21:38:15] INFO: [DEBUG OnGlobalActionFinished] Timer fired for playerId: a6, delay was: 12973
+[2025-11-19 21:38:15] INFO: [DEBUG OnGlobalActionFinished] Callback is: NIL
+[2025-11-19 21:38:15] INFO: GlobalAction:Apply - getting next valid action a6
+[2025-11-19 21:38:15] INFO: [DEBUG OnGlobalActionFinished] Last action was: Talk
+[2025-11-19 21:38:15] INFO: [DEBUG OnGlobalActionFinished] Skipping callback (nil)
+[2025-11-19 21:38:15] INFO: [ActionsGlobals] Publishing graph_event_end for a6_36 (action Talk matches normalized Talk)
+[2025-11-19 21:38:15] INFO: [EventBus] Publishing: graph_event_end with data: {
+  eventId = "a6_36",
+  actionName = "Talk",
+  actorId = "a6",
+}
+[2025-11-19 21:38:15] INFO: [ActionsOrchestrator] Event fulfilled: a6_36 (total fulfilled: 36)
+[2025-11-19 21:38:15] INFO: [ValidateSingularConstraints] actorId a7  eventId a7_43 - actions: not planned yet
+[2025-11-19 21:38:15] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a4 and eventId a4_39 isValid false
+[2025-11-19 21:38:15] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a5 and eventId a5_42 isValid false
+[2025-11-19 21:38:15] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a6 and eventId a6_41 isValid false
+[2025-11-19 21:38:15] INFO: [CameraHandlerBase] Event end: a6_36 - Talk
+[2025-11-19 21:38:15] INFO: [ActionsGlobals] Publishing graph_event_end for starts_with group event a4_35 (actor a4)
+[2025-11-19 21:38:15] INFO: [EventBus] Publishing: graph_event_end with data: {
+  eventId = "a4_35",
+  actionName = "Talk",
+  actorId = "a4",
+}
+[2025-11-19 21:38:15] INFO: [ActionsOrchestrator] Event fulfilled: a4_35 (total fulfilled: 37)
+[2025-11-19 21:38:15] INFO: [ValidateSingularConstraints] actorId a7  eventId a7_43 - actions: not planned yet
+[2025-11-19 21:38:15] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a4 and eventId a4_39 isValid false
+[2025-11-19 21:38:15] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a5 and eventId a5_42 isValid false
+[2025-11-19 21:38:15] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a6 and eventId a6_41 isValid false
+[2025-11-19 21:38:15] INFO: [CameraHandlerBase] Event end: a4_35 - Talk
+[2025-11-19 21:38:15] INFO: Location:GetNextValidAction
+[2025-11-19 21:38:15] INFO: Story actions nr 3
+[2025-11-19 21:38:15] INFO: [GetNextValidAction] Actor a6 - queue size at entry: 0
+[2025-11-19 21:38:15] INFO: [PlanNextEventForActor] Actor a6 planning event a6_36 (Talk)
+[2025-11-19 21:38:15] INFO: [EnqueueEvent] actorId a6 - eventId a6_40 - last events {
+  [1] =   {
+    isStartingEvent = false,
+    Action = "Talk",
+    Location =     {
+      [1] = "garden",
+    },
+    Properties =     {
+    },
+    id = "a6_36",
+    Entities =     {
+      [1] = "a6",
+      [2] = "a4",
+    },
+  },
+}
+[2025-11-19 21:38:15] INFO: [EnqueueEvent] actorId a6 event a6_40 - awaiting temporal constraints
+[2025-11-19 21:38:15] INFO: [EnqueueEvent] actorId a6 - constraints {
+}
+[2025-11-19 21:38:15] INFO: [EnqueueEvent] fulfilled {
+  [1] = "a0_1",
+  [2] = "a0_2",
+  [3] = "a0_3",
+  [4] = "a0_4",
+  [5] = "a0_5",
+  [6] = "a0_6",
+  [7] = "a0_7",
+  [8] = "a0_8",
+  [9] = "a0_9",
+  [10] = "a0_10",
+  [11] = "a3_24",
+  [12] = "a3_25",
+  [13] = "a2_19",
+  [14] = "a2_20",
+  [15] = "a2_21",
+  [16] = "a3_26",
+  [17] = "a3_27",
+  [18] = "a3_28",
+  [19] = "a3_29",
+  [20] = "a3_30",
+  [21] = "a2_22",
+  [22] = "a2_23",
+  [23] = "a3_31",
+  [24] = "a3_32",
+  [25] = "a3_33",
+  [26] = "a1_11",
+  [27] = "a1_12",
+  [28] = "a1_13",
+  [29] = "a1_14",
+  [30] = "a1_15",
+  [31] = "a1_16",
+  [32] = "a1_17",
+  [33] = "a1_18",
+  [34] = "a5_37",
+  [35] = "a4_34",
+  [36] = "a6_36",
+  [37] = "a4_35",
+}
+[2025-11-19 21:38:15] INFO: [ValidateSingularConstraints] actorId a6  eventId a6_40 - actions: not planned yet
+[2025-11-19 21:38:15] INFO: [ValidateSingularConstraints] actorId a7  eventId a7_43 - actions: not planned yet
+[2025-11-19 21:38:15] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a4 and eventId a4_39 isValid false
+[2025-11-19 21:38:15] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a5 and eventId a5_42 isValid false
+[2025-11-19 21:38:15] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a6 and eventId a6_41 isValid false
+[2025-11-19 21:38:15] INFO: [ProcessEventRequests] Planning for actorId a6 event a6_40 (segment 1)
+[2025-11-19 21:38:15] INFO: [EventPlanner] PlanNextAction called for actor: a6, event: a6_40
+[2025-11-19 21:38:15] INFO: [EventPlanner] EnsureTemporalSegmentComputed for event: a6_40
+[2025-11-19 21:38:15] INFO: [EventPlanner] RouteToFlowHandler for event: a6_40, action: TaiChi
+[2025-11-19 21:38:15] INFO: [EventPlanner] PlanFixedChainAction for event: a6_40
+[2025-11-19 21:38:15] INFO: [CleanupStaleChain] ENTRY: actor=a6, event=a6_40, currentChainId=nil
+[2025-11-19 21:38:15] INFO: [CleanupStaleChain] No chain to clean up (actor has no chainId)
+[2025-11-19 21:38:15] INFO: [GetLocationCandidates] ENTRY: event=a6_40, actor=a6, actor.chainId=nil
+[2025-11-19 21:38:15] INFO: [GetLocationCandidates] No poiMap for event a6_40, using dynamic search for region=garden, action=TaiChi
+[2025-11-19 21:38:15] INFO: [GetLocationCandidates] RETURN: 2 candidates [12_garden, 18_garden]
+[2025-11-19 21:38:15] INFO: [PlanFixedChainAction] After GetLocationCandidates: 2 candidates
+[2025-11-19 21:38:15] INFO: [EventPlanner] Selected POI with score: 100 (collisions allowed if no other option)
+[2025-11-19 21:38:15] INFO: [PlanFixedChainAction] Selected POI: near tai chi area (LocationId=12_garden)
+[2025-11-19 21:38:15] INFO: [EventPlanner] Tracked POI usage: segment=1, poi=12_garden, actor=a6
+[2025-11-19 21:38:15] INFO: [PlanFixedChainAction] Chain ID unchanged for actor a6: nil
+[2025-11-19 21:38:15] INFO: [EventPlanner] Planned 2 action(s) for fixed chain event
+[2025-11-19 21:38:15] INFO: [EventPlanner] Planned 2 action(s) for actor: a6
+[2025-11-19 21:38:15] INFO: [ProcessEventRequests] Planned 2 action(s) for actorId a6 event a6_40 (1 artificial): Move, TaiChi
+[2025-11-19 21:38:15] INFO: [ExecuteSingularRequests] actorId a6  eventId a6_40 - actions: Move, TaiChi
+[2025-11-19 21:38:15] INFO: [EnqueueActionLinear] actorId a6 - action Move: return Move{graphId = -1, how = WALK_civi} eventId: a6_40
+[2025-11-19 21:38:15] INFO: [CONTAMINATION_CHECK][EnqueueActionLinear] actorId=a6 action=Move action.eventId=a6_40 param_eventId=a6_40
+[2025-11-19 21:38:15] INFO: [EnqueueActionLinear] Added action to queue for actor a6, queue size: 1
+[2025-11-19 21:38:15] INFO: [EnqueueAction] Actor a6 at wrong location (at 19_garden, needs 12_garden)
+[2025-11-19 21:38:15] INFO: [CONTAMINATION_CHECK][EnqueueForPOI] actorId=a6 action=Move action.eventId=a6_40 param_eventId=a6_40 locationId=12_garden
+[2025-11-19 21:38:15] INFO: [EnqueueForPOI] Actor a6 queued for POI 12_garden (position 1)
+[2025-11-19 21:38:15] INFO: [ProcessPOIQueue] Checking occupancy for POI 12_garden
+[2025-11-19 21:38:15] INFO:   - occupyingActor: nil
+[2025-11-19 21:38:15] INFO:   - targetPOI.isBusy: false
+[2025-11-19 21:38:15] INFO: [ProcessPOIQueue] Actor a6 acquired POI 12_garden
+[2025-11-19 21:38:15] INFO: [CONTAMINATION_CHECK][ProcessPOIQueue_Execute] actorId=a6 action=Move first.action.eventId=a6_40 first.eventId=a6_40 locationId=12_garden
+[2025-11-19 21:38:15] INFO: Move:Apply
+[2025-11-19 21:38:15] INFO: StoryActionBase:Apply - Move
+[2025-11-19 21:38:15] INFO: [StaticCameraHandler] assigning focus to actor a6
+[2025-11-19 21:38:15] INFO: [StaticCameraHandler] {
+	FocusRequests: []
+	isFocused: false
+	}
+[2025-11-19 21:38:15] INFO: [Region]: AssignFocus garden
+[2025-11-19 21:38:15] INFO: Camera sees the actorcameraPos: 805.94227290899
+[2025-11-19 21:38:15] INFO: Setting nextTargetLocation for actor a6 to 12_garden
+[2025-11-19 21:38:15] INFO: Contexts: [a6]. Target location: near tai chi area in region: garden and episode: garden
+[2025-11-19 21:38:15] INFO: a6: Find shortest path between garden and garden
+[2025-11-19 21:38:15] INFO: INFO, pathfinding graph and source region 'garden'found for start point
+[2025-11-19 21:38:15] INFO: INFO, start node id:3
+[2025-11-19 21:38:15] INFO: INFO, pathfinding graph and source region 'garden' found for end point
+[2025-11-19 21:38:15] INFO: INFO, last node id:4
+[2025-11-19 21:38:15] INFO: [EnqueueActionLinear] Kicking off action loop for idle actor a6 with: Move
+[2025-11-19 21:38:15] INFO: [EnqueueActionLinear] actorId a6 - action TaiChi: return TaiChi{} eventId: a6_40
+[2025-11-19 21:38:15] INFO: [CONTAMINATION_CHECK][EnqueueActionLinear] actorId=a6 action=TaiChi action.eventId=a6_40 param_eventId=a6_40
+[2025-11-19 21:38:15] INFO: [EnqueueActionLinear] Re-enqueued action to FRONT of queue for actor a6, queue size: 1
+[2025-11-19 21:38:15] INFO: [PlanNextEventForActor] Enqueued event a6_40 for actor a6
+[2025-11-19 21:38:15] INFO: [GetNextValidAction] Actor a6 - queue size after planning: 1, eventPlanned: true
+[2025-11-19 21:38:15] INFO: [GetNextValidAction] Actor a6 - planning succeeded, returning nil to let action loop start
+[2025-11-19 21:38:15] INFO: [DEBUG OnGlobalActionFinished] Timer fired for playerId: a4, delay was: 12973
+[2025-11-19 21:38:15] INFO: [DEBUG OnGlobalActionFinished] Callback is: NIL
+[2025-11-19 21:38:15] INFO: GlobalAction:Apply - getting next valid action a4
+[2025-11-19 21:38:15] INFO: [DEBUG OnGlobalActionFinished] Last action was: Wait
+[2025-11-19 21:38:15] INFO: [DEBUG OnGlobalActionFinished] Skipping callback (nil)
+[2025-11-19 21:38:15] INFO: [ActionsGlobals] Skipping graph_event_end for a4_35 (action Wait != normalized expected Talk)
+[2025-11-19 21:38:15] INFO: Location:GetNextValidAction
+[2025-11-19 21:38:15] INFO: Story actions nr 4
+[2025-11-19 21:38:15] INFO: [GetNextValidAction] Actor a4 - queue size at entry: 1
+[2025-11-19 21:38:15] INFO: [CONTAMINATION_CHECK][GetNextValidAction] actorId=a4 action=Talk next.eventId=a4_35 queue_size=1
+[2025-11-19 21:38:15] INFO: [GetNextValidAction] Actor a4 - popping 'Talk' from queue (queue size before pop: 1)
+[2025-11-19 21:38:15] INFO: Next action is Talk
+[2025-11-19 21:38:15] INFO: [GetNextValidAction] Actor a4 - queue size after pop: 0
+[2025-11-19 21:38:15] INFO: Next action chosen:  talks to  Talk
+[2025-11-19 21:38:15] INFO: Next action for actor a4 chosen. Action:  talks to  target location: interaction poi_clone in region: garden and episode: garden
+[2025-11-19 21:38:15] INFO: Add next action to history Talk -  talks to 
+[2025-11-19 21:38:15] INFO: [CONTAMINATION_CHECK][OnGlobalActionFinished] actorId=a4 nextAction=Talk nextAction.eventId=a4_35
+[2025-11-19 21:38:15] INFO: [EnqueueActionGraph] actorId a4 - last events {
+  [1] =   {
+    isStartingEvent = false,
+    Action = "TaiChi",
+    Location =     {
+      [1] = "garden",
+    },
+    Properties =     {
+    },
+    id = "a4_34",
+    Entities =     {
+      [1] = "a4",
+    },
+  },
+}
+[2025-11-19 21:38:15] INFO: [EnqueueActionGraph] actorId a4 event a4_34 - action Talk: return Talk{} (eventId: a4_35)
+[2025-11-19 21:38:15] INFO: [EnqueueActionGraph] actorId a4 - constraints {
+}
+[2025-11-19 21:38:15] INFO: [EnqueueActionGraph] fulfilled {
+  [1] = "a0_1",
+  [2] = "a0_2",
+  [3] = "a0_3",
+  [4] = "a0_4",
+  [5] = "a0_5",
+  [6] = "a0_6",
+  [7] = "a0_7",
+  [8] = "a0_8",
+  [9] = "a0_9",
+  [10] = "a0_10",
+  [11] = "a3_24",
+  [12] = "a3_25",
+  [13] = "a2_19",
+  [14] = "a2_20",
+  [15] = "a2_21",
+  [16] = "a3_26",
+  [17] = "a3_27",
+  [18] = "a3_28",
+  [19] = "a3_29",
+  [20] = "a3_30",
+  [21] = "a2_22",
+  [22] = "a2_23",
+  [23] = "a3_31",
+  [24] = "a3_32",
+  [25] = "a3_33",
+  [26] = "a1_11",
+  [27] = "a1_12",
+  [28] = "a1_13",
+  [29] = "a1_14",
+  [30] = "a1_15",
+  [31] = "a1_16",
+  [32] = "a1_17",
+  [33] = "a1_18",
+  [34] = "a5_37",
+  [35] = "a4_34",
+  [36] = "a6_36",
+  [37] = "a4_35",
+}
+[2025-11-19 21:38:15] INFO: [ValidateSingularConstraints] actorId a4  eventId a4_35 - actions: Talk
+[2025-11-19 21:38:15] INFO: [ValidateSingularConstraints] actorId a7  eventId a7_43 - actions: not planned yet
+[2025-11-19 21:38:15] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a4 and eventId a4_39 isValid false
+[2025-11-19 21:38:15] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a5 and eventId a5_42 isValid false
+[2025-11-19 21:38:15] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a6 and eventId a6_41 isValid false
+[2025-11-19 21:38:15] INFO: [ExecuteSingularRequests] actorId a4  eventId a4_35 - actions: Talk
+[2025-11-19 21:38:15] INFO: [EnqueueActionLinear] actorId a4 - action Talk: return Talk{} eventId: a4_35
+[2025-11-19 21:38:15] INFO: [CONTAMINATION_CHECK][EnqueueActionLinear] actorId=a4 action=Talk action.eventId=a4_35 param_eventId=a4_35
+[2025-11-19 21:38:15] INFO: [EnqueueActionLinear] Re-enqueued action to FRONT of queue for actor a4, queue size: 1
+[2025-11-19 21:38:15] INFO: [EnqueueAction] Action popped from queue, executing directly: Talk
+[2025-11-19 21:38:15] INFO: [EnqueueActionLinear] Publishing graph_event_start for a4_35 (action Talk matches normalized Talk)
+[2025-11-19 21:38:15] INFO: [EventBus] Publishing: graph_event_start with data: {
+  eventId = "a4_35",
+  actionName = "Talk",
+  actorId = "a4",
+}
+[2025-11-19 21:38:15] INFO: [CameraHandlerBase] Event start: a4_35 - Talk (actor: a4)
+[2025-11-19 21:38:15] INFO: StoryActionBase:Apply - Talk
+[2025-11-19 21:38:15] INFO: Setting nextTargetLocation for actor a4 to 19_garden_clone
+[2025-11-19 21:38:15] INFO: LookingBehavior.faceTowardsTarget: Angle is NaN, skipping rotation
+[2025-11-19 21:38:15] INFO: LookingBehavior.faceTowardsTarget: Angle is NaN, skipping rotation
+[2025-11-19 21:38:15] INFO: [Interaction] Warning: Rotation failed for one or both actors
+[2025-11-19 21:38:15] INFO: [EnqueueActionLinear] Kicking off action loop for idle actor a4 with: Talk
+[2025-11-19 21:38:15] INFO: Custom callback found path of length 2
+[2025-11-19 21:38:15] INFO: THE TIMEOUT IS 60
+[2025-11-19 21:38:15] INFO: Actor a6 rerunning timer for marker 1
+[2025-11-19 21:38:15] INFO: Elapsed time 134
+[2025-11-19 21:38:15] INFO: a5: WAIT AGAIN with distance between a5 and a4 is 6.8666534423828. The other target location is 19_garden_clone The other interaction is r1
+[2025-11-19 21:38:15] INFO: Exiting waiting loop actor a5 enteredWaitingLoop true requestPause false paused false isReadyForInteraction false isWaitingForInteraction r2 isAboutToInitiateInteraction false
+[2025-11-19 21:38:16] INFO: Actor a6 rerunning timer for marker 1
+[2025-11-19 21:38:16] INFO: Elapsed time 135
+[2025-11-19 21:38:16] INFO: Actor a6 rerunning timer for marker 1
+[2025-11-19 21:38:17] INFO: Actor a6 has reached marker 1
+[2025-11-19 21:38:17] INFO: Actor a6 has reached marker 2
+[2025-11-19 21:38:17] INFO: Actor a6 rerunning timer for marker 3
+[2025-11-19 21:38:17] INFO: [StaticCameraHandler] assigning focus to actor a4
+[2025-11-19 21:38:17] INFO: [StaticCameraHandler] {
+	FocusRequests: []
+	isFocused: true
+	}
+[2025-11-19 21:38:17] INFO: [Region]: AssignFocus garden
+[2025-11-19 21:38:17] INFO: Camera sees the actorcameraPos: 800.39625246823
+[2025-11-19 21:38:17] INFO: Elapsed time 136
+[2025-11-19 21:38:17] INFO: Actor a6 rerunning timer for marker 3
+[2025-11-19 21:38:18] INFO: Actor a6 rerunning timer for marker 3
+[2025-11-19 21:38:18] INFO: Elapsed time 137
+[2025-11-19 21:38:18] INFO: Actor a6 rerunning timer for marker 3
+[2025-11-19 21:38:19] INFO: Elapsed time 138
+[2025-11-19 21:38:20] INFO: Actor a6 rerunning timer for marker 3
+[2025-11-19 21:38:20] INFO: Actor a6 rerunning timer for marker 3
+[2025-11-19 21:38:20] INFO: Elapsed time 139
+[2025-11-19 21:38:20] INFO: Actor a6 rerunning timer for marker 3
+[2025-11-19 21:38:20] INFO: a5: WAIT AGAIN with distance between a5 and a4 is 6.8666534423828. The other target location is 19_garden_clone The other interaction is r1
+[2025-11-19 21:38:20] INFO: Exiting waiting loop actor a5 enteredWaitingLoop true requestPause false paused false isReadyForInteraction false isWaitingForInteraction r2 isAboutToInitiateInteraction false
+[2025-11-19 21:38:21] INFO: Actor a6 has reached marker 3
+[2025-11-19 21:38:21] INFO: Actor a6 rerunning timer for marker 4
+[2025-11-19 21:38:21] INFO: [StaticCameraHandler] assigning focus to actor a6
+[2025-11-19 21:38:21] INFO: [StaticCameraHandler] {
+	FocusRequests: []
+	isFocused: false
+	}
+[2025-11-19 21:38:21] INFO: [Region]: AssignFocus garden
+[2025-11-19 21:38:21] INFO: Camera sees the actorcameraPos: 800.39625246823
+[2025-11-19 21:38:21] INFO: Elapsed time 140
+[2025-11-19 21:38:21] INFO: Actor a6 rerunning timer for marker 4
+[2025-11-19 21:38:22] INFO: Elapsed time 141
+[2025-11-19 21:38:22] INFO: Actor a6 has reached marker 4
+[2025-11-19 21:38:22] INFO: a6Location interaction poi is not busy (actor left)
+[2025-11-19 21:38:22] INFO: a6Location near tai chi area is busy (actor arrived)
+[2025-11-19 21:38:22] INFO: [DEBUG OnGlobalActionFinished] Timer fired for playerId: a6, delay was: 100
+[2025-11-19 21:38:22] INFO: [DEBUG OnGlobalActionFinished] Callback is: NIL
+[2025-11-19 21:38:22] INFO: GlobalAction:Apply - getting next valid action a6
+[2025-11-19 21:38:22] INFO: [DEBUG OnGlobalActionFinished] Last action was: Move
+[2025-11-19 21:38:22] INFO: [DEBUG OnGlobalActionFinished] Skipping callback (nil)
+[2025-11-19 21:38:22] INFO: Location:GetNextValidAction
+[2025-11-19 21:38:22] INFO: Story actions nr 4
+[2025-11-19 21:38:22] INFO: [GetNextValidAction] Actor a6 - queue size at entry: 1
+[2025-11-19 21:38:22] INFO: [CONTAMINATION_CHECK][GetNextValidAction] actorId=a6 action=TaiChi next.eventId=a6_40 queue_size=1
+[2025-11-19 21:38:22] INFO: [GetNextValidAction] Actor a6 - popping 'TaiChi' from queue (queue size before pop: 1)
+[2025-11-19 21:38:22] INFO: Next action is TaiChi
+[2025-11-19 21:38:22] INFO: [GetNextValidAction] Actor a6 - queue size after pop: 0
+[2025-11-19 21:38:22] INFO: Next action chosen:  starts doing tai chi  TaiChi
+[2025-11-19 21:38:22] INFO: Next action for actor a6 chosen. Action:  starts doing tai chi  target location: near tai chi area in region: garden and episode: garden
+[2025-11-19 21:38:22] INFO: Add next action to history TaiChi -  starts doing tai chi 
+[2025-11-19 21:38:22] INFO: [CONTAMINATION_CHECK][OnGlobalActionFinished] actorId=a6 nextAction=TaiChi nextAction.eventId=a6_40
+[2025-11-19 21:38:22] INFO: [EnqueueActionGraph] actorId a6 - last events {
+  [1] =   {
+    isStartingEvent = false,
+    Action = "Talk",
+    Location =     {
+      [1] = "garden",
+    },
+    Properties =     {
+    },
+    id = "a6_36",
+    Entities =     {
+      [1] = "a6",
+      [2] = "a4",
+    },
+  },
+}
+[2025-11-19 21:38:22] INFO: [EnqueueActionGraph] actorId a6 event a6_36 - action TaiChi: return TaiChi{} (eventId: a6_40)
+[2025-11-19 21:38:22] INFO: [EnqueueActionGraph] actorId a6 - constraints {
+}
+[2025-11-19 21:38:22] INFO: [EnqueueActionGraph] fulfilled {
+  [1] = "a0_1",
+  [2] = "a0_2",
+  [3] = "a0_3",
+  [4] = "a0_4",
+  [5] = "a0_5",
+  [6] = "a0_6",
+  [7] = "a0_7",
+  [8] = "a0_8",
+  [9] = "a0_9",
+  [10] = "a0_10",
+  [11] = "a3_24",
+  [12] = "a3_25",
+  [13] = "a2_19",
+  [14] = "a2_20",
+  [15] = "a2_21",
+  [16] = "a3_26",
+  [17] = "a3_27",
+  [18] = "a3_28",
+  [19] = "a3_29",
+  [20] = "a3_30",
+  [21] = "a2_22",
+  [22] = "a2_23",
+  [23] = "a3_31",
+  [24] = "a3_32",
+  [25] = "a3_33",
+  [26] = "a1_11",
+  [27] = "a1_12",
+  [28] = "a1_13",
+  [29] = "a1_14",
+  [30] = "a1_15",
+  [31] = "a1_16",
+  [32] = "a1_17",
+  [33] = "a1_18",
+  [34] = "a5_37",
+  [35] = "a4_34",
+  [36] = "a6_36",
+  [37] = "a4_35",
+}
+[2025-11-19 21:38:22] INFO: [ValidateSingularConstraints] actorId a6  eventId a6_40 - actions: TaiChi
+[2025-11-19 21:38:22] INFO: [ValidateSingularConstraints] actorId a7  eventId a7_43 - actions: not planned yet
+[2025-11-19 21:38:22] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a4 and eventId a4_39 isValid false
+[2025-11-19 21:38:22] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a5 and eventId a5_42 isValid false
+[2025-11-19 21:38:22] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a6 and eventId a6_41 isValid false
+[2025-11-19 21:38:22] INFO: [ExecuteSingularRequests] actorId a6  eventId a6_40 - actions: TaiChi
+[2025-11-19 21:38:22] INFO: [EnqueueActionLinear] actorId a6 - action TaiChi: return TaiChi{} eventId: a6_40
+[2025-11-19 21:38:22] INFO: [CONTAMINATION_CHECK][EnqueueActionLinear] actorId=a6 action=TaiChi action.eventId=a6_40 param_eventId=a6_40
+[2025-11-19 21:38:22] INFO: [EnqueueActionLinear] Re-enqueued action to FRONT of queue for actor a6, queue size: 1
+[2025-11-19 21:38:22] INFO: [EnqueueAction] Action popped from queue, executing directly: TaiChi
+[2025-11-19 21:38:22] INFO: [EnqueueActionLinear] Publishing graph_event_start for a6_40 (action TaiChi matches normalized TaiChi)
+[2025-11-19 21:38:22] INFO: [EventBus] Publishing: graph_event_start with data: {
+  eventId = "a6_40",
+  actionName = "TaiChi",
+  actorId = "a6",
+}
+[2025-11-19 21:38:22] INFO: [CameraHandlerBase] Event start: a6_40 - TaiChi (actor: a6)
+[2025-11-19 21:38:22] INFO: StoryActionBase:Apply - TaiChi
+[2025-11-19 21:38:22] INFO: Setting nextTargetLocation for actor a6 to 12_garden
+[2025-11-19 21:38:22] INFO: [EnqueueActionLinear] Kicking off action loop for idle actor a6 with: TaiChi
+[2025-11-19 21:38:23] INFO: [StaticCameraHandler] assigning focus to actor a6
+[2025-11-19 21:38:23] INFO: [StaticCameraHandler] {
+	FocusRequests: []
+	isFocused: true
+	}
+[2025-11-19 21:38:23] INFO: [Region]: AssignFocus garden
+[2025-11-19 21:38:23] INFO: Camera sees the actorcameraPos: 800.39625246823
+[2025-11-19 21:38:23] INFO: Elapsed time 142
+[2025-11-19 21:38:24] INFO: Elapsed time 143
+[2025-11-19 21:38:25] INFO: Elapsed time 144
+[2025-11-19 21:38:25] INFO: a5: WAIT AGAIN with distance between a5 and a4 is 6.8666534423828. The other target location is 19_garden_clone The other interaction is r1
+[2025-11-19 21:38:25] INFO: Exiting waiting loop actor a5 enteredWaitingLoop true requestPause false paused false isReadyForInteraction false isWaitingForInteraction r2 isAboutToInitiateInteraction false
+[2025-11-19 21:38:26] INFO: Elapsed time 145
+[2025-11-19 21:38:27] INFO: Elapsed time 146
+[2025-11-19 21:38:28] INFO: [DEBUG OnGlobalActionFinished] Timer fired for playerId: a6, delay was: 5440
+[2025-11-19 21:38:28] INFO: [DEBUG OnGlobalActionFinished] Callback is: NIL
+[2025-11-19 21:38:28] INFO: GlobalAction:Apply - getting next valid action a6
+[2025-11-19 21:38:28] INFO: [DEBUG OnGlobalActionFinished] Last action was: TaiChi
+[2025-11-19 21:38:28] INFO: [DEBUG OnGlobalActionFinished] Skipping callback (nil)
+[2025-11-19 21:38:28] INFO: [ActionsGlobals] Publishing graph_event_end for a6_40 (action TaiChi matches normalized TaiChi)
+[2025-11-19 21:38:28] INFO: [EventBus] Publishing: graph_event_end with data: {
+  eventId = "a6_40",
+  actionName = "TaiChi",
+  actorId = "a6",
+}
+[2025-11-19 21:38:28] INFO: [ActionsOrchestrator] Event fulfilled: a6_40 (total fulfilled: 38)
+[2025-11-19 21:38:28] INFO: [ValidateSingularConstraints] actorId a7  eventId a7_43 - actions: not planned yet
+[2025-11-19 21:38:28] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a4 and eventId a4_39 isValid false
+[2025-11-19 21:38:28] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a5 and eventId a5_42 isValid false
+[2025-11-19 21:38:28] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a6 and eventId a6_41 isValid false
+[2025-11-19 21:38:28] INFO: [CameraHandlerBase] Event end: a6_40 - TaiChi
+[2025-11-19 21:38:28] INFO: Location:GetNextValidAction
+[2025-11-19 21:38:28] INFO: Story actions nr 5
+[2025-11-19 21:38:28] INFO: [GetNextValidAction] Actor a6 - queue size at entry: 0
+[2025-11-19 21:38:28] INFO: [PlanNextEventForActor] Actor a6 planning event a6_40 (TaiChi)
+[2025-11-19 21:38:28] INFO: [EnqueueEvent] actorId a6 - eventId a6_41 - last events {
+  [1] =   {
+    isStartingEvent = false,
+    Action = "Talk",
+    Location =     {
+      [1] = "garden",
+    },
+    Properties =     {
+    },
+    id = "a6_36",
+    Entities =     {
+      [1] = "a6",
+      [2] = "a4",
+    },
+  },
+  [2] =   {
+    Action = "TaiChi",
+    Location =     {
+      [1] = "garden",
+    },
+    Properties =     {
+    },
+    id = "a6_40",
+    Entities =     {
+      [1] = "a6",
+    },
+  },
+}
+[2025-11-19 21:38:28] INFO: [EnqueueEvent] actorId a6 event a6_41 - awaiting temporal constraints
+[2025-11-19 21:38:28] INFO: [EnqueueEvent] actorId a6 - constraints {
+}
+[2025-11-19 21:38:28] INFO: [EnqueueEvent] fulfilled {
+  [1] = "a0_1",
+  [2] = "a0_2",
+  [3] = "a0_3",
+  [4] = "a0_4",
+  [5] = "a0_5",
+  [6] = "a0_6",
+  [7] = "a0_7",
+  [8] = "a0_8",
+  [9] = "a0_9",
+  [10] = "a0_10",
+  [11] = "a3_24",
+  [12] = "a3_25",
+  [13] = "a2_19",
+  [14] = "a2_20",
+  [15] = "a2_21",
+  [16] = "a3_26",
+  [17] = "a3_27",
+  [18] = "a3_28",
+  [19] = "a3_29",
+  [20] = "a3_30",
+  [21] = "a2_22",
+  [22] = "a2_23",
+  [23] = "a3_31",
+  [24] = "a3_32",
+  [25] = "a3_33",
+  [26] = "a1_11",
+  [27] = "a1_12",
+  [28] = "a1_13",
+  [29] = "a1_14",
+  [30] = "a1_15",
+  [31] = "a1_16",
+  [32] = "a1_17",
+  [33] = "a1_18",
+  [34] = "a5_37",
+  [35] = "a4_34",
+  [36] = "a6_36",
+  [37] = "a4_35",
+  [38] = "a6_40",
+}
+[2025-11-19 21:38:28] INFO: [ValidateSingularConstraints] actorId a6  eventId a6_41 - actions: not planned yet
+[2025-11-19 21:38:28] INFO: [ValidateSingularConstraints] actorId a7  eventId a7_43 - actions: not planned yet
+[2025-11-19 21:38:28] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a4 and eventId a4_39 isValid false
+[2025-11-19 21:38:28] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a5 and eventId a5_42 isValid false
+[2025-11-19 21:38:28] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a6 and eventId a6_41 isValid false
+[2025-11-19 21:38:28] INFO: [ProcessEventRequests] Planning for actorId a6 event a6_41 (segment 1)
+[2025-11-19 21:38:28] INFO: [EventPlanner] PlanNextAction called for actor: a6, event: a6_41
+[2025-11-19 21:38:28] INFO: [EventPlanner] EnsureTemporalSegmentComputed for event: a6_41
+[2025-11-19 21:38:28] INFO: [EventPlanner] RouteToFlowHandler for event: a6_41, action: Laugh
+[2025-11-19 21:38:28] INFO: [EventPlanner] PlanInteractionAction for event: a6_41
+[2025-11-19 21:38:28] INFO: [EventPlanner] Selected POI with score: 100 (collisions allowed if no other option)
+[2025-11-19 21:38:28] INFO: [EventPlanner] First actor claims interaction POI: 19_garden
+[2025-11-19 21:38:28] INFO: [EventPlanner] Tracked POI usage: segment=1, poi=19_garden, actor=a6
+[2025-11-19 21:38:28] INFO: [EventPlanner] Planned 3 action(s) for actor: a6
+[2025-11-19 21:38:28] INFO: [ProcessEventRequests] Planned 3 action(s) for actorId a6 event a6_41 (1 artificial): Move, Wait, Laugh
+[2025-11-19 21:38:28] INFO: [ExecuteSingularRequests] actorId a6  eventId a6_41 - actions: Move, Wait, Laugh
+[2025-11-19 21:38:28] INFO: [EnqueueActionLinear] actorId a6 - action Move: return Move{graphId = -1, how = WALK_civi} eventId: a6_41
+[2025-11-19 21:38:28] INFO: [CONTAMINATION_CHECK][EnqueueActionLinear] actorId=a6 action=Move action.eventId=a6_41 param_eventId=a6_41
+[2025-11-19 21:38:28] INFO: [EnqueueActionLinear] Added action to queue for actor a6, queue size: 1
+[2025-11-19 21:38:28] INFO: [EnqueueAction] Actor a6 at wrong location (at 12_garden, needs 19_garden)
+[2025-11-19 21:38:28] INFO: [CONTAMINATION_CHECK][EnqueueForPOI] actorId=a6 action=Move action.eventId=a6_41 param_eventId=a6_41 locationId=19_garden
+[2025-11-19 21:38:28] INFO: [EnqueueForPOI] Actor a6 queued for POI 19_garden (position 1)
+[2025-11-19 21:38:28] INFO: [ProcessPOIQueue] Checking occupancy for POI 19_garden
+[2025-11-19 21:38:28] INFO:   - occupyingActor: nil
+[2025-11-19 21:38:28] INFO:   - targetPOI.isBusy: false
+[2025-11-19 21:38:28] INFO: [ProcessPOIQueue] Actor a6 acquired POI 19_garden
+[2025-11-19 21:38:28] INFO: [CONTAMINATION_CHECK][ProcessPOIQueue_Execute] actorId=a6 action=Move first.action.eventId=a6_41 first.eventId=a6_41 locationId=19_garden
+[2025-11-19 21:38:28] INFO: Move:Apply
+[2025-11-19 21:38:28] INFO: StoryActionBase:Apply - Move
+[2025-11-19 21:38:28] INFO: [StaticCameraHandler] assigning focus to actor a6
+[2025-11-19 21:38:28] INFO: [StaticCameraHandler] {
+	FocusRequests: []
+	isFocused: false
+	}
+[2025-11-19 21:38:28] INFO: [Region]: AssignFocus garden
+[2025-11-19 21:38:28] INFO: Camera sees the actorcameraPos: 800.39625246823
+[2025-11-19 21:38:28] INFO: Setting nextTargetLocation for actor a6 to 19_garden
+[2025-11-19 21:38:28] INFO: Contexts: [a6]. Target location: interaction poi in region: garden and episode: garden
+[2025-11-19 21:38:28] INFO: a6: Find shortest path between garden and garden
+[2025-11-19 21:38:28] INFO: INFO, pathfinding graph and source region 'garden'found for start point
+[2025-11-19 21:38:28] INFO: INFO, start node id:4
+[2025-11-19 21:38:28] INFO: INFO, pathfinding graph and source region 'garden' found for end point
+[2025-11-19 21:38:28] INFO: INFO, last node id:3
+[2025-11-19 21:38:28] INFO: [EnqueueActionLinear] Kicking off action loop for idle actor a6 with: Move
+[2025-11-19 21:38:28] INFO: [EnqueueActionLinear] actorId a6 - action Wait: return Wait{ doNothing = false } eventId: a6_41
+[2025-11-19 21:38:28] INFO: [CONTAMINATION_CHECK][EnqueueActionLinear] actorId=a6 action=Wait action.eventId=a6_41 param_eventId=a6_41
+[2025-11-19 21:38:28] INFO: [EnqueueActionLinear] Added action to queue for actor a6, queue size: 1
+[2025-11-19 21:38:28] INFO: [EnqueueActionLinear] actorId a6 - action Laugh: return Laugh{} eventId: a6_41
+[2025-11-19 21:38:28] INFO: [CONTAMINATION_CHECK][EnqueueActionLinear] actorId=a6 action=Laugh action.eventId=a6_41 param_eventId=a6_41
+[2025-11-19 21:38:28] INFO: [EnqueueActionLinear] Added action to queue for actor a6, queue size: 2
+[2025-11-19 21:38:28] INFO: [PlanNextEventForActor] Enqueued event a6_41 for actor a6
+[2025-11-19 21:38:28] INFO: [GetNextValidAction] Actor a6 - queue size after planning: 2, eventPlanned: true
+[2025-11-19 21:38:28] INFO: [GetNextValidAction] Actor a6 - planning succeeded, returning nil to let action loop start
+[2025-11-19 21:38:28] INFO: Custom callback found path of length 2
+[2025-11-19 21:38:28] INFO: THE TIMEOUT IS 60
+[2025-11-19 21:38:28] INFO: Actor a6 rerunning timer for marker 1
+[2025-11-19 21:38:28] INFO: Elapsed time 147
+[2025-11-19 21:38:29] INFO: Actor a6 rerunning timer for marker 1
+[2025-11-19 21:38:29] INFO: Elapsed time 148
+[2025-11-19 21:38:29] INFO: Actor a6 has reached marker 1
+[2025-11-19 21:38:29] INFO: Actor a6 has reached marker 2
+[2025-11-19 21:38:29] INFO: Actor a6 rerunning timer for marker 3
+[2025-11-19 21:38:30] INFO: Actor a6 rerunning timer for marker 3
+[2025-11-19 21:38:30] INFO: [StaticCameraHandler] assigning focus to actor a6
+[2025-11-19 21:38:30] INFO: [StaticCameraHandler] {
+	FocusRequests: []
+	isFocused: true
+	}
+[2025-11-19 21:38:30] INFO: [Region]: AssignFocus garden
+[2025-11-19 21:38:30] INFO: Camera sees the actorcameraPos: 800.39625246823
+[2025-11-19 21:38:30] INFO: Elapsed time 149
+[2025-11-19 21:38:30] INFO: Actor a6 rerunning timer for marker 3
+[2025-11-19 21:38:30] INFO: a5: WAIT AGAIN with distance between a5 and a4 is 6.8666534423828. The other target location is 19_garden_clone The other interaction is r1
+[2025-11-19 21:38:30] INFO: Exiting waiting loop actor a5 enteredWaitingLoop true requestPause false paused false isReadyForInteraction false isWaitingForInteraction r2 isAboutToInitiateInteraction false
+[2025-11-19 21:38:31] INFO: [DEBUG OnGlobalActionFinished] Timer fired for playerId: a4, delay was: 15809
+[2025-11-19 21:38:31] INFO: [DEBUG OnGlobalActionFinished] Callback is: NIL
+[2025-11-19 21:38:31] INFO: GlobalAction:Apply - getting next valid action a4
+[2025-11-19 21:38:31] INFO: [DEBUG OnGlobalActionFinished] Last action was: Talk
+[2025-11-19 21:38:31] INFO: [DEBUG OnGlobalActionFinished] Skipping callback (nil)
+[2025-11-19 21:38:31] INFO: [ActionsGlobals] Publishing graph_event_end for a4_35 (action Talk matches normalized Talk)
+[2025-11-19 21:38:31] INFO: [EventBus] Skipping duplicate graph_event_end for a4_35
+[2025-11-19 21:38:31] INFO: [ActionsGlobals] Publishing graph_event_end for starts_with group event a6_36 (actor a6)
+[2025-11-19 21:38:31] INFO: [EventBus] Skipping duplicate graph_event_end for a6_36
+[2025-11-19 21:38:31] INFO: Location:GetNextValidAction
+[2025-11-19 21:38:31] INFO: Story actions nr 5
+[2025-11-19 21:38:31] INFO: [GetNextValidAction] Actor a4 - queue size at entry: 0
+[2025-11-19 21:38:31] INFO: [PlanNextEventForActor] Actor a4 planning event a4_35 (Talk)
+[2025-11-19 21:38:31] INFO: [EnqueueEvent] actorId a4 - eventId a4_39 - last events {
+  [1] =   {
+    isStartingEvent = false,
+    Action = "TaiChi",
+    Location =     {
+      [1] = "garden",
+    },
+    Properties =     {
+    },
+    id = "a4_34",
+    Entities =     {
+      [1] = "a4",
+    },
+  },
+  [2] =   {
+    Action = "Talk",
+    Location =     {
+      [1] = "garden",
+    },
+    Properties =     {
+    },
+    id = "a4_35",
+    Entities =     {
+      [1] = "a4",
+      [2] = "a6",
+    },
+  },
+}
+[2025-11-19 21:38:31] INFO: [EnqueueEvent] actorId a4 event a4_39 - awaiting temporal constraints
+[2025-11-19 21:38:31] INFO: [EnqueueEvent] actorId a4 - constraints {
+}
+[2025-11-19 21:38:31] INFO: [EnqueueEvent] fulfilled {
+  [1] = "a0_1",
+  [2] = "a0_2",
+  [3] = "a0_3",
+  [4] = "a0_4",
+  [5] = "a0_5",
+  [6] = "a0_6",
+  [7] = "a0_7",
+  [8] = "a0_8",
+  [9] = "a0_9",
+  [10] = "a0_10",
+  [11] = "a3_24",
+  [12] = "a3_25",
+  [13] = "a2_19",
+  [14] = "a2_20",
+  [15] = "a2_21",
+  [16] = "a3_26",
+  [17] = "a3_27",
+  [18] = "a3_28",
+  [19] = "a3_29",
+  [20] = "a3_30",
+  [21] = "a2_22",
+  [22] = "a2_23",
+  [23] = "a3_31",
+  [24] = "a3_32",
+  [25] = "a3_33",
+  [26] = "a1_11",
+  [27] = "a1_12",
+  [28] = "a1_13",
+  [29] = "a1_14",
+  [30] = "a1_15",
+  [31] = "a1_16",
+  [32] = "a1_17",
+  [33] = "a1_18",
+  [34] = "a5_37",
+  [35] = "a4_34",
+  [36] = "a6_36",
+  [37] = "a4_35",
+  [38] = "a6_40",
+}
+[2025-11-19 21:38:31] INFO: [ValidateSingularConstraints] actorId a4  eventId a4_39 - actions: not planned yet
+[2025-11-19 21:38:31] INFO: [ValidateSingularConstraints] actorId a7  eventId a7_43 - actions: not planned yet
+[2025-11-19 21:38:31] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a4 and eventId a4_39 isValid false
+[2025-11-19 21:38:31] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a5 and eventId a5_42 isValid false
+[2025-11-19 21:38:31] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a6 and eventId a6_41 isValid false
+[2025-11-19 21:38:31] INFO: [ProcessEventRequests] Planning for actorId a4 event a4_39 (segment 1)
+[2025-11-19 21:38:31] INFO: [EventPlanner] PlanNextAction called for actor: a4, event: a4_39
+[2025-11-19 21:38:31] INFO: [EventPlanner] EnsureTemporalSegmentComputed for event: a4_39
+[2025-11-19 21:38:31] INFO: [EventPlanner] RouteToFlowHandler for event: a4_39, action: Hug
+[2025-11-19 21:38:31] INFO: [EventPlanner] PlanInteractionAction for event: a4_39
+[2025-11-19 21:38:31] INFO: [POICoordinator] Registered clone POI: 20_garden_clone
+[2025-11-19 21:38:31] INFO: [EventPlanner] Second actor uses clone POI for interaction
+[2025-11-19 21:38:31] INFO: [EventPlanner] Planned 2 action(s) for actor: a4
+[2025-11-19 21:38:31] INFO: [ProcessEventRequests] Planned 2 action(s) for actorId a4 event a4_39 (0 artificial): Wait, Hug
+[2025-11-19 21:38:31] INFO: [ExecuteSingularRequests] actorId a4  eventId a4_39 - actions: Wait, Hug
+[2025-11-19 21:38:31] INFO: [EnqueueActionLinear] actorId a4 - action Wait: return Wait{ doNothing = true } eventId: a4_39
+[2025-11-19 21:38:31] INFO: [CONTAMINATION_CHECK][EnqueueActionLinear] actorId=a4 action=Wait action.eventId=a4_39 param_eventId=a4_39
+[2025-11-19 21:38:31] INFO: [EnqueueActionLinear] Added action to queue for actor a4, queue size: 1
+[2025-11-19 21:38:31] INFO: [EnqueueAction] Actor a4 at wrong location (at 19_garden_clone, needs 20_garden_clone)
+[2025-11-19 21:38:31] INFO: [EnqueueAction] This is a cloned interaction POI - will coordinate through queue
+[2025-11-19 21:38:31] INFO: [CONTAMINATION_CHECK][EnqueueForPOI] actorId=a4 action=Wait action.eventId=a4_39 param_eventId=a4_39 locationId=20_garden_clone
+[2025-11-19 21:38:31] INFO: [EnqueueForPOI] Actor a4 queued for POI 20_garden_clone (position 1)
+[2025-11-19 21:38:31] INFO: [ProcessPOIQueue] Found clone POI: 20_garden_clone
+[2025-11-19 21:38:31] INFO: [ProcessPOIQueue] Checking occupancy for POI 20_garden_clone
+[2025-11-19 21:38:31] INFO:   - occupyingActor: nil
+[2025-11-19 21:38:31] INFO:   - targetPOI.isBusy: false
+[2025-11-19 21:38:31] INFO: [ProcessPOIQueue] Actor a4 acquired POI 20_garden_clone
+[2025-11-19 21:38:31] INFO: [EnqueueActionLinear] Kicking off action loop for idle actor a4 with: Wait
+[2025-11-19 21:38:31] INFO: [EnqueueActionLinear] actorId a4 - action Hug: return Hug{} eventId: a4_39
+[2025-11-19 21:38:31] INFO: [CONTAMINATION_CHECK][EnqueueActionLinear] actorId=a4 action=Hug action.eventId=a4_39 param_eventId=a4_39
+[2025-11-19 21:38:31] INFO: [EnqueueActionLinear] Added action to queue for actor a4, queue size: 1
+[2025-11-19 21:38:31] INFO: [PlanNextEventForActor] Enqueued event a4_39 for actor a4
+[2025-11-19 21:38:31] INFO: [GetNextValidAction] Actor a4 - queue size after planning: 1, eventPlanned: true
+[2025-11-19 21:38:31] INFO: [GetNextValidAction] Actor a4 - planning succeeded, returning nil to let action loop start
+[2025-11-19 21:38:31] INFO: [DEBUG OnGlobalActionFinished] Timer fired for playerId: a6, delay was: 15809
+[2025-11-19 21:38:31] INFO: [DEBUG OnGlobalActionFinished] Callback is: NIL
+[2025-11-19 21:38:31] INFO: GlobalAction:Apply - getting next valid action a6
+[2025-11-19 21:38:31] INFO: [DEBUG OnGlobalActionFinished] Last action was: Move
+[2025-11-19 21:38:31] INFO: [DEBUG OnGlobalActionFinished] Skipping callback (nil)
+[2025-11-19 21:38:31] INFO: Location:GetNextValidAction
+[2025-11-19 21:38:31] INFO: Story actions nr 6
+[2025-11-19 21:38:31] INFO: [GetNextValidAction] Actor a6 - queue size at entry: 2
+[2025-11-19 21:38:31] INFO: [CONTAMINATION_CHECK][GetNextValidAction] actorId=a6 action=Wait next.eventId=a6_41 queue_size=2
+[2025-11-19 21:38:31] INFO: [GetNextValidAction] Actor a6 - popping 'Wait' from queue (queue size before pop: 2)
+[2025-11-19 21:38:31] INFO: Next action is Wait
+[2025-11-19 21:38:31] INFO: [GetNextValidAction] Actor a6 - queue size after pop: 1
+[2025-11-19 21:38:31] INFO: Next action chosen:  is looking around  Wait
+[2025-11-19 21:38:31] INFO: Next action for actor a6 chosen. Action:  is looking around  target location: interaction poi in region: garden and episode: garden
+[2025-11-19 21:38:31] INFO: Add next action to history Wait -  is looking around 
+[2025-11-19 21:38:31] INFO: [CONTAMINATION_CHECK][OnGlobalActionFinished] actorId=a6 nextAction=Wait nextAction.eventId=a6_41
+[2025-11-19 21:38:31] INFO: [EnqueueAction] Actor a6 at wrong location (at 12_garden, needs 19_garden)
+[2025-11-19 21:38:31] INFO: [CONTAMINATION_CHECK][EnqueueForPOI] actorId=a6 action=Wait action.eventId=a6_41 param_eventId=a6_41 locationId=19_garden
+[2025-11-19 21:38:31] INFO: [EnqueueForPOI] Actor a6 queued for POI 19_garden (position 1)
+[2025-11-19 21:38:31] INFO: [ProcessPOIQueue] Checking occupancy for POI 19_garden
+[2025-11-19 21:38:31] INFO:   - occupyingActor: nil
+[2025-11-19 21:38:31] INFO:   - targetPOI.isBusy: false
+[2025-11-19 21:38:31] INFO: [ProcessPOIQueue] Actor a6 acquired POI 19_garden
+[2025-11-19 21:38:31] INFO: [ProcessPOIQueue] Inserting corrective Move to interaction poi
+[2025-11-19 21:38:31] INFO: [CONTAMINATION_CHECK][ProcessPOIQueue_Insert] actorId=a6 action=Wait first.action.eventId=a6_41 first.eventId=a6_41 locationId=19_garden
+[2025-11-19 21:38:31] INFO: Move:Apply
+[2025-11-19 21:38:31] INFO: StoryActionBase:Apply - Move
+[2025-11-19 21:38:31] INFO: Setting nextTargetLocation for actor a6 to 19_garden
+[2025-11-19 21:38:31] INFO: Contexts: [a6]. Target location: interaction poi in region: garden and episode: garden
+[2025-11-19 21:38:31] INFO: a6: Find shortest path between garden and garden
+[2025-11-19 21:38:31] INFO: a6Location near tai chi area is not busy (actor left)
+[2025-11-19 21:38:31] INFO: a6Location interaction poi is busy (actor arrived)
+[2025-11-19 21:38:31] INFO: [DEBUG OnGlobalActionFinished] Timer fired for playerId: a6, delay was: 100
+[2025-11-19 21:38:31] INFO: [DEBUG OnGlobalActionFinished] Callback is: NIL
+[2025-11-19 21:38:31] INFO: GlobalAction:Apply - getting next valid action a6
+[2025-11-19 21:38:31] INFO: [DEBUG OnGlobalActionFinished] Last action was: Move
+[2025-11-19 21:38:31] INFO: [DEBUG OnGlobalActionFinished] Skipping callback (nil)
+[2025-11-19 21:38:31] INFO: Location:GetNextValidAction
+[2025-11-19 21:38:31] INFO: Story actions nr 7
+[2025-11-19 21:38:31] INFO: [GetNextValidAction] Actor a6 - queue size at entry: 2
+[2025-11-19 21:38:31] INFO: [CONTAMINATION_CHECK][GetNextValidAction] actorId=a6 action=Wait next.eventId=a6_41 queue_size=2
+[2025-11-19 21:38:31] INFO: [GetNextValidAction] Actor a6 - popping 'Wait' from queue (queue size before pop: 2)
+[2025-11-19 21:38:31] INFO: Next action is Wait
+[2025-11-19 21:38:31] INFO: [GetNextValidAction] Actor a6 - queue size after pop: 1
+[2025-11-19 21:38:31] INFO: Next action chosen:  is looking around  Wait
+[2025-11-19 21:38:31] INFO: Next action for actor a6 chosen. Action:  is looking around  target location: interaction poi in region: garden and episode: garden
+[2025-11-19 21:38:31] INFO: Add next action to history Wait -  is looking around 
+[2025-11-19 21:38:31] INFO: [CONTAMINATION_CHECK][OnGlobalActionFinished] actorId=a6 nextAction=Wait nextAction.eventId=a6_41
+[2025-11-19 21:38:31] INFO: [EnqueueActionGraph] actorId a6 - last events {
+  [1] =   {
+    isStartingEvent = false,
+    Action = "Talk",
+    Location =     {
+      [1] = "garden",
+    },
+    Properties =     {
+    },
+    id = "a6_36",
+    Entities =     {
+      [1] = "a6",
+      [2] = "a4",
+    },
+  },
+  [2] =   {
+    Action = "TaiChi",
+    Location =     {
+      [1] = "garden",
+    },
+    Properties =     {
+    },
+    id = "a6_40",
+    Entities =     {
+      [1] = "a6",
+    },
+  },
+}
+[2025-11-19 21:38:31] INFO: [EnqueueActionGraph] actorId a6 event a6_40 - action Wait: return Wait{ doNothing = false } (eventId: a6_41)
+[2025-11-19 21:38:31] INFO: [EnqueueActionGraph] actorId a6 - constraints {
+}
+[2025-11-19 21:38:31] INFO: [EnqueueActionGraph] fulfilled {
+  [1] = "a0_1",
+  [2] = "a0_2",
+  [3] = "a0_3",
+  [4] = "a0_4",
+  [5] = "a0_5",
+  [6] = "a0_6",
+  [7] = "a0_7",
+  [8] = "a0_8",
+  [9] = "a0_9",
+  [10] = "a0_10",
+  [11] = "a3_24",
+  [12] = "a3_25",
+  [13] = "a2_19",
+  [14] = "a2_20",
+  [15] = "a2_21",
+  [16] = "a3_26",
+  [17] = "a3_27",
+  [18] = "a3_28",
+  [19] = "a3_29",
+  [20] = "a3_30",
+  [21] = "a2_22",
+  [22] = "a2_23",
+  [23] = "a3_31",
+  [24] = "a3_32",
+  [25] = "a3_33",
+  [26] = "a1_11",
+  [27] = "a1_12",
+  [28] = "a1_13",
+  [29] = "a1_14",
+  [30] = "a1_15",
+  [31] = "a1_16",
+  [32] = "a1_17",
+  [33] = "a1_18",
+  [34] = "a5_37",
+  [35] = "a4_34",
+  [36] = "a6_36",
+  [37] = "a4_35",
+  [38] = "a6_40",
+}
+[2025-11-19 21:38:31] INFO: [ValidateSingularConstraints] actorId a6  eventId a6_41 - actions: Wait
+[2025-11-19 21:38:31] INFO: [ValidateSingularConstraints] actorId a7  eventId a7_43 - actions: not planned yet
+[2025-11-19 21:38:31] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a4 and eventId a4_39 isValid false
+[2025-11-19 21:38:31] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a5 and eventId a5_42 isValid false
+[2025-11-19 21:38:31] INFO: [ValidateSingularConstraints] actorId a7 - constraint after with actorId a6 and eventId a6_41 isValid false
+[2025-11-19 21:38:31] INFO: [ExecuteSingularRequests] actorId a6  eventId a6_41 - actions: Wait
+[2025-11-19 21:38:31] INFO: [EnqueueActionLinear] actorId a6 - action Wait: return Wait{ doNothing = false } eventId: a6_41
+[2025-11-19 21:38:31] INFO: [CONTAMINATION_CHECK][EnqueueActionLinear] actorId=a6 action=Wait action.eventId=a6_41 param_eventId=a6_41
+[2025-11-19 21:38:31] INFO: [EnqueueActionLinear] Re-enqueued action to FRONT of queue for actor a6, queue size: 2
+[2025-11-19 21:38:31] INFO: [EnqueueAction] Action popped from queue, executing directly: Wait
+[2025-11-19 21:38:31] INFO: [EnqueueActionLinear] Skipping graph_event_start for a6_41 (action Wait != normalized expected Laugh)
+[2025-11-19 21:38:31] INFO: StoryActionBase:Apply - Wait
+[2025-11-19 21:38:31] INFO: Setting nextTargetLocation for actor a6 to 19_garden
+[2025-11-19 21:38:31] INFO: a6: WAIT AGAIN with distance between a6 and a5 is 7.1211476325989. The other target location is 20_garden The other interaction is r2
+[2025-11-19 21:38:31] INFO: Exiting waiting loop actor a6 enteredWaitingLoop true requestPause false paused false isReadyForInteraction false isWaitingForInteraction r3 isAboutToInitiateInteraction false
+[2025-11-19 21:38:31] INFO: [EnqueueActionLinear] Kicking off action loop for idle actor a6 with: Wait
+[2025-11-19 21:38:31] INFO: Elapsed time 150
+[2025-11-19 21:38:32] INFO: [StaticCameraHandler] assigning focus to actor a6
+[2025-11-19 21:38:32] INFO: [StaticCameraHandler] {
+	FocusRequests: []
+	isFocused: true
+	}
+[2025-11-19 21:38:32] INFO: [Region]: AssignFocus garden
+[2025-11-19 21:38:32] INFO: Camera sees the actorcameraPos: 800.39625246823
+[2025-11-19 21:38:32] INFO: Elapsed time 151
+[2025-11-19 21:38:33] INFO: Elapsed time 152
+[2025-11-19 21:38:34] INFO: Elapsed time 153
+[2025-11-19 21:38:35] INFO: Elapsed time 154
+[2025-11-19 21:38:35] INFO: a5: WAIT AGAIN with distance between a5 and a4 is 6.8666534423828. The other target location is 19_garden_clone The other interaction is r1
+[2025-11-19 21:38:35] INFO: Exiting waiting loop actor a5 enteredWaitingLoop true requestPause false paused false isReadyForInteraction false isWaitingForInteraction r2 isAboutToInitiateInteraction false
+[2025-11-19 21:38:36] INFO: a6: WAIT AGAIN with distance between a6 and a5 is 7.1211476325989. The other target location is 20_garden The other interaction is r2
+[2025-11-19 21:38:36] INFO: Exiting waiting loop actor a6 enteredWaitingLoop true requestPause false paused false isReadyForInteraction false isWaitingForInteraction r3 isAboutToInitiateInteraction false
+[2025-11-19 21:38:36] INFO: Elapsed time 155
+[2025-11-19 21:38:37] INFO: Elapsed time 156
+[2025-11-19 21:38:38] INFO: Elapsed time 157
+[2025-11-19 21:38:39] INFO: Elapsed time 158
+[2025-11-19 21:38:40] INFO: Elapsed time 159
+[2025-11-19 21:38:40] INFO: a5: WAIT AGAIN with distance between a5 and a4 is 6.8666534423828. The other target location is 19_garden_clone The other interaction is r1
+[2025-11-19 21:38:40] INFO: Exiting waiting loop actor a5 enteredWaitingLoop true requestPause false paused false isReadyForInteraction false isWaitingForInteraction r2 isAboutToInitiateInteraction false
+[2025-11-19 21:38:41] INFO: a6: WAIT AGAIN with distance between a6 and a5 is 7.1211476325989. The other target location is 20_garden The other interaction is r2
+[2025-11-19 21:38:41] INFO: Exiting waiting loop actor a6 enteredWaitingLoop true requestPause false paused false isReadyForInteraction false isWaitingForInteraction r3 isAboutToInitiateInteraction false
+[2025-11-19 21:38:41] INFO: Elapsed time 160
+[2025-11-19 21:38:42] INFO: Elapsed time 161
+[2025-11-19 21:38:43] INFO: Elapsed time 162
+[2025-11-19 21:38:44] INFO: Elapsed time 163
+[2025-11-19 21:38:45] INFO: Elapsed time 164
+[2025-11-19 21:38:45] INFO: a5: WAIT AGAIN with distance between a5 and a4 is 6.8666534423828. The other target location is 19_garden_clone The other interaction is r1
+[2025-11-19 21:38:45] INFO: Exiting waiting loop actor a5 enteredWaitingLoop true requestPause false paused false isReadyForInteraction false isWaitingForInteraction r2 isAboutToInitiateInteraction false
+[2025-11-19 21:38:46] INFO: a6: WAIT AGAIN with distance between a6 and a5 is 7.1211476325989. The other target location is 20_garden The other interaction is r2
+[2025-11-19 21:38:46] INFO: Exiting waiting loop actor a6 enteredWaitingLoop true requestPause false paused false isReadyForInteraction false isWaitingForInteraction r3 isAboutToInitiateInteraction false
+[2025-11-19 21:38:46] INFO: Elapsed time 165
+[2025-11-19 21:38:47] INFO: Elapsed time 166
+[2025-11-19 21:38:48] INFO: Elapsed time 167
+[2025-11-19 21:38:49] INFO: Elapsed time 168
+[2025-11-19 21:38:50] INFO: Elapsed time 169
+[2025-11-19 21:38:50] INFO: a5: WAIT AGAIN with distance between a5 and a4 is 6.8666534423828. The other target location is 19_garden_clone The other interaction is r1
+[2025-11-19 21:38:50] INFO: Exiting waiting loop actor a5 enteredWaitingLoop true requestPause false paused false isReadyForInteraction false isWaitingForInteraction r2 isAboutToInitiateInteraction false
+[2025-11-19 21:38:51] INFO: a6: WAIT AGAIN with distance between a6 and a5 is 7.1211476325989. The other target location is 20_garden The other interaction is r2
+[2025-11-19 21:38:51] INFO: Exiting waiting loop actor a6 enteredWaitingLoop true requestPause false paused false isReadyForInteraction false isWaitingForInteraction r3 isAboutToInitiateInteraction false
+[2025-11-19 21:38:51] INFO: Elapsed time 170
+[2025-11-19 21:38:52] INFO: Elapsed time 171
+[2025-11-19 21:38:53] INFO: Elapsed time 172
+[2025-11-19 21:38:54] INFO: Elapsed time 173
+[2025-11-19 21:38:55] INFO: Elapsed time 174
+[2025-11-19 21:38:55] INFO: a5: WAIT AGAIN with distance between a5 and a4 is 6.8666534423828. The other target location is 19_garden_clone The other interaction is r1
+[2025-11-19 21:38:55] INFO: Exiting waiting loop actor a5 enteredWaitingLoop true requestPause false paused false isReadyForInteraction false isWaitingForInteraction r2 isAboutToInitiateInteraction false
+[2025-11-19 21:38:56] INFO: a6: WAIT AGAIN with distance between a6 and a5 is 7.1211476325989. The other target location is 20_garden The other interaction is r2
+[2025-11-19 21:38:56] INFO: Exiting waiting loop actor a6 enteredWaitingLoop true requestPause false paused false isReadyForInteraction false isWaitingForInteraction r3 isAboutToInitiateInteraction false
+[2025-11-19 21:38:56] INFO: Elapsed time 175
+[2025-11-19 21:38:57] INFO: Elapsed time 176
+[2025-11-19 21:38:58] INFO: Elapsed time 177
+[2025-11-19 21:38:59] INFO: Elapsed time 178
+[2025-11-19 21:39:00] INFO: Elapsed time 179
+[2025-11-19 21:39:00] INFO: a5: WAIT AGAIN with distance between a5 and a4 is 6.8666534423828. The other target location is 19_garden_clone The other interaction is r1
+[2025-11-19 21:39:00] INFO: Exiting waiting loop actor a5 enteredWaitingLoop true requestPause false paused false isReadyForInteraction false isWaitingForInteraction r2 isAboutToInitiateInteraction false
+[2025-11-19 21:39:01] INFO: a6: WAIT AGAIN with distance between a6 and a5 is 7.1211476325989. The other target location is 20_garden The other interaction is r2
+[2025-11-19 21:39:01] INFO: Exiting waiting loop actor a6 enteredWaitingLoop true requestPause false paused false isReadyForInteraction false isWaitingForInteraction r3 isAboutToInitiateInteraction false
+[2025-11-19 21:39:01] INFO: Elapsed time 180
+[2025-11-19 21:39:02] INFO: Elapsed time 181
+[2025-11-19 21:39:03] INFO: Elapsed time 182
+[2025-11-19 21:39:04] INFO: Elapsed time 183
+[2025-11-19 21:39:05] INFO: Elapsed time 184
+[2025-11-19 21:39:05] INFO: a5: WAIT AGAIN with distance between a5 and a4 is 6.8666534423828. The other target location is 19_garden_clone The other interaction is r1
+[2025-11-19 21:39:06] INFO: Exiting waiting loop actor a5 enteredWaitingLoop true requestPause false paused false isReadyForInteraction false isWaitingForInteraction r2 isAboutToInitiateInteraction false
+[2025-11-19 21:39:06] INFO: a6: WAIT AGAIN with distance between a6 and a5 is 7.1211476325989. The other target location is 20_garden The other interaction is r2
+[2025-11-19 21:39:06] INFO: Exiting waiting loop actor a6 enteredWaitingLoop true requestPause false paused false isReadyForInteraction false isWaitingForInteraction r3 isAboutToInitiateInteraction false
+[2025-11-19 21:39:07] INFO: Elapsed time 186
+[2025-11-19 21:39:08] INFO: Elapsed time 187
+[2025-11-19 21:39:09] INFO: Elapsed time 188
+[2025-11-19 21:39:10] INFO: Elapsed time 189
+[2025-11-19 21:39:11] INFO: a5: WAIT AGAIN with distance between a5 and a4 is 6.8666534423828. The other target location is 19_garden_clone The other interaction is r1
+[2025-11-19 21:39:11] INFO: Exiting waiting loop actor a5 enteredWaitingLoop true requestPause false paused false isReadyForInteraction false isWaitingForInteraction r2 isAboutToInitiateInteraction false
+[2025-11-19 21:39:11] INFO: Elapsed time 190
+[2025-11-19 21:39:11] INFO: a6: WAIT AGAIN with distance between a6 and a5 is 7.1211476325989. The other target location is 20_garden The other interaction is r2
+[2025-11-19 21:39:11] INFO: Exiting waiting loop actor a6 enteredWaitingLoop true requestPause false paused false isReadyForInteraction false isWaitingForInteraction r3 isAboutToInitiateInteraction false
+[2025-11-19 21:39:12] INFO: Elapsed time 191
+[2025-11-19 21:39:13] INFO: Elapsed time 192
+[2025-11-19 21:39:14] INFO: Elapsed time 193
+[2025-11-19 21:39:15] INFO: Elapsed time 194
+[2025-11-19 21:39:16] INFO: a5: WAIT AGAIN with distance between a5 and a4 is 6.8666534423828. The other target location is 19_garden_clone The other interaction is r1
+[2025-11-19 21:39:16] INFO: Exiting waiting loop actor a5 enteredWaitingLoop true requestPause false paused false isReadyForInteraction false isWaitingForInteraction r2 isAboutToInitiateInteraction false
+[2025-11-19 21:39:16] INFO: Elapsed time 195
+[2025-11-19 21:39:16] INFO: a6: WAIT AGAIN with distance between a6 and a5 is 7.1211476325989. The other target location is 20_garden The other interaction is r2
+[2025-11-19 21:39:16] INFO: Exiting waiting loop actor a6 enteredWaitingLoop true requestPause false paused false isReadyForInteraction false isWaitingForInteraction r3 isAboutToInitiateInteraction false
+[2025-11-19 21:39:17] INFO: Elapsed time 196
+[2025-11-19 21:39:18] INFO: Elapsed time 197
+[2025-11-19 21:39:19] INFO: Elapsed time 198
+[2025-11-19 21:39:20] INFO: Elapsed time 199
+[2025-11-19 21:39:21] [ErrorHandler] ERROR DETECTED!
+[2025-11-19 21:39:21] [ErrorHandler] Message: The client disconnected from the server during the simulation leaving it in an error state. The simulation will be terminated.
+[2025-11-19 21:39:21] [ErrorHandler] File: sv2l\src\story\Player.lua, Line: 214
+[2025-11-19 21:39:21] [ErrorHandler] Triggering an end of current story...
+[2025-11-19 21:39:21] [ErrorHandler] Stopping current story...
+[2025-11-19 21:39:21] INFO: EndStory:Apply a4
+[2025-11-19 21:39:21] INFO: EndStory:PausePerformer - waiting for the others to finish
+[2025-11-19 21:39:21] INFO: EndStory:PausePerformer - actor a4 finished and is waiting for the others to finish. Unfinished actors: 3
+[2025-11-19 21:39:21] INFO: a5
+[2025-11-19 21:39:21] INFO: a6
+[2025-11-19 21:39:21] INFO: a7
+[2025-11-19 21:39:21] INFO: EndStory:Apply a5
+[2025-11-19 21:39:21] INFO: EndStory:PausePerformer - waiting for the others to finish
+[2025-11-19 21:39:21] INFO: EndStory:PausePerformer - actor a5 finished and is waiting for the others to finish. Unfinished actors: 2
+[2025-11-19 21:39:21] INFO: a6
+[2025-11-19 21:39:21] INFO: a7
+[2025-11-19 21:39:21] INFO: EndStory:Apply a6
+[2025-11-19 21:39:21] INFO: EndStory:PausePerformer - waiting for the others to finish
+[2025-11-19 21:39:21] INFO: EndStory:PausePerformer - actor a6 finished and is waiting for the others to finish. Unfinished actors: 1
+[2025-11-19 21:39:21] INFO: a7
+[2025-11-19 21:39:21] INFO: EndStory:Apply a7
+[2025-11-19 21:39:21] INFO: EndStory:Apply a3
+[2025-11-19 21:39:21] INFO: EndStory:Apply a2
+[2025-11-19 21:39:21] INFO: EndStory:Apply a1
+[2025-11-19 21:39:21] INFO: EndStory:Apply a0
+[2025-11-19 21:39:21] ERROR: sv2l\src\story\Player.lua:214: The client disconnected from the server during the simulation leaving it in an error state. The simulation will be terminated.
+[2025-11-19 21:39:21] Server stopped!
+[2025-11-19 21:39:21] Stopping resources......................
+[2025-11-19 21:39:21] MODULE: Unloaded "Pathfind Module" (1.00) by "Jusonex, StiviK"
+[2025-11-19 21:39:21] MODULE: Unloaded "Screenshot Module" (2.00) by "Claude"
+[2025-11-19 21:39:21] Closing SQLite3 database

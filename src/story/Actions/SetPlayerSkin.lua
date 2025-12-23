@@ -3346,10 +3346,13 @@ function SetPlayerSkin:Apply(requiredAttributes)
 
     if requiredAttributes then
         for k,v in pairs(requiredAttributes) do
-            if DEBUG then
-                print('SetPlayerSkin:Apply: set data '..k:lower()..'='..tostring(v))
+            -- Skip 'id' field to prevent overwriting actor ID set by PedHandler
+            if k:lower() ~= 'id' then
+                if DEBUG then
+                    print('SetPlayerSkin:Apply: set data '..k:lower()..'='..tostring(v))
+                end
+                player:setData(k:lower(), v)
             end
-            player:setData(k:lower(), v)
         end
         if (player:getData('name')) then
             local splitName = player:getData('name'):split(' ')

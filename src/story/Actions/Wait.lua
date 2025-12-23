@@ -73,17 +73,29 @@ function Wait:ExecuteWaitingLoop()
     self.Performer:setData('enteredWaitingLoop', true)
 
     local function wait()
-        --Discard the z coordinate to handle the cases when actors located one next to each other are climbed on a table or another object.
-        local distance = (self.Performer.position - self.TargetItem.position).length
-        local otherTargetLocation = self.TargetItem:getData('nextTargetLocation')
-        local isOtherPlayerInTargetLocation = otherTargetLocation == self.NextLocation.LocationId
-        local isOtherPlayerNearby = distance <= 3.5
+        -- If both actors are executing Wait, they've already arrived at their POIs
+        -- Only check if waiting for same interaction
         local isOtherPlayerWaitingForSameInteraction = self.TargetItem:getData("isWaitingForInteraction") == self.targetInteraction
 
+        -- Keep these for debug logging only (not used in synchronization)
+        local distance = (self.Performer.position - self.TargetItem.position).length
+        local otherTargetLocation = self.TargetItem:getData('nextTargetLocation')
+
         -- Determine if conditions are met for mutual gaze
-        local shouldLookAtEachOther = isOtherPlayerNearby and
-                                      isOtherPlayerInTargetLocation and
-                                      isOtherPlayerWaitingForSameInteraction
+        local shouldLookAtEachOther = isOtherPlayerWaitingForSameInteraction
+
+        -- Debug logging for Wait synchronization state
+        if DEBUG and DEBUG_WAIT_SYNC then
+            print(string.format("[Wait:Sync] Actor %s (%s) polling partner %s:",
+                self.Performer:getData('id'),
+                self.doNothing and "passive" or "active",
+                self.TargetItem:getData('id')))
+            print(string.format("  - Interaction: %s (partner=%s, expected=%s)",
+                tostring(isOtherPlayerWaitingForSameInteraction),
+                tostring(self.TargetItem:getData('isWaitingForInteraction') or 'nil'),
+                tostring(self.targetInteraction)))
+            print(string.format("  - Result: shouldLookAtEachOther=%s", tostring(shouldLookAtEachOther)))
+        end
 
         -- When the other actor is not near the current actor, and the other actor is actually coming here to execute an interaction and the actor that does not initiate the interaction
         -- has already waited and is ready to be interacted with
@@ -162,7 +174,11 @@ function Wait:ExecuteWaitingLoop()
                 end
 
                 self.Performer:setData('enteredWaitingLoop', false)
+                self.Performer:setData('isWaitingForInteraction', nil)
                 self.Performer:setData('isAboutToInitiateInteraction', true)
+                -- Active actor clears target's wait flags too (prevents race condition)
+                self.TargetItem:setData('isWaitingForInteraction', nil)
+                self.TargetItem:setData('enteredWaitingLoop', false)
                 if DEBUG then
                     print(self.Performer:getData('id')..": WAIT IS FINISHED with distance between "..self.Performer:getData('id')..' and '..self.TargetItem:getData('id')..' is '..distance..'. The other target location is '..(otherTargetLocation or 'nil')..' The other interaction is '..(self.TargetItem:getData('isWaitingForInteraction') or 'nil'))
                     print('Exiting waiting loop actor '..tostring(self.Performer:getData('id'))..' enteredWaitingLoop '..tostring(self.Performer:getData('enteredWaitingLoop'))..' requestPause '..tostring(self.Performer:getData('requestPause'))..' paused '..tostring(self.Performer:getData('paused'))..' isReadyForInteraction '..tostring(self.Performer:getData('isReadyForInteraction'))..' isWaitingForInteraction '..tostring(self.Performer:getData('isWaitingForInteraction'))..' isAboutToInitiateInteraction '..tostring(self.Performer:getData('isAboutToInitiateInteraction')))
@@ -201,6 +217,7 @@ function Wait:ExecuteWaitingLoop()
 
             self.Performer:setData('isReadyForInteraction', true)
             self.Performer:setData('enteredWaitingLoop', false)
+            -- Note: Active actor clears isWaitingForInteraction for both actors
             if DEBUG then
                 print(self.Performer:getData('id')..": WAIT IS FINISHED with do nothing (next action is not called) distance between "..self.Performer:getData('id')..' and '..self.TargetItem:getData('id')..' is '..distance..'. The other target location is '..(otherTargetLocation or 'nil')..' The other interaction is '..(self.TargetItem:getData('isWaitingForInteraction') or 'nil'))
             end

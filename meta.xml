@@ -66,6 +66,7 @@
   <script src="src/api/CinematicCameraHandler.lua" type="shared"/>
   <!-- Api -->
   <script src="src/api/CameraHandler.lua" type="shared"/>
+  <script src="src/api/POICoordinator.lua" type="shared" />
   <script src="src/api/ActionsOrchestrator.lua" type="shared" />
   <script src="src/api/PedHandler.lua" type="shared"/>
   <script src="src/api/eStoryItemType.lua" type="shared"/>
@@ -236,6 +237,7 @@
   <script src="src/story/Episodes/MetaEpisode.lua" type="shared" />
   <!-- Story main items -->
   <script src="src/story/Player.lua" type="server" />
+  <script src="src/story/EventPlanner.lua" type="shared" />
   <script src="src/story/RandomStory.lua" type="shared" />
   <script src="src/story/GraphStory.lua" type="shared" />
   <!-- Client classes -->

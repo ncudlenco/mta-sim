@@ -48,8 +48,21 @@ function Vector3:__tostring()
 end
 
 function VectorUtils.angle(vec1, vec2)
-    -- Calculate the angle by applying law of cosines
-    return math.acos(vec1:dot(vec2)/(vec1.length*vec2.length))
+    local len1 = vec1.length
+    local len2 = vec2.length
+    local denominator = len1 * len2
+
+    -- Handle near-zero length vectors
+    if denominator < 0.0001 then
+        return 0
+    end
+
+    local cosAngle = vec1:dot(vec2) / denominator
+
+    -- Clamp to [-1, 1] to handle floating-point errors
+    cosAngle = math.max(-1, math.min(1, cosAngle))
+
+    return math.acos(cosAngle)
 end
 
 Vector3.angle = VectorUtils.angle

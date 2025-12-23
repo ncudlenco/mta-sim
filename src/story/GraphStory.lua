@@ -1,4 +1,4 @@
-GraphStory = class(StoryBase, function(o, spectators, logData, artifactCollectionFactory, artifactManager, eventBus)
+GraphStory = class(StoryBase, function(o, spectators, logData, artifactManager, eventBus)
     StoryBase.init(o, spectators, nil, eventBus)
     o.LogData = logData
     o.globalChainCounter = 0 -- Global counter for unique chain IDs
@@ -236,7 +236,7 @@ function GraphStory:Play()
     if DEBUG then
         print("GraphStory:Play - chosen valid skin and episode. Playing episode")
     end
-    if self:ProcessActions(requiredActors) then
+    if self:ProcessActions() then
         self.StartTime = os.time()
 
         if self.LogData then
@@ -1129,12 +1129,23 @@ end
 ---@param ro any The required object (the one that is used in the event)
 ---@param eventsWithObjectAsTarget any[] The events that have the object as target
 function GraphStory:FindAllValidActionsAndPois(episode, ro, eventsWithObjectAsTarget)
+    if DEBUG_VALIDATION then
+        print(string.format("[FindAllValidActionsAndPois] ENTRY: Episode=%s, Object=%s (id=%s, location=%s), EventsCount=%d, POIsToEvaluate=%d",
+            episode.name or "unknown",
+            ro.name,
+            ro.id,
+            ro.location or "any",
+            Count(eventsWithObjectAsTarget),
+            #episode.POI))
+    end
+
     return Select(episode.POI, function(poi)
         local actionMap = {}
         local eventMap = {}
         local objectMap = {}
         local eventObjectMap = {}
         local poiMap = {}
+        local pickupChainInfo = {}  -- FIX 12: Track PickUp locations for PutDown mapping
 
         if DEBUG_VALIDATION then
             print('Assessing actions in poi '..poi.Description..' in region '..poi.Region.name)
@@ -1151,7 +1162,7 @@ function GraphStory:FindAllValidActionsAndPois(episode, ro, eventsWithObjectAsTa
                 print("Action with matching object does not exist!")
             end
             -- if there is no actual action in the graph with the object, it means that the object is simply a requirement to exist in the environment.
-            if #eventsWithObjectAsTarget == 0 then
+            if IsEmpty(eventsWithObjectAsTarget) then
                 local episodeObject = FirstOrDefault(episode.Objects, function(eO) return eO.ObjectId and eO.type == ro.name end)
                 if episodeObject then
                     actionWithMatchingObject = {
@@ -1180,7 +1191,7 @@ function GraphStory:FindAllValidActionsAndPois(episode, ro, eventsWithObjectAsTa
         end
 
         -- The object is not used in any of the events, but it is simply a requirement of the episode.
-        if #eventsWithObjectAsTarget == 0 then
+        if IsEmpty(eventsWithObjectAsTarget) then
             print("The object is not used in any events "..ro.name)
             eventObjectMap[ro.id] = actionWithMatchingObject.TargetItem.ObjectId
             objectMap[actionWithMatchingObject.TargetItem.ObjectId] = ro.id
@@ -1202,7 +1213,7 @@ function GraphStory:FindAllValidActionsAndPois(episode, ro, eventsWithObjectAsTa
             return isMatchingAction and isMatchingLocation
         end)
 
-        if #eventsMatchingActionAndObject == 0 then
+        if IsEmpty(eventsMatchingActionAndObject) then
             if DEBUG_VALIDATION then
                 print("No events matching action exist!")
             end
@@ -1210,15 +1221,15 @@ function GraphStory:FindAllValidActionsAndPois(episode, ro, eventsWithObjectAsTa
         end
 
         if DEBUG_VALIDATION then
-            print('Found '..#eventsMatchingActionAndObject..' events matching action in POI '..poi.Description)
-            for _, event in ipairs(eventsMatchingActionAndObject) do
+            print('Found '..Count(eventsMatchingActionAndObject)..' events matching action in POI '..poi.Description)
+            for _, event in pairs(eventsMatchingActionAndObject) do
                 print('  Event matching action: '..event.id)
             end
         end
 
         -- Map all matching events to this POI and trace their event chains
         local allEventsMatched = true
-        for _, startingEvent in ipairs(eventsMatchingActionAndObject) do
+        for _, startingEvent in pairs(eventsMatchingActionAndObject) do
             local currentAction = actionWithMatchingObject
             local currentEvent = startingEvent
 
@@ -1345,7 +1356,18 @@ function GraphStory:FindAllValidActionsAndPois(episode, ro, eventsWithObjectAsTa
                     if DEBUG_VALIDATION then
                         print('Skipping interaction/special action: '..nextEvent.Action..' (does not need to match action chain)')
                     end
-                    break
+
+                    -- Stop if this skippable event changes location (matches backward validation pattern line 1257)
+                    -- Per line 1401 comment: iterate "until a Move action is found - and the location would be changed"
+                    if self:IsLocationChangingAction(nextEvent.Action) then
+                        if DEBUG_VALIDATION then
+                            print('Event '..nextEvent.Action..' causes location change - stopping chain validation')
+                        end
+
+                        break
+                    end
+
+                    -- Continue traversing for non-location-changing skippable actions (LookAtObject, Wave, etc.)
                 end
                 currentEvent = nextEvent
             end
@@ -1359,8 +1381,47 @@ function GraphStory:FindAllValidActionsAndPois(episode, ro, eventsWithObjectAsTa
             return nil
         end
 
+        -- FIX 13: Scan poiMap for any PickUp events that were matched during chain validation
+        -- This handles PickUp at ANY position in the chain (starting, backward traversal, or forward traversal)
+        for _, event in pairs(eventsWithObjectAsTarget) do
+            if event.Action:lower() == 'pickup' and poiMap[event.id] then
+                local graphObjectId = event.Entities and event.Entities[2]
+                if graphObjectId then
+                    pickupChainInfo[graphObjectId] = {
+                        locationId = poiMap[event.id],
+                        pickupEventId = event.id
+                    }
+                    if DEBUG_VALIDATION then
+                        print(string.format('[FIX13] Found matched PickUp: object=%s, locationId=%s, eventId=%s',
+                            graphObjectId, poiMap[event.id], event.id))
+                    end
+                end
+            end
+        end
+
+        -- FIX 13: Map any unmapped PutDown events to the same location as their PickUp
+        -- PutDown must return to the same location where the object was picked up
+        for _, event in pairs(eventsWithObjectAsTarget) do
+            if event.Action:lower() == 'putdown' and not poiMap[event.id] then
+                local graphObjectId = event.Entities and event.Entities[2]
+                local chainInfo = graphObjectId and pickupChainInfo[graphObjectId]
+                if chainInfo then
+                    poiMap[event.id] = chainInfo.locationId
+                    if DEBUG_VALIDATION then
+                        print(string.format('[FIX13] Mapped PutDown event %s to PickUp location: %s (from PickUp event %s)',
+                            event.id, chainInfo.locationId, chainInfo.pickupEventId))
+                    end
+                end
+            end
+        end
+
         if DEBUG_VALIDATION then
-            print("This poi is valid, returning ")
+            print(string.format("[FindAllValidActionsAndPois] MATCH: POI=%s (LocationId=%s, Region=%s, Episode=%s) matched for object %s",
+                poi.Description,
+                poi.LocationId,
+                poi.Region.name,
+                episode.name or "unknown",
+                ro.name))
         end
 
         return {
@@ -1371,7 +1432,8 @@ function GraphStory:FindAllValidActionsAndPois(episode, ro, eventsWithObjectAsTa
             poiMap = poiMap,
             poiDescription = poi.Description,
             poiRegion = poi.Region.name,
-            poiLocationId = poi.LocationId
+            poiLocationId = poi.LocationId,
+            episodeName = episode.name  -- Add episode name for AggregatePoiData logging
         }
     end)
 end
@@ -1584,7 +1646,29 @@ end
 --- @param poiMap table Map of graph events to POI location IDs
 --- @return boolean True if object was successfully mapped, false otherwise
 function GraphStory:MapSingleObject(ro, episode, actionMap, eventMap, objectMap, eventObjectMap, poiMap)
-    if eventObjectMap[ro.id] and #eventObjectMap[ro.id] > 0 then return true end
+    -- FIX Bug 5: Check if ALL non-skippable events using this object have poiMap entries
+    -- This prevents skipping objects that were partially mapped as side effects during
+    -- another object's chain tracing (e.g., laptop backward tracing maps m1.3 for officeChair,
+    -- but m1, m1.1 still need to be mapped)
+    local eventsWithObject = Where(self.graph, function(event)
+        return event.Action ~= 'Exists'
+            and #event.Entities == 2
+            and event.Entities[2] == ro.id
+            and not self:IsInteractionOrSkippableAction(event.Action)
+    end)
+
+    -- Only skip if ALL events already have poiMap entries
+    local allEventsMapped = #eventsWithObject > 0 and All(eventsWithObject, function(event)
+        return poiMap[event.id] and #poiMap[event.id] > 0
+    end)
+
+    if allEventsMapped then
+        if DEBUG_VALIDATION then
+            print("[MapSingleObject] Skipping "..ro.id.." - all "..#eventsWithObject.." events already have poiMap entries")
+        end
+        return true
+    end
+
     if DEBUG_VALIDATION and not eventObjectMap[ro.id] then
         print("The object "..ro.id..':'..ro.name..' ()'..(ro.location or '')..' is not mapped in any of event objects map')
         for k, v in pairs(eventObjectMap) do
@@ -1626,7 +1710,7 @@ function GraphStory:MapSingleObject(ro, episode, actionMap, eventMap, objectMap,
 
     if DEBUG_VALIDATION then
         print("Events with object as target:vvv")
-        for _, e in ipairs(eventsWithObjectAsTarget) do
+        for _, e in pairs(eventsWithObjectAsTarget) do
             print("Event with object "..ro.name..' as target '..e.id)
         end
     end
@@ -1634,6 +1718,13 @@ function GraphStory:MapSingleObject(ro, episode, actionMap, eventMap, objectMap,
     local allPotentialMatchingPoiData =
         self:FindAllValidActionsAndPois(episode, ro, eventsWithObjectAsTarget)
 
+    if DEBUG_VALIDATION then
+        print(string.format("[MapSingleObject] FindAllValidActionsAndPois returned %d matches for object %s (id=%s) in episode %s",
+            #allPotentialMatchingPoiData,
+            ro.name,
+            ro.id,
+            episode.name or "unknown"))
+    end
 
     local anyMatchesFound = self:AggregatePoiData(allPotentialMatchingPoiData, objectMap, eventObjectMap, actionMap, eventMap, poiMap)
     if not anyMatchesFound and DEBUG then
@@ -1649,6 +1740,14 @@ end
 
 function GraphStory:AggregatePoiData(poiDatas, objectMap, eventObjectMap, actionMap, eventMap, poiMap)
     local anyMatchesFound = false
+
+    if DEBUG_VALIDATION then
+        print("[AggregatePoiData] Processing " .. #poiDatas .. " poiData entries")
+    end
+
+    -- Track seen POI LocationIds to detect duplicates
+    local seenLocationIds = {}
+
     for poiIndex, poiData in ipairs(poiDatas) do
         if poiData and poiIndex then
             anyMatchesFound = true
@@ -1656,6 +1755,25 @@ function GraphStory:AggregatePoiData(poiDatas, objectMap, eventObjectMap, action
             -- Increment global counter and create unique chain ID
             self.globalChainCounter = self.globalChainCounter + 1
             local chainId = (poiData.poiDescription or "unknown") .. "_" .. (poiData.poiRegion or "unknown") .. "_" .. (poiData.poiLocationId or poiIndex) .. "_" .. self.globalChainCounter
+
+            -- Track duplicate LocationIds
+            local locationId = poiData.poiLocationId or "unknown"
+            if seenLocationIds[locationId] then
+                seenLocationIds[locationId] = seenLocationIds[locationId] + 1
+            else
+                seenLocationIds[locationId] = 1
+            end
+
+            if DEBUG_VALIDATION then
+                print(string.format("[AggregatePoiData] Entry %d: LocationId=%s, Description=%s, Region=%s, Episode=%s, ChainId=%s (occurrence #%d for this LocationId)",
+                    poiIndex,
+                    locationId,
+                    poiData.poiDescription or "unknown",
+                    poiData.poiRegion or "unknown",
+                    poiData.episodeName or "unknown",
+                    chainId,
+                    seenLocationIds[locationId]))
+            end
 
             -- Process objectMap
             for k, v in pairs(poiData.objectMap) do
@@ -1698,6 +1816,21 @@ function GraphStory:AggregatePoiData(poiDatas, objectMap, eventObjectMap, action
             end
         end
     end
+
+    -- Log summary of duplicates
+    if DEBUG_VALIDATION then
+        local duplicateCount = 0
+        for locationId, count in pairs(seenLocationIds) do
+            if count > 1 then
+                print(string.format("[AggregatePoiData] DUPLICATE: LocationId=%s appeared %d times (created %d chains)", locationId, count, count))
+                duplicateCount = duplicateCount + 1
+            end
+        end
+        if duplicateCount > 0 then
+            print(string.format("[AggregatePoiData] WARNING: %d LocationIds had duplicates", duplicateCount))
+        end
+    end
+
     return anyMatchesFound
 end
 
@@ -1816,6 +1949,34 @@ function GraphStory:IsInteractionOrSkippableAction(actionName)
     return false
 end
 
+--- Check if an action causes actor to leave current POI.
+--- Matches the backward validation pattern (line 1257) where Move is excluded
+--- from previous action candidates because it marks a location boundary.
+--- Per documentation (line 1401): validation iterates "until a Move action is found - and the location would be changed"
+---
+--- @param actionName string The name of the action to check
+--- @return boolean True if this action causes the actor to leave the current POI
+function GraphStory:IsLocationChangingAction(actionName)
+    local lower = actionName:lower()
+
+    -- Move/Walk explicitly changes location (matches line 1257 backward validation exclusion)
+    if lower == 'move' or lower == 'walk' then
+        return true
+    end
+
+    -- PickUp means actor takes object and moves to another location
+    if lower == 'pickup' then
+        return true
+    end
+
+    -- Interactions (Talk, Hug, Kiss, Give, etc.) move actor to interaction POI
+    if Any(self.Interactions, function(a) return a:lower() == lower end) then
+        return true
+    end
+
+    return false
+end
+
 ---Normalize graph action names to simulator action names.
 ---Handles inverse actions (INV-*) that map to different simulator classes.
 ---This is necessary because graphs use semantic names like "INV-Give" for clarity,
@@ -1825,12 +1986,12 @@ end
 function GraphStory:NormalizeActionName(graphActionName)
     local actionNameMap = {
         ["INV-Give"] = "Receive",
-        -- Future inverse action mappings can be added here as needed
+        ["LookAtObject"] = "LookAt",
     }
     return actionNameMap[graphActionName] or graphActionName
 end
 
-function GraphStory:ProcessActions(graphActors)
+function GraphStory:ProcessActions()
     print("GraphStory:ProcessActions --------------------------------------------------")
     local episode = self.CurrentEpisode
 
@@ -1871,74 +2032,28 @@ function GraphStory:ProcessActions(graphActors)
     self.eventObjectMap = eventObjectMap
     self.poiMap = poiMap
     self.eventMap = eventMap
+    self.interactionPoiMap = interactionPoiMap
+    self.interactionProcessedMap = interactionProcessedMap
+    self.objectMap = objectMap
+    self.actionMap = actionMap
 
     if DEBUG then
         self:DebugMap()
     end
 
-    for _,a in ipairs(graphActors) do
-        print(a.id)
-        self.actionsQueues[a.id] = {}
-        --find the first event for the current actor
-        local firstEvent = FirstOrDefault(self.graph, function(event)
-            return event.id == self.temporal['starting_actions'][a.id]
-        end)
-        if not firstEvent then
-            print('Could not find the first event for actor '..a.id)
-            return false
-        elseif DEBUG then
-        end
-        print('First event: '..firstEvent.id..' in location '..firstEvent.Location[1]..' with actor '..firstEvent.Entities[1])
-
-        -- Use poiMap to get correct episode's POI (handles duplicate location names)
-        local firstLocation = nil
-        if self.poiMap and self.poiMap[firstEvent.id] then
-            local poiMappings = self.poiMap[firstEvent.id]
-            if #poiMappings > 0 then
-                local poiLocationId = poiMappings[1].value
-                firstLocation = FirstOrDefault(self.CurrentEpisode.POI, function(poi)
-                    return poi.LocationId == poiLocationId and not poi.isBusy
-                end)
-
-                if DEBUG_EPISODE_GROUPS and firstLocation then
-                    print('[ProcessActions] Actor '..a.id..' spawning in '..
-                          firstLocation.Episode.name..': '..firstLocation.Description)
-                end
-            end
-        end
-
-        -- Fallback to old behavior if no mapping found
-        if not firstLocation then
-            firstLocation = PickRandom(Where(self.CurrentEpisode.POI, function(poi)
-                local eventLocation = ""
-                if firstEvent.Location and firstEvent.Location[1] then
-                    eventLocation = firstEvent.Location[1]
-                end
-            return not poi.isBusy and poi.Region.name:lower():find(eventLocation:lower()) end))
-        end
-
-        if not firstLocation then
-            print("Error: could not find a valid first location for event "..firstEvent.id)
-            return false
-        end
-
-        -- print('Actor '..a.id..' will be spawned in the location '..firstLocation.Description)
-
-        -- --this is the first location -> the place where the actor or ped is first spawned
-        firstLocation.isBusy = true
-        local ped = FirstOrDefault(self.CurrentEpisode.peds, function(p) return p:getData('id') == a.id end)
-        print('[GraphStory.ProcessActions] '..ped:getData('id')..': Location '..firstLocation.Description..' is set to busy')
-        ped:setData('startingPoiIdx', LastIndexOf(episode.POI, firstLocation))
-        ped.interior = firstLocation.Interior
-        ped.position = firstLocation.position
-        ped.rotation = Vector3(0,0,firstLocation.Angle)
-
-        firstEvent.isStartingEvent = true
-        self.interactionPoiMap = interactionPoiMap
-        self.interactionProcessedMap = interactionProcessedMap
-        self.nextEvents[a.id] = firstEvent
-        self.nextLocations[a.id] = firstLocation
+    -- Create EventPlanner and delegate first event initialization
+    if DEBUG then
+        print("[GraphStory] Creating EventPlanner for action planning")
     end
+    self.eventPlanner = EventPlanner(self, self.CurrentEpisode, self.poiMap)
+
+    -- Delegate first event initialization to EventPlanner
+    local success = self.eventPlanner:InitializeFirstEvents(self.CurrentEpisode.peds)
+    if not success then
+        print("[GraphStory] ERROR: EventPlanner failed to initialize first events")
+        return false
+    end
+
     print("GraphStory:ProcessActions --------------------------------------------------")
     return true
 end

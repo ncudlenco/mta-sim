@@ -1343,6 +1343,98 @@ function EventPlanner:PlanFixedChainAction(actor, event, segmentId)
                     print(string.format("[PlanFixedChainAction] Materialized object %s (physical=%s) at chain %s for actor %s",
                         eventObjectId, objectId, tostring(chainId), actorId))
                 end
+
+                -- Lazy materialize Exists-only constraint targets (e.g., Desk for "drinkChair behind Desk")
+                -- Must validate ALL constraints to the same target before materializing
+                local spatialConstraints = CURRENT_STORY.SpatialCoordinator:GetSpatialConstraints(eventObjectId)
+                if spatialConstraints then
+                    local materializedObjects = CURRENT_STORY.materializedObjects or {}
+
+                    -- Step 1: Collect unique Exists-only targets that need materialization
+                    local targetsToMaterialize = {}  -- targetGraphId -> true
+                    for _, constraint in ipairs(spatialConstraints) do
+                        local targetGraphId = constraint.target
+                        local targetGraphDef = CURRENT_STORY.graph[targetGraphId]
+                        local isExistsOnly = targetGraphDef and targetGraphDef.Action == "Exists"
+
+                        if isExistsOnly and not materializedObjects[targetGraphId] then
+                            targetsToMaterialize[targetGraphId] = true
+                        end
+                    end
+
+                    -- Step 2: For each unique target, find a physical object satisfying ALL constraints
+                    for targetGraphId, _ in pairs(targetsToMaterialize) do
+                        -- Collect ALL constraints from this source to this target
+                        local constraintsToTarget = {}
+                        for _, constraint in ipairs(spatialConstraints) do
+                            if constraint.target == targetGraphId then
+                                table.insert(constraintsToTarget, constraint)
+                            end
+                        end
+
+                        if DEBUG then
+                            print(string.format("[MaterializeConstraintTarget] %s has %d constraints to %s",
+                                eventObjectId, #constraintsToTarget, targetGraphId))
+                        end
+
+                        -- Find a physical object satisfying ALL constraints
+                        local targetChains = CURRENT_STORY.eventObjectMap[targetGraphId]
+                        if targetChains and #targetChains > 0 then
+                            for _, targetChain in ipairs(targetChains) do
+                                local targetPhysicalId = targetChain.value
+                                local targetObject = FirstOrDefault(CURRENT_STORY.CurrentEpisode.Objects, function(o)
+                                    return o.ObjectId == targetPhysicalId
+                                end)
+
+                                if targetObject and targetObject.position then
+                                    -- Validate ALL constraints to this target
+                                    local allValid = true
+                                    for _, constraint in ipairs(constraintsToTarget) do
+                                        local isValid = CURRENT_STORY.SpatialCoordinator:ValidateRelation(
+                                            objectInstance.position,
+                                            targetObject.position,
+                                            targetObject.rotation,
+                                            constraint.type,
+                                            objectInstance.type,
+                                            targetObject.type
+                                        )
+                                        if not isValid then
+                                            allValid = false
+                                            if DEBUG then
+                                                print(string.format("[MaterializeConstraintTarget] %s fails '%s' constraint to %s (%s)",
+                                                    targetPhysicalId, constraint.type, targetGraphId, eventObjectId))
+                                            end
+                                            break
+                                        end
+                                    end
+
+                                    if allValid then
+                                        -- Materialize this target (satisfies ALL constraints)
+                                        CURRENT_STORY.SpatialCoordinator:MaterializeObject(
+                                            targetGraphId,
+                                            targetObject.position,
+                                            targetObject.rotation or {x=0, y=0, z=0},
+                                            targetChain.chainId,
+                                            nil,
+                                            targetObject.element,
+                                            targetPhysicalId
+                                        )
+
+                                        if DEBUG then
+                                            local constraintTypes = {}
+                                            for _, c in ipairs(constraintsToTarget) do
+                                                table.insert(constraintTypes, c.type)
+                                            end
+                                            print(string.format("[MaterializeConstraintTarget] %s -> %s (triggered by %s [%s])",
+                                                targetGraphId, targetPhysicalId, eventObjectId, table.concat(constraintTypes, ", ")))
+                                        end
+                                        break  -- Found matching physical object, stop searching
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
             end
         end
     end
@@ -1967,6 +2059,20 @@ function EventPlanner:FilterCandidatesBySpatialConstraints(candidates, event)
             return true
         end
 
+        -- GLOBAL CHECK: Reject if physical object is already allocated to a DIFFERENT graph object
+        -- (same graph object can reuse the same physical object, any actor, any time)
+        for graphObjId, materialized in pairs(materializedObjects) do
+            if graphObjId ~= eventObjectId and  -- Different graph object
+               materialized.physicalObjectId == candidateObjectId then
+                -- This physical object belongs to a DIFFERENT graph object - reject
+                if DEBUG then
+                    print(string.format("[EventPlanner] Rejecting candidate %s: belongs to %s, but current event needs %s",
+                        candidateObjectId, graphObjId, eventObjectId))
+                end
+                return false
+            end
+        end
+
         -- Reject if this candidate uses the same physical object as any spatially-related materialized object
         -- Spatial relations (near, left, right, in_front, behind) all imply DIFFERENT objects
         for _, relation in ipairs(spatialConstraints) do
@@ -2004,11 +2110,14 @@ function EventPlanner:FilterCandidatesBySpatialConstraints(candidates, event)
             materializedObjects
         )
 
-        if not isValid and DEBUG then
-            print("[EventPlanner] POI " .. (candidatePoi.Description or "unknown") .. " rejected: " .. (reason or "constraint violation"))
+        if not isValid then
+            if DEBUG then
+                print("[EventPlanner] POI " .. (candidatePoi.Description or "unknown") .. " rejected: " .. (reason or "constraint violation"))
+            end
+            return false
         end
 
-        return isValid
+        return true
     end)
 
     if DEBUG then

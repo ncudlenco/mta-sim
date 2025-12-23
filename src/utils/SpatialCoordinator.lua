@@ -109,6 +109,15 @@ function SpatialCoordinator:CalculateRelativeAngle(sourcePos, targetPos, targetR
         targetForward.x * targetToSource.x + targetForward.y * targetToSource.y  -- Dot product
     ))
 
+    if DEBUG_SPATIAL then
+        print(string.format("[SpatialCoordinator] CalculateRelativeAngle: rot.z=%.2f yawRad=%.4f forward=(%.3f,%.3f) toSource=(%.3f,%.3f) angle=%.2f",
+            targetRotation.z or targetRotation[3] or 0,
+            yawRad,
+            targetForward.x, targetForward.y,
+            targetToSource.x, targetToSource.y,
+            angle))
+    end
+
     return angle
 end
 
@@ -347,6 +356,38 @@ function SpatialCoordinator:GetSpatialConstraints(objectId)
     return nil
 end
 
+--- Get objects that have spatial constraints pointing TO this object
+--- Used for pre-validation: when selecting a POI for object A, check if dependent
+--- objects (those with constraints pointing to A) can still find valid candidates
+---
+--- @param objectId string Object ID to find dependents for (e.g., "officeChair2")
+--- @return table Array of {objectId, relationType} for objects that reference this one
+function SpatialCoordinator:GetDependentObjects(objectId)
+    local dependents = {}
+    if not CURRENT_STORY or not CURRENT_STORY.spatial then
+        return dependents
+    end
+
+    for otherObjectId, constraints in pairs(CURRENT_STORY.spatial) do
+        if constraints.relations then
+            for _, relation in ipairs(constraints.relations) do
+                if relation.target == objectId then
+                    table.insert(dependents, {
+                        objectId = otherObjectId,
+                        relationType = relation.type
+                    })
+                end
+            end
+        end
+    end
+
+    if DEBUG_SPATIAL and #dependents > 0 then
+        print(string.format("[SpatialCoordinator] Found %d dependent objects for %s", #dependents, objectId))
+    end
+
+    return dependents
+end
+
 --- Validate all spatial constraints for an object against materialized world
 --- Checks each spatial relation defined for the object against currently materialized objects
 ---
@@ -479,8 +520,8 @@ function SpatialCoordinator:MaterializeObject(objectId, position, rotation, chai
         print(string.format("[SpatialCoordinator] Materialized %s at (%.2f, %.2f, %.2f) by actor %s chain %s physical=%s",
             objectId,
             position.x, position.y, position.z,
-            actorId,
-            chainId,
+            actorId or "none",
+            chainId or "unknown",
             physicalObjectId or "nil"))
     end
 end

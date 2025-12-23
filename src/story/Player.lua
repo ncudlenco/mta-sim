@@ -26,9 +26,9 @@ function startSimulation(source)
         artifactCollectionFactory:registerCollectors(artifactManager, spectatorsData)
     end
 
-    -- Create story with EventBus injected
+    -- Create story with dependencies injected
     if not FREE_ROAM and LOAD_FROM_GRAPH then
-        CURRENT_STORY = GraphStory(SPECTATORS, LOG_DATA, artifactCollectionFactory, artifactManager, eventBus)
+        CURRENT_STORY = GraphStory(SPECTATORS, LOG_DATA, artifactManager, eventBus)
     else
         CURRENT_STORY = RandomStory(SPECTATORS, MAX_ACTIONS, LOG_DATA, artifactCollectionFactory, artifactManager, eventBus)
     end

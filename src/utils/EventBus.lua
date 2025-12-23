@@ -22,7 +22,8 @@ EventBus = {
 function EventBus:getInstance()
     if not self.instance then
         self.instance = {
-            subscribers = {}
+            subscribers = {},
+            publishedEvents = {}  -- Track published events for deduplication
         }
         setmetatable(self.instance, { __index = self })
     end
@@ -71,6 +72,17 @@ function EventBus:publish(eventType, eventData)
         return
     end
 
+    -- Deduplicate graph_event_end events by eventId
+    if eventType == "graph_event_end" and eventData and eventData.eventId then
+        if self.publishedEvents[eventData.eventId] then
+            if DEBUG then
+                print("[EventBus] Skipping duplicate graph_event_end for "..eventData.eventId)
+            end
+            return
+        end
+        self.publishedEvents[eventData.eventId] = true
+    end
+
     if DEBUG then
         print("[EventBus] Publishing: "..eventType.." with data: "..stringifyTable(eventData))
     end
@@ -90,6 +102,7 @@ end
 --- @usage bus:clear()
 function EventBus:clear()
     self.subscribers = {}
+    self.publishedEvents = {}
     if DEBUG then
         print("[EventBus] Cleared all subscriptions")
     end

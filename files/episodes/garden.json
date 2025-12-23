@@ -1,1 +1,668 @@
-[ { "initialized": false, "peds": [ ], "ValidStartingLocations": [ ], "graphPath": "files\/paths\/garden.json", "ObjectsToDelete": [ ], "Objects": [ ], "temporaryInitialized": false, "name": "garden", "InteriorId": 0, "supertemplates": [ { "name": "taiChi", "position": { "y": -507.1651306152344, "x": 801.4617919921875, "z": 17.3359375 }, "templateIdx": 2, "offsets": [ { "skip": false, "offset": { "y": 0, "x": 0, "z": 0 }, "rotationOffset": { "y": 0, "x": 0, "z": 0 } } ], "templates": [ "yoga" ] }, { "name": "smoke", "position": { "y": -513.5684204101562, "x": 797.9453735351562, "z": 16.94523429870605 }, "templateIdx": 2, "offsets": [ { "skip": false, "offset": { "y": 0, "x": 0, "z": 0 }, "rotationOffset": { "y": 0, "x": 0, "z": 0 } } ], "templates": [ "cigar" ] }, { "name": "smoke", "position": { "y": -509.4927062988281, "x": 798.2894897460938, "z": 17.30415344238281 }, "templateIdx": 2, "offsets": [ { "skip": false, "offset": { "y": 0, "x": 0, "z": 0 }, "rotationOffset": { "y": 0, "x": 0, "z": 0 } } ], "templates": [ "cigar" ] }, { "name": "smoke", "position": { "y": -512.164306640625, "x": 794.9161376953125, "z": 17.11894607543945 }, "templateIdx": 2, "offsets": [ { "skip": false, "offset": { "y": 0, "x": 0, "z": 0 }, "rotationOffset": { "y": 0, "x": 0, "z": 0 } } ], "templates": [ "cigar" ] }, { "name": "talkPhone", "position": { "y": -514.3148803710938, "x": 803.072998046875, "z": 16.82843780517578 }, "templateIdx": 2, "offsets": [ { "skip": false, "offset": { "y": 0, "x": 0, "z": 0 }, "rotationOffset": { "y": 0, "x": 0, "z": 0 } } ], "templates": [ "talkPoiAndAction" ] }, { "name": "talkPhone", "position": { "y": -512.6812744140625, "x": 800.7674560546875, "z": 17.01274299621582 }, "templateIdx": 2, "offsets": [ { "skip": false, "offset": { "y": 0, "x": 0, "z": 0 }, "rotationOffset": { "y": 0, "x": 0, "z": 0 } } ], "templates": [ "talkPoiAndAction" ] }, { "name": "taiChi", "position": { "y": -509.7940673828125, "x": 804.6572265625, "z": 17.07090950012207 }, "templateIdx": 2, "offsets": [ { "skip": false, "offset": { "y": 0, "x": 0, "z": 0 }, "rotationOffset": { "y": 0, "x": 0, "z": 0 } } ], "templates": [ "yoga" ] }, { "name": "interactions", "position": { "y": -509.8228454589844, "x": 800.2597045898438, "z": 17.2160758972168 }, "templateIdx": 2, "templates": [ "poi" ], "offsets": [ { "offset": { "y": 0.2000000178813934, "x": 0.4000000059604645, "z": 0 }, "skip": false, "rotationOffset": { "y": 0, "x": 0, "z": 0 } } ] }, { "name": "interactions", "position": { "y": -516.239990234375, "x": 802.4332885742188, "z": 16.70181846618652 }, "templateIdx": 2, "templates": [ "poi" ], "offsets": [ { "offset": { "y": 0, "x": 0.800000011920929, "z": 0 }, "skip": false, "rotationOffset": { "y": 0, "x": 0, "z": 0 } } ] }, { "name": "interactions", "position": { "y": -511.5176696777344, "x": 793.1051025390625, "z": 17.1827220916748 }, "templateIdx": 2, "templates": [ "poi" ], "offsets": [ { "offset": { "y": 0, "x": 0.5, "z": 0 }, "skip": false, "rotationOffset": { "y": 0, "x": 0, "z": 0 } } ] }, { "name": "interactions", "position": { "y": -508.6812438964844, "x": 793.9136352539062, "z": 18.0129222869873 }, "templateIdx": 2, "offsets": [ { "skip": false, "offset": { "y": 1.100000143051147, "x": 0.9000000953674316, "z": 0 }, "rotationOffset": { "y": 0, "x": 0, "z": 0 } } ], "templates": [ "poi" ] } ], "Disposed": false, "Regions": [ { "Description": "", "cameras": [ { "y": -505.9018371477723, "x": 789.9621703922749, "lz": 16.8114070892334, "z": 19.51140785962343, "lx": 794.75146484375, "ly": -509.3203430175781, "roll": 0, "fov": 70 }, { "y": -510.0627807602286, "x": 790.3007323890924, "lz": 17.0129222869873, "z": 18.91292304545641, "lx": 792.6947631835938, "ly": -506.0674743652344, "roll": 0, "fov": 102.5 } ], "Objects": [ ], "center": { "y": -508.0766296386719, "x": 792.943359375, "z": 16.69467544555664 }, "EvaluatingRegion": false, "name": "porch", "vertexes": [ { "y": -506.1615600585938, "x": 795.8732299804688, "z": 17.0129222869873 }, { "y": -510.0744934082031, "x": 796.2039184570312, "z": 16.3929443359375 }, { "y": -510.1382446289062, "x": 789.8072509765625, "z": 16.3521614074707 }, { "y": -505.9322204589844, "x": 789.88916015625, "z": 17.02067184448242 } ] }, { "Description": "", "cameras": [ { "y": -505.7297460399568, "x": 800.3962524682283, "lz": 15.91462230682373, "z": 21.01462402939796, "lx": 800.4254760742188, "ly": -511.1691284179688, "roll": 0, "fov": 99.5 }, { "y": -521.6305969133973, "x": 805.9422729089856, "lz": 16.06266975402832, "z": 19.16267053037882, "lx": 799.9281005859375, "ly": -512.2374877929688, "roll": 0, "fov": 84 } ], "Objects": [ ], "center": { "y": -511.9501647949219, "x": 799.5881958007812, "z": 16.13887596130371 }, "EvaluatingRegion": false, "name": "garden", "vertexes": [ { "y": -506.2115478515625, "x": 796.7991333007812, "z": 16.70572853088379 }, { "y": -506.1228942871094, "x": 806.055908203125, "z": 16.71147537231445 }, { "y": -519.5618896484375, "x": 806.055419921875, "z": 15.38609409332275 }, { "y": -519.5261840820312, "x": 795.9923095703125, "z": 15.39287281036377 }, { "y": -510.1886596679688, "x": 795.8758544921875, "z": 16.31379699707031 }, { "y": -510.0895690917969, "x": 796.75048828125, "z": 16.32328605651855 } ] }, { "Description": "", "cameras": [ { "y": -523.7462158277631, "x": 793.4238159134984, "lz": 15.75493144989014, "z": 18.85493317991495, "fov": 70, "roll": 0, "ly": -511.7551879882812, "lx": 793.3652954101562 }, { "y": -510.04248046875, "x": 784.4230346679688, "lz": 15.83144664764404, "z": 23.33144836872816, "fov": 86, "roll": 0, "ly": -515.079345703125, "lx": 794.3160400390625 } ], "Objects": [ ], "center": { "y": -515.1084594726562, "x": 792.73486328125, "z": 15.8288402557373 }, "EvaluatingRegion": false, "name": "driveway", "vertexes": [ { "y": -510.3093566894531, "x": 789.7099609375, "z": 16.30189323425293 }, { "y": -519.9334716796875, "x": 789.843017578125, "z": 15.42172527313232 }, { "y": -520.0330200195312, "x": 795.7919311523438, "z": 15.34288597106934 }, { "y": -510.1578674316406, "x": 795.5945434570312, "z": 16.24885368347168 } ] }, { "Description": "", "cameras": [ ], "Objects": [ ], "center": { "y": -522.5673828125, "x": 798.8167724609375, "z": 15.3359375 }, "EvaluatingRegion": false, "name": "street", "vertexes": [ { "y": -520.1771850585938, "x": 790.5322265625, "z": 15.3359375 }, { "y": -524.9315795898438, "x": 790.0130004882812, "z": 15.3359375 }, { "y": -524.8310546875, "x": 807.4497680664062, "z": 15.3359375 }, { "y": -520.3297729492188, "x": 807.272216796875, "z": 15.3359375 } ] } ], "POI": [ { "Description": "house entrance", "Interior": 0, "Y": -506.4792175292969, "X": 795.0894775390625, "episodeLinks": [ "house1_sweet", "house1_stripped", "house1_preloaded", "house3_preloaded", "house7", "house8_preloaded", "house9", "house10_preloaded", "house12_preloaded" ], "Z": 18.0129222869873, "id": 1, "Angle": 185.0909118652344, "PossibleActions": [ ], "allActions": [ ] }, { "Description": "front of the house", "Interior": 0, "Y": -510.5158386230469, "X": 794.979736328125, "episodeLinks": [ ], "Z": 17.28152847290039, "id": 2, "Angle": 181.8126068115234, "PossibleActions": [ ], "allActions": [ ] }, { "Description": "garden ", "Interior": 0, "Y": -511.5870971679688, "X": 798.00927734375, "episodeLinks": [ ], "Z": 17.12056541442871, "id": 3, "Angle": 222.5463562011719, "PossibleActions": [ ], "allActions": [ ] }, { "Description": "garden ", "Interior": 0, "Y": -513.8286743164062, "X": 801.325439453125, "episodeLinks": [ ], "Z": 16.91915512084961, "id": 4, "Angle": 236.3331756591797, "PossibleActions": [ ], "allActions": [ ] }, { "Description": "garden ", "Interior": 0, "Y": -515.7196655273438, "X": 799.2701416015625, "episodeLinks": [ ], "Z": 16.74733734130859, "id": 5, "Angle": 125.7254333496094, "PossibleActions": [ ], "allActions": [ ] }, { "Description": "garden ", "Interior": 0, "Y": -507.1709594726562, "X": 800.205322265625, "episodeLinks": [ ], "Z": 17.3359375, "id": 6, "Angle": 175.5225219726562, "PossibleActions": [ ], "allActions": [ ] }, { "Description": "garden ", "Interior": 0, "Y": -508.9539184570312, "X": 803.0442504882812, "episodeLinks": [ ], "Z": 17.17858123779297, "id": 7, "Angle": 172.7025146484375, "PossibleActions": [ ], "allActions": [ ] }, { "Description": "garden ", "Interior": 0, "Y": -512.0217895507812, "X": 803.841796875, "episodeLinks": [ ], "Z": 16.95181274414062, "id": 8, "Angle": 167.375732421875, "PossibleActions": [ ], "allActions": [ ] }, { "Description": "street ", "Interior": 0, "Y": -523.3262939453125, "X": 792.7884521484375, "episodeLinks": [ ], "Z": 16.3359375, "id": 9, "Angle": 340.0066223144531, "PossibleActions": [ ], "allActions": [ ] }, { "Description": "on the porch", "Interior": 0, "Y": -507.4866638183594, "X": 792.806396484375, "episodeLinks": [ ], "Z": 18.0129222869873, "id": 10, "Angle": 18.23348999023438, "PossibleActions": [ ], "allActions": [ ] }, { "Description": "on the porch2", "Interior": 0, "Y": -507.4615783691406, "X": 791.4532470703125, "episodeLinks": [ ], "Z": 18.0129222869873, "id": 11, "Angle": 140.7245483398438, "PossibleActions": [ ], "allActions": [ ] } ] } ]
+[
+    {
+        "initialized": false,
+        "peds": [],
+        "ValidStartingLocations": [],
+        "graphPath": "files\/paths\/garden.json",
+        "ObjectsToDelete": [],
+        "Objects": [],
+        "temporaryInitialized": false,
+        "name": "garden",
+        "InteriorId": 0,
+        "supertemplates": [
+            {
+                "name": "taiChi",
+                "position": {
+                    "y": -507.1651306152344,
+                    "x": 801.4617919921875,
+                    "z": 17.3359375
+                },
+                "templateIdx": 2,
+                "offsets": [
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    }
+                ],
+                "templates": [
+                    "yoga"
+                ]
+            },
+            {
+                "name": "smoke",
+                "position": {
+                    "y": -513.5684204101562,
+                    "x": 797.9453735351562,
+                    "z": 16.94523429870605
+                },
+                "templateIdx": 2,
+                "offsets": [
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    }
+                ],
+                "templates": [
+                    "cigar"
+                ]
+            },
+            {
+                "name": "smoke",
+                "position": {
+                    "y": -509.4927062988281,
+                    "x": 798.2894897460938,
+                    "z": 17.30415344238281
+                },
+                "templateIdx": 2,
+                "offsets": [
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    }
+                ],
+                "templates": [
+                    "cigar"
+                ]
+            },
+            {
+                "name": "smoke",
+                "position": {
+                    "y": -512.164306640625,
+                    "x": 794.9161376953125,
+                    "z": 17.11894607543945
+                },
+                "templateIdx": 2,
+                "offsets": [
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    }
+                ],
+                "templates": [
+                    "cigar"
+                ]
+            },
+            {
+                "name": "talkPhone",
+                "position": {
+                    "y": -514.3148803710938,
+                    "x": 803.072998046875,
+                    "z": 16.82843780517578
+                },
+                "templateIdx": 2,
+                "offsets": [
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    }
+                ],
+                "templates": [
+                    "talkPoiAndAction"
+                ]
+            },
+            {
+                "name": "talkPhone",
+                "position": {
+                    "y": -512.6812744140625,
+                    "x": 800.7674560546875,
+                    "z": 17.01274299621582
+                },
+                "templateIdx": 2,
+                "offsets": [
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    }
+                ],
+                "templates": [
+                    "talkPoiAndAction"
+                ]
+            },
+            {
+                "name": "taiChi",
+                "position": {
+                    "y": -509.7940673828125,
+                    "x": 804.6572265625,
+                    "z": 17.07090950012207
+                },
+                "templateIdx": 2,
+                "offsets": [
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    }
+                ],
+                "templates": [
+                    "yoga"
+                ]
+            },
+            {
+                "name": "interactions",
+                "position": {
+                    "y": -509.8228454589844,
+                    "x": 800.2597045898438,
+                    "z": 17.2160758972168
+                },
+                "templateIdx": 2,
+                "templates": [
+                    "poi"
+                ],
+                "offsets": [
+                    {
+                        "offset": {
+                            "y": 0.2000000178813934,
+                            "x": 0.4000000059604645,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "interactions",
+                "position": {
+                    "y": -516.239990234375,
+                    "x": 802.4332885742188,
+                    "z": 16.70181846618652
+                },
+                "templateIdx": 2,
+                "templates": [
+                    "poi"
+                ],
+                "offsets": [
+                    {
+                        "offset": {
+                            "y": 0,
+                            "x": 0.800000011920929,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "interactions",
+                "position": {
+                    "y": -511.5176696777344,
+                    "x": 793.1051025390625,
+                    "z": 17.1827220916748
+                },
+                "templateIdx": 2,
+                "templates": [
+                    "poi"
+                ],
+                "offsets": [
+                    {
+                        "offset": {
+                            "y": 0,
+                            "x": 0.5,
+                            "z": 0
+                        },
+                        "skip": false,
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "interactions",
+                "position": {
+                    "y": -508.6812438964844,
+                    "x": 793.9136352539062,
+                    "z": 18.0129222869873
+                },
+                "templateIdx": 2,
+                "offsets": [
+                    {
+                        "skip": false,
+                        "offset": {
+                            "y": 1.100000143051147,
+                            "x": 0.9000000953674316,
+                            "z": 0
+                        },
+                        "rotationOffset": {
+                            "y": 0,
+                            "x": 0,
+                            "z": 0
+                        }
+                    }
+                ],
+                "templates": [
+                    "poi"
+                ]
+            }
+        ],
+        "Disposed": false,
+        "Regions": [
+            {
+                "Description": "",
+                "cameras": [
+                    {
+                        "y": -505.9018371477723,
+                        "x": 789.9621703922749,
+                        "lz": 16.8114070892334,
+                        "z": 19.51140785962343,
+                        "lx": 794.75146484375,
+                        "ly": -509.3203430175781,
+                        "roll": 0,
+                        "fov": 70
+                    },
+                    {
+                        "y": -510.0627807602286,
+                        "x": 790.3007323890924,
+                        "lz": 17.0129222869873,
+                        "z": 18.91292304545641,
+                        "lx": 792.6947631835938,
+                        "ly": -506.0674743652344,
+                        "roll": 0,
+                        "fov": 102.5
+                    }
+                ],
+                "Objects": [],
+                "center": {
+                    "y": -508.0766296386719,
+                    "x": 792.943359375,
+                    "z": 16.69467544555664
+                },
+                "EvaluatingRegion": false,
+                "name": "porch",
+                "vertexes": [
+                    {
+                        "y": -506.1615600585938,
+                        "x": 795.8732299804688,
+                        "z": 17.0129222869873
+                    },
+                    {
+                        "y": -510.0744934082031,
+                        "x": 796.2039184570312,
+                        "z": 16.3929443359375
+                    },
+                    {
+                        "y": -510.1382446289062,
+                        "x": 789.8072509765625,
+                        "z": 16.3521614074707
+                    },
+                    {
+                        "y": -505.9322204589844,
+                        "x": 789.88916015625,
+                        "z": 17.02067184448242
+                    }
+                ]
+            },
+            {
+                "Description": "",
+                "cameras": [
+                    {
+                        "y": -505.7297460399568,
+                        "x": 800.3962524682283,
+                        "lz": 15.91462230682373,
+                        "z": 21.01462402939796,
+                        "lx": 800.4254760742188,
+                        "ly": -511.1691284179688,
+                        "roll": 0,
+                        "fov": 99.5
+                    },
+                    {
+                        "y": -521.6305969133973,
+                        "x": 805.9422729089856,
+                        "lz": 16.06266975402832,
+                        "z": 19.16267053037882,
+                        "lx": 799.9281005859375,
+                        "ly": -512.2374877929688,
+                        "roll": 0,
+                        "fov": 84
+                    }
+                ],
+                "Objects": [],
+                "center": {
+                    "y": -511.9501647949219,
+                    "x": 799.5881958007812,
+                    "z": 16.13887596130371
+                },
+                "EvaluatingRegion": false,
+                "name": "garden",
+                "vertexes": [
+                    {
+                        "y": -506.2115478515625,
+                        "x": 796.7991333007812,
+                        "z": 16.70572853088379
+                    },
+                    {
+                        "y": -506.1228942871094,
+                        "x": 806.055908203125,
+                        "z": 16.71147537231445
+                    },
+                    {
+                        "y": -519.5618896484375,
+                        "x": 806.055419921875,
+                        "z": 15.38609409332275
+                    },
+                    {
+                        "y": -519.5261840820312,
+                        "x": 795.9923095703125,
+                        "z": 15.39287281036377
+                    },
+                    {
+                        "y": -510.1886596679688,
+                        "x": 795.8758544921875,
+                        "z": 16.31379699707031
+                    },
+                    {
+                        "y": -510.0895690917969,
+                        "x": 796.75048828125,
+                        "z": 16.32328605651855
+                    }
+                ]
+            },
+            {
+                "Description": "",
+                "cameras": [
+                    {
+                        "y": -523.7462158277631,
+                        "x": 793.4238159134984,
+                        "lz": 15.75493144989014,
+                        "z": 18.85493317991495,
+                        "fov": 70,
+                        "roll": 0,
+                        "ly": -511.7551879882812,
+                        "lx": 793.3652954101562
+                    },
+                    {
+                        "y": -510.04248046875,
+                        "x": 784.4230346679688,
+                        "lz": 15.83144664764404,
+                        "z": 23.33144836872816,
+                        "fov": 86,
+                        "roll": 0,
+                        "ly": -515.079345703125,
+                        "lx": 794.3160400390625
+                    }
+                ],
+                "Objects": [],
+                "center": {
+                    "y": -515.1084594726562,
+                    "x": 792.73486328125,
+                    "z": 15.8288402557373
+                },
+                "EvaluatingRegion": false,
+                "name": "driveway",
+                "vertexes": [
+                    {
+                        "y": -510.3093566894531,
+                        "x": 789.7099609375,
+                        "z": 16.30189323425293
+                    },
+                    {
+                        "y": -519.9334716796875,
+                        "x": 789.843017578125,
+                        "z": 15.42172527313232
+                    },
+                    {
+                        "y": -520.0330200195312,
+                        "x": 795.7919311523438,
+                        "z": 15.34288597106934
+                    },
+                    {
+                        "y": -510.1578674316406,
+                        "x": 795.5945434570312,
+                        "z": 16.24885368347168
+                    }
+                ]
+            },
+            {
+                "Description": "",
+                "cameras": [],
+                "Objects": [],
+                "center": {
+                    "y": -522.5673828125,
+                    "x": 798.8167724609375,
+                    "z": 15.3359375
+                },
+                "EvaluatingRegion": false,
+                "name": "street",
+                "vertexes": [
+                    {
+                        "y": -520.1771850585938,
+                        "x": 790.5322265625,
+                        "z": 15.3359375
+                    },
+                    {
+                        "y": -524.9315795898438,
+                        "x": 790.0130004882812,
+                        "z": 15.3359375
+                    },
+                    {
+                        "y": -524.8310546875,
+                        "x": 807.4497680664062,
+                        "z": 15.3359375
+                    },
+                    {
+                        "y": -520.3297729492188,
+                        "x": 807.272216796875,
+                        "z": 15.3359375
+                    }
+                ]
+            }
+        ],
+        "POI": [
+            {
+                "Description": "house entrance",
+                "Interior": 0,
+                "Y": -506.4792175292969,
+                "X": 795.0894775390625,
+                "episodeLinks": [
+                    "house1_sweet",
+                    "house1_stripped",
+                    "house1_preloaded",
+                    "house3_preloaded",
+                    "house7",
+                    "house8_preloaded",
+                    "house9",
+                    "house10_preloaded",
+                    "house12_preloaded"
+                ],
+                "Z": 18.0129222869873,
+                "id": 1,
+                "Angle": 185.0909118652344,
+                "PossibleActions": [],
+                "allActions": []
+            },
+            {
+                "Description": "front of the house",
+                "Interior": 0,
+                "Y": -510.5158386230469,
+                "X": 794.979736328125,
+                "episodeLinks": [],
+                "Z": 17.28152847290039,
+                "id": 2,
+                "Angle": 181.8126068115234,
+                "PossibleActions": [],
+                "allActions": []
+            },
+            {
+                "Description": "garden ",
+                "Interior": 0,
+                "Y": -511.5870971679688,
+                "X": 798.00927734375,
+                "episodeLinks": [],
+                "Z": 17.12056541442871,
+                "id": 3,
+                "Angle": 222.5463562011719,
+                "PossibleActions": [],
+                "allActions": []
+            },
+            {
+                "Description": "garden ",
+                "Interior": 0,
+                "Y": -513.8286743164062,
+                "X": 801.325439453125,
+                "episodeLinks": [],
+                "Z": 16.91915512084961,
+                "id": 4,
+                "Angle": 236.3331756591797,
+                "PossibleActions": [],
+                "allActions": []
+            },
+            {
+                "Description": "garden ",
+                "Interior": 0,
+                "Y": -515.7196655273438,
+                "X": 799.2701416015625,
+                "episodeLinks": [],
+                "Z": 16.74733734130859,
+                "id": 5,
+                "Angle": 125.7254333496094,
+                "PossibleActions": [],
+                "allActions": []
+            },
+            {
+                "Description": "garden ",
+                "Interior": 0,
+                "Y": -507.1709594726562,
+                "X": 800.205322265625,
+                "episodeLinks": [],
+                "Z": 17.3359375,
+                "id": 6,
+                "Angle": 175.5225219726562,
+                "PossibleActions": [],
+                "allActions": []
+            },
+            {
+                "Description": "garden ",
+                "Interior": 0,
+                "Y": -508.9539184570312,
+                "X": 803.0442504882812,
+                "episodeLinks": [],
+                "Z": 17.17858123779297,
+                "id": 7,
+                "Angle": 172.7025146484375,
+                "PossibleActions": [],
+                "allActions": []
+            },
+            {
+                "Description": "garden ",
+                "Interior": 0,
+                "Y": -512.0217895507812,
+                "X": 803.841796875,
+                "episodeLinks": [],
+                "Z": 16.95181274414062,
+                "id": 8,
+                "Angle": 167.375732421875,
+                "PossibleActions": [],
+                "allActions": []
+            },
+            {
+                "Description": "street ",
+                "Interior": 0,
+                "Y": -523.3262939453125,
+                "X": 792.7884521484375,
+                "episodeLinks": [],
+                "Z": 16.3359375,
+                "id": 9,
+                "Angle": 340.0066223144531,
+                "PossibleActions": [],
+                "allActions": []
+            },
+            {
+                "Description": "on the porch",
+                "Interior": 0,
+                "Y": -507.4866638183594,
+                "X": 792.806396484375,
+                "episodeLinks": [],
+                "Z": 18.0129222869873,
+                "id": 10,
+                "Angle": 18.23348999023438,
+                "PossibleActions": [],
+                "allActions": []
+            },
+            {
+                "Description": "on the porch2",
+                "Interior": 0,
+                "Y": -507.4615783691406,
+                "X": 791.4532470703125,
+                "episodeLinks": [],
+                "Z": 18.0129222869873,
+                "id": 11,
+                "Angle": 140.7245483398438,
+                "PossibleActions": [],
+                "allActions": []
+            }
+        ]
+    }
+]

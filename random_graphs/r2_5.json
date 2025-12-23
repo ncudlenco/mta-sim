@@ -1,0 +1,176 @@
+{
+  "temporal": {
+    "starting_actions": {
+      "a0": "a0_1"
+    },
+    "a0_1": {
+      "relations": [],
+      "next": "a0_2"
+    },
+    "a0_2": {
+      "relations": [],
+      "next": "a0_3"
+    },
+    "a0_3": {
+      "relations": [],
+      "next": "a0_4"
+    },
+    "a0_4": {
+      "relations": [],
+      "next": "a0_5"
+    },
+    "a0_5": {
+      "relations": [],
+      "next": "a0_6"
+    },
+    "a0_6": {
+      "relations": [],
+      "next": "a0_7"
+    },
+    "a0_7": {
+      "relations": [],
+      "next": "a0_8"
+    },
+    "a0_8": {
+      "relations": [],
+      "next": null
+    }
+  },
+  "spatial": {},
+  "semantic": {},
+  "camera": {},
+  "a0": {
+    "Action": "Exists",
+    "Entities": [
+      "a0"
+    ],
+    "Location": [
+      "hallway"
+    ],
+    "Timeframe": null,
+    "Properties": {
+      "Name": "Actor_a0",
+      "Gender": 2
+    }
+  },
+  "a0_1": {
+    "Action": "AnswerPhone",
+    "Entities": [
+      "a0",
+      "obj_0"
+    ],
+    "Location": [
+      "hallway"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a0_2": {
+    "Action": "TalkPhone",
+    "Entities": [
+      "a0",
+      "obj_0"
+    ],
+    "Location": [
+      "hallway"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a0_3": {
+    "Action": "HangUp",
+    "Entities": [
+      "a0",
+      "obj_0"
+    ],
+    "Location": [
+      "hallway"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "obj_0": {
+    "Action": "Exists",
+    "Entities": [
+      "obj_0"
+    ],
+    "Location": [
+      "hallway"
+    ],
+    "Timeframe": null,
+    "Properties": {
+      "Type": "MobilePhone"
+    }
+  },
+  "a0_4": {
+    "Action": "TakeOut",
+    "Entities": [
+      "a0",
+      "spawn_phone_a0"
+    ],
+    "Location": [
+      "hallway"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a0_5": {
+    "Action": "AnswerPhone",
+    "Entities": [
+      "a0",
+      "spawn_phone_a0"
+    ],
+    "Location": [
+      "hallway"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a0_6": {
+    "Action": "TalkPhone",
+    "Entities": [
+      "a0",
+      "spawn_phone_a0"
+    ],
+    "Location": [
+      "hallway"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a0_7": {
+    "Action": "HangUp",
+    "Entities": [
+      "a0",
+      "spawn_phone_a0"
+    ],
+    "Location": [
+      "hallway"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a0_8": {
+    "Action": "Stash",
+    "Entities": [
+      "a0",
+      "spawn_phone_a0"
+    ],
+    "Location": [
+      "hallway"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "spawn_phone_a0": {
+    "Action": "Exists",
+    "Entities": [
+      "spawn_phone_a0"
+    ],
+    "Location": null,
+    "Timeframe": null,
+    "Properties": {
+      "Type": "MobilePhone"
+    }
+  }
+}

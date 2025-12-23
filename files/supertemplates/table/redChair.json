@@ -23,18 +23,6 @@
         },
         "locations": [
             {
-                "Description": "near table",
-                "Interior": 9,
-                "Y": 3.5654296875,
-                "X": 6.916748046875,
-                "episodeLinks": [],
-                "Z": 4.5078125,
-                "id": 13,
-                "Angle": 235.4886779785156,
-                "PossibleActions": [],
-                "allActions": []
-            },
-            {
                 "Description": "near chair",
                 "Interior": 9,
                 "Y": -0.05926513671875,
@@ -69,7 +57,7 @@
                             "id": 4
                         },
                         "nextLocation": {
-                            "id": 13
+                            "id": 15
                         }
                     },
                     {
@@ -84,7 +72,7 @@
                             "id": 3
                         },
                         "nextLocation": {
-                            "id": 13
+                            "id": 15
                         }
                     },
                     {
@@ -99,7 +87,7 @@
                             "id": 4
                         },
                         "nextLocation": {
-                            "id": 13
+                            "id": 15
                         }
                     },
                     {
@@ -111,7 +99,7 @@
                         },
                         "id": 4,
                         "nextLocation": {
-                            "id": 13
+                            "id": 15
                         }
                     }
                 ]

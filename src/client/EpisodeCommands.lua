@@ -1766,7 +1766,7 @@ addCommandHandler("episode",
                             noCollisions = obj.noCollisions
                         }
                         object = loadstring(object.dynamicString)()
-                        object.ObjectId = #episode.Objects..''
+                        object.ObjectId = (#episode.Objects + 1)..''
 
                         table.insert(
                             episode.Objects,

@@ -36,6 +36,34 @@ function Give:Apply()
         self.TargetPlayer,
         self.InteractionOffset,
         function()
+            -- Look up the actual object from giver's pickedObjects (like Receive.lua does)
+            -- This is needed because EventPlanner may incorrectly set targetItem to otherActor
+            local giverPickedObjects = self.Performer:getData('pickedObjects') or {}
+            if #giverPickedObjects > 0 then
+                local pickedUpObjectId = giverPickedObjects[1][1]
+                local object = FirstOrDefault(CURRENT_STORY.CurrentEpisode.Objects, function(o)
+                    return o.ObjectId == pickedUpObjectId
+                end)
+                if object then
+                    self.TargetItem = object
+                else
+                    error('Could not find object '..(pickedUpObjectId or 'null_object')..
+                          ' that '..self.Performer:getData('id')..' would give to '..
+                          self.TargetPlayer:getData('id'))
+                end
+            end
+
+            -- Capture original chainId and locationId from giver's pickedObjects BEFORE removal
+            local originalChainId = nil
+            local originalLocationId = nil
+            for _, po in ipairs(giverPickedObjects) do
+                if po[1] == self.TargetItem.ObjectId then
+                    originalChainId = po[3]
+                    originalLocationId = po[4]
+                    break
+                end
+            end
+
             -- Actors are now properly positioned and facing each other
             StoryActionBase.GetLogger(self, story):Log(" and " .. self.TargetPlayer:getData('name') .. self.Description, self)
 
@@ -83,7 +111,8 @@ function Give:Apply()
                 if type(pickedObjects) == 'boolean' then
                     pickedObjects = {}
                 end
-                table.insert(pickedObjects, {self.TargetItem.ObjectId, self.TargetItem.Description})
+                -- Store original chainId and locationId with received object (from pickedObjects, not actor data)
+                table.insert(pickedObjects, {self.TargetItem.ObjectId, self.TargetItem.Description, originalChainId, originalLocationId})
                 if DEBUG then
                     print("[Give] Player "..self.TargetPlayer:getData('id').." pickedObjects after receiving:", self.TargetItem.Description )
                 end

@@ -1,0 +1,556 @@
+{
+  "temporal": {
+    "starting_actions": {
+      "a0": "a0_1",
+      "a1": "a1_11",
+      "a2": "a2_17"
+    },
+    "a0_1": {
+      "relations": [],
+      "next": "a0_2"
+    },
+    "a0_2": {
+      "relations": [],
+      "next": "a0_3"
+    },
+    "a0_3": {
+      "relations": [],
+      "next": "a0_4"
+    },
+    "a0_4": {
+      "relations": [],
+      "next": "a0_5"
+    },
+    "a0_5": {
+      "relations": [],
+      "next": "a0_6"
+    },
+    "a0_6": {
+      "relations": [],
+      "next": "a0_7"
+    },
+    "a0_7": {
+      "relations": [],
+      "next": "a0_8"
+    },
+    "a0_8": {
+      "relations": [],
+      "next": "a0_9"
+    },
+    "a0_9": {
+      "relations": [],
+      "next": "a0_10"
+    },
+    "a0_10": {
+      "relations": [
+        "r1",
+        "r3"
+      ],
+      "next": null
+    },
+    "a1_11": {
+      "relations": [
+        "r2"
+      ],
+      "next": "a1_12"
+    },
+    "a1_12": {
+      "relations": [],
+      "next": "a1_13"
+    },
+    "a1_13": {
+      "relations": [],
+      "next": "a1_14"
+    },
+    "a1_14": {
+      "relations": [],
+      "next": "a1_15"
+    },
+    "a1_15": {
+      "relations": [],
+      "next": "a1_16"
+    },
+    "a1_16": {
+      "relations": [],
+      "next": null
+    },
+    "a2_17": {
+      "relations": [
+        "r4"
+      ],
+      "next": "a2_18"
+    },
+    "a2_18": {
+      "relations": [],
+      "next": "a2_19"
+    },
+    "a2_19": {
+      "relations": [],
+      "next": "a2_20"
+    },
+    "a2_20": {
+      "relations": [],
+      "next": "a2_21"
+    },
+    "a2_21": {
+      "relations": [],
+      "next": "a2_22"
+    },
+    "a2_22": {
+      "relations": [],
+      "next": "a2_23"
+    },
+    "a2_23": {
+      "relations": [],
+      "next": "a2_24"
+    },
+    "a2_24": {
+      "relations": [],
+      "next": "a2_25"
+    },
+    "a2_25": {
+      "relations": [],
+      "next": "a2_26"
+    },
+    "a2_26": {
+      "relations": [],
+      "next": null
+    },
+    "r1": {
+      "type": "before",
+      "source": "a0_10",
+      "target": "a1_11"
+    },
+    "r2": {
+      "type": "after",
+      "source": "a1_11",
+      "target": "a0_10"
+    },
+    "r3": {
+      "type": "before",
+      "source": "a0_10",
+      "target": "a2_17"
+    },
+    "r4": {
+      "type": "after",
+      "source": "a2_17",
+      "target": "a0_10"
+    }
+  },
+  "spatial": {},
+  "semantic": {},
+  "camera": {},
+  "a0": {
+    "Action": "Exists",
+    "Entities": [
+      "a0"
+    ],
+    "Location": [
+      "porch"
+    ],
+    "Timeframe": null,
+    "Properties": {
+      "Name": "Actor_a0",
+      "Gender": 2
+    }
+  },
+  "a1": {
+    "Action": "Exists",
+    "Entities": [
+      "a1"
+    ],
+    "Location": [
+      "bedroom"
+    ],
+    "Timeframe": null,
+    "Properties": {
+      "Name": "Actor_a1",
+      "Gender": 2
+    }
+  },
+  "a2": {
+    "Action": "Exists",
+    "Entities": [
+      "a2"
+    ],
+    "Location": [
+      "bedroom"
+    ],
+    "Timeframe": null,
+    "Properties": {
+      "Name": "Actor_a2",
+      "Gender": 2
+    }
+  },
+  "a0_1": {
+    "Action": "TakeOut",
+    "Entities": [
+      "a0",
+      "spawn_cig_a0"
+    ],
+    "Location": [
+      "porch"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a0_2": {
+    "Action": "SmokeIn",
+    "Entities": [
+      "a0",
+      "spawn_cig_a0"
+    ],
+    "Location": [
+      "porch"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a0_3": {
+    "Action": "Smoke",
+    "Entities": [
+      "a0",
+      "spawn_cig_a0"
+    ],
+    "Location": [
+      "porch"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a0_4": {
+    "Action": "SmokeOut",
+    "Entities": [
+      "a0",
+      "spawn_cig_a0"
+    ],
+    "Location": [
+      "porch"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a0_5": {
+    "Action": "Stash",
+    "Entities": [
+      "a0",
+      "spawn_cig_a0"
+    ],
+    "Location": [
+      "porch"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "spawn_cig_a0": {
+    "Action": "Exists",
+    "Entities": [
+      "spawn_cig_a0"
+    ],
+    "Location": null,
+    "Timeframe": null,
+    "Properties": {
+      "Type": "Cigarette"
+    }
+  },
+  "a0_6": {
+    "Action": "TakeOut",
+    "Entities": [
+      "a0",
+      "spawn_cig_a0"
+    ],
+    "Location": [
+      "porch"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a0_7": {
+    "Action": "SmokeIn",
+    "Entities": [
+      "a0",
+      "spawn_cig_a0"
+    ],
+    "Location": [
+      "porch"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a0_8": {
+    "Action": "Smoke",
+    "Entities": [
+      "a0",
+      "spawn_cig_a0"
+    ],
+    "Location": [
+      "porch"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a0_9": {
+    "Action": "SmokeOut",
+    "Entities": [
+      "a0",
+      "spawn_cig_a0"
+    ],
+    "Location": [
+      "porch"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a0_10": {
+    "Action": "Stash",
+    "Entities": [
+      "a0",
+      "spawn_cig_a0"
+    ],
+    "Location": [
+      "porch"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a1_11": {
+    "Action": "GetOn",
+    "Entities": [
+      "a1",
+      "obj_0"
+    ],
+    "Location": [
+      "bedroom"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a1_12": {
+    "Action": "Sleep",
+    "Entities": [
+      "a1",
+      "obj_0"
+    ],
+    "Location": [
+      "bedroom"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a1_13": {
+    "Action": "GetOff",
+    "Entities": [
+      "a1",
+      "obj_0"
+    ],
+    "Location": [
+      "bedroom"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "obj_0": {
+    "Action": "Exists",
+    "Entities": [
+      "obj_0"
+    ],
+    "Location": [
+      "bedroom"
+    ],
+    "Timeframe": null,
+    "Properties": {
+      "Type": "Bed"
+    }
+  },
+  "a1_14": {
+    "Action": "GetOn",
+    "Entities": [
+      "a1",
+      "obj_1"
+    ],
+    "Location": [
+      "bedroom"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a1_15": {
+    "Action": "Sleep",
+    "Entities": [
+      "a1",
+      "obj_1"
+    ],
+    "Location": [
+      "bedroom"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a1_16": {
+    "Action": "GetOff",
+    "Entities": [
+      "a1",
+      "obj_1"
+    ],
+    "Location": [
+      "bedroom"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "obj_1": {
+    "Action": "Exists",
+    "Entities": [
+      "obj_1"
+    ],
+    "Location": [
+      "bedroom"
+    ],
+    "Timeframe": null,
+    "Properties": {
+      "Type": "Bed"
+    }
+  },
+  "a2_17": {
+    "Action": "TakeOut",
+    "Entities": [
+      "a2",
+      "spawn_cig_a2"
+    ],
+    "Location": [
+      "bedroom"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a2_18": {
+    "Action": "SmokeIn",
+    "Entities": [
+      "a2",
+      "spawn_cig_a2"
+    ],
+    "Location": [
+      "bedroom"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a2_19": {
+    "Action": "Smoke",
+    "Entities": [
+      "a2",
+      "spawn_cig_a2"
+    ],
+    "Location": [
+      "bedroom"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a2_20": {
+    "Action": "SmokeOut",
+    "Entities": [
+      "a2",
+      "spawn_cig_a2"
+    ],
+    "Location": [
+      "bedroom"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a2_21": {
+    "Action": "Stash",
+    "Entities": [
+      "a2",
+      "spawn_cig_a2"
+    ],
+    "Location": [
+      "bedroom"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "spawn_cig_a2": {
+    "Action": "Exists",
+    "Entities": [
+      "spawn_cig_a2"
+    ],
+    "Location": null,
+    "Timeframe": null,
+    "Properties": {
+      "Type": "Cigarette"
+    }
+  },
+  "a2_22": {
+    "Action": "TakeOut",
+    "Entities": [
+      "a2",
+      "spawn_phone_a2"
+    ],
+    "Location": [
+      "bedroom"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a2_23": {
+    "Action": "AnswerPhone",
+    "Entities": [
+      "a2",
+      "spawn_phone_a2"
+    ],
+    "Location": [
+      "bedroom"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a2_24": {
+    "Action": "TalkPhone",
+    "Entities": [
+      "a2",
+      "spawn_phone_a2"
+    ],
+    "Location": [
+      "bedroom"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a2_25": {
+    "Action": "HangUp",
+    "Entities": [
+      "a2",
+      "spawn_phone_a2"
+    ],
+    "Location": [
+      "bedroom"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a2_26": {
+    "Action": "Stash",
+    "Entities": [
+      "a2",
+      "spawn_phone_a2"
+    ],
+    "Location": [
+      "bedroom"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "spawn_phone_a2": {
+    "Action": "Exists",
+    "Entities": [
+      "spawn_phone_a2"
+    ],
+    "Location": null,
+    "Timeframe": null,
+    "Properties": {
+      "Type": "MobilePhone"
+    }
+  }
+}

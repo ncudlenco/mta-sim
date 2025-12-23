@@ -12,6 +12,8 @@ function EndStory:Apply()
     if self.Performer:getData('storyEnded') then
         return
     end
+    CURRENT_STORY.CameraHandler:clearFocusRequests(self.Performer:getData('id'))
+
     local areOtherActorsStillPerforming = self:PausePerformer()
     if not areOtherActorsStillPerforming then
         self:EndStory()

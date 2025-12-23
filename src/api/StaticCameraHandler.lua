@@ -30,6 +30,13 @@ end
 --- Adds actor to focus queue and triggers autofocus if this is the first request
 --- @param playerId string The id of the player requesting focus
 function StaticCameraHandler:requestFocus(playerId)
+    local actor = FirstOrDefault(CURRENT_STORY.CurrentEpisode.peds, function(ped) return ped:getData('id') == playerId end)
+    if actor and actor:getData('storyEnded') then
+        if DEBUG_CAMERA then
+            print("[StaticCameraHandler] requestFocus ignored for ended story actor "..playerId)
+        end
+        return
+    end
     if not inList(playerId, self.FocusRequests) then
         table.insert(self.FocusRequests, playerId)
     end

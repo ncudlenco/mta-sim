@@ -55,6 +55,18 @@ function Receive:Apply()
 
             self.TargetItem = object
 
+            -- Capture original chainId and locationId from giver's pickedObjects BEFORE removal
+            local originalChainId = nil
+            local originalLocationId = nil
+            local giverPickedObjects = self.TargetPlayer:getData('pickedObjects') or {}
+            for _, po in ipairs(giverPickedObjects) do
+                if po[1] == self.TargetItem.ObjectId then
+                    originalChainId = po[3]
+                    originalLocationId = po[4]
+                    break
+                end
+            end
+
             outputConsole("Swapping object from one player to the other...")
 
             if DEBUG then
@@ -110,7 +122,8 @@ function Receive:Apply()
                     print("[DEBUG Receive] Performer pickedObjects before insert: count = " .. #pickedObjects)
                 end
 
-                table.insert(pickedObjects, {self.TargetItem.ObjectId, self.TargetItem.Description})
+                -- Store original chainId and locationId with received object (from pickedObjects, not actor data)
+                table.insert(pickedObjects, {self.TargetItem.ObjectId, self.TargetItem.Description, originalChainId, originalLocationId})
 
                 if DEBUG then
                     print("[Receive] Player "..self.Performer:getData('id').." pickedObjects after receiving:", self.TargetItem.Description )
@@ -118,15 +131,6 @@ function Receive:Apply()
                 end
 
                 self.Performer:setData('pickedObjects', pickedObjects)
-
-                -- Inherit giver's chain (receiver now owns the object)
-                local giverChainId = self.TargetPlayer:getData('mappedChainId')
-                if giverChainId then
-                    self.Performer:setData('mappedChainId', giverChainId)
-                    if DEBUG then
-                        print("[Receive] Receiver " .. self.Performer:getData('id') .. " inherited chain from giver: " .. giverChainId)
-                    end
-                end
 
                 if DEBUG then
                     print("[DEBUG Receive] Performer callback completed - object added")

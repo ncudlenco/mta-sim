@@ -70,15 +70,64 @@ function Flatten(arr)
     return res
 end
 
+--- Filter elements from an array or dictionary based on a predicate function.
+--- For dictionaries (tables with non-numeric keys), preserves original keys.
+--- For arrays (tables with numeric keys), re-indexes to contiguous [1, 2, 3...].
+--- @param arr table The input array or dictionary
+--- @param func function Predicate function that returns true for elements to keep
+--- @return table Filtered array or dictionary
 function Where(arr, func)
     local res = {}
     if arr == nil then return res end
-    for _, a in pairs(arr) do --I don't care about the order, this will work on arrays and tables
-        if func(a) then
-            table.insert(res, a)
+
+    -- Check if input has any non-numeric keys (dictionary)
+    local isDictionary = false
+    for k, _ in pairs(arr) do
+        if type(k) ~= "number" then
+            isDictionary = true
+            break
         end
     end
+
+    if isDictionary then
+        -- Dictionary: preserve original keys
+        for k, v in pairs(arr) do
+            if func(v) then
+                res[k] = v
+            end
+        end
+    else
+        -- Array: re-index to contiguous [1, 2, 3...]
+        for k, v in pairs(arr) do
+            if func(v) then
+                table.insert(res, v)
+            end
+        end
+    end
+
     return res
+end
+
+--- Check if a table is empty (works for both arrays and dictionaries).
+--- Uses next() which works correctly regardless of key type.
+--- @param tbl table The table to check
+--- @return boolean True if table is empty or nil
+function IsEmpty(tbl)
+    if tbl == nil then return true end
+    return next(tbl) == nil
+end
+
+--- Count the number of entries in a table (works for both arrays and dictionaries).
+--- For arrays, this is equivalent to #arr, but for dictionaries it counts all key-value pairs.
+--- @param tbl table The table to count
+--- @return number The number of entries in the table
+function Count(tbl)
+    if tbl == nil then return 0 end
+    local count = 0
+    for _ in pairs(tbl) do
+        count = count + 1
+    end
+    return count
 end
 
 function DropNull(arr)

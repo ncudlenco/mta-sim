@@ -13,9 +13,16 @@ function PedHandler:ReInitialize()
     end
 end
 
-function PedHandler:InitializePed(ped)
-    local g = Guid()
-    ped:setData("id", g.Id)
+--- Initialize a ped with default data.
+--- @param ped table The ped element to initialize
+--- @param actorId string|nil Optional actor ID from graph (e.g., "a1", "a2"). If nil, generates GUID.
+function PedHandler:InitializePed(ped, actorId)
+    if actorId then
+        ped:setData("id", actorId)  -- Use provided graph actor ID
+    else
+        local g = Guid()
+        ped:setData("id", g.Id)  -- Fallback to GUID for non-graph stories
+    end
     ped:setData("isPed", true)
     ped:setData("isSpawned", false)
     ped:setData("isReadyForInteraction", false)
@@ -90,7 +97,15 @@ function PedHandler:ClearInventoryInstance(ped, slotNumber)
     self.inventoryInstances[pedId][slotNumber] = nil
 end
 
-function PedHandler:GetOrCreatePed(modelId, x, y, z, angle)
+--- Get or create a ped with specified model and position.
+--- @param modelId number The ped model ID
+--- @param x number X coordinate
+--- @param y number Y coordinate
+--- @param z number Z coordinate
+--- @param angle number Rotation angle
+--- @param actorId string|nil Optional actor ID from graph (e.g., "a1", "a2")
+--- @return table The ped element
+function PedHandler:GetOrCreatePed(modelId, x, y, z, angle, actorId)
     print('Get or create ped '..modelId)
     outputConsole('Get or create ped '..modelId)
     local ped = nil
@@ -118,7 +133,7 @@ function PedHandler:GetOrCreatePed(modelId, x, y, z, angle)
         ped:setData('assigned', true)
         table.insert(self.PED_ZOO, ped)
     end
-    self:InitializePed(ped)
+    self:InitializePed(ped, actorId)
     return ped
 end
 

@@ -556,6 +556,13 @@ function GraphStory:ValidateEpisode(
         -- Continue regardless of success/failure - we'll count what was mapped later
     end
 
+    -- Filter chains that cannot satisfy spatial relations with other chains
+    -- This must happen AFTER all objects are mapped so we know all chain combinations
+    -- Chains are filtered so that only those with a compatible partner (in a DIFFERENT chain) remain
+    if self.spatial then
+        self:FilterChainsBySpatialCompatibility(episode, eventObjectMap, poiMap, actionMap, eventMap)
+    end
+
     -- Validate spatial constraints for mapped objects
     local spatiallyValid, failedObjects = self:ValidateSpatialConstraints(episode, eventObjectMap)
     if not spatiallyValid then
@@ -1605,6 +1612,360 @@ function GraphStory:ValidateSpatialConstraints(episode, eventObjectMap)
     return isValid, #failedObjects > 0 and failedObjects or nil
 end
 
+--- Helper function to remove entries with a specific chainId from a map
+--- @param map table The map to filter (poiMap, actionMap, or eventMap)
+--- @param chainIdToRemove string The chainId to remove
+--- @param mapName string Name of the map for debug logging
+local function RemoveChainFromMap(map, chainIdToRemove, mapName)
+    for key, entries in pairs(map) do
+        if type(entries) == 'table' then
+            local filteredEntries = {}
+            for _, entry in ipairs(entries) do
+                if entry.chainId ~= chainIdToRemove then
+                    table.insert(filteredEntries, entry)
+                else
+                    if DEBUG_FILTER_CHAINS then
+                        print(string.format("[FilterChains] Removed from %s: key=%s chainId=%s",
+                            mapName, tostring(key), chainIdToRemove))
+                    end
+                end
+            end
+            map[key] = filteredEntries
+        end
+    end
+end
+
+--- Filter chains to only keep those that have at least one compatible partner chain
+--- for spatial constraints. Since actors use DIFFERENT chains, each chain must have
+--- a compatible OTHER chain (not itself) that satisfies the spatial relation.
+--- Also removes corresponding entries from poiMap, actionMap, and eventMap.
+---
+--- @param episode Episode The episode being validated
+--- @param eventObjectMap table Map of event object IDs to chains
+--- @param poiMap table Map of graph events to POI location IDs (optional)
+--- @param actionMap table Map of simulator actions to graph events (optional)
+--- @param eventMap table Map of graph events to simulator actions (optional)
+--- @return boolean True if filtering completed (does not indicate if chains remain)
+function GraphStory:FilterChainsBySpatialCompatibility(episode, eventObjectMap, poiMap, actionMap, eventMap)
+    if DEBUG_FILTER_CHAINS then
+        print("[FilterChains] ========== ENTERING FilterChainsBySpatialCompatibility ==========")
+    end
+
+    if not self.spatial then
+        if DEBUG_FILTER_CHAINS then
+            print("[FilterChains] No spatial constraints defined, skipping filter")
+        end
+        return true -- No spatial constraints to filter
+    end
+
+    -- Debug: Print all spatial constraints
+    if DEBUG_FILTER_CHAINS then
+        print("[FilterChains] Spatial constraints found:")
+        for objId, constraintDef in pairs(self.spatial) do
+            if constraintDef.relations then
+                for _, rel in ipairs(constraintDef.relations) do
+                    print(string.format("[FilterChains]   %s --%s--> %s", objId, rel.type, rel.target))
+                end
+            end
+        end
+
+        -- Debug: Print all chains BEFORE filtering
+        print("[FilterChains] Chains BEFORE filtering:")
+        for objId, chains in pairs(eventObjectMap) do
+            local chainStrs = {}
+            for _, c in ipairs(chains) do
+                table.insert(chainStrs, string.format("value=%s,chainId=%s", tostring(c.value), tostring(c.chainId)))
+            end
+            print(string.format("[FilterChains]   %s: %d chains -> [%s]", objId, #chains, table.concat(chainStrs, " | ")))
+        end
+    end
+
+    local anyFiltered = false
+
+    -- For each object with spatial constraints
+    for sourceObjectId, spatialConstraintDef in pairs(self.spatial) do
+        if spatialConstraintDef.relations and #spatialConstraintDef.relations > 0 then
+            local sourceChains = eventObjectMap[sourceObjectId]
+            if sourceChains and #sourceChains > 0 then
+                for _, relation in ipairs(spatialConstraintDef.relations) do
+                    local targetObjectId = relation.target
+                    local relationType = relation.type
+
+                    if DEBUG_FILTER_CHAINS then
+                        print(string.format("[FilterChains] Processing constraint: %s --%s--> %s", sourceObjectId, relationType, targetObjectId))
+                    end
+
+                    local targetChains = eventObjectMap[targetObjectId]
+                    if not targetChains or #targetChains == 0 then
+                        if DEBUG_FILTER_CHAINS then
+                            print(string.format("[FilterChains]   WARNING: No target chains for %s, skipping this constraint", targetObjectId))
+                        end
+                    end
+                    if targetChains and #targetChains > 0 then
+                        if DEBUG_FILTER_CHAINS then
+                            print(string.format("[FilterChains]   Source %s has %d chains, Target %s has %d chains",
+                                sourceObjectId, #sourceChains, targetObjectId, #targetChains))
+                        end
+
+                        -- Filter source chains: keep only those with at least one compatible target
+                        local validSourceChains = {}
+                        for _, sourceChain in ipairs(sourceChains) do
+                            if DEBUG_FILTER_CHAINS then
+                                print(string.format("[FilterChains]   Checking source chain: value=%s", tostring(sourceChain.value)))
+                            end
+
+                            if sourceChain.value == 'spawnable' then
+                                -- Spawnable objects always valid
+                                if DEBUG_FILTER_CHAINS then
+                                    print("[FilterChains]     -> Spawnable, keeping")
+                                end
+                                table.insert(validSourceChains, sourceChain)
+                            else
+                                local sourceObject = FirstOrDefault(episode.Objects, function(o)
+                                    return o.ObjectId == sourceChain.value
+                                end)
+
+                                if DEBUG_FILTER_CHAINS then
+                                    if not sourceObject then
+                                        print(string.format("[FilterChains]     -> No source object found for value=%s", tostring(sourceChain.value)))
+                                    elseif not sourceObject.position then
+                                        print(string.format("[FilterChains]     -> Source object %s has no position", tostring(sourceChain.value)))
+                                    end
+                                end
+
+                                if sourceObject and sourceObject.position then
+                                    local hasCompatibleTarget = false
+                                    local testedTargets = 0
+                                    local skippedSameValue = 0
+
+                                    for _, targetChain in ipairs(targetChains) do
+                                        -- CRITICAL: Skip same physical object - two actors can't use the same chair
+                                        -- value = simulator ObjectId (physical object ID like "15")
+                                        if targetChain.value ~= sourceChain.value then
+                                            testedTargets = testedTargets + 1
+                                            if targetChain.value == 'spawnable' then
+                                                if DEBUG_FILTER_CHAINS then
+                                                    print(string.format("[FilterChains]       Target %s is spawnable -> compatible", tostring(targetChain.value)))
+                                                end
+                                                hasCompatibleTarget = true
+                                                break
+                                            end
+
+                                            local targetObject = FirstOrDefault(episode.Objects, function(o)
+                                                return o.ObjectId == targetChain.value
+                                            end)
+
+                                            if targetObject and targetObject.position then
+                                                -- Get object types from graph for consistent threshold calculation with runtime
+                                                local sourceType = nil
+                                                local targetType = nil
+                                                if self.graph and self.graph[sourceObjectId] and self.graph[sourceObjectId].Properties then
+                                                    sourceType = self.graph[sourceObjectId].Properties.Type
+                                                end
+                                                if self.graph and self.graph[targetObjectId] and self.graph[targetObjectId].Properties then
+                                                    targetType = self.graph[targetObjectId].Properties.Type
+                                                end
+
+                                                -- DEBUG: Print positions and rotations for "behind" relation to diagnose filtering issues
+                                                if relationType == "behind" and DEBUG_FILTER_CHAINS then
+                                                    local rot = targetObject.rotation or {x=0, y=0, z=0}
+                                                    print(string.format("[FilterChains] DEBUG behind: chair=%s pos=(%.2f,%.2f,%.2f) desk=%s pos=(%.2f,%.2f,%.2f) rot.z=%.2f",
+                                                        tostring(sourceChain.value),
+                                                        sourceObject.position.x, sourceObject.position.y, sourceObject.position.z,
+                                                        tostring(targetChain.value),
+                                                        targetObject.position.x, targetObject.position.y, targetObject.position.z,
+                                                        rot.z or 0))
+                                                end
+
+                                                local isValid = self.SpatialCoordinator:ValidateRelation(
+                                                    sourceObject.position,
+                                                    targetObject.position,
+                                                    targetObject.rotation or {x=0, y=0, z=0},
+                                                    relationType,
+                                                    sourceType,
+                                                    targetType
+                                                )
+
+                                                if DEBUG_FILTER_CHAINS then
+                                                    print(string.format("[FilterChains]       Comparing source=%s target=%s relation=%s types=%s/%s -> %s",
+                                                        tostring(sourceChain.value), tostring(targetChain.value), relationType,
+                                                        tostring(sourceType), tostring(targetType), tostring(isValid)))
+                                                end
+
+                                                if isValid then
+                                                    hasCompatibleTarget = true
+                                                    if DEBUG_FILTER_CHAINS then
+                                                        print(string.format("[FilterChains]     -> FOUND compatible target: %s", tostring(targetChain.value)))
+                                                    end
+                                                    break
+                                                end
+                                            else
+                                                if DEBUG_FILTER_CHAINS then
+                                                    print(string.format("[FilterChains]       Target %s: no object or no position", tostring(targetChain.value)))
+                                                end
+                                            end
+                                        else
+                                            skippedSameValue = skippedSameValue + 1
+                                        end
+                                    end
+
+                                    if DEBUG_FILTER_CHAINS then
+                                        print(string.format("[FilterChains]     Tested %d targets, skipped %d same-value, hasCompatible=%s",
+                                            testedTargets, skippedSameValue, tostring(hasCompatibleTarget)))
+                                    end
+
+                                    if hasCompatibleTarget then
+                                        if DEBUG_FILTER_CHAINS then
+                                            print(string.format("[FilterChains]     -> KEEPING chain value=%s", tostring(sourceChain.value)))
+                                        end
+                                        table.insert(validSourceChains, sourceChain)
+                                    else
+                                        anyFiltered = true
+                                        if DEBUG_FILTER_CHAINS then
+                                            print(string.format("[FilterChains]     -> REMOVING chain value=%s chainId=%s (no compatible target)", tostring(sourceChain.value), tostring(sourceChain.chainId)))
+                                        end
+                                        -- Also remove corresponding entries from other maps
+                                        if sourceChain.chainId then
+                                            if poiMap then RemoveChainFromMap(poiMap, sourceChain.chainId, "poiMap") end
+                                            if actionMap then RemoveChainFromMap(actionMap, sourceChain.chainId, "actionMap") end
+                                            if eventMap then RemoveChainFromMap(eventMap, sourceChain.chainId, "eventMap") end
+                                        end
+                                    end
+                                end
+                            end
+                        end
+
+                        -- Update with filtered chains
+                        eventObjectMap[sourceObjectId] = validSourceChains
+                        -- Update sourceChains for next iteration
+                        sourceChains = validSourceChains
+                    end
+                end
+            end
+        end
+    end
+
+    -- Also filter target chains (bidirectional filtering)
+    -- A target chain is valid only if there's a source chain that can use it
+    if DEBUG_FILTER_CHAINS then
+        print("[FilterChains] === BIDIRECTIONAL FILTERING (filtering targets) ===")
+    end
+
+    for sourceObjectId, spatialConstraintDef in pairs(self.spatial) do
+        if spatialConstraintDef.relations then
+            for _, relation in ipairs(spatialConstraintDef.relations) do
+                local targetObjectId = relation.target
+                local relationType = relation.type
+
+                local sourceChains = eventObjectMap[sourceObjectId] or {}
+                local targetChains = eventObjectMap[targetObjectId] or {}
+
+                if DEBUG_FILTER_CHAINS then
+                    print(string.format("[FilterChains] Bidirectional: checking %s (target) against %s (source), relation=%s",
+                        targetObjectId, sourceObjectId, relationType))
+                    print(string.format("[FilterChains]   Source chains remaining: %d, Target chains: %d",
+                        #sourceChains, #targetChains))
+                end
+
+                if #targetChains > 0 then
+                    local validTargetChains = {}
+                    for _, targetChain in ipairs(targetChains) do
+                        if targetChain.value == 'spawnable' then
+                            table.insert(validTargetChains, targetChain)
+                        else
+                            local hasCompatibleSource = false
+                            local targetObject = FirstOrDefault(episode.Objects, function(o)
+                                return o.ObjectId == targetChain.value
+                            end)
+
+                            if targetObject and targetObject.position then
+                                for _, sourceChain in ipairs(sourceChains) do
+                                    -- CRITICAL: Skip same physical object - two actors can't use the same chair
+                                    if sourceChain.value ~= targetChain.value then
+                                        if sourceChain.value == 'spawnable' then
+                                            hasCompatibleSource = true
+                                            break
+                                        end
+
+                                        local sourceObject = FirstOrDefault(episode.Objects, function(o)
+                                            return o.ObjectId == sourceChain.value
+                                        end)
+
+                                        if sourceObject and sourceObject.position then
+                                            -- Get object types from graph for consistent threshold calculation with runtime
+                                            local sourceType = nil
+                                            local targetType = nil
+                                            if self.graph and self.graph[sourceObjectId] and self.graph[sourceObjectId].Properties then
+                                                sourceType = self.graph[sourceObjectId].Properties.Type
+                                            end
+                                            if self.graph and self.graph[targetObjectId] and self.graph[targetObjectId].Properties then
+                                                targetType = self.graph[targetObjectId].Properties.Type
+                                            end
+
+                                            local isValid = self.SpatialCoordinator:ValidateRelation(
+                                                sourceObject.position,
+                                                targetObject.position,
+                                                targetObject.rotation or {x=0, y=0, z=0},
+                                                relationType,
+                                                sourceType,
+                                                targetType
+                                            )
+
+                                            if isValid then
+                                                hasCompatibleSource = true
+                                                break
+                                            end
+                                        end
+                                    end
+                                end
+                            end
+
+                            if hasCompatibleSource then
+                                table.insert(validTargetChains, targetChain)
+                            else
+                                anyFiltered = true
+                                if DEBUG_FILTER_CHAINS then
+                                    print(string.format("[FilterChains]   REMOVING target chain value=%s chainId=%s for %s: no compatible source",
+                                        tostring(targetChain.value), tostring(targetChain.chainId), targetObjectId))
+                                end
+                                -- Also remove corresponding entries from other maps
+                                if targetChain.chainId then
+                                    if poiMap then RemoveChainFromMap(poiMap, targetChain.chainId, "poiMap") end
+                                    if actionMap then RemoveChainFromMap(actionMap, targetChain.chainId, "actionMap") end
+                                    if eventMap then RemoveChainFromMap(eventMap, targetChain.chainId, "eventMap") end
+                                end
+                            end
+                        end
+                    end
+
+                    eventObjectMap[targetObjectId] = validTargetChains
+                end
+            end
+        end
+    end
+
+    -- Debug: Print all chains AFTER filtering
+    if DEBUG_FILTER_CHAINS then
+        print("[FilterChains] Chains AFTER filtering:")
+        for objId, chains in pairs(eventObjectMap) do
+            local chainStrs = {}
+            for _, c in ipairs(chains) do
+                table.insert(chainStrs, string.format("value=%s", tostring(c.value)))
+            end
+            print(string.format("[FilterChains]   %s: %d chains -> [%s]", objId, #chains, table.concat(chainStrs, ", ")))
+        end
+
+        if anyFiltered then
+            print("[FilterChains] Some chains were filtered due to spatial incompatibility")
+        else
+            print("[FilterChains] No chains were filtered")
+        end
+        print("[FilterChains] ========== EXITING FilterChainsBySpatialCompatibility ==========")
+    end
+
+    return true
+end
+
 ---
 ---CURRENT GRAPH EVENT COVERAGE
 ---Only events representing actions with objects are mapped with the exception of 'Exists', 'Move', 'give', 'receive', 'look at object', and interactions are not mapped.
@@ -1626,9 +1987,17 @@ end
 ---@param poiMap any
 ---@return boolean
 function GraphStory:MapObjectsActionsAndPoi(requiredObjects, episode, actionMap, eventMap, objectMap, eventObjectMap, poiMap)
-    return All(requiredObjects, function(ro)
+    local allMapped = All(requiredObjects, function(ro)
         return self:MapSingleObject(ro, episode, actionMap, eventMap, objectMap, eventObjectMap, poiMap)
     end)
+
+    -- Filter chains that cannot satisfy spatial relations with other chains
+    -- This must happen AFTER all objects are mapped so we know all chain combinations
+    if self.spatial then
+        self:FilterChainsBySpatialCompatibility(episode, eventObjectMap, poiMap, actionMap, eventMap)
+    end
+
+    return allMapped
 end
 
 --- Maps a single required object to episode objects, actions, and POIs.
@@ -1713,6 +2082,45 @@ function GraphStory:MapSingleObject(ro, episode, actionMap, eventMap, objectMap,
         for _, e in pairs(eventsWithObjectAsTarget) do
             print("Event with object "..ro.name..' as target '..e.id)
         end
+    end
+
+    -- Handle exists-only objects (no events use this object)
+    -- These objects need proper chain mappings for spatial constraints
+    if IsEmpty(eventsWithObjectAsTarget) then
+        -- Find ALL matching physical objects in the episode
+        local matchingObjects = Where(episode.Objects, function(eO)
+            return eO.ObjectId and eO.type == ro.name
+        end)
+
+        if IsEmpty(matchingObjects) then
+            if DEBUG_VALIDATION then
+                print("[MapSingleObject] Exists-only object " .. ro.name .. " not found in episode " .. episode.name)
+            end
+            return false
+        end
+
+        -- Create one chain per physical object
+        for _, episodeObject in ipairs(matchingObjects) do
+            self.globalChainCounter = self.globalChainCounter + 1
+            local chainId = episodeObject.ObjectId .. "_" .. self.globalChainCounter
+
+            if not eventObjectMap[ro.id] then
+                eventObjectMap[ro.id] = {}
+            end
+            table.insert(eventObjectMap[ro.id], {value = episodeObject.ObjectId, chainId = chainId})
+
+            if not objectMap[episodeObject.ObjectId] then
+                objectMap[episodeObject.ObjectId] = {}
+            end
+            table.insert(objectMap[episodeObject.ObjectId], {value = ro.id, chainId = chainId})
+        end
+
+        if DEBUG_VALIDATION then
+            print(string.format("[MapSingleObject] Exists-only object %s: mapped %d physical objects",
+                ro.name, #matchingObjects))
+        end
+
+        return true  -- Successfully mapped exists-only object
     end
 
     local allPotentialMatchingPoiData =

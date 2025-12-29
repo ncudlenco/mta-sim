@@ -38,6 +38,9 @@ ArtifactCollectionConfig = class(function(o, options)
     -- Depth configuration
     o.enableDepth = options.enableDepth or false
 
+    -- Event frame mapping configuration
+    o.enableEventFrameMapping = options.enableEventFrameMapping or false
+
     -- Video encoding settings
     o.videoFPS = options.videoFPS or 30
     o.videoBitrate = options.videoBitrate or 5000000
@@ -70,6 +73,9 @@ function ArtifactCollectionConfig.fromGlobals()
 
         -- Depth configuration
         enableDepth = ARTIFACT_ENABLE_DEPTH or false,
+
+        -- Event frame mapping configuration
+        enableEventFrameMapping = ARTIFACT_ENABLE_EVENT_FRAME_MAPPING or false,
 
         -- Video encoding settings
         videoFPS = ARTIFACT_VIDEO_FPS or 30,

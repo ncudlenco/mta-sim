@@ -11,7 +11,7 @@
         },
         "locations": [
             {
-                "Description": "livingroom sofa",
+                "Description": "poi near sofa",
                 "Interior": 1,
                 "Y": -0.2291259765625,
                 "X": 1.42919921875,
@@ -58,7 +58,7 @@
                 ]
             },
             {
-                "Description": "livingroom sofa",
+                "Description": "2nd poi near sofa",
                 "Interior": 1,
                 "Y": 0.6971435546875,
                 "X": 1.43017578125,

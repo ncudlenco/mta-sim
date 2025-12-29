@@ -1,28 +1,36 @@
 
 function startSimulation(source)
     print("Starting simulation")
+
     CURRENT_STORY = nil
     if LOAD_FROM_GRAPH and #INPUT_GRAPHS > 0 then
         LOAD_FROM_GRAPH = INPUT_GRAPHS[1]
     end
 
+    -- Create EventBus first (singleton, created once)
+    local eventBus = EventBus:getInstance()
+
     -- Create MTA-specific adapter provider
     local adapterProvider = MTAAdapterProvider()
     -- Extract game-agnostic spectator data from MTA elements
     local spectatorsData = adapterProvider:extractSpectatorData(SPECTATORS)
-    -- Create artifact collection factory with game-agnostic configuration and MTA adapters
+
+    -- Create artifact collection factory and manager
     local artifactCollectionFactory = ArtifactCollectionFactory(nil, adapterProvider)
-    -- Create artifact collection manager
     local artifactManager = artifactCollectionFactory:createManager()
-    -- Register all collectors (raw, segmentation, depth) using game-agnostic data
+
+    -- Setup event subscriptions BEFORE creating story
     if artifactManager then
+        artifactCollectionFactory:setupEventSubscriptions(artifactManager, eventBus)
+        -- Register all collectors (raw, segmentation, depth) using game-agnostic data
         artifactCollectionFactory:registerCollectors(artifactManager, spectatorsData)
     end
 
+    -- Create story with dependencies injected
     if not FREE_ROAM and LOAD_FROM_GRAPH then
-        CURRENT_STORY = GraphStory(SPECTATORS, LOG_DATA, artifactCollectionFactory, artifactManager)
+        CURRENT_STORY = GraphStory(SPECTATORS, LOG_DATA, artifactManager, eventBus)
     else
-        CURRENT_STORY = RandomStory(SPECTATORS, MAX_ACTIONS, LOG_DATA, artifactCollectionFactory, artifactManager)
+        CURRENT_STORY = RandomStory(SPECTATORS, MAX_ACTIONS, LOG_DATA, artifactCollectionFactory, artifactManager, eventBus)
     end
 
     -- Update artifact manager with story ID after story is instantiated
@@ -30,9 +38,31 @@ function startSimulation(source)
         artifactManager:updateConfig({storyId = CURRENT_STORY.Id})
     end
 
-    Timer(function()
-        CURRENT_STORY:Play()
-    end, 2000, 1)
+        -- Handle EXPORT_MODE: export game capabilities and exit
+    if EXPORT_MODE then
+        print("=== EXPORT MODE ACTIVE ===")
+        print("Exporting game capabilities to JSON...")
+
+        -- Run exporter
+        local exporter = GameWorldExporter()
+        exporter:ExportCapabilities()
+
+        print("=== Export Complete ===")
+        print("Shutting down server...")
+
+        -- Shutdown server after export
+        Timer(function()
+            shutdown()
+        end, 2000, 1)
+
+        return
+    else
+        print('Waiting 2 seconds before starting the story...')
+        Timer(function()
+            CURRENT_STORY:Play()
+        end, 2000, 1)
+    end
+
 end
 
 --- Check if all spectators are both joined and have finished downloading resources
@@ -75,7 +105,7 @@ end
 
 function initializeCameraMan(cameraMan, triggerClientReady)
     if not DEFINING_EPISODES then
-        cameraMan:fadeCamera (false)
+        cameraMan:fadeCamera (true, 0)
     end
     cameraMan:setHudComponentVisible("all", false)
     showChat(cameraMan, false)
@@ -84,7 +114,7 @@ function initializeCameraMan(cameraMan, triggerClientReady)
     cameraMan:setData("isPed", false)
     math.randomseed(os.clock()*100000000000)
     math.random(); math.random(); math.random()
-    cameraMan:setData('fadedCamera', false)
+    cameraMan:setData('fadedCamera', true)
     cameraMan:setData('spawned', false)
     cameraMan:setData('clientReady', false)  -- Initialize as not ready
 
@@ -123,18 +153,19 @@ function (prevA, curA)
             outputConsole("Found story for the spawned player. Picking a random action ")
         end
         if story and not FREE_ROAM then
+            print("[Player.lua] Spectator spawned. Waiting 1 second for the world to stream completely before triggering first action...")
             Timer(function()
                 for i,ped in ipairs(story.CurrentEpisode.peds) do
                     OnGlobalActionFinished(0, ped:getData('id'), ped:getData('storyId'))
                 end
-            end, 5000, 1)
+            end, 1000, 1)
         end
     end
 end
 )
 
 function terminatePlayer(player, reason)
-    player:fadeCamera (false)
+    -- player:fadeCamera (false)
     if CURRENT_STORY then
         local story = CURRENT_STORY
         if DEBUG then
@@ -165,19 +196,21 @@ function terminatePlayer(player, reason)
                         initializeCameraMan(player, true)
                     else
                         player:kick(reason)
+                        print("[PLAYER]: No more graphs to process. Shutting down the server. " ..reason)
                     end
                 else
                     player:kick(reason)
+                    print("[PLAYER]: No input graphs defined. Shutting down the server. " ..reason)
                 end
             end
-        end, 10000,1)
+        end, 1000,1)
     end
 end
 
 addEventHandler ( "onPlayerQuit", root,
 function ( quitType )
     -- If the simulation was still running, emit an error
-    if not CURRENT_STORY.Disposed then
+    if CURRENT_STORY and not CURRENT_STORY.Disposed then
         error("The client disconnected from the server during the simulation leaving it in an error state. The simulation will be terminated.")
     end
     if DEBUG then

@@ -1,1 +1,16 @@
-[ { "offsets": [ ], "templates": [ "turnTable", "2231", "tapePlayer" ], "name": "musicPlayer", "position": { "y": -1673.21240234375, "x": 2530.4931640625, "z": 1015.498596191406 } } ]
+[
+    {
+        "offsets": [],
+        "templates": [
+            "turnTable",
+            "2231",
+            "tapePlayer"
+        ],
+        "name": "musicPlayer",
+        "position": {
+            "y": -1673.21240234375,
+            "x": 2530.4931640625,
+            "z": 1015.498596191406
+        }
+    }
+]

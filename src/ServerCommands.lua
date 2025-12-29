@@ -50,6 +50,24 @@ addCommandHandler("interior",
 	end
 )
 
+addCommandHandler("camera",
+	function (thePlayer, commandName, param1, param2)
+		local actorToTarget = thePlayer
+		if param2 then
+			for actor, _ in pairs(getElementsByType("ped")) do
+				if actor:getData("id") == param2 then
+					actorToTarget = actor
+				end
+				break
+			end
+		end
+		if param1 == "follow" then
+			thePlayer:setCameraTarget(actorToTarget)
+		end
+		fadeCamera(thePlayer, true)
+	end
+)
+
 addCommandHandler("getInBed",
 	function (thePlayer)
 		if not thePlayer:getData("sleeping") then

@@ -1,1 +1,112 @@
-[ { "objects": [ { "dynamicString": "return Food{description=\"\", noCollisions=true, modelid=Food.eModel[PickRandom(Food.eModel)], isRandomModelId=true, interior=8, position=Vector3(0.2099609375,-1.20947265625,-0.2706298828125), rotation=Vector3(270,0,6.103515625e-05), posOffset=Vector3(-0.03999999910593,0.050000000745058,0.079999998211861), rotOffset=Vector3(270,0,0)}", "id": 1 }, { "dynamicString": "return Chair{description=\"\", noCollisions=true, modelid=1716, isRandomModelId=false, interior=8, position=Vector3(0.52880859375,-0.3677978515625,-1.0399169921875), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}", "id": 2 } ], "poi": { "isEmpty": true }, "locations": [ { "Description": "kitchen chair", "Interior": 8, "Y": 0.098388671875, "X": 0.271728515625, "episodeLinks": [ ], "Z": 0, "id": 1, "Angle": 179.6522216796875, "PossibleActions": [ { "id": 1 } ], "allActions": [ { "dynamicString": "return SitDown{how = 1, rotation = nil}", "isClosingAction": false, "targetItem": { "id": 1, "type": "Object" }, "id": 1, "nextAction": [ { "id": 2 }, { "id": 4 } ], "closingAction": { "id": 4 }, "nextLocation": { "id": 1 } }, { "dynamicString": "return PickUp{where = \"the table\", targetObjectExists = true, hand = 12, how = 3}", "isClosingAction": false, "targetItem": { "id": 1, "type": "Object" }, "id": 2, "nextAction": { "id": 3 }, "nextLocation": { "id": 1 } }, { "dynamicString": "return Eat{how = 1}", "isClosingAction": false, "targetItem": { "id": 1, "type": "Object" }, "id": 3, "nextAction": { "id": 4 }, "nextLocation": { "id": 1 } }, { "dynamicString": "return StandUp{how = 1}", "isClosingAction": true, "targetItem": { "id": 1, "type": "Object" }, "id": 4, "nextLocation": { "id": 1 } } ] } ], "position": { "y": -1121.08251953125, "x": 2365.744140625, "z": 1050.875 }, "globalCentroid": { "y": -1121.575439453125, "x": 2366.0810546875, "z": 1050.421508789062 }, "name": "1716" } ]
+[
+    {
+        "objects": [
+            {
+                "dynamicString": "return Food{description=\"\", noCollisions=true, modelid=Food.eModel[PickRandom(Food.eModel)], isRandomModelId=true, interior=8, position=Vector3(0.2099609375,-1.20947265625,-0.2706298828125), rotation=Vector3(270,0,6.103515625e-05), posOffset=Vector3(-0.03999999910593,0.050000000745058,0.079999998211861), rotOffset=Vector3(270,0,0)}",
+                "id": 1
+            },
+            {
+                "dynamicString": "return Chair{description=\"\", noCollisions=true, modelid=1716, isRandomModelId=false, interior=8, position=Vector3(0.52880859375,-0.3677978515625,-1.0399169921875), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "id": 2
+            }
+        ],
+        "poi": {
+            "isEmpty": true
+        },
+        "locations": [
+            {
+                "Description": "near chair",
+                "Interior": 8,
+                "Y": 0.098388671875,
+                "X": 0.271728515625,
+                "episodeLinks": [],
+                "Z": 0,
+                "id": 1,
+                "Angle": 179.6522216796875,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "allActions": [
+                    {
+                        "dynamicString": "return SitDown{how = 1, rotation = nil}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 2,
+                            "type": "Object"
+                        },
+                        "id": 1,
+                        "nextAction": [
+                            {
+                                "id": 2
+                            },
+                            {
+                                "id": 4
+                            }
+                        ],
+                        "closingAction": {
+                            "id": 4
+                        },
+                        "nextLocation": {
+                            "id": 1
+                        }
+                    },
+                    {
+                        "dynamicString": "return PickUp{where = \"the table\", targetObjectExists = true, hand = 12, how = 3}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 1,
+                            "type": "Object"
+                        },
+                        "id": 2,
+                        "nextAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 1
+                        }
+                    },
+                    {
+                        "dynamicString": "return Eat{how = 1}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 1,
+                            "type": "Object"
+                        },
+                        "id": 3,
+                        "nextAction": {
+                            "id": 4
+                        },
+                        "nextLocation": {
+                            "id": 1
+                        }
+                    },
+                    {
+                        "dynamicString": "return StandUp{how = 1}",
+                        "isClosingAction": true,
+                        "targetItem": {
+                            "id": 2,
+                            "type": "Object"
+                        },
+                        "id": 4,
+                        "nextLocation": {
+                            "id": 1
+                        }
+                    }
+                ]
+            }
+        ],
+        "position": {
+            "y": -1121.08251953125,
+            "x": 2365.744140625,
+            "z": 1050.875
+        },
+        "globalCentroid": {
+            "y": -1121.575439453125,
+            "x": 2366.0810546875,
+            "z": 1050.421508789062
+        },
+        "name": "1716"
+    }
+]

@@ -16,7 +16,7 @@ function Laptop:updateDescription()
     return self.Description
 end
 
-Laptop.eModel = 
+Laptop.eModel =
 {
     Closed = 7188,
     Open = 7187

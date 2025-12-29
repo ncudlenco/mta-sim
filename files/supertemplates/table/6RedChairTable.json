@@ -79,7 +79,7 @@
         },
         "locations": [
             {
-                "Description": "kitchen chair",
+                "Description": "near chair",
                 "Interior": 1,
                 "Y": -0.29248046875,
                 "X": -0.05224609375,
@@ -113,7 +113,7 @@
                             "id": 4
                         },
                         "nextLocation": {
-                            "id": 1
+                            "id": 2
                         }
                     },
                     {
@@ -128,7 +128,7 @@
                             "id": 3
                         },
                         "nextLocation": {
-                            "id": 1
+                            "id": 2
                         }
                     },
                     {
@@ -143,7 +143,7 @@
                             "id": 4
                         },
                         "nextLocation": {
-                            "id": 1
+                            "id": 2
                         }
                     },
                     {
@@ -155,13 +155,13 @@
                         },
                         "id": 4,
                         "nextLocation": {
-                            "id": 1
+                            "id": 2
                         }
                     }
                 ]
             },
             {
-                "Description": "kitchen chair",
+                "Description": "near chair",
                 "Interior": 1,
                 "Y": 1.080322265625,
                 "X": -1.8017578125,
@@ -195,7 +195,7 @@
                             "id": 4
                         },
                         "nextLocation": {
-                            "id": 3
+                            "id": 4
                         }
                     },
                     {
@@ -210,7 +210,7 @@
                             "id": 3
                         },
                         "nextLocation": {
-                            "id": 3
+                            "id": 4
                         }
                     },
                     {
@@ -225,7 +225,7 @@
                             "id": 4
                         },
                         "nextLocation": {
-                            "id": 3
+                            "id": 4
                         }
                     },
                     {
@@ -237,13 +237,13 @@
                         },
                         "id": 4,
                         "nextLocation": {
-                            "id": 3
+                            "id": 4
                         }
                     }
                 ]
             },
             {
-                "Description": "kitchen chair",
+                "Description": "near chair",
                 "Interior": 1,
                 "Y": 1.038818359375,
                 "X": -2.5390625,
@@ -277,7 +277,7 @@
                             "id": 4
                         },
                         "nextLocation": {
-                            "id": 5
+                            "id": 6
                         }
                     },
                     {
@@ -292,7 +292,7 @@
                             "id": 3
                         },
                         "nextLocation": {
-                            "id": 5
+                            "id": 6
                         }
                     },
                     {
@@ -307,7 +307,7 @@
                             "id": 4
                         },
                         "nextLocation": {
-                            "id": 5
+                            "id": 6
                         }
                     },
                     {
@@ -319,13 +319,13 @@
                         },
                         "id": 4,
                         "nextLocation": {
-                            "id": 5
+                            "id": 6
                         }
                     }
                 ]
             },
             {
-                "Description": "kitchen chair",
+                "Description": "near chair",
                 "Interior": 1,
                 "Y": -0.3861083984375,
                 "X": -4.03759765625,
@@ -359,7 +359,7 @@
                             "id": 4
                         },
                         "nextLocation": {
-                            "id": 12
+                            "id": 13
                         }
                     },
                     {
@@ -374,7 +374,7 @@
                             "id": 3
                         },
                         "nextLocation": {
-                            "id": 12
+                            "id": 13
                         }
                     },
                     {
@@ -389,7 +389,7 @@
                             "id": 4
                         },
                         "nextLocation": {
-                            "id": 12
+                            "id": 13
                         }
                     },
                     {
@@ -401,13 +401,13 @@
                         },
                         "id": 4,
                         "nextLocation": {
-                            "id": 12
+                            "id": 13
                         }
                     }
                 ]
             },
             {
-                "Description": "kitchen chair",
+                "Description": "near chair",
                 "Interior": 1,
                 "Y": -1.8260498046875,
                 "X": -2.52392578125,
@@ -441,7 +441,7 @@
                             "id": 4
                         },
                         "nextLocation": {
-                            "id": 9
+                            "id": 10
                         }
                     },
                     {
@@ -456,7 +456,7 @@
                             "id": 3
                         },
                         "nextLocation": {
-                            "id": 9
+                            "id": 10
                         }
                     },
                     {
@@ -471,7 +471,7 @@
                             "id": 4
                         },
                         "nextLocation": {
-                            "id": 9
+                            "id": 10
                         }
                     },
                     {
@@ -483,13 +483,13 @@
                         },
                         "id": 4,
                         "nextLocation": {
-                            "id": 9
+                            "id": 10
                         }
                     }
                 ]
             },
             {
-                "Description": "kitchen chair",
+                "Description": "near chair",
                 "Interior": 1,
                 "Y": -1.81005859375,
                 "X": -1.77587890625,
@@ -523,7 +523,7 @@
                             "id": 4
                         },
                         "nextLocation": {
-                            "id": 7
+                            "id": 8
                         }
                     },
                     {
@@ -538,7 +538,7 @@
                             "id": 3
                         },
                         "nextLocation": {
-                            "id": 7
+                            "id": 8
                         }
                     },
                     {
@@ -553,7 +553,7 @@
                             "id": 4
                         },
                         "nextLocation": {
-                            "id": 7
+                            "id": 8
                         }
                     },
                     {
@@ -565,7 +565,7 @@
                         },
                         "id": 4,
                         "nextLocation": {
-                            "id": 7
+                            "id": 8
                         }
                     }
                 ]

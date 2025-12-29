@@ -1,5 +1,5 @@
-GraphStory = class(StoryBase, function(o, spectators, logData, artifactCollectionFactory, artifactManager)
-    StoryBase.init(o, spectators, maxActions)
+GraphStory = class(StoryBase, function(o, spectators, logData, artifactManager, eventBus)
+    StoryBase.init(o, spectators, nil, eventBus)
     o.LogData = logData
     o.globalChainCounter = 0 -- Global counter for unique chain IDs
 
@@ -25,17 +25,18 @@ GraphStory = class(StoryBase, function(o, spectators, logData, artifactCollectio
         -- House12()
     }
     o.DynamicEpisodes = {
+      "classroom1",
       "house1_sweet",
       "house1_stripped",
-    -- --   "house3_preloaded", --NOT WORKING! The pathfinding seems flawed here, when we have 2 levels?
-    -- --   "house7", --NOT WORKING! Potential issue when the link POI is located outside a region
-      "house8_preloaded",
+    --   "house3_preloaded", --NOT WORKING! The pathfinding seems flawed here, when we have 2 levels?
+    --   "house7", --NOT WORKING! Potential issue when the link POI is located outside a region
+    --   "house8_preloaded",
       "house9",
     --   "house10_preloaded", -- Not Working!
-      "house12_preloaded", -- Working but needs the objects removed. Some flakiness exists but in general it works...
+    --   "house12_preloaded", -- Working but needs the objects removed. Some flakiness exists but in general it works...
       "garden",
       "office",
-      "office2",
+    --   "office2",
       "common",
       "gym1",
       "gym2",
@@ -45,6 +46,7 @@ GraphStory = class(StoryBase, function(o, spectators, logData, artifactCollectio
     o.SpawnableObjects = {
         "Cigarette",
         "MobilePhone",
+        "Phone", -- Alias for MobilePhone
         -- "Drinks",
         -- "Food"
     }
@@ -66,10 +68,18 @@ GraphStory = class(StoryBase, function(o, spectators, logData, artifactCollectio
         "Receive"
     }
     o.MiddleActions = {
+        "TakeOut",
+        "Stash",
         "Drink",
         "Smoke",
         "LookAtObject",
+        "LookAt",
+        "Wave",
         "TalkPhone",
+        "AnswerPhone",
+        "HangUp",
+        "SmokeIn",
+        "SmokeOut",
         "Eat"
     }
     o.MaxActions = 9999
@@ -82,42 +92,92 @@ GraphStory = class(StoryBase, function(o, spectators, logData, artifactCollectio
     end
     o.graph = nil
     o.temporal = nil
+    o.spatial = nil
+    o.materializedObjects = {}
     o.lastEvents = {}
     o.lastLocations = {}
     o.nextEvents = {}
     o.nextLocations = {}
     o.validMemo = {}
-    print(LOAD_FROM_GRAPH)
-    local file = fileOpen(LOAD_FROM_GRAPH)
-    if file then
-        o.Loggers = Select(spectators, function(spectator) return Logger(LOAD_FROM_GRAPH..'_out/'..o.Id..'/'..spectator:getData('id'), true, o, spectator) end)
 
-        local jsonStr = fileRead(file, fileGetSize(file))
-        o.graph = fromJSON(jsonStr)
-        fileClose(file)
-        if o.graph['temporal'] then
-            o.temporal = o.graph['temporal']
-            o.graph['temporal'] = nil
-        end
-        for k,v in pairs(o.temporal) do
-            if k then
-                v.key = k
-            end
-        end
-        if o.graph['temporal_abs'] then
-            o.graph['temporal_abs'] = nil
-        end
-        for k,v in pairs(o.graph) do
-            if v.Action then
-                v.id = k
-            end
-        end
+    -- Only load graph file if LOAD_FROM_GRAPH is a valid string path
+    if LOAD_FROM_GRAPH and type(LOAD_FROM_GRAPH) == "string" then
+        print(LOAD_FROM_GRAPH)
+        local file = fileOpen(LOAD_FROM_GRAPH)
+        if file then
+            o.Loggers = Select(spectators, function(spectator) return Logger(LOAD_FROM_GRAPH..'_out/'..o.Id..'/'..spectator:getData('id'), true, o, spectator) end)
 
-        if DEBUG then
-            print("GraphStory: read the file graph.json")
+            local jsonStr = fileRead(file, fileGetSize(file))
+            o.graph = fromJSON(jsonStr)
+            fileClose(file)
+            if o.graph['temporal'] then
+                o.temporal = o.graph['temporal']
+                o.graph['temporal'] = nil
+            end
+            if o.graph['semantic'] then
+                o.semantic = o.graph['semantic']
+                o.graph['semantic'] = nil
+            end
+            if o.graph['logical'] then
+                o.logical = o.graph['logical']
+                o.graph['logical'] = nil
+            end
+            for k,v in pairs(o.temporal) do
+                if k then
+                    v.key = k
+                end
+            end
+            if o.graph['temporal_abs'] then
+                o.graph['temporal_abs'] = nil
+            end
+            if o.graph['spatial'] then
+                o.spatial = o.graph['spatial']
+                o.graph['spatial'] = nil
+                if DEBUG then
+                    print("GraphStory: loaded spatial constraints")
+                end
+            end
+
+            -- Load optional camera section (backwards compatible)
+            o.camera = nil
+            o.cameraMode = "static"  -- Default mode
+
+            if o.graph['camera'] then
+                o.camera = o.graph['camera']
+                o.graph['camera'] = nil
+
+                -- Extract mode if specified
+                if o.camera.mode then
+                    o.cameraMode = o.camera.mode
+                    o.camera.mode = nil  -- Remove from command map
+                end
+
+                local cmdCount = 0
+                for _ in pairs(o.camera) do cmdCount = cmdCount + 1 end
+                if DEBUG then
+                    print("GraphStory: loaded camera controls ("..o.cameraMode.." mode) with "..cmdCount.." commands")
+                end
+            end
+
+            for k,v in pairs(o.graph) do
+                if v.Action then
+                    v.id = k
+                end
+                if v.Properties and v.Properties.scene_type then
+                    o.graph[k] = nil
+                end
+            end
+
+            if DEBUG then
+                print("GraphStory: read the file graph.json")
+            end
+        else
+            print("WARNING: The file "..LOAD_FROM_GRAPH.." could not be opened!")
         end
     else
-        print("WARNING: The file "..LOAD_FROM_GRAPH.." could not be opened!")
+        if DEBUG then
+            print("GraphStory: Skipping graph file loading (LOAD_FROM_GRAPH not set or not a string)")
+        end
     end
 end)
 
@@ -151,6 +211,7 @@ function GraphStory:Play()
     self.Episodes = self:GetValidEpisodes(requiredActors)
     if (not self.Episodes or #self.Episodes == 0) then
         outputConsole("We could not find any valid episodes for the file "..LOAD_FROM_GRAPH)
+        print("We could not find any valid episodes for the file "..LOAD_FROM_GRAPH)
         for i,spectator in ipairs(self.Spectators) do
             terminatePlayer(spectator, "We could not find any valid episodes for the file "..LOAD_FROM_GRAPH)
         end
@@ -175,7 +236,7 @@ function GraphStory:Play()
     if DEBUG then
         print("GraphStory:Play - chosen valid skin and episode. Playing episode")
     end
-    if self:ProcessActions(requiredActors) then
+    if self:ProcessActions() then
         self.StartTime = os.time()
 
         if self.LogData then
@@ -236,6 +297,18 @@ function GraphStory:Play()
                     end
                 )
             end
+
+            -- Initialize CameraHandler AFTER manager callbacks are set up
+            -- This ensures legacy mode event emission happens after initialization
+            local hasCameraSection = self.camera ~= nil
+
+            -- Create appropriate camera handler based on mode
+            self.CameraHandler = CreateCameraHandler({
+                mode = self.cameraMode,
+                commands = self.camera
+            })
+
+            self.CameraHandler:initialize(hasCameraSection)
 
             -- Separate timer for MAX_STORY_TIME timeout (story's responsibility)
             self.StoryTimeoutTimer = Timer(function()
@@ -322,17 +395,56 @@ function GraphStory:ExploreValidEpisodesSubset(
                 if DEBUG_VALIDATION then
                     print('Max covering episode is '..maxCoverData.episode.name..' with a score of '..maxCoverData.maxScore.setCoverScore)
                 end
-                local validSubset = self:ExploreValidEpisodeLinks(
+
+                -- Try TWO exploration strategies: prefer linked, allow unlinked
+                local explorationCandidates = {
+                    linked = nil,
+                    all = nil
+                }
+
+                -- Strategy 1: Explore only linked episodes (prefer connected groups)
+                local linkedResult = self:ExploreValidEpisodeLinks(
                     maxCoverData.episode,
                     maxCoverData.maxScore.requiredLocations,
                     maxCoverData.maxScore.requiredObjects,
                     maxCoverData.maxScore.requiredActions,
                     concat(currentSubset, {maxCoverData.episode})
                 )
-                if #validSubset > 0 then
-                    return validSubset
+                if #linkedResult > 0 then
+                    explorationCandidates.linked = linkedResult
+                end
+
+                -- Strategy 2: Explore ALL remaining episodes (allow unlinked)
+                local remainingEpisodes = Where(unexploredBucket, function(e)
+                    return e ~= maxCoverData.episode
+                end)
+                local allResult = self:ExploreValidEpisodesSubset(
+                    remainingEpisodes,
+                    maxCoverData.maxScore.requiredLocations,
+                    maxCoverData.maxScore.requiredObjects,
+                    maxCoverData.maxScore.requiredActions,
+                    concat(currentSubset, {maxCoverData.episode})
+                )
+                if #allResult > 0 then
+                    explorationCandidates.all = allResult
+                end
+
+                -- Choose best strategy: prefer linked (fewer groups), allow unlinked if needed
+                if explorationCandidates.linked and #explorationCandidates.linked > 0 then
+                    if DEBUG_VALIDATION then
+                        print('✓ Found valid subset using linked episodes')
+                    end
+                    return explorationCandidates.linked
+                elseif explorationCandidates.all and #explorationCandidates.all > 0 then
+                    if DEBUG_VALIDATION then
+                        print('✓ Found valid subset using unlinked episodes (multiple groups)')
+                    end
+                    return explorationCandidates.all
                 else
-                    unexploredBucket = Where(unexploredBucket, function(e) return e ~= maxCoverData.episode end)
+                    -- Neither strategy worked, try next episode
+                    unexploredBucket = Where(unexploredBucket, function(e)
+                        return e ~= maxCoverData.episode
+                    end)
                 end
             else
                 if DEBUG_VALIDATION then
@@ -438,7 +550,29 @@ function GraphStory:ValidateEpisode(
     -- Partial matches are allowed at this point, because we are exploring individual contextual episodes, and walking through other connected episodes.
     -- In the end, if a sub-tree of linked episodes that satisfy all the requirements is found, then all the found episodes are wrapped in a meta-episode, which will be used to play the story.
     -- At this point, the function below works on granular episodes (non-meta-episodes), so it is allowed to have partial matches.
-    self:MapObjectsActionsAndPoi(requiredObjects, episode, actionMap, eventMap, objectMap, eventObjectMap, poiMap)
+    -- Try to map each object individually (validation mode: count successes, continue on failure)
+    for _, ro in ipairs(requiredObjects) do
+        self:MapSingleObject(ro, episode, actionMap, eventMap, objectMap, eventObjectMap, poiMap)
+        -- Continue regardless of success/failure - we'll count what was mapped later
+    end
+
+    -- Validate spatial constraints for mapped objects
+    local spatiallyValid, failedObjects = self:ValidateSpatialConstraints(episode, eventObjectMap)
+    if not spatiallyValid then
+        if DEBUG_VALIDATION then
+            print('[GraphStory] Episode ' .. episode.name .. ' discarded due to unsatisfiable spatial constraints for objects: ' .. join(', ', failedObjects))
+        end
+        -- Return early with zero score to discard this episode
+        res = {
+            setCoverScore = 0,
+            requiredLocations = requiredLocations,
+            requiredObjects = requiredObjects,
+            requiredActions = requiredActions
+        }
+        self.validMemo[episode.name] = res
+        return res
+    end
+
     for eventRoId, potentialRealObjects in pairs(eventObjectMap) do
         if DEBUG_VALIDATION then
             print('!!!!!!!!!!!!!!!!!!!!!!Mapped '..eventRoId..' to '..#potentialRealObjects..' potential chains of real objects')
@@ -476,7 +610,7 @@ function GraphStory:ValidateEpisode(
                         if DEBUG_ACTION_VALIDATION then
                             print('**********'..a.Name)
                             if a.TargetItem and a.TargetItem.ObjectId then
-                                print('**********->'..a.TargetItem.ObjectId)
+                                print('**********->'..a.TargetItem.ObjectId..'('..tostring(a.TargetItem.dynamicString)..')')
                             elseif a.TargetItem and a.TargetItem.Region then
                                 print('**********->'..a.TargetItem.Region.name)
                             end
@@ -679,19 +813,76 @@ function GraphStory:GetValidEpisodes(requiredActors)
     --     return { location = location, name = event.Properties.Type, id = event.id }
     -- end)
     --a list of all the actions and their locations (a POI is placed in a location, in a POI I have allActions)
-    local requiredActions = Select(Where(self.graph, function(event)
-        return event.Action ~= 'Exists'
-    end), function(event)
-        local target = nil
-        if #event.Entities > 1 then target = event.Entities[2] end
-        local location = ''
-        if event.Location and #event.Location > 0 then location = event.Location[1] end
-        return { location = location, name = event.Action, target = target }
-    end)
+    -- Only collect actions from actor event chains (from starting_actions to null)
+    local requiredActions = {}
+    for _, requiredActor in ipairs(requiredActors) do
+        local eventId = self.temporal.starting_actions[requiredActor.id]
+        while eventId ~= nil do
+            local event = self.graph[eventId]
+            if event.Action ~= 'Exists' then
+                if DEBUG then
+                    print("Required action "..event.Action)
+                end
+
+                local target = nil
+                if #event.Entities > 1 then target = event.Entities[2] end
+
+                local location = ''
+                -- For entity-based Move (2 entities), only source location matters for validation
+                if event.Action:lower() == 'move' and #event.Entities == 2 then
+                    if event.Location and #event.Location > 0 then
+                        location = event.Location[1]  -- Source location only
+                    end
+                else
+                    -- Normal actions and location-based Move
+                    if event.Location and #event.Location > 0 then
+                        location = event.Location[1]
+                    end
+                end
+
+                table.insert(requiredActions, { location = location, name = event.Action, target = target })
+            end
+
+            eventId = self:GetNextEvent(eventId, requiredActor.id)
+        end
+    end
+
+    if DEBUG then
+        print("********Finished retrieving the required actions*******")
+    end
 
     local validEpisodesSubset = self:ExploreValidEpisodesSubset(self.Episodes, requiredLocations, requiredObjects, requiredActions, {})
 
     print('---------------------------------------------finished GetValidEpisodes: {'..join(';', Select(validEpisodesSubset, function(e) return e.name end))..'} found----------------------------------------')
+
+    -- Detect episode groups and validate
+    if #validEpisodesSubset > 1 then
+        local groupData = self:DetectEpisodeGroups(validEpisodesSubset)
+        self.episodeGroups = groupData.episodeGroups
+        self.episodeToGroup = groupData.episodeToGroup
+
+        if DEBUG_EPISODE_GROUPS then
+            print('[GetValidEpisodes] Detected '..#self.episodeGroups..' episode groups')
+        end
+
+        -- Analyze which groups each actor uses
+        self:AnalyzeActorEpisodeUsage(requiredActors)
+
+        -- Validate no explicit Move actions cross groups
+        if not self:ValidateCrossGroupMoves() then
+            return {}  -- Validation failed
+        end
+    elseif #validEpisodesSubset == 1 then
+        -- Single episode - create trivial group structure
+        self.episodeGroups = {[1] = validEpisodesSubset}
+        self.episodeToGroup = {[validEpisodesSubset[1].name] = 1}
+        self.actorEpisodeUsage = {}
+
+        if DEBUG_EPISODE_GROUPS then
+            print('[GetValidEpisodes] Single episode, trivial group structure')
+        end
+    end
+
 --find all episodes which contain all the required locations
 --and all the required actions
     return Where(self.AllEpisodes, function(e)
@@ -703,6 +894,232 @@ function GraphStory:GetValidEpisodes(requiredActors)
     end)
 end
 
+--- Detects episode groups (connected components) based on episodeLinks.
+--- Episodes in the same group are reachable via episodeLinks.
+--- @param episodes table[] Array of episode objects
+--- @return table Structure: {episodeGroups = {[groupId] = {episode1, episode2}}, episodeToGroup = {[episodeName] = groupId}}
+function GraphStory:DetectEpisodeGroups(episodes)
+    if DEBUG_EPISODE_GROUPS then
+        print('[DetectEpisodeGroups] Analyzing '..#episodes..' episodes')
+    end
+
+    -- Create Union-Find with episode names
+    local episodeNames = Select(episodes, function(e) return e.name end)
+    local uf = UnionFind(episodeNames)
+
+    -- Union episodes that have episodeLinks
+    for _, episode in ipairs(episodes) do
+        for _, poi in ipairs(episode.POI) do
+            if poi.episodeLinks and #poi.episodeLinks > 0 then
+                for _, linkedEpisodeName in ipairs(poi.episodeLinks) do
+                    -- Find the linked episode in our list
+                    local linkedEpisode = FirstOrDefault(episodes, function(e)
+                        return e.name == linkedEpisodeName
+                    end)
+                    if linkedEpisode then
+                        if DEBUG_EPISODE_GROUPS then
+                            print('[DetectEpisodeGroups] Linking '..episode.name..' <-> '..linkedEpisodeName)
+                        end
+                        uf:union(episode.name, linkedEpisode.name)
+                    end
+                end
+            end
+        end
+    end
+
+    -- Extract components and create lookup structures
+    local components = uf:getComponents()
+    local episodeGroups = {}
+    local episodeToGroup = {}
+    local groupId = 1
+
+    for _, episodeNamesInGroup in pairs(components) do
+        episodeGroups[groupId] = {}
+        for _, episodeName in ipairs(episodeNamesInGroup) do
+            local episode = FirstOrDefault(episodes, function(e) return e.name == episodeName end)
+            table.insert(episodeGroups[groupId], episode)
+            episodeToGroup[episodeName] = groupId
+        end
+
+        if DEBUG_EPISODE_GROUPS then
+            print('[DetectEpisodeGroups] Group '..groupId..': '..
+                  join(', ', Select(episodeGroups[groupId], function(e) return e.name end)))
+        end
+
+        groupId = groupId + 1
+    end
+
+    return {
+        episodeGroups = episodeGroups,
+        episodeToGroup = episodeToGroup
+    }
+end
+
+--- Analyzes which episodes and groups each actor uses throughout their event sequence.
+--- Uses poiMap to handle cases where multiple episodes have same location names.
+--- @param requiredActors table[] Array of actor definitions from graph
+function GraphStory:AnalyzeActorEpisodeUsage(requiredActors)
+    if DEBUG_EPISODE_GROUPS then
+        print('[AnalyzeActorEpisodeUsage] Analyzing '..#requiredActors..' actors')
+    end
+
+    self.actorEpisodeUsage = {}
+
+    for _, actor in ipairs(requiredActors) do
+        local actorId = actor.id
+        self.actorEpisodeUsage[actorId] = {
+            episodes = {},  -- Set of episode names used
+            groups = {},    -- Set of group IDs used
+            sequence = {}   -- Ordered sequence of {eventId, episodeName, groupId}
+        }
+
+        -- Walk through actor's event chain
+        local eventId = self.temporal.starting_actions[actorId]
+        while eventId do
+            local event = self.graph[eventId]
+            if event then
+                local episodeName = nil
+
+                -- METHOD 1: Use poiMap to find which episode this event is mapped to
+                if self.poiMap and self.poiMap[eventId] then
+                    local poiMappings = self.poiMap[eventId]
+                    if #poiMappings > 0 then
+                        -- Get the POI from the first mapping
+                        local poiLocationId = poiMappings[1].value
+                        local poi = FirstOrDefault(self.CurrentEpisode.POI, function(p)
+                            return p.LocationId == poiLocationId
+                        end)
+                        if poi and poi.Episode then
+                            episodeName = poi.Episode.name
+                        end
+                    end
+                end
+
+                -- METHOD 2: Fallback - use eventObjectMap to infer episode from objects
+                if not episodeName and #event.Entities > 1 then
+                    local objectId = event.Entities[2]
+                    if self.eventObjectMap and self.eventObjectMap[objectId] then
+                        local objectMappings = self.eventObjectMap[objectId]
+                        if #objectMappings > 0 and objectMappings[1].value ~= 'spawnable' then
+                            local realObjectId = objectMappings[1].value
+                            local obj = FirstOrDefault(self.CurrentEpisode.Objects, function(o)
+                                return o.ObjectId == realObjectId
+                            end)
+                            if obj and obj.Region and obj.Region.Episode then
+                                episodeName = obj.Region.Episode.name
+                            end
+                        end
+                    end
+                end
+
+                if episodeName then
+                    local groupId = self.episodeToGroup[episodeName]
+
+                    -- Track episode and group usage
+                    if not inList(episodeName, self.actorEpisodeUsage[actorId].episodes) then
+                        table.insert(self.actorEpisodeUsage[actorId].episodes, episodeName)
+                    end
+                    if groupId and not inList(groupId, self.actorEpisodeUsage[actorId].groups) then
+                        table.insert(self.actorEpisodeUsage[actorId].groups, groupId)
+                    end
+
+                    -- Record in sequence
+                    table.insert(self.actorEpisodeUsage[actorId].sequence, {
+                        eventId = eventId,
+                        episode = episodeName,
+                        groupId = groupId
+                    })
+                end
+            end
+
+            eventId = self:GetNextEvent(eventId, actorId)
+        end
+
+        if DEBUG_EPISODE_GROUPS then
+            print('[AnalyzeActorEpisodeUsage] Actor '..actorId..
+                  ' uses episodes: '..join(', ', self.actorEpisodeUsage[actorId].episodes)..
+                  ' (groups: '..join(', ', self.actorEpisodeUsage[actorId].groups)..')')
+        end
+    end
+end
+
+--- Validates that explicit Move actions in the graph don't cross episode groups.
+--- Auto-generated Move actions (from MetaEpisode) are allowed to cross groups.
+--- @return boolean True if valid, false if validation fails
+function GraphStory:ValidateCrossGroupMoves()
+    if DEBUG_EPISODE_GROUPS then
+        print('[ValidateCrossGroupMoves] Validating explicit Move actions')
+    end
+
+    -- Find explicit Move events in graph (Action == "Move")
+    local moveEvents = Where(self.graph, function(event)
+        return event.Action and event.Action == 'Move'
+    end)
+
+    for _, moveEvent in ipairs(moveEvents) do
+        local actorId = moveEvent.Entities[1]
+        local sourceLocation = moveEvent.Location and moveEvent.Location[1] or nil
+        local targetLocation = nil
+
+        -- Find target location from next event
+        local nextEventId = self:GetNextEvent(moveEvent.id, actorId)
+        if nextEventId then
+            local nextEvent = self.graph[nextEventId]
+            targetLocation = nextEvent.Location and nextEvent.Location[1] or nil
+        end
+
+        if sourceLocation and targetLocation and sourceLocation ~= targetLocation then
+            -- Use poiMap to determine actual episodes (handles duplicate names)
+            local sourceEpisode = nil
+            local targetEpisode = nil
+
+            -- Find source episode from moveEvent mapping
+            if self.poiMap and self.poiMap[moveEvent.id] then
+                local poiMappings = self.poiMap[moveEvent.id]
+                if #poiMappings > 0 then
+                    local poi = FirstOrDefault(self.CurrentEpisode.POI, function(p)
+                        return p.LocationId == poiMappings[1].value
+                    end)
+                    if poi and poi.Episode then
+                        sourceEpisode = poi.Episode.name
+                    end
+                end
+            end
+
+            -- Find target episode from next event mapping
+            if nextEventId and self.poiMap and self.poiMap[nextEventId] then
+                local poiMappings = self.poiMap[nextEventId]
+                if #poiMappings > 0 then
+                    local poi = FirstOrDefault(self.CurrentEpisode.POI, function(p)
+                        return p.LocationId == poiMappings[1].value
+                    end)
+                    if poi and poi.Episode then
+                        targetEpisode = poi.Episode.name
+                    end
+                end
+            end
+
+            if sourceEpisode and targetEpisode then
+                local sourceGroup = self.episodeToGroup[sourceEpisode]
+                local targetGroup = self.episodeToGroup[targetEpisode]
+
+                if sourceGroup ~= targetGroup then
+                    print('[ERROR] Explicit Move action (event '..moveEvent.id..
+                          ') crosses episode groups: '..sourceEpisode..' (group '..sourceGroup..
+                          ') -> '..targetEpisode..' (group '..targetGroup..')')
+                    print('[ERROR] Actors cannot physically move between unlinked episodes.')
+                    return false
+                end
+            end
+        end
+    end
+
+    if DEBUG_EPISODE_GROUPS then
+        print('[ValidateCrossGroupMoves] ✓ All explicit Move actions are valid')
+    end
+    return true
+end
+
 ---This function iterates through all the POIs available in an episode (it can be a meta episode that is a composition of multiple local episodes),
 ---and for each POI, it finds and maps a chain of events that happen in the same location (both forward and backward in time)
 ---starting from the first eventsWithObjectAsTarget that has the same action and location as the action with the object as target.
@@ -712,12 +1129,23 @@ end
 ---@param ro any The required object (the one that is used in the event)
 ---@param eventsWithObjectAsTarget any[] The events that have the object as target
 function GraphStory:FindAllValidActionsAndPois(episode, ro, eventsWithObjectAsTarget)
+    if DEBUG_VALIDATION then
+        print(string.format("[FindAllValidActionsAndPois] ENTRY: Episode=%s, Object=%s (id=%s, location=%s), EventsCount=%d, POIsToEvaluate=%d",
+            episode.name or "unknown",
+            ro.name,
+            ro.id,
+            ro.location or "any",
+            Count(eventsWithObjectAsTarget),
+            #episode.POI))
+    end
+
     return Select(episode.POI, function(poi)
         local actionMap = {}
         local eventMap = {}
         local objectMap = {}
         local eventObjectMap = {}
         local poiMap = {}
+        local pickupChainInfo = {}  -- FIX 12: Track PickUp locations for PutDown mapping
 
         if DEBUG_VALIDATION then
             print('Assessing actions in poi '..poi.Description..' in region '..poi.Region.name)
@@ -734,7 +1162,7 @@ function GraphStory:FindAllValidActionsAndPois(episode, ro, eventsWithObjectAsTa
                 print("Action with matching object does not exist!")
             end
             -- if there is no actual action in the graph with the object, it means that the object is simply a requirement to exist in the environment.
-            if #eventsWithObjectAsTarget == 0 then
+            if IsEmpty(eventsWithObjectAsTarget) then
                 local episodeObject = FirstOrDefault(episode.Objects, function(eO) return eO.ObjectId and eO.type == ro.name end)
                 if episodeObject then
                     actionWithMatchingObject = {
@@ -743,8 +1171,13 @@ function GraphStory:FindAllValidActionsAndPois(episode, ro, eventsWithObjectAsTa
                             ObjectId = episodeObject.ObjectId
                         }
                     }
-                elseif DEBUG_VALIDATION then
-                    print("This object "..ro.name.." does not exist in the episode!")
+                else
+                    -- There are NO events with the object as target in the graph, no action in the current POI, and also the object does not exist in the episode.
+                    -- The episode is invalid still, because the object is required to exist in the graph.
+                    if DEBUG_VALIDATION then
+                        print("This object "..ro.name.." does not exist in the episode!")
+                    end
+                    return nil
                 end
             else
                 -- An action with the object was not found in the current POI, but the object is used in some actions within the episode.
@@ -758,7 +1191,7 @@ function GraphStory:FindAllValidActionsAndPois(episode, ro, eventsWithObjectAsTa
         end
 
         -- The object is not used in any of the events, but it is simply a requirement of the episode.
-        if #eventsWithObjectAsTarget == 0 then
+        if IsEmpty(eventsWithObjectAsTarget) then
             print("The object is not used in any events "..ro.name)
             eventObjectMap[ro.id] = actionWithMatchingObject.TargetItem.ObjectId
             objectMap[actionWithMatchingObject.TargetItem.ObjectId] = ro.id
@@ -780,7 +1213,7 @@ function GraphStory:FindAllValidActionsAndPois(episode, ro, eventsWithObjectAsTa
             return isMatchingAction and isMatchingLocation
         end)
 
-        if #eventsMatchingActionAndObject == 0 then
+        if IsEmpty(eventsMatchingActionAndObject) then
             if DEBUG_VALIDATION then
                 print("No events matching action exist!")
             end
@@ -788,15 +1221,15 @@ function GraphStory:FindAllValidActionsAndPois(episode, ro, eventsWithObjectAsTa
         end
 
         if DEBUG_VALIDATION then
-            print('Found '..#eventsMatchingActionAndObject..' events matching action in POI '..poi.Description)
-            for _, event in ipairs(eventsMatchingActionAndObject) do
+            print('Found '..Count(eventsMatchingActionAndObject)..' events matching action in POI '..poi.Description)
+            for _, event in pairs(eventsMatchingActionAndObject) do
                 print('  Event matching action: '..event.id)
             end
         end
 
         -- Map all matching events to this POI and trace their event chains
         local allEventsMatched = true
-        for _, startingEvent in ipairs(eventsMatchingActionAndObject) do
+        for _, startingEvent in pairs(eventsMatchingActionAndObject) do
             local currentAction = actionWithMatchingObject
             local currentEvent = startingEvent
 
@@ -891,12 +1324,10 @@ function GraphStory:FindAllValidActionsAndPois(episode, ro, eventsWithObjectAsTa
                 end
                 local nextEvent = self.graph[nextEventId]
 
-                if
-                        nextEvent.Action:lower() ~= 'move'
-                    and nextEvent.Action:lower() ~= 'give'
-                    and nextEvent.Action:lower() ~= 'inv-give'
-                    and nextEvent.Action:lower() ~= 'lookatobject'
-                then
+                -- Check if this event should be validated against the action chain
+                -- Interactions and special actions (Move, LookAt, TakeOut, Stash, etc.) can interrupt
+                -- object manipulation chains without requiring explicit nextAction links
+                if not self:IsInteractionOrSkippableAction(nextEvent.Action) then
                     local nextActions = { currentAction.NextAction }
                     if isArray(currentAction.NextAction) then
                         nextActions = currentAction.NextAction
@@ -904,6 +1335,9 @@ function GraphStory:FindAllValidActionsAndPois(episode, ro, eventsWithObjectAsTa
 
                     --if multiple possible next actions, choose the first one that matches the next event
                     currentAction = FirstOrDefault(nextActions, function(action)
+                        if DEBUG_VALIDATION then
+                            print("Next action candidate "..action.Name)
+                        end
                         return self:MatchEventAndAction(action, nextEvent, poi, actionMap, eventMap, objectMap, eventObjectMap, poiMap)
                     end)
                     if not currentAction then
@@ -918,8 +1352,22 @@ function GraphStory:FindAllValidActionsAndPois(episode, ro, eventsWithObjectAsTa
                         print("Next action that also matches next event "..currentAction.Name)
                     end
                 else
-                    print('The event does not follow the chain of actions. Event: '..nextEvent.Action..' Action: '..currentAction.Name)
-                    break
+                    -- This event is an interaction or special action that can interrupt the chain
+                    if DEBUG_VALIDATION then
+                        print('Skipping interaction/special action: '..nextEvent.Action..' (does not need to match action chain)')
+                    end
+
+                    -- Stop if this skippable event changes location (matches backward validation pattern line 1257)
+                    -- Per line 1401 comment: iterate "until a Move action is found - and the location would be changed"
+                    if self:IsLocationChangingAction(nextEvent.Action) then
+                        if DEBUG_VALIDATION then
+                            print('Event '..nextEvent.Action..' causes location change - stopping chain validation')
+                        end
+
+                        break
+                    end
+
+                    -- Continue traversing for non-location-changing skippable actions (LookAtObject, Wave, etc.)
                 end
                 currentEvent = nextEvent
             end
@@ -933,8 +1381,47 @@ function GraphStory:FindAllValidActionsAndPois(episode, ro, eventsWithObjectAsTa
             return nil
         end
 
+        -- FIX 13: Scan poiMap for any PickUp events that were matched during chain validation
+        -- This handles PickUp at ANY position in the chain (starting, backward traversal, or forward traversal)
+        for _, event in pairs(eventsWithObjectAsTarget) do
+            if event.Action:lower() == 'pickup' and poiMap[event.id] then
+                local graphObjectId = event.Entities and event.Entities[2]
+                if graphObjectId then
+                    pickupChainInfo[graphObjectId] = {
+                        locationId = poiMap[event.id],
+                        pickupEventId = event.id
+                    }
+                    if DEBUG_VALIDATION then
+                        print(string.format('[FIX13] Found matched PickUp: object=%s, locationId=%s, eventId=%s',
+                            graphObjectId, poiMap[event.id], event.id))
+                    end
+                end
+            end
+        end
+
+        -- FIX 13: Map any unmapped PutDown events to the same location as their PickUp
+        -- PutDown must return to the same location where the object was picked up
+        for _, event in pairs(eventsWithObjectAsTarget) do
+            if event.Action:lower() == 'putdown' and not poiMap[event.id] then
+                local graphObjectId = event.Entities and event.Entities[2]
+                local chainInfo = graphObjectId and pickupChainInfo[graphObjectId]
+                if chainInfo then
+                    poiMap[event.id] = chainInfo.locationId
+                    if DEBUG_VALIDATION then
+                        print(string.format('[FIX13] Mapped PutDown event %s to PickUp location: %s (from PickUp event %s)',
+                            event.id, chainInfo.locationId, chainInfo.pickupEventId))
+                    end
+                end
+            end
+        end
+
         if DEBUG_VALIDATION then
-            print("This poi is valid, returning ")
+            print(string.format("[FindAllValidActionsAndPois] MATCH: POI=%s (LocationId=%s, Region=%s, Episode=%s) matched for object %s",
+                poi.Description,
+                poi.LocationId,
+                poi.Region.name,
+                episode.name or "unknown",
+                ro.name))
         end
 
         return {
@@ -945,7 +1432,8 @@ function GraphStory:FindAllValidActionsAndPois(episode, ro, eventsWithObjectAsTa
             poiMap = poiMap,
             poiDescription = poi.Description,
             poiRegion = poi.Region.name,
-            poiLocationId = poi.LocationId
+            poiLocationId = poi.LocationId,
+            episodeName = episode.name  -- Add episode name for AggregatePoiData logging
         }
     end)
 end
@@ -975,6 +1463,148 @@ end
 ---   ** objectMap[simulatorObjectId] = {graphObjectId1, graphObjectId2, ...}
 ---   ** eventObjectMap[graphObjectId] = {simulatorObjectId1, simulatorObjectId2, ...}
 ---   ** poiMap[graphEventId] = {simulatorLocationId1, simulatorLocationId2, ...}
+--- Validate spatial constraints for mapped objects in an episode
+--- Checks if at least one valid spatial configuration exists for each object with constraints
+---
+--- @param episode any The episode being validated
+--- @param eventObjectMap table Map of event object IDs to chains of real object mappings
+--- @return boolean True if all spatial constraints can be satisfied
+--- @return table|nil Objects that failed spatial validation (nil if all valid)
+function GraphStory:ValidateSpatialConstraints(episode, eventObjectMap)
+    if not self.spatial then
+        return true, nil -- No spatial constraints defined
+    end
+
+    local failedObjects = {}
+
+    -- Check each object that has spatial constraints
+    for eventObjectId, spatialConstraintDef in pairs(self.spatial) do
+        if spatialConstraintDef.relations and #spatialConstraintDef.relations > 0 then
+            local relations = spatialConstraintDef.relations
+
+            if DEBUG_VALIDATION then
+                print("[GraphStory] Validating spatial constraints for object " .. eventObjectId)
+            end
+
+            -- Check if this object is mapped
+            if eventObjectMap[eventObjectId] and #eventObjectMap[eventObjectId] > 0 then
+                -- For each relation, check if target object can be found
+                local allRelationsCanBeSatisfied = true
+
+                for _, relation in ipairs(relations) do
+                    local targetObjectId = relation.target
+                    local relationType = relation.type
+
+                    if DEBUG_VALIDATION then
+                        print("[GraphStory] Checking if " .. eventObjectId .. " " .. relationType .. " " .. targetObjectId .. " can be satisfied")
+                    end
+
+                    -- Check if target object is mapped
+                    if eventObjectMap[targetObjectId] and #eventObjectMap[targetObjectId] > 0 then
+                        -- Find at least one valid combination of source and target objects that satisfy the constraint
+                        local foundValidCombination = false
+
+                        for _, sourceChain in ipairs(eventObjectMap[eventObjectId]) do
+                            local sourceObjectId = sourceChain.value
+
+                            if sourceObjectId == 'spawnable' then
+                                -- Spawnable objects don't have fixed positions
+                                foundValidCombination = true
+                                break
+                            end
+
+                            local sourceObject = FirstOrDefault(episode.Objects, function(o)
+                                return o.ObjectId == sourceObjectId
+                            end)
+
+                            if sourceObject and sourceObject.position then
+                                -- Try to find a target object that satisfies the constraint
+                                for _, targetChain in ipairs(eventObjectMap[targetObjectId]) do
+                                    local targetRealObjectId = targetChain.value
+
+                                    if targetRealObjectId ~= 'spawnable' then
+                                        local targetObject = FirstOrDefault(episode.Objects, function(o)
+                                            return o.ObjectId == targetRealObjectId
+                                        end)
+
+                                        if targetObject and targetObject.position then
+                                            -- Get object types for dynamic threshold calculation
+                                            local sourceType = nil
+                                            local targetType = nil
+                                            if self.graph[eventObjectId] and self.graph[eventObjectId].Properties then
+                                                sourceType = self.graph[eventObjectId].Properties.Type
+                                            end
+                                            if self.graph[targetObjectId] and self.graph[targetObjectId].Properties then
+                                                targetType = self.graph[targetObjectId].Properties.Type
+                                            end
+
+                                            -- Get element references if available
+                                            local sourceElement = sourceObject.element or nil
+                                            local targetElement = targetObject.element or nil
+
+                                            -- Validate the spatial relation
+                                            local isValid = self.SpatialCoordinator:ValidateRelation(
+                                                sourceObject.position,
+                                                targetObject.position,
+                                                targetObject.rotation or {x=0, y=0, z=0},
+                                                relationType,
+                                                sourceType,
+                                                targetType,
+                                                sourceElement,
+                                                targetElement
+                                            )
+
+                                            if isValid then
+                                                foundValidCombination = true
+                                                if DEBUG_VALIDATION then
+                                                    print("[GraphStory] ✓ Found valid combination: " .. sourceObjectId .. " " .. relationType .. " " .. targetRealObjectId)
+                                                end
+                                                break
+                                            end
+                                        end
+                                    end
+                                end
+
+                                if foundValidCombination then
+                                    break
+                                end
+                            end
+                        end
+
+                        if not foundValidCombination then
+                            if DEBUG_VALIDATION then
+                                print("[GraphStory] ✗ No valid combination found for " .. eventObjectId .. " " .. relationType .. " " .. targetObjectId)
+                            end
+                            allRelationsCanBeSatisfied = false
+                            break
+                        end
+                    else
+                        if DEBUG_VALIDATION then
+                            print("[GraphStory] Target object " .. targetObjectId .. " not mapped - spatial constraint cannot be validated during episode validation")
+                        end
+                        -- Target not mapped means we can't validate this constraint at episode level
+                        -- It will be validated at runtime - skip this relation
+                    end
+                end
+
+                if not allRelationsCanBeSatisfied then
+                    table.insert(failedObjects, eventObjectId)
+                    if DEBUG_VALIDATION then
+                        print("[GraphStory] Episode " .. episode.name .. " cannot satisfy spatial constraints for object " .. eventObjectId)
+                    end
+                end
+            else
+                if DEBUG_VALIDATION then
+                    print("[GraphStory] Object " .. eventObjectId .. " not mapped, skipping spatial validation")
+                end
+            end
+        end
+    end
+
+    local isValid = #failedObjects == 0
+    return isValid, #failedObjects > 0 and failedObjects or nil
+end
+
 ---
 ---CURRENT GRAPH EVENT COVERAGE
 ---Only events representing actions with objects are mapped with the exception of 'Exists', 'Move', 'give', 'receive', 'look at object', and interactions are not mapped.
@@ -997,62 +1627,127 @@ end
 ---@return boolean
 function GraphStory:MapObjectsActionsAndPoi(requiredObjects, episode, actionMap, eventMap, objectMap, eventObjectMap, poiMap)
     return All(requiredObjects, function(ro)
-        if eventObjectMap[ro.id] and #eventObjectMap[ro.id] > 0 then return true end
-        if DEBUG_VALIDATION and not eventObjectMap[ro.id] then
-            print("The object "..ro.id..':'..ro.name..' ()'..(ro.location or '')..' is not mapped in any of event objects map')
-            for k, v in pairs(eventObjectMap) do
-                print(k)
-            end
-        end
-
-        if Any(self.SpawnableObjects, function(o) return o:lower() == ro.name:lower() end) then
-            eventObjectMap[ro.id] = {{value = 'spawnable', chainId = -1}}
-            return true
-        end
-
-        local eventsWithObjectAsTarget = Where(self.graph, function(event)
-            return
-                --The action was not already processed
-                not actionMap[event.id]
-                --The event is of type action (LookAtObject will be individually mapped during runtime, so we are not mapping it here)
-                and event.Action ~= 'Exists'
-                and event.Action ~= 'LookAtObject'
-                -- and event.Action ~= 'Drink'
-                -- and event.Action ~= 'Eat'
-                --The event is not interaction and is with the required object
-                and #event.Entities == 2 and event.Entities[2] == ro.id
-                --The event is in the same location as the required object (this event will not be mapped if the object was moved to a different location)
-                --The consequence of the check below is that only the events occuring in the same location where the object initially exists are considered.
-                and (#event.Location == 0 or event.Location[1] == '' or event.Location[1]:lower():find(ro.location:lower()))
-            end
-        )
-
-        if DEBUG_VALIDATION then
-            print("Events with object as target:vvv")
-            for _, e in ipairs(eventsWithObjectAsTarget) do
-                print("Event with object "..ro.name..' as target '..e.id)
-            end
-        end
-
-        local allPotentialMatchingPoiData =
-            self:FindAllValidActionsAndPois(episode, ro, eventsWithObjectAsTarget)
-
-
-        local anyMatchesFound = self:AggregatePoiData(allPotentialMatchingPoiData, objectMap, eventObjectMap, actionMap, eventMap, poiMap)
-        if not anyMatchesFound and DEBUG then
-            print('Episode '..episode.name..' was discarded because the object '..ro.name..' does not exist in region '..ro.location..' or at all or a matching chain of actions could not be found for the object')
-        end
-        if not anyMatchesFound then
-            print("Could not find actions required for the object "..ro.name..' id '..ro.id..' in location '..ro.location)
-            return false
-        end
-
-        return true
+        return self:MapSingleObject(ro, episode, actionMap, eventMap, objectMap, eventObjectMap, poiMap)
     end)
+end
+
+--- Maps a single required object to episode objects, actions, and POIs.
+--- Attempts to find matching actions and POIs for the given object and populates the maps.
+--- This function is used in two contexts:
+---   1. Validation mode (ValidateEpisode): Called in a loop to try ALL objects, continue on failure
+---   2. Chain mapping mode (ProcessActions): Called via MapObjectsActionsAndPoi with All() for fail-fast behavior
+---
+--- @param ro table The required object {id, name, location}
+--- @param episode any The episode to map within
+--- @param actionMap table Map of simulator actions to graph events
+--- @param eventMap table Map of graph events to simulator actions
+--- @param objectMap table Map of simulator objects to graph object IDs
+--- @param eventObjectMap table Map of graph object IDs to simulator objects
+--- @param poiMap table Map of graph events to POI location IDs
+--- @return boolean True if object was successfully mapped, false otherwise
+function GraphStory:MapSingleObject(ro, episode, actionMap, eventMap, objectMap, eventObjectMap, poiMap)
+    -- FIX Bug 5: Check if ALL non-skippable events using this object have poiMap entries
+    -- This prevents skipping objects that were partially mapped as side effects during
+    -- another object's chain tracing (e.g., laptop backward tracing maps m1.3 for officeChair,
+    -- but m1, m1.1 still need to be mapped)
+    local eventsWithObject = Where(self.graph, function(event)
+        return event.Action ~= 'Exists'
+            and #event.Entities == 2
+            and event.Entities[2] == ro.id
+            and not self:IsInteractionOrSkippableAction(event.Action)
+    end)
+
+    -- Only skip if ALL events already have poiMap entries
+    local allEventsMapped = #eventsWithObject > 0 and All(eventsWithObject, function(event)
+        return poiMap[event.id] and #poiMap[event.id] > 0
+    end)
+
+    if allEventsMapped then
+        if DEBUG_VALIDATION then
+            print("[MapSingleObject] Skipping "..ro.id.." - all "..#eventsWithObject.." events already have poiMap entries")
+        end
+        return true
+    end
+
+    if DEBUG_VALIDATION and not eventObjectMap[ro.id] then
+        print("The object "..ro.id..':'..ro.name..' ()'..(ro.location or '')..' is not mapped in any of event objects map')
+        for k, v in pairs(eventObjectMap) do
+            print(k)
+        end
+    end
+
+    if Any(self.SpawnableObjects, function(o) return o:lower() == ro.name:lower() end) then
+        eventObjectMap[ro.id] = {{value = 'spawnable', chainId = -1}}
+        return true
+    end
+
+    local eventsWithObjectAsTarget = Where(self.graph, function(event)
+        return
+            --The action was not already processed
+            not actionMap[event.id]
+            --The event is of type action (LookAt/LookAtObject/Wave will be individually mapped during runtime, so we are not mapping it here)
+            and event.Action ~= 'Exists'
+            and event.Action ~= 'LookAt'
+            and event.Action ~= 'LookAtObject'
+            and event.Action ~= 'Wave'
+            and event.Action ~= 'TakeOut'
+            and event.Action ~= 'Stash'
+            and event.Action ~= 'AnswerPhone'
+            and event.Action ~= 'TalkPhone'
+            and event.Action ~= 'HangUp'
+            and event.Action ~= 'SmokeIn'
+            and event.Action ~= 'Smoke'
+            and event.Action ~= 'SmokeOut'
+            -- and event.Action ~= 'Drink'
+            -- and event.Action ~= 'Eat'
+            --The event is not interaction and is with the required object
+            and #event.Entities == 2 and event.Entities[2] == ro.id
+            --The event is in the same location as the required object (this event will not be mapped if the object was moved to a different location)
+            --The consequence of the check below is that only the events occuring in the same location where the object initially exists are considered.
+            and (#event.Location == 0 or event.Location[1] == '' or event.Location[1]:lower():find(ro.location:lower()))
+        end
+    )
+
+    if DEBUG_VALIDATION then
+        print("Events with object as target:vvv")
+        for _, e in pairs(eventsWithObjectAsTarget) do
+            print("Event with object "..ro.name..' as target '..e.id)
+        end
+    end
+
+    local allPotentialMatchingPoiData =
+        self:FindAllValidActionsAndPois(episode, ro, eventsWithObjectAsTarget)
+
+    if DEBUG_VALIDATION then
+        print(string.format("[MapSingleObject] FindAllValidActionsAndPois returned %d matches for object %s (id=%s) in episode %s",
+            #allPotentialMatchingPoiData,
+            ro.name,
+            ro.id,
+            episode.name or "unknown"))
+    end
+
+    local anyMatchesFound = self:AggregatePoiData(allPotentialMatchingPoiData, objectMap, eventObjectMap, actionMap, eventMap, poiMap)
+    if not anyMatchesFound and DEBUG then
+        print('Episode '..episode.name..' was discarded because the object '..ro.name..' does not exist in region '..ro.location..' or at all or a matching chain of actions could not be found for the object')
+    end
+    if not anyMatchesFound then
+        print("Could not find actions required for the object "..ro.name..' id '..ro.id..' in location '..ro.location)
+        return false
+    end
+
+    return true
 end
 
 function GraphStory:AggregatePoiData(poiDatas, objectMap, eventObjectMap, actionMap, eventMap, poiMap)
     local anyMatchesFound = false
+
+    if DEBUG_VALIDATION then
+        print("[AggregatePoiData] Processing " .. #poiDatas .. " poiData entries")
+    end
+
+    -- Track seen POI LocationIds to detect duplicates
+    local seenLocationIds = {}
+
     for poiIndex, poiData in ipairs(poiDatas) do
         if poiData and poiIndex then
             anyMatchesFound = true
@@ -1060,6 +1755,25 @@ function GraphStory:AggregatePoiData(poiDatas, objectMap, eventObjectMap, action
             -- Increment global counter and create unique chain ID
             self.globalChainCounter = self.globalChainCounter + 1
             local chainId = (poiData.poiDescription or "unknown") .. "_" .. (poiData.poiRegion or "unknown") .. "_" .. (poiData.poiLocationId or poiIndex) .. "_" .. self.globalChainCounter
+
+            -- Track duplicate LocationIds
+            local locationId = poiData.poiLocationId or "unknown"
+            if seenLocationIds[locationId] then
+                seenLocationIds[locationId] = seenLocationIds[locationId] + 1
+            else
+                seenLocationIds[locationId] = 1
+            end
+
+            if DEBUG_VALIDATION then
+                print(string.format("[AggregatePoiData] Entry %d: LocationId=%s, Description=%s, Region=%s, Episode=%s, ChainId=%s (occurrence #%d for this LocationId)",
+                    poiIndex,
+                    locationId,
+                    poiData.poiDescription or "unknown",
+                    poiData.poiRegion or "unknown",
+                    poiData.episodeName or "unknown",
+                    chainId,
+                    seenLocationIds[locationId]))
+            end
 
             -- Process objectMap
             for k, v in pairs(poiData.objectMap) do
@@ -1102,6 +1816,21 @@ function GraphStory:AggregatePoiData(poiDatas, objectMap, eventObjectMap, action
             end
         end
     end
+
+    -- Log summary of duplicates
+    if DEBUG_VALIDATION then
+        local duplicateCount = 0
+        for locationId, count in pairs(seenLocationIds) do
+            if count > 1 then
+                print(string.format("[AggregatePoiData] DUPLICATE: LocationId=%s appeared %d times (created %d chains)", locationId, count, count))
+                duplicateCount = duplicateCount + 1
+            end
+        end
+        if duplicateCount > 0 then
+            print(string.format("[AggregatePoiData] WARNING: %d LocationIds had duplicates", duplicateCount))
+        end
+    end
+
     return anyMatchesFound
 end
 
@@ -1189,7 +1918,80 @@ function GraphStory:MatchEventAndAction(action, event, poi, actionMap, eventMap,
     end
 end
 
-function GraphStory:ProcessActions(graphActors)
+--- Determines if an action is an interaction or special action that should skip chain validation.
+--- When validating event sequences against template action chains, interactions (Talk, Hug, etc.)
+--- and certain special actions (Move, LookAt, etc.) should not break the validation chain.
+--- They are allowed to occur between object manipulation actions without requiring explicit
+--- nextAction links in templates.
+---
+--- @param actionName string The name of the action to check
+--- @return boolean True if this action should skip chain validation, false otherwise
+function GraphStory:IsInteractionOrSkippableAction(actionName)
+    local lower = actionName:lower()
+
+    -- Special movement/location actions that can interrupt chains
+    if lower == 'move' then
+        return true
+    end
+
+    -- Check if it's an interaction (Talk, Hug, Kiss, Handshake, etc.)
+    -- These are defined in self.Interactions and represent actor-to-actor actions
+    if Any(self.Interactions, function(a) return a:lower() == lower end) then
+        return true
+    end
+
+    -- Specific non-object actions that can interrupt without breaking chains
+    local skippableActions = {'lookatobject', 'lookat', 'wave', 'stash', 'takeout'}
+    if inList(lower, skippableActions) then
+        return true
+    end
+
+    return false
+end
+
+--- Check if an action causes actor to leave current POI.
+--- Matches the backward validation pattern (line 1257) where Move is excluded
+--- from previous action candidates because it marks a location boundary.
+--- Per documentation (line 1401): validation iterates "until a Move action is found - and the location would be changed"
+---
+--- @param actionName string The name of the action to check
+--- @return boolean True if this action causes the actor to leave the current POI
+function GraphStory:IsLocationChangingAction(actionName)
+    local lower = actionName:lower()
+
+    -- Move/Walk explicitly changes location (matches line 1257 backward validation exclusion)
+    if lower == 'move' or lower == 'walk' then
+        return true
+    end
+
+    -- PickUp means actor takes object and moves to another location
+    if lower == 'pickup' then
+        return true
+    end
+
+    -- Interactions (Talk, Hug, Kiss, Give, etc.) move actor to interaction POI
+    if Any(self.Interactions, function(a) return a:lower() == lower end) then
+        return true
+    end
+
+    return false
+end
+
+---Normalize graph action names to simulator action names.
+---Handles inverse actions (INV-*) that map to different simulator classes.
+---This is necessary because graphs use semantic names like "INV-Give" for clarity,
+---while the simulator uses actual action class names like "Receive".
+---@param graphActionName string The action name from the graph event
+---@return string The normalized action name for simulator action comparison
+function GraphStory:NormalizeActionName(graphActionName)
+    local actionNameMap = {
+        ["INV-Give"] = "Receive",
+        ["LookAtObject"] = "LookAt",
+    }
+    return actionNameMap[graphActionName] or graphActionName
+end
+
+function GraphStory:ProcessActions()
     print("GraphStory:ProcessActions --------------------------------------------------")
     local episode = self.CurrentEpisode
 
@@ -1216,57 +2018,42 @@ function GraphStory:ProcessActions(graphActors)
         return false
     end
 
+    -- Pass episode group metadata to MetaEpisode
+    if self.CurrentEpisode then
+        self.CurrentEpisode.episodeGroups = self.episodeGroups
+        self.CurrentEpisode.episodeToGroup = self.episodeToGroup
+        self.CurrentEpisode.actorEpisodeUsage = self.actorEpisodeUsage
+
+        if DEBUG_EPISODE_GROUPS and self.episodeGroups then
+            print('[ProcessActions] Passing '..#self.episodeGroups..' episode groups to MetaEpisode')
+        end
+    end
+
     self.eventObjectMap = eventObjectMap
     self.poiMap = poiMap
     self.eventMap = eventMap
+    self.interactionPoiMap = interactionPoiMap
+    self.interactionProcessedMap = interactionProcessedMap
+    self.objectMap = objectMap
+    self.actionMap = actionMap
 
     if DEBUG then
         self:DebugMap()
     end
 
-    for _,a in ipairs(graphActors) do
-        print(a.id)
-        self.actionsQueues[a.id] = {}
-        --find the first event for the current actor
-        local firstEvent = FirstOrDefault(self.graph, function(event)
-            return event.id == self.temporal['starting_actions'][a.id]
-        end)
-        if not firstEvent then
-            print('Could not find the first event for actor '..a.id)
-            return false
-        elseif DEBUG then
-        end
-        print('First event: '..firstEvent.id..' in location '..firstEvent.Location[1]..' with actor '..firstEvent.Entities[1])
-
-        local firstLocation = PickRandom(Where(self.CurrentEpisode.POI, function(poi)
-            local eventLocation = ""
-            if firstEvent.Location and firstEvent.Location[1] then
-                eventLocation = firstEvent.Location[1]
-            end
-        return not poi.isBusy and poi.Region.name:lower():find(eventLocation:lower()) end))
-
-        if not firstLocation then
-            print("Error: could not find a valid first location for event "..firstEvent.id)
-            return false
-        end
-
-        -- print('Actor '..a.id..' will be spawned in the location '..firstLocation.Description)
-
-        -- --this is the first location -> the place where the actor or ped is first spawned
-        firstLocation.isBusy = true
-        local ped = FirstOrDefault(self.CurrentEpisode.peds, function(p) return p:getData('id') == a.id end)
-        print('[GraphStory.ProcessActions] '..ped:getData('id')..': Location '..firstLocation.Description..' is set to busy')
-        ped:setData('startingPoiIdx', LastIndexOf(episode.POI, firstLocation))
-        ped.interior = firstLocation.Interior
-        ped.position = firstLocation.position
-        ped.rotation = Vector3(0,0,firstLocation.Angle)
-
-        firstEvent.isStartingEvent = true
-        self.interactionPoiMap = interactionPoiMap
-        self.interactionProcessedMap = interactionProcessedMap
-        self.nextEvents[a.id] = firstEvent
-        self.nextLocations[a.id] = firstLocation
+    -- Create EventPlanner and delegate first event initialization
+    if DEBUG then
+        print("[GraphStory] Creating EventPlanner for action planning")
     end
+    self.eventPlanner = EventPlanner(self, self.CurrentEpisode, self.poiMap)
+
+    -- Delegate first event initialization to EventPlanner
+    local success = self.eventPlanner:InitializeFirstEvents(self.CurrentEpisode.peds)
+    if not success then
+        print("[GraphStory] ERROR: EventPlanner failed to initialize first events")
+        return false
+    end
+
     print("GraphStory:ProcessActions --------------------------------------------------")
     return true
 end
@@ -1328,6 +2115,11 @@ function GraphStory:End(reason)
         return
     end
 
+    -- Cleanup EventBus subscriptions
+    if self.EventBus then
+        self.EventBus:clear()
+    end
+
     -- Phase 1: Immediate cleanup
     if self.StoryTimeoutTimer then
         self.StoryTimeoutTimer:destroy()
@@ -1341,7 +2133,7 @@ function GraphStory:End(reason)
     self.Disposed = true
 
     -- Phase 2: Wait for collection, then terminate spectators
-    if self.artifactManager and self.artifactManager:isScheduling() then
+    if self.artifactManager then
         if DEBUG then
             print("[GraphStory] Waiting for artifact collection to finish...")
         end

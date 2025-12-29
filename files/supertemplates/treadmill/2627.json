@@ -1,1 +1,88 @@
-[ { "objects": [ { "dynamicString": "return Treadmill{description=\"\", noCollisions=true, modelid=2627, isRandomModelId=false, interior=5, position=Vector3(1.4173583984375,-0.010502696037292,-1.102294921875), rotation=Vector3(0,0,270.00036621094), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}", "id": 1 } ], "poi": { "isEmpty": true }, "locations": [ { "Description": "treadmill ", "Interior": 5, "Y": 0.005510210990905762, "X": 0.046630859375, "episodeLinks": [ ], "Z": -6.103515625e-05, "id": 1, "Angle": 268.8193054199219, "PossibleActions": [ { "id": 1 } ], "allActions": [ { "dynamicString": "return GetOn{how = 3,side = 1}", "isClosingAction": false, "targetItem": { "id": 1, "type": "Object" }, "id": 1, "nextAction": { "id": 2 }, "closingAction": { "id": 3 }, "nextLocation": { "id": 1 } }, { "dynamicString": "return JogTreadmill{how = gym_tread_walk}", "isClosingAction": false, "targetItem": { "id": 1, "type": "Object" }, "id": 2, "nextAction": { "id": 3 }, "nextLocation": { "id": 1 } }, { "dynamicString": "return GetOff{how = 3,side = 1}", "isClosingAction": true, "targetItem": { "id": 1, "type": "Object" }, "id": 3, "nextLocation": { "id": 1 } } ] } ], "position": { "y": -1.135233521461487, "x": 771.95849609375, "z": 1000.726684570312 }, "globalCentroid": { "y": -1.13772976398468, "x": 772.6904907226562, "z": 1000.175537109375 }, "name": "2627" } ]
+[
+    {
+        "objects": [
+            {
+                "dynamicString": "return Treadmill{description=\"\", noCollisions=true, modelid=2627, isRandomModelId=false, interior=5, position=Vector3(1.4173583984375,-0.010502696037292,-1.102294921875), rotation=Vector3(0,0,270.00036621094), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "id": 1
+            }
+        ],
+        "poi": {
+            "isEmpty": true
+        },
+        "locations": [
+            {
+                "Description": " near treadmill ",
+                "Interior": 5,
+                "Y": 0.005510210990905762,
+                "X": 0.046630859375,
+                "episodeLinks": [],
+                "Z": -6.103515625e-05,
+                "id": 1,
+                "Angle": 268.8193054199219,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "allActions": [
+                    {
+                        "dynamicString": "return GetOn{how = 3,side = 1}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 1,
+                            "type": "Object"
+                        },
+                        "id": 1,
+                        "nextAction": {
+                            "id": 2
+                        },
+                        "closingAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 1
+                        }
+                    },
+                    {
+                        "dynamicString": "return JogTreadmill{how = gym_tread_walk}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 1,
+                            "type": "Object"
+                        },
+                        "id": 2,
+                        "nextAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 1
+                        }
+                    },
+                    {
+                        "dynamicString": "return GetOff{how = 3,side = 1}",
+                        "isClosingAction": true,
+                        "targetItem": {
+                            "id": 1,
+                            "type": "Object"
+                        },
+                        "id": 3,
+                        "nextLocation": {
+                            "id": 1
+                        }
+                    }
+                ]
+            }
+        ],
+        "position": {
+            "y": -1.135233521461487,
+            "x": 771.95849609375,
+            "z": 1000.726684570312
+        },
+        "globalCentroid": {
+            "y": -1.13772976398468,
+            "x": 772.6904907226562,
+            "z": 1000.175537109375
+        },
+        "name": "2627"
+    }
+]

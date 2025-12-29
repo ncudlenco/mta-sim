@@ -6,6 +6,9 @@ Wait = class(StoryActionBase, function(o, params)
     o.Time = params.time
     o.targetInteraction = params.targetInteraction
     o.doNothing = params.doNothing
+    o.isLookingAtTarget = false
+    o.lookAtTimer = nil
+    o.waitTimer = nil
 end)
 
 function Wait:resume(player)
@@ -15,7 +18,8 @@ function Wait:resume(player)
     if player:getData('enteredWaitingLoop') then
         self:ExecuteWaitingLoop()
     elseif player:getData('isAboutToInitiateInteraction') then
-        OnGlobalActionFinished(1, player:getData('id'), player:getData('storyId'))
+        -- Already triggered the global action finished
+        -- OnGlobalActionFinished(1, player:getData('id'), player:getData('storyId'))
     end
 end
 
@@ -23,6 +27,23 @@ function Wait:pause(player)
     if DEBUG then
         print('Wait.Pause actor '..tostring(player:getData('id'))..' enteredWaitingLoop '..tostring(player:getData('enteredWaitingLoop'))..' requestPause '..tostring(player:getData('requestPause'))..' paused '..tostring(player:getData('paused'))..' isReadyForInteraction '..tostring(player:getData('isReadyForInteraction'))..' isWaitingForInteraction '..tostring(player:getData('isWaitingForInteraction'))..' isAboutToInitiateInteraction '..tostring(player:getData('isAboutToInitiateInteraction')))
     end
+
+    -- Cleanup looking behavior when pausing
+    if self.isLookingAtTarget then
+        LookingBehavior.stopContinuousLooking(self.Performer, self.lookAtTimer)
+        self.lookAtTimer = nil
+        self.isLookingAtTarget = false
+    end
+
+    -- Kill wait timer when pausing
+    if self.waitTimer and isTimer(self.waitTimer) then
+        killTimer(self.waitTimer)
+        self.waitTimer = nil
+        if DEBUG then
+            print('Wait.Pause: Killed wait timer for '..player:getData('id'))
+        end
+    end
+
     if player:getData('requestPause') and not player:getData('enteredWaitingLoop') and player:getData('isReadyForInteraction') then
         player:setData('requestPause', false)
         player:setData('paused', true)
@@ -52,37 +73,112 @@ function Wait:ExecuteWaitingLoop()
     self.Performer:setData('enteredWaitingLoop', true)
 
     local function wait()
-        --Discard the z coordinate to handle the cases when actors located one next to each other are climbed on a table or another object.
-        local distance = math.abs((Vector3(self.Performer.position.x, self.Performer.position.y, 0) - Vector3(self.TargetItem.position.x, self.TargetItem.position.y, 0)).length)
-        local otherTargetLocation = self.TargetItem:getData('nextTargetLocation')
-        local isOtherPlayerInTargetLocation = otherTargetLocation == self.NextLocation.LocationId
-        local isOtherPlayerNearby = distance <= 1.5
+        -- If both actors are executing Wait, they've already arrived at their POIs
+        -- Only check if waiting for same interaction
         local isOtherPlayerWaitingForSameInteraction = self.TargetItem:getData("isWaitingForInteraction") == self.targetInteraction
+
+        -- Keep these for debug logging only (not used in synchronization)
+        local distance = (self.Performer.position - self.TargetItem.position).length
+        local otherTargetLocation = self.TargetItem:getData('nextTargetLocation')
+
+        -- Determine if conditions are met for mutual gaze
+        local shouldLookAtEachOther = isOtherPlayerWaitingForSameInteraction
+
+        -- Debug logging for Wait synchronization state
+        if DEBUG and DEBUG_WAIT_SYNC then
+            print(string.format("[Wait:Sync] Actor %s (%s) polling partner %s:",
+                self.Performer:getData('id'),
+                self.doNothing and "passive" or "active",
+                self.TargetItem:getData('id')))
+            print(string.format("  - Interaction: %s (partner=%s, expected=%s)",
+                tostring(isOtherPlayerWaitingForSameInteraction),
+                tostring(self.TargetItem:getData('isWaitingForInteraction') or 'nil'),
+                tostring(self.targetInteraction)))
+            print(string.format("  - Result: shouldLookAtEachOther=%s", tostring(shouldLookAtEachOther)))
+        end
 
         -- When the other actor is not near the current actor, and the other actor is actually coming here to execute an interaction and the actor that does not initiate the interaction
         -- has already waited and is ready to be interacted with
-        if not isOtherPlayerNearby or not isOtherPlayerInTargetLocation or not isOtherPlayerWaitingForSameInteraction
+        if not shouldLookAtEachOther
         then
+            -- -- Stop looking if currently looking
+            if self.isLookingAtTarget then
+                LookingBehavior.stopContinuousLooking(self.Performer, self.lookAtTimer)
+                self.lookAtTimer = nil
+                self.isLookingAtTarget = false
+            end
+
             self.Performer:setAnimation("cop_ambient", "coplook_loop", 5000, true, false, false, true) --TODO: do something smarter
             if DEBUG then
                 print(self.Performer:getData('id')..": WAIT AGAIN with distance between "..self.Performer:getData('id')..' and '..self.TargetItem:getData('id')..' is '..distance..'. The other target location is '..(otherTargetLocation or 'nil')..' The other interaction is '..(self.TargetItem:getData('isWaitingForInteraction') or 'nil'))
             end
+            -- Kill existing timer before scheduling new one to prevent stacking
+            if self.waitTimer and isTimer(self.waitTimer) then
+                killTimer(self.waitTimer)
+                self.waitTimer = nil
+            end
             if not self.Performer:getData('requestPause') then
-                Timer(wait, 5000, 1)
+                self.waitTimer = Timer(wait, 5000, 1)
             end
         elseif not self.doNothing then
+            -- Start looking at each other if not already looking
+            if not self.isLookingAtTarget then
+                -- Start continuous looking at the other actor (with body rotation)
+                self.lookAtTimer = LookingBehavior.startContinuousLooking(
+                    self.Performer,
+                    function()
+                        return LookingBehavior.isPerformerValid(self.TargetItem)
+                               and self.TargetItem.position
+                               or nil
+                    end,
+                    { expectedAction = 'Wait', updateInterval = 200, skipBodyRotation = false }
+                )
+
+                self.isLookingAtTarget = true
+            end
+
             if not self.TargetItem:getData('isReadyForInteraction') then
                 if DEBUG then
                     print(self.Performer:getData('id')..": My WAIT IS FINISHED but the other is not ready for interaction. Distance between "..self.Performer:getData('id')..' and '..self.TargetItem:getData('id')..' is '..distance..'. The other target location is '..(otherTargetLocation or 'nil')..' The other interaction is '..(self.TargetItem:getData('isWaitingForInteraction') or 'nil'))
                 end
+                -- Kill existing timer before scheduling new one to prevent stacking
+                if self.waitTimer and isTimer(self.waitTimer) then
+                    killTimer(self.waitTimer)
+                    self.waitTimer = nil
+                end
                 if not self.Performer:getData('requestPause') then
-                    Timer(wait, 5000, 1)
+                    self.waitTimer = Timer(wait, 5000, 1)
                 end
             else
                 -- Only the active actor gets here
                 -- This actor in the next action will initiate the interaction
+
+                -- GUARD: Prevent duplicate OnGlobalActionFinished from already-queued timer callbacks
+                -- Note: killTimer() doesn't stop in-progress callbacks, only prevents future ones
+                if self.Performer:getData('isAboutToInitiateInteraction') then
+                    if DEBUG then
+                        print(self.Performer:getData('id')..": Already initiated interaction - ignoring stacked timer callback")
+                    end
+                    return
+                end
+
+                -- CRITICAL: Stop continuous rotation before exiting to let next action take control
+                LookingBehavior.stopContinuousLooking(self.Performer, self.lookAtTimer)
+                self.lookAtTimer = nil
+                self.isLookingAtTarget = false
+
+                -- Kill wait timer since we're exiting
+                if self.waitTimer and isTimer(self.waitTimer) then
+                    killTimer(self.waitTimer)
+                    self.waitTimer = nil
+                end
+
                 self.Performer:setData('enteredWaitingLoop', false)
+                self.Performer:setData('isWaitingForInteraction', nil)
                 self.Performer:setData('isAboutToInitiateInteraction', true)
+                -- Active actor clears target's wait flags too (prevents race condition)
+                self.TargetItem:setData('isWaitingForInteraction', nil)
+                self.TargetItem:setData('enteredWaitingLoop', false)
                 if DEBUG then
                     print(self.Performer:getData('id')..": WAIT IS FINISHED with distance between "..self.Performer:getData('id')..' and '..self.TargetItem:getData('id')..' is '..distance..'. The other target location is '..(otherTargetLocation or 'nil')..' The other interaction is '..(self.TargetItem:getData('isWaitingForInteraction') or 'nil'))
                     print('Exiting waiting loop actor '..tostring(self.Performer:getData('id'))..' enteredWaitingLoop '..tostring(self.Performer:getData('enteredWaitingLoop'))..' requestPause '..tostring(self.Performer:getData('requestPause'))..' paused '..tostring(self.Performer:getData('paused'))..' isReadyForInteraction '..tostring(self.Performer:getData('isReadyForInteraction'))..' isWaitingForInteraction '..tostring(self.Performer:getData('isWaitingForInteraction'))..' isAboutToInitiateInteraction '..tostring(self.Performer:getData('isAboutToInitiateInteraction')))
@@ -92,8 +188,36 @@ function Wait:ExecuteWaitingLoop()
             end
         else
             -- Only the passive actor gets here
+            -- Start looking at each other if not already looking
+            if not self.isLookingAtTarget then
+                -- Start continuous looking at the other actor (with body rotation)
+                self.lookAtTimer = LookingBehavior.startContinuousLooking(
+                    self.Performer,
+                    function()
+                        return LookingBehavior.isPerformerValid(self.TargetItem)
+                               and self.TargetItem.position
+                               or nil
+                    end,
+                    { expectedAction = 'Wait', updateInterval = 200, skipBodyRotation = false }
+                )
+
+                self.isLookingAtTarget = true
+            end
+
+            -- Stop continuous rotation before setting ready for interaction
+            LookingBehavior.stopContinuousLooking(self.Performer, self.lookAtTimer)
+            self.lookAtTimer = nil
+            self.isLookingAtTarget = false
+
+            -- Kill wait timer since we're exiting
+            if self.waitTimer and isTimer(self.waitTimer) then
+                killTimer(self.waitTimer)
+                self.waitTimer = nil
+            end
+
             self.Performer:setData('isReadyForInteraction', true)
             self.Performer:setData('enteredWaitingLoop', false)
+            -- Note: Active actor clears isWaitingForInteraction for both actors
             if DEBUG then
                 print(self.Performer:getData('id')..": WAIT IS FINISHED with do nothing (next action is not called) distance between "..self.Performer:getData('id')..' and '..self.TargetItem:getData('id')..' is '..distance..'. The other target location is '..(otherTargetLocation or 'nil')..' The other interaction is '..(self.TargetItem:getData('isWaitingForInteraction') or 'nil'))
             end

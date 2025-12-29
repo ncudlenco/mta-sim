@@ -1,41 +1,45 @@
-Hug = class(StoryActionBase, function(o, params)
+Hug = class(InteractionActionBase, function(o, params)
     params.description = " hug each other "
     params.name = 'Hug'
-    StoryActionBase.init(o,params)
+    params.interactionOffset = Vector3(-0.5, -0.5, 0)
 
-    o.TargetPlayer = params.targetPlayer
-    o.isInteraction = true
+    InteractionActionBase.init(o, params)
 end)
 
 function Hug:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
 
-    local function faceP1ToP2(p1, p2)
-        local targetFront = p2.position - p1.position
-        local angle = p1.matrix.forward:angleAboutAxis(targetFront, p1.matrix.up)
-        print("Signed angle is: "..angle)
-        p1.rotation = Vector3(0,0,p1.rotation.z + math.deg(angle))
-    end
+    -- -- Also add to TargetPlayer's history
+    -- -- Hug is symmetric - both actors perform the same action
+    -- -- This ensures both actors have the correct action name for event publication
+    -- table.insert(story.History[self.TargetPlayer:getData('id')], self)
+
     StoryActionBase.Apply(self)
 
-    self.TargetPlayer.position = self.Performer.position + Vector3(-0.5,-0.5,0)
-
-    faceP1ToP2(self.Performer, self.TargetPlayer)
-    faceP1ToP2(self.TargetPlayer, self.Performer)
-
     local time = 2400
-    StoryActionBase.GetLogger(self, story):Log(" and " .. self.TargetPlayer:getData('name') .. self.Description, self)
 
-    self.Performer:setAnimation("gangs", "hndshkfa_swt", time, true, false, false, false)
-    self.TargetPlayer:setAnimation("gangs", "hndshkfa_swt", time, true, false, false, false)
+    -- Synchronize actors: rotation → delay → position check → animations
+    self:SyncActors(
+        self.Performer,
+        self.TargetPlayer,
+        self.InteractionOffset,
+        function()
+            -- Actors are now properly positioned and facing each other
+            StoryActionBase.GetLogger(self, story):Log(" and " .. self.TargetPlayer:getData('name') .. self.Description, self)
 
-    if DEBUG then
-        outputConsole("Hug:Apply")
-    end
+            self.Performer:setAnimation("gangs", "hndshkfa_swt", time, false, false, false, false)
+            self.TargetPlayer:setAnimation("gangs", "hndshkfa_swt", time, false, false, false, false)
 
-    OnGlobalActionFinished(time, self.Performer:getData('id'), self.Performer:getData('storyId'))
-    OnGlobalActionFinished(time, self.TargetPlayer:getData('id'), self.TargetPlayer:getData('storyId'))
+            if DEBUG then
+                outputConsole("Hug:Apply")
+            end
+
+            -- Schedule action completion
+            OnGlobalActionFinished(time, self.Performer:getData('id'), self.Performer:getData('storyId'))
+            OnGlobalActionFinished(time, self.TargetPlayer:getData('id'), self.TargetPlayer:getData('storyId'))
+        end
+    )
 end
 
 function Hug:GetDynamicString()

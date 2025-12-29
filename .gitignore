@@ -1,5 +1,4 @@
 data/
-ServerGlobals.lua
 .vscode/*
 story_generator/__pycache__/*
 story_generator/babi/*
@@ -31,3 +30,4 @@ _deps/
 out/
 .cmake/
 nul
+input_graphs/*

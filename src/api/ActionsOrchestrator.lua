@@ -1293,6 +1293,28 @@ function ActionsOrchestrator:CanActorBeDisplaced(actor, visitedActors)
         return false
     end
 
+    -- Cannot displace if actor is in mid-chain with pending same-POI actions
+    local actorChainId = actor:getData('mappedChainId')
+    if actorChainId and locationId then
+        -- Check if next event in chain requires the same POI
+        if CURRENT_STORY.EventPlanner and CURRENT_STORY.EventPlanner.actorNextEvents then
+            local nextEventId = CURRENT_STORY.EventPlanner.actorNextEvents[actorId]
+            if nextEventId and CURRENT_STORY.poiMap and CURRENT_STORY.poiMap[nextEventId] then
+                for _, mapping in ipairs(CURRENT_STORY.poiMap[nextEventId]) do
+                    if mapping.chainId == actorChainId and mapping.value == locationId then
+                        -- Actor has a pending event in the same chain at the same POI
+                        if DEBUG and DEBUG_POI_ORCHESTRATION then
+                            print('[CanActorBeDisplaced] Actor '..actorId..
+                                  ' has pending chain action ('..nextEventId..
+                                  ') at same POI '..locationId..', cannot displace')
+                        end
+                        return false
+                    end
+                end
+            end
+        end
+    end
+
     -- Can displace if in interactionsOnly POI doing non-interaction action
     -- BUT NOT if actor is part of an active interaction (may have follow-up actions like Drink, Give)
     if currentPOI and currentPOI.interactionsOnly then

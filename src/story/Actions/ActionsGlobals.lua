@@ -158,11 +158,28 @@ function OnGlobalActionFinished(delay, playerId, storyId, callback, destroyedIte
             end
             --The case where the first action didn't start because the location was busy
             local idx = actor:getData('startingPoiIdx')
+            local locationId = actor:getData('locationId')
+
             if DEBUG then
-                print("Starting poi idx for ped "..idx)
+                print(string.format("[ActionsGlobals] Actor %s: startingPoiIdx=%d, locationId=%s",
+                    actor:getData('id'), idx, tostring(locationId)))
             end
+
+            -- Resolve target POI: either from episode POI array or clone POI lookup
+            local targetPoi = nil
             if idx > 0 then
-                local firstAction = CURRENT_STORY.CurrentEpisode.POI[idx]:GetNextValidAction(actor)
+                targetPoi = CURRENT_STORY.CurrentEpisode.POI[idx]
+            elseif locationId and locationId:match("_clone$") then
+                -- Clone POI with _clone suffix - look up from POICoordinator
+                targetPoi = CURRENT_STORY.PoiCoordinator:GetClonePOI(locationId)
+                if DEBUG then
+                    print(string.format("[ActionsGlobals] Actor %s: clone POI lookup result: %s",
+                        actor:getData('id'), targetPoi and targetPoi.LocationId or "nil"))
+                end
+            end
+
+            if targetPoi then
+                local firstAction = targetPoi:GetNextValidAction(actor)
                 if firstAction then
                     nextAction = firstAction
                 else

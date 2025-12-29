@@ -1,15 +1,20 @@
 {
   "permissions": {
     "allow": [
-      "Read(Z:\\More games\\GTA San Andreas\\MTA-SA1.6\\server\\mods\\deathmatch\\logs/**)",
-      "WebFetch(domain:github.com)",
-      "Bash(./build.bat)",
+      "Bash(cd:*)",
+      "Read(//z/More games/GTA San Andreas/MTA-SA1.6/server/mods/deathmatch/resources/multiagent_story_system/output/story_13294b0b/scene_detail_agent/host_answers_inside/**)",
+      "Read(//z/More games/GTA San Andreas/MTA-SA1.6/server/mods/deathmatch/logs/**)",
+      "Bash(cat:*)",
+      "Bash(dir:*)",
+      "Read(//z/More games/GTA San Andreas/MTA-SA1.6/server/mods/deathmatch/**)",
+      "Bash(findstr:*)",
       "Read(//z/More games/GTA San Andreas/MTA-SA1.6/server/**)",
-      "Bash(start \"\" \"Z:\\More games\\GTA San Andreas\\MTA-SA1.6\\Multi Theft Auto.exe - Shortcut.lnk\")",
-      "Bash(tasklist)",
-      "Bash(taskkill /F /IM \"gta_sa.exe\" 2>nul; taskkill /F /IM \"Multi Theft Auto.exe\" 2>nul; taskkill /F /IM \"MTA Server.exe\" 2>nul; sleep 2; echo \"Processes killed\"",
-      "Bash(echo \"\" > \"Z:\\More games\\GTA San Andreas\\MTA-SA1.6\\server\\mods\\deathmatch\\logs\\server.log\"",
-      "Bash(start \"\" \"MTA Server.exe\")"
+      "Bash(python:*)",
+      "Bash(sed:*)",
+      "Bash(awk:*)",
+      "Bash(powershell \"Get-Content server.log | Select-Object -Last 800\")",
+      "Bash(powershell \"Get-Content server.log | Select-String -Pattern ''actorId a1 - constraints'' -Context 0,20 | Select-Object -First 1\")",
+      "Bash(powershell:*)"
     ],
     "deny": [],
     "ask": []

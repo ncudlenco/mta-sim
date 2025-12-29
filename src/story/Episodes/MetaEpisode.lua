@@ -17,10 +17,15 @@ MetaEpisode = class(StoryEpisodeBase, function(o, episodes)
     end
     o.Episodes = episodes
     o.episodeLinks = {}
+
+    -- Episode group metadata (set by GraphStory)
+    o.episodeGroups = nil      -- {[groupId] = {episode1, episode2}}
+    o.episodeToGroup = nil     -- {[episodeName] = groupId}
+    o.actorEpisodeUsage = nil  -- Actor episode usage patterns
 end)
 
 
-function MetaEpisode:Initialize(actor, isTemporaryInitialize, actors, graphOfEvents)
+function MetaEpisode:Initialize(isTemporaryInitialize, actors, graphOfEvents)
     if(#self.Episodes == 0) then return end
 
     self.POI = {}
@@ -29,9 +34,9 @@ function MetaEpisode:Initialize(actor, isTemporaryInitialize, actors, graphOfEve
     self.peds = {}
     for i, e in ipairs(self.Episodes) do
         if i == 1 then
-            e:Initialize(actor, isTemporaryInitialize, actors, graphOfEvents)
+            e:Initialize(isTemporaryInitialize, actors, graphOfEvents)
         else
-            e:Initialize(actor, isTemporaryInitialize, {}, graphOfEvents)
+            e:Initialize(isTemporaryInitialize, nil, graphOfEvents)
         end
     end
     local allPeds = {}

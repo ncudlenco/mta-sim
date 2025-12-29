@@ -1,1 +1,14 @@
-[ { "offsets": [ ], "templates": [ "poi" ], "name": "interactions", "position": { "y": -1675.940673828125, "x": 2525.951416015625, "z": 1015.498596191406 } } ]
+[
+    {
+        "offsets": [],
+        "templates": [
+            "poi"
+        ],
+        "name": "interactions",
+        "position": {
+            "y": -1675.940673828125,
+            "x": 2525.951416015625,
+            "z": 1015.498596191406
+        }
+    }
+]

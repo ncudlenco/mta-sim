@@ -28,6 +28,9 @@
   <file src="files/data/AlcoholBottle5.dff" type="client" />
   <file src="files/data/WineGlass1.dff" type="client" />
   <file src="files/data/CocktailGlass1.dff" type="client" />
+  <!-- Files -->
+  <!-- <file src="files/episodes/classroom.json" type="server" /> -->
+
   <!-- Client -->
   <script src="src/client/Handlers.lua" type="shared"/>
   <script src="src/client/Debug.lua" type="client"/>
@@ -42,13 +45,28 @@
   <script src="src/utils/enum.lua" type="shared"/>
   <script src="src/utils/Extent3.lua" type="shared"/>
   <script src="src/utils/guid.lua" type="shared"/>
+  <script src="src/utils/EventBus.lua" type="shared"/>
+  <script src="src/utils/LookingBehavior.lua" type="shared"/>
+  <script src="src/utils/SpatialCoordinator.lua" type="shared"/>
+  <script src="src/utils/ConfigurationLoader.lua" type="server"/>
+  <script src="src/utils/UnionFind.lua" type="server"/>
   <script src="src/utils/bone_attach.lua" />
 	<script src="src/utils/bone_attach_c.lua" type="client" />
 	<script src="src/utils/attach_func.lua" />
 	<script src="src/utils/attach_func.lua" type="client" />
 	<script src="src/utils/bone_pos_rot.lua" type="client" />
+  <!-- Camera System -->
+  <script src="src/story/Camera/CameraSpecParser.lua" type="shared"/>
+  <script src="src/story/Camera/CameraParameters.lua" type="shared"/>
+  <script src="src/utils/CameraValidation.lua" type="server"/>
+  <script src="src/client/CameraValidationClient.lua" type="client"/>
+  <script src="src/client/CameraControlClient.lua" type="client"/>
+  <script src="src/api/CameraHandlerBase.lua" type="shared"/>
+  <script src="src/api/StaticCameraHandler.lua" type="shared"/>
+  <script src="src/api/CinematicCameraHandler.lua" type="shared"/>
   <!-- Api -->
   <script src="src/api/CameraHandler.lua" type="shared"/>
+  <script src="src/api/POICoordinator.lua" type="shared" />
   <script src="src/api/ActionsOrchestrator.lua" type="shared" />
   <script src="src/api/PedHandler.lua" type="shared"/>
   <script src="src/api/eStoryItemType.lua" type="shared"/>
@@ -82,12 +100,15 @@
   <script src="src/features/artifact_collection/collectors/NativeScreenshotCollector.lua" type="server"/>
   <script src="src/features/artifact_collection/collectors/SegmentationCollector.lua" type="server"/>
   <script src="src/features/artifact_collection/collectors/DepthCollector.lua" type="server"/>
+  <script src="src/features/artifact_collection/collectors/EventFrameMappingCollector.lua" type="server"/>
   <!-- Manager and Factory -->
   <script src="src/features/artifact_collection/ArtifactCollectionManager.lua" type="server"/>
   <script src="src/features/artifact_collection/factories/ArtifactCollectionFactory.lua" type="server"/>
   <!-- Globals -->
   <script src="src/ServerGlobals.lua" type="server" />
   <script src="src/ErrorHandler.lua" type="server" />
+  <!-- Export Module -->
+  <script src="src/export/GameWorldExporter.lua" type="server" />
   <!-- Other story related objects -->
   <script src="src/story/Logger.lua" type="shared" />
   <script src="src/story/TimeOfDay.lua" type="shared" />
@@ -110,6 +131,7 @@
   <!-- Actions -->
   <script src="src/story/Actions/DynamicAction.lua" type="shared" />
   <script src="src/story/Actions/ActionsGlobals.lua" type="shared" />
+  <script src="src/story/Actions/InteractionActionBase.lua" type="shared" />
   <script src="src/story/Actions/AnswerPhone.lua" type="shared" />
   <script src="src/story/Actions/Cook.lua" type="shared" />
   <script src="src/story/Actions/Eat.lua" type="shared" />
@@ -126,7 +148,7 @@
   <script src="src/story/Actions/SitDown.lua" type="shared" />
   <script src="src/story/Actions/StandUp.lua" type="shared" />
   <script src="src/story/Actions/WashHands.lua" type="shared" />
-  <script src="src/story/Actions/LookAtObject.lua" type="shared" />
+  <script src="src/story/Actions/LookAt.lua" type="shared" />
   <script src="src/story/Actions/OpenLaptop.lua" type="shared" />
   <script src="src/story/Actions/CloseLaptop.lua" type="shared" />
   <script src="src/story/Actions/LayOnElbow.lua" type="shared" />
@@ -138,8 +160,10 @@
   <script src="src/story/Actions/Receive.lua" type="shared" />
   <script src="src/story/Actions/PutIn.lua" type="shared" />
   <script src="src/story/Actions/Wait.lua" type="shared" />
+  <script src="src/story/Actions/Wave.lua" type="shared" />
   <script src="src/story/Actions/PutDown.lua" type="shared" />
   <script src="src/story/Actions/TalkPhone.lua" type="shared" />
+  <script src="src/story/Actions/TakeOut.lua" type="shared" />
   <script src="src/story/Actions/TurnOn.lua" type="shared" />
   <script src="src/story/Actions/TurnOff.lua" type="shared" />
   <script src="src/story/Actions/Dance.lua" type="shared" />
@@ -148,6 +172,7 @@
   <script src="src/story/Actions/Read.lua" type="shared" />
   <script src="src/story/Actions/Smoke.lua" type="shared" />
   <script src="src/story/Actions/SmokeIn.lua" type="shared" />
+  <script src="src/story/Actions/Stash.lua" type="shared" />
   <script src="src/story/Actions/SmokeOut.lua" type="shared" />
   <script src="src/story/Actions/TaiChi.lua" type="shared" />
   <script src="src/story/Actions/BenchpressWorkOut.lua" type="shared" />
@@ -212,6 +237,7 @@
   <script src="src/story/Episodes/MetaEpisode.lua" type="shared" />
   <!-- Story main items -->
   <script src="src/story/Player.lua" type="server" />
+  <script src="src/story/EventPlanner.lua" type="shared" />
   <script src="src/story/RandomStory.lua" type="shared" />
   <script src="src/story/GraphStory.lua" type="shared" />
   <!-- Client classes -->

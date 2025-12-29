@@ -170,7 +170,7 @@ function Logger:DescribeObjects(player, regionName, objects, locationMap, descri
 
                 return {noun = getWordPrefix(k) .. ' ' .. k, isPlural = false}
             elseif v.nr then
-                return {noun = v.pluralTemplate:gsub('{count}', ''..num2word(v.nr)), isPlural = true}
+                return {noun = v.pluralTemplate:gsub('{count}', ''..tostring(v.nr or 0)), isPlural = true}
             else
                 return {noun = '', isPlural = false}
             end
@@ -297,7 +297,7 @@ function Logger:Log(text, ...)
                 self.Buffer[player:getData('id')].TempDependency = false
                 self.Buffer[player:getData('id')].firstAction = false
                 self.Buffer[player:getData('id')].text = self:EndSentence(self.Buffer[player:getData('id')].text)
-                logText = 'When '..player:getData('name')..' '..PickRandom(self.Buffer[player:getData('id')].NextTemporalLinks)..' '..player:getData('genderNominative')..' '..text
+                logText = 'When '..tostring(player:getData('name') or '')..' '..tostring(PickRandom(self.Buffer[player:getData('id')].NextTemporalLinks) or '')..' '..tostring(player:getData('genderNominative') or '')..' '..tostring(text or '')
                 commit = true
                 self.PreviousAnd = false
                 if DEBUG_LOGGER then

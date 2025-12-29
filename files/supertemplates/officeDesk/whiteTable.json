@@ -19,7 +19,7 @@
         },
         "locations": [
             {
-                "Description": " the desk ",
+                "Description": " near the desk ",
                 "Interior": 8,
                 "Y": -0.095703125,
                 "X": 0.255126953125,
@@ -41,9 +41,29 @@
                             "type": "Object"
                         },
                         "id": 1,
-                        "nextAction": {
-                            "id": 2
-                        },
+                        "nextAction": [
+                            {
+                                "id": 2
+                            },
+                            {
+                                "id": 3
+                            },
+                            {
+                                "id": 4
+                            },
+                            {
+                                "id": 5
+                            },
+                            {
+                                "id": 6
+                            },
+                            {
+                                "id": 7
+                            },
+                            {
+                                "id": 8
+                            }
+                        ],
                         "closingAction": {
                             "id": 8
                         },
@@ -74,6 +94,9 @@
                             },
                             {
                                 "id": 7
+                            },
+                            {
+                                "id": 8
                             }
                         ],
                         "nextLocation": {
@@ -103,6 +126,9 @@
                             },
                             {
                                 "id": 7
+                            },
+                            {
+                                "id": 8
                             }
                         ],
                         "nextLocation": {
@@ -132,6 +158,9 @@
                             },
                             {
                                 "id": 7
+                            },
+                            {
+                                "id": 8
                             }
                         ],
                         "nextLocation": {
@@ -161,6 +190,9 @@
                             },
                             {
                                 "id": 7
+                            },
+                            {
+                                "id": 8
                             }
                         ],
                         "nextLocation": {
@@ -190,6 +222,9 @@
                             },
                             {
                                 "id": 7
+                            },
+                            {
+                                "id": 8
                             }
                         ],
                         "nextLocation": {
@@ -204,9 +239,23 @@
                             "type": "Object"
                         },
                         "id": 7,
-                        "nextAction": {
-                            "id": 8
-                        },
+                        "nextAction": [
+                            {
+                                "id": 2
+                            },
+                            {
+                                "id": 4
+                            },
+                            {
+                                "id": 5
+                            },
+                            {
+                                "id": 6
+                            },
+                            {
+                                "id": 8
+                            }
+                        ],
                         "nextLocation": {
                             "id": 2
                         }

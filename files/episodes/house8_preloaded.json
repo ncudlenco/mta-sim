@@ -2221,8 +2221,8 @@
                         "dynamicString": "return WashHands{}",
                         "isClosingAction": false,
                         "targetItem": {
-                            "id": 8,
-                            "type": "Location"
+                            "id": -1,
+                            "type": "none"
                         },
                         "id": 1,
                         "nextLocation": {

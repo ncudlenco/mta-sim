@@ -166,8 +166,8 @@ function StoryEpisodeBase:Initialize(...)
                 end
                 print('RequiredActors '..nr)
             end
-            if requiredActors then
-                pedsNr = #requiredActors
+            if LOAD_FROM_GRAPH or requiredActors then
+                pedsNr = requiredActors and #requiredActors or 0
             end
             print('Peds nr '..pedsNr)
             if pedsNr > #self.ValidStartingLocations then
@@ -201,21 +201,32 @@ function StoryEpisodeBase:Initialize(...)
                 elseif DEBUG then
                     print('Valid starting ped point '..validStartingPoi.LocationId..': '..validStartingPoi.Description)
                 end
+                local predefinedSkinId = (requiredActors and requiredActors[i] and requiredActors[i].Properties and requiredActors[i].Properties.SkinId) or nil
                 local skin = PickRandom(Where(SetPlayerSkin.PlayerSkins, function(s)
-                    return s and not s.isTaken and(not requiredActors or requiredActors[i].Properties.Gender == s.Gender )
+                    local hasNoSkinSpecifiedOrMatchesPredefined = not predefinedSkinId or predefinedSkinId == s.Id
+                    local matchesGender = (not requiredActors or requiredActors[i].Properties.Gender == s.Gender)
+                    if s.Id == 51 then
+                        print('Is taken: '..tostring(s.isTaken)..'; PredefinedSkinId: '..tostring(predefinedSkinId)..'; RequiredGender: '..tostring(requiredActors and requiredActors[i] and requiredActors[i].Properties and requiredActors[i].Properties.Gender)..
+                            '; SkinGender: '..tostring(s.Gender))
+                        print('hasNoSkinSpecifiedOrMatchesPredefined: '..tostring(hasNoSkinSpecifiedOrMatchesPredefined)..'; matchesGender: '..tostring(matchesGender))
+                    end
+                    return s and not s.isTaken and hasNoSkinSpecifiedOrMatchesPredefined and matchesGender
                 end))
                 if not skin then
-                    error('A valid skin could not be found for ped '..i)
+                    local pedId = requiredActors[i] and requiredActors[i].Entities and #requiredActors[i].Entities > 0 and requiredActors[i].Entities[1] or 'unknown'
+                    error('A valid skin could not be found for ped '..i..'. Predefined skin id: '..tostring(predefinedSkinId)..'. Ped id: '..pedId)
                 end
                 validStartingPoi.isBusy = true
                 print('[StoryEpisodeBase.Initialize] Location '..validStartingPoi.Description..' is set to busy')
-                local ped = PedHandler:GetOrCreatePed(skin.Id, validStartingPoi.X, validStartingPoi.Y, validStartingPoi.Z, validStartingPoi.Angle)
+
+                -- Extract actor ID from graph (use .id or Entities[1]), fallback to numeric index for random stories
+                local actorId = requiredActors and requiredActors[i] and (requiredActors[i].id or (requiredActors[i].Entities and requiredActors[i].Entities[1])) or nil
+
+                local ped = PedHandler:GetOrCreatePed(skin.Id, validStartingPoi.X, validStartingPoi.Y, validStartingPoi.Z, validStartingPoi.Angle, actorId)
                 if not ped then
                     error('Error while creating the ped '..i)
                 end
                 ped.interior = validStartingPoi.Interior
-                local g = Guid()
-                ped:setData("id", i..'')
                 ped:setData("isPed", true)
                 ped:setData('startingPoiIdx', validStartingPoi.dummy or LastIndexOf(self.POI, validStartingPoi))
                 if validStartingPoi.Region then
@@ -561,12 +572,21 @@ function StoryEpisodeBase:LoadFromFile()
             math.random(); math.random(); math.random()
 
             for _, s in ipairs(episode.supertemplates) do
-                local idx = math.random(#s.templates)
-                if not s.offsets[idx].skip then
-                    local template = Template.Load(s.name, s.templates[idx])
+                -- Filter out skipped templates
+                local availableIndices = {}
+                for idx, offset in ipairs(s.offsets) do
+                    if not offset.skip then
+                        table.insert(availableIndices, idx)
+                    end
+                end
+
+                -- Randomly select from available templates
+                if #availableIndices > 0 then
+                    local selectedIdx = availableIndices[math.random(#availableIndices)]
+                    local template = Template.Load(s.name, s.templates[selectedIdx])
                     template:Instantiate(episode.InteriorId, Vector3(s.position.x, s.position.y, s.position.z))
                     s.instantiatedTemplate = template
-                    local offsets = s.offsets[idx]
+                    local offsets = s.offsets[selectedIdx]
                     template:UpdatePosition(Vector3(offsets.offset.x, offsets.offset.y, offsets.offset.z))
                     template:UpdatePosition(nil, Vector3(offsets.rotationOffset.x, offsets.rotationOffset.y, offsets.rotationOffset.z), Vector3(s.position.x, s.position.y, s.position.z), true)
                     -- The check is needed when defining episodes because otherwise all the objects inserted from the supertemplate will also be saved, resulting in overlaping objects when loading.
@@ -608,7 +628,12 @@ function StoryEpisodeBase:RequestPause()
                     print('Requesting pause for actor '..actor:getData('id')..' last action '..lastAction.Name..' (is a move action: '..isMove..') is not finished: '..isMoveActionFinished)
                 end
 
-                actor:setData('requestPause', true) -- Handled in ActionsGlobals.OnGlobalActionFinished and in Move:pause
+                -- Only pause if the last action is NOT a finished Move
+                -- If Move is finished, actor should continue to next action (e.g., Wait)
+                -- Otherwise actor gets stuck: marker is cleared, but Move thinks it's not finished
+                if not (lastAction:is_a(Move) and lastAction:isFinished(actor)) then
+                    actor:setData('requestPause', true) -- Handled in ActionsGlobals.OnGlobalActionFinished and in Move:pause
+                end
                 if lastAction:is_a(Wait) then
                     lastAction:pause(actor)
                 end
@@ -647,7 +672,7 @@ end
 function StoryEpisodeBase:Resume()
     for _, actor in ipairs(self.peds) do
         if DEBUG then
-            print('[StoryEpisodeBase:Resume] Evaluating actor '..actor:getData('id')..' from episode '..actor:getData('currentEpisode')..' with storyEnded '..tostring(actor:getData('storyEnded'))..' and currentEpisode '..actor:getData('currentEpisode')..' and requestPause '..tostring(actor:getData('requestPause'))..' and paused '..tostring(actor:getData('paused'))..' and isAwaitingConstraints '..tostring(actor:getData('isAwaitingConstraints'))..' and isAwaitingContextSwitch '..tostring(actor:getData('isAwaitingContextSwitch')))
+            print('[StoryEpisodeBase:Resume] Evaluating actor '..tostring(actor:getData('id'))..' from episode '..tostring(actor:getData('currentEpisode'))..' with storyEnded '..tostring(actor:getData('storyEnded'))..' and currentEpisode '..tostring(actor:getData('currentEpisode'))..' and requestPause '..tostring(actor:getData('requestPause'))..' and paused '..tostring(actor:getData('paused'))..' and isAwaitingConstraints '..tostring(actor:getData('isAwaitingConstraints'))..' and isAwaitingContextSwitch '..tostring(actor:getData('isAwaitingContextSwitch')))
         end
         if actor:getData('currentEpisode') == self.name and not actor:getData('storyEnded') then
             actor:setData('requestPause', false)

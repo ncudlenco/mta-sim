@@ -1,0 +1,587 @@
+{
+  "temporal": {
+    "starting_actions": {
+      "a0": "a0_1",
+      "a1": "a1_7",
+      "a2": "a2_13",
+      "a3": "a3_19"
+    },
+    "a0_1": {
+      "relations": [],
+      "next": "a0_2"
+    },
+    "a0_2": {
+      "relations": [],
+      "next": "a0_3"
+    },
+    "a0_3": {
+      "relations": [],
+      "next": "a0_4"
+    },
+    "a0_4": {
+      "relations": [],
+      "next": "a0_5"
+    },
+    "a0_5": {
+      "relations": [],
+      "next": "a0_6"
+    },
+    "a0_6": {
+      "relations": [],
+      "next": null
+    },
+    "a1_7": {
+      "relations": [],
+      "next": "a1_8"
+    },
+    "a1_8": {
+      "relations": [],
+      "next": "a1_9"
+    },
+    "a1_9": {
+      "relations": [],
+      "next": "a1_10"
+    },
+    "a1_10": {
+      "relations": [],
+      "next": "a1_11"
+    },
+    "a1_11": {
+      "relations": [],
+      "next": "a1_12"
+    },
+    "a1_12": {
+      "relations": [],
+      "next": null
+    },
+    "a2_13": {
+      "relations": [],
+      "next": "a2_14"
+    },
+    "a2_14": {
+      "relations": [],
+      "next": "a2_15"
+    },
+    "a2_15": {
+      "relations": [],
+      "next": "a2_16"
+    },
+    "a2_16": {
+      "relations": [],
+      "next": "a2_17"
+    },
+    "a2_17": {
+      "relations": [],
+      "next": "a2_18"
+    },
+    "a2_18": {
+      "relations": [],
+      "next": null
+    },
+    "a3_19": {
+      "relations": [],
+      "next": "a3_20"
+    },
+    "a3_20": {
+      "relations": [],
+      "next": "a3_21"
+    },
+    "a3_21": {
+      "relations": [],
+      "next": "a3_22"
+    },
+    "a3_22": {
+      "relations": [],
+      "next": "a3_23"
+    },
+    "a3_23": {
+      "relations": [],
+      "next": "a3_24"
+    },
+    "a3_24": {
+      "relations": [],
+      "next": "a3_25"
+    },
+    "a3_25": {
+      "relations": [],
+      "next": "a3_26"
+    },
+    "a3_26": {
+      "relations": [],
+      "next": "a3_27"
+    },
+    "a3_27": {
+      "relations": [],
+      "next": "a3_28"
+    },
+    "a3_28": {
+      "relations": [],
+      "next": null
+    }
+  },
+  "spatial": {},
+  "semantic": {},
+  "camera": {},
+  "a0": {
+    "Action": "Exists",
+    "Entities": [
+      "a0"
+    ],
+    "Location": [
+      "left part of the gym room"
+    ],
+    "Timeframe": null,
+    "Properties": {
+      "Name": "Actor_a0",
+      "Gender": 1
+    }
+  },
+  "a1": {
+    "Action": "Exists",
+    "Entities": [
+      "a1"
+    ],
+    "Location": [
+      "left part of the gym room"
+    ],
+    "Timeframe": null,
+    "Properties": {
+      "Name": "Actor_a1",
+      "Gender": 2
+    }
+  },
+  "a2": {
+    "Action": "Exists",
+    "Entities": [
+      "a2"
+    ],
+    "Location": [
+      "left part of the gym room"
+    ],
+    "Timeframe": null,
+    "Properties": {
+      "Name": "Actor_a2",
+      "Gender": 2
+    }
+  },
+  "a3": {
+    "Action": "Exists",
+    "Entities": [
+      "a3"
+    ],
+    "Location": [
+      "left part of the gym room"
+    ],
+    "Timeframe": null,
+    "Properties": {
+      "Name": "Actor_a3",
+      "Gender": 2
+    }
+  },
+  "a0_1": {
+    "Action": "PickUp",
+    "Entities": [
+      "a0",
+      "obj_0"
+    ],
+    "Location": [
+      "left part of the gym room"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a0_2": {
+    "Action": "DumbbellsWorkOut",
+    "Entities": [
+      "a0",
+      "obj_0"
+    ],
+    "Location": [
+      "left part of the gym room"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a0_3": {
+    "Action": "PutDown",
+    "Entities": [
+      "a0",
+      "obj_0"
+    ],
+    "Location": [
+      "left part of the gym room"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "obj_0": {
+    "Action": "Exists",
+    "Entities": [
+      "obj_0"
+    ],
+    "Location": [
+      "left part of the gym room"
+    ],
+    "Timeframe": null,
+    "Properties": {
+      "Type": "TwoDumbbells"
+    }
+  },
+  "a0_4": {
+    "Action": "GetOn",
+    "Entities": [
+      "a0",
+      "obj_1"
+    ],
+    "Location": [
+      "left part of the gym room"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a0_5": {
+    "Action": "BenchpressWorkOut",
+    "Entities": [
+      "a0",
+      "obj_2"
+    ],
+    "Location": [
+      "left part of the gym room"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a0_6": {
+    "Action": "GetOff",
+    "Entities": [
+      "a0",
+      "obj_1"
+    ],
+    "Location": [
+      "left part of the gym room"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "obj_1": {
+    "Action": "Exists",
+    "Entities": [
+      "obj_1"
+    ],
+    "Location": [
+      "left part of the gym room"
+    ],
+    "Timeframe": null,
+    "Properties": {
+      "Type": "BenchPressBar"
+    }
+  },
+  "obj_2": {
+    "Action": "Exists",
+    "Entities": [
+      "obj_2"
+    ],
+    "Location": [
+      "left part of the gym room"
+    ],
+    "Timeframe": null,
+    "Properties": {
+      "Type": "BenchPressBar"
+    }
+  },
+  "a1_7": {
+    "Action": "TakeOut",
+    "Entities": [
+      "a1",
+      "spawn_phone_a1"
+    ],
+    "Location": [
+      "left part of the gym room"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a1_8": {
+    "Action": "AnswerPhone",
+    "Entities": [
+      "a1",
+      "spawn_phone_a1"
+    ],
+    "Location": [
+      "left part of the gym room"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a1_9": {
+    "Action": "TalkPhone",
+    "Entities": [
+      "a1",
+      "spawn_phone_a1"
+    ],
+    "Location": [
+      "left part of the gym room"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a1_10": {
+    "Action": "HangUp",
+    "Entities": [
+      "a1",
+      "spawn_phone_a1"
+    ],
+    "Location": [
+      "left part of the gym room"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a1_11": {
+    "Action": "Stash",
+    "Entities": [
+      "a1",
+      "spawn_phone_a1"
+    ],
+    "Location": [
+      "left part of the gym room"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "spawn_phone_a1": {
+    "Action": "Exists",
+    "Entities": [
+      "spawn_phone_a1"
+    ],
+    "Location": null,
+    "Timeframe": null,
+    "Properties": {
+      "Type": "MobilePhone"
+    }
+  },
+  "a1_12": {
+    "Action": "TaiChi",
+    "Entities": [
+      "a1"
+    ],
+    "Location": [
+      "left part of the gym room"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a2_13": {
+    "Action": "TaiChi",
+    "Entities": [
+      "a2"
+    ],
+    "Location": [
+      "left part of the gym room"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a2_14": {
+    "Action": "TakeOut",
+    "Entities": [
+      "a2",
+      "spawn_phone_a2"
+    ],
+    "Location": [
+      "left part of the gym room"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a2_15": {
+    "Action": "AnswerPhone",
+    "Entities": [
+      "a2",
+      "spawn_phone_a2"
+    ],
+    "Location": [
+      "left part of the gym room"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a2_16": {
+    "Action": "TalkPhone",
+    "Entities": [
+      "a2",
+      "spawn_phone_a2"
+    ],
+    "Location": [
+      "left part of the gym room"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a2_17": {
+    "Action": "HangUp",
+    "Entities": [
+      "a2",
+      "spawn_phone_a2"
+    ],
+    "Location": [
+      "left part of the gym room"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a2_18": {
+    "Action": "Stash",
+    "Entities": [
+      "a2",
+      "spawn_phone_a2"
+    ],
+    "Location": [
+      "left part of the gym room"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "spawn_phone_a2": {
+    "Action": "Exists",
+    "Entities": [
+      "spawn_phone_a2"
+    ],
+    "Location": null,
+    "Timeframe": null,
+    "Properties": {
+      "Type": "MobilePhone"
+    }
+  },
+  "a3_19": {
+    "Action": "TakeOut",
+    "Entities": [
+      "a3",
+      "spawn_phone_a3"
+    ],
+    "Location": [
+      "left part of the gym room"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a3_20": {
+    "Action": "AnswerPhone",
+    "Entities": [
+      "a3",
+      "spawn_phone_a3"
+    ],
+    "Location": [
+      "left part of the gym room"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a3_21": {
+    "Action": "TalkPhone",
+    "Entities": [
+      "a3",
+      "spawn_phone_a3"
+    ],
+    "Location": [
+      "left part of the gym room"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a3_22": {
+    "Action": "HangUp",
+    "Entities": [
+      "a3",
+      "spawn_phone_a3"
+    ],
+    "Location": [
+      "left part of the gym room"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a3_23": {
+    "Action": "Stash",
+    "Entities": [
+      "a3",
+      "spawn_phone_a3"
+    ],
+    "Location": [
+      "left part of the gym room"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "spawn_phone_a3": {
+    "Action": "Exists",
+    "Entities": [
+      "spawn_phone_a3"
+    ],
+    "Location": null,
+    "Timeframe": null,
+    "Properties": {
+      "Type": "MobilePhone"
+    }
+  },
+  "a3_24": {
+    "Action": "TakeOut",
+    "Entities": [
+      "a3",
+      "spawn_phone_a3"
+    ],
+    "Location": [
+      "left part of the gym room"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a3_25": {
+    "Action": "AnswerPhone",
+    "Entities": [
+      "a3",
+      "spawn_phone_a3"
+    ],
+    "Location": [
+      "left part of the gym room"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a3_26": {
+    "Action": "TalkPhone",
+    "Entities": [
+      "a3",
+      "spawn_phone_a3"
+    ],
+    "Location": [
+      "left part of the gym room"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a3_27": {
+    "Action": "HangUp",
+    "Entities": [
+      "a3",
+      "spawn_phone_a3"
+    ],
+    "Location": [
+      "left part of the gym room"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
+  "a3_28": {
+    "Action": "Stash",
+    "Entities": [
+      "a3",
+      "spawn_phone_a3"
+    ],
+    "Location": [
+      "left part of the gym room"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  }
+}

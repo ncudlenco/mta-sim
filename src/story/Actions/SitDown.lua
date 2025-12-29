@@ -20,6 +20,63 @@ SitDown.eHow = {
     onSofa = 2
 }
 
+--- Polls the player's position and rotation until they match the target location or timeout is reached
+-- @param performer The player element to check
+-- @param targetPosition The target position Vector3
+-- @param targetRotation The target rotation Vector3
+-- @param animationLib The animation library to use when aligned
+-- @param animationId The animation ID to use when aligned
+-- @param elapsedTime Time elapsed since polling started (ms)
+-- @param maxTimeout Maximum time to wait for alignment (ms)
+local function waitForAlignment(performer, targetPosition, targetRotation, animationLib, animationId, elapsedTime, maxTimeout)
+    if not performer or not isElement(performer) then
+        if DEBUG then
+            outputConsole("SitDown:waitForAlignment - Performer is invalid, aborting")
+        end
+        return
+    end
+
+    local positionTolerance = 0.05
+    local rotationTolerance = 5.0 -- degrees
+
+    -- Check position alignment
+    local positionDiff = math.abs((performer.position - targetPosition).length)
+
+    -- Check rotation alignment (Z-axis only, which controls horizontal orientation)
+    local rotationDiff = math.abs(performer.rotation.z - targetRotation.z)
+    -- Handle rotation wrapping (360 degrees = 0 degrees)
+    if rotationDiff > 180 then
+        rotationDiff = 360 - rotationDiff
+    end
+
+    local isPositionAligned = positionDiff < positionTolerance
+    local isRotationAligned = rotationDiff < rotationTolerance
+    local isAligned = isPositionAligned and isRotationAligned
+
+    if DEBUG then
+        outputConsole(string.format("SitDown:waitForAlignment - Position diff: %.4f (target: %.2f), Rotation diff: %.2f° (target: %.2f°), Elapsed: %dms",
+            positionDiff, positionTolerance, rotationDiff, rotationTolerance, elapsedTime))
+    end
+
+    if isAligned or elapsedTime >= maxTimeout then
+        if DEBUG then
+            if isAligned then
+                outputConsole("SitDown:waitForAlignment - Player aligned, starting animation")
+            else
+                outputConsole(string.format("SitDown:waitForAlignment - Timeout reached (%dms), starting animation anyway", elapsedTime))
+            end
+        end
+
+        -- Start the sitting animation
+        performer:setAnimation(animationLib, animationId, -1, false, true, false, true)
+    else
+        -- Continue polling
+        Timer(function()
+            waitForAlignment(performer, targetPosition, targetRotation, animationLib, animationId, elapsedTime + 50, maxTimeout)
+        end, 50, 1)
+    end
+end
+
 function SitDown:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
@@ -30,6 +87,9 @@ function SitDown:Apply()
         self.TargetItem.instance:setCollisionsEnabled(false)
     end
 
+    -- Disable collisions between this actor and all other peds while sitting
+    triggerClientEvent("onDisablePedToPedCollisions", getRootElement(), self.Performer)
+
     -- Set rotation first (if provided)
     if self.rotation then
         self.Performer.rotation = self.rotation
@@ -38,6 +98,7 @@ function SitDown:Apply()
     local animationLib = "INT_OFFICE"
     local animationId = "OFF_Sit_In"
     local duration = 4000
+    local initialDelay = 100 -- Initial delay before starting alignment polling
 
     if self.how == SitDown.eHow.atDesk then
         animationLib = "INT_OFFICE"
@@ -46,19 +107,31 @@ function SitDown:Apply()
     elseif self.how == SitDown.eHow.onSofa then
         animationLib = "INT_HOUSE"
         animationId = "LOU_In"
-        -- Allow rotation to settle in
+        -- Allow rotation to settle in and adjust position
         Timer(function()
             self.Performer.position = self.Performer.position - self.Performer.matrix.forward * 0.35
         end, 100, 1)
         duration = 5000
+        initialDelay = 150 -- Give extra time for sofa position adjustment
     end
 
-    -- Delay animation to allow position/rotation to be applied (reduced from 1000ms to 100ms)
+    -- Wait for initial engine updates, then start polling for alignment
     Timer(function()
-        if self.Performer and isElement(self.Performer) then
-            self.Performer:setAnimation(animationLib, animationId, -1, false, true, false, true)
+        if self.Performer and isElement(self.Performer) and self.NextLocation then
+            if DEBUG then
+                outputConsole("SitDown:Apply - Starting alignment polling")
+            end
+            waitForAlignment(
+                self.Performer,
+                self.NextLocation.position,
+                self.NextLocation.rotation,
+                animationLib,
+                animationId,
+                0, -- elapsed time starts at 0
+                1000 -- max timeout 1000ms
+            )
         end
-    end, 200, 1)
+    end, initialDelay, 1)
 
     if DEBUG then
         outputConsole("SitDown:Apply")

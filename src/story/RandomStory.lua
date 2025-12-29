@@ -3,8 +3,8 @@
 --3. Random inter-episode connections
 
 --Random story
-RandomStory = class(StoryBase, function(o, spectators, maxActions, logData, artifactCollectionFactory, artifactManager)
-    StoryBase.init(o, spectators, maxActions)
+RandomStory = class(StoryBase, function(o, spectators, maxActions, logData, artifactCollectionFactory, artifactManager, eventBus)
+    StoryBase.init(o, spectators, maxActions, eventBus)
     o.LogData = logData
 
     -- Use the pre-configured artifact manager passed from Player.lua
@@ -156,7 +156,7 @@ function RandomStory:Play()
         print("RandomStory: Playing the picked episode...")
     end
     self.CurrentEpisode:Play()
-    -- self.Actor:fadeCamera (true)
+    self.Actor:fadeCamera (true)
 
     if DEBUG then
         print("RandomStory: Play - chosen random skin and episode. Playing episode")

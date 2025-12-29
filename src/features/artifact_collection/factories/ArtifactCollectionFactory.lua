@@ -58,6 +58,37 @@ function ArtifactCollectionFactory:createManager()
     return manager
 end
 
+--- Setup event subscriptions for artifact collection lifecycle
+--- Subscribes manager to artifact collection start/stop events from camera system
+--- This wiring is done by the factory to keep manager camera-agnostic
+---
+--- @param manager ArtifactCollectionManager The manager instance
+--- @param eventBus EventBus The event bus for subscriptions
+function ArtifactCollectionFactory:setupEventSubscriptions(manager, eventBus)
+    if not manager or not eventBus then
+        if DEBUG then
+            print("[ArtifactCollectionFactory] Cannot setup subscriptions: missing dependencies")
+        end
+        return
+    end
+
+    -- When collection should start/resume, resume the collection schedule
+    -- Frame counter is NOT reset - frames continue sequentially
+    eventBus:subscribe("artifact_start_collection", "artifact_manager", function(eventData)
+        manager:resumeScheduledCollection()
+    end)
+
+    -- When collection should pause, pause the collection schedule
+    -- Does NOT finalize videos - just stops capturing frames temporarily
+    eventBus:subscribe("artifact_stop_collection", "artifact_manager", function(eventData)
+        manager:pauseScheduledCollection()
+    end)
+
+    if DEBUG then
+        print("[ArtifactCollectionFactory] Setup artifact collection event subscriptions")
+    end
+end
+
 --- Create screenshot collector
 ---
 --- @param spectatorData SpectatorData The spectator data
@@ -200,6 +231,31 @@ function ArtifactCollectionFactory:createDepthCollector(spectatorData)
     return collector
 end
 
+--- Create event frame mapping collector
+--- Maps graph events to frame IDs for video analysis
+--- This is a global collector (not per-spectator)
+---
+--- @return EventFrameMappingCollector|nil Event frame mapping collector instance, or nil if not enabled
+function ArtifactCollectionFactory:createEventFrameMappingCollector()
+    -- Check if event frame mapping is enabled
+    if not self.config.enableEventFrameMapping then
+        if DEBUG then
+            print("[ArtifactCollectionFactory] Event frame mapping disabled in config")
+        end
+        return nil
+    end
+
+    local collector = EventFrameMappingCollector({
+        framesPerSecond = self.config.framesPerSecond
+    })
+
+    if DEBUG then
+        print("[ArtifactCollectionFactory] Created event frame mapping collector")
+    end
+
+    return collector
+end
+
 --- Register all enabled collectors for spectators
 --- Game-agnostic version - accepts spectator data, not game-specific entities
 ---
@@ -214,6 +270,15 @@ function ArtifactCollectionFactory:registerCollectors(manager, spectatorsData)
     if not spectatorsData or #spectatorsData == 0 then
         print("[WARNING] ArtifactCollectionFactory: No spectators provided for collector registration")
         return
+    end
+
+    -- Register event frame mapping collector (global, not per-spectator)
+    local eventMappingCollector = self:createEventFrameMappingCollector()
+    if eventMappingCollector then
+        manager:registerCollector(eventMappingCollector)
+        if DEBUG then
+            print("[ArtifactCollectionFactory] Registered event frame mapping collector")
+        end
     end
 
     for i, spectatorData in ipairs(spectatorsData) do

@@ -1,0 +1,966 @@
+{
+  "temporal": {
+    "livingroom_music_setup": {
+      "relations": [
+        "t1"
+      ],
+      "next": null
+    },
+    "t1": {
+      "type": "before",
+      "source": "livingroom_music_setup",
+      "target": "courier_calls_outside"
+    },
+    "courier_calls_outside": {
+      "relations": [
+        "t2",
+        "t4"
+      ],
+      "next": null
+    },
+    "t2": {
+      "type": "starts_with",
+      "source": "courier_calls_outside",
+      "target": "host_answers_inside"
+    },
+    "host_answers_inside": {
+      "relations": [
+        "t3"
+      ],
+      "next": null
+    },
+    "t3": {
+      "type": "before",
+      "source": "host_answers_inside",
+      "target": "door_handover"
+    },
+    "door_handover": {
+      "relations": [],
+      "next": null
+    },
+    "t4": {
+      "type": "before",
+      "source": "courier_calls_outside",
+      "target": "door_handover"
+    },
+    "r1_on_livingroom_music_setup_0": {
+      "relations": null,
+      "next": "r2_dance_livingroom_music_setup_0"
+    },
+    "r2_dance_livingroom_music_setup_0": {
+      "relations": null,
+      "next": "r3_off_livingroom_music_setup_0"
+    },
+    "r3_off_livingroom_music_setup_0": {
+      "relations": [
+        "scene_link_r3_off_livingroom_music_setup_0_to_h1_takeout_host_answers_inside_1"
+      ],
+      "next": null
+    },
+    "h1_takeout_host_answers_inside_1": {
+      "relations": [
+        "scene_link_h1_takeout_host_answers_inside_1_after_r3_off_livingroom_music_setup_0"
+      ],
+      "next": "h2_answer_host_answers_inside_1"
+    },
+    "h2_answer_host_answers_inside_1": {
+      "relations": null,
+      "next": "h3_talk_host_answers_inside_1"
+    },
+    "h3_talk_host_answers_inside_1": {
+      "relations": null,
+      "next": "h4_hangup_host_answers_inside_1"
+    },
+    "h4_hangup_host_answers_inside_1": {
+      "relations": null,
+      "next": "h5_stash_host_answers_inside_1"
+    },
+    "h5_stash_host_answers_inside_1": {
+      "relations": [
+        "scene_link_h5_stash_host_answers_inside_1_to_c1_courier_calls_outside_2"
+      ],
+      "next": "h0_talk_door_handover_3"
+    },
+    "scene_link_r3_off_livingroom_music_setup_0_to_h1_takeout_host_answers_inside_1": {
+      "type": "before",
+      "source": "r3_off_livingroom_music_setup_0",
+      "target": "h1_takeout_host_answers_inside_1"
+    },
+    "scene_link_h1_takeout_host_answers_inside_1_after_r3_off_livingroom_music_setup_0": {
+      "type": "after",
+      "source": "h1_takeout_host_answers_inside_1",
+      "target": "r3_off_livingroom_music_setup_0"
+    },
+    "c1_courier_calls_outside_2": {
+      "relations": [
+        "scene_link_c1_courier_calls_outside_2_after_h5_stash_host_answers_inside_1"
+      ],
+      "next": "c2_courier_calls_outside_2"
+    },
+    "c2_courier_calls_outside_2": {
+      "relations": null,
+      "next": "c3_courier_calls_outside_2"
+    },
+    "c3_courier_calls_outside_2": {
+      "relations": null,
+      "next": "c4_courier_calls_outside_2"
+    },
+    "c4_courier_calls_outside_2": {
+      "relations": null,
+      "next": "c5_courier_calls_outside_2"
+    },
+    "c5_courier_calls_outside_2": {
+      "relations": [
+        "scene_link_c5_courier_calls_outside_2_to_n0_look_host_door_handover_3",
+        "scene_link_c5_courier_calls_outside_2_to_p0_look_courier_door_handover_3"
+      ],
+      "next": "c0_move_garden_door_handover_3"
+    },
+    "scene_link_h5_stash_host_answers_inside_1_to_c1_courier_calls_outside_2": {
+      "type": "before",
+      "source": "h5_stash_host_answers_inside_1",
+      "target": "c1_courier_calls_outside_2"
+    },
+    "scene_link_c1_courier_calls_outside_2_after_h5_stash_host_answers_inside_1": {
+      "type": "after",
+      "source": "c1_courier_calls_outside_2",
+      "target": "h5_stash_host_answers_inside_1"
+    },
+    "talk_starts_door_handover_3": {
+      "type": "starts_with"
+    },
+    "give_starts_door_handover_3": {
+      "type": "starts_with"
+    },
+    "c2_before_h0_door_handover_3": {
+      "source": "c2_move_porch_door_handover_3",
+      "type": "before",
+      "target": "h0_talk_door_handover_3"
+    },
+    "c0_move_garden_door_handover_3": {
+      "relations": null,
+      "next": "c1_pickup_phone1_door_handover_3"
+    },
+    "c1_pickup_phone1_door_handover_3": {
+      "relations": null,
+      "next": "c2_move_porch_door_handover_3"
+    },
+    "c2_move_porch_door_handover_3": {
+      "relations": [
+        "c2_before_h0_door_handover_3"
+      ],
+      "next": "c3_talk_door_handover_3"
+    },
+    "c3_talk_door_handover_3": {
+      "relations": [
+        "talk_starts_door_handover_3"
+      ],
+      "next": "c4_give_phone1_door_handover_3"
+    },
+    "c4_give_phone1_door_handover_3": {
+      "relations": [
+        "give_starts_door_handover_3"
+      ],
+      "next": null
+    },
+    "h0_talk_door_handover_3": {
+      "relations": [
+        "talk_starts_door_handover_3"
+      ],
+      "next": "h1_inv_give_phone1_door_handover_3"
+    },
+    "h1_inv_give_phone1_door_handover_3": {
+      "relations": [
+        "give_starts_door_handover_3"
+      ],
+      "next": "h2_lookat_phone1_door_handover_3"
+    },
+    "h2_lookat_phone1_door_handover_3": {
+      "relations": null,
+      "next": null
+    },
+    "n0_look_host_door_handover_3": {
+      "relations": [
+        "scene_link_n0_look_host_door_handover_3_after_c5_courier_calls_outside_2"
+      ],
+      "next": "n1_look_courier_door_handover_3"
+    },
+    "n1_look_courier_door_handover_3": {
+      "relations": null,
+      "next": null
+    },
+    "p0_look_courier_door_handover_3": {
+      "relations": [
+        "scene_link_p0_look_courier_door_handover_3_after_c5_courier_calls_outside_2"
+      ],
+      "next": null
+    },
+    "starting_actions": {
+      "roommate": "r1_on_livingroom_music_setup_0",
+      "host": "h1_takeout_host_answers_inside_1",
+      "courier": "c1_courier_calls_outside_2",
+      "neighbor_1": "n0_look_host_door_handover_3",
+      "pedestrian_1": "p0_look_courier_door_handover_3"
+    },
+    "scene_link_c5_courier_calls_outside_2_to_n0_look_host_door_handover_3": {
+      "type": "before",
+      "source": "c5_courier_calls_outside_2",
+      "target": "n0_look_host_door_handover_3"
+    },
+    "scene_link_n0_look_host_door_handover_3_after_c5_courier_calls_outside_2": {
+      "type": "after",
+      "source": "n0_look_host_door_handover_3",
+      "target": "c5_courier_calls_outside_2"
+    },
+    "scene_link_c5_courier_calls_outside_2_to_p0_look_courier_door_handover_3": {
+      "type": "before",
+      "source": "c5_courier_calls_outside_2",
+      "target": "p0_look_courier_door_handover_3"
+    },
+    "scene_link_p0_look_courier_door_handover_3_after_c5_courier_calls_outside_2": {
+      "type": "after",
+      "source": "p0_look_courier_door_handover_3",
+      "target": "c5_courier_calls_outside_2"
+    }
+  },
+  "spatial": {},
+  "semantic": {
+    "livingroom_music_setup": {
+      "type": "is_part_of",
+      "targets": [
+        "initial"
+      ]
+    },
+    "courier_calls_outside": {
+      "type": "is_part_of",
+      "targets": [
+        "initial"
+      ]
+    },
+    "host_answers_inside": {
+      "type": "is_part_of",
+      "targets": [
+        "initial"
+      ]
+    },
+    "door_handover": {
+      "type": "is_part_of",
+      "targets": [
+        "initial"
+      ]
+    },
+    "host_answers_inside_extra": {
+      "type": "responds_to",
+      "targets": [
+        "courier_calls_outside"
+      ]
+    },
+    "courier_calls_outside_extra": {
+      "type": "requests",
+      "targets": [
+        "host_answers_inside"
+      ]
+    },
+    "music_interference": {
+      "type": "interferes_with",
+      "targets": [
+        "host_answers_inside"
+      ]
+    },
+    "handover_resolution": {
+      "type": "answers",
+      "targets": [
+        "courier_calls_outside",
+        "host_answers_inside"
+      ]
+    }
+  },
+  "logical": {
+    "courier_calls_outside": {
+      "relations": [
+        "l1"
+      ]
+    },
+    "l1": {
+      "type": "enables",
+      "source": "courier_calls_outside",
+      "target": "door_handover"
+    },
+    "host_answers_inside": {
+      "relations": [
+        "l2"
+      ]
+    },
+    "l2": {
+      "type": "enables",
+      "source": "host_answers_inside",
+      "target": "door_handover"
+    },
+    "livingroom_music_setup": {
+      "relations": [
+        "l3"
+      ]
+    },
+    "l3": {
+      "type": "conflicts_with",
+      "source": "livingroom_music_setup",
+      "target": "host_answers_inside"
+    }
+  },
+  "camera": {
+    "r1_on_livingroom_music_setup_0": {
+      "action": "record"
+    },
+    "r3_off_livingroom_music_setup_0": {
+      "action": "stop"
+    },
+    "h2_answer_host_answers_inside_1": {
+      "action": "record"
+    },
+    "h4_hangup_host_answers_inside_1": {
+      "action": "stop"
+    },
+    "c1_courier_calls_outside_2": {
+      "action": "record"
+    },
+    "c3_talk_door_handover_3": {
+      "action": "record"
+    },
+    "h2_lookat_phone1_door_handover_3": {
+      "action": "stop"
+    }
+  },
+  "initial": {
+    "Action": "PorchDelivery",
+    "Entities": [
+      "courier",
+      "host",
+      "roommate",
+      "neighbor_1",
+      "pedestrian_1"
+    ],
+    "Location": [
+      "livingroom",
+      "nearDoor"
+    ],
+    "Timeframe": "evening",
+    "Properties": {
+      "scene_type": "parent",
+      "parent_scene": null,
+      "child_scenes": [
+        "livingroom_music_setup",
+        "courier_calls_outside",
+        "host_answers_inside",
+        "door_handover"
+      ],
+      "narrative": "A delivery arrangement unfolds across the living room and the front door area in the evening."
+    }
+  },
+  "livingroom_music_setup": {
+    "Action": "DanceToMusic",
+    "Entities": [
+      "roommate"
+    ],
+    "Location": [
+      "livingroom"
+    ],
+    "Timeframe": "evening",
+    "Properties": {
+      "scene_type": "leaf",
+      "parent_scene": "initial",
+      "child_scenes": null,
+      "narrative": "The roommate turns on the music player and dances in the living room.",
+      "child_events": [
+        "roommate",
+        "turntable1_livingroom_music_setup_0",
+        "r1_on_livingroom_music_setup_0",
+        "r2_dance_livingroom_music_setup_0",
+        "r3_off_livingroom_music_setup_0"
+      ]
+    }
+  },
+  "courier_calls_outside": {
+    "Action": "InformsByPhone",
+    "Entities": [
+      "courier"
+    ],
+    "Location": [
+      "porch"
+    ],
+    "Timeframe": "evening",
+    "Properties": {
+      "scene_type": "leaf",
+      "parent_scene": "courier_calls_outside",
+      "child_scenes": null,
+      "narrative": "Outside near the door, the courier takes out a phone and makes a call to arrange the handoff.",
+      "child_events": [
+        "phone1_courier_calls_outside_2",
+        "courier",
+        "c1_courier_calls_outside_2",
+        "c2_courier_calls_outside_2",
+        "c3_courier_calls_outside_2",
+        "c4_courier_calls_outside_2",
+        "c5_courier_calls_outside_2"
+      ]
+    }
+  },
+  "host_answers_inside": {
+    "Action": "AnswersPhone",
+    "Entities": [
+      "host"
+    ],
+    "Location": [
+      "livingroom"
+    ],
+    "Timeframe": "evening",
+    "Properties": {
+      "scene_type": "leaf",
+      "parent_scene": "host_answers_inside",
+      "child_scenes": null,
+      "narrative": "In the living room, the host answers and speaks on the phone to coordinate meeting at the door.",
+      "child_events": [
+        "host",
+        "phone_obj1_host_answers_inside_1",
+        "h1_takeout_host_answers_inside_1",
+        "h2_answer_host_answers_inside_1",
+        "h3_talk_host_answers_inside_1",
+        "h4_hangup_host_answers_inside_1",
+        "h5_stash_host_answers_inside_1"
+      ]
+    }
+  },
+  "door_handover": {
+    "Action": "DeliverPackage",
+    "Entities": [
+      "courier",
+      "host",
+      "neighbor_1",
+      "pedestrian_1"
+    ],
+    "Location": [
+      "nearDoor"
+    ],
+    "Timeframe": "evening",
+    "Properties": {
+      "scene_type": "leaf",
+      "parent_scene": "door_handover",
+      "child_scenes": null,
+      "narrative": "The courier and host meet at the door and complete a handover using a small item as the package.",
+      "extra_narratives": {
+        "neighbor_1": "A neighbor lingers on the porch, occasionally looking toward the door.",
+        "pedestrian_1": "A pedestrian passes along the nearby street without engaging."
+      },
+      "child_events": [
+        "courier",
+        "host",
+        "neighbor_1",
+        "pedestrian_1",
+        "phone1_door_handover_3",
+        "c0_move_garden_door_handover_3",
+        "c1_pickup_phone1_door_handover_3",
+        "c2_move_porch_door_handover_3",
+        "c3_talk_door_handover_3",
+        "c4_give_phone1_door_handover_3",
+        "h0_talk_door_handover_3",
+        "h1_inv_give_phone1_door_handover_3",
+        "h2_lookat_phone1_door_handover_3",
+        "n0_look_host_door_handover_3",
+        "n1_look_courier_door_handover_3",
+        "p0_look_courier_door_handover_3"
+      ]
+    }
+  },
+  "courier": {
+    "Action": "Exists",
+    "Entities": [
+      "courier"
+    ],
+    "Location": [
+      "porch"
+    ],
+    "Timeframe": null,
+    "Properties": {
+      "Gender": 1,
+      "Name": "Jordan Hale",
+      "SkinId": 260,
+      "Description": "A young black man in a orange shirt, gray jeans and a yellow helmet",
+      "archetype_age": "young",
+      "archetype_attire": "worker",
+      "IsBackgroundActor": false,
+      "parent_scene": "courier_calls_outside"
+    }
+  },
+  "host": {
+    "Action": "Exists",
+    "Entities": [
+      "host"
+    ],
+    "Location": [
+      "livingroom"
+    ],
+    "Timeframe": null,
+    "Properties": {
+      "Gender": 2,
+      "Name": "Avery Chen",
+      "SkinId": 224,
+      "Description": "A middle-aged asian woman with black hair in a brown and purple shirt and purple pants",
+      "archetype_age": "middle-aged",
+      "archetype_attire": "casual",
+      "IsBackgroundActor": false,
+      "parent_scene": "host_answers_inside"
+    }
+  },
+  "roommate": {
+    "Action": "Exists",
+    "Entities": [
+      "roommate"
+    ],
+    "Location": [
+      "livingroom"
+    ],
+    "Timeframe": null,
+    "Properties": {
+      "Gender": 1,
+      "Name": "Liam Carter",
+      "SkinId": 291,
+      "Description": "A young man with brown hair in a light blue jeans vest and black jeans",
+      "archetype_age": "young",
+      "archetype_attire": "casual",
+      "IsBackgroundActor": false,
+      "parent_scene": "livingroom_music_setup"
+    }
+  },
+  "neighbor_1": {
+    "Action": "Exists",
+    "Entities": [
+      "neighbor_1"
+    ],
+    "Location": [
+      "porch"
+    ],
+    "Timeframe": null,
+    "Properties": {
+      "Gender": 2,
+      "Name": "neighbor_1",
+      "SkinId": 9,
+      "Description": "An old black woman in a brown suit",
+      "archetype_age": "old",
+      "archetype_attire": "formal_suits",
+      "IsBackgroundActor": true,
+      "parent_scene": "door_handover"
+    }
+  },
+  "pedestrian_1": {
+    "Action": "Exists",
+    "Entities": [
+      "pedestrian_1"
+    ],
+    "Location": [
+      "street"
+    ],
+    "Timeframe": null,
+    "Properties": {
+      "Gender": 1,
+      "Name": "pedestrian_1",
+      "SkinId": 46,
+      "Description": "A young white man in a white shirt and blue jeans",
+      "archetype_age": "young",
+      "archetype_attire": "casual",
+      "IsBackgroundActor": true,
+      "parent_scene": "door_handover"
+    }
+  },
+  "turntable1_livingroom_music_setup_0": {
+    "Action": "Exists",
+    "Entities": [
+      "turntable1_livingroom_music_setup_0"
+    ],
+    "Location": [
+      "livingroom"
+    ],
+    "Timeframe": null,
+    "Properties": {
+      "Type": "TurnTable",
+      "parent_scene": "livingroom_music_setup"
+    }
+  },
+  "r1_on_livingroom_music_setup_0": {
+    "Action": "TurnOn",
+    "Entities": [
+      "roommate",
+      "turntable1_livingroom_music_setup_0"
+    ],
+    "Location": [
+      "livingroom"
+    ],
+    "Timeframe": null,
+    "Properties": {
+      "parent_scene": "livingroom_music_setup"
+    }
+  },
+  "r2_dance_livingroom_music_setup_0": {
+    "Action": "Dance",
+    "Entities": [
+      "roommate"
+    ],
+    "Location": [
+      "livingroom"
+    ],
+    "Timeframe": null,
+    "Properties": {
+      "parent_scene": "livingroom_music_setup"
+    }
+  },
+  "r3_off_livingroom_music_setup_0": {
+    "Action": "TurnOff",
+    "Entities": [
+      "roommate",
+      "turntable1_livingroom_music_setup_0"
+    ],
+    "Location": [
+      "livingroom"
+    ],
+    "Timeframe": null,
+    "Properties": {
+      "parent_scene": "livingroom_music_setup"
+    }
+  },
+  "phone_obj1_host_answers_inside_1": {
+    "Action": "Exists",
+    "Entities": [
+      "phone_obj1_host_answers_inside_1"
+    ],
+    "Location": [
+      "livingroom"
+    ],
+    "Timeframe": null,
+    "Properties": {
+      "Type": "MobilePhone",
+      "parent_scene": "host_answers_inside"
+    }
+  },
+  "h1_takeout_host_answers_inside_1": {
+    "Action": "TakeOut",
+    "Entities": [
+      "host",
+      "phone_obj1_host_answers_inside_1"
+    ],
+    "Location": [
+      "livingroom"
+    ],
+    "Timeframe": "evening",
+    "Properties": {
+      "parent_scene": "host_answers_inside"
+    }
+  },
+  "h2_answer_host_answers_inside_1": {
+    "Action": "AnswerPhone",
+    "Entities": [
+      "host",
+      "phone_obj1_host_answers_inside_1"
+    ],
+    "Location": [
+      "livingroom"
+    ],
+    "Timeframe": "evening",
+    "Properties": {
+      "parent_scene": "host_answers_inside"
+    }
+  },
+  "h3_talk_host_answers_inside_1": {
+    "Action": "TalkPhone",
+    "Entities": [
+      "host",
+      "phone_obj1_host_answers_inside_1"
+    ],
+    "Location": [
+      "livingroom"
+    ],
+    "Timeframe": "evening",
+    "Properties": {
+      "parent_scene": "host_answers_inside"
+    }
+  },
+  "h4_hangup_host_answers_inside_1": {
+    "Action": "HangUp",
+    "Entities": [
+      "host",
+      "phone_obj1_host_answers_inside_1"
+    ],
+    "Location": [
+      "livingroom"
+    ],
+    "Timeframe": "evening",
+    "Properties": {
+      "parent_scene": "host_answers_inside"
+    }
+  },
+  "h5_stash_host_answers_inside_1": {
+    "Action": "Stash",
+    "Entities": [
+      "host",
+      "phone_obj1_host_answers_inside_1"
+    ],
+    "Location": [
+      "livingroom"
+    ],
+    "Timeframe": "evening",
+    "Properties": {
+      "parent_scene": "host_answers_inside"
+    }
+  },
+  "phone1_courier_calls_outside_2": {
+    "Action": "Exists",
+    "Entities": [
+      "phone1_courier_calls_outside_2"
+    ],
+    "Location": [
+      "porch"
+    ],
+    "Timeframe": null,
+    "Properties": {
+      "Type": "MobilePhone",
+      "parent_scene": "courier_calls_outside"
+    }
+  },
+  "c1_courier_calls_outside_2": {
+    "Action": "TakeOut",
+    "Entities": [
+      "courier",
+      "phone1_courier_calls_outside_2"
+    ],
+    "Location": [
+      "porch"
+    ],
+    "Timeframe": "evening",
+    "Properties": {
+      "parent_scene": "courier_calls_outside"
+    }
+  },
+  "c2_courier_calls_outside_2": {
+    "Action": "AnswerPhone",
+    "Entities": [
+      "courier",
+      "phone1_courier_calls_outside_2"
+    ],
+    "Location": [
+      "porch"
+    ],
+    "Timeframe": "evening",
+    "Properties": {
+      "parent_scene": "courier_calls_outside"
+    }
+  },
+  "c3_courier_calls_outside_2": {
+    "Action": "TalkPhone",
+    "Entities": [
+      "courier",
+      "phone1_courier_calls_outside_2"
+    ],
+    "Location": [
+      "porch"
+    ],
+    "Timeframe": "evening",
+    "Properties": {
+      "parent_scene": "courier_calls_outside"
+    }
+  },
+  "c4_courier_calls_outside_2": {
+    "Action": "HangUp",
+    "Entities": [
+      "courier",
+      "phone1_courier_calls_outside_2"
+    ],
+    "Location": [
+      "porch"
+    ],
+    "Timeframe": "evening",
+    "Properties": {
+      "parent_scene": "courier_calls_outside"
+    }
+  },
+  "c5_courier_calls_outside_2": {
+    "Action": "Stash",
+    "Entities": [
+      "courier",
+      "phone1_courier_calls_outside_2"
+    ],
+    "Location": [
+      "porch"
+    ],
+    "Timeframe": "evening",
+    "Properties": {
+      "parent_scene": "courier_calls_outside"
+    }
+  },
+  "phone1_door_handover_3": {
+    "Action": "Exists",
+    "Entities": [
+      "phone1_door_handover_3"
+    ],
+    "Location": [
+      "garden"
+    ],
+    "Timeframe": null,
+    "Properties": {
+      "Type": "MobilePhone",
+      "parent_scene": "door_handover"
+    }
+  },
+  "c0_move_garden_door_handover_3": {
+    "Action": "Move",
+    "Entities": [
+      "courier"
+    ],
+    "Location": [
+      "porch",
+      "garden"
+    ],
+    "Timeframe": null,
+    "Properties": {
+      "parent_scene": "door_handover"
+    }
+  },
+  "c1_pickup_phone1_door_handover_3": {
+    "Action": "PickUp",
+    "Entities": [
+      "courier",
+      "phone1_door_handover_3"
+    ],
+    "Location": [
+      "garden"
+    ],
+    "Timeframe": null,
+    "Properties": {
+      "parent_scene": "door_handover"
+    }
+  },
+  "c2_move_porch_door_handover_3": {
+    "Action": "Move",
+    "Entities": [
+      "courier"
+    ],
+    "Location": [
+      "garden",
+      "porch"
+    ],
+    "Timeframe": null,
+    "Properties": {
+      "parent_scene": "door_handover"
+    }
+  },
+  "c3_talk_door_handover_3": {
+    "Action": "Talk",
+    "Entities": [
+      "courier",
+      "host"
+    ],
+    "Location": [
+      "porch"
+    ],
+    "Timeframe": null,
+    "Properties": {
+      "parent_scene": "door_handover"
+    }
+  },
+  "c4_give_phone1_door_handover_3": {
+    "Action": "Give",
+    "Entities": [
+      "courier",
+      "host",
+      "phone1_door_handover_3"
+    ],
+    "Location": [
+      "porch"
+    ],
+    "Timeframe": null,
+    "Properties": {
+      "parent_scene": "door_handover"
+    }
+  },
+  "h0_talk_door_handover_3": {
+    "Action": "Talk",
+    "Entities": [
+      "host",
+      "courier"
+    ],
+    "Location": [
+      "porch"
+    ],
+    "Timeframe": null,
+    "Properties": {
+      "parent_scene": "door_handover"
+    }
+  },
+  "h1_inv_give_phone1_door_handover_3": {
+    "Action": "INV-Give",
+    "Entities": [
+      "host",
+      "courier",
+      "phone1_door_handover_3"
+    ],
+    "Location": [
+      "porch"
+    ],
+    "Timeframe": null,
+    "Properties": {
+      "parent_scene": "door_handover"
+    }
+  },
+  "h2_lookat_phone1_door_handover_3": {
+    "Action": "LookAt",
+    "Entities": [
+      "host",
+      "phone1_door_handover_3"
+    ],
+    "Location": [
+      "porch"
+    ],
+    "Timeframe": null,
+    "Properties": {
+      "parent_scene": "door_handover"
+    }
+  },
+  "n0_look_host_door_handover_3": {
+    "Action": "LookAt",
+    "Entities": [
+      "neighbor_1",
+      "host"
+    ],
+    "Location": [
+      "porch"
+    ],
+    "Timeframe": null,
+    "Properties": {
+      "parent_scene": "door_handover"
+    }
+  },
+  "n1_look_courier_door_handover_3": {
+    "Action": "LookAt",
+    "Entities": [
+      "neighbor_1",
+      "courier"
+    ],
+    "Location": [
+      "porch"
+    ],
+    "Timeframe": null,
+    "Properties": {
+      "parent_scene": "door_handover"
+    }
+  },
+  "p0_look_courier_door_handover_3": {
+    "Action": "LookAt",
+    "Entities": [
+      "pedestrian_1",
+      "courier"
+    ],
+    "Location": [
+      "street"
+    ],
+    "Timeframe": null,
+    "Properties": {
+      "parent_scene": "door_handover"
+    }
+  }
+}

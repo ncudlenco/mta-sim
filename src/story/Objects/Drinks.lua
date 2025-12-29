@@ -2,7 +2,7 @@ Drinks = class(SampStoryObjectBase, function(o, params)
     params.description = "drink"
     params.type = 'Drinks'
 
-    if ( params.modelid == Drinks.eModel.AppleJuice or params.modelid == Drinks.eModel.OrangeJuice or 
+    if ( params.modelid == Drinks.eModel.AppleJuice or params.modelid == Drinks.eModel.OrangeJuice or
          params.modelid == Drinks.eModel.MilkCarton or params.modelid == Drinks.eModel.MilkBottle) then
         params.position.z = params.position.z - 0.02
     elseif params.modelid == Drinks.eModel.CoffeCup or params.modelid == Drinks.eModel.SodaCup2 then
@@ -71,13 +71,13 @@ function Drinks:updateDescription()
         self.Description = "cup of soda"
     elseif self.modelid == Drinks.eModel.MilkBottle then
         self.Description = "bottle of milk"
-    elseif self.modelid == Drinks.eModel.BottleAlcohol1 or self.modelid == Drinks.eModel.BottleAlcohol2 or 
+    elseif self.modelid == Drinks.eModel.BottleAlcohol1 or self.modelid == Drinks.eModel.BottleAlcohol2 or
            self.modelid == Drinks.eModel.BottleAlcohol3 or self.modelid == Drinks.eModel.BottleAlcohol4 or
            self.modelid == Drinks.eModel.BottleAlcohol5 then
         self.Description = "bottle of alcohol"
     elseif self.modelid == Drinks.eModel.BottleCider1 or self.modelid == Drinks.eModel.BottleCider2 then
         self.Description = "bottle of cider"
-    elseif self.modelid == Drinks.eModel.BottleWine1 or self.modelid == Drinks.eModel.BottleWine2 or 
+    elseif self.modelid == Drinks.eModel.BottleWine1 or self.modelid == Drinks.eModel.BottleWine2 or
            self.modelid == Drinks.eModel.BottleWine3 or self.modelid == Drinks.eModel.BottleWine4 then
         self.Description = "bottle of wine"
     elseif self.modelid == Drinks.eModel.GlassBeer then
@@ -98,7 +98,7 @@ function Drinks:updateDescription()
 end
 
 function Drinks:updatePositionOffsetStandUp()
-    if (self.modelid == Drinks.eModel.AppleJuice or self.modelid == Drinks.eModel.OrangeJuice or 
+    if (self.modelid == Drinks.eModel.AppleJuice or self.modelid == Drinks.eModel.OrangeJuice or
         self.modelid == Drinks.eModel.MilkCarton) then
         self.PosOffset = Vector3(-0.15, 0.09, 0.11)
     elseif (self.modelid == Drinks.eModel.CoffeCup) then
@@ -107,7 +107,7 @@ function Drinks:updatePositionOffsetStandUp()
         self.PosOffset = Vector3(0, 0.03, 0.09)
     elseif self.modelid == Drinks.eModel.MilkBottle then
         self.PosOffset = Vector3(-0.20, 0.09, 0.11)
-    elseif self.modelid == Drinks.eModel.BottleAlcohol1 or self.modelid == Drinks.eModel.BottleAlcohol2 or 
+    elseif self.modelid == Drinks.eModel.BottleAlcohol1 or self.modelid == Drinks.eModel.BottleAlcohol2 or
            self.modelid == Drinks.eModel.BottleAlcohol3 then
         self.PosOffset = Vector3(-0.04, 0.03, 0.08)
     elseif self.modelid == Drinks.eModel.BottleAlcohol4 then
@@ -149,7 +149,7 @@ end
 
 
 function Drinks:removeZOffset()
-    if ( self.modelid == Drinks.eModel.AppleJuice or self.modelid == Drinks.eModel.OrangeJuice or 
+    if ( self.modelid == Drinks.eModel.AppleJuice or self.modelid == Drinks.eModel.OrangeJuice or
          self.modelid == Drinks.eModel.MilkCarton or self.modelid == Drinks.eModel.MilkBottle) then
             self.position.z = self.position.z + 0.02
     elseif self.modelid == Drinks.eModel.CoffeCup or self.modelid == Drinks.eModel.SodaCup2 then
@@ -193,12 +193,12 @@ end
 
 
 function Drinks:updateRotOffsetStandUp()
-    --if (self.modelid == Drinks.eModel.AppleJuice or self.modelid == Drinks.eModel.OrangeJuice or 
+    --if (self.modelid == Drinks.eModel.AppleJuice or self.modelid == Drinks.eModel.OrangeJuice or
      --   self.modelid == Drinks.eModel.MilkCarton or self.modelid == Drinks.eModel.MilkBottle)  then
       --  self.RotOffset = Vector3(0, 90, 0)
   --  elseif (self.modelid == Drinks.eModel.CoffeCup or self.modelid == Drinks.eModel.SodaCup) then
    --     self.RotOffset = Vector3(0, 90, 0)
-    --elseif self.modelid == Drinks.eModel.BottleAlcohol1 or self.modelid == Drinks.eModel.BottleAlcohol2 or 
+    --elseif self.modelid == Drinks.eModel.BottleAlcohol1 or self.modelid == Drinks.eModel.BottleAlcohol2 or
        --    self.modelid == Drinks.eModel.BottleAlcohol3 or self.modelid == Drinks.eModel.BottleAlcohol4 or
        --    self then
        -- self.RotOffset = Vector3(0, 90, 0)
@@ -208,7 +208,7 @@ function Drinks:updateRotOffsetStandUp()
     return self.Description
 end
 
-Drinks.eModel = 
+Drinks.eModel =
 {
     AppleJuice = 3113,
     OrangeJuice = 3788,
@@ -233,8 +233,8 @@ Drinks.eModel =
     GlassWine1 = 1667,
     GlassWine2 = 1253,
     GlassWine3 = 1248,
-    BottleVodka1 = 1668,
-    BottleVodka2 = 1240,
+    -- BottleVodka1 = 1668,
+    -- BottleVodka2 = 1240,
     BottleBeer1 = 1950,
     BottleBeer2 = 1951,
 }

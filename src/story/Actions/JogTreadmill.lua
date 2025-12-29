@@ -21,7 +21,7 @@ function JogTreadmill:Apply()
 
     StoryActionBase.GetLogger(self, story):Log(self.Description, self)
 
-    local setupTime = 3000
+    local setupTime = random(5000, 16000)
     self.Performer:setAnimation("GYMNASIUM", self.how, -1, true, false, true, true)
 
     if DEBUG then

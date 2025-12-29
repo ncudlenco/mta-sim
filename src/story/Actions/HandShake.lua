@@ -1,43 +1,47 @@
-HandShake = class(StoryActionBase, function(o, params)
+HandShake = class(InteractionActionBase, function(o, params)
     params.description = " shake their hands"
     params.name = 'HandShake'
+    params.interactionOffset = Vector3(-0.5, -0.5, 0)
 
-    StoryActionBase.init(o,params)
-
-    o.TargetPlayer = params.targetPlayer
-    o.isInteraction = true
+    InteractionActionBase.init(o, params)
 end)
 
 function HandShake:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
+
+    -- -- Also add to TargetPlayer's history
+    -- -- HandShake is symmetric - both actors perform the same action
+    -- -- This ensures both actors have the correct action name for event publication
+    -- table.insert(story.History[self.TargetPlayer:getData('id')], self)
+
     StoryActionBase.Apply(self)
 
-    local function faceP1ToP2(p1, p2)
-        local targetFront = p2.position - p1.position
-        local angle = p1.matrix.forward:angleAboutAxis(targetFront, p1.matrix.up)
-        p1.rotation = Vector3(0,0,p1.rotation.z + math.deg(angle))
-    end
-
-    self.TargetPlayer.position = self.Performer.position + Vector3(-0.5,-0.5,0)
-
-    faceP1ToP2(self.Performer, self.TargetPlayer)
-    faceP1ToP2(self.TargetPlayer, self.Performer)
-
     local time = 2000
-    StoryActionBase.GetLogger(self, story):Log(" and " .. self.TargetPlayer:getData('name') .. self.Description, self)
 
-    local shakeType = PickRandom({"hndshkaa", "hndshkda", "hndshkfa", "prtial_hndshk_biz_01"})
-    self.Performer:setAnimation("gangs", shakeType, time, true, false, false, false)
-    self.TargetPlayer:setAnimation("gangs", shakeType, time, true, false, false, false)
+    -- Synchronize actors: rotation → delay → position check → animations
+    self:SyncActors(
+        self.Performer,
+        self.TargetPlayer,
+        self.InteractionOffset,
+        function()
+            -- Actors are now properly positioned and facing each other
+            StoryActionBase.GetLogger(self, story):Log(" and " .. self.TargetPlayer:getData('name') .. self.Description, self)
 
-    if DEBUG then
-        outputConsole("HandShake:Apply")
-    end
+            -- Start animations
+            local shakeType = PickRandom({"hndshkaa", "hndshkda", "hndshkfa", "prtial_hndshk_biz_01"})
+            self.Performer:setAnimation("gangs", shakeType, time, false, false, false, false)
+            self.TargetPlayer:setAnimation("gangs", shakeType, time, false, false, false, false)
 
-    OnGlobalActionFinished(time, self.Performer:getData('id'), self.Performer:getData('storyId'))
-    OnGlobalActionFinished(time, self.TargetPlayer:getData('id'), self.TargetPlayer:getData('storyId'))
+            if DEBUG then
+                outputConsole("HandShake:Apply")
+            end
 
+            -- Schedule action completion
+            OnGlobalActionFinished(time, self.Performer:getData('id'), self.Performer:getData('storyId'))
+            OnGlobalActionFinished(time, self.TargetPlayer:getData('id'), self.TargetPlayer:getData('storyId'))
+        end
+    )
 end
 
 function HandShake:GetDynamicString()

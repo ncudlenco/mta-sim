@@ -13,18 +13,8 @@ function GetOn:Apply()
     table.insert(story.History[self.Performer:getData('id')], self)
     StoryActionBase.Apply(self)
 
-    ----Bounding box is a function for client side only. eventually develop a mechanism to trigger a client side call then send back to
-    ----the server the result and continue with other processes
-    -- local theBed = self.TargetItem
-    -- local x0, y0, z0, x1, y1, z1 = theBed:getBoundingBox();
-    -- local bbox = Extent3(Vector3(x0,y0,z0), Vector3(x1,y1,z1));
-
-    -- bbox:ChangeOrigin(theBed.position, Vector3(0, 0, theBed.Rotation.z));
-    -- local centerTopMiddle = Vector3(bbox.Center.X, bbox.Center.Y, bbox.Max.Z);
-    -- local across = Vector3.UnitX.Rotate(new Vector3(0, 0, theBed.Rotation.Z));
-    -- local centerTopLeft = centerTopMiddle + across.Normalized().Mult((bbox.Max.X - bbox.Min.X) / 2);
-    -- player.Position = new Vector3(centerTopLeft.X, centerTopLeft.Y, player.Position.Z);
-    --self.TargetItem.instance:setCollisionsEnabled(false)
+    -- Disable collisions between this actor and all other peds when getting on furniture
+    triggerClientEvent("onDisablePedToPedCollisions", getRootElement(), self.Performer)
 
     if DEBUG then
         outputConsole("GetOn:Apply")

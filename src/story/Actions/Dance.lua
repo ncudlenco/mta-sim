@@ -8,13 +8,13 @@ function Dance:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
     StoryActionBase.Apply(self)
-    
+
     StoryActionBase.GetLogger(self, story):Log(self.Description, self, false, true, {"finishes", "finishes dancing"})
     -- self.TargetItem.instance:setCollisionsEnabled(false)
 
     time = random(4000, 15000)
 
-    self.Performer:setAnimation("DANCING", "dance_loop", time, true, true, false, true)
+    self.Performer:setAnimation("DANCING", "dance_loop", -1, true, true, false, true)
 
     if DEBUG then
         outputConsole("Dance:Apply")

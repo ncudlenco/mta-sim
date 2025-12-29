@@ -19,11 +19,12 @@
 using namespace Gdiplus;
 
 // Debug control flag - can be controlled from Lua
-bool ENABLE_SCREENSHOT_MODULE_DEBUG = true;
+bool ENABLE_SCREENSHOT_MODULE_DEBUG = false;
 
 // Feature flags
 bool USE_DESKTOP_DUPLICATION = true;  // Desktop Duplication API (fast, video support)
 bool USE_BITBLT_FALLBACK = false;      // BitBlt fallback (slower, PNG only)
+bool USE_FULL_SCREEN_CAPTURE = false;  // Capture full screen (skip window finding) - use for VMware
 const int DEFAULT_CROP_TOP = 40;
 const int DEFAULT_CROP_LEFT = 3;
 const int DEFAULT_CROP_RIGHT = 3;
@@ -293,6 +294,22 @@ int lua_getScreenshotModuleDebug(lua_State* L) {
     return 1;
 }
 
+// Full screen capture control functions
+int lua_setCaptureFullScreen(lua_State* L) {
+    bool enable = lua_toboolean(L, 1);
+    USE_FULL_SCREEN_CAPTURE = enable;
+
+    DEBUG_LOG_FMT("LuaBindings", "Full screen capture %s", enable ? "ENABLED" : "DISABLED");
+
+    lua_pushboolean(L, true);
+    return 1;
+}
+
+int lua_getCaptureFullScreen(lua_State* L) {
+    lua_pushboolean(L, USE_FULL_SCREEN_CAPTURE);
+    return 1;
+}
+
 void InvokeLuaCallback(lua_State* L, int callbackRef, bool success, int width, int height) {
     lua_rawgeti(L, LUA_REGISTRYINDEX, callbackRef);
     lua_pushboolean(L, success);
@@ -333,6 +350,10 @@ void RegisterFunctions(lua_State* L) {
     // Debug control
     lua_register(L, "setScreenshotModuleDebug", lua_setScreenshotModuleDebug);
     lua_register(L, "getScreenshotModuleDebug", lua_getScreenshotModuleDebug);
+
+    // Full screen capture control
+    lua_register(L, "setCaptureFullScreen", lua_setCaptureFullScreen);
+    lua_register(L, "getCaptureFullScreen", lua_getCaptureFullScreen);
 }
 
 } // namespace LuaBindings
@@ -547,9 +568,12 @@ MTAEXPORT bool InitModule(ILuaModuleManager10* pManager, char* szModuleName, cha
             g_frameProcessor->Start();
 
             // Create Desktop Duplication backend
-            DEBUG_LOG_FMT("InitModule", "Creating Desktop Duplication backend (window=MTA: San Andreas, crops t=%d l=%d r=%d b=%d)...",
+            // Empty windowTitle triggers full-screen fallback (for VMware compatibility)
+            std::string windowTitle = USE_FULL_SCREEN_CAPTURE ? "" : "MTA: San Andreas";
+            DEBUG_LOG_FMT("InitModule", "Creating Desktop Duplication backend (window=%s, crops t=%d l=%d r=%d b=%d)...",
+                         USE_FULL_SCREEN_CAPTURE ? "[FULL SCREEN MODE]" : "MTA: San Andreas",
                          DEFAULT_CROP_TOP, DEFAULT_CROP_LEFT, DEFAULT_CROP_RIGHT, DEFAULT_CROP_BOTTOM);
-            g_captureBackend = new DesktopDuplicationBackend("MTA: San Andreas",
+            g_captureBackend = new DesktopDuplicationBackend(windowTitle,
                                                             DEFAULT_CROP_TOP, DEFAULT_CROP_LEFT, DEFAULT_CROP_RIGHT, DEFAULT_CROP_BOTTOM);
             if (!g_captureBackend->Initialize()) {
                 DEBUG_LOG("InitModule", "Desktop Duplication backend initialization failed");

@@ -1,1 +1,88 @@
-[ { "objects": [ { "dynamicString": "return GymBike{description=\"\", noCollisions=true, modelid=2630, isRandomModelId=false, interior=5, position=Vector3(-0.35845947265625,0.74984502792358,-1.0009765625), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}", "id": 2 } ], "poi": { "isEmpty": true }, "locations": [ { "Description": "gym bike", "Interior": 5, "Y": 0.2721652984619141, "X": 0.13671875, "episodeLinks": [ ], "Z": -0.0003662109375, "id": 2, "Angle": 92.12103271484375, "PossibleActions": [ { "id": 1 } ], "allActions": [ { "dynamicString": "return GetOn{how = 2,side = 1}", "isClosingAction": false, "targetItem": { "id": 2, "type": "Object" }, "id": 1, "nextAction": { "id": 2 }, "closingAction": { "id": 3 }, "nextLocation": { "id": 2 } }, { "dynamicString": "return PedalGymBike{how=\"gym_bike_faster\"}", "isClosingAction": false, "targetItem": { "id": 2, "type": "Object" }, "id": 2, "nextAction": { "id": 3 }, "nextLocation": { "id": 2 } }, { "dynamicString": "return GetOff{how = 2,side = 1}", "isClosingAction": true, "targetItem": { "id": 2, "type": "Object" }, "id": 3, "nextLocation": { "id": 2 } } ] } ], "position": { "y": 7.058701038360596, "x": 772.772216796875, "z": 1000.710083007812 }, "globalCentroid": { "y": 7.569705963134766, "x": 772.661376953125, "z": 1000.209411621094 }, "name": "2630" } ]
+[
+    {
+        "objects": [
+            {
+                "dynamicString": "return GymBike{description=\"\", noCollisions=true, modelid=2630, isRandomModelId=false, interior=5, position=Vector3(-0.35845947265625,0.74984502792358,-1.0009765625), rotation=Vector3(0,0,270), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "id": 2
+            }
+        ],
+        "poi": {
+            "isEmpty": true
+        },
+        "locations": [
+            {
+                "Description": "near gym bike",
+                "Interior": 5,
+                "Y": 0.2721652984619141,
+                "X": 0.13671875,
+                "episodeLinks": [],
+                "Z": -0.0003662109375,
+                "id": 2,
+                "Angle": 92.12103271484375,
+                "PossibleActions": [
+                    {
+                        "id": 1
+                    }
+                ],
+                "allActions": [
+                    {
+                        "dynamicString": "return GetOn{how = 2,side = 1}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 2,
+                            "type": "Object"
+                        },
+                        "id": 1,
+                        "nextAction": {
+                            "id": 2
+                        },
+                        "closingAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 2
+                        }
+                    },
+                    {
+                        "dynamicString": "return PedalGymBike{how=\"gym_bike_faster\"}",
+                        "isClosingAction": false,
+                        "targetItem": {
+                            "id": 2,
+                            "type": "Object"
+                        },
+                        "id": 2,
+                        "nextAction": {
+                            "id": 3
+                        },
+                        "nextLocation": {
+                            "id": 2
+                        }
+                    },
+                    {
+                        "dynamicString": "return GetOff{how = 2,side = 1}",
+                        "isClosingAction": true,
+                        "targetItem": {
+                            "id": 2,
+                            "type": "Object"
+                        },
+                        "id": 3,
+                        "nextLocation": {
+                            "id": 2
+                        }
+                    }
+                ]
+            }
+        ],
+        "position": {
+            "y": 7.058701038360596,
+            "x": 772.772216796875,
+            "z": 1000.710083007812
+        },
+        "globalCentroid": {
+            "y": 7.569705963134766,
+            "x": 772.661376953125,
+            "z": 1000.209411621094
+        },
+        "name": "2630"
+    }
+]

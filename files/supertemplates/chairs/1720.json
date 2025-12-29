@@ -15,7 +15,7 @@
         },
         "locations": [
             {
-                "Description": "kitchen chair",
+                "Description": "near chair",
                 "Interior": 8,
                 "Y": 0.144775390625,
                 "X": 0.231201171875,
@@ -33,7 +33,7 @@
                         "dynamicString": "return SitDown{how = 1, rotation = nil}",
                         "isClosingAction": false,
                         "targetItem": {
-                            "id": 1,
+                            "id": 2,
                             "type": "Object"
                         },
                         "id": 1,
@@ -86,7 +86,7 @@
                         "dynamicString": "return StandUp{how = 1}",
                         "isClosingAction": true,
                         "targetItem": {
-                            "id": 1,
+                            "id": 2,
                             "type": "Object"
                         },
                         "id": 4,

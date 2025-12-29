@@ -1,1 +1,69 @@
-[ { "objects": [ { "dynamicString": "return TurnTable{description=\"\", noCollisions=false, modelid=2099, interior=1, position=Vector3(-0.0712890625,1.2579345703125,-0.89312744140625), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}", "id": 7 } ], "poi": { "Description": "turn table", "Interior": 1, "Y": -1672.80810546875, "X": 2530.26953125, "Z": 1015.498596191406, "id": 8, "Angle": 359.9065856933594, "PossibleActions": [ { "id": 1 } ], "allActions": [ { "dynamicString": "return TurnOn{}", "targetItem": { "id": 7, "type": "Object" }, "id": 1, "nextAction": { "id": 2 }, "closingAction": { "id": 3 }, "nextLocation": { "id": 8 } }, { "dynamicString": "return Dance{}", "targetItem": { "id": -1, "type": "none" }, "id": 2, "nextAction": { "id": 3 }, "nextLocation": { "id": 8 } }, { "dynamicString": "return TurnOff{}", "targetItem": { "id": 7, "type": "Object" }, "id": 3, "nextLocation": { "id": 8 } } ] }, "locations": [ ] } ]
+[
+    {
+        "objects": [
+            {
+                "dynamicString": "return TurnTable{description=\"\", noCollisions=false, modelid=2099, interior=1, position=Vector3(-0.0712890625,1.2579345703125,-0.89312744140625), rotation=Vector3(0,0,0), posOffset=Vector3(0,0,0), rotOffset=Vector3(0,0,0)}",
+                "id": 7
+            }
+        ],
+        "poi": {
+            "Description": "turn table",
+            "Interior": 1,
+            "Y": -1672.80810546875,
+            "X": 2530.26953125,
+            "Z": 1015.498596191406,
+            "id": 8,
+            "Angle": 359.9065856933594,
+            "PossibleActions": [
+                {
+                    "id": 1
+                }
+            ],
+            "allActions": [
+                {
+                    "dynamicString": "return TurnOn{}",
+                    "targetItem": {
+                        "id": 7,
+                        "type": "Object"
+                    },
+                    "id": 1,
+                    "nextAction": {
+                        "id": 2
+                    },
+                    "closingAction": {
+                        "id": 3
+                    },
+                    "nextLocation": {
+                        "id": 8
+                    }
+                },
+                {
+                    "dynamicString": "return Dance{}",
+                    "targetItem": {
+                        "id": -1,
+                        "type": "none"
+                    },
+                    "id": 2,
+                    "nextAction": {
+                        "id": 3
+                    },
+                    "nextLocation": {
+                        "id": 8
+                    }
+                },
+                {
+                    "dynamicString": "return TurnOff{}",
+                    "targetItem": {
+                        "id": 7,
+                        "type": "Object"
+                    },
+                    "id": 3,
+                    "nextLocation": {
+                        "id": 8
+                    }
+                }
+            ]
+        },
+        "locations": []
+    }
+]

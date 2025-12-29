@@ -11,14 +11,52 @@ function Drink:Apply()
 
     StoryActionBase.GetLogger(self, story):Log(self.Description, self, false, true, {"finishes", "finishes drinking"})
 
-    local time = random(2000, 6000)
-    setPedAnimation(self.Performer, "VENDING", "VEND_Drink2_P", time, true, true, false, true)
+    local setupTime = 3000
 
-    if DEBUG then
-        outputConsole("Drink:Apply")
+    -- Set animation to loop indefinitely
+    setPedAnimation(self.Performer, "VENDING", "VEND_Drink_P", -1, true, true, true, true)
+
+    -- Capture actor-specific references to avoid conflicts when action instance is shared
+    local performer = self.Performer
+
+    -- Clean up any existing timer for this performer
+    local existingTimer = performer:getData('drinkMonitorTimer')
+    if existingTimer and isTimer(existingTimer) then
+        killTimer(existingTimer)
     end
 
-    OnGlobalActionFinished(time, self.Performer:getData('id'), self.Performer:getData('storyId'))
+    -- Monitor action changes and cleanup when no longer drinking
+    local monitorTimer
+    monitorTimer = Timer(function()
+        if not performer or not isElement(performer) then
+            if monitorTimer and isTimer(monitorTimer) then
+                killTimer(monitorTimer)
+            end
+            performer:setData('drinkMonitorTimer', nil)
+            return
+        end
+
+        local currentAction = performer:getData('currentAction')
+        if currentAction ~= 'Drink' then
+            -- Action changed, cleanup is not needed for Drink
+            if monitorTimer and isTimer(monitorTimer) then
+                killTimer(monitorTimer)
+            end
+            performer:setData('drinkMonitorTimer', nil)
+            if DEBUG then
+                print("Drink: Action changed, stopping monitor")
+            end
+        end
+    end, 200, 0)
+
+    -- Store timer in performer metadata
+    performer:setData('drinkMonitorTimer', monitorTimer)
+
+    if DEBUG then
+        print("Drink:Apply")
+    end
+
+    OnGlobalActionFinished(setupTime, performer:getData('id'), performer:getData('storyId'))
 end
 
 function Drink:GetDynamicString()

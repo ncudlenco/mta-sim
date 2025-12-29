@@ -17,15 +17,18 @@ function PutDown:Apply()
     StoryActionBase.GetLogger(self, story):Log(self.Description .. self.TargetItem.Description .. " on " .. self.Where, self)
     -- self.TargetItem.instance:setCollisionsEnabled(false)
 
+    -- Remove from inventory IMMEDIATELY so subsequent event planning sees correct state
+    self:RemovePickedObject()
+
     local time = 500
     if self.how == PutDown.eHow.Normal then
         time = 200
-        self.Performer:setAnimation("BAR", "Barserve_bottle", time, true, true, false, true)
+        self.Performer:setAnimation("BAR", "Barserve_bottle", time, false, false, false, true)
     elseif self.how == PutDown.eHow.Down then
-        self.Performer:setAnimation("MISC", "Case_pickup", time, true, true, false, true)
+        self.Performer:setAnimation("MISC", "Case_pickup", time, false, false, false, true)
     elseif self.how == PutDown.eHow.FloorBarbell then
         time = 1000
-        self.Performer:setAnimation("Freeweights", "gym_free_putdown", time, true, true, false, true)
+        self.Performer:setAnimation("Freeweights", "gym_free_putdown", time, false, false, false, true)
     end
 
     if DEBUG then
@@ -34,7 +37,6 @@ function PutDown:Apply()
 
     OnGlobalActionFinished(time, self.Performer:getData('id'), self.Performer:getData('storyId'), function()
         detachElementFromBone(self.TargetItem.instance)
-        self:RemovePickedObject()
         self.TargetItem:Destroy()
         self.TargetItem:Create()
     end)
@@ -52,10 +54,34 @@ end
 
 function PutDown:RemovePickedObject()
     local pickedObjects = self.Performer:getData('pickedObjects') or {}
+    local targetObjectId = self.TargetItem and self.TargetItem.ObjectId or "nil"
+    local targetDescription = self.TargetItem and self.TargetItem.Description or "nil"
+
+    if DEBUG then
+        print(string.format("[RemovePickedObject] Looking for ObjectId=%s, Description=%s",
+            tostring(targetObjectId), tostring(targetDescription)))
+        print(string.format("[RemovePickedObject] pickedObjects count: %d", #pickedObjects))
+        for idx, value in ipairs(pickedObjects) do
+            print(string.format("[RemovePickedObject]   [%d] ObjectId=%s, Description=%s",
+                idx, tostring(value[1]), tostring(value[2])))
+        end
+    end
+
+    local found = false
     for i, value in ipairs(pickedObjects) do
         if value[1] == self.TargetItem.ObjectId then
             table.remove(pickedObjects, i)
+            found = true
+            if DEBUG then
+                print("[RemovePickedObject] Found and removed by ObjectId")
+            end
             break
         end
     end
+
+    if DEBUG and not found then
+        print("[RemovePickedObject] WARNING: No matching ObjectId found!")
+    end
+
+    self.Performer:setData('pickedObjects', pickedObjects)
 end

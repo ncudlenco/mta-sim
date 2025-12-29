@@ -11,16 +11,14 @@ function SmokeOut:Apply()
     StoryActionBase.Apply(self)
 
     StoryActionBase.GetLogger(self, story):Log(self.Description .. self.TargetItem.Description, self.Performer)
-    self.Performer:setAnimation("SMOKING", "M_smk_out", 3000, true, true, false, true)
+    self.Performer:setAnimation("SMOKING", "M_smk_out", 3000, false, false, false, true)
 
     if DEBUG then
         outputConsole("SmokeOut:Apply")
     end
 
     OnGlobalActionFinished(3000, self.Performer:getData('id'), self.Performer:getData('storyId'), function()
-        detachElementFromBone(self.TargetItem.instance)
-        self.TargetItem:Destroy()
-        self.TargetItem:Create()
+        self.Performer:setAnimation() -- reset the animation
     end)
 end
 

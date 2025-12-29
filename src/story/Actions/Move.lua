@@ -4,8 +4,6 @@ Move = class(StoryActionBase, function(o, params)
     --     error("Move: targetItem not given in the constructor")
     -- elseif not params.nextLocation then
     --     error("Move: nextLocation not given in the constructor")
-    -- elseif type(params.graphId) ~= "number" then
-    --     error("Move: graphId not given in the constructor")
     -- end
     local description = " goes to the "
     o.lib = Move.eLib.Ped
@@ -23,10 +21,14 @@ Move = class(StoryActionBase, function(o, params)
 
     StoryActionBase.init(o,params)
     o.planningData = {}
-    o.graphId = params.graphId
     o.how = params.how or Move.eHow.Walk
     o.AnimationSpeed = params.AnimationSpeed or 1.0
     o.isMove = true
+
+    -- Entity-based movement support
+    o.TargetEntityId = params.targetEntityId or nil
+    o.TargetEntityType = params.targetEntityType or nil  -- "object" | "actor" | nil
+    o.targetActor = nil  -- Resolved in Apply() for actor targets
 end)
 
 Move.eLib = {
@@ -117,7 +119,10 @@ function Move.destinationReached(player, source)
 	end
     if player:getData('requestPause') then
         lastAction:pause(player)
-        CURRENT_STORY.CameraHandler:requestFocus(player:getData('id'))
+        -- Background actors should not request camera focus
+        if not player:getData("isbackgroundactor") then
+            CURRENT_STORY.CameraHandler:requestFocus(player:getData('id'))
+        end
         return
     end
 	if (path and sourceIdx + 1 <= #path) then
@@ -181,15 +186,23 @@ function Move.destinationReached(player, source)
             print('!!!!!!!!!!!!!Teleporting player '..player:getData('id')..' to context '..nextPoi.Episode.name)
             player:setAnimation() --stop the animation - the player will stop moving
             player:setData('isMoving', false)
+            -- switch picked objects interior
+            switchPickedObjectsInterior(player, nextPoi.Episode)
             player.position = nextPoi.position
             player.rotation = nextPoi.rotation
             player.interior = nextPoi.Episode.InteriorId
-            -- switch picked objects interior
-            switchPickedObjectsInterior(player, nextPoi.Episode)
 
             table.remove(lastAction.planningData[player:getData('id')].contextSegments, 1)
             for _, context in ipairs(lastAction.planningData[player:getData('id')].contextSegments) do
                 print("Contexts: ["..player:getData('id').."]. Target location: "..context.Description.." in region: "..context.Region.name.." and episode: "..context.Episode.name)
+            end
+            -- Cancel any scheduled polling timer before context switch
+            if lastAction.planningData[playerId].pollingTimer then
+                killTimer(lastAction.planningData[playerId].pollingTimer)
+                lastAction.planningData[playerId].pollingTimer = nil
+                if DEBUG_PATHFINDING then
+                    print('[Move] Cancelled polling timer for '..playerId..' due to context switch')
+                end
             end
             lastAction.planningData[playerId].path = {}
             lastAction.planningData[playerId].nextMarker = nil
@@ -199,13 +212,97 @@ function Move.destinationReached(player, source)
             lastAction:pause(player)
             --make sure the region player hit event was triggered - needed to set the player's region and episode
             nextPoi.Region:OnPlayerHit(player)
-            story.CameraHandler:requestFocus(player:getData('id')) --Actors changing contexts get an extra focus request
+            -- Background actors should not request camera focus
+            if not player:getData("isbackgroundactor") then
+                story.CameraHandler:requestFocus(player:getData('id')) --Actors changing contexts get an extra focus request
+            end
         else
+            -- NEW: For actor targets, check proximity and handle actor movement
+            if lastAction.TargetEntityType == 'actor' and lastAction.targetActor then
+                local targetPos = lastAction.targetActor.position
+                local distance = math.abs((player.position - targetPos).length)
+
+                if distance > 2.0 then
+                    -- Actor moved too far - recalculate path
+                    print('[Move] Target actor moved (distance='..distance..'), recalculating path')
+                    lastAction.planningData[player:getData('id')].contextSegments = {lastAction.NextLocation}
+                    lastAction:FindNextShortestPath(player)
+                    return
+                else
+                    -- Close enough to actor - complete move
+                    print('[Move] Reached target actor '..lastAction.TargetEntityId)
+                    player:setAnimation()
+                    player:setData('isMoving', false)
+                    player.position = targetPos
+                    player.rotation = lastAction.targetActor.rotation
+
+                    -- Update locationId now that actor has arrived
+                    local oldLocationId = player:getData('locationId')
+                    local newLocationId = lastAction.NextLocation.LocationId
+                    if oldLocationId ~= newLocationId then
+                        -- Mark old location as not busy (actor left)
+                        if oldLocationId then
+                            local oldPOI = FirstOrDefault(CURRENT_STORY.CurrentEpisode.POI,
+                                function(poi) return poi.LocationId == oldLocationId end)
+                            if oldPOI then
+                                oldPOI.isBusy = false
+                                print(player:getData('id').."Location "..oldPOI.Description..' is not busy (actor left)')
+                            end
+                        end
+
+                        -- Update actor's current location
+                        player:setData('locationId', newLocationId)
+
+                        -- Mark new location as busy (actor arrived)
+                        lastAction.NextLocation.isBusy = true
+                        print(player:getData('id').."Location "..lastAction.NextLocation.Description..' is busy (actor arrived)')
+
+                        -- Clear reserved location since we've now arrived
+                        player:setData('reservedLocationId', nil)
+                    end
+
+                    lastAction.planningData[player:getData('id')] = {}
+                    if DEBUG_PATHFINDING then
+                        outputConsole("Move:Apply - getting next valid action")
+                        print("Move:Apply - getting next valid action")
+                    end
+                    OnGlobalActionFinished(100, player:getData('id'), player:getData('storyId'))
+                    return
+                end
+            end
+
+            -- Existing POI-based completion logic
             player:setData('isMoving', false)
             player:setAnimation() --stop the animation - the player will stop moving
             player.position = lastAction.NextLocation.position
             player.rotation = lastAction.NextLocation.rotation
             -- player.interior = lastAction.NextLocation.Episode.InteriorId
+
+            -- Update locationId now that actor has arrived
+            local oldLocationId = player:getData('locationId')
+            local newLocationId = lastAction.NextLocation.LocationId
+            if oldLocationId ~= newLocationId then
+                -- Mark old location as not busy (actor left)
+                if oldLocationId then
+                    local oldPOI = FirstOrDefault(CURRENT_STORY.CurrentEpisode.POI,
+                        function(poi) return poi.LocationId == oldLocationId end)
+                    if oldPOI then
+                        oldPOI.isBusy = false
+                        print(player:getData('id').."Location "..oldPOI.Description..' is not busy (actor left)')
+                    end
+                end
+
+                -- Update actor's current location
+                player:setData('locationId', newLocationId)
+
+                -- Mark new location as busy (actor arrived)
+                lastAction.NextLocation.isBusy = true
+                print(player:getData('id').."Location "..lastAction.NextLocation.Description..' is busy (actor arrived)')
+
+                -- Clear reserved location since we've now arrived
+                player:setData('reservedLocationId', nil)
+            end
+
             lastAction.planningData[player:getData('id')] = {}
             if DEBUG_PATHFINDING then
                 outputConsole("Move:Apply - getting next valid action")
@@ -220,7 +317,10 @@ function Move.destinationReached(player, source)
     --         story.CameraHandler:updatePerspective(playerId)
     --     end, 100, 1)
     -- else
-        story.CameraHandler:requestFocus(playerId)
+        -- Background actors should not request camera focus
+        if not player:getData("isbackgroundactor") then
+            story.CameraHandler:requestFocus(playerId)
+        end
     -- end
     source:setData('processed', true)
     source:destroy()
@@ -290,6 +390,48 @@ function Move:Apply()
     local story = GetStory(self.Performer)
     table.insert(story.History[self.Performer:getData('id')], self)
 
+    -- Resolve actor target reference for entity-based moves
+    if self.TargetEntityType == 'actor' and self.TargetEntityId then
+        self.targetActor = FirstOrDefault(CURRENT_STORY.CurrentEpisode.peds,
+            function(p) return p:getData('id') == self.TargetEntityId end)
+
+        if not self.targetActor then
+            print('[ERROR][Move] Target actor '..self.TargetEntityId..' not found, falling back to POI-based movement')
+            self.TargetEntityType = nil
+        else
+            print('[Move] Moving to actor '..self.TargetEntityId..' at position '..self.targetActor.position.x..', '..self.targetActor.position.y)
+        end
+    end
+
+    -- Check if this is an artificially inserted Move (not from graph) and if we're off-camera
+    local hasEventId = self.Performer:getData('currentGraphEventId') ~= nil
+    local isRecording = story.CameraHandler:isCurrentlyRecording()
+
+    -- Artificially inserted Moves (no eventId) can teleport when off-camera
+    -- if not hasEventId and not isRecording then
+    --     if DEBUG then
+    --         print("[Move] Off-camera teleport for "..self.Performer:getData('id').." to "..self.TargetItem.Description)
+    --     end
+
+    --     -- Instant teleport
+    --     self.Performer:setPosition(self.TargetItem.position)
+    --     if self.TargetItem.rotation then
+    --         self.Performer:setRotation(self.TargetItem.rotation)
+    --     end
+    --     if self.TargetItem.Interior then
+    --         self.Performer.interior = self.TargetItem.Interior
+    --     end
+
+    --     -- Update actor's episode context
+    --     if self.TargetItem.Episode then
+    --         self.Performer:setData('currentEpisode', self.TargetItem.Episode.name)
+    --     end
+
+    --     -- Complete immediately (no animation)
+    --     OnGlobalActionFinished(1000, self.Performer:getData('id'), self.Performer:getData('storyId'))
+    --     return
+    -- end
+
     if self.TargetItem.Region and self.TargetItem.Region.Id ~= self.Performer:getData('currentRegionId') then
 
         if DEBUG then
@@ -331,12 +473,33 @@ function Move:Apply()
     if self.NextLocation.Episode and self.NextLocation.Episode.name ~= self.Performer:getData('currentEpisode') then
         print('SWITCHING CONTEXT from '..self.Performer:getData('currentEpisode')..' to '..self.NextLocation.Episode.name)
 
-        local contextSwitchingPath = self:getLinks(self.Performer:getData('currentEpisode'), {})
-        if not contextSwitchingPath then
-            print('Warning! Actor '..self.Performer:getData('id')..' wanted to go to a different context '..self.NextLocation.Episode.name..' from '..(self.Performer:getData('currentEpisode') or 'null')..'but we could not find a path')
-            teleport = true
+        -- Check if crossing episode groups
+        local sourceEpisode = self.Performer:getData('currentEpisode')
+        local targetEpisode = self.NextLocation.Episode.name
+        local sourceGroup = CURRENT_STORY.episodeToGroup and CURRENT_STORY.episodeToGroup[sourceEpisode] or nil
+        local targetGroup = CURRENT_STORY.episodeToGroup and CURRENT_STORY.episodeToGroup[targetEpisode] or nil
+
+        if sourceGroup and targetGroup and sourceGroup ~= targetGroup then
+            -- CROSS-GROUP TRANSITION: Direct teleportation (skip pathfinding)
+            if DEBUG_EPISODE_GROUPS then
+                print('[Move] Cross-group teleport: '..self.Performer:getData('id')..
+                      ' from '..sourceEpisode..' (group '..sourceGroup..
+                      ') to '..targetEpisode..' (group '..targetGroup..')')
+            end
+
+            teleport = true  -- Skip getLinks() pathfinding
         else
-            contextSegments = contextSwitchingPath
+            -- SAME GROUP: Try to find path via episodeLinks
+            local contextSwitchingPath = self:getLinks(self.Performer:getData('currentEpisode'), {})
+            if not contextSwitchingPath then
+                print('Warning! Actor '..self.Performer:getData('id')..
+                      ' wanted to go to a different context '..self.NextLocation.Episode.name..
+                      ' from '..(self.Performer:getData('currentEpisode') or 'null')..
+                      ' but we could not find a path')
+                teleport = true
+            else
+                contextSegments = contextSwitchingPath
+            end
         end
     end
 
@@ -467,6 +630,93 @@ function Move:FindNextShortestPath(player)
         return
     end
     print(player:getData('id')..": Find shortest path between "..(player:getData('currentRegion') or 'null')..' and '..(contextSegments[1].Region.name or 'null'))
+
+    -- NEW: For actor targets, use actor's current position as destination
+    if self.TargetEntityType == 'actor' and self.targetActor then
+        local actorPos = self.targetActor.position
+
+        -- Find actor's current region
+        local actorRegion = FirstOrDefault(contextSegments[1].Episode.Regions,
+            function(r) return r.name == self.targetActor:getData('currentRegion') end)
+
+        if not actorRegion then
+            print('[ERROR][Move] Could not determine target actor region, falling back to POI-based movement')
+            self.TargetEntityType = nil
+            -- Continue with existing POI-based logic below
+        else
+            print('[Move] Calculating path to actor at position '..actorPos.x..', '..actorPos.y..' in region '..actorRegion.name)
+
+            -- Check if already close to actor
+            if math.abs((player.position - actorPos).length) < 1.5 then
+                local m = self:InitializeMarker(actorPos.x, actorPos.y, actorPos.z, player)
+                self.planningData[player:getData('id')].paused = false
+                table.remove(self.planningData[player:getData('id')].contextSegments, 1)
+                Move.destinationReached(player, m)
+                return
+            end
+
+            self:InternalShortestPath(
+                contextSegments[1].Episode.graphId,
+                contextSegments[1].Episode.pathfindingGraph,
+                player.position,
+                FirstOrDefault(contextSegments[1].Episode.Regions,
+                    function(r) return r.name == player:getData('currentRegion') end),
+                actorPos,  -- Target = actor's position
+                actorRegion,
+                function(result)
+                    if result then
+                        local lib = self.planningData[player:getData('id')].lib
+                        local how = self.planningData[player:getData('id')].how
+
+                        if DEBUG_PATHFINDING then
+                            print('[Move] Path to actor found, length='..#result)
+                        end
+
+                        self.planningData[player:getData('id')].path = result
+
+                        -- Add actor's position as final waypoint
+                        table.insert(self.planningData[player:getData('id')].path, {actorPos.x, actorPos.y, actorPos.z})
+                        table.remove(self.planningData[player:getData('id')].contextSegments, 1)
+
+                        -- Process path markers (existing logic)
+                        local path = self.planningData[player:getData('id')].path
+                        local nextPos = path[1]
+                        while #path > 0 and nextPos and math.abs((player.position - Vector3(nextPos[1], nextPos[2], nextPos[3])).length) < 1.5 do
+                            table.remove(path, 1)
+                            nextPos = path[1]
+                        end
+                        if not nextPos then
+                            print("[FATAL ERROR] Path became empty while removing close waypoints!")
+                            Timer(Move.teleport, 5000, 1, self.Performer, self)
+                            return
+                        end
+
+                        self.planningData[player:getData('id')].timeout = 60
+                        local marker = self:InitializeMarker(nextPos[1], nextPos[2], nextPos[3], player)
+                        self.planningData[player:getData('id')].paused = false
+                        Move.hasReachedMarker(player, marker)
+
+                        player:setRotation(0, 0, findRotation(player.position.x, player.position.y, nextPos[1], nextPos[2]), "ZYX", true, true)
+
+                        local animationSpeed = self.AnimationSpeed
+                        Timer(function()
+                            player:setAnimation(lib, how, -1, true, true, true, true)
+                            player:setAnimationSpeed(how, animationSpeed)
+                            player:setData('isMoving', true)
+                        end, 100, 1)
+                        if not DISABLE_BETWEEN_POINTS_TELEPORTATION then
+                            Move.wait(player)
+                        end
+                    else
+                        print('[FATAL ERROR!] No shortest path found to actor!')
+                    end
+                end
+            )
+            return  -- Exit early, don't run POI-based logic
+        end
+    end
+
+    -- Existing POI-based pathfinding logic
     if math.abs((player.position - contextSegments[1].position).length) < 1.5 then
         local m = self:InitializeMarker(contextSegments[1].position.x, contextSegments[1].position.y, contextSegments[1].position.z, player)
         self.planningData[player:getData('id')].paused = false
@@ -524,6 +774,15 @@ function Move:FindNextShortestPath(player)
                     end
                     if not nextPos then
                         print("[FATAL ERROR] Path became empty while removing close waypoints!")
+                        -- Cancel any scheduled polling timer to prevent race condition
+                        local playerId = player:getData('id')
+                        if self.planningData[playerId] and self.planningData[playerId].pollingTimer then
+                            killTimer(self.planningData[playerId].pollingTimer)
+                            self.planningData[playerId].pollingTimer = nil
+                            if DEBUG_PATHFINDING then
+                                print('[Move] Cancelled polling timer for '..playerId..' due to empty path')
+                            end
+                        end
                         Timer(Move.teleport, 5000, 1, self.Performer, self)
                         return
                     end
@@ -588,6 +847,49 @@ function Move.hasReachedMarker(player, marker)
         plan = lastAction.planningData[playerId]
     end
 
+    -- Guard: If path is empty, exit gracefully to prevent timer race conditions
+    if not plan or not plan.path or #plan.path == 0 then
+        if DEBUG_PATHFINDING then
+            print('[hasReachedMarker] Path is empty for '..playerId..', exiting gracefully')
+        end
+        if marker and isElement(marker) then
+            marker:destroy()
+        end
+        return
+    end
+
+    -- NEW: Check if target actor moved significantly
+    if lastAction.TargetEntityType == 'actor' and lastAction.targetActor then
+        local currentTargetPos = lastAction.targetActor.position
+        local path = lastAction.planningData[playerId].path
+
+        if path and #path > 0 then
+            local plannedTarget = Vector3(path[#path][1], path[#path][2], path[#path][3])
+            local displacement = math.abs((plannedTarget - currentTargetPos).length)
+
+            -- Actor moved > 3 units - recalculate path
+            if displacement > 3.0 then
+                print('[Move] Target actor moved '..displacement..' units, recalculating path')
+                -- Cancel any scheduled polling timer before clearing path
+                if lastAction.planningData[playerId].pollingTimer then
+                    killTimer(lastAction.planningData[playerId].pollingTimer)
+                    lastAction.planningData[playerId].pollingTimer = nil
+                    if DEBUG_PATHFINDING then
+                        print('[Move] Cancelled polling timer for '..playerId..' due to path recalculation')
+                    end
+                end
+                lastAction.planningData[playerId].path = {}
+                if lastAction.planningData[playerId].nextMarker then
+                    lastAction.planningData[playerId].nextMarker:destroy()
+                    lastAction.planningData[playerId].nextMarker = nil
+                end
+                lastAction.planningData[playerId].contextSegments = {lastAction.NextLocation}
+                lastAction:FindNextShortestPath(player)
+                return
+            end
+        end
+    end
+
     local distance = math.abs((player.position - marker.position).length)
     -- print('Actor '..playerId..' distance to marker '..marker:getData('idx')..' is '..distance..' and marker size is '..marker.size)
     if distance < marker.size then
@@ -610,7 +912,9 @@ function Move.hasReachedMarker(player, marker)
 
             print('Actor '..playerId..' rerunning timer for marker '..marker:getData('idx'))
             local pollingTime = (600 / math.max(1, math.max(math.min(distance, animationSpeed), 1.5) / 1.5))
-            Timer(Move.hasReachedMarker, pollingTime, 1, player, marker)
+            -- Store timer handle for potential cancellation
+            local timerHandle = Timer(Move.hasReachedMarker, pollingTime, 1, player, marker)
+            lastAction.planningData[playerId].pollingTimer = timerHandle
         else
             print("[FATAL ERROR] "..playerId..". The player had no plan or the path is empty but Move.hasReachedMarker has been called")
         end
@@ -683,7 +987,7 @@ function Move.teleport(player, lastAction)
 end
 
 function Move:GetDynamicString()
-    return 'return Move{graphId = -1, how = '..self.how..'}'
+    return 'return Move{how = '..self.how..'}'
 end
 function Move:isFinished(player)
     if self.planningData[player:getData('id')] and self.planningData[player:getData('id')].how then return false else return true end

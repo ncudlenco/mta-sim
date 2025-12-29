@@ -160,3 +160,7 @@ Any new development should follow best engineering practices as DRY, YAGNI, and 
 We are using a custom class-like function located in utils/class.lua.
 
 The overarching architecture should be designed in a way that makes it easy to isolate the core-engine logic from the simulation related business logic. With the idea in mind that this system is to be extended for other games as well. The very next milestone after the idea is fully proved for GTA:SA is to extend it for GTA V through FiveM.
+
+Whenever you make a new change, do not reference anything from the previous state. Always document and write your code as if this is the solution and do not explain how it compares with a previous implementation or how it was previously implemented.
+
+When doing ROOT CAUSE ANALYSIS: always look at the server logs, line by line, then ground the answers in code as well. Never make assumptions.

@@ -37,7 +37,10 @@ function StoryActionBase:Apply(...)
     local story = GetStory(self.Performer)
     local playerId = self.Performer:getData('id')
     if not DEFINING_EPISODES then
-        story.CameraHandler:requestFocus(playerId)
+        -- Background actors should not request camera focus
+        if not self.Performer:getData("isbackgroundactor") then
+            story.CameraHandler:requestFocus(playerId)
+        end
     end
     if self.Performer and self.NextLocation and self.NextLocation.LocationId then
         if DEBUG then
@@ -45,6 +48,7 @@ function StoryActionBase:Apply(...)
         end
         self.Performer:setData('nextTargetLocation', self.NextLocation.LocationId)
     end
+    self.Performer:setData('currentAction', self.Name)
 end
 
 function StoryActionBase:GetLogger(story)

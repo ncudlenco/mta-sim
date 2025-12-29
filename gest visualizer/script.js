@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const cyContainer = document.getElementById('cy');
     const toggleButtons = document.getElementById('toggle-buttons');
 
+    let headlessConfig = null; // Will store {inputPath, outputPath} in headless mode
+
     const cy = cytoscape({
         container: cyContainer,
         elements: [],
@@ -34,6 +36,9 @@ document.addEventListener('DOMContentLoaded', () => {
             { selector: 'node.entity', style: { 'background-color': '#007bff', 'color': 'white' } }, // Blue for entities
             { selector: 'node.actor', style: { 'background-color': '#4caf50', 'color': 'white' } }, // Green for actors
             { selector: 'node.event', style: { 'background-color': '#ff9800', 'color': 'white' } }, // Orange for events
+            { selector: 'node.scene', style: { 'border-width': 3, 'font-weight': 'bold' } }, // Scene nodes have bold border
+            { selector: 'node.parent', style: { 'background-color': '#9c27b0', 'color': 'white', 'width': 80, 'height': 80 } }, // Purple for parent scenes
+            { selector: 'node.leaf', style: { 'background-color': '#00bcd4', 'color': 'white', 'width': 60, 'height': 60 } }, // Cyan for leaf scenes
             {
                 selector: 'edge',
                 style: {
@@ -54,6 +59,8 @@ document.addEventListener('DOMContentLoaded', () => {
             { selector: '.same-entity', style: { 'line-color': 'green', 'target-arrow-color': 'green' } },
             { selector: '.temporal', style: { 'line-color': 'red', 'target-arrow-color': 'red' } },
             { selector: '.temporal-relation', style: { 'line-color': 'blue', 'target-arrow-color': 'blue' } },
+            { selector: '.semantic-relation', style: { 'line-color': '#9c27b0', 'target-arrow-color': '#9c27b0', 'line-style': 'dashed', 'width': 2 } }, // Purple dashed for semantic
+            { selector: '.logical-relation', style: { 'line-color': '#ff5722', 'target-arrow-color': '#ff5722', 'line-style': 'dotted', 'width': 2, 'curve-style': 'unbundled-bezier', 'control-point-distances': 40, 'control-point-weights': 0.5 } }, // Orange dotted for logical
             { selector: '.hidden', style: { 'display': 'none' } }
         ],
         layout: {
@@ -87,10 +94,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Listen for headless mode file loading
+    ipcRenderer.on('load-file-headless', (event, config) => {
+        headlessConfig = config;
+        console.log('Headless mode: Loading file', config.inputPath);
+        loadGraph(config.inputPath);
+    });
+
     function loadGraph(filePath) {
         fs.readFile(filePath, 'utf-8', (err, data) => {
             if (err) {
                 console.error('Error reading file:', err);
+                if (headlessConfig) {
+                    ipcRenderer.send('export-error', `Failed to read file: ${err.message}`);
+                }
                 return;
             }
             try {
@@ -98,6 +115,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 renderGraph(graphData);
             } catch (error) {
                 console.error('Invalid JSON format:', error);
+                if (headlessConfig) {
+                    ipcRenderer.send('export-error', `Invalid JSON: ${error.message}`);
+                }
             }
         });
     }
@@ -105,24 +125,60 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderGraph(data) {
         cy.elements().remove();
         const elements = [];
+
+        // PASS 1: Create all nodes with complete data
         Object.keys(data).forEach(key => {
-            if (key !== 'temporal') {
+            if (key !== 'temporal' && key !== 'spatial' && key !== 'semantic' && key !== 'logical' && key !== 'camera') {
                 const nodeData = data[key];
-                const nodeClass = nodeData.Action === "Exists" && 'Gender' in (nodeData?.Properties || {}) ? "entity actor" : nodeData.Action === "Exists" ? "entity other" : "event";
+                // Classify node based on type
+                let nodeClass;
+                if (nodeData.Action === "Exists" && 'Gender' in (nodeData?.Properties || {})) {
+                    nodeClass = "entity actor";
+                } else if (nodeData.Action === "Exists") {
+                    nodeClass = "entity other";
+                } else if (nodeData.Properties?.scene_type === "parent") {
+                    nodeClass = "scene parent";
+                } else if (nodeData.Properties?.scene_type === "leaf") {
+                    nodeClass = "scene leaf";
+                } else {
+                    nodeClass = "event";
+                }
                 let detailsText = `id: ${key}\nAction: ${nodeData.Action}\nEntities: ${nodeData.Entities?.join(', ') || ''}\nLocation: ${nodeData.Location?.join(', ') || ''}`;
-                if (Object.keys(nodeData.Properties).length > 0)
-                    detailsText += `\nProperties: ${JSON.stringify(nodeData.Properties, null, 2)}`
+
+                if (Object.keys(nodeData.Properties || {}).length > 0) {
+                    // For actor Exists nodes, only show Name and Gender
+                    if (nodeClass.includes('actor')) {
+                        const { Name, Gender } = nodeData.Properties;
+                        detailsText += `\nName: ${Name}\nGender: ${Gender}`;
+                    } else {
+                        // For all other nodes, show full Properties
+                        detailsText += `\nProperties: ${JSON.stringify(nodeData.Properties, null, 2)}`;
+                    }
+                }
 
                 elements.push({
                     data: { id: key, label: key, details: detailsText },
                     classes: nodeClass
                 });
 
+                // Debug logging for actor nodes
+                if (nodeClass.includes('actor')) {
+                    console.log('Created actor node:', key, 'with classes:', nodeClass);
+                }
+            }
+        });
+
+        // PASS 2: Create all edges (same-entity relationships)
+        Object.keys(data).forEach(key => {
+            if (key !== 'temporal' && key !== 'spatial' && key !== 'semantic' && key !== 'logical' && key !== 'camera') {
+                const nodeData = data[key];
+
                 nodeData.Entities?.forEach(entity => {
-                    if (!cy.getElementById(entity).length) {
-                        elements.push({ data: { id: entity, label: entity }, classes: "entity" });
-                    }
-                    elements.push({ data: { source: key, target: entity, label: 'same-entity' }, classes: 'same-entity' });
+                    // Create edge from this node to each entity it references
+                    elements.push({
+                        data: { source: key, target: entity, label: 'same-entity' },
+                        classes: 'same-entity'
+                    });
                 });
             }
         });
@@ -148,17 +204,19 @@ document.addEventListener('DOMContentLoaded', () => {
                             temporal.relations.forEach(relationKey => {
                                 const relation = data.temporal[relationKey];
                                 if (relation?.source && relation?.target) {
+                                    // Map "starts_with" to "same_time" for clarity
+                                    const label = relation.type === 'starts_with' ? 'same_time' : relation.type;
                                     elements.push({
-                                        data: { source: relation.source, target: relation.target, label: relation.type },
+                                        data: { source: relation.source, target: relation.target, label: label },
                                         classes: 'temporal-relation'
                                     });
                                 } else if (relation?.type === 'starts_with') {
                                     const source = temporalKey;
                                     const target = Object.keys(data.temporal).find(key => key !== source && data.temporal[key]?.relations?.includes(relationKey));
 
-                                    if (target && !elements.find(e => e.data.source === target && e.data.target === source && e.data.label === relation.type)) {
+                                    if (target && !elements.find(e => e.data.source === target && e.data.target === source && e.data.label === 'same_time')) {
                                         elements.push({
-                                            data: { source: source, target: target, label: relation.type },
+                                            data: { source: source, target: target, label: 'same_time' },
                                             classes: 'temporal-relation'
                                         });
                                     }
@@ -171,17 +229,107 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
             });
+
+            // Assign actor property to actor Exists nodes so they can be positioned
+            console.log('Starting actions:', startingActions);
+            console.log('Total elements:', elements.length);
+
+            Object.keys(startingActions).forEach(actorKey => {
+                console.log('Searching for actor:', actorKey);
+                const actorExistsNode = elements.find(e => {
+                    const match = e.data.id === actorKey && e.classes?.includes('actor');
+                    if (e.data.id === actorKey) {
+                        console.log('  Found element with id:', actorKey, 'classes:', e.classes, 'match:', match);
+                    }
+                    return match;
+                });
+                console.log('  Result:', actorExistsNode ? 'FOUND' : 'NOT FOUND');
+
+                if (actorExistsNode) {
+                    actorExistsNode.data.actor = actorKey;
+                    actorExistsNode.data.order = -1; // Position at the top of the lane
+                    console.log('  Assigned actor property to:', actorKey);
+                }
+            });
+        }
+
+        // Process semantic relations
+        if (data.semantic) {
+            Object.keys(data.semantic).forEach(key => {
+                const semantic = data.semantic[key];
+
+                // Create source node if it doesn't exist (for abstract semantic concepts)
+                if (!elements.find(e => e.data.id === key)) {
+                    elements.push({
+                        data: {
+                            id: key,
+                            label: key,
+                            details: `Semantic: ${semantic.type}`
+                        },
+                        classes: 'semantic-node'
+                    });
+                }
+
+                // Create edges to targets
+                if (semantic.type && semantic.targets) {
+                    semantic.targets.forEach(target => {
+                        // Verify target node exists before creating edge
+                        if (elements.find(e => e.data.id === target)) {
+                            elements.push({
+                                data: {
+                                    source: key,
+                                    target: target,
+                                    label: semantic.type
+                                },
+                                classes: 'semantic-relation'
+                            });
+                        } else {
+                            console.warn(`[Semantic] Skipping edge: target '${target}' not found for source '${key}'`);
+                        }
+                    });
+                }
+            });
+        }
+
+        // Process logical relations
+        if (data.logical) {
+            Object.keys(data.logical).forEach(key => {
+                const logical = data.logical[key];
+                if (logical.type && logical.source && logical.target) {
+                    elements.push({
+                        data: {
+                            source: logical.source,
+                            target: logical.target,
+                            label: logical.type
+                        },
+                        classes: 'logical-relation'
+                    });
+                }
+            });
         }
 
         cy.add(elements);
-        // cy.layout({ name: 'cose' }).run();
-        createToggleButtons();
-        adjustPositions();
+
+        // In headless mode, we need to wait for layout to complete before exporting
+        if (headlessConfig) {
+            console.log('Headless mode: Waiting for layout to complete...');
+            // Use adjustPositions which is synchronous, then export
+            adjustPositions();
+
+            // Small delay to ensure rendering is complete
+            setTimeout(() => {
+                performHeadlessExport();
+            }, 1000);
+        } else {
+            // GUI mode - normal flow
+            createToggleButtons();
+            adjustPositions();
+        }
     }
 
     function createToggleButtons() {
         toggleButtons.innerHTML = '';
-        const nodeTypes = ['entity', 'actor', 'other', 'event'];
+        const nodeTypes = ['entity', 'actor', 'other', 'event', 'scene', 'parent', 'leaf'];
         nodeTypes.forEach(type => {
             const button = document.createElement('button');
             button.innerText = `Toggle ${type}`;
@@ -191,7 +339,7 @@ document.addEventListener('DOMContentLoaded', () => {
             toggleButtons.appendChild(button);
         });
 
-        const edgeTypes = ['same-entity', 'temporal', 'temporal-relation'];
+        const edgeTypes = ['same-entity', 'temporal', 'temporal-relation', 'semantic-relation', 'logical-relation'];
         edgeTypes.forEach(type => {
             const button = document.createElement('button');
             button.innerText = `Toggle ${type}`;
@@ -222,6 +370,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // After the layout is applied, manually adjust the positions
     function adjustPositions() {
         const nodes = cy.nodes();
+        console.log('adjustPositions: Total nodes:', nodes.length);
+
         const groupedNodes = nodes.reduce((acc, node) => {
             const actor = node.data('actor');
             if (!acc[actor]) {
@@ -230,6 +380,29 @@ document.addEventListener('DOMContentLoaded', () => {
             acc[actor].push(node);
             return acc;
         }, {});
+
+        console.log('Grouped by actor:', Object.keys(groupedNodes));
+        console.log('Nodes per actor:', Object.fromEntries(
+            Object.entries(groupedNodes).map(([k, v]) => [k, v.length])
+        ));
+
+        // Debug: Check actor entity nodes specifically
+        Object.keys(groupedNodes).forEach(actorKey => {
+            if (actorKey !== 'undefined') {
+                const actorEntityNode = groupedNodes[actorKey].find(n => n.data('order') === -1);
+                if (actorEntityNode) {
+                    console.log(`Actor entity node "${actorKey}":`, {
+                        id: actorEntityNode.id(),
+                        classes: actorEntityNode.classes(),
+                        hasActorClass: actorEntityNode.hasClass('actor'),
+                        visible: actorEntityNode.visible(),
+                        position: actorEntityNode.position()
+                    });
+                } else {
+                    console.warn(`No entity node found for actor "${actorKey}" (no node with order=-1)`);
+                }
+            }
+        });
 
         let xOffset = 0;
         Object.keys(groupedNodes).forEach((actor, actorIdx) => {
@@ -246,7 +419,38 @@ document.addEventListener('DOMContentLoaded', () => {
             xOffset += actorNodes.length * 100 + 100; // Adjust spacing between clusters
         });
 
+        console.log('Calling cy.fit() to adjust viewport...');
         cy.fit(); // Adjust the viewport to fit the new positions
+        console.log('Viewport adjusted. Zoom:', cy.zoom(), 'Pan:', cy.pan());
+    }
+
+    // Headless mode: automatically export PNG and exit
+    function performHeadlessExport() {
+        try {
+            console.log('Headless mode: Generating PNG...');
+
+            // Generate PNG with high quality settings
+            const png = cy.png({
+                full: true,  // Export entire graph, not just viewport
+                scale: 2,    // 2x resolution for better quality
+                bg: 'white'  // White background
+            });
+
+            // Write PNG to file
+            const base64Data = png.split(',')[1];
+            fs.writeFile(headlessConfig.outputPath, base64Data, 'base64', (err) => {
+                if (err) {
+                    console.error('Error saving PNG:', err);
+                    ipcRenderer.send('export-error', err.message);
+                } else {
+                    console.log('Headless mode: PNG saved successfully');
+                    ipcRenderer.send('export-complete', headlessConfig.outputPath);
+                }
+            });
+        } catch (error) {
+            console.error('Error during export:', error);
+            ipcRenderer.send('export-error', error.message);
+        }
     }
 });
 

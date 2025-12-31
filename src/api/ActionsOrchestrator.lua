@@ -433,9 +433,28 @@ function ActionsOrchestrator:ProcessEventRequests()
     self:ExecuteSingularRequests()
 
     -- Phase 6: Clean up performed requests (preserve requests flagged for re-planning)
+    if DEBUG then
+        print("[DIAG][Phase6Cleanup] BEFORE cleanup - eventRequests state:")
+        for actorId, request in pairs(self.eventRequests) do
+            print(string.format("  Actor %s: eventId=%s, performed=%s, needsReplanning=%s, pendingGraphAction=%s, isValid=%s, planned=%s",
+                actorId,
+                tostring(request.eventId),
+                tostring(request.performed),
+                tostring(request.needsReplanning),
+                request.pendingGraphAction and request.pendingGraphAction.Name or "nil",
+                tostring(request.isValid),
+                tostring(request.planned)))
+        end
+    end
     self.eventRequests = Where(self.eventRequests, function(request)
         return not request.performed or request.needsReplanning
     end)
+    if DEBUG then
+        print("[DIAG][Phase6Cleanup] AFTER cleanup - remaining eventRequests:")
+        for actorId, request in pairs(self.eventRequests) do
+            print(string.format("  Actor %s: eventId=%s", actorId, tostring(request.eventId)))
+        end
+    end
 
     -- Phase 7: Process POI queues
     for locationId, queue in pairs(self.poiQueues) do
@@ -699,6 +718,10 @@ function ActionsOrchestrator:ValidateAndExecuteGroup(group, groupType)
                     self:EnqueueActionLinear(request.pendingGraphAction, request.actor, request.eventId)
                 end
                 request.performed = true
+                if DEBUG then
+                    print(string.format("[DIAG][ValidateAndExecuteGroup] MARKED PERFORMED: Actor %s eventId=%s",
+                        request.actor:getData('id'), tostring(request.eventId)))
+                end
             end
             return true
         else
@@ -1494,14 +1517,27 @@ function ActionsOrchestrator:DisplaceActor(actor, reason)
 
     -- Step 6: Mark actor's eventRequest for re-planning if displacement invalidated navigation
     local eventRequest = self.eventRequests[actorId]
+    if DEBUG then
+        print(string.format("[DIAG][DisplaceActor] Actor %s - eventRequest exists=%s", actorId, tostring(eventRequest ~= nil)))
+        if eventRequest then
+            print(string.format("[DIAG][DisplaceActor] Actor %s eventRequest: eventId=%s, planned=%s, performed=%s, pendingGraphAction=%s",
+                actorId,
+                tostring(eventRequest.eventId),
+                tostring(eventRequest.planned),
+                tostring(eventRequest.performed),
+                eventRequest.pendingGraphAction and eventRequest.pendingGraphAction.Name or "nil"))
+        end
+    end
     if eventRequest and eventRequest.planned and not eventRequest.performed then
         eventRequest.needsReplanning = true
         eventRequest.displacementReason = reason
 
-        if DEBUG and DEBUG_POI_ORCHESTRATION then
-            print('[DisplaceActor] Flagged eventRequest for actor '..actorId..' event '..
-                  (eventRequest.eventId or 'unknown')..' for re-planning after displacement')
+        if DEBUG then
+            print('[DIAG][DisplaceActor] Set needsReplanning=true for actor '..actorId..' event '..
+                  (eventRequest.eventId or 'unknown')..' reason: '..tostring(reason))
         end
+    elseif DEBUG and not eventRequest then
+        print('[DIAG][DisplaceActor] WARNING: No eventRequest found for displaced actor '..actorId)
     end
 
     if DEBUG and DEBUG_POI_ORCHESTRATION then
@@ -1553,10 +1589,15 @@ function ActionsOrchestrator:EnqueueForPOI(actor, action, eventId, locationId)
 
     local queue = self.poiQueues[locationId]
 
-    -- Check if actor already in this queue
-    if Any(queue, function(entry) return entry.actor == actor end) then
+    -- Check if actor already in this queue - append to pending actions instead of discarding
+    local existingEntry = FirstOrDefault(queue, function(entry) return entry.actor == actor end)
+    if existingEntry then
+        if not existingEntry.pendingActions then
+            existingEntry.pendingActions = {}
+        end
+        table.insert(existingEntry.pendingActions, {action = action, eventId = eventId})
         if DEBUG and DEBUG_POI_ORCHESTRATION then
-            print('[EnqueueForPOI] Actor '..actor:getData('id')..' already in queue for POI '..locationId)
+            print('[EnqueueForPOI] Actor '..actor:getData('id')..' already in queue for POI '..locationId..', appended '..action.Name..' to pending')
         end
         return
     end
@@ -1726,6 +1767,16 @@ function ActionsOrchestrator:ProcessPOIQueue(locationId)
                 actor:getData('id'), first.action.Name, tostring(first.action.eventId), tostring(first.eventId), locationId))
 
             self:TriggerActionExecution(actor, first.action, first.eventId)
+        end
+
+        -- Enqueue any pending actions that were appended while actor was already in queue
+        if first.pendingActions then
+            for _, pending in ipairs(first.pendingActions) do
+                table.insert(CURRENT_STORY.actionsQueues[actor:getData('id')], pending.action)
+                if DEBUG and DEBUG_POI_ORCHESTRATION then
+                    print('[ProcessPOIQueue] Queued pending action '..pending.action.Name..' for actor '..actor:getData('id'))
+                end
+            end
         end
 
         if #queue > 0 then

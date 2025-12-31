@@ -179,6 +179,11 @@ function Wait:ExecuteWaitingLoop()
                 -- Active actor clears target's wait flags too (prevents race condition)
                 self.TargetItem:setData('isWaitingForInteraction', nil)
                 self.TargetItem:setData('enteredWaitingLoop', false)
+                -- Clear passive actor's currentAction so allReady check passes in ValidateAndExecuteGroup
+                self.TargetItem:setData('currentAction', nil)
+                if DEBUG then
+                    print("[Wait] Cleared currentAction for passive actor " .. self.TargetItem:getData('id'))
+                end
                 if DEBUG then
                     print(self.Performer:getData('id')..": WAIT IS FINISHED with distance between "..self.Performer:getData('id')..' and '..self.TargetItem:getData('id')..' is '..distance..'. The other target location is '..(otherTargetLocation or 'nil')..' The other interaction is '..(self.TargetItem:getData('isWaitingForInteraction') or 'nil'))
                     print('Exiting waiting loop actor '..tostring(self.Performer:getData('id'))..' enteredWaitingLoop '..tostring(self.Performer:getData('enteredWaitingLoop'))..' requestPause '..tostring(self.Performer:getData('requestPause'))..' paused '..tostring(self.Performer:getData('paused'))..' isReadyForInteraction '..tostring(self.Performer:getData('isReadyForInteraction'))..' isWaitingForInteraction '..tostring(self.Performer:getData('isWaitingForInteraction'))..' isAboutToInitiateInteraction '..tostring(self.Performer:getData('isAboutToInitiateInteraction')))

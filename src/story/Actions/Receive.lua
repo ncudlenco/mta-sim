@@ -85,6 +85,13 @@ function Receive:Apply()
                 end
                 pickedObjects = Where(pickedObjects, function(po) return po[1] ~= self.TargetItem.ObjectId end)
                 self.TargetPlayer:setData('pickedObjects', pickedObjects)
+
+                -- Clear giver's chain (giver no longer owns this object)
+                self.TargetPlayer:setData('mappedChainId', nil)
+                if DEBUG then
+                    print("[Receive] Cleared mappedChainId for giver " .. self.TargetPlayer:getData('id'))
+                end
+
                 if DEBUG then
                     print("[DEBUG Receive] TargetPlayer callback completed - object removed")
                 end
@@ -131,6 +138,12 @@ function Receive:Apply()
                 end
 
                 self.Performer:setData('pickedObjects', pickedObjects)
+
+                -- Transfer chainId to receiver so they can use it for PutDown
+                self.Performer:setData('mappedChainId', originalChainId)
+                if DEBUG then
+                    print("[Receive] Transferred mappedChainId to receiver " .. self.Performer:getData('id') .. ": " .. tostring(originalChainId))
+                end
 
                 if DEBUG then
                     print("[DEBUG Receive] Performer callback completed - object added")

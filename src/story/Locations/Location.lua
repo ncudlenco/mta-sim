@@ -328,6 +328,8 @@ end
 function InstantiateAction(event, player, location, target)
     if event.Action == 'Drink' then
         return Drink { performer = player, nextLocation = location, TargetItem = target }
+    elseif event.Action == 'Eat' then
+        return Eat { performer = player, nextLocation = location, TargetItem = target }
     elseif event.Action == 'LookAt' or event.Action == 'LookAtObject' then
         -- LookAt accepts any target (ped, object, or coordinates)
         -- Uses element:getType() internally to determine target type
@@ -663,6 +665,28 @@ function Location:PlanNextEventForActor(player)
     local existingRequest = CURRENT_STORY.ActionsOrchestrator and
         CURRENT_STORY.ActionsOrchestrator.eventRequests and
         CURRENT_STORY.ActionsOrchestrator.eventRequests[actorId]
+
+    if DEBUG then
+        print(string.format("[DIAG][PlanNextEventForActor] Actor %s - existingRequest exists=%s", actorId, tostring(existingRequest ~= nil)))
+        if existingRequest then
+            print(string.format("[DIAG][PlanNextEventForActor] existingRequest: eventId=%s, pendingGraphAction=%s, performed=%s, needsReplanning=%s",
+                tostring(existingRequest.eventId),
+                existingRequest.pendingGraphAction and existingRequest.pendingGraphAction.Name or "nil",
+                tostring(existingRequest.performed),
+                tostring(existingRequest.needsReplanning)))
+        else
+            print(string.format("[DIAG][PlanNextEventForActor] Actor %s has NO existing request - will create new for event %s", actorId, event.id))
+            -- Dump all current eventRequests for debugging
+            if CURRENT_STORY.ActionsOrchestrator and CURRENT_STORY.ActionsOrchestrator.eventRequests then
+                print("[DIAG][PlanNextEventForActor] Current eventRequests:")
+                for reqActorId, req in pairs(CURRENT_STORY.ActionsOrchestrator.eventRequests) do
+                    print(string.format("  %s: eventId=%s, pendingGraphAction=%s",
+                        reqActorId, tostring(req.eventId),
+                        req.pendingGraphAction and req.pendingGraphAction.Name or "nil"))
+                end
+            end
+        end
+    end
 
     if existingRequest then
         CURRENT_STORY.ActionsOrchestrator:ProcessEventRequests()

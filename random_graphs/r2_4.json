@@ -969,7 +969,7 @@
     "Properties": {}
   },
   "a6_26": {
-    "Action": "Drink",
+    "Action": "Eat",
     "Entities": [
       "a6",
       "obj_4"

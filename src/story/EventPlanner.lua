@@ -158,6 +158,30 @@ function EventPlanner:InitializeFirstEvents(graphActors)
         local mainAction = plannedActions and plannedActions[#plannedActions]
         local plannedPOI = mainAction and mainAction.NextLocation
 
+        -- Check if this POI is already occupied by a previously-initialized actor
+        -- Uses the same LocationId tracking as runtime POICoordinator
+        if plannedPOI then
+            local isOccupied = false
+            for _, otherActor in ipairs(episode.peds) do
+                local otherId = otherActor:getData('id')
+                if otherId ~= actorId then
+                    local otherLocationId = otherActor:getData('locationId')
+                    if otherLocationId == plannedPOI.LocationId then
+                        isOccupied = true
+                        if DEBUG then
+                            print(string.format("[InitializeFirstEvents] POI %s already occupied by %s, will use fallback for %s",
+                                plannedPOI.LocationId, otherId, actorId))
+                        end
+                        break
+                    end
+                end
+            end
+
+            if isOccupied then
+                plannedPOI = nil  -- Force fallback path
+            end
+        end
+
         if plannedPOI then
             if DEBUG then
                 print("[EventPlanner] Actor " .. actorId .. " spawning at POI: " ..

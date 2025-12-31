@@ -117,6 +117,12 @@ function Give:Apply()
                     print("[Give] Player "..self.TargetPlayer:getData('id').." pickedObjects after receiving:", self.TargetItem.Description )
                 end
                 self.TargetPlayer:setData('pickedObjects', pickedObjects)
+
+                -- Transfer chainId to receiver so they can use it for PutDown
+                self.TargetPlayer:setData('mappedChainId', originalChainId)
+                if DEBUG then
+                    print("[Give] Transferred mappedChainId to receiver " .. self.TargetPlayer:getData('id') .. ": " .. tostring(originalChainId))
+                end
             end)
         end
     )

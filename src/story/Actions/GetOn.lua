@@ -29,6 +29,12 @@ function GetOn:Apply()
         time = 3100
         block = "INT_HOUSE"
 
+        -- Ensure actor rotation matches POI angle before bed animation
+        -- This fixes rotation corruption from previous GetOff actions (+180 offset)
+        if self.NextLocation and self.NextLocation.rotation then
+            self.Performer.rotation = self.NextLocation.rotation
+        end
+
         if self.side == GetOn.eSide.Left then
             animation = "BED_In_L"
         elseif self.side == GetOn.eSide.Right then

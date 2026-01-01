@@ -1,7 +1,11 @@
 {
   "temporal": {
     "starting_actions": {
-      "a0": "a0_1"
+      "a0": "a0_0"
+    },
+    "a0_0": {
+      "relations": [],
+      "next": "a0_1"
     },
     "a0_1": {
       "relations": [],
@@ -12,6 +16,10 @@
       "next": "a0_3"
     },
     "a0_3": {
+      "relations": [],
+      "next": "a0_3.1"
+    },
+    "a0_3.1": {
       "relations": [],
       "next": "a0_4"
     },
@@ -53,11 +61,23 @@
       "Gender": 2
     }
   },
+  "a0_0": {
+    "Action": "TakeOut",
+    "Entities": [
+      "a0",
+      "spawn_phone_a0"
+    ],
+    "Location": [
+      "hallway"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
   "a0_1": {
     "Action": "AnswerPhone",
     "Entities": [
       "a0",
-      "obj_0"
+      "spawn_phone_a0"
     ],
     "Location": [
       "hallway"
@@ -69,7 +89,7 @@
     "Action": "TalkPhone",
     "Entities": [
       "a0",
-      "obj_0"
+      "spawn_phone_a0"
     ],
     "Location": [
       "hallway"
@@ -81,7 +101,7 @@
     "Action": "HangUp",
     "Entities": [
       "a0",
-      "obj_0"
+      "spawn_phone_a0"
     ],
     "Location": [
       "hallway"
@@ -89,18 +109,17 @@
     "Timeframe": null,
     "Properties": {}
   },
-  "obj_0": {
-    "Action": "Exists",
+  "a0_3.1": {
+    "Action": "Stash",
     "Entities": [
-      "obj_0"
+      "a0",
+      "spawn_phone_a0"
     ],
     "Location": [
       "hallway"
     ],
     "Timeframe": null,
-    "Properties": {
-      "Type": "MobilePhone"
-    }
+    "Properties": {}
   },
   "a0_4": {
     "Action": "TakeOut",

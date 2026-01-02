@@ -478,6 +478,19 @@ function EventPlanner:ComputeAllSegments()
         end
     end
 
+    -- Safety check: verify all events were placed
+    if #satisfiedEvents ~= totalEvents then
+        print(string.format("[ComputeAllSegments] ERROR: Event count mismatch! satisfied=%d expected=%d",
+              #satisfiedEvents, totalEvents))
+        print("[ComputeAllSegments] Missing events:")
+        for eventId, event in pairs(self.story.graph) do
+            if event.Action and event.Action ~= "Exists" and not self:Contains(satisfiedEvents, eventId) then
+                print("  - " .. eventId .. " (" .. (event.Action or "unknown") .. ")")
+            end
+        end
+        return false
+    end
+
     if DEBUG_VALIDATION then
         print(string.format("[ComputeAllSegments] ====== Complete: %d segments, %d events ======",
               self.segmentCounter, #satisfiedEvents))
@@ -630,45 +643,51 @@ function EventPlanner:GroupByConcurrency(readyEvents)
             local toRemove = {}
 
             for i, eventId in ipairs(remainingEvents) do
-                local canAdd = true
-
-                -- Check if this event conflicts with ANY event in segment
-                for _, segmentEventId in ipairs(segment) do
-                    if self:HasTemporalConflict(eventId, segmentEventId) then
-                        canAdd = false
-                        break
-                    end
-                end
-
-                if canAdd then
-                    table.insert(segment, eventId)
+                -- Skip if already in segment (may have been added as a partner earlier)
+                if self:Contains(segment, eventId) then
                     table.insert(toRemove, i)
+                else
+                    local canAdd = true
 
-                    -- If this event has a starts_with partner in remainingEvents, add it too
-                    local eventPartnerId = self:GetStartsWithPartner(eventId)
-                    if eventPartnerId and self:Contains(remainingEvents, eventPartnerId) then
-                        -- Check if partner also doesn't conflict
-                        local partnerCanAdd = true
-                        for _, segmentEventId in ipairs(segment) do
-                            if self:HasTemporalConflict(eventPartnerId, segmentEventId) then
-                                partnerCanAdd = false
-                                break
-                            end
+                    -- Check if this event conflicts with ANY event in segment
+                    for _, segmentEventId in ipairs(segment) do
+                        if self:HasTemporalConflict(eventId, segmentEventId) then
+                            canAdd = false
+                            break
                         end
+                    end
 
-                        if partnerCanAdd then
-                            table.insert(segment, eventPartnerId)
-                            -- Mark partner for removal
-                            for j, remEventId in ipairs(remainingEvents) do
-                                if remEventId == eventPartnerId then
-                                    table.insert(toRemove, j)
+                    if canAdd then
+                        table.insert(segment, eventId)
+                        table.insert(toRemove, i)
+
+                        -- If this event has a starts_with partner in remainingEvents, add it too
+                        local eventPartnerId = self:GetStartsWithPartner(eventId)
+                        if eventPartnerId and self:Contains(remainingEvents, eventPartnerId)
+                           and not self:Contains(segment, eventPartnerId) then
+                            -- Check if partner also doesn't conflict
+                            local partnerCanAdd = true
+                            for _, segmentEventId in ipairs(segment) do
+                                if self:HasTemporalConflict(eventPartnerId, segmentEventId) then
+                                    partnerCanAdd = false
                                     break
                                 end
                             end
-                        end
-                    end
 
-                    changed = true
+                            if partnerCanAdd then
+                                table.insert(segment, eventPartnerId)
+                                -- Mark partner for removal
+                                for j, remEventId in ipairs(remainingEvents) do
+                                    if remEventId == eventPartnerId then
+                                        table.insert(toRemove, j)
+                                        break
+                                    end
+                                end
+                            end
+                        end
+
+                        changed = true
+                    end
                 end
             end
 

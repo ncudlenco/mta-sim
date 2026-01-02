@@ -90,6 +90,9 @@ function SitDown:Apply()
     -- Disable collisions between this actor and all other peds while sitting
     triggerClientEvent("onDisablePedToPedCollisions", getRootElement(), self.Performer)
 
+    -- Mark actor as on furniture to prevent displacement until StandUp
+    self.Performer:setData('isOnFurniture', true)
+
     -- Set rotation first (if provided)
     if self.rotation then
         self.Performer.rotation = self.rotation

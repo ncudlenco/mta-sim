@@ -15,6 +15,9 @@ function TakeOut:Apply()
     table.insert(story.History[self.Performer:getData('id')], self)
     StoryActionBase.Apply(self)
 
+    -- Mark actor as holding spawnable to prevent displacement until Stash
+    self.Performer:setData('isHoldingSpawnable', true)
+
     local objectType = self.TargetItem.type
 
     -- Find inventory slot

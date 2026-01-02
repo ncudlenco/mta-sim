@@ -24,6 +24,9 @@ function StandUp:Apply()
     table.insert(story.History[self.Performer:getData('id')], self)
     StoryActionBase.Apply(self)
 
+    -- Clear furniture flag - actor is standing up
+    self.Performer:setData('isOnFurniture', false)
+
     StoryActionBase.GetLogger(self, story):Log(self.Description .. "from the " .. self.TargetItem.Description, self)
     if self.TargetItem.instance then
         self.TargetItem.instance:setCollisionsEnabled(false)

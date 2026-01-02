@@ -1113,6 +1113,16 @@ function ActionsOrchestrator:EnqueueActionLinear(action, actor, eventId)
 
     -- If actor was awaiting constraints, kick off execution loop
     if actor:getData('isAwaitingConstraints') then
+        if DEBUG and DEBUG_POI_ORCHESTRATION then
+            local currentAction = actor:getData('currentAction')
+            local isActionExecuting = actor:getData('isActionExecuting')
+            print('[EnqueueActionLinear] RACE_DEBUG KICK_OFF actorId='..actorId..
+                  ' queueSize='..#CURRENT_STORY.actionsQueues[actorId]..
+                  ' currentAction='..tostring(currentAction)..
+                  ' isActionExecuting='..tostring(isActionExecuting)..
+                  ' isAwaitingConstraints=true')
+        end
+
         local firstAction = table.remove(CURRENT_STORY.actionsQueues[actorId], 1)
         firstAction._isReenqueue = true  -- Mark for front-of-queue insertion if re-enqueued
         self:EnqueueAction(firstAction, actor, eventId)
@@ -1373,7 +1383,27 @@ function ActionsOrchestrator:CanActorBeDisplaced(actor, visitedActors)
         return true
     end
 
+    -- Can displace if actor is idle (finished action, waiting for future segment)
+    -- This prevents cross-segment POI deadlocks where actors from earlier segments
+    -- block POIs needed by actors in the current segment
+    local isIdle = not currentAction
+    local hasNoEventRequest = not self.eventRequests[actorId] or not self.eventRequests[actorId].planned
+    local hasDeferredNextEvent = CURRENT_STORY.EventPlanner
+        and CURRENT_STORY.EventPlanner.actorNextEvents
+        and CURRENT_STORY.EventPlanner.actorNextEvents[actorId]
+        and self.currentSegment
+
+    if isIdle and (hasNoEventRequest or hasDeferredNextEvent) then
+        if DEBUG and DEBUG_POI_ORCHESTRATION then
+            print('[CanActorBeDisplaced] Actor '..actorId..' is idle/deferred (no current action, waiting for segment), CAN displace')
+        end
+        return true
+    end
+
     -- Default: cannot displace (actor is actively executing)
+    if DEBUG and DEBUG_POI_ORCHESTRATION then
+        print('[CanActorBeDisplaced] Actor '..actorId..' fell through to default return false - actively executing or unknown state')
+    end
     return false
 end
 

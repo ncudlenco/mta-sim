@@ -798,6 +798,14 @@ function Location:GetNextValidAction(player)
             print('[GetNextValidAction] Actor '..player:getData('id')..' - queue size at entry: '..#q)
         end
 
+        if DEBUG and DEBUG_POI_ORCHESTRATION then
+            local currentAction = player:getData('currentAction')
+            local isActionExecuting = player:getData('isActionExecuting')
+            print('[GetNextValidAction] RACE_DEBUG actorId='..player:getData('id')..
+                  ' queueSize='..#q..' currentAction='..tostring(currentAction)..
+                  ' isActionExecuting='..tostring(isActionExecuting))
+        end
+
         -- New EventPlanner flow: Plan next event when queue is empty
         if #q == 0 then
             eventPlanned = self:PlanNextEventForActor(player)
@@ -816,6 +824,18 @@ function Location:GetNextValidAction(player)
         end
 
         if #q > 0 then
+            -- Don't pop from queue if an action is currently executing
+            -- This prevents race condition where queued actions are lost
+            local currentAction = player:getData('currentAction')
+            if currentAction then
+                if DEBUG and DEBUG_POI_ORCHESTRATION then
+                    print('[GetNextValidAction] Actor '..player:getData('id')..
+                          ' has currentAction='..tostring(currentAction)..', not popping from queue')
+                end
+                lock = false
+                return nil
+            end
+
             -- Check if actor is waiting for POI acquisition
             if player:getData('pendingPOIAction') then
                 if DEBUG then
@@ -838,6 +858,12 @@ function Location:GetNextValidAction(player)
             if DEBUG then
                 print('[GetNextValidAction] Actor '..player:getData('id')..' - popping \''..sssss..'\' from queue (queue size before pop: '..#q..')')
             end
+
+            if DEBUG and DEBUG_POI_ORCHESTRATION then
+                print('[GetNextValidAction] ABOUT_TO_POP actorId='..player:getData('id')..
+                      ' action='..sssss..' traceback:\n'..debug.traceback())
+            end
+
             print('Next action is '..sssss)
             -- Remove action from queue - ActionsOrchestrator handles all POI coordination
             table.remove(q, 1)

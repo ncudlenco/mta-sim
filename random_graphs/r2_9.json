@@ -1,7 +1,7 @@
 {
   "temporal": {
     "starting_actions": {
-      "a0": "a0_1",
+      "a0": "a0_0",
       "a1": "a1_5",
       "a2": "a2_15",
       "a3": "a3_21",
@@ -11,6 +11,10 @@
       "a7": "a7_53",
       "a8": "a8_57",
       "a9": "a9_56"
+    },
+    "a0_0": {
+      "relations": [],
+      "next": "a0_1"
     },
     "a0_1": {
       "relations": [],
@@ -25,6 +29,10 @@
       "next": "a0_4"
     },
     "a0_4": {
+      "relations": [],
+      "next": "a0_5"
+    },
+    "a0_5": {
       "relations": [
         "r8"
       ],
@@ -408,13 +416,13 @@
     },
     "r8": {
       "type": "before",
-      "source": "a0_4",
+      "source": "a0_5",
       "target": "a4_29"
     },
     "r9": {
       "type": "after",
       "source": "a4_29",
-      "target": "a0_4"
+      "target": "a0_5"
     },
     "r10": {
       "type": "before",
@@ -640,6 +648,18 @@
       "Gender": 2
     }
   },
+  "a0_0": {
+    "Action": "TakeOut",
+    "Entities": [
+      "a0",
+      "obj_0"
+    ],
+    "Location": [
+      "bathroom"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
   "a0_1": {
     "Action": "AnswerPhone",
     "Entities": [
@@ -676,6 +696,18 @@
     "Timeframe": null,
     "Properties": {}
   },
+  "a0_4": {
+    "Action": "Stash",
+    "Entities": [
+      "a0",
+      "obj_0"
+    ],
+    "Location": [
+      "bathroom"
+    ],
+    "Timeframe": null,
+    "Properties": {}
+  },
   "obj_0": {
     "Action": "Exists",
     "Entities": [
@@ -689,7 +721,7 @@
       "Type": "MobilePhone"
     }
   },
-  "a0_4": {
+  "a0_5": {
     "Action": "WashHands",
     "Entities": [
       "a0",

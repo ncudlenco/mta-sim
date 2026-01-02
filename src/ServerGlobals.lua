@@ -133,19 +133,19 @@ DISABLE_BETWEEN_POINTS_TELEPORTATION = false
 LOAD_FROM_GRAPH = true
 INPUT_GRAPHS = {
     ------------------------------------------------------------------------------------------------
-    -- 'random_graphs/r2_0.json', -- a static object was recreated in the same room for each actor (in graph)
-    -- 'random_graphs/r2_2.json',
-    -- 'random_graphs/r2_3.json', -- corrected geton benchpress instead of benchpressbar
+    'random_graphs/r2_0.json', -- a static object was recreated in the same room for each actor (in graph)
+    'random_graphs/r2_2.json',
+    'random_graphs/r2_3.json', -- corrected geton benchpress instead of benchpressbar
     'random_graphs/r2_4.json', -- Tries to pick up and give a food object, the receiver tries to Drink the food object
     -- 'random_graphs/r2_5.json', -- Contains answer phone without take out and stash
     -- 'random_graphs/r2_6.json', -- contains smoke and phone chain without take out and stash
     'random_graphs/r2_7.json',
-    -- 'random_graphs/r2_8.json',
-    -- 'random_graphs/r2_9.json',
-    -- 'random_graphs/r2_10.json',
+    'random_graphs/r2_8.json',
+    'random_graphs/r2_9.json',
+    'random_graphs/r2_10.json',
     -- -----------------------------------------------------------------------------------------------
-    -- 'complex_graphs/c10_sync.json',
-    -- 'complex_graphs/incredibly_complex.json',
+    'complex_graphs/c10_sync.json',
+    'complex_graphs/incredibly_complex.json',
     -- -- 'random_graphs/g9.json',
     -- ------------------------------------------------------------------------------------------------
     -- 'imar_graphs/easy_1_P1200253_3.json',

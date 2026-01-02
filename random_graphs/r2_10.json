@@ -324,7 +324,7 @@
     ],
     "Timeframe": null,
     "Properties": {
-      "Type": "BenchPressBar"
+      "Type": "BenchPress"
     }
   },
   "obj_2": {

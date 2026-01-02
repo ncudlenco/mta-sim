@@ -15,6 +15,9 @@ function Stash:Apply()
     table.insert(story.History[self.Performer:getData('id')], self)
     StoryActionBase.Apply(self)
 
+    -- Clear spawnable flag - actor is stashing the object
+    self.Performer:setData('isHoldingSpawnable', false)
+
     local objectType = self.TargetItem.type
 
     -- Find which inventory slot has this item (using lowercase for inventory lookup)

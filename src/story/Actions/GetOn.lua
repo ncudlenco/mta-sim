@@ -16,6 +16,9 @@ function GetOn:Apply()
     -- Disable collisions between this actor and all other peds when getting on furniture
     triggerClientEvent("onDisablePedToPedCollisions", getRootElement(), self.Performer)
 
+    -- Mark actor as on furniture to prevent displacement until GetOff
+    self.Performer:setData('isOnFurniture', true)
+
     if DEBUG then
         outputConsole("GetOn:Apply")
     end

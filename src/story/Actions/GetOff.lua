@@ -13,6 +13,9 @@ function GetOff:Apply()
     table.insert(story.History[self.Performer:getData('id')], self)
     StoryActionBase.Apply(self)
 
+    -- Clear furniture flag - actor is getting off
+    self.Performer:setData('isOnFurniture', false)
+
     -- Cleanup benchpress object if this is interrupting a benchpress workout
     local cleanupData = self.Performer:getData('benchpress_cleanup')
     if cleanupData then

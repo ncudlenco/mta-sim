@@ -1298,6 +1298,14 @@ function ActionsOrchestrator:CanActorBeDisplaced(actor, visitedActors)
         end
     end
 
+    -- Cannot displace if actor is on furniture (GetOn/SitDown without GetOff/StandUp)
+    if actor:getData('isOnFurniture') then
+        if DEBUG and DEBUG_POI_ORCHESTRATION then
+            print('[CanActorBeDisplaced] Actor '..actorId..' is on furniture, cannot displace')
+        end
+        return false
+    end
+
     -- Cannot displace if waiting for interaction
     if actor:getData('isWaitingForInteraction') then
         if DEBUG and DEBUG_POI_ORCHESTRATION then

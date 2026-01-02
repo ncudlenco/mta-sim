@@ -1397,7 +1397,8 @@ function EventPlanner:PlanSpawnableAction(actor, event, segmentId)
     -- 1. Find target location from event.Location (like PlanFixedChainAction does)
     local targetRegion = event.Location and event.Location[1] or ""
     local targetLocation = nil
-    local currentLocationId = self.actorLocations[actorId]
+    -- Use actor's actual locationId (updated by DisplaceActor) instead of potentially stale cache
+    local currentLocationId = actor:getData('locationId') or self.actorLocations[actorId]
     local currentLocation = currentLocationId and self:FindLocationById(currentLocationId)
     -- local isCurrentInteractionOnly = currentLocation and currentLocation.interactionsOnly == true
     -- local hasCurrentEpisodeLinks = currentLocation and currentLocation.episodeLinks and #currentLocation.episodeLinks > 0

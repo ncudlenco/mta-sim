@@ -247,6 +247,10 @@ function Move.destinationReached(player, source)
                             if oldPOI then
                                 oldPOI.isBusy = false
                                 print(player:getData('id').."Location "..oldPOI.Description..' is not busy (actor left)')
+                                -- Wake up any actors waiting in POI queue for the old location
+                                if CURRENT_STORY and CURRENT_STORY.ActionsOrchestrator then
+                                    CURRENT_STORY.ActionsOrchestrator:ProcessPOIQueue(oldLocationId)
+                                end
                             end
                         end
 
@@ -289,6 +293,10 @@ function Move.destinationReached(player, source)
                     if oldPOI then
                         oldPOI.isBusy = false
                         print(player:getData('id').."Location "..oldPOI.Description..' is not busy (actor left)')
+                        -- Wake up any actors waiting in POI queue for the old location
+                        if CURRENT_STORY and CURRENT_STORY.ActionsOrchestrator then
+                            CURRENT_STORY.ActionsOrchestrator:ProcessPOIQueue(oldLocationId)
+                        end
                     end
                 end
 

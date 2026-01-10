@@ -56,9 +56,8 @@ function OnGlobalActionFinished(delay, playerId, storyId, callback, destroyedIte
         actor:setData('currentAction', nil)
 
         -- Publish graph event end (if this was a graph event and action matched)
-        -- Save the completedEventId before clearing it, so we can pass it to NextActions
+        -- Save the completedEventId before clearing it
         local completedEventId = actor:getData('currentGraphEventId')
-        local eventIdForNextAction = completedEventId  -- Preserve for NextAction propagation
 
         if completedEventId and story.EventBus and story:is_a(GraphStory) and lastAction then
             -- Check if the completed action matches the expected graph action for this actor
@@ -191,6 +190,12 @@ function OnGlobalActionFinished(delay, playerId, storyId, callback, destroyedIte
                 end
             end
         else
+            -- DEBUG: Log action and NextLocation state for diagnosis
+            if DEBUG then
+                print("[ActionsGlobals] Actor "..playerId.." - lastAction="..tostring(lastAction.Name)..
+                      ", NextLocation="..tostring(lastAction.NextLocation and lastAction.NextLocation.LocationId or 'nil'))
+            end
+
             if not LOAD_FROM_GRAPH and lastAction.NextAction then
                 if isArray(lastAction.NextAction) then
                     nextAction = PickRandom(lastAction.NextAction)
@@ -200,12 +205,42 @@ function OnGlobalActionFinished(delay, playerId, storyId, callback, destroyedIte
             elseif DEFINING_EPISODES then
                 nextAction = EmptyAction({Performer = player})
             elseif lastAction.NextLocation then
+                if DEBUG then
+                    print("[ActionsGlobals] Actor "..playerId.." - calling GetNextValidAction on "..lastAction.NextLocation.LocationId)
+                end
                 nextAction = lastAction.NextLocation:GetNextValidAction(lastAction.Performer)
+                if DEBUG then
+                    print("[ActionsGlobals] Actor "..playerId.." - GetNextValidAction returned "..tostring(nextAction and nextAction.Name or 'nil'))
+                end
                 if not nextAction then
+                    -- GetNextValidAction returns nil for multiple reasons:
+                    -- 1. PlanNextEventForActor succeeded (normal flow handles kick-off)
+                    -- 2. Actor waiting for POI (pendingPOIAction set)
+                    -- 3. Actor has currentAction set (action executing)
+                    -- 4. PlanNextEventForActor failed silently (needs fallback)
+                    if DEBUG then
+                        print("[ActionsGlobals] Actor "..playerId.." - GetNextValidAction returned nil, trying fallback")
+                    end
+
+                    -- FIX Issue 10: Delegate to ActionsOrchestrator to decide if enqueue is needed
+                    -- ActionsOrchestrator knows its internal state (fulfilled, requests, queues)
+                    -- Note: completedEventId is already defined earlier in function (line 60)
+                    if story:is_a(GraphStory) and story.ActionsOrchestrator then
+                        local nextEventId = completedEventId and story.temporal[completedEventId] and story.temporal[completedEventId].next
+
+                        if nextEventId then
+                            story.ActionsOrchestrator:TryEnqueueEventIfNeeded(actor, nextEventId)
+                        else
+                            if DEBUG then
+                                print("[ActionsGlobals] Actor "..playerId.." - no next event (story complete for this actor)")
+                            end
+                        end
+                    end
                     return
                 end
             else
-                print("[FATAL ERROR][ActionsGlobals] No valid action found for the ped "..actor:getData('id'))
+                print("[FATAL ERROR][ActionsGlobals] No valid action found for the ped "..actor:getData('id')..
+                      " (NextLocation="..tostring(lastAction.NextLocation)..")")
             end
         end
 

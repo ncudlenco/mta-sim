@@ -2107,11 +2107,19 @@ end
 --- If artifact collection is active, waits for it to finish
 --- @param reason string Reason for termination
 function GraphStory:End(reason)
+    -- DIAG Issue 11: Log entry and traceback to identify caller
     if DEBUG then
+        print("[DIAG][GraphStory:End] ENTRY - reason: " .. tostring(reason or "nil"))
+        -- Try to get a traceback to see who called End()
+        local traceback = debug.traceback and debug.traceback("", 2) or "traceback unavailable"
+        print("[DIAG][GraphStory:End] Call stack:\n" .. traceback)
         outputConsole("GraphStory:End - " .. (reason or "story completed"))
     end
 
     if self.Disposed then
+        if DEBUG then
+            print("[DIAG][GraphStory:End] Already disposed, returning early")
+        end
         return
     end
 

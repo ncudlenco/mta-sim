@@ -64,6 +64,17 @@ end
 ---@param eventId string The graph event ID to enqueue
 function ActionsOrchestrator:EnqueueEvent(actor, eventId)
     local actorId = actor:getData('id')
+
+    -- FIX Issue 7: Don't re-enqueue already fulfilled events
+    -- This can happen when PlanNextEventForActor uses stale nextEvents data
+    -- after an event completes but before nextEvents is updated
+    if inList(eventId, self.fulfilled) then
+        if DEBUG then
+            print("[EnqueueEvent] Skipping already-fulfilled event "..eventId.." for actor "..actorId)
+        end
+        return
+    end
+
     local existingRequest = self.eventRequests[actorId]
 
     -- DIAGNOSTIC: Check if we're about to overwrite a request with pendingGraphAction
@@ -120,6 +131,63 @@ function ActionsOrchestrator:EnqueueEvent(actor, eventId)
     end
 
     self:ProcessEventRequests()
+end
+
+--- Conditionally enqueue an event if not already being handled.
+--- This is the fallback mechanism when GetNextValidAction returns nil
+--- but the normal planning flow didn't actually enqueue the next event.
+--- FIX Issue 10: Encapsulates the decision logic in ActionsOrchestrator (SOLID)
+--- @param actor table The actor
+--- @param eventId string The event ID to potentially enqueue
+--- @return boolean True if event was enqueued, false if already handled
+function ActionsOrchestrator:TryEnqueueEventIfNeeded(actor, eventId)
+    local actorId = actor:getData('id')
+
+    -- Check 1: Already fulfilled
+    if inList(eventId, self.fulfilled) then
+        if DEBUG then
+            print("[TryEnqueueEventIfNeeded] Actor "..actorId.." - event "..eventId.." already fulfilled, skipping")
+        end
+        return false
+    end
+
+    -- Check 2: Already enqueued (in eventRequests with performed=false)
+    local existingRequest = self.eventRequests[actorId]
+    if existingRequest and existingRequest.eventId == eventId and not existingRequest.performed then
+        if DEBUG then
+            print("[TryEnqueueEventIfNeeded] Actor "..actorId.." - event "..eventId.." already enqueued, skipping")
+        end
+        return false
+    end
+
+    -- Check 3: Actor already has actions in queue (normal flow working)
+    local queue = CURRENT_STORY.actionsQueues[actorId]
+    if queue and #queue > 0 then
+        if DEBUG then
+            print("[TryEnqueueEventIfNeeded] Actor "..actorId.." - queue not empty ("..#queue.." actions), skipping")
+        end
+        return false
+    end
+
+    -- Check 4: Actor already has an action executing (FIX Issue 11)
+    -- This catches the case where normal flow kicked off execution but:
+    -- - Request was removed by Phase6Cleanup (performed=true)
+    -- - Queue is empty (action popped for execution)
+    -- - But the action is actively running (currentAction is set)
+    local currentAction = actor:getData('currentAction')
+    if currentAction then
+        if DEBUG then
+            print("[TryEnqueueEventIfNeeded] Actor "..actorId.." - action executing ("..currentAction.."), skipping")
+        end
+        return false
+    end
+
+    -- None of the above - normal flow didn't handle it, enqueue as fallback
+    if DEBUG then
+        print("[TryEnqueueEventIfNeeded] Actor "..actorId.." - fallback: enqueuing event "..eventId)
+    end
+    self:EnqueueEvent(actor, eventId)
+    return true
 end
 
 ---Enqueues an action for the actor. Routes to graph-based or linear orchestration.
@@ -527,8 +595,56 @@ function ActionsOrchestrator:CheckSegmentCompletion()
 
         -- Trigger planning for next segment
         self:ProcessEventRequests()
-    elseif DEBUG and DEBUG_ACTIONS_ORCHESTRATOR then
-        print("[ActionsOrchestrator] Segment "..self.currentSegment.." complete, no more segments")
+    else
+        -- FIX Issue 5: Final segment complete, trigger story end
+        -- Previously this just logged and returned, leaving the simulation running indefinitely
+        if DEBUG and DEBUG_ACTIONS_ORCHESTRATOR then
+            print("[ActionsOrchestrator] Segment "..self.currentSegment.." complete, no more segments - checking for story end")
+        end
+
+        -- DIAG Issue 11: Always log when entering final segment completion check
+        if DEBUG then
+            print("[DIAG][CheckSegmentCompletion] Final segment "..self.currentSegment.." complete - checking anyPending")
+            print("[DIAG][CheckSegmentCompletion] eventRequests state:")
+            for actorId, request in pairs(self.eventRequests) do
+                print(string.format("[DIAG][CheckSegmentCompletion]   %s: eventId=%s, performed=%s, planned=%s, isValid=%s",
+                    actorId,
+                    tostring(request.eventId),
+                    tostring(request.performed),
+                    tostring(request.planned),
+                    tostring(request.isValid)))
+            end
+        end
+
+        -- Check if all actors have completed (no pending/unperformed requests)
+        local anyPending = false
+        for actorId, request in pairs(self.eventRequests) do
+            if request and not request.performed then
+                anyPending = true
+                if DEBUG and DEBUG_ACTIONS_ORCHESTRATOR then
+                    print("[ActionsOrchestrator] Actor "..actorId.." still has pending request for event "..tostring(request.eventId))
+                end
+                break
+            end
+        end
+
+        -- DIAG Issue 11: Log final decision
+        if DEBUG then
+            print("[DIAG][CheckSegmentCompletion] anyPending="..tostring(anyPending))
+        end
+
+        if not anyPending then
+            -- DIAG Issue 11: Log before calling End()
+            if DEBUG then
+                print("[DIAG][CheckSegmentCompletion] TRIGGERING STORY END via CURRENT_STORY:End()")
+            end
+            print("[ActionsOrchestrator] All segments and events complete - triggering story end")
+            if CURRENT_STORY and CURRENT_STORY.End then
+                CURRENT_STORY:End()
+            end
+        elseif DEBUG and DEBUG_ACTIONS_ORCHESTRATOR then
+            print("[ActionsOrchestrator] Final segment complete but some requests still pending")
+        end
     end
 end
 
@@ -877,27 +993,42 @@ function ActionsOrchestrator:ExecuteSingularRequests()
     for actorId, request in pairs(self.eventRequests) do
         -- Only execute if: valid, planned, not performed, and has no starts_with/concurrent constraints
         if request.isValid and request.planned and not request.performed then
-            local hasGroupConstraints = Any(request.constraints, function(c)
-                return c.constraint.type == 'starts_with' or c.constraint.type == 'concurent'
-            end)
+            -- FIX: Don't execute if displacement Move is still in progress
+            -- The Move's hasReachedMarker polls the last action in History.
+            -- Executing another action would add it to History, causing hasReachedMarker
+            -- to abort with "[Fatal Error] The last action was not a Move action"
+            local currentAction = request.actor:getData('currentAction')
+            if currentAction == 'Move' then
+                if DEBUG and DEBUG_ACTIONS_ORCHESTRATOR then
+                    print("[ExecuteSingularRequests] Deferring execution for actor "..actorId..
+                          " event "..tostring(request.eventId)..
+                          " - displacement Move still in progress (currentAction=Move)")
+                end
+                -- Skip this request, will retry in next ProcessEventRequests cycle
+                -- after the Move completes and OnGlobalActionFinished clears currentAction
+            else
+                local hasGroupConstraints = Any(request.constraints, function(c)
+                    return c.constraint.type == 'starts_with' or c.constraint.type == 'concurent'
+                end)
 
-            if not hasGroupConstraints then
-                local actor = request.actor
-                local actions = request.actions
-                local eventId = request.eventId
+                if not hasGroupConstraints then
+                    local actor = request.actor
+                    local actions = request.actions
+                    local eventId = request.eventId
 
-                if actions and #actions > 0 then
-                    if DEBUG and DEBUG_ACTIONS_ORCHESTRATOR then
-                        local actionNames = Select(actions, function(a) return a.Name end)
-                        print("[ExecuteSingularRequests] actorId " ..
-                        actorId ..
-                        " " .. " eventId " .. tostring(eventId) .. " - actions: " ..
-                        table.concat(actionNames, ", "))
-                    end
-                    request.performed = true
-                    -- Add all actions to queue (EnqueueActionLinear handles kick-off)
-                    for _, action in ipairs(actions) do
-                        self:EnqueueActionLinear(action, actor, eventId)
+                    if actions and #actions > 0 then
+                        if DEBUG and DEBUG_ACTIONS_ORCHESTRATOR then
+                            local actionNames = Select(actions, function(a) return a.Name end)
+                            print("[ExecuteSingularRequests] actorId " ..
+                            actorId ..
+                            " " .. " eventId " .. tostring(eventId) .. " - actions: " ..
+                            table.concat(actionNames, ", "))
+                        end
+                        request.performed = true
+                        -- Add all actions to queue (EnqueueActionLinear handles kick-off)
+                        for _, action in ipairs(actions) do
+                            self:EnqueueActionLinear(action, actor, eventId)
+                        end
                     end
                 end
             end
@@ -1450,15 +1581,26 @@ function ActionsOrchestrator:DisplaceActor(actor, reason)
         end
     end
 
+    -- FIX: Build set of currently occupied POIs (by locationId, not just isBusy)
+    -- The isBusy flag can be stale when an action completes but the actor is still at the POI
+    local occupiedPOIs = {}
+    for _, ped in ipairs(CURRENT_STORY.CurrentEpisode.peds) do
+        local locId = ped:getData('locationId')
+        if locId and ped ~= actor then  -- Don't exclude our own location
+            occupiedPOIs[locId] = true
+        end
+    end
+
     -- Priority 0: Check if actor has a planned target and it's reachable
     local targetMove = nil
     if CURRENT_STORY.EventPlanner and CURRENT_STORY.EventPlanner.plannedTargets then
         local plannedTarget = CURRENT_STORY.EventPlanner.plannedTargets[actorId]
         if plannedTarget and plannedTarget ~= currentLocationId then
-            -- Find a Move action that leads to the planned target
+            -- Find a Move action that leads to the planned target (must not be busy or occupied)
             local plannedMoveAction = FirstOrDefault(moveActions, function(a)
                 return a.NextLocation and a.NextLocation.LocationId == plannedTarget
                     and not a.NextLocation.isBusy
+                    and not occupiedPOIs[a.NextLocation.LocationId]
             end)
 
             if plannedMoveAction then
@@ -1474,42 +1616,49 @@ function ActionsOrchestrator:DisplaceActor(actor, reason)
 
     -- If no planned target or planned target not reachable, use priority-based selection
     if not targetMove then
-        -- Priority 1: POIs with no actions (pure transit points), same region, not busy, not reserved
+        -- Priority 1: POIs with no actions (pure transit points), same region, not busy, not reserved, not occupied
         local candidates = Where(moveActions, function(a)
             return #a.NextLocation.PossibleActions == 0
                 and a.NextLocation.Region ~= nil and a.NextLocation.Region.name == currentPOI.Region.name
                 and not a.NextLocation.isBusy
                 and not reservedPOIs[a.NextLocation.LocationId]
+                and not occupiedPOIs[a.NextLocation.LocationId]
         end)
 
-        -- Priority 2: POIs not busy and not reserved, same region
+        -- Priority 2: POIs not busy, not reserved, not occupied, same region
         if #candidates == 0 then
             candidates = Where(moveActions, function(a)
-                return not a.NextLocation.isBusy and not reservedPOIs[a.NextLocation.LocationId]
+                return not a.NextLocation.isBusy
+                    and not reservedPOIs[a.NextLocation.LocationId]
+                    and not occupiedPOIs[a.NextLocation.LocationId]
                     and a.NextLocation.Region ~= nil and a.NextLocation.Region.name == currentPOI.Region.name
             end)
         end
 
-        -- Priority 3: POIs with no actions (pure transit points), any region
+        -- Priority 3: POIs with no actions (pure transit points), any region, not occupied
         if #candidates == 0 then
             candidates = Where(moveActions, function(a)
                 return #a.NextLocation.PossibleActions == 0
                     and not a.NextLocation.isBusy
                     and not reservedPOIs[a.NextLocation.LocationId]
+                    and not occupiedPOIs[a.NextLocation.LocationId]
             end)
         end
 
-        -- Priority 4: POIs not busy and not reserved, any region
-        if #candidates == 0 then
-            candidates = Where(moveActions, function(a)
-                return not a.NextLocation.isBusy and not reservedPOIs[a.NextLocation.LocationId]
-            end)
-        end
-
-        -- Fallback: any non-busy POI
+        -- Priority 4: POIs not busy, not reserved, not occupied, any region
         if #candidates == 0 then
             candidates = Where(moveActions, function(a)
                 return not a.NextLocation.isBusy
+                    and not reservedPOIs[a.NextLocation.LocationId]
+                    and not occupiedPOIs[a.NextLocation.LocationId]
+            end)
+        end
+
+        -- Fallback: any non-busy, non-occupied POI
+        if #candidates == 0 then
+            candidates = Where(moveActions, function(a)
+                return not a.NextLocation.isBusy
+                    and not occupiedPOIs[a.NextLocation.LocationId]
             end)
         end
 

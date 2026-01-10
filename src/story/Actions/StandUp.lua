@@ -27,9 +27,15 @@ function StandUp:Apply()
     -- Clear furniture flag - actor is standing up
     self.Performer:setData('isOnFurniture', false)
 
-    StoryActionBase.GetLogger(self, story):Log(self.Description .. "from the " .. self.TargetItem.Description, self)
-    if self.TargetItem.instance then
+    -- Nil-safety: Check TargetItem before accessing properties to prevent silent crashes
+    local targetDescription = self.TargetItem and self.TargetItem.Description or "unknown object"
+    StoryActionBase.GetLogger(self, story):Log(self.Description .. "from the " .. targetDescription, self)
+
+    if self.TargetItem and self.TargetItem.instance then
         self.TargetItem.instance:setCollisionsEnabled(false)
+    elseif not self.TargetItem then
+        print(string.format("[WARNING] StandUp:Apply - TargetItem is nil for actor %s, animation may be incorrect",
+            self.Performer:getData('id')))
     end
 
     local animationLib = "INT_OFFICE"
@@ -58,8 +64,11 @@ function StandUp:Apply()
     end
 
     Timer(function()
-        self.Performer.rotation = self.NextLocation.rotation
+        if self.Performer and isElement(self.Performer) and self.NextLocation then
+            self.Performer.rotation = self.NextLocation.rotation
+        end
     end, duration + 200, 1)
+    -- CRITICAL: OnGlobalActionFinished MUST always be called to prevent deadlocks
     OnGlobalActionFinished(duration + 400, self.Performer:getData('id'), self.Performer:getData('storyId'), function ()
         -- Re-enable collisions between this actor and all other peds after standing up
         triggerClientEvent("onEnablePedToPedCollisions", getRootElement(), self.Performer)

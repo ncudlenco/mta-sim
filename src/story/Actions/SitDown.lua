@@ -82,9 +82,20 @@ function SitDown:Apply()
     table.insert(story.History[self.Performer:getData('id')], self)
     StoryActionBase.Apply(self)
 
-    StoryActionBase.GetLogger(self, story):Log(self.Description .. " on the " .. self.TargetItem.Description, self)
-    if self.TargetItem.instance then
+    local animationLib = "INT_OFFICE"
+    local animationId = "OFF_Sit_In"
+    local duration = 4000
+    local initialDelay = 100 -- Initial delay before starting alignment polling
+
+    -- Nil-safety: Check TargetItem before accessing properties to prevent silent crashes
+    local targetDescription = self.TargetItem and self.TargetItem.Description or "unknown object"
+    StoryActionBase.GetLogger(self, story):Log(self.Description .. " on the " .. targetDescription, self)
+
+    if self.TargetItem and self.TargetItem.instance then
         self.TargetItem.instance:setCollisionsEnabled(false)
+    elseif not self.TargetItem then
+        print(string.format("[WARNING] SitDown:Apply - TargetItem is nil for actor %s, animation may be incorrect",
+            self.Performer:getData('id')))
     end
 
     -- Disable collisions between this actor and all other peds while sitting
@@ -98,11 +109,6 @@ function SitDown:Apply()
         self.Performer.rotation = self.rotation
     end
 
-    local animationLib = "INT_OFFICE"
-    local animationId = "OFF_Sit_In"
-    local duration = 4000
-    local initialDelay = 100 -- Initial delay before starting alignment polling
-
     if self.how == SitDown.eHow.atDesk then
         animationLib = "INT_OFFICE"
         animationId = "OFF_Sit_In"
@@ -112,7 +118,9 @@ function SitDown:Apply()
         animationId = "LOU_In"
         -- Allow rotation to settle in and adjust position
         Timer(function()
-            self.Performer.position = self.Performer.position - self.Performer.matrix.forward * 0.35
+            if self.Performer and isElement(self.Performer) then
+                self.Performer.position = self.Performer.position - self.Performer.matrix.forward * 0.35
+            end
         end, 100, 1)
         duration = 5000
         initialDelay = 150 -- Give extra time for sofa position adjustment
@@ -140,6 +148,7 @@ function SitDown:Apply()
         outputConsole("SitDown:Apply")
     end
 
+    -- CRITICAL: OnGlobalActionFinished MUST always be called to prevent deadlocks
     OnGlobalActionFinished(duration, self.Performer:getData('id'), self.Performer:getData('storyId'))
 end
 

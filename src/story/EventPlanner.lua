@@ -1963,6 +1963,28 @@ function EventPlanner:GetLocationCandidates(event, actor)
         end)
     end
 
+    -- Filter out POIs where object is already taken by another actor
+    -- This prevents the "drink hijacking" bug where a displaced actor loses their drink
+    -- to another actor who picks up from the same POI
+    if event.Action and event.Action:lower() == 'pickup' then
+        local beforeTakenFilter = #candidates
+        candidates = Where(candidates, function(poi)
+            local takenByActor = poi:getData('objectTakenByActor')
+            if takenByActor and takenByActor ~= actorId then
+                if DEBUG then
+                    print(string.format("[GetLocationCandidates] Filtering out POI %s: object already taken by actor %s",
+                        poi.LocationId, tostring(takenByActor)))
+                end
+                return false
+            end
+            return true
+        end)
+        if DEBUG and beforeTakenFilter ~= #candidates then
+            print(string.format("[GetLocationCandidates] After objectTakenByActor filter: %d candidates (filtered out %d)",
+                #candidates, beforeTakenFilter - #candidates))
+        end
+    end
+
     if DEBUG then
         local locationIds = {}
         for _, poi in ipairs(candidates) do

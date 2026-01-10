@@ -688,7 +688,10 @@ function Location:PlanNextEventForActor(player)
         end
     end
 
-    if existingRequest then
+    -- FIX Issue 9: Only skip planning if request exists AND is not already performed
+    -- After an action completes, request.performed=true but request stays in eventRequests
+    -- Without this check, we'd skip planning the next event (e.g., a1_17 StandUp after a1_16 SitDown)
+    if existingRequest and not existingRequest.performed then
         CURRENT_STORY.ActionsOrchestrator:ProcessEventRequests()
         return true
     end
@@ -737,18 +740,16 @@ function Location:PlanNextEventForActor(player)
     return false
 end
 
-lock = false
+-- NOTE: Removed broken global lock implementation
+-- The while lock do Timer() end pattern was causing infinite loops because:
+-- 1. Timer() doesn't block in MTA Lua - it creates an async timer and returns immediately
+-- 2. If any error occurred before lock = false, the lock would stay stuck forever
+-- 3. Since Lua is single-threaded, no lock is needed for re-entrancy protection
 
 function Location:GetNextValidAction(player)
     if CURRENT_STORY and CURRENT_STORY.Disposed then
         return EmptyAction({Performer = player})
     end
-
-    --wait
-    while lock do
-        Timer(function()end, 500, 1)
-    end
-    lock = true
 
     if DEBUG then
         print("Location:GetNextValidAction")
@@ -778,7 +779,6 @@ function Location:GetNextValidAction(player)
             outputConsole("Location:GetNextValidAction - max story actions reached. Ending the current story")
         end
         table.insert(CURRENT_STORY.lastEvents[player:getData('id')], {id = "$@!end_story!@$"})
-        lock = false
         return EndStory(player)
     end
 
@@ -818,7 +818,6 @@ function Location:GetNextValidAction(player)
                 if DEBUG then
                     print('[GetNextValidAction] Actor '..player:getData('id')..' - planning succeeded, returning nil to let action loop start')
                 end
-                lock = false
                 return nil
             end
         end
@@ -832,7 +831,6 @@ function Location:GetNextValidAction(player)
                     print('[GetNextValidAction] Actor '..player:getData('id')..
                           ' has currentAction='..tostring(currentAction)..', not popping from queue')
                 end
-                lock = false
                 return nil
             end
 
@@ -841,7 +839,6 @@ function Location:GetNextValidAction(player)
                 if DEBUG then
                     print('[GetNextValidAction] Actor '..player:getData('id')..' waiting for POI, not popping from queue')
                 end
-                lock = false
                 return nil
             end
 
@@ -888,7 +885,6 @@ function Location:GetNextValidAction(player)
                 if DEBUG then
                     print("[GetNextValidAction] Actor "..actorId.." current event "..tostring(request.eventId).." still executing")
                 end
-                lock = false
                 return nil
             end
 
@@ -898,7 +894,6 @@ function Location:GetNextValidAction(player)
                 print("[GetNextValidAction] No next event for "..actorId..". Ending story")
             end
             table.insert(CURRENT_STORY.lastEvents[actorId], {id = "$@!end_story!@$"})
-            lock = false
             return EndStory(player)
         end
 
@@ -906,7 +901,6 @@ function Location:GetNextValidAction(player)
         if DEBUG then
             print("[GetNextValidAction] Actor "..actorId.." waiting for constraints, staying idle")
         end
-        lock = false
         return nil
     else
         if DEBUG then
@@ -933,7 +927,6 @@ function Location:GetNextValidAction(player)
             print(player:getData('id').."Location "..next.NextLocation.Description..' will be busy (reserved)')
         end
     end
-    lock = false
     next.Performer = player
     return next
 end

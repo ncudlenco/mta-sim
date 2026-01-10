@@ -74,10 +74,24 @@ function PickUp:Apply()
     table.insert(pickedObjects, {self.TargetItem.ObjectId, self.TargetItem.Description, chainId, locationId})
     self.Performer:setData('pickedObjects', pickedObjects)
 
-    OnGlobalActionFinished(time, self.Performer:getData('id'), self.Performer:getData('storyId'), function()
+    -- Store NextLocation reference for use in callback (self may not be accessible)
+    local pickupPOI = self.NextLocation
+    local performerId = self.Performer:getData('id')
+
+    OnGlobalActionFinished(time, performerId, self.Performer:getData('storyId'), function()
         attachElementToBone(self.TargetItem.instance, self.Performer, self.hand,
                         self.TargetItem.PosOffset.x, self.TargetItem.PosOffset.y, self.TargetItem.PosOffset.z,
                         self.TargetItem.RotOffset.x, self.TargetItem.RotOffset.y, self.TargetItem.RotOffset.z)
+
+        -- FIX Issue 4: Mark the POI's object as taken to prevent other actors from picking it up
+        -- This prevents the "drink hijacking" bug where a displaced actor loses their drink
+        -- to another actor who picks up from the same POI
+        if pickupPOI then
+            pickupPOI:setData('objectTakenByActor', performerId)
+            if DEBUG then
+                print("[PickUp] Marked POI "..pickupPOI.LocationId.." object as taken by "..performerId)
+            end
+        end
     end)
 
 end

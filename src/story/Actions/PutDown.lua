@@ -68,12 +68,14 @@ function PutDown:RemovePickedObject()
     end
 
     local found = false
+    local originalLocationId = nil
     for i, value in ipairs(pickedObjects) do
         if value[1] == self.TargetItem.ObjectId then
+            originalLocationId = value[4]  -- LocationId is stored as 4th element
             table.remove(pickedObjects, i)
             found = true
             if DEBUG then
-                print("[RemovePickedObject] Found and removed by ObjectId")
+                print("[RemovePickedObject] Found and removed by ObjectId, originalLocationId="..tostring(originalLocationId))
             end
             break
         end
@@ -84,4 +86,18 @@ function PutDown:RemovePickedObject()
     end
 
     self.Performer:setData('pickedObjects', pickedObjects)
+
+    -- FIX Issue 4: Clear the objectTakenByActor flag from the original pickup POI
+    -- This makes the POI's object available again for other actors
+    if originalLocationId and CURRENT_STORY and CURRENT_STORY.CurrentEpisode then
+        local originalPOI = FirstOrDefault(CURRENT_STORY.CurrentEpisode.POI, function(poi)
+            return poi.LocationId == originalLocationId
+        end)
+        if originalPOI then
+            originalPOI:setData('objectTakenByActor', nil)
+            if DEBUG then
+                print("[PutDown] Cleared objectTakenByActor from POI "..originalLocationId)
+            end
+        end
+    end
 end

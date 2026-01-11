@@ -195,11 +195,27 @@ end
 ---@param actor table The actor performing the action
 ---@param eventId string|nil Optional eventId to associate with this action (defaults to lookup from lastEvents)
 function ActionsOrchestrator:EnqueueAction(action, actor, eventId)
-    CURRENT_STORY.CameraHandler:clearFocusRequests(actor:getData('id'))
+    local actorId = actor:getData('id')
+
+    -- DEBUG TRACE: Entry point - always log for furniture actions
+    if action.Name == 'SitDown' or action.Name == 'Sleep' then
+        local actorPos = actor.position
+        print(string.format("[MIDAIR_DEBUG][EnqueueAction] ENTRY actorId=%s action=%s eventId=%s",
+            actorId, action.Name, tostring(eventId)))
+        print(string.format("[MIDAIR_DEBUG][EnqueueAction] actorId=%s locationId=%s pendingPOIAction=%s",
+            actorId, tostring(actor:getData('locationId')), tostring(actor:getData('pendingPOIAction'))))
+        print(string.format("[MIDAIR_DEBUG][EnqueueAction] actorId=%s _isReenqueue=%s NextLocation=%s",
+            actorId, tostring(action._isReenqueue), tostring(action.NextLocation and action.NextLocation.LocationId or 'nil')))
+        if actorPos then
+            print(string.format("[MIDAIR_DEBUG][EnqueueAction] actorId=%s position=(%.1f, %.1f, %.1f)",
+                actorId, actorPos.x, actorPos.y, actorPos.z))
+        end
+    end
+
+    CURRENT_STORY.CameraHandler:clearFocusRequests(actorId)
 
     -- If using EventPlanner and action was popped from queue, execute directly without re-validation
     if CURRENT_STORY.eventPlanner and CURRENT_STORY:is_a(GraphStory) then
-        local actorId = actor:getData('id')
 
         -- Check if action needs POI acquisition before execution
         if action.NextLocation then
@@ -214,6 +230,12 @@ function ActionsOrchestrator:EnqueueAction(action, actor, eventId)
                 isSameArea = currentBase == targetBase
             end
 
+            -- DEBUG TRACE: POI check result for furniture actions
+            if action.Name == 'SitDown' or action.Name == 'Sleep' then
+                print(string.format("[MIDAIR_DEBUG][EnqueueAction] POI_CHECK actorId=%s actorLocation=%s requiredLocation=%s isSameArea=%s",
+                    actorId, tostring(actorLocation), tostring(requiredLocation), tostring(isSameArea)))
+            end
+
             if not isSameArea then
                 if DEBUG and DEBUG_ACTIONS_ORCHESTRATOR then
                     print("[EnqueueAction] Actor "..actorId.." at wrong location (at "..tostring(actorLocation)..", needs "..tostring(requiredLocation)..")")
@@ -222,12 +244,27 @@ function ActionsOrchestrator:EnqueueAction(action, actor, eventId)
                     end
                 end
 
+                -- DEBUG TRACE: POI enqueue for furniture actions
+                if action.Name == 'SitDown' or action.Name == 'Sleep' then
+                    print(string.format("[MIDAIR_DEBUG][EnqueueAction] ENQUEUE_FOR_POI actorId=%s - actor NOT at required location, enqueueing", actorId))
+                end
+
                 -- Set flag to prevent premature queue popping
                 actor:setData('pendingPOIAction', true)
 
                 -- Enqueue actor for target POI - queue system will handle displacement and execution
                 self:EnqueueForPOI(actor, action, eventId, requiredLocation)
                 return
+            else
+                -- DEBUG TRACE: Actor at correct location
+                if action.Name == 'SitDown' or action.Name == 'Sleep' then
+                    print(string.format("[MIDAIR_DEBUG][EnqueueAction] AT_CORRECT_LOC actorId=%s - proceeding to execution", actorId))
+                end
+            end
+        else
+            -- DEBUG TRACE: No NextLocation
+            if action.Name == 'SitDown' or action.Name == 'Sleep' then
+                print(string.format("[MIDAIR_DEBUG][EnqueueAction] NO_NEXT_LOCATION actorId=%s - action.NextLocation is nil!", actorId))
             end
         end
 
@@ -237,6 +274,10 @@ function ActionsOrchestrator:EnqueueAction(action, actor, eventId)
         if request and request.performed then
             if DEBUG and DEBUG_ACTIONS_ORCHESTRATOR then
                 print("[EnqueueAction] Action popped from queue, executing directly: "..action.Name)
+            end
+            -- DEBUG TRACE: Executing via request.performed path
+            if action.Name == 'SitDown' or action.Name == 'Sleep' then
+                print(string.format("[MIDAIR_DEBUG][EnqueueAction] EXEC_VIA_PERFORMED actorId=%s - request.performed=true, triggering execution", actorId))
             end
             self:TriggerActionExecution(actor, action, eventId)
             return
@@ -249,6 +290,11 @@ function ActionsOrchestrator:EnqueueAction(action, actor, eventId)
             action._isReenqueue = nil  -- Clear flag
             if DEBUG and DEBUG_ACTIONS_ORCHESTRATOR then
                 print("[EnqueueAction] Re-enqueued action, executing directly: "..action.Name)
+            end
+            -- DEBUG TRACE: Executing via _isReenqueue path - this is the suspected bug path
+            if action.Name == 'SitDown' or action.Name == 'Sleep' then
+                print(string.format("[MIDAIR_DEBUG][EnqueueAction] EXEC_VIA_REENQUEUE actorId=%s - _isReenqueue=true, triggering execution DIRECTLY", actorId))
+                print(string.format("[MIDAIR_DEBUG][EnqueueAction] WARNING: If actor is at wrong location, this will cause mid-air sit/sleep!"))
             end
             self:TriggerActionExecution(actor, action, eventId)
             return
@@ -557,24 +603,40 @@ function ActionsOrchestrator:CheckSegmentCompletion()
         return
     end
 
-    -- Check if ALL events in current segment are fulfilled (not just enqueued ones)
-    local allFulfilled = true
+    -- Check if ALL events in current segment are fulfilled OR blocked on POI
+    -- POI-blocked events shouldn't prevent segment advancement (allows next segment to release POI)
+    local allFulfilledOrPOIBlocked = true
+    local poiBlockedEvents = {}
+
     for _, eventId in ipairs(currentSegmentData.events) do
         if not inList(eventId, self.fulfilled) then
-            if DEBUG and DEBUG_ACTIONS_ORCHESTRATOR then
-                print("[CheckSegmentCompletion] Unfulfilled segment event: " .. eventId)
+            -- Check if this event's actor is POI-blocked
+            local actorId = self:GetActorForEvent(eventId)
+            local actor = actorId and self:GetActorById(actorId)
+
+            if actor and actor:getData('pendingPOIAction') then
+                -- This event is waiting for POI - don't block segment completion
+                table.insert(poiBlockedEvents, eventId)
+                if DEBUG and DEBUG_ACTIONS_ORCHESTRATOR then
+                    print("[CheckSegmentCompletion] Event " .. eventId .. " is POI-blocked (actor "..actorId.."), not blocking segment completion")
+                end
+            else
+                -- Event is unfulfilled and NOT POI-blocked - blocks segment completion
+                if DEBUG and DEBUG_ACTIONS_ORCHESTRATOR then
+                    print("[CheckSegmentCompletion] Unfulfilled segment event: " .. eventId)
+                end
+                allFulfilledOrPOIBlocked = false
+                break
             end
-            allFulfilled = false
-            break
         end
     end
 
     if DEBUG and DEBUG_ACTIONS_ORCHESTRATOR then
-        print("[CheckSegmentCompletion] allFulfilled=" .. tostring(allFulfilled))
+        print("[CheckSegmentCompletion] allFulfilledOrPOIBlocked=" .. tostring(allFulfilledOrPOIBlocked) .. ", poiBlockedCount=" .. #poiBlockedEvents)
     end
 
-    if not allFulfilled then
-        return  -- Current segment still has pending enqueued events
+    if not allFulfilledOrPOIBlocked then
+        return  -- Current segment still has pending events that are NOT POI-blocked
     end
 
     -- Current segment complete - advance to next sequential segment
@@ -646,6 +708,27 @@ function ActionsOrchestrator:CheckSegmentCompletion()
             print("[ActionsOrchestrator] Final segment complete but some requests still pending")
         end
     end
+end
+
+---Gets the actor ID for an event from eventRequests.
+---@param eventId string The event ID
+---@return string|nil actorId The actor ID, or nil if not found
+function ActionsOrchestrator:GetActorForEvent(eventId)
+    for actorId, request in pairs(self.eventRequests) do
+        if request.eventId == eventId then
+            return actorId
+        end
+    end
+    return nil
+end
+
+---Gets an actor ped by their ID.
+---@param actorId string The actor ID
+---@return table|nil actor The actor ped, or nil if not found
+function ActionsOrchestrator:GetActorById(actorId)
+    if not CURRENT_STORY or not CURRENT_STORY.CurrentEpisode then return nil end
+    return FirstOrDefault(CURRENT_STORY.CurrentEpisode.peds,
+        function(ped) return ped:getData('id') == actorId end)
 end
 
 ---Collects all starts_with constraint groups that are ready to execute.
@@ -1266,6 +1349,26 @@ function ActionsOrchestrator:EnqueueActionLinear(action, actor, eventId)
 end
 
 function ActionsOrchestrator:TriggerActionExecution(actor, action, eventId)
+    local actorId = actor:getData('id')
+
+    -- DEBUG TRACE: Entry point for furniture action execution
+    if action.Name == 'SitDown' or action.Name == 'Sleep' then
+        local actorPos = actor.position
+        local actorLocationId = actor:getData('locationId')
+        local targetLocationId = action.NextLocation and action.NextLocation.LocationId or 'nil'
+        print(string.format("[MIDAIR_DEBUG][TriggerActionExecution] ENTRY actorId=%s action=%s eventId=%s",
+            actorId, action.Name, tostring(eventId)))
+        print(string.format("[MIDAIR_DEBUG][TriggerActionExecution] actorId=%s locationId=%s targetLocation=%s",
+            actorId, tostring(actorLocationId), tostring(targetLocationId)))
+        if actorPos then
+            print(string.format("[MIDAIR_DEBUG][TriggerActionExecution] actorId=%s position=(%.1f, %.1f, %.1f)",
+                actorId, actorPos.x, actorPos.y, actorPos.z))
+        end
+        -- Log callstack to trace where this was triggered from
+        print(string.format("[MIDAIR_DEBUG][TriggerActionExecution] actorId=%s traceback:\n%s",
+            actorId, debug.traceback()))
+    end
+
     -- Clear awaiting constraints flag when action execution begins
     actor:setData('isAwaitingConstraints', false)
 
@@ -1279,12 +1382,12 @@ function ActionsOrchestrator:TriggerActionExecution(actor, action, eventId)
     if shouldAwaitContextSwitch then
         actor:setData('isAwaitingContextSwitch', true)
         if DEBUG and DEBUG_ACTIONS_ORCHESTRATOR then
-            print("[EnqueueActionLinear] actorId ".. actor:getData('id').." - action "..action.Name..': '..action:GetDynamicString().." - awaiting context switch")
+            print("[EnqueueActionLinear] actorId ".. actorId.." - action "..action.Name..': '..action:GetDynamicString().." - awaiting context switch")
         end
-        self.actionQueue[actor:getData('id')] = { action = action, eventId = eventId }
+        self.actionQueue[actorId] = { action = action, eventId = eventId }
         -- Background actors should not request camera focus
         if not actor:getData("isbackgroundactor") then
-            CURRENT_STORY.CameraHandler:requestFocus(actor:getData('id'))
+            CURRENT_STORY.CameraHandler:requestFocus(actorId)
         end
     else
         self:PublishActionStarted(actor, action, eventId)
@@ -1918,6 +2021,19 @@ function ActionsOrchestrator:ProcessPOIQueue(locationId)
         -- Insert corrective Move if actor has been displaced in the meantime?
         local currentLocation = actor:getData('locationId')
         if currentLocation ~= locationId and first.action.Name ~= 'Move' then
+            -- DEBUG TRACE: Corrective move needed for furniture actions
+            if first.action.Name == 'SitDown' or first.action.Name == 'Sleep' then
+                local actorPos = actor.position
+                print(string.format("[MIDAIR_DEBUG][ProcessPOIQueue] CORRECTIVE_MOVE_NEEDED actorId=%s action=%s",
+                    actor:getData('id'), first.action.Name))
+                print(string.format("[MIDAIR_DEBUG][ProcessPOIQueue] actorId=%s currentLocation=%s targetLocation=%s",
+                    actor:getData('id'), tostring(currentLocation), locationId))
+                if actorPos then
+                    print(string.format("[MIDAIR_DEBUG][ProcessPOIQueue] actorId=%s position=(%.1f, %.1f, %.1f)",
+                        actor:getData('id'), actorPos.x, actorPos.y, actorPos.z))
+                end
+            end
+
             local currentPOI = FirstOrDefault(CURRENT_STORY.CurrentEpisode.POI,
                 function(poi) return poi.LocationId == currentLocation end)
 
@@ -1934,6 +2050,12 @@ function ActionsOrchestrator:ProcessPOIQueue(locationId)
                     print(string.format("[CONTAMINATION_CHECK][ProcessPOIQueue_Insert] actorId=%s action=%s first.action.eventId=%s first.eventId=%s locationId=%s",
                         actor:getData('id'), first.action.Name, tostring(first.action.eventId), tostring(first.eventId), locationId))
 
+                    -- DEBUG TRACE: Re-queueing furniture action after corrective move
+                    if first.action.Name == 'SitDown' or first.action.Name == 'Sleep' then
+                        print(string.format("[MIDAIR_DEBUG][ProcessPOIQueue] REQUEUE_ACTION actorId=%s action=%s - inserting at front of queue",
+                            actor:getData('id'), first.action.Name))
+                    end
+
                     -- Queue original action at FRONT to maintain execution order
                     table.insert(CURRENT_STORY.actionsQueues[actor:getData('id')], 1, first.action)
 
@@ -1949,6 +2071,17 @@ function ActionsOrchestrator:ProcessPOIQueue(locationId)
             end
         else
             -- Actor already at correct location, execute immediately
+            -- DEBUG TRACE: Furniture action executing at correct location
+            if first.action.Name == 'SitDown' or first.action.Name == 'Sleep' then
+                local actorPos = actor.position
+                print(string.format("[MIDAIR_DEBUG][ProcessPOIQueue] AT_CORRECT_LOCATION actorId=%s action=%s locationId=%s",
+                    actor:getData('id'), first.action.Name, locationId))
+                if actorPos then
+                    print(string.format("[MIDAIR_DEBUG][ProcessPOIQueue] actorId=%s position=(%.1f, %.1f, %.1f)",
+                        actor:getData('id'), actorPos.x, actorPos.y, actorPos.z))
+                end
+            end
+
             -- CONTAMINATION CHECK: Verify action ownership before direct execution
             print(string.format("[CONTAMINATION_CHECK][ProcessPOIQueue_Execute] actorId=%s action=%s first.action.eventId=%s first.eventId=%s locationId=%s",
                 actor:getData('id'), first.action.Name, tostring(first.action.eventId), tostring(first.eventId), locationId))

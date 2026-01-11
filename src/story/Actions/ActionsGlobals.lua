@@ -208,7 +208,11 @@ function OnGlobalActionFinished(delay, playerId, storyId, callback, destroyedIte
                 if DEBUG then
                     print("[ActionsGlobals] Actor "..playerId.." - calling GetNextValidAction on "..lastAction.NextLocation.LocationId)
                 end
-                nextAction = lastAction.NextLocation:GetNextValidAction(lastAction.Performer)
+                -- CRITICAL FIX: Use `actor` instead of `lastAction.Performer`.
+                -- Action instances are shared between actors. When another actor's action is planned,
+                -- lastAction.Performer gets overwritten. Using `actor` (the correct parameter) ensures
+                -- GetNextValidAction processes the correct actor's queue.
+                nextAction = lastAction.NextLocation:GetNextValidAction(actor)
                 if DEBUG then
                     print("[ActionsGlobals] Actor "..playerId.." - GetNextValidAction returned "..tostring(nextAction and nextAction.Name or 'nil'))
                 end

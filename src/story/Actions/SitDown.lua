@@ -67,6 +67,22 @@ local function waitForAlignment(performer, targetPosition, targetRotation, anima
             end
         end
 
+        -- DEBUG TRACE: Log which actor ACTUALLY receives the animation
+        local performerPos = performer.position
+        local actorId = performer:getData('id')
+        print(string.format("[MIDAIR_DEBUG][waitForAlignment] ANIMATION actorId=%s animLib=%s animId=%s",
+            actorId, animationLib, animationId))
+        if performerPos and targetPosition then
+            print(string.format("[MIDAIR_DEBUG][waitForAlignment] actorId=%s performer.pos=(%.1f, %.1f, %.1f) target.pos=(%.1f, %.1f, %.1f)",
+                actorId, performerPos.x, performerPos.y, performerPos.z,
+                targetPosition.x, targetPosition.y, targetPosition.z))
+            local dist = math.abs((performerPos - targetPosition).length)
+            print(string.format("[MIDAIR_DEBUG][waitForAlignment] actorId=%s distance=%.2f", actorId, dist))
+            if dist > 3.0 then
+                print(string.format("[MIDAIR_DEBUG][waitForAlignment] WARNING: Actor %s is %.1f units from target - MID-AIR ANIMATION!", actorId, dist))
+            end
+        end
+
         -- Start the sitting animation
         performer:setAnimation(animationLib, animationId, -1, false, true, false, true)
     else
@@ -78,9 +94,42 @@ local function waitForAlignment(performer, targetPosition, targetRotation, anima
 end
 
 function SitDown:Apply()
+    local actorId = self.Performer:getData('id')
+    local actorPos = self.Performer.position
+    local actorLocationId = self.Performer:getData('locationId')
+    local targetLocationId = self.NextLocation and self.NextLocation.LocationId or 'nil'
+
+    -- DEBUG TRACE: Capture full state at SitDown execution
+    print(string.format("[MIDAIR_DEBUG][SitDown:Apply] EXECUTING actorId=%s", actorId))
+    print(string.format("[MIDAIR_DEBUG][SitDown:Apply] actorId=%s locationId=%s targetLocation=%s",
+        actorId, tostring(actorLocationId), tostring(targetLocationId)))
+    if actorPos then
+        print(string.format("[MIDAIR_DEBUG][SitDown:Apply] actorId=%s position=(%.1f, %.1f, %.1f)",
+            actorId, actorPos.x, actorPos.y, actorPos.z))
+    end
+    if self.TargetItem then
+        local targetPos = self.TargetItem.instance and self.TargetItem.instance.position
+        if targetPos then
+            print(string.format("[MIDAIR_DEBUG][SitDown:Apply] actorId=%s targetItem.position=(%.1f, %.1f, %.1f)",
+                actorId, targetPos.x, targetPos.y, targetPos.z))
+            local dist = math.abs((actorPos - targetPos).length)
+            print(string.format("[MIDAIR_DEBUG][SitDown:Apply] actorId=%s distance_to_target=%.2f", actorId, dist))
+            if dist > 3.0 then
+                print(string.format("[MIDAIR_DEBUG][SitDown:Apply] WARNING: Actor %s is %.1f units away from furniture - MID-AIR SIT DETECTED!", actorId, dist))
+            end
+        end
+    else
+        print(string.format("[MIDAIR_DEBUG][SitDown:Apply] WARNING: actorId=%s TargetItem is nil!", actorId))
+    end
+
     local story = GetStory(self.Performer)
-    table.insert(story.History[self.Performer:getData('id')], self)
+    table.insert(story.History[actorId], self)
     StoryActionBase.Apply(self)
+
+    -- CRITICAL FIX: Capture performer before any Timers to prevent cross-actor contamination.
+    -- Action instances are shared between actors. When another actor's action is planned,
+    -- self.Performer gets overwritten. Capturing here ensures Timer closures use the correct actor.
+    local performer = self.Performer
 
     local animationLib = "INT_OFFICE"
     local animationId = "OFF_Sit_In"
@@ -118,8 +167,8 @@ function SitDown:Apply()
         animationId = "LOU_In"
         -- Allow rotation to settle in and adjust position
         Timer(function()
-            if self.Performer and isElement(self.Performer) then
-                self.Performer.position = self.Performer.position - self.Performer.matrix.forward * 0.35
+            if performer and isElement(performer) then
+                performer.position = performer.position - performer.matrix.forward * 0.35
             end
         end, 100, 1)
         duration = 5000
@@ -128,12 +177,12 @@ function SitDown:Apply()
 
     -- Wait for initial engine updates, then start polling for alignment
     Timer(function()
-        if self.Performer and isElement(self.Performer) and self.NextLocation then
+        if performer and isElement(performer) and self.NextLocation then
             if DEBUG then
                 outputConsole("SitDown:Apply - Starting alignment polling")
             end
             waitForAlignment(
-                self.Performer,
+                performer,
                 self.NextLocation.position,
                 self.NextLocation.rotation,
                 animationLib,

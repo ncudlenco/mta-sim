@@ -812,14 +812,8 @@ function Location:GetNextValidAction(player)
             if DEBUG then
                 print('[GetNextValidAction] Actor '..player:getData('id')..' - queue size after planning: '..#q..', eventPlanned: '..tostring(eventPlanned))
             end
-            -- If planning succeeded, return nil to let EnqueueActionLinear handle kickoff
-            -- Don't pop from queue in same call that did planning - prevents overlapping execution
-            if eventPlanned then
-                if DEBUG then
-                    print('[GetNextValidAction] Actor '..player:getData('id')..' - planning succeeded, returning nil to let action loop start')
-                end
-                return nil
-            end
+            -- NOTE: Removed IdleAction return here - it was blocking queue pops when planning added actions
+            -- The isAwaitingConstraints mechanism handles kick-off when constraints are satisfied
         end
 
         if #q > 0 then
@@ -837,8 +831,9 @@ function Location:GetNextValidAction(player)
             -- Check if actor is waiting for POI acquisition
             if player:getData('pendingPOIAction') then
                 if DEBUG then
-                    print('[GetNextValidAction] Actor '..player:getData('id')..' waiting for POI, not popping from queue')
+                    print('[GetNextValidAction] Actor '..player:getData('id')..' waiting for POI, returning nil')
                 end
+                -- Return nil - ProcessPOIQueue will call TriggerActionExecution when POI is acquired
                 return nil
             end
 
@@ -865,6 +860,21 @@ function Location:GetNextValidAction(player)
             -- Remove action from queue - ActionsOrchestrator handles all POI coordination
             table.remove(q, 1)
             next._isReenqueue = true  -- Mark for front-of-queue insertion if re-enqueued
+
+            -- DEBUG TRACE: Log when furniture actions get _isReenqueue set
+            if sssss == 'SitDown' or sssss == 'Sleep' then
+                local actorPos = player.position
+                print(string.format("[MIDAIR_DEBUG][GetNextValidAction] SETTING_REENQUEUE actorId=%s action=%s",
+                    player:getData('id'), sssss))
+                print(string.format("[MIDAIR_DEBUG][GetNextValidAction] actorId=%s locationId=%s NextLocation=%s",
+                    player:getData('id'), tostring(player:getData('locationId')),
+                    tostring(next.NextLocation and next.NextLocation.LocationId or 'nil')))
+                if actorPos then
+                    print(string.format("[MIDAIR_DEBUG][GetNextValidAction] actorId=%s position=(%.1f, %.1f, %.1f)",
+                        player:getData('id'), actorPos.x, actorPos.y, actorPos.z))
+                end
+            end
+
             if DEBUG then
                 print('[GetNextValidAction] Actor '..player:getData('id')..' - queue size after pop: '..#q)
             end
@@ -897,9 +907,10 @@ function Location:GetNextValidAction(player)
             return EndStory(player)
         end
 
-        -- Has next event but waiting for constraints - return nil, stay idle
+        -- Has next event but waiting for constraints - return nil
+        -- EnqueueActionLinear will kick off execution when constraints are satisfied
         if DEBUG then
-            print("[GetNextValidAction] Actor "..actorId.." waiting for constraints, staying idle")
+            print("[GetNextValidAction] Actor "..actorId.." waiting for constraints, returning nil")
         end
         return nil
     else

@@ -21,22 +21,22 @@ DEBUG_TEMPLATES = false
 DEBUG_LOCATION_CANDIDATES = false
 DEBUG_METAEPISODE = false
 DEBUG_PATHFINDING = false
-DEBUG_VALIDATION = true
+DEBUG_VALIDATION = false
 DEBUG_ACTION_VALIDATION = false
 DEBUG_LOGGER = false
 DEBUG_SCREENSHOTS = false
 -- Screenshot module debugging
 if setScreenshotModuleDebug then setScreenshotModuleDebug(DEBUG_SCREENSHOTS) end
 -- Screenshot capture mode: set true for VMware (captures full screen instead of window cropping)
-SCREENSHOT_CAPTURE_FULL_SCREEN = false
+SCREENSHOT_CAPTURE_FULL_SCREEN = true
 if setCaptureFullScreen then setCaptureFullScreen(SCREENSHOT_CAPTURE_FULL_SCREEN) end
 DEBUG_OBJECTS = false
 DEBUG_EPISODE = false
 DEBUG_ACTIONS = false
 DEBUG_CHAIN_LINKED_ACTIONS = false
 DEBUG_CAMERA = false
-DEBUG_ACTIONS_ORCHESTRATOR = true
-DEBUG_POI_ORCHESTRATION = true
+DEBUG_ACTIONS_ORCHESTRATOR = false
+DEBUG_POI_ORCHESTRATION = false
 --- Debug flag for spatial validation logging
 DEBUG_SPATIAL = false
 --- Debug flag for episode group detection and cross-group teleportation logging
@@ -46,7 +46,7 @@ DEBUG_CAMERA_VALIDATION = false   -- Enable detailed logging of camera position 
 DEBUG_WAIT_SYNC = false -- Enable detailed logging of Wait polling conditions (proximity, location, interaction)
 
 -- Artifact Collection Configuration
-ARTIFACT_COLLECTION_ENABLED = false -- Enable/disable artifact collection system
+ARTIFACT_COLLECTION_ENABLED = true -- Enable/disable artifact collection system
 ARTIFACT_FRAMES_PER_SECOND = 30 -- Frame collection rate (1, 2, 5, 10, 30 fps)
 ARTIFACT_OUTPUT_PATH = "data_out" -- Base path for artifact output
 ARTIFACT_COLLECTION_TIMEOUT = 10000 -- Max wait time for artifact collection (ms)
@@ -132,20 +132,53 @@ DISABLE_BETWEEN_POINTS_TELEPORTATION = false
 
 LOAD_FROM_GRAPH = true
 INPUT_GRAPHS = {
+    ---------phase 0--------------------------------------------------------------------------------
+    --- fix the random generator's geton benchpressbar instead of benchpress
+    --- fix the random generator's smoke and phone chain without take out and stash
+    --- fix the random generator's Drink from picked up food object
+    --- start generation
+    --- write down a technical report of the whole system
+    --- -----phase 1--------------------------------------------------------------------------------------------
+    --- add more cameras in the gyms
+    --- add more pois in the link regions and uncomment the code that prevents actors to occupy link pois
+    --- remove the spawnable objects from house9
+    --- fix the other house interiors that are not working, with supertemplates
+    --- in house9 move the TV and the laptop more towards the wall
+    --- briefly look into why in barroom picked up drinks are in right hand but drunk with left hand
+    --- add 2 more gardens with similar regions and actions
+    --- add in the random generator mandatory a move of at least one actor from one region to another (with actor reuse in target region)
+    --- ----phase 2--------------------------------------------------------------------------------------------
+    --- test the custom build of MTA that is supposed to perform multimodal artifact collection with DirectX directly
+    --- ----phase 3--------------------------------------------------------------------------------------------
+    --- fix the spatial relations to allow for benchmarking based on spatial relations
+    --- ----phase 4--------------------------------------------------------------------------------------------
+    --- refactor the action planning and move away from many individual flags towards a per-actor state machine
+    --- ----phase 5--------------------------------------------------------------------------------------------
+    --- isolate and refactor the system as vertical architecture with MTA specific functionality as adapters
+    --- ----phase 6--------------------------------------------------------------------------------------------
+    --- implement GTA V adapters (execution engine, screenshot collector, configuration loader, capabilities exporter)
+    --- ----phase 7--------------------------------------------------------------------------------------------
+    --- implement an agentic system for semantically meaningful story graph generation
+    --- ---phase 8--------------------------------------------------------------------------------------------
+    --- automatic world parsing into episodes
+    --- ---phase 9--------------------------------------------------------------------------------------------
+    --- automatic episode and world generation based on graphs
     ------------------------------------------------------------------------------------------------
     'random_graphs/r2_0.json', -- a static object was recreated in the same room for each actor (in graph)
-    'random_graphs/r2_2.json',
-    'random_graphs/r2_3.json', -- corrected geton benchpress instead of benchpressbar
-    'random_graphs/r2_4.json', -- Tries to pick up and give a food object, the receiver tries to Drink the food object
+    -- 'random_graphs/r2_2.json',
+    -- 'random_graphs/r2_3.json', -- corrected geton benchpress instead of benchpressbar
+    -- 'random_graphs/r2_4.json', -- Tries to pick up and give a food object, the receiver tries to Drink the food object, tries to putdown food object after eating
     -- 'random_graphs/r2_5.json', -- Contains answer phone without take out and stash
     -- 'random_graphs/r2_6.json', -- contains smoke and phone chain without take out and stash
-    'random_graphs/r2_7.json',
-    'random_graphs/r2_8.json',
-    'random_graphs/r2_9.json',
-    'random_graphs/r2_10.json',
-    -- -----------------------------------------------------------------------------------------------
-    'complex_graphs/c10_sync.json',
-    'complex_graphs/incredibly_complex.json',
+    -- 'random_graphs/r2_7.json',
+    -- 'random_graphs/r2_8.json',
+    -- 'random_graphs/r2_9.json',
+    -- 'random_graphs/r2_10.json',
+    ---------------------------------------------------------------------------------------------
+    -- 'complex_graphs/c10_sync.json',
+    -- 'complex_graphs/incredibly_complex.json',
+    -- 'input_graphs/deadlock_test.json',  -- Deadlock reproduction test
+    -- 'input_graphs/classroom1_chairs_bug.json',
     -- -- 'random_graphs/g9.json',
     -- ------------------------------------------------------------------------------------------------
     -- 'imar_graphs/easy_1_P1200253_3.json',

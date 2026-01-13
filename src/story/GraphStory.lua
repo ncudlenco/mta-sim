@@ -300,7 +300,8 @@ function GraphStory:Play()
 
             -- Initialize CameraHandler AFTER manager callbacks are set up
             -- This ensures legacy mode event emission happens after initialization
-            local hasCameraSection = self.camera ~= nil
+            -- Check both that camera table exists AND has entries (empty table {} should be treated as no camera section)
+            local hasCameraSection = self.camera ~= nil and next(self.camera) ~= nil
 
             -- Create appropriate camera handler based on mode
             self.CameraHandler = CreateCameraHandler({

@@ -95,8 +95,8 @@ function EventPlanner:SelectPOIForEvent(event, actor, segmentId)
     -- 2. Filter by spatial constraints
     candidates = self:FilterCandidatesBySpatialConstraints(candidates, event)
 
-    -- 3. Filter by chain conflicts
-    candidates = self:FilterByChainConflicts(candidates, actor, event)
+    -- 3. Filter by chain conflicts (segment-aware)
+    candidates = self:FilterByChainConflicts(candidates, actor, event, segmentId)
 
     if #candidates == 0 then
         if DEBUG then
@@ -1299,9 +1299,9 @@ function EventPlanner:PlanFixedChainAction(actor, event, segmentId)
             #candidates, beforeSpatial - #candidates))
     end
 
-    -- 3. Filter by chain conflicts
+    -- 3. Filter by chain conflicts (segment-aware)
     local beforeChainConflict = #candidates
-    candidates = self:FilterByChainConflicts(candidates, actor, event)
+    candidates = self:FilterByChainConflicts(candidates, actor, event, segmentId)
     if DEBUG and #candidates ~= beforeChainConflict then
         print(string.format("[PlanFixedChainAction] After FilterByChainConflicts: %d candidates (filtered out %d)",
             #candidates, beforeChainConflict - #candidates))
@@ -2084,22 +2084,38 @@ function EventPlanner:FilterCandidatesBySpatialConstraints(candidates, event)
     return filteredCandidates
 end
 
---- Filter candidates by chain conflicts
+--- Filter candidates by chain conflicts (segment-aware)
+---
+--- Only blocks POIs where another actor in the SAME segment has the chainId.
+--- Actors in different segments can safely share the same chainId (sequential execution).
 ---
 --- @param candidates table Array of POI candidates
 --- @param actor Player The actor
 --- @param event table The event
+--- @param segmentId number The segment ID of the current event
 --- @return table Filtered candidates
-function EventPlanner:FilterByChainConflicts(candidates, actor, event)
+function EventPlanner:FilterByChainConflicts(candidates, actor, event, segmentId)
     local actorId = actor:getData('id')
 
-    -- Get chain IDs assigned to other actors
+    -- Get chain IDs assigned to other actors IN THE SAME SEGMENT
     local otherActorChainIds = {}
     for _, ped in ipairs(self.metaEpisode.peds) do
-        if ped:getData('id') ~= actorId then
-            local otherChainId = ped:getData('mappedChainId')
-            if otherChainId then
-                otherActorChainIds[otherChainId] = true
+        local otherId = ped:getData('id')
+        if otherId ~= actorId then
+            -- Check if other actor's next event is in the same segment
+            local otherNextEventId = self.actorNextEvents[otherId]
+            local otherSegment = otherNextEventId and self.eventToSegment[otherNextEventId]
+
+            -- Only consider chain conflict if in SAME segment
+            if otherSegment == segmentId then
+                local otherChainId = ped:getData('mappedChainId')
+                if otherChainId then
+                    otherActorChainIds[otherChainId] = true
+                    if DEBUG then
+                        print(string.format("[FilterByChainConflicts] Actor %s blocks chainId %s (same segment %d)",
+                            otherId, otherChainId, segmentId))
+                    end
+                end
             end
         end
     end

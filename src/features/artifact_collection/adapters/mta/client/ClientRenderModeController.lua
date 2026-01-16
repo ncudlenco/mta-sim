@@ -10,6 +10,8 @@ local DEBUG_SCREENSHOTS = true
 local storedShaders = nil
 local storedMarkerDimensions = nil  -- Stores {[marker] = originalDimension}
 local storedCoronaZTest = nil       -- Stores original corona z-test state
+local storedLocalPlayerPosition = nil  -- Stores original localPlayer position during segmentation
+local BEHIND_CAMERA_DISTANCE = 5       -- Distance behind camera to move player
 
 -- Render-based synchronization: Wait for actual GPU render before notifying server
 local pendingRenderConfirmation = nil  -- {mode: string, callback: function, frameMapping: table}
@@ -206,6 +208,30 @@ end
 --     dxDrawText("", 0, 0)
 -- end
 
+--- Calculate a position behind the camera (outside the field of view)
+--- Uses camera matrix to determine view direction and positions player
+--- directly behind the camera position
+--- @return number, number, number x, y, z position behind camera
+local function getPositionBehindCamera()
+    local camX, camY, camZ, lookX, lookY, lookZ = getCameraMatrix()
+
+    -- Calculate and normalize view direction
+    local viewDirX = lookX - camX
+    local viewDirY = lookY - camY
+    local viewDirZ = lookZ - camZ
+    local length = math.sqrt(viewDirX * viewDirX + viewDirY * viewDirY + viewDirZ * viewDirZ)
+    if length > 0 then
+        viewDirX = viewDirX / length
+        viewDirY = viewDirY / length
+        viewDirZ = viewDirZ / length
+    end
+
+    -- Position behind camera
+    return camX - (viewDirX * BEHIND_CAMERA_DISTANCE),
+           camY - (viewDirY * BEHIND_CAMERA_DISTANCE),
+           camZ - (viewDirZ * BEHIND_CAMERA_DISTANCE)
+end
+
 --- Apply segmentation shader to all visible textures
 --- Colors each texture with a unique, deterministic color based on texture name
 local function applySegmentationShader()
@@ -238,6 +264,27 @@ local function applySegmentationShader()
 
     if DEBUG_SCREENSHOTS then
         outputDebugString(string.format("[ClientRenderModeController] Moved %d markers to dimension 1", #markers))
+    end
+
+    -- Phase 0C: Move localPlayer behind camera to hide from segmentation
+    -- The spectator player is positioned in 3D space for interior streaming
+    -- but becomes visible when segmentation shaders are applied
+    storedLocalPlayerPosition = {
+        x = localPlayer.position.x,
+        y = localPlayer.position.y,
+        z = localPlayer.position.z,
+        interior = localPlayer.interior
+    }
+
+    local behindX, behindY, behindZ = getPositionBehindCamera()
+    setElementPosition(localPlayer, behindX, behindY, behindZ)
+    -- Interior unchanged to maintain streaming
+
+    if DEBUG_SCREENSHOTS then
+        outputDebugString(string.format(
+            "[ClientRenderModeController] Moved localPlayer behind camera: (%.2f, %.2f, %.2f) -> (%.2f, %.2f, %.2f)",
+            storedLocalPlayerPosition.x, storedLocalPlayerPosition.y, storedLocalPlayerPosition.z,
+            behindX, behindY, behindZ))
     end
 
     -- Phase 1: Build texture→modelId mapping for visible dynamic elements
@@ -400,6 +447,22 @@ local function removeSegmentationShader()
         if DEBUG_SCREENSHOTS then
             outputDebugString("[ClientRenderModeController] Cleaned up all segmentation shaders")
         end
+    end
+
+    -- Restore localPlayer to original position
+    if storedLocalPlayerPosition then
+        setElementPosition(localPlayer,
+            storedLocalPlayerPosition.x,
+            storedLocalPlayerPosition.y,
+            storedLocalPlayerPosition.z)
+        setElementInterior(localPlayer, storedLocalPlayerPosition.interior)
+
+        if DEBUG_SCREENSHOTS then
+            outputDebugString(string.format(
+                "[ClientRenderModeController] Restored localPlayer position: (%.2f, %.2f, %.2f)",
+                storedLocalPlayerPosition.x, storedLocalPlayerPosition.y, storedLocalPlayerPosition.z))
+        end
+        storedLocalPlayerPosition = nil
     end
 
     -- Restore markers to their original dimensions

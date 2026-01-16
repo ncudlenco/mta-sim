@@ -24,11 +24,11 @@ DEBUG_PATHFINDING = false
 DEBUG_VALIDATION = false
 DEBUG_ACTION_VALIDATION = false
 DEBUG_LOGGER = false
-DEBUG_SCREENSHOTS = false
+DEBUG_SCREENSHOTS = true
 -- Screenshot module debugging
 if setScreenshotModuleDebug then setScreenshotModuleDebug(DEBUG_SCREENSHOTS) end
 -- Screenshot capture mode: set true for VMware (captures full screen instead of window cropping)
-SCREENSHOT_CAPTURE_FULL_SCREEN = true
+SCREENSHOT_CAPTURE_FULL_SCREEN = false
 if setCaptureFullScreen then setCaptureFullScreen(SCREENSHOT_CAPTURE_FULL_SCREEN) end
 DEBUG_OBJECTS = false
 DEBUG_EPISODE = false
@@ -46,8 +46,8 @@ DEBUG_CAMERA_VALIDATION = false   -- Enable detailed logging of camera position 
 DEBUG_WAIT_SYNC = false -- Enable detailed logging of Wait polling conditions (proximity, location, interaction)
 
 -- Artifact Collection Configuration
-ARTIFACT_COLLECTION_ENABLED = true -- Enable/disable artifact collection system
-ARTIFACT_FRAMES_PER_SECOND = 30 -- Frame collection rate (1, 2, 5, 10, 30 fps)
+ARTIFACT_COLLECTION_ENABLED = false -- Enable/disable artifact collection system
+ARTIFACT_FRAMES_PER_SECOND = 60 -- Frame collection rate (1, 2, 5, 10, 30 fps)
 ARTIFACT_OUTPUT_PATH = "data_out" -- Base path for artifact output
 ARTIFACT_COLLECTION_TIMEOUT = 10000 -- Max wait time for artifact collection (ms)
 SCREENSHOT_COLLECTOR_TYPE = "native" -- Screenshot collector type: "client" or "native"
@@ -164,7 +164,7 @@ INPUT_GRAPHS = {
     --- ---phase 9--------------------------------------------------------------------------------------------
     --- automatic episode and world generation based on graphs
     ------------------------------------------------------------------------------------------------
-    'random_graphs/r2_0.json', -- a static object was recreated in the same room for each actor (in graph)
+    -- 'random_graphs/r2_0.json', -- a static object was recreated in the same room for each actor (in graph)
     -- 'random_graphs/r2_2.json',
     -- 'random_graphs/r2_3.json', -- corrected geton benchpress instead of benchpressbar
     -- 'random_graphs/r2_4.json', -- Tries to pick up and give a food object, the receiver tries to Drink the food object, tries to putdown food object after eating
@@ -177,7 +177,7 @@ INPUT_GRAPHS = {
     ---------------------------------------------------------------------------------------------
     -- 'complex_graphs/c10_sync.json',
     -- 'complex_graphs/incredibly_complex.json',
-    -- 'input_graphs/deadlock_test.json',  -- Deadlock reproduction test
+    'input_graphs/deadlock_test.json',  -- Deadlock reproduction test
     -- 'input_graphs/classroom1_chairs_bug.json',
     -- -- 'random_graphs/g9.json',
     -- ------------------------------------------------------------------------------------------------

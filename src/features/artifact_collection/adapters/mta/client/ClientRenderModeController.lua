@@ -449,21 +449,8 @@ local function removeSegmentationShader()
         end
     end
 
-    -- Restore localPlayer to original position
-    if storedLocalPlayerPosition then
-        setElementPosition(localPlayer,
-            storedLocalPlayerPosition.x,
-            storedLocalPlayerPosition.y,
-            storedLocalPlayerPosition.z)
-        setElementInterior(localPlayer, storedLocalPlayerPosition.interior)
-
-        if DEBUG_SCREENSHOTS then
-            outputDebugString(string.format(
-                "[ClientRenderModeController] Restored localPlayer position: (%.2f, %.2f, %.2f)",
-                storedLocalPlayerPosition.x, storedLocalPlayerPosition.y, storedLocalPlayerPosition.z))
-        end
-        storedLocalPlayerPosition = nil
-    end
+    -- Note: localPlayer position is NOT restored - it stays behind camera
+    -- This is intentional: player remains hidden and streaming continues to work
 
     -- Restore markers to their original dimensions
     -- Not needed as the markers are only there for pathfinding

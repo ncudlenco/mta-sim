@@ -54,21 +54,28 @@ SCREENSHOT_COLLECTOR_TYPE = "native" -- Screenshot collector type: "client" or "
 
 -- Multi-Modal Video Configuration (requires "native" collector type)
 -- Raw (native) screenshot collector image export
-ARTIFACT_NATIVE_SCREENSHOT_SAVE_IMAGES = false -- Enable individual image frame saving for raw modality
+ARTIFACT_NATIVE_SCREENSHOT_SAVE_IMAGES = true -- Enable individual image frame saving for raw modality
 ARTIFACT_NATIVE_SCREENSHOT_IMAGE_FPS = 30 -- Frame rate for image capture (0 = disabled)
 ARTIFACT_NATIVE_SCREENSHOT_IMAGE_FORMAT = "jpeg" -- Image format: "png", "jpeg", or "none"
 ARTIFACT_NATIVE_SCREENSHOT_JPEG_QUALITY = 95 -- JPEG quality (0-100, only used if format is "jpeg")
 
 -- Segmentation modality (indexed PNG export)
-ARTIFACT_ENABLE_SEGMENTATION = false -- Enable segmentation map video recording
+ARTIFACT_ENABLE_SEGMENTATION = true -- Enable segmentation map video recording
 ARTIFACT_SEGMENTATION_SAVE_PNG = true -- Save segmentation frames as indexed PNG files
-ARTIFACT_SEGMENTATION_PNG_FPS = 30 -- Frame rate for PNG capture (frames per second, 0 = disabled)
+ARTIFACT_SEGMENTATION_PNG_FPS = 60 -- Frame rate for PNG capture (frames per second, 0 = disabled)
 
 -- Depth modality
 ARTIFACT_ENABLE_DEPTH = false -- Enable depth map video recording
 
 -- Event frame mapping collector
 ARTIFACT_ENABLE_EVENT_FRAME_MAPPING = true -- Enable event-to-frame mapping JSON generation
+
+-- Spatial relations collector
+ARTIFACT_ENABLE_SPATIAL_RELATIONS = true -- Enable spatial relations JSON collection
+ARTIFACT_SPATIAL_RELATIONS_FPS = 60 -- Frame rate for spatial relations capture (0 = match global FPS)
+ARTIFACT_SPATIAL_RELATIONS_INCLUDE_INVISIBLE = false -- Include objects outside FOV
+ARTIFACT_SPATIAL_RELATIONS_MAX_DISTANCE = 0 -- Maximum distance to include objects (0 = unlimited)
+ARTIFACT_SPATIAL_RELATIONS_INCLUDE_OBJECT_RELATIONS = true -- Include pairwise object-to-object spatial relations
 
 -- Video encoding settings (applies to all modalities that record video)
 ARTIFACT_VIDEO_FPS = 30 -- Video encoding frame rate

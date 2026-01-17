@@ -256,6 +256,38 @@ function ArtifactCollectionFactory:createEventFrameMappingCollector()
     return collector
 end
 
+--- Create spatial relations collector
+--- Captures spatial relations of all visible objects relative to camera
+--- This is a per-spectator collector
+---
+--- @param spectatorData table Spectator configuration
+--- @return SpatialRelationsCollector|nil Spatial relations collector instance, or nil if not enabled
+function ArtifactCollectionFactory:createSpatialRelationsCollector(spectatorData)
+    -- Check if spatial relations collection is enabled
+    if not self.config.enableSpatialRelations then
+        if DEBUG then
+            print("[ArtifactCollectionFactory] Spatial relations collection disabled in config")
+        end
+        return nil
+    end
+
+    local collector = SpatialRelationsCollector({
+        cameraId = spectatorData.id,
+        framesPerSecond = self.config.framesPerSecond,
+        spatialRelationsFPS = self.config.spatialRelationsFPS,
+        includeInvisible = self.config.spatialRelationsIncludeInvisible,
+        maxDistance = self.config.spatialRelationsMaxDistance,
+        includeObjectRelations = self.config.spatialRelationsIncludeObjectRelations
+    })
+
+    if DEBUG then
+        print(string.format("[ArtifactCollectionFactory] Created spatial relations collector for: %s",
+            spectatorData.id))
+    end
+
+    return collector
+end
+
 --- Register all enabled collectors for spectators
 --- Game-agnostic version - accepts spectator data, not game-specific entities
 ---
@@ -306,6 +338,15 @@ function ArtifactCollectionFactory:registerCollectors(manager, spectatorsData)
             manager:registerCollector(depthCollector)
             if DEBUG then
                 print(string.format("[ArtifactCollectionFactory] Registered depth collector for %s", spectatorData.id))
+            end
+        end
+
+        -- Create and register spatial relations collector if enabled
+        local spatialCollector = self:createSpatialRelationsCollector(spectatorData)
+        if spatialCollector then
+            manager:registerCollector(spatialCollector)
+            if DEBUG then
+                print(string.format("[ArtifactCollectionFactory] Registered spatial relations collector for %s", spectatorData.id))
             end
         end
     end

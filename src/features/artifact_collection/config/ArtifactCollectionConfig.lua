@@ -41,6 +41,16 @@ ArtifactCollectionConfig = class(function(o, options)
     -- Event frame mapping configuration
     o.enableEventFrameMapping = options.enableEventFrameMapping or false
 
+    -- Spatial relations configuration
+    o.enableSpatialRelations = options.enableSpatialRelations or false
+    o.spatialRelationsFPS = options.spatialRelationsFPS or 0
+    o.spatialRelationsIncludeInvisible = options.spatialRelationsIncludeInvisible or false
+    o.spatialRelationsMaxDistance = options.spatialRelationsMaxDistance or 0
+    o.spatialRelationsIncludeObjectRelations = options.spatialRelationsIncludeObjectRelations
+    if o.spatialRelationsIncludeObjectRelations == nil then
+        o.spatialRelationsIncludeObjectRelations = true  -- Default to enabled
+    end
+
     -- Video encoding settings
     o.videoFPS = options.videoFPS or 30
     o.videoBitrate = options.videoBitrate or 5000000
@@ -76,6 +86,13 @@ function ArtifactCollectionConfig.fromGlobals()
 
         -- Event frame mapping configuration
         enableEventFrameMapping = ARTIFACT_ENABLE_EVENT_FRAME_MAPPING or false,
+
+        -- Spatial relations configuration
+        enableSpatialRelations = ARTIFACT_ENABLE_SPATIAL_RELATIONS or false,
+        spatialRelationsFPS = ARTIFACT_SPATIAL_RELATIONS_FPS or 0,
+        spatialRelationsIncludeInvisible = ARTIFACT_SPATIAL_RELATIONS_INCLUDE_INVISIBLE or false,
+        spatialRelationsMaxDistance = ARTIFACT_SPATIAL_RELATIONS_MAX_DISTANCE or 0,
+        spatialRelationsIncludeObjectRelations = ARTIFACT_SPATIAL_RELATIONS_INCLUDE_OBJECT_RELATIONS,
 
         -- Video encoding settings
         videoFPS = ARTIFACT_VIDEO_FPS or 30,

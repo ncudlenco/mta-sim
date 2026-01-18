@@ -101,6 +101,7 @@
   <script src="src/features/artifact_collection/collectors/SegmentationCollector.lua" type="server"/>
   <script src="src/features/artifact_collection/collectors/DepthCollector.lua" type="server"/>
   <script src="src/features/artifact_collection/collectors/EventFrameMappingCollector.lua" type="server"/>
+  <script src="src/features/artifact_collection/collectors/SpatialRelationsCollector.lua" type="server"/>
   <!-- Manager and Factory -->
   <script src="src/features/artifact_collection/ArtifactCollectionManager.lua" type="server"/>
   <script src="src/features/artifact_collection/factories/ArtifactCollectionFactory.lua" type="server"/>

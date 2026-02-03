@@ -1,0 +1,29 @@
+{
+  "EXPORT_MODE": false,
+  "INPUT_GRAPHS": [
+    "input_graphs/story_9df41677_t1_s1_full.json"
+  ],
+  "ARTIFACT_COLLECTION_ENABLED": false,
+  "DEBUG": false,
+  "DEBUG_PROCESSACTIONS": false,
+  "DEBUG_PROCESSREGIONS": false,
+  "DEBUG_TEMPLATES": false,
+  "DEBUG_LOCATION_CANDIDATES": false,
+  "DEBUG_METAEPISODE": false,
+  "DEBUG_PATHFINDING": false,
+  "DEBUG_VALIDATION": false,
+  "DEBUG_ACTION_VALIDATION": false,
+  "DEBUG_LOGGER": false,
+  "DEBUG_SCREENSHOTS": false,
+  "DEBUG_OBJECTS": false,
+  "DEBUG_EPISODE": false,
+  "DEBUG_ACTIONS": false,
+  "DEBUG_CHAIN_LINKED_ACTIONS": false,
+  "DEBUG_CAMERA": false,
+  "DEBUG_ACTIONS_ORCHESTRATOR": false,
+  "DEBUG_POI_ORCHESTRATION": false,
+  "DEBUG_SPATIAL": false,
+  "DEBUG_EPISODE_GROUPS": false,
+  "DEBUG_CAMERA_VALIDATION": false,
+  "DEBUG_WAIT_SYNC": false
+}

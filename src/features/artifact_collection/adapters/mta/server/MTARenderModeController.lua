@@ -3,7 +3,6 @@
 --- Manages event handlers for shader ready confirmations
 ---
 --- @classmod MTARenderModeController
---- @author Claude Code
 --- @license MIT
 
 MTARenderModeController = class(RenderModeControllerBase, function(o, spectatorElement)

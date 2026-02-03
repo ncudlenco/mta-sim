@@ -36,7 +36,6 @@
 --- }
 ---
 --- @classmod SpatialRelationsCollector
---- @author Claude Code
 --- @license MIT
 
 SpatialRelationsCollector = class(ArtifactCollector, function(o, config)

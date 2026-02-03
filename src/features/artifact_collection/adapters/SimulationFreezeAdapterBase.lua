@@ -3,7 +3,6 @@
 -- Subclasses implement game-specific freeze/unfreeze mechanisms
 --
 -- @classmod SimulationFreezeAdapterBase
--- @author Claude Code
 -- @license MIT
 
 SimulationFreezeAdapterBase = class(function(o)

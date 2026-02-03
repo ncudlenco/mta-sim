@@ -2,7 +2,6 @@
 -- Reads configuration from global variables
 --
 -- @classmod ArtifactCollectionConfig
--- @author Claude Code
 -- @license MIT
 
 -- Modality type enumeration

@@ -4,7 +4,6 @@
 --- Part of multi-modal artifact collection system
 ---
 --- @classmod DepthCollector
---- @author Claude Code
 --- @license MIT
 
 DepthCollector = class(NativeScreenshotCollector, function(o, screenshotAdapter, renderModeController, config)

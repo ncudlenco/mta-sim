@@ -10,7 +10,7 @@
   "keywords": [
     "gest"
   ],
-  "author": "Cudlenco Nicolae",
+  "author": "",
   "license": "ISC",
   "devDependencies": {
     "electron": "^34.0.2",

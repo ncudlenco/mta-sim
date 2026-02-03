@@ -9,7 +9,6 @@
 ---   bus:subscribe("my_event", "my_component", function(data) print(data.message) end)
 ---   bus:publish("my_event", {message = "Hello"})
 ---
---- @author Claude Code
 --- @license MIT
 
 EventBus = {

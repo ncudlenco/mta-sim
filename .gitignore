@@ -31,3 +31,4 @@ out/
 .cmake/
 nul
 input_graphs/*
+.claude/settings.local.json

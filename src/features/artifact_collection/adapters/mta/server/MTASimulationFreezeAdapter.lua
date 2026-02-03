@@ -2,7 +2,6 @@
 -- Handles pausing and resuming the game simulation using MTA's APIs
 --
 -- @classmod MTASimulationFreezeAdapter
--- @author Claude Code
 -- @license MIT
 
 MTASimulationFreezeAdapter = class(SimulationFreezeAdapterBase, function(o)

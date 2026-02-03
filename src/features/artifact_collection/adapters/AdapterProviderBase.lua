@@ -3,7 +3,6 @@
 --- Each game (MTA, FiveM, etc.) provides its own concrete implementation
 ---
 --- @classmod AdapterProviderBase
---- @author Claude Code
 --- @license MIT
 
 AdapterProviderBase = class(function(o)

@@ -3,7 +3,6 @@
 --- Does NOT depend on game-specific entities (MTA elements, FiveM natives, etc.)
 ---
 --- @classmod ArtifactCollectionFactory
---- @author Claude Code
 --- @license MIT
 
 --- Spectator data structure (game-agnostic)

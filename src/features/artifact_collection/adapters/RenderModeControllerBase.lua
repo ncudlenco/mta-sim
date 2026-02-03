@@ -3,7 +3,6 @@
 --- Game-specific implementations handle event triggering and state management
 ---
 --- @classmod RenderModeControllerBase
---- @author Claude Code
 --- @license MIT
 
 RenderModeControllerBase = class(function(o)

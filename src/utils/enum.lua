@@ -1,6 +1,5 @@
 -- general language features
 
--- Contributors: sulai
 
 
 --[[

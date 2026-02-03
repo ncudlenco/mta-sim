@@ -5,7 +5,6 @@
 --- File path uses frame-based naming: frame_[XXXX]_screenshot.jpg
 ---
 --- @classmod MTAScreenshotCollector
---- @author Claude Code
 --- @license MIT
 
 MTAScreenshotCollector = class(ArtifactCollector, function(o, screenshotAdapter, config)

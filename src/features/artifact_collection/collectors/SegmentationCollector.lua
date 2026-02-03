@@ -4,7 +4,6 @@
 --- Implements frame skipping to achieve target PNG capture rate
 ---
 --- @classmod SegmentationCollector
---- @author Claude Code
 --- @license MIT
 
 SegmentationCollector = class(ArtifactCollector, function(o, screenshotAdapter, renderModeController, config)

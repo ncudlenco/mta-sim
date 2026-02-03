@@ -3,7 +3,6 @@
 --- Provides callback support to notify when pixels are available in memory (before disk write)
 ---
 --- @classmod MTANativeScreenshotAdapter
---- @author Claude Code
 --- @license MIT
 
 MTANativeScreenshotAdapter = class(ScreenshotAdapterBase, function(o)

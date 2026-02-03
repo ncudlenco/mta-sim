@@ -3,7 +3,6 @@
 --- This is the bridge between game-agnostic factory and MTA-specific adapters
 ---
 --- @classmod MTAAdapterProvider
---- @author Claude Code
 --- @license MIT
 
 MTAAdapterProvider = class(AdapterProviderBase, function(o)

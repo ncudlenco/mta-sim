@@ -3,7 +3,6 @@
 -- Subclasses implement game-specific screenshot capture mechanisms
 --
 -- @classmod ScreenshotAdapterBase
--- @author Claude Code
 -- @license MIT
 
 ScreenshotAdapterBase = class(function(o)

@@ -2,7 +2,6 @@
 --- Responds to server events to switch rendering modes
 --- Part of vertical architecture: adapters/mta/client/
 ---
---- @author Claude Code
 --- @license MIT
 
 local currentRenderMode = "normal"

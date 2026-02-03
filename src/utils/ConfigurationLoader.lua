@@ -11,7 +11,6 @@
 ---       loader:applyToGlobals(config)
 ---   end
 ---
---- @author Nicolae Cudlenco
 
 ConfigurationLoader = class(function(o, configPath)
     --- Constructor for ConfigurationLoader

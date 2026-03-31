@@ -986,6 +986,31 @@ function Move.teleport(player, lastAction)
         player.interior = lastAction.NextLocation.Episode.InteriorId
         player.rotation = lastAction.NextLocation.rotation
         lastAction.planningData[playerId] = {}
+
+        -- Update locationId and POI busy flags (same as normal Move completion)
+        local oldLocationId = player:getData('locationId')
+        local newLocationId = lastAction.NextLocation.LocationId
+        if oldLocationId ~= newLocationId then
+            if oldLocationId then
+                local lookupId = oldLocationId:gsub("_clone$", "")
+                local oldPOI = FirstOrDefault(CURRENT_STORY.CurrentEpisode.POI,
+                    function(poi) return poi.LocationId == lookupId end)
+                if oldPOI then
+                    oldPOI.isBusy = false
+                    print(playerId..'Location '..oldPOI.Description..' is not busy (actor left)')
+                    if CURRENT_STORY and CURRENT_STORY.ActionsOrchestrator then
+                        CURRENT_STORY.ActionsOrchestrator:ProcessPOIQueue(oldLocationId)
+                    end
+                end
+            end
+
+            player:setData('locationId', newLocationId)
+
+            lastAction.NextLocation.isBusy = true
+            print(playerId..'Location '..lastAction.NextLocation.Description..' is busy (actor arrived)')
+
+            player:setData('reservedLocationId', nil)
+        end
     end
     if DEBUG_PATHFINDING then
         outputConsole("Move.teleport - Teleport applied for actor "..playerId..'. Calling Action finished...')

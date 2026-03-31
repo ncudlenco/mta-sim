@@ -60,7 +60,7 @@ end
 --- @usage StaticCameraHandler:focusTimeReached(playerId, contextChanged)
 --- @return nil
 function StaticCameraHandler:focusTimeReached(playerId, contextChanged, time)
-    local time = 2000
+    local time = 1000
     if contextChanged then
         time = 5000
     end

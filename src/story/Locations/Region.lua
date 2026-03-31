@@ -362,7 +362,19 @@ function Region:SetStaticCamera(cameraPos, actor)
     if STATIC_CAMERA and self.cameras and #self.cameras > 0 then
         local story = CURRENT_STORY
         for _, spectator in ipairs(story.Spectators) do
-            spectator:setCameraMatrix(cameraPos.x, cameraPos.y, cameraPos.z, cameraPos.lx, cameraPos.ly, cameraPos.lz, cameraPos.roll, cameraPos.fov)
+            local camX, camY, camZ = cameraPos.x, cameraPos.y, cameraPos.z
+            local lx, ly, lz = cameraPos.lx, cameraPos.ly, cameraPos.lz
+            if ENABLE_CLOSE_IN_STATIC_CAMERA and actor then
+                local camVec = Vector3(camX, camY, camZ)
+                local toActor = actor.position - camVec
+                local distance = toActor.length
+                toActor:normalize()
+                local closeInDistance = distance / 2
+                local adjustedCamVec = camVec + toActor * closeInDistance
+                camX, camY, camZ = adjustedCamVec.x, adjustedCamVec.y, adjustedCamVec.z
+                lx, ly, lz = actor.position.x, actor.position.y, actor.position.z
+            end
+            spectator:setCameraMatrix(camX, camY, camZ, lx, ly, lz, cameraPos.roll, cameraPos.fov)
             -- print('CHANGING SPECTATORS INTERIORS AND POSITION to '..self.Episode.name)
             spectator.position = self.Episode.POI[1].position + Vector3(0,0,3)
             spectator.interior = self.Episode.InteriorId
@@ -370,8 +382,8 @@ function Region:SetStaticCamera(cameraPos, actor)
     end
 end
 
-function Region:SetRandomStaticCamera()
-    self:SetStaticCamera(PickRandom(self.cameras))
+function Region:SetRandomStaticCamera(actor)
+    self:SetStaticCamera(PickRandom(self.cameras), actor)
 end
 
 ---Set the camera to the first camera that sees the actor or to a random camera if none of them see the actor

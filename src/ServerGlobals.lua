@@ -101,6 +101,7 @@ DEFINING_EPISODES = not SIMULATION_MODE
 -- Camera validation settings
 ENABLE_CAMERA_VALIDATION = true  -- Enable wall-aware camera positioning with line-of-sight checks
 CAMERA_WALL_OFFSET = 0.5          -- Distance (units) to offset camera from walls when adjusting position
+ENABLE_CLOSE_IN_STATIC_CAMERA = true
 
 -- Camera follow mode for cinematic continuous tracking
 -- true  = Use MTA's built-in setCameraTarget() with client-side smooth interpolation

@@ -2100,6 +2100,10 @@ function EventPlanner:FilterByChainConflicts(candidates, actor, event)
             local otherChainId = ped:getData('mappedChainId')
             if otherChainId then
                 otherActorChainIds[otherChainId] = true
+                if DEBUG and DEBUG_ACTIONS_ORCHESTRATOR then
+                    print(string.format("[FilterByChainConflicts] Actor %s holds chain %s",
+                        ped:getData('id'), otherChainId))
+                end
             end
         end
     end
@@ -2107,6 +2111,10 @@ function EventPlanner:FilterByChainConflicts(candidates, actor, event)
     -- Filter out POIs with conflicting chain IDs
     return Where(candidates, function(poi)
         local poiChainId = poi:getData("mappedChainId_" .. event.id)
+        if otherActorChainIds[poiChainId] and DEBUG and DEBUG_ACTIONS_ORCHESTRATOR then
+            print(string.format("[FilterByChainConflicts] Rejecting POI %s for event %s: chain %s conflicts",
+                poi.LocationId or 'unknown', event.id, tostring(poiChainId)))
+        end
         return not otherActorChainIds[poiChainId]
     end)
 end

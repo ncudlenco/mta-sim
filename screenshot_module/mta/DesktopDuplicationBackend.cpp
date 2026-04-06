@@ -21,6 +21,7 @@ DesktopDuplicationBackend::DesktopDuplicationBackend(const std::string& windowTi
     DEBUG_LOG_FMT("DesktopDuplicationBackend", "Constructor: windowTitle=%s, crops(t=%d,l=%d,r=%d,b=%d)",
                   windowTitle.c_str(), cropTop, cropLeft, cropRight, cropBottom);
     memset(&windowRect, 0, sizeof(windowRect));
+    memset(&outputRect, 0, sizeof(outputRect));
 }
 
 DesktopDuplicationBackend::~DesktopDuplicationBackend() {
@@ -33,17 +34,95 @@ bool DesktopDuplicationBackend::Initialize() {
 
     if (initialized) {
         DEBUG_LOG("DesktopDuplicationBackend", "Initialize: already initialized");
-        return true;  // Already initialized
+        return true;
     }
 
     HRESULT hr;
 
-    // 1. Create D3D11 device
-    DEBUG_LOG("DesktopDuplicationBackend", "Creating D3D11 device...");
+    // 1. Create DXGI Factory to enumerate all adapters (GPUs)
+    DEBUG_LOG("DesktopDuplicationBackend", "Creating DXGI Factory...");
+    IDXGIFactory1* dxgiFactory = nullptr;
+    hr = CreateDXGIFactory1(__uuidof(IDXGIFactory1), (void**)&dxgiFactory);
+    if (FAILED(hr)) {
+        DEBUG_LOG_HR("DesktopDuplicationBackend", "CreateDXGIFactory1", hr);
+        return false;
+    }
+
+    // 2. Find the adapter+output that contains the target window
+    IDXGIAdapter* matchedAdapter = nullptr;
+    IDXGIOutput* matchedOutput = nullptr;
+
+    FindTargetWindow();
+    RECT targetRect = {0};
+    bool haveWindowRect = false;
+    if (cachedWindow) {
+        haveWindowRect = (GetWindowRect(cachedWindow, &targetRect) != 0);
+    }
+
+    if (haveWindowRect) {
+        int centerX = (targetRect.left + targetRect.right) / 2;
+        int centerY = (targetRect.top + targetRect.bottom) / 2;
+        DEBUG_LOG_FMT("DesktopDuplicationBackend", "Window center: (%d, %d)", centerX, centerY);
+
+        IDXGIAdapter* adapter = nullptr;
+        for (UINT ai = 0; dxgiFactory->EnumAdapters(ai, &adapter) != DXGI_ERROR_NOT_FOUND; ai++) {
+            DXGI_ADAPTER_DESC adapterDesc;
+            adapter->GetDesc(&adapterDesc);
+            DEBUG_LOG_FMT("DesktopDuplicationBackend", "Adapter %u: %ls (VRAM=%lluMB)",
+                ai, adapterDesc.Description, adapterDesc.DedicatedVideoMemory / (1024*1024));
+
+            IDXGIOutput* output = nullptr;
+            for (UINT oi = 0; adapter->EnumOutputs(oi, &output) != DXGI_ERROR_NOT_FOUND; oi++) {
+                DXGI_OUTPUT_DESC desc;
+                output->GetDesc(&desc);
+                RECT r = desc.DesktopCoordinates;
+                DEBUG_LOG_FMT("DesktopDuplicationBackend", "  Output %u: (%d,%d)-(%d,%d) [%ls]",
+                    oi, r.left, r.top, r.right, r.bottom, desc.DeviceName);
+
+                if (centerX >= r.left && centerX < r.right &&
+                    centerY >= r.top && centerY < r.bottom) {
+                    matchedAdapter = adapter;
+                    matchedOutput = output;
+                    outputRect = r;
+                    DEBUG_LOG_FMT("DesktopDuplicationBackend", "Matched window to adapter %u output %u", ai, oi);
+                    break;
+                }
+                output->Release();
+            }
+            if (matchedAdapter) break;
+            adapter->Release();
+        }
+    }
+
+    // Fall back to default adapter, output 0
+    if (!matchedAdapter) {
+        DEBUG_LOG("DesktopDuplicationBackend", "No adapter match, falling back to adapter 0 output 0");
+        hr = dxgiFactory->EnumAdapters(0, &matchedAdapter);
+        if (SUCCEEDED(hr)) {
+            hr = matchedAdapter->EnumOutputs(0, &matchedOutput);
+            if (SUCCEEDED(hr)) {
+                DXGI_OUTPUT_DESC desc;
+                matchedOutput->GetDesc(&desc);
+                outputRect = desc.DesktopCoordinates;
+            }
+        }
+    }
+
+    dxgiFactory->Release();
+
+    if (!matchedAdapter || !matchedOutput) {
+        DEBUG_LOG("DesktopDuplicationBackend", "Failed to find any adapter/output");
+        if (matchedAdapter) matchedAdapter->Release();
+        if (matchedOutput) matchedOutput->Release();
+        return false;
+    }
+
+    // 3. Create D3D11 device on the matched adapter
+    DEBUG_LOG("DesktopDuplicationBackend", "Creating D3D11 device on matched adapter...");
     D3D_FEATURE_LEVEL featureLevel;
     hr = D3D11CreateDevice(
-        nullptr,                    // Adapter
-        D3D_DRIVER_TYPE_HARDWARE,   // Driver type
+        matchedAdapter,             // Specific adapter for this output
+        D3D_DRIVER_TYPE_UNKNOWN,    // Must be UNKNOWN when adapter is specified
         nullptr,                    // Software rasterizer
         0,                          // Flags
         nullptr,                    // Feature levels
@@ -54,57 +133,28 @@ bool DesktopDuplicationBackend::Initialize() {
         &d3dContext                 // Device context
     );
 
+    matchedAdapter->Release();
+
     if (FAILED(hr)) {
         DEBUG_LOG_HR("DesktopDuplicationBackend", "D3D11CreateDevice", hr);
+        matchedOutput->Release();
         return false;
     }
 
-    DEBUG_LOG("DesktopDuplicationBackend", "D3D11 device created successfully");
+    DEBUG_LOG("DesktopDuplicationBackend", "D3D11 device created on matched adapter");
 
-    // 2. Get DXGI device
-    DEBUG_LOG("DesktopDuplicationBackend", "Getting DXGI device...");
-    IDXGIDevice* dxgiDevice = nullptr;
-    hr = d3dDevice->QueryInterface(__uuidof(IDXGIDevice), (void**)&dxgiDevice);
-    if (FAILED(hr)) {
-        DEBUG_LOG_HR("DesktopDuplicationBackend", "QueryInterface (IDXGIDevice)", hr);
-        Cleanup();
-        return false;
-    }
-
-    // 3. Get DXGI adapter
-    DEBUG_LOG("DesktopDuplicationBackend", "Getting DXGI adapter...");
-    IDXGIAdapter* dxgiAdapter = nullptr;
-    hr = dxgiDevice->GetAdapter(&dxgiAdapter);
-    dxgiDevice->Release();
-    if (FAILED(hr)) {
-        DEBUG_LOG_HR("DesktopDuplicationBackend", "GetAdapter", hr);
-        Cleanup();
-        return false;
-    }
-
-    // 4. Get primary output
-    DEBUG_LOG("DesktopDuplicationBackend", "Getting primary output...");
-    IDXGIOutput* dxgiOutput = nullptr;
-    hr = dxgiAdapter->EnumOutputs(0, &dxgiOutput);
-    dxgiAdapter->Release();
-    if (FAILED(hr)) {
-        DEBUG_LOG_HR("DesktopDuplicationBackend", "EnumOutputs", hr);
-        Cleanup();
-        return false;
-    }
-
-    // 5. Get output1 interface (for Desktop Duplication)
+    // 4. Get output1 interface (for Desktop Duplication)
     DEBUG_LOG("DesktopDuplicationBackend", "Getting IDXGIOutput1 interface...");
     IDXGIOutput1* dxgiOutput1 = nullptr;
-    hr = dxgiOutput->QueryInterface(__uuidof(IDXGIOutput1), (void**)&dxgiOutput1);
-    dxgiOutput->Release();
+    hr = matchedOutput->QueryInterface(__uuidof(IDXGIOutput1), (void**)&dxgiOutput1);
+    matchedOutput->Release();
     if (FAILED(hr)) {
         DEBUG_LOG_HR("DesktopDuplicationBackend", "QueryInterface (IDXGIOutput1)", hr);
         Cleanup();
         return false;
     }
 
-    // 6. Create Desktop Duplication API
+    // 5. Create Desktop Duplication API
     DEBUG_LOG("DesktopDuplicationBackend", "Creating Desktop Duplication...");
     hr = dxgiOutput1->DuplicateOutput(d3dDevice, &deskDupl);
     dxgiOutput1->Release();
@@ -181,11 +231,16 @@ ID3D11Texture2D* DesktopDuplicationBackend::CaptureFrame() {
     }
 
     // Update window bounds on every capture (worker thread)
-    // This handles window resizing, moving, or switching between windowed/fullscreen
-    if (windowFound || FindTargetWindow()) {
+    // This handles window resizing, moving, or late window appearance
+    if (!windowFound) {
+        if (FindTargetWindow()) {
+            windowFound = true;
+            DEBUG_LOG("DesktopDuplicationBackend", "CaptureFrame: window found (late detection)");
+        }
+    }
+    if (windowFound) {
         if (!UpdateWindowBounds()) {
             DEBUG_LOG("DesktopDuplicationBackend", "CaptureFrame: WARNING - failed to update window bounds");
-            // Continue with last known bounds rather than failing
         }
     }
 
@@ -329,11 +384,13 @@ ID3D11Texture2D* DesktopDuplicationBackend::CreateWindowCroppedTexture(ID3D11Tex
     D3D11_TEXTURE2D_DESC sourceDesc;
     source->GetDesc(&sourceDesc);
 
-    // Calculate crop box (window bounds + crops)
-    int left = windowRect.left + cropLeft;
-    int top = windowRect.top + cropTop;
-    int right = windowRect.right - cropRight;
-    int bottom = windowRect.bottom - cropBottom;
+    // Calculate crop box relative to the duplicated output's origin
+    // Window coordinates are absolute (virtual desktop), but the texture
+    // only covers the matched output, so subtract the output origin.
+    int left = (windowRect.left - outputRect.left) + cropLeft;
+    int top = (windowRect.top - outputRect.top) + cropTop;
+    int right = (windowRect.right - outputRect.left) - cropRight;
+    int bottom = (windowRect.bottom - outputRect.top) - cropBottom;
 
     // Bounds check
     if (left < 0) left = 0;

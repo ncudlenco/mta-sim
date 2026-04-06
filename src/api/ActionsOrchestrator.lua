@@ -557,15 +557,28 @@ function ActionsOrchestrator:CheckSegmentCompletion()
         return
     end
 
-    -- Check if ALL events in current segment are fulfilled (not just enqueued ones)
+    -- Check if all non-background-actor events in current segment are fulfilled.
+    -- Background actors are extras — the simulation only requires main actors to
+    -- complete their events for segment advancement and story completion.
     local allFulfilled = true
     for _, eventId in ipairs(currentSegmentData.events) do
         if not inList(eventId, self.fulfilled) then
-            if DEBUG and DEBUG_ACTIONS_ORCHESTRATOR then
-                print("[CheckSegmentCompletion] Unfulfilled segment event: " .. eventId)
+            -- Check if this event belongs to a background actor
+            local event = CURRENT_STORY.graph[eventId]
+            local actorId = event and event.Entities and event.Entities[1]
+            local actor = actorId and FirstOrDefault(CURRENT_STORY.CurrentEpisode.peds,
+                function(ped) return ped:getData('id') == actorId end)
+            local isBackground = actor and actor:getData('isbackgroundactor')
+
+            if not isBackground then
+                if DEBUG and DEBUG_ACTIONS_ORCHESTRATOR then
+                    print("[CheckSegmentCompletion] Unfulfilled segment event: " .. eventId)
+                end
+                allFulfilled = false
+                break
+            elseif DEBUG and DEBUG_ACTIONS_ORCHESTRATOR then
+                print("[CheckSegmentCompletion] Skipping unfulfilled background actor event: " .. eventId .. " (actor " .. tostring(actorId) .. ")")
             end
-            allFulfilled = false
-            break
         end
     end
 
@@ -616,15 +629,19 @@ function ActionsOrchestrator:CheckSegmentCompletion()
             end
         end
 
-        -- Check if all actors have completed (no pending/unperformed requests)
+        -- Check if all non-background actors have completed (no pending/unperformed requests)
         local anyPending = false
         for actorId, request in pairs(self.eventRequests) do
             if request and not request.performed then
-                anyPending = true
-                if DEBUG and DEBUG_ACTIONS_ORCHESTRATOR then
-                    print("[ActionsOrchestrator] Actor "..actorId.." still has pending request for event "..tostring(request.eventId))
+                local actor = request.actor
+                local isBackground = actor and actor:getData('isbackgroundactor')
+                if not isBackground then
+                    anyPending = true
+                    if DEBUG and DEBUG_ACTIONS_ORCHESTRATOR then
+                        print("[ActionsOrchestrator] Actor "..actorId.." still has pending request for event "..tostring(request.eventId))
+                    end
+                    break
                 end
-                break
             end
         end
 
@@ -664,15 +681,33 @@ function ActionsOrchestrator:CollectStartsWithGroups()
                 All(request.actions, function(a) return a.isArtificial end)
 
             if #startsWithConstraints > 0 and not allArtificial then
-                -- Collect all actors in this starts_with group
+                -- Collect all actors in this starts_with group transitively.
+                -- A starts_with group may span multiple relation IDs (e.g. r1 links a0+a1,
+                -- r2 links a0+a2). Starting from any member, we follow starts_with
+                -- constraints to discover direct links, then follow their links in turn,
+                -- until no new members are found.
                 local group = {request}
+                local groupMembers = {[actorId] = true}
                 processed[actorId] = true
 
-                for _, constraint in ipairs(startsWithConstraints) do
-                    local linkedRequest = self.eventRequests[constraint.actorId]
-                    if linkedRequest and linkedRequest.eventId == constraint.eventId and linkedRequest.isValid and linkedRequest.planned and not linkedRequest.performed then
-                        table.insert(group, linkedRequest)
-                        processed[constraint.actorId] = true
+                -- Queue of requests whose constraints still need to be followed
+                local queue = {request}
+                while #queue > 0 do
+                    local current = table.remove(queue, 1)
+                    local currentConstraints = Where(current.constraints,
+                        function(c) return c.constraint.type == 'starts_with' end)
+
+                    for _, constraint in ipairs(currentConstraints) do
+                        if not groupMembers[constraint.actorId] then
+                            local linkedRequest = self.eventRequests[constraint.actorId]
+                            if linkedRequest and linkedRequest.eventId == constraint.eventId and linkedRequest.isValid and linkedRequest.planned and not linkedRequest.performed then
+                                table.insert(group, linkedRequest)
+                                groupMembers[constraint.actorId] = true
+                                processed[constraint.actorId] = true
+                                -- Follow this member's constraints to find more group members
+                                table.insert(queue, linkedRequest)
+                            end
+                        end
                     end
                 end
 
@@ -728,17 +763,27 @@ end
 function ActionsOrchestrator:ValidateAndExecuteGroup(group, groupType)
     if not group or #group == 0 then return false end
 
-    -- Validate group completeness for both starts_with and concurrent
+    -- Validate group completeness: each member's expected partners must be present.
+    -- In hub topologies (e.g. a0↔a1 via r1, a0↔a2 via r2), individual members have
+    -- different constraint counts. Validate that each member's specific partners are
+    -- in the group, rather than requiring uniform group size.
     if groupType == "starts_with" or groupType == "concurrent" then
+        local groupActorIds = {}
+        for _, req in ipairs(group) do
+            groupActorIds[req.actor:getData('id')] = true
+        end
+
         for _, request in ipairs(group) do
             local constraintType = groupType == "starts_with" and 'starts_with' or 'concurent'  -- Note: typo is consistent in codebase
-            local expectedPartners = #Where(request.constraints,
+            local partnerConstraints = Where(request.constraints,
                 function(c) return c.constraint.type == constraintType end)
-            if #group ~= expectedPartners + 1 then
-                if DEBUG and DEBUG_ACTIONS_ORCHESTRATOR then
-                    print("[ValidateAndExecuteGroup] Incomplete "..groupType.." group for "..request.actor:getData('id')..": has "..#group..", needs ".. (expectedPartners + 1))
+            for _, constraint in ipairs(partnerConstraints) do
+                if not groupActorIds[constraint.actorId] then
+                    if DEBUG and DEBUG_ACTIONS_ORCHESTRATOR then
+                        print("[ValidateAndExecuteGroup] Incomplete "..groupType.." group for "..request.actor:getData('id')..": missing partner "..constraint.actorId)
+                    end
+                    return false  -- Defer until all partners present
                 end
-                return false  -- Defer until all partners present
             end
         end
     end
@@ -1275,17 +1320,15 @@ function ActionsOrchestrator:TriggerActionExecution(actor, action, eventId)
         actor:setData('currentGraphEventId', eventId)
     end
 
-    local shouldAwaitContextSwitch = CURRENT_STORY.CurrentFocusedEpisode and actor:getData('currentEpisode') ~= CURRENT_STORY.CurrentFocusedEpisode.name
+    local isOffCamera = CURRENT_STORY.CurrentFocusedEpisode and actor:getData('currentEpisode') ~= CURRENT_STORY.CurrentFocusedEpisode.name
+    local shouldAwaitContextSwitch = isOffCamera and not actor:getData("isbackgroundactor")
     if shouldAwaitContextSwitch then
         actor:setData('isAwaitingContextSwitch', true)
         if DEBUG and DEBUG_ACTIONS_ORCHESTRATOR then
             print("[EnqueueActionLinear] actorId ".. actor:getData('id').." - action "..action.Name..': '..action:GetDynamicString().." - awaiting context switch")
         end
         self.actionQueue[actor:getData('id')] = { action = action, eventId = eventId }
-        -- Background actors should not request camera focus
-        if not actor:getData("isbackgroundactor") then
-            CURRENT_STORY.CameraHandler:requestFocus(actor:getData('id'))
-        end
+        CURRENT_STORY.CameraHandler:requestFocus(actor:getData('id'))
     else
         self:PublishActionStarted(actor, action, eventId)
         action:Apply()
@@ -1299,7 +1342,7 @@ function ActionsOrchestrator:PublishActionStarted(actor, action, eventId)
         -- Check if this action matches the expected graph action for this actor's current event
         local currentGraphActionName = actor:getData('currentGraphActionName')
 
-        if currentGraphActionName and action.Name == currentGraphActionName then
+        if currentGraphActionName and action.Name:lower() == currentGraphActionName:lower() then
             if DEBUG and DEBUG_ACTIONS_ORCHESTRATOR then
                 print("[EnqueueActionLinear] Publishing graph_event_start for "..eventId.." (action "..action.Name.." matches currentGraphActionName "..currentGraphActionName..")")
             end

@@ -26,6 +26,9 @@ private:
     RECT windowRect;  // Cached window rectangle
     bool windowFound;
 
+    // Monitor tracking for correct DXGI output
+    RECT outputRect;  // Desktop coordinates of the duplicated output
+
 public:
     /// Constructor
     /// @param windowTitle Title of window to capture (e.g., "MTA: San Andreas")

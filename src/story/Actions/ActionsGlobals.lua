@@ -66,7 +66,7 @@ function OnGlobalActionFinished(delay, playerId, storyId, callback, destroyedIte
             -- Only publish if the completed action was the actual graph event action
             -- Normalize graph action name to handle mappings (e.g., LookAtObject -> LookAt)
             local normalizedGraphActionName = story:NormalizeActionName(currentGraphActionName)
-            if currentGraphActionName and lastAction.Name == normalizedGraphActionName then
+            if currentGraphActionName and lastAction.Name:lower() == normalizedGraphActionName:lower() then
                 if DEBUG then
                     print("[ActionsGlobals] Publishing graph_event_end for "..completedEventId.." (action "..lastAction.Name.." matches currentGraphActionName "..currentGraphActionName..")")
                 end
@@ -124,7 +124,7 @@ function OnGlobalActionFinished(delay, playerId, storyId, callback, destroyedIte
             -- For passive actors in starts_with interactions:
             -- Event may have been fulfilled by active actor, but action name doesn't match
             -- Check if event is in fulfilled list and clear eventId if so
-            if completedEventId and not (currentGraphActionName and lastAction.Name == normalizedGraphActionName) then
+            if completedEventId and not (currentGraphActionName and lastAction.Name:lower() == normalizedGraphActionName:lower()) then
                 -- Main publication was skipped - check if event was fulfilled via starts_with
                 if inList(completedEventId, story.ActionsOrchestrator.fulfilled) then
                     if DEBUG then

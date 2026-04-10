@@ -2,6 +2,7 @@
 
 <p align="center">
   <a href="https://github.com/ncudlenco/mta-sim/releases"><img src="https://img.shields.io/github/v/release/ncudlenco/mta-sim?include_prereleases&style=for-the-badge" alt="Latest release"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge" alt="MIT License"></a>
   <a href="https://github.com/ncudlenco/mta-sim/stargazers"><img src="https://img.shields.io/github/stars/ncudlenco/mta-sim?style=for-the-badge&logo=github" alt="GitHub stars"></a>
   <a href="https://github.com/ncudlenco/mta-sim/network/members"><img src="https://img.shields.io/github/forks/ncudlenco/mta-sim?style=for-the-badge&logo=github" alt="GitHub forks"></a>
   <a href="https://github.com/ncudlenco/mta-sim/watchers"><img src="https://img.shields.io/github/watchers/ncudlenco/mta-sim?style=for-the-badge&logo=github" alt="GitHub watchers"></a>

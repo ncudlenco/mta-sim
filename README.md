@@ -12,11 +12,15 @@
 
 This repository contains the Lua-based simulation engine. The Python batch orchestrator and procedural / LLM-based GEST generators that drive it at scale live in the companion repository [**multiagent_story_system**](https://github.com/ncudlenco/multiagent_story_system).
 
-## Paper
+## Publications
 
-This system is described in the ICLR 2026 Workshop paper:
+This system is described in:
 
-> N.~Cudlenco, M.~Masala, M.~Leordeanu. **[Tiny Paper] GEST-Engine: Controllable Multi-Actor Video Synthesis with Perfect Spatiotemporal Annotations.** *ICLR 2026 the 2nd Workshop on World Models: Understanding, Modelling and Scaling.* [OpenReview](https://openreview.net/forum?id=uUofPYVMZH)
+> N. Cudlenco, M. Masala, M. Leordeanu. **[Tiny Paper] GEST-Engine: Controllable Multi-Actor Video Synthesis with Perfect Spatiotemporal Annotations.** *ICLR 2026, the 2nd Workshop on World Models: Understanding, Modelling and Scaling.* [OpenReview](https://openreview.net/forum?id=uUofPYVMZH)
+
+The underlying GEST formalism — *Graphs of Events in Space and Time* — was introduced in:
+
+> M. Masala, N. Cudlenco, T. Rebedea, M. Leordeanu. **Explaining Vision and Language Through Graphs of Events in Space and Time.** *ICCV 2023 Workshops (CLVL)*, pp. 2826–2831. [openaccess.thecvf.com](https://openaccess.thecvf.com/content/ICCV2023W/CLVL/html/Masala_Explaining_Vision_and_Language_Through_Graphs_of_Events_in_Space_ICCVW_2023_paper.html) · [arXiv:2309.08612](https://arxiv.org/abs/2309.08612)
 
 The sample corpus of **398 procedurally generated multi-actor stories** (with engine-rendered videos, dense annotations, and VEO 3.1 / WAN 2.2 neural baselines) is publicly available on HuggingFace: [**nnc-001/gtasa-01**](https://huggingface.co/datasets/nnc-001/gtasa-01).
 

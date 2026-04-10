@@ -227,6 +227,16 @@ sv2l/
 └── complex_graphs/             # Additional example GEST input files
 ```
 
+## Star History
+
+<a href="https://www.star-history.com/#ncudlenco/mta-sim&Date">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=ncudlenco/mta-sim&type=Date&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=ncudlenco/mta-sim&type=Date" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=ncudlenco/mta-sim&type=Date" />
+ </picture>
+</a>
+
 ## Citation
 
 If you use this system in your research, please cite the ICLR 2026 Tiny Paper:

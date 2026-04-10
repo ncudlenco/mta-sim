@@ -1,166 +1,73 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Onboarding instructions for AI coding agents (and human contributors) working in this repository. For an end-user introduction to the project, see the [README](README.md).
 
-## Project Overview
+## Project overview
 
-This project represents a pioneering effort to bridge the gap between text-to-video and video-to-text generation by introducing graph-like structures for objects, actors, and their interactions. Initiated 5-7 years ago (before the current LLM and video generation era), the project tackles the fundamental challenge of creating structured interaction data for deep learning applications.
+**GEST-Engine (mta-sim)** is a Multi Theft Auto resource that executes formal *Graphs of Events in Space and Time (GESTs)* deterministically inside GTA San Andreas, producing multi-actor narrative videos paired with dense frame-level ground-truth annotations (instance segmentation, pairwise spatial relations, exact event-to-frame temporal mappings, natural-language descriptions). It is the simulation half of a two-repo system; the Python orchestrator and LLM-based GEST generators live in [multiagent_story_system](https://github.com/ncudlenco/multiagent_story_system).
 
-### The Core Challenge
+The engine is written in Lua against the MTA scripting API and is structured to keep core engine logic isolated from GTA-specific business logic so that future ports to other engines (FiveM/GTA V is the next target) can reuse the orchestration core.
 
-The absence of structured multi-agent interaction data led to the creation of this comprehensive system using GTA San Andreas as a simulation environment. The project involves two primary workflows:
+## Source layout
 
-1. **Data Collection**: Automating scenarios where NPCs interact with objects and each other, logging these interactions as structured graphs
-2. **Graph-to-Video Generation**: Starting from predefined graphs and mapping them to executable scenarios in the 3D game world
+All Lua source lives under [src/](src/), organized into six subsystems:
 
-### Technical Complexity
+- [src/api/](src/api/) — high-level façade exposed to the rest of the engine: [`ActionsOrchestrator`](src/api/ActionsOrchestrator.lua) (temporal coordination of multi-actor actions), [`CameraHandler`](src/api/CameraHandler.lua) and friends (`CameraHandlerBase`, `CinematicCameraHandler`, `StaticCameraHandler`), [`PedHandler`](src/api/PedHandler.lua), [`POICoordinator`](src/api/POICoordinator.lua), and the abstract bases `IStoryItem`, `StoryBase`, `StoryActionBase`.
+- [src/story/](src/story/) — story execution core: [`GraphStory`](src/story/GraphStory.lua) (parses input GEST JSON, drives execution), [`EventPlanner`](src/story/EventPlanner.lua), [`Generator`](src/story/Generator.lua), [`Logger`](src/story/Logger.lua), plus subdirectories `Actions/`, `Camera/`, `Episodes/`, `Locations/`, `Needs/`, `Objects/`.
+- [src/client/](src/client/) — client-side scripts (the MTA client connects to the localhost server and runs these for camera control, frame capture, and developer-mode 3D editing tools).
+- [src/export/](src/export/) — [`GameWorldExporter`](src/export/GameWorldExporter.lua) traverses the running game world and serializes available actions, regions, objects and skins to `simulation_environment_capabilities.json` for downstream agents.
+- [src/features/](src/features/) — opt-in feature modules, currently `artifact_collection/` (frame capture and per-frame ground-truth dumping).
+- [src/utils/](src/utils/) — shared utilities including [`class.lua`](src/utils/class.lua) (the custom class-like OOP helper), [`EventBus`](src/utils/EventBus.lua), [`SpatialCoordinator`](src/utils/SpatialCoordinator.lua), `ConfigurationLoader`, `UnionFind`, `Plane3`, `Extent3`, `VectorUtils`, etc.
 
-The implementation revealed extraordinary complexity across multiple domains:
+Non-source directories worth knowing:
 
-- **Geometry and Pathfinding**: Custom libraries for spatial reasoning and NPC navigation
-- **Temporal Synchronization**: Complex async orchestration to precisely time when NPCs reach locations and perform actions
-- **World Mapping**: Converting existing game locations to JSON structures without native API support (see `EpisodeCommands.lua`, `MappingCommands.lua`)
-- **Template Systems**: Abstraction layers for objects and actions through Template and Supertemplate systems
-- **Action Orchestration**: Sophisticated scheduling system for coordinating when actions begin and end
-- **Object Mapping**: Dynamic mapping between abstract graph objects and concrete game objects
+- [files/episodes/](files/episodes/) — JSON episode definitions (POIs, available actions, object layouts).
+- [files/supertemplates/](files/supertemplates/) — reusable interaction templates assembled from sub-templates.
+- [files/data/](files/data/) — custom 3D models (`.dff`/`.txd`) loaded by the resource.
+- [input_graphs/](input_graphs/) — sample input GESTs the engine consumes.
+- [screenshot_module/](screenshot_module/) — native C++ module that uses the Windows Desktop Duplication API (DXGI) to capture frames out-of-process; built independently with CMake. See [screenshot_module/README.md](screenshot_module/README.md).
+- [scripts/](scripts/) — Python helpers (postprocessing, validation).
+- [meta.xml](meta.xml) — MTA resource manifest. `<oop>true</oop>` is set, so MTA's element instances behave as class instances.
 
-### Development Challenges
+## Running the engine
 
-The project faces unique development constraints:
-- **Lua Development**: Limited debugging capabilities without proper debugger support
-- **MTA Engine Limitations**: Difficulty mocking the MTA engine for unit testing
-- **Integration Testing**: Manual testing requiring 10+ minute cycles to start the engine and observe full scenario execution
-- **Async Complexity**: Managing timing-dependent interactions in a game engine environment
+The system is launched as a normal MTA resource. The [README](README.md) covers full installation and end-to-end usage; the points below are the ones an agent typically needs:
 
-This system represents one of the first attempts at creating a comprehensive graph-based narrative simulation engine for research into multi-agent story generation and video synthesis.
+- The engine **requires both the MTA server and the MTA client running simultaneously**. The server hosts the resource and processes the GEST; the client connects to `localhost`, which is what triggers actual execution. Starting the server alone does nothing — it sits idle waiting for a client.
+- The Python orchestrator in [multiagent_story_system](https://github.com/ncudlenco/multiagent_story_system) automates this by writing a `config.json` next to this resource and managing both processes. For manual runs, edit `src/ServerGlobals.lua` (or drop a `config.json` next to it) to set `EXPORT_MODE`, `SIMULATION_MODE`, `LOAD_FROM_GRAPH`, `INPUT_GRAPHS`, `ARTIFACT_COLLECTION_ENABLED`, etc.
+- Two operational modes:
+  - **Export mode**: dumps the game world's available capabilities (actions, regions, objects, skins) to `simulation_environment_capabilities.json` and exits. Used to seed downstream LLM agents with ground-truth game vocabulary.
+  - **Simulation mode**: loads a GEST JSON, validates it against the loaded episodes, plans locations, and runs the orchestrator until all events fire or the story errors out.
 
-**For detailed technical development guidance, see the sections below.**
+There is no usable automated test suite. Verification is done by running an actual simulation against a known input graph and inspecting the resulting `clientscript.log` and `server.log`.
 
-## Development Commands
+## Code conventions
 
-**Testing:**
-- In general, the testing framework doesn't work. It is incomplete and does not fully mock all the functionalities from MTA. I am testing now manually by running the game, connecting, using a specific graph (JSON file), and visual verification + reviewing the clientscript.log and server.log. The information below is true but in practice it is never used.
-- `lua run_tests_standalone.lua` - Run all tests with standalone Lua interpreter - this doesn't work
-- `run_tests.bat` (Windows) or `./run_tests.sh` (Linux/macOS) - Run tests with wrapper scripts that check for Lua availability
-- Tests are located in `test_framework/` and use mock MTA functions for standalone testing
+- **Lua, OOP via [class.lua](src/utils/class.lua).** New components extend an existing base class or use the helper to declare a new one. Keep state on `self`; avoid module-level mutable globals.
+- **LDoc** for documentation comments. See [the LDoc manual](https://stevedonovan.github.io/ldoc/manual/doc.md.html). Document every public function (`@param`, `@return`, short description). The `docs/` directory holds LDoc-style component reference docs that are kept in sync with the code.
+- **DRY, YAGNI, SOLID.** Keep the engine core decoupled from GTA-specific logic. The medium-term goal is to port the orchestrator to FiveM/GTA V; anything that bakes in San Andreas-only assumptions makes that harder.
+- **Naming**: PascalCase for classes and files containing classes; camelCase for functions and locals; UPPER_SNAKE_CASE for global config flags in [src/ServerGlobals.lua](src/ServerGlobals.lua).
+- **Logging**: route through [`src/story/Logger.lua`](src/story/Logger.lua). Subsystem debug flags (`DEBUG_VALIDATION`, `DEBUG_ACTIONS_ORCHESTRATOR`, etc.) live in `ServerGlobals.lua` and gate verbose output.
+- **No backwards-compatibility narration.** When you change something, write the new code and docs as the only solution. Do not leave "previously this was…" comments or migration notes.
 
-**Story Generation (Python):**
-- `python story_generator/main.py` - Generate synthetic story graphs for testing
+## Critical context
 
-## Project Architecture
+- **Lua debugging is limited.** There is no working step debugger in the MTA environment that we rely on. Debugging is done by inserting `outputServerLog` / `outputDebugString` calls and reading `server.log` / `clientscript.log`. Plan accordingly: prefer small, isolated changes you can verify quickly.
+- **Iteration cycles are slow.** A full simulation run for a non-trivial GEST takes minutes and requires the GTA window to be focused for client-side capture. Don't expect tight TDD-style loops.
+- **The MTA engine is hard to mock.** Past attempts at a Lua-side test framework with mocked MTA functions were abandoned because the surface area is too large and the hardest bugs are timing-dependent in the real engine. Functional verification is the standard.
+- **Async / temporal correctness is the dominant source of bugs.** Most non-trivial issues are race conditions between actor pathfinding, action triggering, and constraint satisfaction. When something fails, the suspect is usually a constraint that fired in the wrong order, not a code-level bug.
+- **Root-cause analysis discipline**: when investigating a failure, start by reading `server.log` (and `clientscript.log` for client-side issues) line by line from the moment the GEST is loaded, then ground each hypothesis in the actual code path. Never guess from symptoms alone — Lua silent failures are common and the log usually has the answer.
 
-This is an **MTA San Andreas story simulation system** that generates and executes complex multi-actor interactive narratives in a 3D game environment.
+## Companion documentation
 
-### Core Components
+LDoc-style component references and architecture diagrams (kept up to date with the code) live in the repository:
 
-**Graph-Based Story Engine (`story/GraphStory.lua`):**
-- Processes JSON story graphs containing events, actors, objects, and temporal constraints
-- Maps graph events to 3D simulator actions through episode validation
-- Supports complex temporal relationships: after, before, starts_with, concurrent
-- Handles multi-episode stories with location transitions
+- [arch/system-overview.md](arch/system-overview.md), [arch/component-details.md](arch/component-details.md), [arch/data-flow.md](arch/data-flow.md) — high-level architecture diagrams.
+- [docs/ServerGlobals.md](docs/ServerGlobals.md), [docs/ServerCommands.md](docs/ServerCommands.md) — global configuration and developer commands.
+- [docs/api/ActionsOrchestrator.md](docs/api/ActionsOrchestrator.md), [docs/api/CameraHandler.md](docs/api/CameraHandler.md) — temporal coordination and camera management.
+- [docs/story/GraphStory.md](docs/story/GraphStory.md), [docs/story/Episodes/MetaEpisode.md](docs/story/Episodes/MetaEpisode.md), [docs/story/Locations/Location.md](docs/story/Locations/Location.md) — graph execution, multi-episode wrapping, location planning.
+- [docs/client/EpisodeCommands.md](docs/client/EpisodeCommands.md), [docs/client/MappingCommands.md](docs/client/MappingCommands.md), [docs/client/Template.md](docs/client/Template.md), [docs/client/Supertemplate.md](docs/client/Supertemplate.md) — client-side developer tooling for episode editing, pathfinding graph creation, and template authoring.
+- [docs/utils/SpatialCoordinator.md](docs/utils/SpatialCoordinator.md) — spatial coordination utility.
+- [docs/action-flow-sequence-diagram.md](docs/action-flow-sequence-diagram.md), [docs/action-planning-execution-flow.md](docs/action-planning-execution-flow.md) — execution flow traces.
 
-**Actions Orchestrator (`api/ActionsOrchestrator.lua`):**
-- Coordinates multi-actor action execution with temporal constraints
-- Manages context switching between different episodes/locations
-- Handles concurrent and synchronized actions between multiple actors
-- Queues actions awaiting constraint satisfaction
-
-**Episode System:**
-- Episodes define 3D environments with POIs (Points of Interest), objects, and available actions
-- Dynamic episodes loaded from JSON files in `files/episodes/`
-- Meta-episodes combine multiple connected episodes for complex stories
-- Template system for reusable object interaction patterns
-
-**Object and Action Mapping:**
-- Maps abstract story objects to concrete 3D game objects
-- Chain ID system ensures consistent object usage across actions
-- Supports spawnable objects (cigarettes, phones) and fixed objects (furniture)
-- Template-based object / possible actions definitions in `files/supertemplates/`
-
-### Key Patterns
-
-**Story Loading Flow:**
-1. `GraphStory` loads JSON graph from `LOAD_FROM_GRAPH` global variable
-2. Validates required actors, locations, objects against available episodes
-3. Creates `MetaEpisode` wrapper for multi-episode stories
-4. Maps graph events to simulator actions via `MapObjectsActionsAndPoi()`
-5. Processes actions through `ActionsOrchestrator` with temporal constraints
-6. Plans at runtime the choice of locations and actions through `Location`
-
-**Action Execution:**
-1. Actions enqueued with temporal constraints extracted from graph
-2. Constraints validated (after, before, starts_with, concurrent)
-3. Context switches handled for cross-episode actions
-4. Camera management for spectator recording
-
-**Testing Framework: incomplete and does not work**
-- Mock MTA functions allow testing without game engine
-- Chain ID consistency testing for object mappings
-- Scenario-based tests for common story patterns
-
-### File Organization
-
-- `story/` - Core story execution engine and episode definitions
-- `api/` - Interface classes and action orchestration
-- `files/episodes/` - Episode definitions with POIs and object layouts
-- `files/supertemplates/` - Reusable interaction templates
-- `story_generator/` - Python tools for generating synthetic test stories
-- `test_framework/` - Standalone testing infrastructure with MTA mocks - not working
-
-### Critical Globals
-
-- `CURRENT_STORY` - Active story instance
-- `LOAD_FROM_GRAPH` - Path to input story graph JSON
-- `DEBUG` - Enables detailed logging output
-- Various debug flags for specific subsystems (e.g., `DEBUG_VALIDATION`, `DEBUG_ACTIONS_ORCHESTRATOR`)
-
-The system is designed for research into multi-agent story simulation and supports both linear random stories and complex graph-based narratives with precise temporal control.
-
-## Documentation Structure
-
-This repository includes comprehensive documentation of the system architecture and implementation:
-
-### Architecture Documentation
-- **[System Architecture Overview](arch/system-overview.md)** - High-level system architecture with Mermaid diagrams
-- **[Component Details](arch/component-details.md)** - Detailed component architecture and state machines
-- **[Data Flow Architecture](arch/data-flow.md)** - Data flow patterns and processing pipelines
-
-### Component Documentation
-- **[Core System Files](docs/)** - Detailed documentation of all major system components:
-  - **[ServerGlobals.md](docs/ServerGlobals.md)** - Global configuration and debug settings
-  - **[ServerCommands.md](docs/ServerCommands.md)** - Development and debugging commands
-  - **[story/GraphStory.md](docs/story/GraphStory.md)** - Main graph processing engine
-  - **[api/ActionsOrchestrator.md](docs/api/ActionsOrchestrator.md)** - Action coordination and temporal synchronization
-  - **[api/CameraHandler.md](docs/api/CameraHandler.md)** - Advanced camera synchronization and video capture management
-  - **[story/Episodes/MetaEpisode.md](docs/story/Episodes/MetaEpisode.md)** - Multi-episode wrapper system
-  - **[story/Locations/Location.md](docs/story/Locations/Location.md)** - Complex location management and action selection
-  - **[client/EpisodeCommands.md](docs/client/EpisodeCommands.md)** - Interactive 3D episode development toolkit
-  - **[client/MappingCommands.md](docs/client/MappingCommands.md)** - Pathfinding graph creation tools
-  - **[client/Template.md](docs/client/Template.md)** - Modular content templates
-  - **[client/Supertemplate.md](docs/client/Supertemplate.md)** - Template collection coordination
-  - **[utils/README.md](docs/utils/README.md)** - Utility functions overview
-
-### Key System Features
-
-**Temporal Synchronization Engine**: The ActionsOrchestrator implements sophisticated multi-actor coordination with support for after/before relationships, concurrent execution, starts_with synchronization, and cross-episode context switching.
-
-**Graph-to-Action Translation**: The GraphStory engine performs complex mapping from abstract story graphs to concrete 3D actions through chain-based object mapping, episode validation, and constraint extraction.
-
-**Multi-Episode System**: MetaEpisode enables seamless transitions between different 3D environments with automatic cross-episode movement generation and unified actor distribution.
-
-**Interactive Development Tools**: Real-time 3D editing capabilities for episodes, templates, and pathfinding networks with visual feedback and immediate JSON serialization.
-
-**Advanced Object Mapping**: Chain ID system ensures consistent object usage across multiple actors while preventing conflicts and managing spawnable vs. fixed objects.
-
-**Camera Synchronization Engine**: Sophisticated multi-spectator camera management with automatic focus switching, cross-episode context transitions, and coordinated fade effects for seamless video generation.
-
-## Development guidelines
-Any new development should follow best engineering practices as DRY, YAGNI, and SOLID principles. The functions must be documented in an LDoc compliant style [https://stevedonovan.github.io/ldoc/manual/doc.md.html].
-
-We are using a custom class-like function located in utils/class.lua.
-
-The overarching architecture should be designed in a way that makes it easy to isolate the core-engine logic from the simulation related business logic. With the idea in mind that this system is to be extended for other games as well. The very next milestone after the idea is fully proved for GTA:SA is to extend it for GTA V through FiveM.
-
-Whenever you make a new change, do not reference anything from the previous state. Always document and write your code as if this is the solution and do not explain how it compares with a previous implementation or how it was previously implemented.
-
-When doing ROOT CAUSE ANALYSIS: always look at the server logs, line by line, then ground the answers in code as well. Never make assumptions.
+When something is stale or wrong, fix the code first, then fix the doc. When a new component is added, add an LDoc-style reference under `docs/` that mirrors the source path.

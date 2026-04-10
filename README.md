@@ -1,9 +1,11 @@
 # GEST-Engine (mta-sim)
 
-[![GitHub stars](https://img.shields.io/github/stars/ncudlenco/mta-sim?style=social)](https://github.com/ncudlenco/mta-sim/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/ncudlenco/mta-sim?style=social)](https://github.com/ncudlenco/mta-sim/network/members)
-[![GitHub watchers](https://img.shields.io/github/watchers/ncudlenco/mta-sim?style=social)](https://github.com/ncudlenco/mta-sim/watchers)
-[![Latest release](https://img.shields.io/github/v/release/ncudlenco/mta-sim?include_prereleases)](https://github.com/ncudlenco/mta-sim/releases)
+<p align="center">
+  <a href="https://github.com/ncudlenco/mta-sim/releases"><img src="https://img.shields.io/github/v/release/ncudlenco/mta-sim?include_prereleases&style=for-the-badge" alt="Latest release"></a>
+  <a href="https://github.com/ncudlenco/mta-sim/stargazers"><img src="https://img.shields.io/github/stars/ncudlenco/mta-sim?style=for-the-badge&logo=github" alt="GitHub stars"></a>
+  <a href="https://github.com/ncudlenco/mta-sim/network/members"><img src="https://img.shields.io/github/forks/ncudlenco/mta-sim?style=for-the-badge&logo=github" alt="GitHub forks"></a>
+  <a href="https://github.com/ncudlenco/mta-sim/watchers"><img src="https://img.shields.io/github/watchers/ncudlenco/mta-sim?style=for-the-badge&logo=github" alt="GitHub watchers"></a>
+</p>
 
 > **GEST-Engine** is a Multi Theft Auto (MTA) resource that executes formal event graph specifications — *Graphs of Events in Space and Time (GESTs)* — deterministically in GTA San Andreas, producing multi-actor narrative videos paired with dense frame-level ground-truth annotations: instance segmentation, per-frame pairwise spatial relations between all entities, exact event-to-frame temporal mappings, and natural-language descriptions — all at zero marginal annotation cost.
 

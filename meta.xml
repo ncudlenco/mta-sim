@@ -81,6 +81,8 @@
   <script src="src/api/StoryWeatherBase.lua" type="shared"/>
   <!-- Artifact Collection Module -->
   <script src="src/features/artifact_collection/config/ArtifactCollectionConfig.lua" type="server"/>
+  <script src="src/features/artifact_collection/NativeCaptureMetadata.lua" type="server"/>
+  <script src="src/features/artifact_collection/CoordSpaceWriter.lua" type="server"/>
   <script src="src/features/artifact_collection/collectors/ArtifactCollector.lua" type="server"/>
   <!-- Adapter Base Classes -->
   <script src="src/features/artifact_collection/adapters/AdapterProviderBase.lua" type="server"/>

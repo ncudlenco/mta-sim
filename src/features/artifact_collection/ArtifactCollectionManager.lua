@@ -5,8 +5,6 @@
 --   Idle → Freezing → Collecting → Unfreezing → Idle
 --
 -- @classmod ArtifactCollectionManager
--- @author Claude Code
--- @license MIT
 
 ArtifactCollectionManager = class(function(o, freezeAdapter, config)
     o.name = "ArtifactCollectionManager"

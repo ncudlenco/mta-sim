@@ -17,8 +17,6 @@
 --- }
 ---
 --- @classmod EventFrameMappingCollector
---- @author Claude Code
---- @license MIT
 
 EventFrameMappingCollector = class(ArtifactCollector, function(o, config)
     ArtifactCollector.init(o, "EventFrameMappingCollector", config)

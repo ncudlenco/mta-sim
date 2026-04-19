@@ -60,6 +60,10 @@ public:
     /// @return True if modality exists
     bool GetTargetDimensions(int modalityId, int& outWidth, int& outHeight) const;
 
+    /// Snapshot of every recording modality's target dimensions.
+    /// @return Copy of the internal modalityId -> (width, height) map.
+    std::map<int, std::pair<int, int>> GetAllTargetDimensions() const;
+
     /// Stop all recordings
     void StopAll();
 

@@ -3,8 +3,6 @@
 --- Each game (MTA, FiveM, etc.) provides its own concrete implementation
 ---
 --- @classmod AdapterProviderBase
---- @author Claude Code
---- @license MIT
 
 AdapterProviderBase = class(function(o)
     o.gameType = "unknown"
@@ -51,6 +49,25 @@ end
 --- @return RenderModeControllerBase Render mode controller instance
 function AdapterProviderBase:createRenderModeController(spectatorData)
     error(string.format("%s:createRenderModeController() must be implemented by subclass", self.gameType))
+end
+
+--- Create game-specific pose adapter
+--- Coordinates client-side bone reads for per-frame pose collection
+---
+--- @param spectatorData SpectatorData The spectator data containing entity reference
+--- @return any Pose adapter instance
+function AdapterProviderBase:createPoseAdapter(spectatorData)
+    error(string.format("%s:createPoseAdapter() must be implemented by subclass", self.gameType))
+end
+
+--- Create game-specific visibility adapter
+--- Coordinates client-side isElementOnScreen + isLineOfSightClear queries
+--- for collectors that need engine-authoritative visibility.
+---
+--- @param spectatorData SpectatorData The spectator data containing entity reference
+--- @return any Visibility adapter instance
+function AdapterProviderBase:createVisibilityAdapter(spectatorData)
+    error(string.format("%s:createVisibilityAdapter() must be implemented by subclass", self.gameType))
 end
 
 --- Get the game type identifier

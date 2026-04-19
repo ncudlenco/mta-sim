@@ -2,8 +2,6 @@
 -- Reads configuration from global variables
 --
 -- @classmod ArtifactCollectionConfig
--- @author Claude Code
--- @license MIT
 
 -- Modality type enumeration
 ModalityType = {
@@ -37,6 +35,7 @@ ArtifactCollectionConfig = class(function(o, options)
 
     -- Depth configuration
     o.enableDepth = options.enableDepth or false
+    o.depthPNGFPS = options.depthPNGFPS or 0
 
     -- Event frame mapping configuration
     o.enableEventFrameMapping = options.enableEventFrameMapping or false
@@ -51,9 +50,21 @@ ArtifactCollectionConfig = class(function(o, options)
         o.spatialRelationsIncludeObjectRelations = true  -- Default to enabled
     end
 
+    -- Pose configuration
+    o.enablePose = options.enablePose or false
+    o.poseFPS = options.poseFPS or 0
+    o.poseIncludeOffscreen = options.poseIncludeOffscreen or false
+
     -- Video encoding settings
     o.videoFPS = options.videoFPS or 30
     o.videoBitrate = options.videoBitrate or 5000000
+
+    -- Unified multi-modal native backend (CMultiModalCapture via client C++).
+    -- When enabled, a single MultiModalCollector replaces the per-modality
+    -- RGB / seg / depth collectors and captures all three atomically via the
+    -- D3D9 proxy hooks. Requires an mtasa-blue client build that exposes
+    -- captureMultiModalFrame() and friends.
+    o.useUnifiedMultiModal = options.useUnifiedMultiModal or false
 end)
 
 --- Create configuration from global variables
@@ -83,6 +94,7 @@ function ArtifactCollectionConfig.fromGlobals()
 
         -- Depth configuration
         enableDepth = ARTIFACT_ENABLE_DEPTH or false,
+        depthPNGFPS = ARTIFACT_DEPTH_PNG_FPS or 0,
 
         -- Event frame mapping configuration
         enableEventFrameMapping = ARTIFACT_ENABLE_EVENT_FRAME_MAPPING or false,
@@ -94,9 +106,17 @@ function ArtifactCollectionConfig.fromGlobals()
         spatialRelationsMaxDistance = ARTIFACT_SPATIAL_RELATIONS_MAX_DISTANCE or 0,
         spatialRelationsIncludeObjectRelations = ARTIFACT_SPATIAL_RELATIONS_INCLUDE_OBJECT_RELATIONS,
 
+        -- Pose configuration
+        enablePose = ARTIFACT_ENABLE_POSE or false,
+        poseFPS = ARTIFACT_POSE_FPS or 0,
+        poseIncludeOffscreen = ARTIFACT_POSE_INCLUDE_OFFSCREEN or false,
+
         -- Video encoding settings
         videoFPS = ARTIFACT_VIDEO_FPS or 30,
-        videoBitrate = ARTIFACT_VIDEO_BITRATE or 5000000
+        videoBitrate = ARTIFACT_VIDEO_BITRATE or 5000000,
+
+        -- Unified multi-modal native backend
+        useUnifiedMultiModal = ARTIFACT_USE_UNIFIED_MULTIMODAL or false
     })
 end
 

@@ -3,8 +3,6 @@
 --- Does NOT depend on game-specific entities (MTA elements, FiveM natives, etc.)
 ---
 --- @classmod ArtifactCollectionFactory
---- @author Claude Code
---- @license MIT
 
 --- Spectator data structure (game-agnostic)
 --- @class SpectatorData
@@ -20,6 +18,9 @@ ArtifactCollectionFactory = class(function(o, config, adapterProvider)
     o.config = config or ArtifactCollectionConfig.fromGlobals()
     o.adapterProvider = adapterProvider
     o.sharedNativeAdapter = nil  -- Singleton for native screenshot adapter
+    -- One CoordSpaceWriter shared across all collectors so coord_space.json
+    -- per (storyId, cameraId) is written at most once.
+    o.coordSpaceWriter = CoordSpaceWriter()
 
     if DEBUG then
         print(string.format("[ArtifactCollectionFactory] Initialized (game: %s, enabled: %s, fps: %d)",
@@ -176,7 +177,7 @@ function ArtifactCollectionFactory:createSegmentationCollector(spectatorData)
         cameraId = spectatorData.id,
         framesPerSecond = self.config.framesPerSecond,  -- Global FPS (for frame skipping calculation)
         segmentationPNGFPS = self.config.segmentationPNGFPS,  -- Target PNG capture FPS
-        segmentationFrameIdOffset = self.config.segmentationFrameIdOffset  -- Frame ID offset for Desktop Duplication compensation
+        segmentationFrameIdOffset = self.config.segmentationFrameIdOffset,  -- Frame ID offset for Desktop Duplication compensation
         -- storyId will be obtained from frameContext.storyId or CURRENT_STORY.Id at runtime
     })
 
@@ -214,18 +215,60 @@ function ArtifactCollectionFactory:createDepthCollector(spectatorData)
     -- Ask adapter provider for render mode controller
     local renderModeController = self.adapterProvider:createRenderModeController(spectatorData)
 
-    -- Create depth collector
+    -- Create depth collector (PNG-only, no video — the native encoder only
+    -- handles RGB, so depth mirrors segmentation's standalone capture path).
     local collector = DepthCollector(screenshotAdapter, renderModeController, {
         cameraId = spectatorData.id,
-        videoFPS = self.config.videoFPS,
-        videoBitrate = self.config.videoBitrate,
         framesPerSecond = self.config.framesPerSecond,
-        modalityId = ModalityType.DEPTH
+        depthPNGFPS = self.config.depthPNGFPS
     })
 
     if DEBUG_SCREENSHOTS then
         print(string.format("[ArtifactCollectionFactory] Created depth collector for: %s",
             spectatorData.id))
+    end
+
+    return collector
+end
+
+--- Create the unified multi-modal collector that drives the mtasa-blue client
+--- native backend. Replaces the RGB / segmentation / depth trio when
+--- `config.useUnifiedMultiModal` is true.
+---
+--- @param spectatorData SpectatorData The spectator data
+--- @return MultiModalCollector|nil Collector instance, or nil if disabled
+function ArtifactCollectionFactory:createMultiModalCollector(spectatorData)
+    local adapter = self.adapterProvider:createClientMultiModalAdapter(spectatorData)
+    if not adapter then
+        print("[ERROR] ArtifactCollectionFactory: Failed to create multi-modal adapter")
+        return nil
+    end
+
+    local collector = MultiModalCollector(adapter, {
+        cameraId                   = spectatorData.id,
+        framesPerSecond            = self.config.framesPerSecond,
+        widthResolution            = self.config.widthResolution,
+        heightResolution           = self.config.heightResolution,
+        videoFPS                   = self.config.videoFPS,
+        videoBitrate               = self.config.videoBitrate,
+
+        -- RGB modality (reuses the existing native-screenshot config keys).
+        rgbImageFPS                = self.config.nativeScreenshotImageFPS,
+        rgbImageFormat             = self.config.nativeScreenshotImageFormat,
+        rgbJPEGQuality             = self.config.nativeScreenshotJPEGQuality,
+        rgbSaveToVideo             = self.config.nativeScreenshotSaveImages ~= false,
+
+        -- Segmentation modality.
+        segmentationPNGFPS         = self.config.enableSegmentation and self.config.segmentationPNGFPS or 0,
+        segSaveToVideo             = false,
+
+        -- Depth modality.
+        depthPNGFPS                = self.config.enableDepth and self.config.depthPNGFPS or 0,
+        depthSaveToVideo           = false
+    })
+
+    if DEBUG_SCREENSHOTS then
+        print(string.format("[ArtifactCollectionFactory] Created multi-modal collector for: %s", spectatorData.id))
     end
 
     return collector
@@ -271,17 +314,61 @@ function ArtifactCollectionFactory:createSpatialRelationsCollector(spectatorData
         return nil
     end
 
-    local collector = SpatialRelationsCollector({
+    local visibilityAdapter = self.adapterProvider:createVisibilityAdapter(spectatorData)
+    if not visibilityAdapter then
+        print("[ERROR] ArtifactCollectionFactory: Failed to create visibility adapter for spatial relations")
+        return nil
+    end
+
+    local collector = SpatialRelationsCollector(visibilityAdapter, self.coordSpaceWriter, {
         cameraId = spectatorData.id,
         framesPerSecond = self.config.framesPerSecond,
         spatialRelationsFPS = self.config.spatialRelationsFPS,
         includeInvisible = self.config.spatialRelationsIncludeInvisible,
         maxDistance = self.config.spatialRelationsMaxDistance,
-        includeObjectRelations = self.config.spatialRelationsIncludeObjectRelations
+        includeObjectRelations = self.config.spatialRelationsIncludeObjectRelations,
+        screenWidth = self.config.widthResolution,
+        screenHeight = self.config.heightResolution
     })
 
     if DEBUG then
         print(string.format("[ArtifactCollectionFactory] Created spatial relations collector for: %s",
+            spectatorData.id))
+    end
+
+    return collector
+end
+
+--- Create pose collector (3D bones + 2D screen projection per story actor)
+--- Per-spectator: each spectator has its own camera matrix for projection.
+---
+--- @param spectatorData table Spectator configuration
+--- @return PoseCollector|nil Pose collector instance, or nil if not enabled
+function ArtifactCollectionFactory:createPoseCollector(spectatorData)
+    if not self.config.enablePose then
+        if DEBUG then
+            print("[ArtifactCollectionFactory] Pose collection disabled in config")
+        end
+        return nil
+    end
+
+    local poseAdapter = self.adapterProvider:createPoseAdapter(spectatorData)
+    if not poseAdapter then
+        print("[ERROR] ArtifactCollectionFactory: Failed to create pose adapter")
+        return nil
+    end
+
+    local collector = PoseCollector(poseAdapter, self.coordSpaceWriter, {
+        cameraId = spectatorData.id,
+        framesPerSecond = self.config.framesPerSecond,
+        poseFPS = self.config.poseFPS,
+        includeOffscreen = self.config.poseIncludeOffscreen,
+        screenWidth = self.config.widthResolution,
+        screenHeight = self.config.heightResolution
+    })
+
+    if DEBUG then
+        print(string.format("[ArtifactCollectionFactory] Created pose collector for: %s",
             spectatorData.id))
     end
 
@@ -314,30 +401,40 @@ function ArtifactCollectionFactory:registerCollectors(manager, spectatorsData)
     end
 
     for i, spectatorData in ipairs(spectatorsData) do
-        -- Create and register segmentation collector if enabled
-        local segmentationCollector = self:createSegmentationCollector(spectatorData)
-        if segmentationCollector then
-            manager:registerCollector(segmentationCollector)
-            if DEBUG then
-                print(string.format("[ArtifactCollectionFactory] Registered segmentation collector for %s", spectatorData.id))
+        if self.config.useUnifiedMultiModal then
+            -- Unified backend replaces the RGB / segmentation / depth trio with
+            -- a single collector that drives all three modalities atomically.
+            local multiModalCollector = self:createMultiModalCollector(spectatorData)
+            if multiModalCollector then
+                manager:registerCollector(multiModalCollector)
+                if DEBUG then
+                    print(string.format("[ArtifactCollectionFactory] Registered multi-modal collector for %s", spectatorData.id))
+                end
             end
-        end
-
-        -- Always create raw collector (primary modality)
-        local rawCollector = self:createScreenshotCollector(spectatorData)
-        if rawCollector then
-            manager:registerCollector(rawCollector)
-            if DEBUG then
-                print(string.format("[ArtifactCollectionFactory] Registered raw collector for %s", spectatorData.id))
+        else
+            -- Legacy per-modality path: each modality is its own collector.
+            local segmentationCollector = self:createSegmentationCollector(spectatorData)
+            if segmentationCollector then
+                manager:registerCollector(segmentationCollector)
+                if DEBUG then
+                    print(string.format("[ArtifactCollectionFactory] Registered segmentation collector for %s", spectatorData.id))
+                end
             end
-        end
 
-        -- Create and register depth collector if enabled
-        local depthCollector = self:createDepthCollector(spectatorData)
-        if depthCollector then
-            manager:registerCollector(depthCollector)
-            if DEBUG then
-                print(string.format("[ArtifactCollectionFactory] Registered depth collector for %s", spectatorData.id))
+            local rawCollector = self:createScreenshotCollector(spectatorData)
+            if rawCollector then
+                manager:registerCollector(rawCollector)
+                if DEBUG then
+                    print(string.format("[ArtifactCollectionFactory] Registered raw collector for %s", spectatorData.id))
+                end
+            end
+
+            local depthCollector = self:createDepthCollector(spectatorData)
+            if depthCollector then
+                manager:registerCollector(depthCollector)
+                if DEBUG then
+                    print(string.format("[ArtifactCollectionFactory] Registered depth collector for %s", spectatorData.id))
+                end
             end
         end
 
@@ -347,6 +444,15 @@ function ArtifactCollectionFactory:registerCollectors(manager, spectatorsData)
             manager:registerCollector(spatialCollector)
             if DEBUG then
                 print(string.format("[ArtifactCollectionFactory] Registered spatial relations collector for %s", spectatorData.id))
+            end
+        end
+
+        -- Create and register pose collector if enabled
+        local poseCollector = self:createPoseCollector(spectatorData)
+        if poseCollector then
+            manager:registerCollector(poseCollector)
+            if DEBUG then
+                print(string.format("[ArtifactCollectionFactory] Registered pose collector for %s", spectatorData.id))
             end
         end
     end

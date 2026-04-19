@@ -94,16 +94,24 @@
   <script src="src/features/artifact_collection/adapters/mta/server/MTAClientSideScreenshotAdapter.lua" type="server"/>
   <script src="src/features/artifact_collection/adapters/mta/server/MTANativeScreenshotAdapter.lua" type="server"/>
   <script src="src/features/artifact_collection/adapters/mta/server/MTARenderModeController.lua" type="server"/>
+  <script src="src/features/artifact_collection/adapters/mta/server/MTAPoseAdapter.lua" type="server"/>
+  <script src="src/features/artifact_collection/adapters/mta/server/MTAVisibilityAdapter.lua" type="server"/>
+  <script src="src/features/artifact_collection/adapters/mta/server/MTAClientMultiModalAdapter.lua" type="server"/>
   <script src="src/features/artifact_collection/adapters/mta/server/MTAAdapterProvider.lua" type="server"/>
   <script src="src/features/artifact_collection/adapters/mta/client/ClientScreenshotHandler.lua" type="client" />
   <script src="src/features/artifact_collection/adapters/mta/client/ClientRenderModeController.lua" type="client" />
+  <script src="src/features/artifact_collection/adapters/mta/client/ClientMultiModalHandler.lua" type="client" />
+  <script src="src/features/artifact_collection/adapters/mta/client/ClientPoseHandler.lua" type="client" />
+  <script src="src/features/artifact_collection/adapters/mta/client/ClientVisibilityHandler.lua" type="client" />
   <!-- Collectors -->
   <script src="src/features/artifact_collection/collectors/ClientSideScreenshotCollector.lua" type="server"/>
   <script src="src/features/artifact_collection/collectors/NativeScreenshotCollector.lua" type="server"/>
   <script src="src/features/artifact_collection/collectors/SegmentationCollector.lua" type="server"/>
   <script src="src/features/artifact_collection/collectors/DepthCollector.lua" type="server"/>
+  <script src="src/features/artifact_collection/collectors/MultiModalCollector.lua" type="server"/>
   <script src="src/features/artifact_collection/collectors/EventFrameMappingCollector.lua" type="server"/>
   <script src="src/features/artifact_collection/collectors/SpatialRelationsCollector.lua" type="server"/>
+  <script src="src/features/artifact_collection/collectors/PoseCollector.lua" type="server"/>
   <!-- Manager and Factory -->
   <script src="src/features/artifact_collection/ArtifactCollectionManager.lua" type="server"/>
   <script src="src/features/artifact_collection/factories/ArtifactCollectionFactory.lua" type="server"/>

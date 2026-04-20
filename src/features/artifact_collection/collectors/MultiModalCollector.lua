@@ -207,6 +207,13 @@ end
 --- segmentation double-draw on the client. Called by ArtifactCollectionManager
 --- during `stopScheduledCollection`.
 function MultiModalCollector:stopCollection()
+    -- Drain fire-and-forget saves queued during the session BEFORE stopping
+    -- encoders. Otherwise the video encoder Stop() races against in-flight
+    -- frame submissions and an MP4 can end up missing its trailing frames.
+    if self.adapter.waitMultiModalPending then
+        self.adapter:waitMultiModalPending()
+    end
+
     for modalityId, started in pairs(self.videoStarted) do
         if started then
             self.adapter:stopVideoRecording(modalityId)

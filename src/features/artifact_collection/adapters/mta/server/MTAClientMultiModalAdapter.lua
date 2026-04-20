@@ -140,3 +140,11 @@ end
 function MTAClientMultiModalAdapter:isUnified()
     return true
 end
+
+--- Asks the client to block until all queued fire-and-forget captures have
+--- finished writing to disk. Fires onMultiModalPendingDrained back when done;
+--- callers can wait on that ack if they need strict ordering at session end.
+function MTAClientMultiModalAdapter:waitMultiModalPending()
+    triggerClientEvent(self.spectator, "onWaitMultiModalPending", self.spectator)
+    return true
+end

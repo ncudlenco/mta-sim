@@ -108,3 +108,14 @@ addEventHandler("onEnableCaptureLogs", root,
             outputDebugString("[ClientMultiModalHandler] enableCaptureLogs " .. tostring(enabled))
         end
     end)
+
+addEvent("onWaitMultiModalPending", true)
+addEventHandler("onWaitMultiModalPending", root,
+    function()
+        if not waitMultiModalPending then return end
+        local ok = waitMultiModalPending()
+        if DEBUG_MULTIMODAL then
+            outputDebugString("[ClientMultiModalHandler] waitMultiModalPending ok=" .. tostring(ok))
+        end
+        triggerServerEvent("onMultiModalPendingDrained", localPlayer)
+    end)

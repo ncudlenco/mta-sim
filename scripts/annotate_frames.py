@@ -268,6 +268,39 @@ def draw_skeleton(draw: ImageDraw.ImageDraw, pose: dict, transform):
                   font=FONT_SMALL)
 
 
+def _build_spatial_index(spectator_dir: Path):
+    """Sorted list of (frame_id, path) for every frame_XXXX_spatial_relations.json
+    in the directory. Spatial-relations captures are deduplicated on the Lua
+    side (only written when content changes), so many frame IDs have no exact
+    match — callers should fall back to the most recent one at or before the
+    target frame."""
+    out = []
+    for p in sorted(spectator_dir.glob("frame_*_spatial_relations.json")):
+        fid = frame_id_from_name(p.name)
+        if fid is not None:
+            out.append((fid, p))
+    return out
+
+
+def _spatial_for_frame(spatial_index, spatial_cache, frame_id):
+    """Return the loaded spatial-relations payload applicable to `frame_id`:
+    the most recent `(fid, path)` in `spatial_index` with `fid <= frame_id`.
+    Uses `spatial_cache` (path -> data) to avoid re-reading the same JSON
+    across a deduplicated run of frames."""
+    latest_path = None
+    for fid, path in spatial_index:
+        if fid > frame_id:
+            break
+        latest_path = path
+    if latest_path is None:
+        return None
+    cached = spatial_cache.get(latest_path)
+    if cached is None:
+        cached = load_frame_payload(latest_path)
+        spatial_cache[latest_path] = cached
+    return cached
+
+
 def _pose_bbox_by_actor(pose: dict):
     """Build {storyActorId -> screenRect} from the per-pose bone screen coords.
     This gives pose-accurate ped bounding boxes (head-to-foot of the *current*
@@ -383,10 +416,10 @@ def draw_visible_rect(draw: ImageDraw.ImageDraw, transform, vr, saved):
 
 
 def annotate_frame(frame_id: int, spectator_dir: Path, out_dir: Path,
-                   mode: str, transform, vr, saved):
+                   mode: str, transform, vr, saved,
+                   spatial_index=None, spatial_cache=None):
     screenshot = spectator_dir / f"frame_{frame_id:04d}_screenshot.jpg"
     pose_path = spectator_dir / f"frame_{frame_id:04d}_pose.json"
-    spatial_path = spectator_dir / f"frame_{frame_id:04d}_spatial_relations.json"
 
     if not screenshot.exists():
         return False
@@ -403,7 +436,15 @@ def annotate_frame(frame_id: int, spectator_dir: Path, out_dir: Path,
     pose_bboxes = _pose_bbox_by_actor(pose) if pose else {}
 
     if mode in ("spatial", "both"):
-        spatial = load_frame_payload(spatial_path)
+        # Spatial-relations files are deduplicated — the most recent entry at
+        # or before the current frame is still valid for every frame after it
+        # until the next entry supersedes it.
+        if spatial_index is not None and spatial_cache is not None:
+            spatial = _spatial_for_frame(spatial_index, spatial_cache, frame_id)
+        else:
+            # Fallback for direct callers: exact-frame lookup only.
+            exact = spectator_dir / f"frame_{frame_id:04d}_spatial_relations.json"
+            spatial = load_frame_payload(exact)
         if spatial:
             draw_spatial_entities(draw, spatial, transform, vr, pose_bboxes)
 
@@ -658,9 +699,18 @@ def main():
               f"scale=({saved['w']/vr['w']:.4f}, {saved['h']/vr['h']:.4f})")
     print(f"writing to {out_dir}")
 
+    # Build a single spatial-relations index + cache up-front so every frame
+    # can pick the most recent applicable JSON (spatial captures are deduped
+    # so only a subset of frame IDs have their own file on disk).
+    spatial_index = _build_spatial_index(spectator_dir)
+    spatial_cache = {}
+    if args.mode in ("spatial", "both"):
+        print(f"spatial_relations index: {len(spatial_index)} files")
+
     count = 0
     for fid in iter_frames(spectator_dir, args.frames):
-        if annotate_frame(fid, spectator_dir, out_dir, args.mode, transform, vr, saved):
+        if annotate_frame(fid, spectator_dir, out_dir, args.mode, transform, vr, saved,
+                          spatial_index=spatial_index, spatial_cache=spatial_cache):
             count += 1
 
     print(f"annotated {count} frames")

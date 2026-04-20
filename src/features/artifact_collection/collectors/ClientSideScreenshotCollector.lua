@@ -3,8 +3,6 @@
 -- File path is derived from input graph location (LOAD_FROM_GRAPH)
 --
 -- @classmod ClientSideScreenshotCollector
--- @author Claude Code
--- @license MIT
 
 ClientSideScreenshotCollector = class(ArtifactCollector, function(o, screenshotAdapter, config)
     ArtifactCollector.init(o, "ClientSideScreenshotCollector", config)

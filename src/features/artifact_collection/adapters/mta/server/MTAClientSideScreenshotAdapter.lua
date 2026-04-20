@@ -3,8 +3,6 @@
 -- Client captures and saves locally, server receives instant confirmation only
 --
 -- @classmod MTAClientSideScreenshotAdapter
--- @author Claude Code
--- @license MIT
 
 MTAClientSideScreenshotAdapter = class(ScreenshotAdapterBase, function(o, params)
     ScreenshotAdapterBase.init(o)

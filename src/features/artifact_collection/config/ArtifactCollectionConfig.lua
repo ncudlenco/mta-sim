@@ -91,6 +91,11 @@ function ArtifactCollectionConfig.fromGlobals()
         enableSegmentation = ARTIFACT_ENABLE_SEGMENTATION or false,
         segmentationSavePNG = ARTIFACT_SEGMENTATION_SAVE_PNG or false,
         segmentationPNGFPS = ARTIFACT_SEGMENTATION_PNG_FPS or 0,
+        -- "native" = MultiModal captures seg (D3D9 double-draw), "dda" = legacy
+        -- Lua-shader + Desktop Duplication path. In the "dda" case the
+        -- MultiModalCollector skips seg and a parallel SegmentationCollector
+        -- runs alongside it for seg only.
+        segmentationBackend = ARTIFACT_SEGMENTATION_BACKEND or "native",
 
         -- Depth configuration
         enableDepth = ARTIFACT_ENABLE_DEPTH or false,

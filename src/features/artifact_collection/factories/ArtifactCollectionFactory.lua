@@ -258,8 +258,12 @@ function ArtifactCollectionFactory:createMultiModalCollector(spectatorData)
         rgbJPEGQuality             = self.config.nativeScreenshotJPEGQuality,
         rgbSaveToVideo             = self.config.nativeScreenshotSaveImages ~= false,
 
-        -- Segmentation modality.
-        segmentationPNGFPS         = self.config.enableSegmentation and self.config.segmentationPNGFPS or 0,
+        -- Segmentation modality. When the backend is "dda", the native
+        -- MultiModalCollector skips seg entirely — the legacy Lua-shader +
+        -- Desktop Duplication SegmentationCollector handles it instead.
+        segmentationPNGFPS         = (self.config.enableSegmentation
+                                       and self.config.segmentationBackend ~= "dda")
+                                       and self.config.segmentationPNGFPS or 0,
         segSaveToVideo             = false,
 
         -- Depth modality.
@@ -409,6 +413,20 @@ function ArtifactCollectionFactory:registerCollectors(manager, spectatorsData)
                 manager:registerCollector(multiModalCollector)
                 if DEBUG then
                     print(string.format("[ArtifactCollectionFactory] Registered multi-modal collector for %s", spectatorData.id))
+                end
+            end
+            -- Hybrid: MultiModal (RGB + depth + video) runs in parallel with
+            -- the old Lua-shader + Desktop Duplication SegmentationCollector.
+            -- The MultiModal collector was configured with segmentationPNGFPS=0
+            -- above when segmentationBackend=="dda", so there's no double-write
+            -- and the two capture paths don't step on each other.
+            if self.config.segmentationBackend == "dda" then
+                local segmentationCollector = self:createSegmentationCollector(spectatorData)
+                if segmentationCollector then
+                    manager:registerCollector(segmentationCollector)
+                    if DEBUG then
+                        print(string.format("[ArtifactCollectionFactory] Registered DDA segmentation collector alongside multi-modal for %s", spectatorData.id))
+                    end
                 end
             end
         else

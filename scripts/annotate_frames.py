@@ -1,12 +1,13 @@
 """
-Overlay pose skeletons and/or spatial-relation markers onto the RGB screenshot
-frames of a single spectator directory.
+Overlay pose skeletons / spatial-relation markers onto screenshots, or produce
+human-readable depth-visualisations, for a single spectator directory.
 
 Input  : <story-dir>/<spectator-id>/ containing frame_XXXX_screenshot.jpg,
-         frame_XXXX_pose.json, frame_XXXX_spatial_relations.json, and
-         coord_space.json (written once by CoordSpaceWriter).
-Output : <story-dir>/<spectator-id>_annotated/ with one JPG per annotated
-         frame.
+         frame_XXXX_pose.json, frame_XXXX_spatial_relations.json,
+         frame_XXXX_depth.png, and coord_space.json (written once by
+         CoordSpaceWriter).
+Output : <story-dir>/<spectator-id>_annotated/ for overlay modes, or
+         <story-dir>/<spectator-id>_depth_viz/ for depth visualisation.
 
 The coord_space.json is authoritative for the viewport -> saved-image mapping;
 this script does not hardcode any resolutions or crop constants.
@@ -16,14 +17,22 @@ Usage:
     python annotate_frames.py <spectator-dir> --mode skeleton
     python annotate_frames.py <spectator-dir> --mode spatial
     python annotate_frames.py <spectator-dir> --mode both         # default: skel+spatial
+    python annotate_frames.py <spectator-dir> --mode depth-viz    # per-frame depth visualisation
     python annotate_frames.py <spectator-dir> --frames 40-60
     python annotate_frames.py <spectator-dir> --modality 0
+
+Depth-viz options (only apply when --mode depth-viz):
+    --depth-viz-mode {turbo,magma,viridis,grayscale}  colormap (default: turbo)
+    --depth-percentiles P_LO,P_HI                     percentile clip (default: 2,98)
+    --depth-far-threshold F                           raw-depth exclusion (default: 0.9995)
+    --depth-scale-bar / --no-depth-scale-bar          overlay a small scale bar (default: on)
 """
 import argparse
 import json
 import os
 import re
 from pathlib import Path
+import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
 
@@ -184,6 +193,18 @@ def frame_id_from_name(name: str):
 def iter_frames(spectator_dir: Path, frame_range):
     """Yield frame IDs that have a screenshot, sorted, within the optional range."""
     for p in sorted(spectator_dir.glob("frame_*_screenshot.jpg")):
+        fid = frame_id_from_name(p.name)
+        if fid is None:
+            continue
+        if frame_range is not None and not (frame_range[0] <= fid <= frame_range[1]):
+            continue
+        yield fid
+
+
+def _iter_depth_frames(spectator_dir: Path, frame_range):
+    """Yield frame IDs for every frame_XXXX_depth.png, within the optional
+    range. Mirrors iter_frames() but keyed on the depth filename pattern."""
+    for p in sorted(spectator_dir.glob("frame_*_depth.png")):
         fid = frame_id_from_name(p.name)
         if fid is None:
             continue
@@ -402,26 +423,221 @@ def annotate_frame(frame_id: int, spectator_dir: Path, out_dir: Path,
     return True
 
 
+# ---------------------------------------------------------------------------
+# Depth visualisation
+# ---------------------------------------------------------------------------
+
+DEPTH_FAR_THRESHOLD = 0.9995       # pixels >= this are treated as sky / unpinned
+DEPTH_NEUTRAL_GREY = (128, 128, 128)
+
+
+def _load_depth_raw(path: Path) -> np.ndarray:
+    """Load frame_XXXX_depth.png as a float32 array in [0, 1].
+
+    GTA:SA depth captures land on disk as 8-bit grayscale, 8-bit RGB (R==G==B),
+    or 16-bit `I`-mode PNGs depending on the backend. Normalise based on mode
+    so any of those produce the same [0, 1] range without silently rescaling.
+    """
+    im = Image.open(path)
+    if im.mode == "L":
+        return np.array(im, dtype=np.float32) / 255.0
+    if im.mode in ("I", "I;16"):
+        return np.array(im, dtype=np.float32) / 65535.0
+    # RGB / RGBA: depth is encoded as grayscale replicated to channels; take
+    # the L-conversion (itu601 weights don't matter when R==G==B).
+    return np.array(im.convert("L"), dtype=np.float32) / 255.0
+
+
+def _apply_depth_colormap(vis_linear: np.ndarray, colormap: str) -> np.ndarray:
+    """Map a [0, 1] float image to (H, W, 3) uint8 via matplotlib cmap
+    or a grayscale path. Near-camera pixels are passed in bright
+    (vis_linear near 1.0), which is the convention used downstream."""
+    if colormap == "grayscale":
+        g = (vis_linear * 255).astype(np.uint8)
+        return np.stack([g, g, g], axis=-1)
+    import matplotlib  # imported lazily — keeps overlay modes mpl-free
+    cmap = matplotlib.colormaps[colormap]
+    rgba = cmap(vis_linear)
+    return (rgba[..., :3] * 255).astype(np.uint8)
+
+
+def _draw_depth_scale_bar(img: Image.Image, p_lo: float, p_hi: float,
+                          colormap: str):
+    """Overlay a small horizontal scale bar in the bottom-right corner with
+    the two percentile values labelled. Purely informational."""
+    W, H = img.size
+    bar_w = min(260, W // 5)
+    bar_h = 16
+    margin = 20
+    x0 = W - margin - bar_w
+    y0 = H - margin - bar_h - 18
+    x1 = x0 + bar_w
+    y1 = y0 + bar_h
+
+    # Generate a strip of the colormap at full range.
+    strip = np.linspace(1.0, 0.0, bar_w, dtype=np.float32)  # near..far
+    strip = np.tile(strip[np.newaxis, :], (bar_h, 1))
+    strip_rgb = _apply_depth_colormap(strip, colormap)
+    img.paste(Image.fromarray(strip_rgb), (x0, y0))
+
+    draw = ImageDraw.Draw(img)
+    draw.rectangle([x0 - 1, y0 - 1, x1, y1], outline=(255, 255, 255, 255), width=1)
+    font = try_font(12)
+    # Near (bright end, left) and far (dark end, right).
+    draw.text((x0, y1 + 2), f"near {p_lo:.3f}",
+              fill=(255, 255, 255), stroke_width=2, stroke_fill=(0, 0, 0),
+              font=font)
+    far_label = f"far {p_hi:.3f}"
+    try:
+        tw = draw.textlength(far_label, font=font)
+    except AttributeError:
+        tw = font.getsize(far_label)[0] if hasattr(font, "getsize") else 80
+    draw.text((x1 - tw, y1 + 2), far_label,
+              fill=(255, 255, 255), stroke_width=2, stroke_fill=(0, 0, 0),
+              font=font)
+
+
+def visualise_depth_frame(frame_id: int, spectator_dir: Path, out_dir: Path,
+                          colormap: str, p_lo: float, p_hi: float,
+                          far_threshold: float, draw_scale_bar: bool) -> bool:
+    """Read raw depth for a frame and write a display-ready PNG alongside.
+
+    Pipeline (per frame):
+      1. Load raw non-linear post-projection depth as float32 in [0, 1].
+      2. Build a validity mask of pixels below `far_threshold` (sky /
+         far-plane pinned pixels are excluded — they'd dominate any
+         normalisation stretch and flatten the rest).
+      3. If <1% of pixels are valid, emit a flat neutral-grey image.
+      4. Compute percentiles (p_lo, p_hi) on the valid subset.
+      5. Contrast-stretch the full image to [0, 1] with those percentiles.
+      6. Invert so near=bright / far=dark (MiDaS / Depth-Anything convention).
+      7. Apply the chosen colormap; mask invalid pixels back to neutral
+         grey so sky doesn't grab one extreme of the colormap.
+    """
+    depth_path = spectator_dir / f"frame_{frame_id:04d}_depth.png"
+    if not depth_path.exists():
+        return False
+
+    depth = _load_depth_raw(depth_path)
+    H, W = depth.shape
+    valid = depth < far_threshold
+    valid_frac = float(valid.mean())
+
+    out_path = out_dir / f"frame_{frame_id:04d}_depth_vis.png"
+
+    if valid_frac < 0.01:
+        # Nothing useful — far-plane-dominated frame. Emit flat grey.
+        Image.fromarray(np.full((H, W, 3), DEPTH_NEUTRAL_GREY, dtype=np.uint8)) \
+            .save(out_path)
+        return True
+
+    valid_vals = depth[valid]
+    lo = float(np.percentile(valid_vals, p_lo))
+    hi = float(np.percentile(valid_vals, p_hi))
+
+    if hi - lo < 1e-6:
+        # Degenerate percentile clip (all valid pixels at one value).
+        Image.fromarray(np.full((H, W, 3), DEPTH_NEUTRAL_GREY, dtype=np.uint8)) \
+            .save(out_path)
+        return True
+
+    stretched = np.clip((depth - lo) / (hi - lo), 0.0, 1.0)
+    vis_linear = 1.0 - stretched  # near-camera = bright, far = dark
+
+    rgb = _apply_depth_colormap(vis_linear, colormap)
+    rgb[~valid] = DEPTH_NEUTRAL_GREY  # sky / far-plane pixels → neutral grey
+
+    img = Image.fromarray(rgb, mode="RGB")
+    if draw_scale_bar:
+        _draw_depth_scale_bar(img, lo, hi, colormap)
+    img.save(out_path)
+    return True
+
+
+def _parse_percentiles(s: str):
+    parts = s.split(",")
+    if len(parts) != 2:
+        raise argparse.ArgumentTypeError(
+            f"--depth-percentiles expects 'LO,HI', got {s!r}")
+    try:
+        lo, hi = float(parts[0]), float(parts[1])
+    except ValueError:
+        raise argparse.ArgumentTypeError(
+            f"--depth-percentiles values must be numeric, got {s!r}")
+    if not (0 <= lo < hi <= 100):
+        raise argparse.ArgumentTypeError(
+            f"--depth-percentiles requires 0 <= LO < HI <= 100, got {s!r}")
+    return lo, hi
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("spectator_dir", type=Path,
                         help="Path to <story>/<spectator-id>/ containing screenshots + JSON + coord_space.json")
     parser.add_argument("--mode",
-                        choices=("skeleton", "spatial", "both"),
+                        choices=("skeleton", "spatial", "both", "depth-viz"),
                         default="both",
-                        help="What to overlay. 'both' (default) = skeleton + spatial markers + bboxes. "
-                             "'skeleton' or 'spatial' to isolate one layer.")
+                        help="What to produce. 'both' (default) = skeleton + spatial markers "
+                             "+ bboxes over screenshot. 'skeleton' or 'spatial' to isolate one "
+                             "overlay layer. 'depth-viz' produces human-readable depth PNGs "
+                             "into a sibling directory.")
     parser.add_argument("--frames", type=parse_frame_range, default=None,
                         help="Frame range, e.g. '41', '41-60', or 'all' (default: all)")
     parser.add_argument("--modality", type=int, default=0,
                         help="Modality ID whose saved dims to use for transform (default: 0 = raw)")
     parser.add_argument("--out", type=Path, default=None,
-                        help="Output directory (default: <spectator_dir>_annotated)")
+                        help="Output directory (default: <spectator_dir>_annotated, or "
+                             "<spectator_dir>_depth_viz when --mode depth-viz)")
+
+    # Depth-viz-only options.
+    parser.add_argument("--depth-viz-mode", dest="depth_viz_mode",
+                        choices=("turbo", "magma", "viridis", "grayscale"),
+                        default="turbo",
+                        help="Colormap for --mode depth-viz (default: turbo)")
+    parser.add_argument("--depth-percentiles", dest="depth_percentiles",
+                        type=_parse_percentiles, default=(2.0, 98.0),
+                        help="Percentile clip for depth-viz, as 'LO,HI' (default: 2,98)")
+    parser.add_argument("--depth-far-threshold", dest="depth_far_threshold",
+                        type=float, default=DEPTH_FAR_THRESHOLD,
+                        help=f"Depth value above which a pixel is treated as "
+                             f"sky/far-plane (default: {DEPTH_FAR_THRESHOLD})")
+    parser.add_argument("--depth-scale-bar", dest="depth_scale_bar",
+                        action=argparse.BooleanOptionalAction, default=True,
+                        help="Draw a small scale bar in the bottom-right corner "
+                             "of the depth visualisation (default: on)")
+
     args = parser.parse_args()
 
     spectator_dir = args.spectator_dir.resolve()
     if not spectator_dir.is_dir():
         parser.error(f"Not a directory: {spectator_dir}")
+
+    # --- depth-viz: independent of coord_space / screenshots / overlays ---
+    if args.mode == "depth-viz":
+        out_dir = args.out or spectator_dir.with_name(spectator_dir.name + "_depth_viz")
+        out_dir.mkdir(parents=True, exist_ok=True)
+
+        global FONT_SMALL, FONT_LARGE
+        FONT_SMALL = try_font(14)
+        FONT_LARGE = try_font(20)
+
+        p_lo, p_hi = args.depth_percentiles
+        print(f"depth-viz: cmap={args.depth_viz_mode}, percentiles=({p_lo},{p_hi}), "
+              f"far_threshold={args.depth_far_threshold}, scale_bar={args.depth_scale_bar}")
+        print(f"writing to {out_dir}")
+
+        count = 0
+        for fid in _iter_depth_frames(spectator_dir, args.frames):
+            if visualise_depth_frame(
+                fid, spectator_dir, out_dir,
+                colormap=args.depth_viz_mode,
+                p_lo=p_lo, p_hi=p_hi,
+                far_threshold=args.depth_far_threshold,
+                draw_scale_bar=args.depth_scale_bar,
+            ):
+                count += 1
+        print(f"depth-visualised {count} frames")
+        return
 
     coord_space = load_coord_space(spectator_dir)
     transform, vr, saved = build_transform(coord_space, spectator_dir, args.modality)
@@ -429,9 +645,10 @@ def main():
     out_dir = args.out or spectator_dir.with_name(spectator_dir.name + "_annotated")
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    global FONT_SMALL, FONT_LARGE
     FONT_SMALL = try_font(14)
     FONT_LARGE = try_font(20)
+    globals()["FONT_SMALL"] = FONT_SMALL
+    globals()["FONT_LARGE"] = FONT_LARGE
 
     if coord_space is None:
         print(f"no coord_space.json — identity transform, saved image {saved['w']}x{saved['h']} "

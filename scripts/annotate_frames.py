@@ -328,24 +328,27 @@ def _pose_bbox_by_actor(pose: dict):
 
 
 def draw_spatial_entities(draw: ImageDraw.ImageDraw, spatial: dict, transform, vr,
-                          pose_bboxes: dict = None):
+                          pose_bboxes: dict = None, draw_object_bboxes: bool = False):
     pose_bboxes = pose_bboxes or {}
     for ent in spatial.get("entities", []) or []:
         s = ent.get("spatial") or {}
         sc = s.get("screen") or {}
 
-        # Only peds get an overlay rectangle, and it comes from the pose-bone
-        # projection (head-to-foot envelope of the actual animated pose).
-        # Objects' mesh bboxes from `getElementBoundingBox` don't reliably
-        # enclose the visible silhouette (model-authored origins are often
-        # offset from the mesh), so drawing them in the overlay is misleading.
-        # The mesh bbox is still stored in `spatial.bbox` of the JSON for
-        # anything that wants to consume it programmatically.
+        # Peds get a pose-bone-derived bbox (head-to-foot envelope of the
+        # actual animated pose). Objects get the raw getElementBoundingBox
+        # rectangle only when the caller opts in via draw_object_bboxes — the
+        # mesh bbox often doesn't enclose the visible silhouette (authored
+        # origins are frequently offset from the mesh) so it's misleading as
+        # a default. The full `spatial.bbox` block stays in the JSON either
+        # way for programmatic consumers.
         rect = None
         if ent.get("elementType") == "ped":
             actor_id = ent.get("storyActorId")
             if actor_id and actor_id in pose_bboxes:
                 rect = pose_bboxes[actor_id]
+        elif draw_object_bboxes:
+            bbox = s.get("bbox") or {}
+            rect = bbox.get("screenRectClipped") or bbox.get("screenRect")
 
         # Note: the center screen coord (`sc`) may be nil if the bbox center
         # projects behind the camera; in that case the entity can still have
@@ -417,7 +420,8 @@ def draw_visible_rect(draw: ImageDraw.ImageDraw, transform, vr, saved):
 
 def annotate_frame(frame_id: int, spectator_dir: Path, out_dir: Path,
                    mode: str, transform, vr, saved,
-                   spatial_index=None, spatial_cache=None):
+                   spatial_index=None, spatial_cache=None,
+                   draw_object_bboxes: bool = False):
     screenshot = spectator_dir / f"frame_{frame_id:04d}_screenshot.jpg"
     pose_path = spectator_dir / f"frame_{frame_id:04d}_pose.json"
 
@@ -446,7 +450,8 @@ def annotate_frame(frame_id: int, spectator_dir: Path, out_dir: Path,
             exact = spectator_dir / f"frame_{frame_id:04d}_spatial_relations.json"
             spatial = load_frame_payload(exact)
         if spatial:
-            draw_spatial_entities(draw, spatial, transform, vr, pose_bboxes)
+            draw_spatial_entities(draw, spatial, transform, vr, pose_bboxes,
+                                  draw_object_bboxes=draw_object_bboxes)
 
     if mode in ("skeleton", "both") and pose:
         for p in pose.get("poses", []) or []:
@@ -629,6 +634,12 @@ def main():
     parser.add_argument("--out", type=Path, default=None,
                         help="Output directory (default: <spectator_dir>_annotated, or "
                              "<spectator_dir>_depth_viz when --mode depth-viz)")
+    parser.add_argument("--object-bboxes", dest="object_bboxes",
+                        action="store_true", default=False,
+                        help="Also draw getElementBoundingBox rectangles for non-ped "
+                             "entities (diagnostic / visual-inspection only — the mesh "
+                             "bbox often doesn't enclose the visible silhouette for "
+                             "models with off-centre authored origins).")
 
     # Depth-viz-only options.
     parser.add_argument("--depth-viz-mode", dest="depth_viz_mode",
@@ -710,7 +721,8 @@ def main():
     count = 0
     for fid in iter_frames(spectator_dir, args.frames):
         if annotate_frame(fid, spectator_dir, out_dir, args.mode, transform, vr, saved,
-                          spatial_index=spatial_index, spatial_cache=spatial_cache):
+                          spatial_index=spatial_index, spatial_cache=spatial_cache,
+                          draw_object_bboxes=args.object_bboxes):
             count += 1
 
     print(f"annotated {count} frames")

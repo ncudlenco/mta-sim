@@ -98,3 +98,13 @@ addEventHandler("onWriteMultiModalMapping", root,
                 tostring(path), tostring(ok)))
         end
     end)
+
+addEvent("onEnableCaptureLogs", true)
+addEventHandler("onEnableCaptureLogs", root,
+    function(enabled)
+        if not enableCaptureLogs then return end
+        enableCaptureLogs(enabled and true or false)
+        if DEBUG_MULTIMODAL then
+            outputDebugString("[ClientMultiModalHandler] enableCaptureLogs " .. tostring(enabled))
+        end
+    end)

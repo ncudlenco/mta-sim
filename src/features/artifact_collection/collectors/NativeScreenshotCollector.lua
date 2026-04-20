@@ -5,8 +5,6 @@
 --- Supports multi-modal video recording (raw, segmentation, depth)
 ---
 --- @classmod NativeScreenshotCollector
---- @author Claude Code
---- @license MIT
 
 NativeScreenshotCollector = class(ArtifactCollector, function(o, screenshotAdapter, config)
     ArtifactCollector.init(o, "NativeScreenshotCollector", config)

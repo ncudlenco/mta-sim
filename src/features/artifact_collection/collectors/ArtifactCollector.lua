@@ -2,8 +2,6 @@
 -- Provides common functionality and interface for artifact collection
 --
 -- @classmod ArtifactCollector
--- @author Claude Code
--- @license MIT
 
 ArtifactCollector = class(function(o, name, config)
     o.name = name or "ArtifactCollector"

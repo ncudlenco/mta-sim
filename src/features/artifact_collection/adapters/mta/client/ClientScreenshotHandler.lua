@@ -2,8 +2,6 @@
 -- Handles screenshot capture using dxScreenSource and saves locally to disk
 -- Eliminates network latency by not sending pixel data to server
 --
--- @author Claude Code
--- @license MIT
 
 -- Global screen source (created once, reused for all captures)
 local screenSource = nil

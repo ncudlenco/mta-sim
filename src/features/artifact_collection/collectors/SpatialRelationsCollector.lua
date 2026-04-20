@@ -36,17 +36,23 @@
 --- }
 ---
 --- @classmod SpatialRelationsCollector
---- @author Claude Code
---- @license MIT
 
-SpatialRelationsCollector = class(ArtifactCollector, function(o, config)
+SpatialRelationsCollector = class(ArtifactCollector, function(o, visibilityAdapter, coordSpaceWriter, config)
     ArtifactCollector.init(o, "SpatialRelationsCollector", config)
 
+    if not visibilityAdapter then
+        error("[SpatialRelationsCollector] Visibility adapter is required")
+    end
+
+    o.visibilityAdapter = visibilityAdapter
+    o.coordSpaceWriter = coordSpaceWriter  -- may be nil (graceful)
     o.cameraId = config.cameraId or "unknown"
     o.spatialRelationsFPS = config.spatialRelationsFPS or 0
     o.includeInvisible = config.includeInvisible or false
     o.maxDistance = config.maxDistance or 0
     o.framesPerSecond = config.framesPerSecond or 30
+    o.fallbackScreenWidth = config.screenWidth or WIDTH_RESOLUTION or 1920
+    o.fallbackScreenHeight = config.screenHeight or HEIGHT_RESOLUTION or 1080
     o.captureInterval = 1
     o.frameCounter = 0
 
@@ -72,109 +78,151 @@ SpatialRelationsCollector = class(ArtifactCollector, function(o, config)
     end
 end)
 
---- Main collection method called by ArtifactCollectionManager
+--- Main collection method called by ArtifactCollectionManager.
+--- Asynchronous: a client round-trip is issued via the visibility adapter so
+--- `isElementOnScreen` / `isLineOfSightClear` (both client-only) can provide
+--- engine-authoritative visibility. JSON is written in the adapter callback.
+---
 --- @param frameContext table Context data for frame (storyId, cameraId, timestamp, etc.)
 --- @param frameId number Current frame ID
 --- @param callback function Callback(success, width, height) to invoke when done
 function SpatialRelationsCollector:collectAndSave(frameContext, frameId, callback)
     self.frameCounter = self.frameCounter + 1
 
-    -- Check frame skip
     if self.captureInterval > 1 and (self.frameCounter % self.captureInterval ~= 0) then
-        -- Skip this frame
-        if callback then
-            callback(true, 0, 0)
-        end
+        if callback then callback(true, 0, 0) end
         return
     end
 
-    -- Get camera data
     local camera = self:getCameraMatrix()
     if not camera then
         if DEBUG then
             print("[SpatialRelationsCollector] ERROR: Could not get camera matrix for " .. self.cameraId)
         end
-        if callback then
-            callback(false, 0, 0)
-        end
+        if callback then callback(false, 0, 0) end
         return
     end
 
-    -- Enumerate all entities
+    -- Enumerate + distance-prefilter. Distance is cheap server-side and keeps
+    -- the network payload small — we only send candidate elements to the
+    -- client for visibility probing.
     local entities = self:enumerateAllEntities()
-
-    -- Build entity data
-    local entityData = {}
-    local visibleCount = 0
-
+    local cameraPos = Vector3(camera.x, camera.y, camera.z)
+    local candidates = {}
     for _, entityInfo in ipairs(entities) do
-        local data = self:buildEntityData(entityInfo.element, entityInfo.elementType, camera)
-
-        if data then
-            -- Filter by visibility if configured
-            if not self.includeInvisible and not data.spatial.inFOV then
-                -- Skip invisible objects
-            else
-                table.insert(entityData, data)
-                if data.spatial.inFOV then
-                    visibleCount = visibleCount + 1
-                end
+        local position = self:getElementPosition(entityInfo.element)
+        if position then
+            if self.maxDistance <= 0 or (position - cameraPos):getLength() <= self.maxDistance then
+                table.insert(candidates, {
+                    element = entityInfo.element,
+                    elementType = entityInfo.elementType,
+                    position = position
+                })
             end
         end
     end
 
-    -- Calculate pairwise object relations if enabled
-    local objectRelations = {}
-    if self.includeObjectRelations and #entityData > 1 then
-        objectRelations = self:calculatePairwiseRelations(entityData)
+    local elementsForRequest = {}
+    for i, c in ipairs(candidates) do
+        elementsForRequest[i] = c.element
     end
 
-    -- Build JSON structure
-    local outputData = {
-        frameId = frameId,
-        timestamp = frameContext.timestamp or 0,
-        storyId = frameContext.storyId or "unknown",
-        cameraId = self.cameraId,
-        camera = {
-            position = {x = camera.x, y = camera.y, z = camera.z},
-            lookAt = {x = camera.lx, y = camera.ly, z = camera.lz},
-            fov = camera.fov,
-            roll = camera.roll
-        },
-        entities = entityData,
-        objectRelations = objectRelations
-    }
+    self.visibilityAdapter:requestVisibility(elementsForRequest, function(success, results, clientViewport)
+        local visibility = results or {}
+        if not success and DEBUG then
+            print("[SpatialRelationsCollector] Visibility request failed; writing entities with unknown visibility")
+        end
 
-    -- Deduplication: Compare content with previous frame (excluding frameId and timestamp)
-    local contentForComparison = self:buildComparisonKey(outputData)
+        -- Resolve viewport+visibleRect from (1) native metadata when present
+        -- (Desktop Duplication chrome/crop), else (2) client-reported viewport
+        -- (multimodal: no crop), else (3) static WIDTH/HEIGHT fallback.
+        local viewportW, viewportH, visibleRect = self:_resolveViewport(clientViewport)
 
-    if self.lastComparisonKey and self.lastComparisonKey == contentForComparison then
-        -- Identical to previous frame, skip write
-        self.skippedFrames = self.skippedFrames + 1
+        if self.coordSpaceWriter and frameContext.storyId then
+            NativeCaptureMetadata.setClientViewport(clientViewport)
+            self.coordSpaceWriter:ensureWritten(frameContext.storyId, self.cameraId)
+        end
+
+        local entityData = {}
+        local visibleCount = 0
+
+        for i, c in ipairs(candidates) do
+            local vis = visibility[i] or {lineOfSight = false}
+            local data = self:buildEntityData(c.element, c.elementType, c.position,
+                                              camera, vis, viewportW, viewportH, visibleRect)
+
+            if data then
+                if self.includeInvisible or data.spatial.visible then
+                    table.insert(entityData, data)
+                    if data.spatial.visible then
+                        visibleCount = visibleCount + 1
+                    end
+                end
+            end
+        end
+
+        local objectRelations = {}
+        if self.includeObjectRelations and #entityData > 1 then
+            objectRelations = self:calculatePairwiseRelations(entityData)
+        end
+
+        local outputData = {
+            frameId = frameId,
+            timestamp = frameContext.timestamp or 0,
+            storyId = frameContext.storyId or "unknown",
+            cameraId = self.cameraId,
+            camera = {
+                position = {x = camera.x, y = camera.y, z = camera.z},
+                lookAt = {x = camera.lx, y = camera.ly, z = camera.lz},
+                fov = camera.fov,
+                roll = camera.roll
+            },
+            resolution = {width = viewportW, height = viewportH},
+            entities = entityData,
+            objectRelations = objectRelations
+        }
+
+        -- Deduplication (content-only hash excludes frameId + timestamp).
+        local contentForComparison = self:buildComparisonKey(outputData)
+        if self.lastComparisonKey and self.lastComparisonKey == contentForComparison then
+            self.skippedFrames = self.skippedFrames + 1
+            if DEBUG then
+                print(string.format("[SpatialRelationsCollector] Frame %d: SKIPPED (identical to frame %d), total skipped: %d",
+                    frameId, self.lastFrameId, self.skippedFrames))
+            end
+            if callback then callback(true, 0, 0) end
+            return
+        end
+
+        self.lastComparisonKey = contentForComparison
+        self.lastFrameId = frameId
+
+        local writeSuccess = self:writeToFile(outputData, frameId, frameContext.storyId)
+
         if DEBUG then
-            print(string.format("[SpatialRelationsCollector] Frame %d: SKIPPED (identical to frame %d), total skipped: %d",
-                frameId, self.lastFrameId, self.skippedFrames))
+            print(string.format("[SpatialRelationsCollector] Frame %d: %d entities, %d visible, %d relations, written=%s",
+                frameId, #entityData, visibleCount, #objectRelations, tostring(writeSuccess)))
         end
-        if callback then
-            callback(true, 0, 0)
-        end
-        return
+
+        if callback then callback(writeSuccess, 0, 0) end
+    end)
+end
+
+--- Resolve viewport dims + visibleRect.
+--- Priority: native backend metadata (Desktop Duplication chrome + crop info) >
+--- client-supplied viewport (no crop, identity) > static fallback.
+function SpatialRelationsCollector:_resolveViewport(clientViewport)
+    local meta = NativeCaptureMetadata.get()
+    if meta then
+        return meta.viewport.w, meta.viewport.h, meta.visibleRect
     end
-
-    -- Different from previous, update state and write to file
-    self.lastComparisonKey = contentForComparison
-    self.lastFrameId = frameId
-
-    local success = self:writeToFile(outputData, frameId, frameContext.storyId)
-
-    if DEBUG then
-        print(string.format("[SpatialRelationsCollector] Frame %d: %d entities, %d in FOV, %d relations, written=%s",
-            frameId, #entityData, visibleCount, #objectRelations, tostring(success)))
+    if clientViewport and clientViewport.w and clientViewport.h then
+        return clientViewport.w, clientViewport.h,
+            {x = 0, y = 0, w = clientViewport.w, h = clientViewport.h}
     end
-
-    if callback then
-        callback(success, 0, 0)
-    end
+    local w = self.fallbackScreenWidth
+    local h = self.fallbackScreenHeight
+    return w, h, {x = 0, y = 0, w = w, h = h}
 end
 
 --- Enumerate all game entities (objects, peds, vehicles, etc.)
@@ -207,28 +255,25 @@ function SpatialRelationsCollector:enumerateAllEntities()
     return entities
 end
 
---- Build entity data structure with spatial relations
+--- Build entity data structure with spatial relations.
+--- Position and distance filtering happen in the caller (enumerate+prefilter
+--- pass); this builder only fills in metadata and the spatial/screen/visibility
+--- record. Visibility is engine-authoritative, supplied from the client
+--- round-trip and gated against the visibleRect (post-crop region).
+---
 --- @param element userdata MTA element
 --- @param elementType string Element type ("object", "ped", "vehicle", etc.)
+--- @param position Vector3 Pre-computed world position
 --- @param camera table Camera data {x, y, z, lx, ly, lz, fov, roll}
+--- @param visibility table {lineOfSight = bool} from ClientVisibilityHandler
+--- @param viewportW number Viewport width (for projection)
+--- @param viewportH number Viewport height (for projection)
+--- @param visibleRect table {x, y, w, h} post-crop region in viewport coords
 --- @return table|nil Entity data structure or nil if element invalid
-function SpatialRelationsCollector:buildEntityData(element, elementType, camera)
+function SpatialRelationsCollector:buildEntityData(element, elementType, position, camera, visibility,
+                                                   viewportW, viewportH, visibleRect)
     if not isElement(element) then
         return nil
-    end
-
-    -- Get element position
-    local position = self:getElementPosition(element)
-    if not position then
-        return nil
-    end
-
-    -- Filter by distance if configured
-    if self.maxDistance > 0 then
-        local distance = (position - Vector3(camera.x, camera.y, camera.z)):getLength()
-        if distance > self.maxDistance then
-            return nil
-        end
     end
 
     -- Get element rotation
@@ -237,8 +282,9 @@ function SpatialRelationsCollector:buildEntityData(element, elementType, camera)
     -- Get model ID
     local modelId = element.model or 0
 
-    -- Calculate spatial data
-    local spatial = self:calculateSpatialData(camera, position)
+    -- Calculate spatial data (angles + 2D projection + engine visibility)
+    local spatial = self:calculateSpatialData(camera, position, visibility,
+                                              viewportW, viewportH, visibleRect)
 
     -- Build base entity structure
     local entityData = {
@@ -511,11 +557,31 @@ function SpatialRelationsCollector:getCurrentEventIdForObject(storyObjectId)
     return actor:getData('currentGraphEventId')
 end
 
---- Calculate spatial relations relative to camera
+--- Calculate spatial relations relative to camera.
+--- Angular data (distance, horizontal/vertical angles, direction bucket) is
+--- computed here. 2D screen coords are supplied by the client (projected via
+--- getScreenFromWorldPosition) — server does no projection math.
+---
+--- `visible` is the single authoritative "is this entity rendered in the
+--- saved frame" flag: the engine-accurate projection says the entity's pixel is inside
+--- `visibleRect` (post-crop region in viewport coords — excludes the MTA
+--- watermark zone) AND the client's `isLineOfSightClear` raycast against an
+--- 8-bbox-corner sample is unobstructed by world geometry / vehicles / peds /
+--- objects (the entity itself is excluded from the raycast).
+---
+--- We deliberately do NOT use `isElementOnScreen`: that engine call tests a
+--- generous bounding sphere against an extended frustum and routinely returns
+--- true for elements geometrically behind the camera.
+---
 --- @param camera table Camera data {x, y, z, lx, ly, lz, fov, roll}
 --- @param position Vector3 Entity position
---- @return table Spatial data {distance, angleHorizontal, angleVertical, direction, inFOV}
-function SpatialRelationsCollector:calculateSpatialData(camera, position)
+--- @param visibility table {lineOfSight = bool} from client
+--- @param viewportW number Viewport width (for projection)
+--- @param viewportH number Viewport height (for projection)
+--- @param visibleRect table {x, y, w, h} post-crop region in viewport coords
+--- @return table Spatial data {distance, angleHorizontal, angleVertical, direction, visible, screen}
+function SpatialRelationsCollector:calculateSpatialData(camera, position, visibility,
+                                                        viewportW, viewportH, visibleRect)
     local cameraPos = Vector3(camera.x, camera.y, camera.z)
     local cameraLookAtPos = Vector3(camera.lx, camera.ly, camera.lz)
 
@@ -536,7 +602,7 @@ function SpatialRelationsCollector:calculateSpatialData(camera, position)
     if toObjectLength > 0.001 then
         toObject:normalize()
 
-        -- Horizontal angle (project to XY plane)
+        -- Horizontal angle (project to XY plane; GTA:SA is Z-up)
         local forwardHoriz = Vector3(forward.x, forward.y, 0)
         local toObjectHoriz = Vector3(toObject.x, toObject.y, 0)
 
@@ -547,31 +613,103 @@ function SpatialRelationsCollector:calculateSpatialData(camera, position)
             forwardHoriz:normalize()
             toObjectHoriz:normalize()
 
-            -- Use atan2 for signed angle
             local cross = forwardHoriz.x * toObjectHoriz.y - forwardHoriz.y * toObjectHoriz.x
             local dot = forwardHoriz.x * toObjectHoriz.x + forwardHoriz.y * toObjectHoriz.y
             angleHorizontal = math.deg(math.atan2(cross, dot))
         end
 
-        -- Vertical angle
         local horizontalDist = math.sqrt(toObject.x * toObject.x + toObject.y * toObject.y)
         if horizontalDist > 0.001 then
             angleVertical = math.deg(math.atan2(toObject.z, horizontalDist))
         end
     end
 
-    -- Direction bucket
     local direction = self:getDirectionBucket(angleHorizontal, angleVertical)
 
-    -- FOV check
-    local inFOV = self:isInFOV(camera, position)
+    local lineOfSight = (visibility and visibility.lineOfSight) == true
+    local vrMaxX = visibleRect.x + visibleRect.w
+    local vrMaxY = visibleRect.y + visibleRect.h
+
+    -- The client already projected bbox.center and bbox.corners via
+    -- `getScreenFromWorldPosition`, which uses the real camera matrix. We read
+    -- those results directly. Corners behind the camera come back as nil and
+    -- are excluded from the 2D envelope + visible test.
+    local bboxCenter = visibility and visibility.bbox and visibility.bbox.center
+    local centerScreen = visibility and visibility.bbox and visibility.bbox.centerScreen
+
+    local bboxOut = nil
+    local anyCornerInside = false
+    if visibility and visibility.bbox and visibility.bbox.corners then
+        local worldCorners = visibility.bbox.corners
+        local cornersScreen = visibility.bbox.cornersScreen or {}
+        local worldCornersOut = {}
+        local screenCorners = {}
+        local minX, minY, maxX, maxY = math.huge, math.huge, -math.huge, -math.huge
+        local anyInFront = false
+        for i, c in ipairs(worldCorners) do
+            worldCornersOut[i] = {x = c[1], y = c[2], z = c[3]}
+            local cs = cornersScreen[i]
+            if cs and cs.x and cs.y then
+                screenCorners[i] = {x = cs.x, y = cs.y}
+                anyInFront = true
+                if cs.x < minX then minX = cs.x end
+                if cs.y < minY then minY = cs.y end
+                if cs.x > maxX then maxX = cs.x end
+                if cs.y > maxY then maxY = cs.y end
+                if cs.x >= visibleRect.x and cs.x < vrMaxX
+                   and cs.y >= visibleRect.y and cs.y < vrMaxY then
+                    anyCornerInside = true
+                end
+            else
+                screenCorners[i] = nil
+            end
+        end
+
+        if anyInFront then
+            -- Clip the 2D envelope to visibleRect so overlays stay inside the
+            -- saved image even when one corner projects wildly off-screen.
+            local clippedMinX = math.max(minX, visibleRect.x)
+            local clippedMinY = math.max(minY, visibleRect.y)
+            local clippedMaxX = math.min(maxX, vrMaxX)
+            local clippedMaxY = math.min(maxY, vrMaxY)
+            bboxOut = {
+                worldCenter = bboxCenter and
+                    {x = bboxCenter[1], y = bboxCenter[2], z = bboxCenter[3]},
+                worldCorners = worldCornersOut,
+                screenCorners = screenCorners,
+                screenRect = {
+                    x = minX,
+                    y = minY,
+                    w = maxX - minX,
+                    h = maxY - minY,
+                },
+                screenRectClipped = (clippedMaxX > clippedMinX and clippedMaxY > clippedMinY)
+                    and {
+                        x = clippedMinX,
+                        y = clippedMinY,
+                        w = clippedMaxX - clippedMinX,
+                        h = clippedMaxY - clippedMinY,
+                    }
+                    or nil,
+            }
+        end
+    else
+        -- No bbox available; degrade gracefully using the center screen.
+        if centerScreen and centerScreen.x and centerScreen.y
+           and centerScreen.x >= visibleRect.x and centerScreen.x < vrMaxX
+           and centerScreen.y >= visibleRect.y and centerScreen.y < vrMaxY then
+            anyCornerInside = true
+        end
+    end
 
     return {
         distance = distance,
         angleHorizontal = angleHorizontal,
         angleVertical = angleVertical,
         direction = direction,
-        inFOV = inFOV
+        visible = anyCornerInside and lineOfSight,
+        screen = centerScreen and {x = centerScreen.x, y = centerScreen.y} or nil,
+        bbox = bboxOut,
     }
 end
 
@@ -611,81 +749,6 @@ function SpatialRelationsCollector:getDirectionBucket(angleH, angleV)
             return "back-right"
         end
     end
-end
-
---- Check if position is within camera FOV
---- Based on Region.lua:318-359 FOV calculation
---- @param camera table Camera data {x, y, z, lx, ly, lz, fov, roll}
---- @param position Vector3 Entity position
---- @return boolean True if in FOV, false otherwise
-function SpatialRelationsCollector:isInFOV(camera, position)
-    local cameraPos = Vector3(camera.x, camera.y, camera.z)
-    local cameraLookAtPos = Vector3(camera.lx, camera.ly, camera.lz)
-
-    -- Calculate view direction
-    local viewDir = cameraLookAtPos - cameraPos
-    local viewDirLength = viewDir:getLength()
-    if viewDirLength < 0.001 then
-        return false
-    end
-    viewDir:normalize()
-
-    -- Build coordinate system
-    local worldUp = Vector3(0, 1, 0)
-    local right = viewDir:cross(worldUp)
-    local rightLength = right:getLength()
-    if rightLength < 0.001 then
-        -- View direction parallel to world up, use fallback
-        right = Vector3(1, 0, 0)
-    else
-        right:normalize()
-    end
-    local up = right:cross(viewDir)
-    up:normalize()
-
-    -- Apply roll
-    if camera.roll and camera.roll ~= 0 then
-        local rollRad = math.rad(camera.roll)
-        local cosRoll = math.cos(rollRad)
-        local sinRoll = math.sin(rollRad)
-
-        local rightX = right.x * cosRoll - up.x * sinRoll
-        local rightY = right.y * cosRoll - up.y * sinRoll
-        local rightZ = right.z * cosRoll - up.z * sinRoll
-
-        local upX = right.x * sinRoll + up.x * cosRoll
-        local upY = right.y * sinRoll + up.y * cosRoll
-        local upZ = right.z * sinRoll + up.z * cosRoll
-
-        right = Vector3(rightX, rightY, rightZ)
-        up = Vector3(upX, upY, upZ)
-    end
-
-    -- Vector to position
-    local camToPos = position - cameraPos
-    local camToPosLength = camToPos:getLength()
-    if camToPosLength < 0.001 then
-        return true  -- Position at camera
-    end
-    camToPos:normalize()
-
-    -- Calculate angles
-    local dotView = viewDir:dot(camToPos)
-    local dotRight = right:dot(camToPos)
-    local dotUp = up:dot(camToPos)
-
-    -- Clamp to avoid acos domain errors
-    dotView = math.max(-1, math.min(1, dotView))
-
-    local angleView = math.acos(dotView)
-    local angleHorizontal = math.atan2(dotRight, dotView)
-    local angleVertical = math.atan2(dotUp, dotView)
-
-    -- Check FOV
-    local fovRad = math.rad(camera.fov)
-    return angleView <= (fovRad / 2)
-       and math.abs(angleHorizontal) <= (fovRad / 2)
-       and math.abs(angleVertical) <= (fovRad / 2)
 end
 
 --- Calculate pairwise spatial relations between all entities

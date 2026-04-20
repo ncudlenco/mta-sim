@@ -3,14 +3,14 @@
 --- This is the bridge between game-agnostic factory and MTA-specific adapters
 ---
 --- @classmod MTAAdapterProvider
---- @author Claude Code
---- @license MIT
 
 MTAAdapterProvider = class(AdapterProviderBase, function(o)
     AdapterProviderBase.init(o)
     o.gameType = "mta"
     o.nativeScreenshotAdapter = nil  -- Singleton for native adapter
     o.renderModeControllers = {}  -- Cache controllers per spectator
+    o.poseAdapters = {}  -- Cache pose adapters per spectator
+    o.visibilityAdapters = {}  -- Cache visibility adapters per spectator
 end)
 
 --- Create MTA-specific freeze adapter
@@ -28,6 +28,19 @@ function MTAAdapterProvider:createClientScreenshotAdapter(spectatorData)
     end
 
     return MTAClientSideScreenshotAdapter({
+        spectator = spectatorData.entity
+    })
+end
+
+--- Create the client-native multi-modal adapter (RGB + seg + depth in one
+--- atomic call via the mtasa-blue C++ bindings). One adapter per spectator.
+--- @param spectatorData SpectatorData
+--- @return MTAClientMultiModalAdapter
+function MTAAdapterProvider:createClientMultiModalAdapter(spectatorData)
+    if not spectatorData or not spectatorData.entity then
+        error("[MTAAdapterProvider] Invalid spectatorData for multi-modal adapter")
+    end
+    return MTAClientMultiModalAdapter({
         spectator = spectatorData.entity
     })
 end
@@ -69,6 +82,42 @@ function MTAAdapterProvider:createRenderModeController(spectatorData)
     end
 
     return controller
+end
+
+--- Create MTA-specific pose adapter (one per spectator, cached)
+--- @param spectatorData SpectatorData The spectator data containing MTA element
+--- @return MTAPoseAdapter Pose adapter instance
+function MTAAdapterProvider:createPoseAdapter(spectatorData)
+    if not spectatorData or not spectatorData.entity then
+        error("[MTAAdapterProvider] Invalid spectatorData for pose adapter")
+    end
+
+    local spectatorId = spectatorData.id
+    if self.poseAdapters[spectatorId] then
+        return self.poseAdapters[spectatorId]
+    end
+
+    local adapter = MTAPoseAdapter(spectatorData.entity)
+    self.poseAdapters[spectatorId] = adapter
+    return adapter
+end
+
+--- Create MTA-specific visibility adapter (one per spectator, cached)
+--- @param spectatorData SpectatorData The spectator data containing MTA element
+--- @return MTAVisibilityAdapter Visibility adapter instance
+function MTAAdapterProvider:createVisibilityAdapter(spectatorData)
+    if not spectatorData or not spectatorData.entity then
+        error("[MTAAdapterProvider] Invalid spectatorData for visibility adapter")
+    end
+
+    local spectatorId = spectatorData.id
+    if self.visibilityAdapters[spectatorId] then
+        return self.visibilityAdapters[spectatorId]
+    end
+
+    local adapter = MTAVisibilityAdapter(spectatorData.entity)
+    self.visibilityAdapters[spectatorId] = adapter
+    return adapter
 end
 
 --- Extract spectator data from MTA elements

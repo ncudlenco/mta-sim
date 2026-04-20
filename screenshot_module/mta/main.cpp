@@ -25,10 +25,19 @@ bool ENABLE_SCREENSHOT_MODULE_DEBUG = false;
 bool USE_DESKTOP_DUPLICATION = true;  // Desktop Duplication API (fast, video support)
 bool USE_BITBLT_FALLBACK = false;      // BitBlt fallback (slower, PNG only)
 bool USE_FULL_SCREEN_CAPTURE = false;  // Capture full screen (skip window finding) - use for VMware
-const int DEFAULT_CROP_TOP = 40;
-const int DEFAULT_CROP_LEFT = 3;
-const int DEFAULT_CROP_RIGHT = 3;
-const int DEFAULT_CROP_BOTTOM = 15;
+
+// Viewport-side crop constants: pixels to strip from each edge of the GTA
+// viewport (client area), independent of OS chrome. OS title bar / window
+// borders are auto-detected at runtime via GetClientRect / ClientToScreen and
+// added to these to form the effective window-space crop.
+//
+// VIEWPORT_CROP_BOTTOM = 15 strips the MTA watermark overlay rendered at the
+// bottom of the viewport. Other sides default to 0; increase VIEWPORT_CROP_TOP
+// if you want to strip the MTA toolbar / menu bar inside the viewport.
+const int VIEWPORT_CROP_TOP = 0;
+const int VIEWPORT_CROP_LEFT = 0;
+const int VIEWPORT_CROP_RIGHT = 0;
+const int VIEWPORT_CROP_BOTTOM = 15;
 
 // Global state
 ILuaModuleManager10* g_pModuleManager = nullptr;
@@ -338,6 +347,80 @@ void QueueLuaCallback(lua_State* L, int callbackRef, bool success, int width, in
     g_pendingCallbacks.push(cb);
 }
 
+// Push a 4-key int rect table {left, top, right, bottom} onto the Lua stack.
+static void PushRectLTRB(lua_State* L, int left, int top, int right, int bottom) {
+    lua_newtable(L);
+    lua_pushinteger(L, left);   lua_setfield(L, -2, "left");
+    lua_pushinteger(L, top);    lua_setfield(L, -2, "top");
+    lua_pushinteger(L, right);  lua_setfield(L, -2, "right");
+    lua_pushinteger(L, bottom); lua_setfield(L, -2, "bottom");
+}
+
+int lua_getNativeCaptureMetadata(lua_State* L) {
+    if (!g_captureBackend || !g_captureBackend->IsInitialized()) {
+        lua_pushnil(L);
+        return 1;
+    }
+
+    int viewportW, viewportH;
+    g_captureBackend->GetViewportSize(viewportW, viewportH);
+
+    // If UpdateWindowBounds hasn't run yet (no frame captured), viewport will
+    // be zero. Surface as nil so Lua callers can retry next frame.
+    if (viewportW <= 0 || viewportH <= 0) {
+        lua_pushnil(L);
+        return 1;
+    }
+
+    int chromeL, chromeT, chromeR, chromeB;
+    g_captureBackend->GetChrome(chromeL, chromeT, chromeR, chromeB);
+
+    int vCropL, vCropT, vCropR, vCropB;
+    g_captureBackend->GetCropInViewport(vCropL, vCropT, vCropR, vCropB);
+
+    int visX, visY, visW, visH;
+    g_captureBackend->GetVisibleRect(visX, visY, visW, visH);
+
+    lua_newtable(L);  // root metadata table
+
+    // viewport = {w, h}
+    lua_newtable(L);
+    lua_pushinteger(L, viewportW); lua_setfield(L, -2, "w");
+    lua_pushinteger(L, viewportH); lua_setfield(L, -2, "h");
+    lua_setfield(L, -2, "viewport");
+
+    // chrome = {left, top, right, bottom}
+    PushRectLTRB(L, chromeL, chromeT, chromeR, chromeB);
+    lua_setfield(L, -2, "chrome");
+
+    // cropInViewport = {left, top, right, bottom}
+    PushRectLTRB(L, vCropL, vCropT, vCropR, vCropB);
+    lua_setfield(L, -2, "cropInViewport");
+
+    // visibleRect = {x, y, w, h}
+    lua_newtable(L);
+    lua_pushinteger(L, visX); lua_setfield(L, -2, "x");
+    lua_pushinteger(L, visY); lua_setfield(L, -2, "y");
+    lua_pushinteger(L, visW); lua_setfield(L, -2, "w");
+    lua_pushinteger(L, visH); lua_setfield(L, -2, "h");
+    lua_setfield(L, -2, "visibleRect");
+
+    // savedDims = { [modalityId] = {w, h}, ... }
+    lua_newtable(L);
+    if (g_modalityManager) {
+        auto allDims = g_modalityManager->GetAllTargetDimensions();
+        for (const auto& kv : allDims) {
+            lua_newtable(L);
+            lua_pushinteger(L, kv.second.first);  lua_setfield(L, -2, "w");
+            lua_pushinteger(L, kv.second.second); lua_setfield(L, -2, "h");
+            lua_rawseti(L, -2, kv.first);  // savedDims[modalityId] = {w, h}
+        }
+    }
+    lua_setfield(L, -2, "savedDims");
+
+    return 1;
+}
+
 void RegisterFunctions(lua_State* L) {
     // Desktop Duplication API functions (video support)
     lua_register(L, "startVideoRecording", lua_startVideoRecording);
@@ -354,6 +437,9 @@ void RegisterFunctions(lua_State* L) {
     // Full screen capture control
     lua_register(L, "setCaptureFullScreen", lua_setCaptureFullScreen);
     lua_register(L, "getCaptureFullScreen", lua_getCaptureFullScreen);
+
+    // Capture metadata for downstream coord-space mapping
+    lua_register(L, "getNativeCaptureMetadata", lua_getNativeCaptureMetadata);
 }
 
 } // namespace LuaBindings
@@ -434,14 +520,24 @@ int GetEncoderClsid(const WCHAR* format, CLSID* pClsid) {
 bool TakeWindowScreenshotBitBlt(HWND hwnd, const std::string& outputPath, std::shared_ptr<ScreenshotRequest> request) {
     if (!hwnd || !IsWindow(hwnd)) return false;
 
-    RECT rect;
-    if (!GetWindowRect(hwnd, &rect)) return false;
+    RECT windowRect;
+    if (!GetWindowRect(hwnd, &windowRect)) return false;
 
-    int fullWidth = rect.right - rect.left;
-    int fullHeight = rect.bottom - rect.top;
-    int croppedHeight = fullHeight - DEFAULT_CROP_TOP;
-    int width = fullWidth;
-    int height = croppedHeight;
+    // Detect OS chrome so the captured region aligns with the viewport, then
+    // apply the viewport-side crops on top. Mirrors the DesktopDuplication
+    // path so both backends produce the same framing.
+    RECT clientRect;
+    POINT clientTopLeft = {0, 0};
+    if (!GetClientRect(hwnd, &clientRect) || !ClientToScreen(hwnd, &clientTopLeft)) {
+        return false;
+    }
+    int viewportW = clientRect.right  - clientRect.left;
+    int viewportH = clientRect.bottom - clientRect.top;
+
+    int srcX = clientTopLeft.x + VIEWPORT_CROP_LEFT;
+    int srcY = clientTopLeft.y + VIEWPORT_CROP_TOP;
+    int width  = viewportW - VIEWPORT_CROP_LEFT - VIEWPORT_CROP_RIGHT;
+    int height = viewportH - VIEWPORT_CROP_TOP  - VIEWPORT_CROP_BOTTOM;
 
     if (width <= 0 || height <= 0) return false;
 
@@ -458,8 +554,8 @@ bool TakeWindowScreenshotBitBlt(HWND hwnd, const std::string& outputPath, std::s
 
     HBITMAP hOldBitmap = (HBITMAP)SelectObject(hdcMemory, hBitmap);
 
-    // Capture pixels with BitBlt (crop toolbar)
-    bool result = BitBlt(hdcMemory, 0, 0, width, height, hdcScreen, rect.left, rect.top + DEFAULT_CROP_TOP, SRCCOPY);
+    // Capture the post-crop viewport region.
+    bool result = BitBlt(hdcMemory, 0, 0, width, height, hdcScreen, srcX, srcY, SRCCOPY);
 
     // Pixels are in memory - release resources BEFORE callback (allows re-rendering)
     SelectObject(hdcMemory, hOldBitmap);
@@ -570,11 +666,11 @@ MTAEXPORT bool InitModule(ILuaModuleManager10* pManager, char* szModuleName, cha
             // Create Desktop Duplication backend
             // Empty windowTitle triggers full-screen fallback (for VMware compatibility)
             std::string windowTitle = USE_FULL_SCREEN_CAPTURE ? "" : "MTA: San Andreas";
-            DEBUG_LOG_FMT("InitModule", "Creating Desktop Duplication backend (window=%s, crops t=%d l=%d r=%d b=%d)...",
+            DEBUG_LOG_FMT("InitModule", "Creating Desktop Duplication backend (window=%s, viewportCrops t=%d l=%d r=%d b=%d; OS chrome auto-detected)...",
                          USE_FULL_SCREEN_CAPTURE ? "[FULL SCREEN MODE]" : "MTA: San Andreas",
-                         DEFAULT_CROP_TOP, DEFAULT_CROP_LEFT, DEFAULT_CROP_RIGHT, DEFAULT_CROP_BOTTOM);
+                         VIEWPORT_CROP_TOP, VIEWPORT_CROP_LEFT, VIEWPORT_CROP_RIGHT, VIEWPORT_CROP_BOTTOM);
             g_captureBackend = new DesktopDuplicationBackend(windowTitle,
-                                                            DEFAULT_CROP_TOP, DEFAULT_CROP_LEFT, DEFAULT_CROP_RIGHT, DEFAULT_CROP_BOTTOM);
+                                                            VIEWPORT_CROP_TOP, VIEWPORT_CROP_LEFT, VIEWPORT_CROP_RIGHT, VIEWPORT_CROP_BOTTOM);
             if (!g_captureBackend->Initialize()) {
                 DEBUG_LOG("InitModule", "Desktop Duplication backend initialization failed");
                 delete g_captureBackend;

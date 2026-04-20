@@ -3,7 +3,6 @@
 --- for POI collision minimization.
 ---
 --- @module EventPlanner
---- @author Claude Code
 --- @see GraphStory
 --- @see ActionsOrchestrator
 --- @see POICoordinator

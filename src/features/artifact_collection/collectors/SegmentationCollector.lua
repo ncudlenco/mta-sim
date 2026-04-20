@@ -4,8 +4,6 @@
 --- Implements frame skipping to achieve target PNG capture rate
 ---
 --- @classmod SegmentationCollector
---- @author Claude Code
---- @license MIT
 
 SegmentationCollector = class(ArtifactCollector, function(o, screenshotAdapter, renderModeController, config)
     ArtifactCollector.init(o, "SegmentationCollector", config)
@@ -73,13 +71,10 @@ function SegmentationCollector:collectAndSave(frameContext, frameId, callback)
 
         -- Accumulate texture mappings
         if frameMapping then
-            local newTextures = 0
-            -- Apply frame offset to texture mapping data for accurate frame tracking
             local adjustedFrameId = math.max(0, frameId + self.frameIdOffset)
-
+            local newTextures = 0
             for texName, texInfo in pairs(frameMapping) do
                 if not self.globalTextureMapping[texName] then
-                    -- Store with adjusted frame ID to match actual captured frame
                     texInfo.frameId = adjustedFrameId
                     self.globalTextureMapping[texName] = texInfo
                     newTextures = newTextures + 1
@@ -91,8 +86,6 @@ function SegmentationCollector:collectAndSave(frameContext, frameId, callback)
                     frameId, adjustedFrameId, newTextures, self:_countTextures()))
             end
 
-            -- Write updated mapping to disk incrementally (crash-safe)
-            -- This ensures we have partial data even if simulation crashes
             self:_saveGlobalMapping(newTextures > 0)
         end
 
@@ -122,18 +115,15 @@ function SegmentationCollector:collectAndSave(frameContext, frameId, callback)
                     print(string.format("[ERROR] SegmentationCollector: PNG capture failed for frame %d", frameId))
                 end
 
-                -- Disable segmentation shader after capture and wait for confirmation
-                -- This ensures 2 frames of normal rendering before next raw capture
+                -- Disable segmentation shader after capture and wait for
+                -- confirmation so normal rendering is fully restored before
+                -- the next modality runs.
                 self.renderModeController:disableSegmentation(function(disableSuccess)
                     if DEBUG_SCREENSHOTS then
                         print(string.format("[SegmentationCollector] Segmentation disabled and normal rendering restored (success: %s)",
                             tostring(disableSuccess)))
                     end
-
-                    -- Invoke final callback after shader is fully removed
-                    if callback then
-                        callback(captureSuccess, width, height)
-                    end
+                    if callback then callback(captureSuccess, width, height) end
                 end)
             end
         )
@@ -248,3 +238,4 @@ function SegmentationCollector:_saveGlobalMapping(hasNewTextures)
         print(string.format("[ERROR] SegmentationCollector: Failed to create mapping file: %s", outputPath))
     end
 end
+

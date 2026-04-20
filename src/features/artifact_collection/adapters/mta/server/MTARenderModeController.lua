@@ -3,8 +3,6 @@
 --- Manages event handlers for shader ready confirmations
 ---
 --- @classmod MTARenderModeController
---- @author Claude Code
---- @license MIT
 
 MTARenderModeController = class(RenderModeControllerBase, function(o, spectatorElement)
     RenderModeControllerBase.init(o)
@@ -42,14 +40,13 @@ function MTARenderModeController:_registerEventHandlers()
                 mappingCount))
         end
 
-        -- Store frame mapping for collector access
         controller.lastFrameMapping = frameMapping
         controller.currentMode = "segmentation"
 
         if controller.pendingCallback then
             local callback = controller.pendingCallback
             controller.pendingCallback = nil
-            callback(true, frameMapping)  -- Pass mapping to callback
+            callback(true, frameMapping)
         end
     end)
 
@@ -82,6 +79,23 @@ function MTARenderModeController:_registerEventHandlers()
         if controller.pendingCallback then
             local callback = controller.pendingCallback
             controller.pendingCallback = nil
+            callback(true)
+        end
+    end)
+
+    -- Register depth disabled handler (mirrors onSegmentationDisabled so the
+    -- collector can wait for normal rendering to fully resume before moving on).
+    addEvent("onDepthDisabled", true)
+    addEventHandler("onDepthDisabled", self.spectator, function()
+        if DEBUG_SCREENSHOTS then
+            print("[MTARenderModeController] Depth mode disabled (normal rendering restored)")
+        end
+
+        controller.currentMode = "normal"
+
+        if controller.pendingDisableCallback then
+            local callback = controller.pendingDisableCallback
+            controller.pendingDisableCallback = nil
             callback(true)
         end
     end)
@@ -166,21 +180,29 @@ function MTARenderModeController:enableDepth(callback)
     end
 end
 
---- Disable depth rendering mode on client
---- Restores normal rendering
-function MTARenderModeController:disableDepth()
+--- Disable depth rendering mode on client.
+--- Restores normal rendering and waits for the client's render-confirmation
+--- before invoking the callback (mirrors disableSegmentation).
+---
+--- @param callback function Optional callback when normal rendering is confirmed: callback(success)
+function MTARenderModeController:disableDepth(callback)
     if not self.spectator or not isElement(self.spectator) then
         print("[ERROR] MTARenderModeController: Invalid spectator element")
+        if callback then
+            callback(false)
+        end
         return
     end
 
-    -- Trigger MTA client-side event to restore normal rendering
+    if callback then
+        self.pendingDisableCallback = callback
+    end
+
+    -- Client waits for N rendered frames then fires onDepthDisabled.
     triggerClientEvent(self.spectator, "onRenderDepth", self.spectator, false)
 
-    self.currentMode = "normal"
-
     if DEBUG_SCREENSHOTS then
-        print("[MTARenderModeController] Disabled depth mode")
+        print("[MTARenderModeController] Disabled depth mode (waiting for confirmation)")
     end
 end
 

@@ -127,3 +127,8 @@ bool ModalityManager::GetTargetDimensions(int modalityId, int& outWidth, int& ou
     DEBUG_LOG_FMT("ModalityManager", "GetTargetDimensions: modality %d -> %dx%d", modalityId, outWidth, outHeight);
     return true;
 }
+
+std::map<int, std::pair<int, int>> ModalityManager::GetAllTargetDimensions() const {
+    std::lock_guard<std::mutex> lock(encoderMutex);
+    return targetDimensions;
+}

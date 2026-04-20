@@ -3,23 +3,35 @@
 #include "../core/DebugLog.h"
 
 DesktopDuplicationBackend::DesktopDuplicationBackend(const std::string& windowTitle,
-                                                     int cropTop, int cropLeft, int cropRight, int cropBottom)
+                                                     int viewportCropTop, int viewportCropLeft,
+                                                     int viewportCropRight, int viewportCropBottom)
     : d3dDevice(nullptr)
     , d3dContext(nullptr)
     , deskDupl(nullptr)
     , initialized(false)
-    , cropTop(cropTop)
-    , cropLeft(cropLeft)
-    , cropRight(cropRight)
-    , cropBottom(cropBottom)
+    , viewportCropTop(viewportCropTop)
+    , viewportCropLeft(viewportCropLeft)
+    , viewportCropRight(viewportCropRight)
+    , viewportCropBottom(viewportCropBottom)
+    , cropTop(viewportCropTop)
+    , cropLeft(viewportCropLeft)
+    , cropRight(viewportCropRight)
+    , cropBottom(viewportCropBottom)
+    , chromeTop(0)
+    , chromeLeft(0)
+    , chromeRight(0)
+    , chromeBottom(0)
+    , viewportWidth(0)
+    , viewportHeight(0)
     , currentWidth(0)
     , currentHeight(0)
     , windowTitle(windowTitle)
     , cachedWindow(nullptr)
     , windowFound(false)
 {
-    DEBUG_LOG_FMT("DesktopDuplicationBackend", "Constructor: windowTitle=%s, crops(t=%d,l=%d,r=%d,b=%d)",
-                  windowTitle.c_str(), cropTop, cropLeft, cropRight, cropBottom);
+    DEBUG_LOG_FMT("DesktopDuplicationBackend",
+                  "Constructor: windowTitle=%s, viewportCrops(t=%d,l=%d,r=%d,b=%d); OS chrome auto-detected at capture start",
+                  windowTitle.c_str(), viewportCropTop, viewportCropLeft, viewportCropRight, viewportCropBottom);
     memset(&windowRect, 0, sizeof(windowRect));
     memset(&outputRect, 0, sizeof(outputRect));
 }
@@ -359,16 +371,46 @@ bool DesktopDuplicationBackend::UpdateWindowBounds() {
         return false;
     }
 
-    // Apply crops
-    int width = (windowRect.right - windowRect.left) - cropLeft - cropRight;
-    int height = (windowRect.bottom - windowRect.top) - cropTop - cropBottom;
-
-    if (width <= 0 || height <= 0) {
-        DEBUG_LOG_FMT("DesktopDuplicationBackend", "UpdateWindowBounds: invalid dimensions after cropping (%dx%d)", width, height);
+    // Detect OS chrome (title bar + borders) dynamically. GetClientRect gives
+    // the viewport dimensions; mapping the client-area top-left to screen
+    // coords tells us where the viewport lives inside the window rect.
+    RECT clientRect;
+    if (!GetClientRect(cachedWindow, &clientRect)) {
+        DEBUG_LOG("DesktopDuplicationBackend", "UpdateWindowBounds: GetClientRect failed");
+        return false;
+    }
+    POINT clientTopLeft = {0, 0};
+    if (!ClientToScreen(cachedWindow, &clientTopLeft)) {
+        DEBUG_LOG("DesktopDuplicationBackend", "UpdateWindowBounds: ClientToScreen failed");
         return false;
     }
 
-    currentWidth = width;
+    viewportWidth  = clientRect.right  - clientRect.left;
+    viewportHeight = clientRect.bottom - clientRect.top;
+
+    chromeLeft   = clientTopLeft.x - windowRect.left;
+    chromeTop    = clientTopLeft.y - windowRect.top;
+    chromeRight  = (windowRect.right  - windowRect.left) - viewportWidth  - chromeLeft;
+    chromeBottom = (windowRect.bottom - windowRect.top)  - viewportHeight - chromeTop;
+
+    // Effective window-space crop = OS chrome + viewport-side crop.
+    cropLeft   = chromeLeft   + viewportCropLeft;
+    cropTop    = chromeTop    + viewportCropTop;
+    cropRight  = chromeRight  + viewportCropRight;
+    cropBottom = chromeBottom + viewportCropBottom;
+
+    int width  = (windowRect.right  - windowRect.left) - cropLeft - cropRight;
+    int height = (windowRect.bottom - windowRect.top)  - cropTop  - cropBottom;
+
+    if (width <= 0 || height <= 0) {
+        DEBUG_LOG_FMT("DesktopDuplicationBackend",
+                      "UpdateWindowBounds: invalid dimensions after cropping (%dx%d); viewport=%dx%d, chrome=(l=%d,t=%d,r=%d,b=%d)",
+                      width, height, viewportWidth, viewportHeight,
+                      chromeLeft, chromeTop, chromeRight, chromeBottom);
+        return false;
+    }
+
+    currentWidth  = width;
     currentHeight = height;
 
     return true;
@@ -440,4 +482,30 @@ ID3D11Texture2D* DesktopDuplicationBackend::CreateWindowCroppedTexture(ID3D11Tex
 void DesktopDuplicationBackend::GetDimensions(int& width, int& height) const {
     width = currentWidth;
     height = currentHeight;
+}
+
+void DesktopDuplicationBackend::GetViewportSize(int& width, int& height) const {
+    width = viewportWidth;
+    height = viewportHeight;
+}
+
+void DesktopDuplicationBackend::GetCropInViewport(int& left, int& top, int& right, int& bottom) const {
+    left = viewportCropLeft;
+    top = viewportCropTop;
+    right = viewportCropRight;
+    bottom = viewportCropBottom;
+}
+
+void DesktopDuplicationBackend::GetChrome(int& left, int& top, int& right, int& bottom) const {
+    left = chromeLeft;
+    top = chromeTop;
+    right = chromeRight;
+    bottom = chromeBottom;
+}
+
+void DesktopDuplicationBackend::GetVisibleRect(int& x, int& y, int& width, int& height) const {
+    x = viewportCropLeft;
+    y = viewportCropTop;
+    width = viewportWidth - viewportCropLeft - viewportCropRight;
+    height = viewportHeight - viewportCropTop - viewportCropBottom;
 }

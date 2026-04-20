@@ -3,8 +3,6 @@
 --- Invokes callback when pixels arrive at server (disk write happens async in background)
 ---
 --- @classmod MTAServerSideScreenshotAdapter
---- @author Claude Code
---- @license MIT
 
 MTAServerSideScreenshotAdapter = class(ScreenshotAdapterBase, function(o, params)
     ScreenshotAdapterBase.init(o)

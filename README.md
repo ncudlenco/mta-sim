@@ -3,9 +3,6 @@
 <p align="center">
   <a href="https://github.com/ncudlenco/mta-sim/releases"><img src="https://img.shields.io/github/v/release/ncudlenco/mta-sim?include_prereleases&style=for-the-badge" alt="Latest release"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge" alt="MIT License"></a>
-  <a href="https://github.com/ncudlenco/mta-sim/stargazers"><img src="https://img.shields.io/github/stars/ncudlenco/mta-sim?style=for-the-badge&logo=github" alt="GitHub stars"></a>
-  <a href="https://github.com/ncudlenco/mta-sim/network/members"><img src="https://img.shields.io/github/forks/ncudlenco/mta-sim?style=for-the-badge&logo=github" alt="GitHub forks"></a>
-  <a href="https://github.com/ncudlenco/mta-sim/watchers"><img src="https://img.shields.io/github/watchers/ncudlenco/mta-sim?style=for-the-badge&logo=github" alt="GitHub watchers"></a>
 </p>
 
 > **GEST-Engine** is a Multi Theft Auto (MTA) resource that executes formal event graph specifications — *Graphs of Events in Space and Time (GESTs)* — deterministically in GTA San Andreas, producing multi-actor narrative videos paired with dense frame-level ground-truth annotations: instance segmentation, per-frame pairwise spatial relations between all entities, exact event-to-frame temporal mappings, and natural-language descriptions — all at zero marginal annotation cost.
@@ -14,15 +11,23 @@ This repository contains the Lua-based simulation engine. The Python batch orche
 
 ## Publications
 
-This system is described in:
+This system is described in, and was used for, the following papers:
 
 > N. Cudlenco, M. Masala, M. Leordeanu. **[Tiny Paper] GEST-Engine: Controllable Multi-Actor Video Synthesis with Perfect Spatiotemporal Annotations.** *ICLR 2026, the 2nd Workshop on World Models: Understanding, Modelling and Scaling.* [OpenReview](https://openreview.net/forum?id=uUofPYVMZH)
 
+> N. Cudlenco, M. Masala, M. Leordeanu. **GTASA: Ground Truth Annotations for Spatiotemporal Analysis, Evaluation and Training of Video Models.** *ACCV 2026.* [arXiv:2604.10385](https://arxiv.org/abs/2604.10385)
+
+> N. Cudlenco, M. Masala, M. Leordeanu. **Authoring for Living Worlds: Tool-Constrained LLM Agents for Executable Multi-Actor Scenarios.** *ECCV 2026, Workshop on Agent in World: Living Worlds with Interactive Agents (AIW).* [OpenReview](https://openreview.net/forum?id=kFK4sVgN9b) — the agents author GESTs that this engine executes.
+
+The full engine is documented in the technical report:
+
+> N. Cudlenco, M. Masala, M. Leordeanu. **The GEST-Engine: From Event Graphs to Synthetic Video. A Full Technical Report.** [arXiv:2607.12231](https://arxiv.org/abs/2607.12231)
+
 The underlying GEST formalism — *Graphs of Events in Space and Time* — was introduced in:
 
-> M. Masala, N. Cudlenco, T. Rebedea, M. Leordeanu. **Explaining Vision and Language Through Graphs of Events in Space and Time.** *ICCV 2023 Workshops (CLVL)*, pp. 2826–2831. [openaccess.thecvf.com](https://openaccess.thecvf.com/content/ICCV2023W/CLVL/html/Masala_Explaining_Vision_and_Language_Through_Graphs_of_Events_in_Space_ICCVW_2023_paper.html) · [arXiv:2309.08612](https://arxiv.org/abs/2309.08612)
+> M. Masala, N. Cudlenco, T. Rebedea, M. Leordeanu. **Explaining Vision and Language Through Graphs of Events in Space and Time.** *ICCV 2023 Workshops (CLVL)*, pp. 2818–2823. [openaccess.thecvf.com](https://openaccess.thecvf.com/content/ICCV2023W/CLVL/html/Masala_Explaining_Vision_and_Language_Through_Graphs_of_Events_in_Space_ICCVW_2023_paper.html) · [arXiv:2309.08612](https://arxiv.org/abs/2309.08612)
 
-The sample corpus of **398 procedurally generated multi-actor stories** (with engine-rendered videos, dense annotations, and VEO 3.1 / WAN 2.2 neural baselines) is publicly available on HuggingFace: [**nnc-001/gtasa-01**](https://huggingface.co/datasets/nnc-001/gtasa-01).
+The corpus generated with this engine, **GTASA-01** (1,008 procedurally generated multi-actor stories, including the 938-scenario set reported in the GTASA paper, with engine-rendered videos, dense annotations, and VEO 3.1 / WAN 2.2 neural baselines), is publicly available on HuggingFace: [**nnc-001/gtasa-01**](https://huggingface.co/datasets/nnc-001/gtasa-01).
 
 ## Checkpoints
 
@@ -234,19 +239,9 @@ sv2l/
 └── complex_graphs/             # Additional example GEST input files
 ```
 
-## Star History
-
-<a href="https://www.star-history.com/#ncudlenco/mta-sim&Date">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=ncudlenco/mta-sim&type=Date&theme=dark" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=ncudlenco/mta-sim&type=Date" />
-   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=ncudlenco/mta-sim&type=Date" />
- </picture>
-</a>
-
 ## Citation
 
-If you use this system in your research, please cite the ICLR 2026 Tiny Paper:
+If you use this system in your research, please cite the ICLR 2026 Tiny Paper and the ACCV 2026 GTASA paper, and refer to the technical report for the full engine design:
 
 ```bibtex
 @inproceedings{cudlenco2026tiny,
@@ -255,6 +250,26 @@ If you use this system in your research, please cite the ICLR 2026 Tiny Paper:
   booktitle={ICLR 2026 the 2nd Workshop on World Models: Understanding, Modelling and Scaling},
   year={2026},
   url={https://openreview.net/forum?id=uUofPYVMZH}
+}
+
+@inproceedings{cudlenco2026gtasa,
+  title={{GTASA}: Ground Truth Annotations for Spatiotemporal Analysis, Evaluation and Training of Video Models},
+  author={Nicolae Cudlenco and Mihai Masala and Marius Leordeanu},
+  booktitle={Asian Conference on Computer Vision (ACCV)},
+  year={2026},
+  eprint={2604.10385},
+  archivePrefix={arXiv},
+  url={https://arxiv.org/abs/2604.10385}
+}
+
+@misc{cudlenco2026gestengineeventgraphssynthetic,
+  title={The GEST-Engine: From Event Graphs to Synthetic Video. A Full Technical Report},
+  author={Nicolae Cudlenco and Mihai Masala and Marius Leordeanu},
+  year={2026},
+  eprint={2607.12231},
+  archivePrefix={arXiv},
+  primaryClass={cs.CV},
+  url={https://arxiv.org/abs/2607.12231}
 }
 ```
 

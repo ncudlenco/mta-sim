@@ -16,9 +16,8 @@ The GEST line of work, from the formalism to the engine, the agentic authoring l
 - M. Masala, N. Cudlenco, T. Rebedea, M. Leordeanu. **Explaining Vision and Language through Graphs of Events in Space and Time.** *ICCV 2023 Workshops (CLVL)*, pp. 2818–2823. [CVF Open Access](https://openaccess.thecvf.com/content/ICCV2023W/CLVL/html/Masala_Explaining_Vision_and_Language_Through_Graphs_of_Events_in_Space_ICCVW_2023_paper.html) · [DOI](https://doi.org/10.1109/ICCVW60793.2023.00302) · [arXiv:2309.08612](https://arxiv.org/abs/2309.08612) — introduces the GEST formalism
 - M. Masala, N. Cudlenco, T. Rebedea, M. Leordeanu. **GEST: the Graph of Events in Space and Time as a Common Representation between Vision and Language.** Preprint, 2023. [arXiv:2305.12940](https://arxiv.org/abs/2305.12940)
 - N. Cudlenco, M. Masala, M. Leordeanu. **[Tiny Paper] GEST-Engine: Controllable Multi-Actor Video Synthesis with Perfect Spatiotemporal Annotations.** *ICLR 2026, 2nd Workshop on World Models.* [OpenReview](https://openreview.net/forum?id=uUofPYVMZH) — checkpoint [`v1.0-iclr2026`](https://github.com/ncudlenco/mta-sim/releases/tag/v1.0-iclr2026)
-- N. Cudlenco, M. Masala, M. Leordeanu. **Agentic Video Generation: From Text to Executable Event Graphs via Tool-Constrained LLM Planning.** Preprint, 2026. [arXiv:2604.10383](https://arxiv.org/abs/2604.10383)
 - N. Cudlenco, M. Masala, M. Leordeanu. **The GEST-Engine: From Event Graphs to Synthetic Video. A Full Technical Report.** 2026. [arXiv:2607.12231](https://arxiv.org/abs/2607.12231) — full documentation of this engine
-- N. Cudlenco, M. Masala, M. Leordeanu. **Authoring for Living Worlds: Tool-Constrained LLM Agents for Executable Multi-Actor Scenarios.** *ECCV 2026 Workshop on Agent in World: Living Worlds with Interactive Agents (AIW).* [OpenReview](https://openreview.net/forum?id=kFK4sVgN9b) — the agents author GESTs that this engine executes
+- N. Cudlenco, M. Masala, M. Leordeanu. **Authoring for Living Worlds: Tool-Constrained LLM Agents for Executable Multi-Actor Scenarios.** *ECCV 2026 Workshop on Agent in World: Living Worlds with Interactive Agents (AIW).* [OpenReview](https://openreview.net/forum?id=kFK4sVgN9b) · [arXiv:2604.10383](https://arxiv.org/abs/2604.10383) (earlier versions titled *Agentic Video Generation: From Text to Executable Event Graphs via Tool-Constrained LLM Planning*) — the agents author GESTs that this engine executes
 - N. Cudlenco, M. Masala, M. Leordeanu. **GTASA: Ground Truth Annotations for Spatiotemporal Analysis, Evaluation and Training of Video Models.** *ACCV 2026.* [arXiv:2604.10385](https://arxiv.org/abs/2604.10385) — corpus generated with checkpoint [`v1.0-iclr2026`](https://github.com/ncudlenco/mta-sim/releases/tag/v1.0-iclr2026)
 
 The corpus generated with this engine, **GTASA-01** (1,008 procedurally generated multi-actor stories, including the 938-scenario set reported in the GTASA paper, with engine-rendered videos, dense annotations, and VEO 3.1 / WAN 2.2 neural baselines), is publicly available on HuggingFace: [**nnc-001/gtasa-01**](https://huggingface.co/datasets/nnc-001/gtasa-01).
@@ -273,6 +272,10 @@ The code in this repository (Lua sources, the native screenshot module, and auxi
 
 **Use of this system requires a licensed copy of Grand Theft Auto: San Andreas.** Rockstar Games / Take-Two Interactive own all in-game assets (3D models, textures, animations, environments) and this repository makes no claim to them. Nothing here distributes Rockstar / Take-Two intellectual property — users supply their own legitimate copy of the game. Users are responsible for complying with both Rockstar's EULA and the Multi Theft Auto terms of use. Research data derived from this system (e.g. the [GTASA-01 corpus on HuggingFace](https://huggingface.co/datasets/nnc-001/gtasa-01)) is released for non-commercial academic research only.
 
-## Contact
+## Authors and contact
 
-For questions, bug reports, or collaboration inquiries: open an [issue](https://github.com/ncudlenco/mta-sim/issues) or email `nicolae.cudlenco@gmail.com`.
+- **Nicolae Cudlenco**, corresponding author and maintainer: `nicolae.cudlenco@gmail.com`
+- **Mihai Masala**: `mihaimasala@gmail.com`
+- **Marius Leordeanu**: `leordeanu@gmail.com`
+
+For questions, bug reports, or collaboration inquiries, open an [issue](https://github.com/ncudlenco/mta-sim/issues) or email the corresponding author.
